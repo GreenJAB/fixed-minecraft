@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "fixed-minecraft",
+	"version": "${version}",
+	"name": "Fixed Minecraft",
+	"description": "I FIXED MINECRAFT!",
+	"authors": [
+		"Green_Jab"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/fixed-minecraft/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"net.green_jab.fixed.FixedMinecraft"
+		],
+		"Client": [
+			"net.green_jab.fixed.FixedMinecraftClient"
+		],
+		"fabric-datagen": [
+			"net.green_jab.fixed.FixedMinecraftDataGenerator"
+		]
+	},
+	"mixins": [
+		"fixed-minecraft.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.20.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
