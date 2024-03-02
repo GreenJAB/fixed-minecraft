@@ -1,4 +1,4 @@
-package net.green_jab.fixed;
+package net.green_jab.fixed_minecraft;
 
 import net.fabricmc.api.ClientModInitializer;
 

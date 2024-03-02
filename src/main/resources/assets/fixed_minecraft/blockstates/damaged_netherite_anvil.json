@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "model": "fixed_minecraft:block/damaged_netherite_anvil",
+      "y": 270
+    }
+  }
+}

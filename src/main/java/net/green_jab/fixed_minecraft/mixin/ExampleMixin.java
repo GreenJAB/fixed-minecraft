@@ -1,4 +1,4 @@
-package net.green_jab.fixed.mixin;
+package net.green_jab.fixed_minecraft.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package net.green_jab.fixed;
+package net.green_jab.fixed_minecraft;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
