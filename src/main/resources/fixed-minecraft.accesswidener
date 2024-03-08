@@ -1,0 +1,10 @@
+accessWidener v2 named
+
+## Classes
+# <access>   class   <className>
+
+## Methods
+# <access>   method   <className>   <methodName>   <methodDesc>
+
+## Fields
+# <access>   field   <className>   <fieldName>   <fieldDesc>

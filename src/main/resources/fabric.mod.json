@@ -1,40 +1,49 @@
 {
-	"schemaVersion": 1,
-	"id": "fixed_minecraft",
-	"version": "${version}",
-	"name": "Fixed Minecraft",
-	"description": "I FIXED MINECRAFT!",
-	"authors": [
-		"Green_Jab"
-	],
-	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
-	},
-	"license": "MIT",
-	"icon": "assets/fixed_minecraft/icon.png",
-	"environment": "*",
-	"entrypoints": {
-		"main": [
-			"net.green_jab.fixed_minecraft.FixedMinecraft"
-		],
-		"Client": [
-			"net.green_jab.fixed_minecraft.FixedMinecraftClient"
-		],
-		"fabric-datagen": [
-			"net.green_jab.fixed_minecraft.FixedMinecraftDataGenerator"
-		]
-	},
-	"mixins": [
-		"fixed_minecraft.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.15.7",
-		"minecraft": "~1.20.4",
-		"java": ">=17",
-		"fabric-api": "*"
-	},
-	"suggests": {
-		"another-mod": "*"
-	}
+    "schemaVersion": 1,
+    "id": "fixed_minecraft",
+    "version": "${version}",
+    "name": "Fixed Minecraft",
+    "description": "I FIXED MINECRAFT!",
+    "authors": [
+        "Green_Jab"
+    ],
+    "contact": {
+        "homepage": "https://fabricmc.net/",
+        "sources": "https://github.com/FabricMC/fabric-example-mod"
+    },
+    "license": "MIT",
+    "icon": "assets/fixed_minecraft/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": [
+            "net.green_jab.fixed_minecraft.FixedMinecraft"
+        ],
+        "Client": [
+            "net.green_jab.fixed_minecraft.FixedMinecraftClient"
+        ],
+        "fabric-datagen": [
+            "net.green_jab.fixed_minecraft.FixedMinecraftDataGenerator"
+        ]
+    },
+    "mixins": [
+        "fixed_minecraft.mixins.json"
+    ],
+    "depends": {
+        "java": ">=17",
+        "minecraft": "~${versions.minecraft}",
+        "fabric-api": ">=${versions.fabric.api}",
+        "fabric-language-kotlin": ">=${versions.fabric.languageKotlin}",
+        "fabricloader": ">=${versions.fabric.loader}",
+        "cloth-config": ">=${versions.clothconfig}",
+        "silk-core": ">=${versions.silk}",
+        "silk-game": ">=${versions.silk}",
+        "silk-igui": ">=${versions.silk}",
+        "silk-nbt": ">=${versions.silk}",
+        "silk-network": ">=${versions.silk}",
+        "silk-persistence": ">=${versions.silk}",
+        "patchouli": ">=${versions.patchouli}"
+    },
+    "suggests": {
+        "modmenu": "*"
+    }
 }
