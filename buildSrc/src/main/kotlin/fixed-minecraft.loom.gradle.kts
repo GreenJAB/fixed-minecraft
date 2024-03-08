@@ -21,7 +21,7 @@ afterEvaluate {
     loom {
         runs {
             configureEach {
-                vmArgs("-Xmx2G", "-XX:+UseShenandoahGC")
+                vmArgs("-Xmx2G")
 
                 property("fabric.development", "true")
                 property("mixin.debug", "true")
