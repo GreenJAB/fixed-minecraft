@@ -26,7 +26,7 @@ public class AnvilMixin /*extends FallingBlock*/ {
 
     @Inject(method = "getLandingState", at = @At("HEAD"), cancellable = true)
     private static void injected(BlockState fallingState, CallbackInfoReturnable cir) {
-        // this code does nothing as the netherite anvil is never and instance of an anvil
+        // this code does nothing as the netherite anvil is never and instance of an AnvilBlock
         // if (fallingState.isOf(ModBlocks.NETHERITE_ANVIL)) {
         //     cir.setReturnValue((BlockState)ModBlocks.CHIPPED_NETHERITE_ANVIL.getDefaultState().with(FACING, fallingState.get(FACING)));
         // }
