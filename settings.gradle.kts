@@ -1,4 +1,4 @@
-rootProject.name = "fixed-minecraft"
+rootProject.name = "fixedminecraft"
 
 pluginManagement {
     repositories {

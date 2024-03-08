@@ -3,52 +3,44 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     java
-    kotlin("jvm")
-    id("fabric-loom")
+    kotlin("jvm") version "1.9.22"
+    id("fabric-loom") version "1.5-SNAPSHOT"
 }
 
 version = "0.1-1.20.4"
-group = "net.green_jab.fixed_minecraft"
+group = "net.green_jab.fixedminecraft"
 
 base {
     archivesName = project.name
 }
 
-repositories {
-    maven("https://maven.solo-studios.ca/releases/") {
-        name = "Solo Studios"
-    }
+loom {
+    splitEnvironmentSourceSets()
 
+    mods {
+        register("fixedminecraft") {
+            sourceSet(sourceSets["main"])
+            sourceSet(sourceSets["client"])
+        }
+    }
+}
+
+repositories {
     maven("https://maven.fabricmc.net/") {
         name = "Fabric"
-        // content {
-        //     includeGroupAndSubgroups("net.fabricmc")
-        //     includeModule("me.zeroeightsix", "fiber")
-        //     includeModule("io.github.llamalad7", "mixinextras-fabric")
-        // }
     }
-
     maven("https://maven.shedaniel.me/") {
         name = "Shedaniel"
         content {
             includeGroup("me.shedaniel.cloth")
         }
     }
-
-    maven("https://maven.blamejared.com") {
-        name = "BlameJared"
-        content {
-            includeGroup("vazkii.patchouli")
-        }
-    }
-
     maven("https://maven.terraformersmc.com/releases/") {
         name = "TerraformersMC"
         content {
             includeGroup("com.terraformersmc")
         }
     }
-
     mavenCentral()
 }
 
@@ -71,7 +63,7 @@ loom {
 }
 
 tasks.processResources {
-    filesMatching("/fabric.mod.json") {
+    filesMatching("fabric.mod.json") {
         expand(
             "version" to project.version,
             "fabric_api" to libs.versions.fabric.api.get(),

@@ -9,13 +9,17 @@
         "solonovamax"
     ],
     "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
     },
     "license": "MIT",
     "icon": "assets/fixedminecraft/icon.png",
     "environment": "*",
     "entrypoints": {
+        "client": [
+            {
+                "adapter": "kotlin",
+                "value": "net.greenjab.fixedminecraft.FixedMinecraftClient"
+            }
+        ],
         "main": [
             {
                 "adapter": "kotlin",
@@ -27,24 +31,16 @@
         ]
     },
     "mixins": [
-        "fixed-minecraft.mixins.json"
+        "fixedminecraft.mixins.json",
+        {
+            "config": "fixedminecraft.client.mixins.json",
+            "environment": "client"
+        }
     ],
     "depends": {
         "java": ">=17",
-        "minecraft": "~${versions.minecraft}",
-        "fabric-api": ">=${versions.fabric.api}",
-        "fabric-language-kotlin": ">=${versions.fabric.languageKotlin}",
-        "fabricloader": ">=${versions.fabric.loader}",
-        "cloth-config": ">=${versions.clothconfig}",
-        "silk-core": ">=${versions.silk}",
-        "silk-game": ">=${versions.silk}",
-        "silk-igui": ">=${versions.silk}",
-        "silk-nbt": ">=${versions.silk}",
-        "silk-network": ">=${versions.silk}",
-        "silk-persistence": ">=${versions.silk}",
-        "patchouli": ">=${versions.patchouli}"
-    },
-    "suggests": {
-        "modmenu": "*"
+        "minecraft": "~${minecraft}",
+        "fabric-api": ">=${fabric_api}",
+        "fabric-language-kotlin": ">=1.10"
     }
 }
