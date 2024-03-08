@@ -12,17 +12,18 @@ fabric-yarn = "1.20.4+build.3"
 
 slf4k = "0.5.1"
 
-cloth-config = "11.1.118"
+cloth-config = "13.0.121"
 
-modmenu = "7.2.2"
+modmenu = "9.0.0"
 
 mixin = "0.12.5+mixin.0.8.5"
 
 shadow = "7.1.2"
 
-silk = "1.10.1"
+silk = "1.10.3"
 
 patchouli = "1.20.1-83-FABRIC"
+patchouli = "1.20.4-85-FABRIC-SNAPSHOT"
 
 [plugins]
 
