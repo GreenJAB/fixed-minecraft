@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     java
-    kotlin("jvm") version "1.9.22"
-    id("fabric-loom") version "1.5-SNAPSHOT"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.fabric.loom)
 }
 
 version = "0.1-1.20.4"
@@ -26,23 +26,11 @@ loom {
 }
 
 repositories {
-    // maven("https://maven.solo-studios.ca/releases/") {
-    //     name = "Solo Studios"
-    // }
+    maven("https://maven.solo-studios.ca/releases/") {
+        name = "Solo Studios"
+    }
     maven("https://maven.fabricmc.net/") {
         name = "Fabric"
-    }
-    maven("https://maven.shedaniel.me/") {
-        name = "Shedaniel"
-        content {
-            includeGroup("me.shedaniel.cloth")
-        }
-    }
-    maven("https://maven.terraformersmc.com/releases/") {
-        name = "TerraformersMC"
-        content {
-            includeGroup("com.terraformersmc")
-        }
     }
     mavenCentral()
 }
