@@ -5,7 +5,8 @@
     "mixins": [
         "AnvilMixin",
         "FireworkRocketItemMixin",
-        "ItemMixin"
+        "ItemMixin",
+        "InGameHudMixin"
     ],
     "injectors": {
         "defaultRequire": 1

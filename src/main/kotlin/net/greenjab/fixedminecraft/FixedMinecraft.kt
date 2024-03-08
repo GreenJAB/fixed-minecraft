@@ -14,6 +14,12 @@ object FixedMinecraft : ModInitializer {
     override fun onInitialize() {
         logger.info { "Initializing ${FixedMinecraftConstants.MOD_NAME}" }
 
+
+        //ClientSyncHandler.init()
+
+        // ModConfig.init();
+        //HUDOverlayHandler.init()
+
         BlockRegistry.register()
         ItemRegistry.register()
 
