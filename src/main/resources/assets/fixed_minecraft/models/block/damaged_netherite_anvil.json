@@ -1,6 +1,0 @@
-{
-  "parent": "fixed_minecraft:block/template_netherite_anvil",
-  "textures": {
-    "top": "fixed_minecraft:block/damaged_netherite_anvil_top"
-  }
-}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+        "model": "fixedminecraft:block/damaged_netherite_anvil",
+      "y": 270
+    },
+    "facing=north": {
+        "model": "fixedminecraft:block/damaged_netherite_anvil",
+      "y": 180
+    },
+    "facing=south": {
+        "model": "fixedminecraft:block/damaged_netherite_anvil"
+    },
+    "facing=west": {
+        "model": "fixedminecraft:block/damaged_netherite_anvil",
+      "y": 90
+    }
+  }
+}

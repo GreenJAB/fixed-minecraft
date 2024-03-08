@@ -24,6 +24,10 @@ silk = "1.10.3"
 
 patchouli = "1.20.4-85-FABRIC-SNAPSHOT"
 
+adventure-api = "4.16.0"
+adventure-fabric = "5.12.0"
+adventure-kotlin-dsl = "0.1.0"
+
 [plugins]
 
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }
@@ -74,6 +78,11 @@ silk-persistence = { group = "net.silkmc", name = "silk-persistence", version.re
 patchouli = { group = "vazkii.patchouli", name = "Patchouli", version.ref = "patchouli" }
 
 
+adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure-api" }
+adventure-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventure-fabric" }
+adventure-kotlin-dsl = { group = "ca.solo-studios", name = "adventure-kotlin-dsl", version.ref = "adventure-kotlin-dsl" }
+
+
 [bundles]
 silk = [
     "silk-core",
@@ -82,4 +91,10 @@ silk = [
     "silk-nbt",
     "silk-network",
     "silk-persistence",
+]
+
+adventure = [
+    "adventure-api",
+    "adventure-fabric",
+    "adventure-kotlin-dsl",
 ]

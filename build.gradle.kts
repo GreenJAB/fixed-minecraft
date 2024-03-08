@@ -45,6 +45,11 @@ dependencies {
         include(this)
     }
 
+    modImplementation(libs.bundles.adventure) {
+        exclude(group = "net.fabricmc.fabric-api")
+        include(this)
+    }
+
     modImplementation(libs.modmenu)
 }
 
