@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin;
 
+import net.greenjab.fixedminecraft.blocks.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -26,13 +27,13 @@ public class AnvilMixin /*extends FallingBlock*/ {
 
     @Inject(method = "getLandingState", at = @At("HEAD"), cancellable = true)
     private static void injected(BlockState fallingState, CallbackInfoReturnable cir) {
-        // this code does nothing as the netherite anvil is never and instance of an anvil
-        // if (fallingState.isOf(ModBlocks.NETHERITE_ANVIL)) {
-        //     cir.setReturnValue((BlockState)ModBlocks.CHIPPED_NETHERITE_ANVIL.getDefaultState().with(FACING, fallingState.get(FACING)));
-        // }
-        // if (fallingState.isOf(ModBlocks.CHIPPED_NETHERITE_ANVIL)) {
-        //     cir.setReturnValue((BlockState)ModBlocks.DAMAGED_NETHERITE_ANVIL.getDefaultState().with(FACING, fallingState.get(FACING)));
-        // }
+
+         if (fallingState.isOf(BlockRegistry.INSTANCE.getNETHERITE_ANVIL())) {
+             cir.setReturnValue((BlockState)BlockRegistry.INSTANCE.getCHIPPED_NETHERITE_ANVIL().getDefaultState().with(FACING, fallingState.get(FACING)));
+         }
+         if (fallingState.isOf(BlockRegistry.INSTANCE.getCHIPPED_NETHERITE_ANVIL())) {
+             cir.setReturnValue((BlockState)BlockRegistry.INSTANCE.getDAMAGED_NETHERITE_ANVIL().getDefaultState().with(FACING, fallingState.get(FACING)));
+         }
 
     }
 }
