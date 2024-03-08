@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "fixed_minecraft:netherite_anvil",
-    "fixed_minecraft:chipped_netherite_anvil",
-    "fixed_minecraft:damaged_netherite_anvil"
+      "fixedminecraft:netherite_anvil",
+      "fixedminecraft:chipped_netherite_anvil",
+      "fixedminecraft:damaged_netherite_anvil"
   ]
 }

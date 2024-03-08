@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "fixed_minecraft:damaged_netherite_anvil"
+            "name": "fixedminecraft:damaged_netherite_anvil"
         }
       ],
       "rolls": 1.0

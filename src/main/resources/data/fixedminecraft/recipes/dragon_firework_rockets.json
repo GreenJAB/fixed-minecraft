@@ -16,7 +16,7 @@
     }
   ,
   "result": {
-    "item": "fixed_minecraft:dragon_firework_rocket",
+      "item": "fixedminecraft:dragon_firework_rocket",
     "count": 8
   }
 }
