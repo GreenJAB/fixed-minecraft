@@ -4,15 +4,14 @@ import net.fabricmc.api.ModInitializer
 import net.greenjab.fixedminecraft.blocks.BlockRegistry
 import net.greenjab.fixedminecraft.items.ItemGroupRegistry
 import net.greenjab.fixedminecraft.items.ItemRegistry
-import org.slf4j.kotlin.getLogger
-import org.slf4j.kotlin.info
+import org.slf4j.LoggerFactory
 
 
 object FixedMinecraft : ModInitializer {
-    private val logger by getLogger()
+    private val logger = LoggerFactory.getLogger("FixedMinecraft")
 
     override fun onInitialize() {
-        logger.info { "Initializing ${FixedMinecraftConstants.MOD_NAME}" }
+        logger.info("Initializing ${FixedMinecraftConstants.MOD_NAME}")
 
 
         //ClientSyncHandler.init()
