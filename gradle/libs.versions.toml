@@ -7,6 +7,8 @@ fabric-yarn = "1.20.4+build.3"
 cloth-config = "13.0.121"
 modmenu = "9.0.0"
 
+slf4k = "0.5.1"
+
 [libraries]
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 yarn-mappings = { group = "net.fabricmc", name = "yarn", version.ref = "fabric-yarn" }
@@ -15,3 +17,5 @@ fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.r
 fabric-language-kotlin = { group = "net.fabricmc", name = "fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 cloth-config = { group = "me.shedaniel.cloth", name = "cloth-config-fabric", version.ref = "cloth-config" }
 modmenu = { group = "com.terraformersmc", name = "modmenu", version.ref = "modmenu" }
+
+slf4k = { group = "ca.solo-studios", name = "slf4k", version.ref = "slf4k" }

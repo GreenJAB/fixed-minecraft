@@ -26,6 +26,9 @@ loom {
 }
 
 repositories {
+    // maven("https://maven.solo-studios.ca/releases/") {
+    //     name = "Solo Studios"
+    // }
     maven("https://maven.fabricmc.net/") {
         name = "Fabric"
     }
@@ -50,6 +53,18 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
     modImplementation(libs.fabric.language.kotlin)
+
+    // Enable when needed
+    // implementation(libs.slf4k) {
+    //     include(this)
+    // }
+
+    // modImplementation(libs.modmenu)
+
+    // modImplementation(libs.cloth.config) {
+    //     exclude(group = "net.fabricmc.fabric-api")
+    //     include(this)
+    // }
 }
 
 fabricApi {
