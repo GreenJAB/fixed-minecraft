@@ -4,11 +4,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
-public class ClientSyncHandler
-{
+public class ClientSyncHandler {
     @Environment(EnvType.CLIENT)
-    public static void init()
-    {
+    public static void init() {
         ClientPlayNetworking.registerGlobalReceiver(SyncHandler.INSTANCE.getEXHAUSTION_SYNC(), (client, handler, buf, responseSender) -> {
             float exhaustion = buf.readFloat();
             client.execute(() -> {

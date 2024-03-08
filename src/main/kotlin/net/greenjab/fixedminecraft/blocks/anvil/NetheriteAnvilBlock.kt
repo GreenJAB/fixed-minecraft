@@ -45,7 +45,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
             ) as BlockState
     }
 
-    override fun getPlacementState(ctx: ItemPlacementContext): BlockState? {
+    override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
         return defaultState.with(FACING, ctx.horizontalPlayerFacing.rotateYClockwise()) as BlockState
     }
 
@@ -65,7 +65,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         return ActionResult.CONSUME
     }
 
-    override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos): NamedScreenHandlerFactory? {
+    override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos): NamedScreenHandlerFactory {
         return SimpleNamedScreenHandlerFactory({ syncId: Int, inventory: PlayerInventory?, player: PlayerEntity? ->
             AnvilScreenHandler(
                 syncId,

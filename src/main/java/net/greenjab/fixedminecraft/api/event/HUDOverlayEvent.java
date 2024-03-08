@@ -5,40 +5,11 @@ import net.fabricmc.fabric.api.event.Event;
 import net.greenjab.fixedminecraft.api.handler.EventHandler;
 import net.minecraft.client.gui.DrawContext;
 
-public class HUDOverlayEvent
-{
-    /**
-     * If cancelled, will stop all rendering of the exhaustion meter.
-     */
-    public static class Exhaustion extends HUDOverlayEvent
-    {
-        public Exhaustion(float exhaustion, int x, int y, DrawContext context)
-        {
-            super(x, y, context);
-            this.exhaustion = exhaustion;
-        }
-
-        public final float exhaustion;
-
-        public static Event<EventHandler<Exhaustion>> EVENT = EventHandler.createArrayBacked();
-    }
-
-    /**
-     * If cancelled, will stop all rendering of the saturation overlay.
-     */
-    public static class Saturation extends HUDOverlayEvent
-    {
-        public Saturation(float saturationLevel, int x, int y, DrawContext context)
-        {
-            super(x, y, context);
-            this.saturationLevel = saturationLevel;
-        }
-
-        public final float saturationLevel;
-
-        public static Event<EventHandler<Saturation>> EVENT = EventHandler.createArrayBacked();
-    }
-
+public class HUDOverlayEvent {
+    public int x;
+    public int y;
+    public DrawContext context;
+    public boolean isCanceled = false;
     /**
      * If cancelled, will stop all rendering of the hunger restored overlay.
      */
@@ -78,16 +49,35 @@ public class HUDOverlayEvent
 
         public static Event<EventHandler<HealthRestored>> EVENT = EventHandler.createArrayBacked();
     }*/
-
-    private HUDOverlayEvent(int x, int y, DrawContext context)
-    {
+    private HUDOverlayEvent(int x, int y, DrawContext context) {
         this.x = x;
         this.y = y;
         this.context = context;
     }
 
-    public int x;
-    public int y;
-    public DrawContext context;
-    public boolean isCanceled = false;
+    /**
+     * If cancelled, will stop all rendering of the exhaustion meter.
+     */
+    public static class Exhaustion extends HUDOverlayEvent {
+        public static Event<EventHandler<Exhaustion>> EVENT = EventHandler.createArrayBacked();
+        public final float exhaustion;
+
+        public Exhaustion(float exhaustion, int x, int y, DrawContext context) {
+            super(x, y, context);
+            this.exhaustion = exhaustion;
+        }
+    }
+
+    /**
+     * If cancelled, will stop all rendering of the saturation overlay.
+     */
+    public static class Saturation extends HUDOverlayEvent {
+        public static Event<EventHandler<Saturation>> EVENT = EventHandler.createArrayBacked();
+        public final float saturationLevel;
+
+        public Saturation(float saturationLevel, int x, int y, DrawContext context) {
+            super(x, y, context);
+            this.saturationLevel = saturationLevel;
+        }
+    }
 }
