@@ -12,7 +12,7 @@ object SyncHandler {
     val SATURATION_SYNC: Identifier = Identifier("fixedminecraft", "saturation_sync")
 
     fun makePacketBuf(value: Float): PacketByteBuf {
-        var buf: PacketByteBuf = PacketByteBuf(Unpooled.buffer())
+        var buf = PacketByteBuf(Unpooled.buffer())
         buf.writeFloat(value)
         return buf
     }
@@ -25,6 +25,7 @@ object SyncHandler {
     var lastExhaustionLevels: HashMap<UUID, Float> = HashMap<UUID, Float>()
 
     fun onPlayerUpdate(player: ServerPlayerEntity) {
+
         var lastSaturationLevel = lastSaturationLevels.get(player.uuid)
         var lastExhaustionLevel = lastExhaustionLevels.get(player.uuid)
 

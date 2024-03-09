@@ -4,6 +4,7 @@ import net.fabricmc.api.ModInitializer
 import net.greenjab.fixedminecraft.blocks.BlockRegistry
 import net.greenjab.fixedminecraft.items.ItemGroupRegistry
 import net.greenjab.fixedminecraft.items.ItemRegistry
+//import net.greenjab.fixedminecraft.network.ClientSyncManager
 import org.slf4j.LoggerFactory
 
 
@@ -13,7 +14,7 @@ object FixedMinecraft : ModInitializer {
     override fun onInitialize() {
         logger.info("Initializing ${FixedMinecraftConstants.MOD_NAME}")
 
-        // ClientSyncHandler.init()
+         //ClientSyncHandler.init()
 
         // ModConfig.init();
         // HUDOverlayHandler.init()

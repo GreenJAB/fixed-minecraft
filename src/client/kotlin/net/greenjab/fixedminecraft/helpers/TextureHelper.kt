@@ -4,7 +4,6 @@ import net.minecraft.util.Identifier
 
 object TextureHelper {
     val MOD_ICONS: Identifier = Identifier("fixedminecraft", "textures/icons.png")
-    // val HUNGER_OUTLINE_SPRITE: Identifier  = Identifier("fixedminecraft", "tooltip_hunger_outline");
 
     // Hunger
     val FOOD_EMPTY_HUNGER_TEXTURE: Identifier = Identifier("hud/food_empty_hunger")

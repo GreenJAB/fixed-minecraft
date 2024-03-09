@@ -5,7 +5,9 @@
     "mixins": [
         "AnvilMixin",
         "FireworkRocketItemMixin",
-        "ItemMixin"
+        "ItemMixin",
+        "PlayerManagerMixin",
+        "ServerPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1
