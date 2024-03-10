@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin  {
 
-
     @Redirect(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
         private boolean cancelElytraInLiquid(LivingEntity instance, StatusEffect effect) {
         return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());

@@ -8,7 +8,9 @@
         "ItemMixin",
         "PlayerManagerMixin",
         "ServerPlayerEntityMixin",
-        "LivingEntityMixin"
+        "LivingEntityMixin",
+        "PlayerEntityMixin",
+        "WorldMixin"
     ],
     "injectors": {
         "defaultRequire": 1

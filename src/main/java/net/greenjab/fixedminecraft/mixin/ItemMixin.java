@@ -24,7 +24,7 @@ public class ItemMixin {
     @Inject(method = "getMaxUseTime", at = @At("HEAD"), cancellable = true)
     private void modifyFoodEatTimes(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
         if (stack.getItem().isFood()) {
-            cir.setReturnValue(8 + 8 * stack.getFoodComponent().getHunger());
+            cir.setReturnValue(8 + 8 * stack.getItem().getFoodComponent().getHunger());
 
             // checking the item name... not the best, tbh
             if (stack.getItem().toString().contains("golden"))
