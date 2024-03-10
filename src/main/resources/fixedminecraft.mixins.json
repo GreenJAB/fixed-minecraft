@@ -7,7 +7,8 @@
         "FireworkRocketItemMixin",
         "ItemMixin",
         "PlayerManagerMixin",
-        "ServerPlayerEntityMixin"
+        "ServerPlayerEntityMixin",
+        "LivingEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

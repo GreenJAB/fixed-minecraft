@@ -1,28 +1,23 @@
 package net.greenjab.fixedminecraft.hud
 
-import com.mojang.blaze3d.platform.GlStateManager
-import com.mojang.blaze3d.systems.RenderSystem
 import net.greenjab.fixedminecraft.helpers.TextureHelper
-import net.greenjab.fixedminecraft.hud.HUDOverlayEvent
 import net.greenjab.fixedminecraft.util.IntPoint
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerEntity
-import org.lwjgl.opengl.GL11
 import java.util.Random
 import java.util.Vector
 import kotlin.math.ceil
 
 
 object HUDOverlayHandler {
-    var foodIconsOffset = 0
-    var needDisableBlend = false
+    private var foodIconsOffset = 0
 
-    val FOOD_BAR_HEIGHT = 39
+    private const val FOOD_BAR_HEIGHT = 39
 
-    var foodBarOffsets: Vector<IntPoint> = Vector<IntPoint>()
+    private var foodBarOffsets: Vector<IntPoint> = Vector<IntPoint>()
 
-    var random: Random = Random()
+    private var random: Random = Random()
 
     fun onPreRender(context: DrawContext) {
         foodIconsOffset = FOOD_BAR_HEIGHT
@@ -40,8 +35,6 @@ object HUDOverlayHandler {
     }
 
     fun onRender(context: DrawContext) {
-        //if (!shouldRenderAnyOverlays())
-        //    return
 
         val mc: MinecraftClient = MinecraftClient.getInstance()
         val player: PlayerEntity = mc.player!!
@@ -61,7 +54,7 @@ object HUDOverlayHandler {
 
     }
 
-    fun drawSaturationOverlay(context: DrawContext, saturationLevel: Float, mc: MinecraftClient, right: Int, top: Int) {
+    private fun drawSaturationOverlay(context: DrawContext, saturationLevel: Float, mc: MinecraftClient, right: Int, top: Int) {
 
         var modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f))
         var endSaturationBar = (ceil(modifiedSaturation / 2)).toInt()
@@ -93,41 +86,36 @@ object HUDOverlayHandler {
 
     }
 
-    fun drawExhaustionOverlay(context: DrawContext, exhaustion: Float, mc: MinecraftClient, right: Int, top: Int) {
-        val maxExhaustion = 4.0f/*FoodHelper.MAX_EXHAUSTION*/
+    private fun drawExhaustionOverlay(context: DrawContext, exhaustion: Float, mc: MinecraftClient, right: Int, top: Int) {
+        val maxExhaustion = 4.0f
         // clamp between 0 and 1
         val ratio = (exhaustion / maxExhaustion).coerceIn(0f, 1f)
         val width = (ratio * 81).toInt()
-        val height = 9.toInt()
+        val height = 9
 
         context.drawTexture(TextureHelper.MOD_ICONS, right - width, top, 81 - width, 18, width, height)
     }
 
 
-    fun drawSaturationOverlay(event: HUDOverlayEvent.Saturation, mc: MinecraftClient) {
+    private fun drawSaturationOverlay(event: HUDOverlayEvent.Saturation, mc: MinecraftClient) {
         drawSaturationOverlay(event.context, event.saturationLevel, mc, event.x, event.y)
     }
 
 
-    fun drawExhaustionOverlay(event: HUDOverlayEvent.Exhaustion, mc: MinecraftClient) {
+    private fun drawExhaustionOverlay(event: HUDOverlayEvent.Exhaustion, mc: MinecraftClient) {
         drawExhaustionOverlay(event.context, event.exhaustion, mc, event.x, event.y)
     }
 
-    fun generateBarOffsets(top: Int, left: Int, right: Int, ticks: Int, player: PlayerEntity) {
+    private fun generateBarOffsets(top: Int, left: Int, right: Int, ticks: Int, player: PlayerEntity) {
         var preferFoodBars = 10
-
         var shouldAnimatedFood = false
-
-        // when some mods using custom render, we need to least provide an option to cancel animation
-        if (true/*ModConfig.INSTANCE.showVanillaAnimationsOverlay*/) {
-            var hungerManager = player.hungerManager
+        var hungerManager = player.hungerManager
 
             // in vanilla saturation level is zero will show hunger animation
-            var saturationLevel = hungerManager.saturationLevel
-            var foodLevel = hungerManager.foodLevel
-            shouldAnimatedFood = saturationLevel <= 0.0F && ticks % (foodLevel * 3 + 1) == 0
+        var saturationLevel = hungerManager.saturationLevel
+        var foodLevel = hungerManager.foodLevel
+        shouldAnimatedFood = saturationLevel <= 0.0F && ticks % (foodLevel * 3 + 1) == 0
 
-        }
 
         // hard code in `InGameHUD`
         random.setSeed((ticks * 312871).toLong())
