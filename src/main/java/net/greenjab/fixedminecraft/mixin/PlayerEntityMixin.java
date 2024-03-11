@@ -16,14 +16,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
 
-    /*@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isTouchingWater()Z"))
-        private boolean dontStartElytraInLiquid(PlayerEntity instance) {
-        return !(!instance.isWet() && !instance.isInLava());
-    }*/
-    /*@Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
-    private boolean dontStartElytraInLiquid(LivingEntity instance, StatusEffect effect) {
-        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());
-    }*/
     @Inject(method = "checkFallFlying", at = @At("HEAD"), cancellable = true)
     private void injected(CallbackInfoReturnable cir) {
         PlayerEntity instance = (PlayerEntity)(Object)this;

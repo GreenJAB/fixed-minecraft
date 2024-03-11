@@ -142,7 +142,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         private const val FALLING_BLOCK_ENTITY_DAMAGE_MULTIPLIER = 2.0f
         private const val FALLING_BLOCK_ENTITY_MAX_DAMAGE = 40
 
-        fun getLandingState(fallingState: BlockState): BlockState? {
+        /*fun getLandingState(fallingState: BlockState): BlockState? {
             if (fallingState.isOf(BlockRegistry.NETHERITE_ANVIL)) {
                 return BlockRegistry.CHIPPED_NETHERITE_ANVIL.defaultState.with(FACING, fallingState.get(FACING)) as BlockState
             }
@@ -150,7 +150,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
                 return BlockRegistry.DAMAGED_NETHERITE_ANVIL.defaultState.with(FACING, fallingState.get(FACING)) as BlockState
             }
             return null
-        }
+        }*/
     }
 }
 

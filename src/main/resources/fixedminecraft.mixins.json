@@ -6,6 +6,8 @@
         "AnvilMixin",
         "FireworkRocketItemMixin",
         "ItemMixin",
+        "ItemsMixin",
+        "StewItemMixin",
         "PlayerManagerMixin",
         "ServerPlayerEntityMixin",
         "LivingEntityMixin",
