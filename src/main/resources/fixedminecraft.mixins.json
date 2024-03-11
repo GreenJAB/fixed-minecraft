@@ -14,6 +14,7 @@
     "StewItemMixin",
     "WorldMixin",
     "transport.ArmorAbstractHorseEntityMixin",
+    "transport.BreedingAbstractHorseEntityMixin",
     "transport.LeavesBlockMixin"
   ],
   "injectors": {
