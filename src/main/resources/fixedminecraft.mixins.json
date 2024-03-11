@@ -13,6 +13,7 @@
     "ServerPlayerEntityMixin",
     "StewItemMixin",
     "WorldMixin",
+    "transport.AbstractHorseEntityMixin",
     "transport.LeavesBlockMixin"
   ],
   "injectors": {

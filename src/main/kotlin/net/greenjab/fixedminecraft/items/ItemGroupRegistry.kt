@@ -15,6 +15,7 @@ object ItemGroupRegistry {
         entries { _: ItemGroup.DisplayContext, entries: ItemGroup.Entries ->
             entries.add(ItemRegistry.DRAGON_FIREWORK_ROCKET)
             entries.add(ItemRegistry.MAP_BOOK)
+            entries.add(ItemRegistry.NETHERITE_HORSE_ARMOR)
             entries.add(BlockRegistry.NETHERITE_ANVIL)
             entries.add(BlockRegistry.CHIPPED_NETHERITE_ANVIL)
             entries.add(BlockRegistry.DAMAGED_NETHERITE_ANVIL)
