@@ -10,8 +10,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/**
+ * Prevents the horse wearing netherite armor from getting into angry pose when taking damage.
+ */
 @Mixin(AbstractHorseEntity.class)
-public class AbstractHorseEntityMixin {
+public class ArmorAbstractHorseEntityMixin {
     @Shadow
     protected SimpleInventory items;
 
