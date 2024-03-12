@@ -12,7 +12,7 @@ import net.minecraft.util.Rarity
 object ItemRegistry {
     val DRAGON_FIREWORK_ROCKET: Item = FireworkRocketItem(Item.Settings())
     val MAP_BOOK: Item = Item(FabricItemSettings())
-    val NETHERITE_HORSE_ARMOR = HorseArmorItem(15, "netherite", FabricItemSettings().maxCount(1).rarity(Rarity.RARE))
+    val NETHERITE_HORSE_ARMOR = HorseArmorItem(15, "netherite", FabricItemSettings().maxCount(1).rarity(Rarity.RARE).fireproof())
 
     fun register() {
         ITEM.register(identifierOf("dragon_firework_rocket"), DRAGON_FIREWORK_ROCKET)

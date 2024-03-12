@@ -35,7 +35,7 @@ object BlockRegistry {
 
 
     fun register() {
-        registerBlockWithItem(identifierOf("netherite_anvil"), NETHERITE_ANVIL)
+        registerBlockWithItem(identifierOf("netherite_anvil",), NETHERITE_ANVIL)
         registerBlockWithItem(identifierOf("chipped_netherite_anvil"), CHIPPED_NETHERITE_ANVIL)
         registerBlockWithItem(identifierOf("damaged_netherite_anvil"), DAMAGED_NETHERITE_ANVIL)
     }
@@ -46,6 +46,6 @@ object BlockRegistry {
 
     private fun registerBlockWithItem(identifier: Identifier, block: Block, itemSettings: Item.Settings = FabricItemSettings()) {
         registerBlock(identifier, block)
-        Registries.ITEM.register(identifier, BlockItem(block, itemSettings))
+        Registries.ITEM.register(identifier, BlockItem(block, itemSettings.fireproof()))
     }
 }
