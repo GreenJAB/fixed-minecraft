@@ -13,12 +13,8 @@ import net.minecraft.world.World
 
 class TotemItem(settings: Settings) : Item(settings) {
 
-    /*fun TotemItem() {
-        super(Settings)
-    }*/
-
     override fun getUseAction(stack: ItemStack?): UseAction {
-        return UseAction.BLOCK
+        return UseAction.TOOT_HORN
     }
     override fun getMaxUseTime(stack: ItemStack?): Int {
         return 72000
@@ -27,10 +23,4 @@ class TotemItem(settings: Settings) : Item(settings) {
         user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1.0f, 1.0f)
         return ItemUsage.consumeHeldItem(world, user, hand)
     }
-
-    /*fun TOTEM_OF_UNDYING(settings: Settings?): Item {
-        return TotemItem(Settings?)
-    }*/
-
-
 }

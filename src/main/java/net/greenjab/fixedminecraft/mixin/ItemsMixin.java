@@ -22,8 +22,7 @@ public class ItemsMixin {
             "stringValue=totem_of_undying"},ordinal = 0)),at = @At(
                     value = "NEW",target = "Lnet/minecraft/item/Item;*", ordinal = 0 ),method = "<clinit>")
     private static Item useableTotem(Item.Settings settings) {
-        //return TotemItem.TOTEM_OF_UNDYING(settings);
-        return new Item((new Item.Settings()).maxCount(1).rarity(Rarity.UNCOMMON));
+        return new TotemItem((new Item.Settings()).maxCount(1).rarity(Rarity.UNCOMMON));
     }
     @Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=rabbit_stew"},ordinal = 0)),at = @At(

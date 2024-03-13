@@ -15,32 +15,30 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(StewItem.class)
 public class StewItemMixin {
 
-    @Inject(method = "finishUsing", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "finishUsing", at = @At("TAIL"), cancellable = true)
     private void fixStackedBowlUse(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable cir) {
-        //ItemStack itemStack = stack.getItem().finishUsing(stack, world, user);
-        /*if (user instanceof ServerPlayerEntity serverPlayerEntity) {
-            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, itemStack);
+        if (user instanceof ServerPlayerEntity serverPlayerEntity) {
+            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
             serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat((StewItem)(Object)this));
         }
-
-        if (itemStack.isEmpty()) {
+        if (stack.isEmpty()) {
             cir.setReturnValue( new ItemStack(Items.BOWL));
         } else {
             if (user instanceof PlayerEntity) {
                 PlayerEntity playerEntity = (PlayerEntity)user;
                 if (!playerEntity.getAbilities().creativeMode) {
                     ItemStack itemStack2 = new ItemStack(Items.BOWL);
-                    if (!playerEntity.getInventory().insertStack(itemStack)) {
+                    if (!playerEntity.getInventory().insertStack(itemStack2)) {
                         playerEntity.dropItem(itemStack2, false);
                     }
                 }
             }
-
             cir.setReturnValue(stack);
-        }*/
+        }
     }
 }

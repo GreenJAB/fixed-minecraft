@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "minecraft:item/totem_of_undying"
+  },
+    "overrides": [
+        {
+            "predicate": {
+                "saving": 1
+            },
+            "model": "item/using_totem"
+        }
+    ]
+}
