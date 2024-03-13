@@ -8,6 +8,7 @@
         "ItemMixin",
         "ItemsMixin",
         "StewItemMixin",
+        "SuspiciousStewItemMixin",
         "PlayerManagerMixin",
         "ServerPlayerEntityMixin",
         "LivingEntityMixin",
