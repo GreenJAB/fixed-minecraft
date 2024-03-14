@@ -7,13 +7,14 @@
         "FireworkRocketItemMixin",
         "ItemMixin",
         "ItemsMixin",
-        "StewItemMixin",
-        "SuspiciousStewItemMixin",
-        "PlayerManagerMixin",
-        "ServerPlayerEntityMixin",
         "LivingEntityMixin",
         "PlayerEntityMixin",
-        "WorldMixin"
+        "PlayerManagerMixin",
+        "ServerPlayerEntityMixin",
+        "StewItemMixin",
+        "SuspiciousStewItemMixin",
+        "WorldMixin",
+        "redstone.BulbBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1
