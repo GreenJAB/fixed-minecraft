@@ -1,23 +1,18 @@
 package net.greenjab.fixedminecraft.mixin;
 
-import net.greenjab.fixedminecraft.items.TotemItem;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.StewItem;
 import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.util.Rarity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Items.class)
 public class ItemsMixin {
-
     @Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=totem_of_undying"},ordinal = 0)),at = @At(
                     value = "NEW",target = "Lnet/minecraft/item/Item;*", ordinal = 0 ),method = "<clinit>")
