@@ -15,8 +15,7 @@
         "WorldMixin",
         "transport.ArmorAbstractHorseEntityMixin",
         "transport.BreedingAbstractHorseEntityMixin",
-        "transport.LeavesBlockMixin",
-        "transport.OxidizableMixin"
+        "transport.LeavesBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1
