@@ -3,7 +3,8 @@
     "package": "net.greenjab.fixedminecraft.mixin.client",
     "compatibilityLevel": "JAVA_17",
     "mixins": [
-        "InGameHudMixin"
+        "InGameHudMixin",
+        "ClientPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

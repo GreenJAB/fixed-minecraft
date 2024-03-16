@@ -11,6 +11,7 @@
         "LivingEntityMixin",
         "PlayerEntityMixin",
         "PlayerManagerMixin",
+        "HungerManagerMixin",
         "ServerPlayerEntityMixin",
         "StewItemMixin",
         "WorldMixin",

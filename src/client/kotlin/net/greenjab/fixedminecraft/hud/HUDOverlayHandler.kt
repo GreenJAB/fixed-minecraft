@@ -74,20 +74,19 @@ object HUDOverlayHandler {
 
             val effectiveSaturationOfBar = (modifiedSaturation / 2.0F) - i
 
-            if (effectiveSaturationOfBar >= 1)
+            if (effectiveSaturationOfBar > .75)
                 u = 3 * iconSize
-            else if (effectiveSaturationOfBar > .5)
+            else if (effectiveSaturationOfBar > .50)
                 u = 2 * iconSize
             else if (effectiveSaturationOfBar > .25)
                 u = 1 * iconSize
-
             context.drawTexture(TextureHelper.MOD_ICONS, x, y, u, v, iconSize, iconSize)
         }
 
     }
 
     private fun drawExhaustionOverlay(context: DrawContext, exhaustion: Float, mc: MinecraftClient, right: Int, top: Int) {
-        val maxExhaustion = 4.0f
+        val maxExhaustion = 1.0f
         // clamp between 0 and 1
         val ratio = (exhaustion / maxExhaustion).coerceIn(0f, 1f)
         val width = (ratio * 81).toInt()
