@@ -11,7 +11,7 @@ object Saturation {
      private var lastExhaustion = 0.0f
      private var ticksSinceLastExhaustion = 0
 
-    fun HungerToSaturation(player: PlayerEntity, hunger: HungerManager) {
+    fun hungerToSaturation(player: PlayerEntity, hunger: HungerManager) {
         var h = if(player.isSneaking()) 2.0f else 1.0f
         if (hunger.exhaustion == lastExhaustion) {ticksSinceLastExhaustion = min(ticksSinceLastExhaustion+h.toInt(), 40);}
         else {
@@ -28,8 +28,6 @@ object Saturation {
                      hunger.foodLevel--;
                 }
             }
-        } else {
-            hunger.saturationLevel= hunger.foodLevel.toFloat();
         }
     }
 }
