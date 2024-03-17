@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.greenjab.fixedminecraft.blocks.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
