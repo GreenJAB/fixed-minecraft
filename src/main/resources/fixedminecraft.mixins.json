@@ -13,17 +13,20 @@
         "StewItemMixin",
         "SuspiciousStewItemMixin",
         "WorldMixin",
-        "redstone.BulbBlockMixin",
         "enchanting.AnvilMixin",
-        "enchanting.DamageUtilMixin",
         "enchanting.BookItemMixin",
-        "enchanting.EnchantmentScreenHandlerMixin",
+        "enchanting.DamageUtilMixin",
         "enchanting.DepthStriderEnchantmentMixin",
+        "enchanting.EnchantmentScreenHandlerMixin",
         "enchanting.FrostWalkerEnchantmentMixin",
         "enchanting.InfinityEnchantmentMixin",
         "enchanting.MultishotEnchantmentMixin",
         "enchanting.PiercingEnchantmentMixin",
-        "enchanting.ProtectionEnchantmentMixin"
+        "enchanting.ProtectionEnchantmentMixin",
+        "inventory.CraftingInventoryAccessor",
+        "inventory.PlayerEntityMixin",
+        "inventory.PlayerScreenHandlerMixin",
+        "redstone.BulbBlockMixin"
     ],
     "injectors": {
         "defaultRequire": 1
