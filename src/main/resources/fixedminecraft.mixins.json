@@ -1,25 +1,26 @@
 {
-    "required": true,
-    "package": "net.greenjab.fixedminecraft.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "AnvilMixin",
-        "FireworkRocketItemMixin",
-        "ItemMixin",
-        "ItemsMixin",
-        "BlocksMixin",
-        "LivingEntityMixin",
-        "PlayerEntityMixin",
-        "PlayerManagerMixin",
-        "HungerManagerMixin",
-        "ServerPlayerEntityMixin",
-        "StewItemMixin",
-        "WorldMixin",
-        "transport.ArmorAbstractHorseEntityMixin",
-        "transport.BreedingAbstractHorseEntityMixin",
-        "transport.LeavesBlockMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
+  "required": true,
+  "package": "net.greenjab.fixedminecraft.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AnvilMixin",
+    "BlocksMixin",
+    "FireworkRocketItemMixin",
+    "HungerManagerMixin",
+    "ItemMixin",
+    "ItemsMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "PlayerManagerMixin",
+    "ServerPlayerEntityMixin",
+    "StewItemMixin",
+    "WorldMixin",
+    "transport.ArmorAbstractHorseEntityMixin",
+    "transport.BreedingAbstractHorseEntityMixin",
+    "transport.LeavesBlockMixin",
+    "transport.TridentItemMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
   }
 }
