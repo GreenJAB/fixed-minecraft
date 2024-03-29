@@ -1,31 +1,34 @@
 {
-    "required": true,
-    "package": "net.greenjab.fixedminecraft.mixin",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "FireworkRocketItemMixin",
-        "ItemMixin",
-        "ItemsMixin",
-        "LivingEntityMixin",
-        "PlayerEntityMixin",
-        "PlayerManagerMixin",
-        "ServerPlayerEntityMixin",
-        "StewItemMixin",
-        "SuspiciousStewItemMixin",
-        "WorldMixin",
-        "redstone.BulbBlockMixin",
-        "enchanting.AnvilMixin",
-        "enchanting.DamageUtilMixin",
-        "enchanting.BookItemMixin",
-        "enchanting.EnchantmentScreenHandlerMixin",
-        "enchanting.DepthStriderEnchantmentMixin",
-        "enchanting.FrostWalkerEnchantmentMixin",
-        "enchanting.InfinityEnchantmentMixin",
-        "enchanting.MultishotEnchantmentMixin",
-        "enchanting.PiercingEnchantmentMixin",
-        "enchanting.ProtectionEnchantmentMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    }
+  "required": true,
+  "package": "net.greenjab.fixedminecraft.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "FireworkRocketItemMixin",
+    "ItemMixin",
+    "ItemsMixin",
+    "LivingEntityMixin",
+    "PlayerEntityMixin",
+    "PlayerManagerMixin",
+    "ServerPlayerEntityMixin",
+    "StewItemMixin",
+    "SuspiciousStewItemMixin",
+    "WorldMixin",
+    "enchanting.AnvilMixin",
+    "enchanting.BookItemMixin",
+    "enchanting.DamageUtilMixin",
+    "enchanting.DepthStriderEnchantmentMixin",
+    "enchanting.EnchantmentScreenHandlerMixin",
+    "enchanting.FrostWalkerEnchantmentMixin",
+    "enchanting.InfinityEnchantmentMixin",
+    "enchanting.MultishotEnchantmentMixin",
+    "enchanting.PiercingEnchantmentMixin",
+    "enchanting.ProtectionEnchantmentMixin",
+    "redstone.BulbBlockMixin",
+    "wolves.AttackWithOwnerGoalMixin",
+    "wolves.GoatHornItemMixin",
+    "wolves.FollowOwnerGoalMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }
