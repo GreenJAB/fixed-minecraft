@@ -1,6 +1,9 @@
 package net.greenjab.fixedminecraft.blocks
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
+import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.blocks.anvil.NetheriteAnvilBlock
 import net.greenjab.fixedminecraft.util.blockSettings
 import net.greenjab.fixedminecraft.util.identifierOf
@@ -96,6 +99,19 @@ object BlockRegistry {
         registerBlockWithItem(identifierOf("azalea_fence_gate"), AZALEA_FENCE_GATE)
         registerBlockWithItem(identifierOf("azalea_fence"), AZALEA_FENCE)
         registerBlockWithItem(identifierOf("azalea_door"), AZALEA_DOOR)
+
+        StrippableBlockRegistry.register(AZALEA_LOG, STRIPPED_AZALEA_LOG)
+        StrippableBlockRegistry.register(AZALEA_WOOD, STRIPPED_AZALEA_WOOD)
+
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_PLANKS, 5, 20)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_SLAB, 5, 20)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_FENCE_GATE, 5, 20)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_FENCE, 5, 20)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_STAIRS, 5, 20)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_LOG, 5, 5)
+        FlammableBlockRegistry.getDefaultInstance().add(AZALEA_WOOD, 5, 5)
+        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_AZALEA_LOG, 5, 5)
+        FlammableBlockRegistry.getDefaultInstance().add(STRIPPED_AZALEA_WOOD, 5, 5)
     }
 
     private fun registerBlock(identifier: Identifier, block: Block) {
