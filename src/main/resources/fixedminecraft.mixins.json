@@ -25,7 +25,10 @@
     "enchanting.ProtectionEnchantmentMixin",
     "mobs.MobEntityMixin",
     "mobs.PiglinEntityMixin",
-    "redstone.BulbBlockMixin"
+    "redstone.BulbBlockMixin",
+    "wolves.AttackWithOwnerGoalMixin",
+    "wolves.GoatHornItemMixin",
+    "wolves.FollowOwnerGoalMixin"
   ],
   "injectors": {
     "defaultRequire": 1
