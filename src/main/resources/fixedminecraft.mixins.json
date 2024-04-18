@@ -23,12 +23,15 @@
     "enchanting.MultishotEnchantmentMixin",
     "enchanting.PiercingEnchantmentMixin",
     "enchanting.ProtectionEnchantmentMixin",
+    "map_book.MapStateAccessor",
+    "map_book.MapStatePlayerUpdateTrackerMixin",
+    "map_book.MapUpdateS2CPacketMixin",
     "mobs.MobEntityMixin",
     "mobs.PiglinEntityMixin",
     "redstone.BulbBlockMixin",
     "wolves.AttackWithOwnerGoalMixin",
-    "wolves.GoatHornItemMixin",
-    "wolves.FollowOwnerGoalMixin"
+    "wolves.FollowOwnerGoalMixin",
+    "wolves.GoatHornItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
