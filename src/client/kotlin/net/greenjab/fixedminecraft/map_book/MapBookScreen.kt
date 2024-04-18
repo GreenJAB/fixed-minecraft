@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.map_book
 
+import net.greenjab.fixedminecraft.items.ItemRegistry
+import net.greenjab.fixedminecraft.items.map_book.MapBookItem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
@@ -8,15 +10,15 @@ import net.minecraft.screen.ScreenTexts
 import net.minecraft.util.math.MathHelper
 import kotlin.math.abs
 
-class MapBookScreen(item: ItemStack) : Screen(item.name) {
+class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     var x = 0.0
     var y = 0.0
     var scale = 1.0f
     var targetScale = 1.0f
 
     override fun init() {
-        for (i in 1..16) {
-            addDrawable(MapTile(this, i, client!!))
+        for (mapStateData in (ItemRegistry.MAP_BOOK as MapBookItem).getMapStates(item, client?.world)) {
+            addDrawable(MapTile(this, mapStateData.id, mapStateData.mapState, client!!))
         }
 
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button: ButtonWidget? -> this.close() }.dimensions(width / 2 - 100, height / 4 + 144, 200, 20).build())
