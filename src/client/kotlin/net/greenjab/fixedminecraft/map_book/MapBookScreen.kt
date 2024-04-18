@@ -8,14 +8,16 @@ import net.minecraft.screen.ScreenTexts
 import net.minecraft.util.math.MathHelper
 import kotlin.math.abs
 
-class MapBookScreen(var item: ItemStack) : Screen(item.name) {
+class MapBookScreen(item: ItemStack) : Screen(item.name) {
     var x = 0.0
     var y = 0.0
     var scale = 1.0f
     var targetScale = 1.0f
 
     override fun init() {
-        addDrawable(MapTile(this, item.count, client!!))
+        for (i in 1..16) {
+            addDrawable(MapTile(this, i, client!!))
+        }
 
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button: ButtonWidget? -> this.close() }.dimensions(width / 2 - 100, height / 4 + 144, 200, 20).build())
     }
