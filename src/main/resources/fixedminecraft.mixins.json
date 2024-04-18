@@ -14,10 +14,12 @@
     "SuspiciousStewItemMixin",
     "WorldMixin",
     "enchanting.AnvilMixin",
+    "enchanting.AnvilScreenHandlerMixin",
     "enchanting.BookItemMixin",
     "enchanting.DamageUtilMixin",
     "enchanting.DepthStriderEnchantmentMixin",
     "enchanting.EnchantmentScreenHandlerMixin",
+    "enchanting.ForgingScreenHandlerAccessor",
     "enchanting.FrostWalkerEnchantmentMixin",
     "enchanting.InfinityEnchantmentMixin",
     "enchanting.MultishotEnchantmentMixin",
@@ -27,8 +29,8 @@
     "mobs.PiglinEntityMixin",
     "redstone.BulbBlockMixin",
     "wolves.AttackWithOwnerGoalMixin",
-    "wolves.GoatHornItemMixin",
-    "wolves.FollowOwnerGoalMixin"
+    "wolves.FollowOwnerGoalMixin",
+    "wolves.GoatHornItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
