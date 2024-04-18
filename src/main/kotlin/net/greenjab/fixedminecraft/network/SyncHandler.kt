@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.network
 
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
@@ -45,5 +46,18 @@ object SyncHandler {
     fun onPlayerLoggedIn(player: ServerPlayerEntity) {
         lastSaturationLevels.remove(player.uuid)
         lastExhaustionLevels.remove(player.uuid)
+    }
+
+
+    fun makeItemStackBuf(value: ItemStack): PacketByteBuf {
+        var buf = PacketByteBuf(Unpooled.buffer())
+        buf.writeItemStack(value)
+        return buf
+    }
+
+    val OPEN_MAP_BOOK: Identifier = Identifier("fixedminecraft", "open_map_book")
+
+    fun onOpenMapBook(player: ServerPlayerEntity, item: ItemStack) {
+        ServerPlayNetworking.send(player, OPEN_MAP_BOOK, makeItemStackBuf(item))
     }
 }
