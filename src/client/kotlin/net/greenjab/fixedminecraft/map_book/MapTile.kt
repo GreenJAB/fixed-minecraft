@@ -8,9 +8,7 @@ import net.minecraft.item.map.MapState
 
 class MapTile(var screen: MapBookScreen, var id: Int, var mapState: MapState, var client: MinecraftClient) : Drawable {
 
-    override fun render(context: DrawContext?, mouseX: Int, mouseY: Int, delta: Float) {
-        if (context == null) return
-
+    override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
         val mapScale = (1 shl mapState.scale.toInt()).toFloat()
         val offset = 64*mapScale
 
@@ -24,7 +22,7 @@ class MapTile(var screen: MapBookScreen, var id: Int, var mapState: MapState, va
         context.matrices.translate(mapState.centerX.toDouble() - offset + context.scaledWindowWidth/2, mapState.centerZ.toDouble() - offset + context.scaledWindowHeight/2,0.0)
         context.matrices.scale(mapScale, mapScale, 1.0f)
 
-        client.gameRenderer.mapRenderer.draw(context.matrices, context.vertexConsumers, id, mapState, false, LightmapTextureManager.MAX_LIGHT_COORDINATE)
+        client.gameRenderer.mapRenderer.draw(context.matrices, context.vertexConsumers, id, mapState, true, LightmapTextureManager.MAX_LIGHT_COORDINATE)
 
         context.matrices.pop()
     }
