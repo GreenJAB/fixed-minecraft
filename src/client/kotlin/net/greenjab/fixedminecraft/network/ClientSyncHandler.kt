@@ -4,6 +4,9 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
+import net.greenjab.fixedminecraft.items.map_book.MapBookItem
+import net.greenjab.fixedminecraft.items.map_book.MapBookState
+import net.greenjab.fixedminecraft.items.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
 import net.greenjab.fixedminecraft.network.SyncHandler.EXHAUSTION_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.OPEN_MAP_BOOK
@@ -30,6 +33,17 @@ object ClientSyncHandler {
 
         ClientPlayNetworking.registerGlobalReceiver(OPEN_MAP_BOOK) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
             val itemStack = buf.readItemStack()
+            val ids = buf.readIntArray()
+
+            if (ids.isNotEmpty()) {
+                client.execute {
+                    MapBookStateManager.putClientMapBookState(
+                        (itemStack.item as MapBookItem).getMapBookId(itemStack),
+                        MapBookState(ids)
+                    )
+                }
+            }
+
             client.execute {
                 client.setScreen(MapBookScreen(itemStack))
             }

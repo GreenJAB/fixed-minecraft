@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.network
 
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.greenjab.fixedminecraft.items.map_book.MapBookItem
+import net.greenjab.fixedminecraft.items.map_book.MapBookStateManager
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
@@ -49,15 +51,25 @@ object SyncHandler {
     }
 
 
-    fun makeItemStackBuf(value: ItemStack): PacketByteBuf {
-        var buf = PacketByteBuf(Unpooled.buffer())
-        buf.writeItemStack(value)
+    fun makeMapBookBuf(player: ServerPlayerEntity, item: ItemStack): PacketByteBuf {
+        val buf = PacketByteBuf(Unpooled.buffer())
+
+        buf.writeItemStack(item)
+
+        val mapBookState = MapBookStateManager.getMapBookState(player.server, (item.item as MapBookItem).getMapBookId(item))
+        if (mapBookState != null) {
+            buf.writeIntArray(mapBookState.mapIDs.toIntArray())
+        } else {
+            //client should treat this as a 0 length array when reading
+            buf.writeVarInt(0)
+        }
+
         return buf
     }
 
     val OPEN_MAP_BOOK: Identifier = Identifier("fixedminecraft", "open_map_book")
 
     fun onOpenMapBook(player: ServerPlayerEntity, item: ItemStack) {
-        ServerPlayNetworking.send(player, OPEN_MAP_BOOK, makeItemStackBuf(item))
+        ServerPlayNetworking.send(player, OPEN_MAP_BOOK, makeMapBookBuf(player, item))
     }
 }
