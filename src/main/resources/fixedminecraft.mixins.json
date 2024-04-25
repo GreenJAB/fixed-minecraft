@@ -23,7 +23,6 @@
     "enchanting.MultishotEnchantmentMixin",
     "enchanting.PiercingEnchantmentMixin",
     "enchanting.ProtectionEnchantmentMixin",
-    "map_book.IdCountsStateMixin",
     "map_book.MapStateAccessor",
     "map_book.MapStatePlayerUpdateTrackerMixin",
     "map_book.MapUpdateS2CPacketMixin",

@@ -9,10 +9,13 @@ class MapBookState() : PersistentState() {
     constructor(ids: IntArray) : this() {
         mapIDs.clear()
         mapIDs.addAll(ids.toList())
+        this.markDirty()
     }
 
     override fun writeNbt(nbt: NbtCompound): NbtCompound {
-        nbt.putIntArray("mapIDs", mapIDs)
+        if (mapIDs.isNotEmpty()) {
+            nbt.putIntArray("mapIDs", mapIDs)
+        }
         return nbt
     }
 
@@ -24,5 +27,6 @@ class MapBookState() : PersistentState() {
 
     fun addMapID(id: Int) {
         mapIDs.add(id)
+        this.markDirty()
     }
 }
