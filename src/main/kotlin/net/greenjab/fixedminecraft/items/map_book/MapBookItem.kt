@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.items.map_book
 
-import net.greenjab.fixedminecraft.mixin.map_book.IdCountsStateAccessor
 import net.greenjab.fixedminecraft.network.SyncHandler
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -10,14 +9,16 @@ import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
 import net.minecraft.item.map.MapState
 import net.minecraft.nbt.NbtElement
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.Vec3d
-import net.minecraft.world.IdCountsState
 import net.minecraft.world.World
 import kotlin.math.abs
+import kotlin.math.floor
 import kotlin.math.max
 
 class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
@@ -27,8 +28,25 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         if (world != null && !world.isClient()) {
             val player = user as ServerPlayerEntity
             val item = user.getStackInHand(hand)
+            val otherHand = if (hand == Hand.MAIN_HAND) player.offHandStack else player.mainHandStack
+
+            var openMap = true
+
+            if (otherHand.isOf(Items.PAPER)) {
+                if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0)) {
+                    if (!player.abilities.creativeMode) {
+                        otherHand.decrement(1)
+                    }
+                    player.world.playSoundFromEntity(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.soundCategory, 1.0f, 1.0f)
+                    openMap = false
+                }
+            }
+
             sendMapUpdates(player, item)
-            SyncHandler.onOpenMapBook(player, item)
+            SyncHandler.mapBookSync(player, item)
+            if (openMap) {
+                SyncHandler.onOpenMapBook(player, item)
+            }
         }
         return super.use(world, user, hand)
     }
@@ -51,7 +69,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         for (mapStateData in getMapStates(stack, entity.world)) {
             mapStateData.mapState.update(entity, stack)
 
-            if (!mapStateData.mapState.locked && getDistanceToEdgeOfMap(mapStateData.mapState, entity) < 128) {
+            if (!mapStateData.mapState.locked && getDistanceToEdgeOfMap(mapStateData.mapState, entity.pos) < 128) {
                 (Items.FILLED_MAP as FilledMapItem).updateColors(world, entity, mapStateData.mapState)
             }
         }
@@ -79,14 +97,14 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return list
     }
 
-    fun getNearestMap(stack: ItemStack, world: World, player: PlayerEntity): MapStateData? {
+    fun getNearestMap(stack: ItemStack, world: World, pos: Vec3d): MapStateData? {
         //get nearest map, if inside multiple maps, choose smallest resolution
         var nearestDistance = Double.MAX_VALUE
         var nearestScale: Byte = Byte.MAX_VALUE
         var nearestMap: MapStateData? = null
 
         for (mapStateData in getMapStates(stack, world)) {
-            var distance = getDistanceToEdgeOfMap(mapStateData.mapState, player)
+            var distance = getDistanceToEdgeOfMap(mapStateData.mapState, pos)
             if (distance < 0) distance = -1.0
 
             val roughlyEqual = abs(nearestDistance-distance) < 1
@@ -107,11 +125,11 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return player.pos.distanceTo(Vec3d(mapState.centerX.toDouble(), player.y, mapState.centerZ.toDouble()))
     }
 
-    fun getDistanceToEdgeOfMap(mapState: MapState, player: PlayerEntity): Double {
+    fun getDistanceToEdgeOfMap(mapState: MapState, pos: Vec3d): Double {
         // get signed distance to edge of map
         // so the edge of the map is 0, inside is negative and outside is positive
         // note the distance does not round the corners like a proper sdf would
-        return max(abs(player.pos.x-mapState.centerX), abs(player.pos.z-mapState.centerZ)) - 64*(1 shl mapState.scale.toInt())
+        return max(abs(pos.x-mapState.centerX), abs(pos.z-mapState.centerZ)) - 64*(1 shl mapState.scale.toInt())
     }
 
     fun getMapBookId(stack: ItemStack): Int? {
@@ -123,11 +141,11 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         ) Integer.valueOf(nbtCompound.getInt(MAP_BOOK_KEY)) else null
     }
 
-    private fun allocateMapId(world: ServerWorld): Int {
+    private fun allocateMapBookId(server: MinecraftServer): Int {
         val mapBookState = MapBookState()
-        val counts = world.server.overworld?.persistentStateManager?.getOrCreate(IdCountsState.getPersistentStateType(), "idcounts") as IdCountsStateAccessor
-        val i = counts.`fixedminecraft$getNextMapBookId`()
-        MapBookStateManager.putMapBookState(world.server, i, mapBookState)
+        val counts = server.overworld?.persistentStateManager?.getOrCreate(MapBookIdCountsState.persistentStateType, MapBookIdCountsState.IDCOUNTS_KEY)
+        val i = counts!!.nextMapBookId
+        MapBookStateManager.putMapBookState(server, i, mapBookState)
         return i
     }
 
@@ -135,8 +153,29 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         stack.getOrCreateNbt().putInt(MAP_BOOK_KEY, id)
     }
 
-    fun createMapBookState(stack: ItemStack, world: ServerWorld) {
-        val i = allocateMapId(world)
+    private fun createMapBookState(stack: ItemStack, server: MinecraftServer) : Int {
+        val i = allocateMapBookId(server)
         setMapBookId(stack, i)
+        return i
+    }
+
+    private fun getOrCreateMapBookState(stack: ItemStack, server: MinecraftServer) : MapBookState {
+        val state = MapBookStateManager.getMapBookState(server, getMapBookId(stack))
+        if (state != null) return state
+        val i = createMapBookState(stack, server)
+        return MapBookStateManager.getMapBookState(server, i)!!
+    }
+
+    private fun addNewMapAtPos(item: ItemStack, world: ServerWorld, pos: Vec3d, scale: Int) : Boolean {
+        val state = getOrCreateMapBookState(item, world.server)
+
+        val nearestState = getNearestMap(item, world, pos)
+        //make a new map if the book has no maps, the position is outside a map, or the map the position is in has a larger scale
+        if (nearestState == null || nearestState.mapState.scale > scale || getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0) {
+            val newMap = FilledMapItem.createMap(world, floor(pos.x).toInt(), floor(pos.z).toInt(), scale.toByte(), true, false)
+            state.addMapID(FilledMapItem.getMapId(newMap)!!)
+            return true
+        }
+        return false
     }
 }
