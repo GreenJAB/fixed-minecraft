@@ -19,11 +19,17 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     var x = 0.0
     var y = 0.0
     var scale = 1.0f
-    private var targetScale = 1.0f
+    private var targetScale = 0.5f
 
     private val MAP_ICONS_RENDER_LAYER: RenderLayer = RenderLayer.getText(Identifier("textures/map/map_icons.png"))
 
     override fun init() {
+        if (client != null && client!!.player != null) {
+            x = -client!!.player!!.x
+            y = -client!!.player!!.z
+        }
+        setScale(targetScale, width/2.0, height/2.0)
+
         for (mapStateData in (ItemRegistry.MAP_BOOK as MapBookItem).getMapStates(item, client?.world)) {
             addDrawable(MapTile(this, mapStateData.id, mapStateData.mapState, client!!))
         }
@@ -64,7 +70,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         context.matrices.translate(this.x, this.y, 0.0)
         context.matrices.scale(this.scale, this.scale, 1.0f)
 
-        context.matrices.translate(x + context.scaledWindowWidth/2.0, z + context.scaledWindowHeight/2.0, 0.0)
+        context.matrices.translate(x + width/2.0, z + height/2.0, 0.0)
 
         context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation))
         context.matrices.scale(8.0f, 8.0f, -3.0f)
@@ -101,6 +107,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     }
 
     private fun zoom(start: Float, scroll: Float, speed: Float): Float {
+        // logarithmic zoom that doesn't drift when zooming in and out repeatedly
         val absScroll = abs(scroll)
         return if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
     }

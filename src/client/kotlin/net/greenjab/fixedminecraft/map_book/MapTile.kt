@@ -19,7 +19,7 @@ class MapTile(var screen: MapBookScreen, var id: Int, var mapState: MapState, va
         context.matrices.translate(screen.x, screen.y, (1.0/(mapState.scale.toInt()+1.0))+1.0)
         context.matrices.scale(screen.scale, screen.scale, -1.0f)
 
-        context.matrices.translate(mapState.centerX.toDouble() - offset + context.scaledWindowWidth/2, mapState.centerZ.toDouble() - offset + context.scaledWindowHeight/2,0.0)
+        context.matrices.translate(mapState.centerX.toDouble() - offset + screen.width/2.0, mapState.centerZ.toDouble() - offset + screen.height/2.0,0.0)
         context.matrices.scale(mapScale, mapScale, 1.0f)
 
         client.gameRenderer.mapRenderer.draw(context.matrices, context.vertexConsumers, id, mapState, true, LightmapTextureManager.MAX_LIGHT_COORDINATE)
