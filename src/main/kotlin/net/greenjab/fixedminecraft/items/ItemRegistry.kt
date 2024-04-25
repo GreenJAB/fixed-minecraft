@@ -10,7 +10,7 @@ import net.minecraft.registry.Registries
 
 object ItemRegistry {
     val DRAGON_FIREWORK_ROCKET: Item = FireworkRocketItem(Item.Settings())
-    val MAP_BOOK: Item = MapBookItem(FabricItemSettings())
+    val MAP_BOOK: Item = MapBookItem(FabricItemSettings().maxCount(1))
 
     fun register() {
         Registries.ITEM.register(identifierOf("dragon_firework_rocket"), DRAGON_FIREWORK_ROCKET)

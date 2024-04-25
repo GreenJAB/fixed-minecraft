@@ -1,6 +1,9 @@
 {
     "item.fixedminecraft.dragon_firework_rocket": "Dragon Firework Rocket",
     "item.fixedminecraft.map_book": "Map Book",
+    "item.fixedminecraft.map_book_empty": "Empty Map Book",
+    "item.fixedminecraft.map_book_id": "Book:",
+    "item.fixedminecraft.map_book_maps": "Maps:",
     "block.fixedminecraft.netherite_anvil": "Netherite Anvil",
     "block.fixedminecraft.chipped_netherite_anvil": "Chipped Netherite Anvil",
     "block.fixedminecraft.damaged_netherite_anvil": "Damaged Netherite Anvil",

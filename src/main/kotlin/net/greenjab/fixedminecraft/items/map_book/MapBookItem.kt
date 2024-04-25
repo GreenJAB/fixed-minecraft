@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.items.map_book
 
 import net.greenjab.fixedminecraft.network.SyncHandler
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.FilledMapItem
@@ -9,10 +10,13 @@ import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
 import net.minecraft.item.map.MapState
 import net.minecraft.nbt.NbtElement
+import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvents
+import net.minecraft.text.Text
+import net.minecraft.util.Formatting
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.Vec3d
@@ -22,7 +26,7 @@ import kotlin.math.floor
 import kotlin.math.max
 
 class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
-    private val MAP_BOOK_KEY = "fixed_minecraft:map_book"
+    private val MAP_BOOK_KEY = "fixedminecraft:map_book"
 
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack> {
         if (world != null && !world.isClient()) {
@@ -44,7 +48,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
             sendMapUpdates(player, item)
             SyncHandler.mapBookSync(player, item)
-            if (openMap) {
+            if (openMap && getMapBookId(item) != null) {
                 SyncHandler.onOpenMapBook(player, item)
             }
         }
@@ -121,10 +125,6 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return nearestMap
     }
 
-    fun getDistanceToCenterOfMap(mapState: MapState, player: PlayerEntity): Double {
-        return player.pos.distanceTo(Vec3d(mapState.centerX.toDouble(), player.y, mapState.centerZ.toDouble()))
-    }
-
     fun getDistanceToEdgeOfMap(mapState: MapState, pos: Vec3d): Double {
         // get signed distance to edge of map
         // so the edge of the map is 0, inside is negative and outside is positive
@@ -177,5 +177,20 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
             return true
         }
         return false
+    }
+
+    override fun getName(stack: ItemStack?): Text {
+        if (stack != null && getMapBookId(stack) == null) return Text.translatable("item.fixedminecraft.map_book_empty")
+        return super.getName(stack)
+    }
+
+    override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
+        if (stack == null) return
+        val id = getMapBookId(stack) ?: return
+        val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(world.server!!, id)
+        val mapsCount = mapBookState?.mapIDs?.count() ?: 0
+
+        tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id+1).toString()).formatted(Formatting.GRAY))
+        tooltip.add(Text.translatable("item.fixedminecraft.map_book_maps").append(ScreenTexts.SPACE).append(mapsCount.toString()).formatted(Formatting.GRAY))
     }
 }
