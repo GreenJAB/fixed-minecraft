@@ -1,0 +1,32 @@
+Enchantment power
+(DONE) - All enchants have a ‘cost’ increasing ‘exponentially’ with each level (cost difference between 1 and 2 is less than 4 and 5 etc)
+(done until |) - All items have an enchantment capacity | based on the material and proportional to the total number of enchants that item has (gold has more than diamond, boots have more than the chestplate)
+
+Anvil
+- When using the anvil, the xp cost is based on the output item, the sum of the cost of each enchantment applied (no level 30 cap in the enchantment table nor 39 cap in the anvil/no exponential anvil use cost).
+- You can not apply enchants over the capacity in a normal anvil, nor repair ‘unstable’ gear that is already over the limit or has ‘overleveled’ enchants i.e. sharpness 6, but requires the netherite anvil to do so. The chance for a netherite anvil to ‘damage’ is proportional to the amount of levels just used.
+- You can't combine enchants from different tools to prevent just enchanting a bunch of tools then combining them together
+- You can still combine enchanted books, but would be to place more enchants in the chiseled bookshelves to have a higher chance of being selected.
+- Netherrite gear only needs scraps to repair rather than full ingots
+- Output of Netherrite anvil can not have mending
+
+Enchanting table
+(DONE) - When enchanting, the xp cost is based on the output item, the sum of the cost of each enchantment applied (no level 30 cap in the enchantment table nor 39 cap in the anvil/no exponential anvil use cost).
+(DONE) - The enchanting table can only apply 1 low level enchantment on its own, and the more bookshelves (up to 15) will give a chance for that enchant to be a higher level.
+- Chiseled bookshelves around an enchanting table can copy the enchants onto the item, however not automatically. The more bookshelves, the more times the enchantment table will scan a random block in its range, and if it's a chiseled bookshelf it will pick a random enchant off a random book in it and if valid, will apply it to the item.
+    -> always chooses from one out of 15 (if not 15 present -> chance), then chooses from one out of 6 slots (again, if not all present -> chance)
+- If the enchant output will be above the capacity, the button will display differently, and perhaps have an additional cost (perhaps lapis blocks instead of just ‘ingots’)?
+(DONE) - You can not enchant books yourself
+
+Enchantments
+(DONE) - All mutual restrictions removed apart from silk-fortune
+
+
+
+
+
+
+Extra ideas:
+    Enchanting table:
+        - chance of additional enchantments increases the lower the slot
+        - level of enchantments increase with additional bookshelves

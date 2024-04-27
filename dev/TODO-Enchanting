@@ -23,15 +23,20 @@ Enchanting Features:
 
 Still to do:
     Enchantment Power:
-            - max ench power for diff items
-            - overenchanted loot
+        - max ench power for diff items
+        - overenchanted loot -> Datapack
+
+    Enchanting table:
+        - picks 3 random possible combinations depending on the number of bookshelves -> cost = ench power
 
     Anvil cost is solely based on the output item (no increasing anvil use).
          -> + extra cost per tool material
-         -> curses decrease xp cost
+         -> renaming costs???
 
     Repairing doesn’t require the base material but using it reduces the xp cost (however if the base xp cost is over the limit it will stay that way)
     -> idea instead: use grindstone to "sharpen" tools and gain durability, but it removes some enchantment points of the max limit of the item
+
+    Bar on the right side of the anvil indicating the enchantment power
 
 
 Done:
@@ -41,3 +46,4 @@ Done:
 
     Anvil cost is solely based on the output item (no increasing anvil use).
         -> 1 lvl per ench power
+        -> curses decrease xp cost

@@ -15,4 +15,9 @@ public class BookItemMixin {
     private void unenchantableBook(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(false);
     }
+
+    @Inject(method = "getEnchantability", at = @At("HEAD"), cancellable = true)
+    private void noEnchantability(CallbackInfoReturnable<Integer> cir) {
+        cir.setReturnValue(0);
+    }
 }

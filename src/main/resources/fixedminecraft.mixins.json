@@ -18,6 +18,7 @@
     "enchanting.BookItemMixin",
     "enchanting.DamageUtilMixin",
     "enchanting.DepthStriderEnchantmentMixin",
+    "enchanting.EnchantmentHelperMixin",
     "enchanting.EnchantmentScreenHandlerMixin",
     "enchanting.ForgingScreenHandlerAccessor",
     "enchanting.FrostWalkerEnchantmentMixin",
