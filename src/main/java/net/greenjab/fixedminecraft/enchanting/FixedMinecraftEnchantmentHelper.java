@@ -53,7 +53,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     @Deprecated
-    public static List<List<EnchantmentLevelEntry>> createUniqueOptions(int count) {
+    public static List<List<EnchantmentLevelEntry>> createUniqueEnchantmentCombinations(int count) {
         return null;
     }
 }
