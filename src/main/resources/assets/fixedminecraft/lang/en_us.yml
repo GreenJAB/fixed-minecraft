@@ -1,0 +1,18 @@
+item:
+  fixedminecraft:
+    dragon_firework_rocket: Dragon Firework Rocket
+    map_book: Map Book
+    netherite_horse_armor: Netherite Horse Armor
+block:
+  fixedminecraft:
+    netherite_anvil: Netherite Anvil
+    chipped_netherite_anvil: Chipped Netherite Anvil
+    damaged_netherite_anvil: Damaged Netherite Anvil
+    copper_rail: Copper Rail
+    exposed_copper_rail: Exposed Copper Rail
+    weathered_copper_rail: Weathered Copper Rail
+    oxidized_copper_rail: Oxidized Copper Rail
+    waxed_copper_rail: Waxed Copper Rail
+    waxed_exposed_copper_rail: Waxed Exposed Copper Rail
+    waxed_weathered_copper_rail: Waxed Weathered Copper Rail
+    waxed_oxidized_copper_rail: Waxed Oxidized Copper Rail

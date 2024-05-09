@@ -5,6 +5,7 @@ plugins {
     java
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.fabric.loom)
+    alias(libs.plugins.yamlang)
 }
 
 version = "0.1-1.20.4"
@@ -73,6 +74,12 @@ tasks.processResources {
             "minecraft" to libs.versions.minecraft.get(),
         )
     }
+}
+
+
+yamlang {
+    targetSourceSets.set(mutableListOf(sourceSets["main"]))
+    inputDir.set("assets/fixedminecraft/lang")
 }
 
 tasks {
