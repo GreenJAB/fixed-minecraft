@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin;
 
-import net.greenjab.fixedminecraft.blocks.BlockRegistry;
+import net.greenjab.fixedminecraft.registry.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;

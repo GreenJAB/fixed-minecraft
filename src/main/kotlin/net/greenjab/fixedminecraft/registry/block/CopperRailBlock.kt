@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.blocks.impl
+package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.AbstractRailBlock
@@ -15,7 +15,10 @@ import net.minecraft.util.BlockRotation
 @Suppress("OVERRIDE_DEPRECATION")
 open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, settings) {
     init {
-        defaultState = stateManager.defaultState.with(SHAPE, NORTH_SOUTH).with(POWERED, false).with(WATERLOGGED, false)
+        this.defaultState = stateManager.defaultState
+            .with(SHAPE, NORTH_SOUTH)
+            .with(POWERED, false)
+            .with(WATERLOGGED, false)
     }
 
     override fun getShapeProperty() = SHAPE
@@ -25,8 +28,11 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
     override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = Blocks.POWERED_RAIL.mirror(state, mirror)
 
     companion object {
+        @JvmField
         val SHAPE: EnumProperty<RailShape> = Properties.STRAIGHT_RAIL_SHAPE
+        @JvmField
         val POWERED: BooleanProperty = Properties.POWERED
+        @JvmField
         val CODEC: MapCodec<CopperRailBlock> = createCodec(::CopperRailBlock)
     }
 }

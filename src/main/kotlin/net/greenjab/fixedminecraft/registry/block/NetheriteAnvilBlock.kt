@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.blocks.impl
+package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.Block

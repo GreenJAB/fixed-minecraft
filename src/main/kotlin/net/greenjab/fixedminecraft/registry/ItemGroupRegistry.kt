@@ -1,14 +1,11 @@
-package net.greenjab.fixedminecraft.items
+package net.greenjab.fixedminecraft.registry
 
-import net.greenjab.fixedminecraft.blocks.BlockRegistry
-import net.greenjab.fixedminecraft.util.identifierOf
-import net.greenjab.fixedminecraft.util.itemGroup
-import net.greenjab.fixedminecraft.util.register
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 
+@Suppress("MemberVisibilityCanBePrivate")
 object ItemGroupRegistry {
     val FIXED = itemGroup(Text.translatable("itemgroup.fixed")) {
         icon { ItemStack(ItemRegistry.DRAGON_FIREWORK_ROCKET) }
@@ -23,6 +20,6 @@ object ItemGroupRegistry {
     }
 
     fun register() {
-        Registries.ITEM_GROUP.register(identifierOf("fixed"), FIXED)
+        Registries.ITEM_GROUP.register("fixed", FIXED)
     }
 }

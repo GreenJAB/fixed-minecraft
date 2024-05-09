@@ -10,7 +10,6 @@
     "ItemMixin",
     "ItemsMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin",
     "PlayerManagerMixin",
     "ServerPlayerEntityMixin",
     "StewItemMixin",

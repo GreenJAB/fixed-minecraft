@@ -1,10 +1,10 @@
 package net.greenjab.fixedminecraft
 
-import net.fabricmc.api.ModInitializer
-import net.greenjab.fixedminecraft.blocks.BlockRegistry
-import net.greenjab.fixedminecraft.items.ItemGroupRegistry
-import net.greenjab.fixedminecraft.items.ItemRegistry
 //import net.greenjab.fixedminecraft.network.ClientSyncManager
+import net.fabricmc.api.ModInitializer
+import net.greenjab.fixedminecraft.registry.BlockRegistry
+import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
+import net.greenjab.fixedminecraft.registry.ItemRegistry
 import org.slf4j.LoggerFactory
 
 
@@ -21,7 +21,6 @@ object FixedMinecraft : ModInitializer {
 
         BlockRegistry.register()
         ItemRegistry.register()
-
         ItemGroupRegistry.register()
     }
 }

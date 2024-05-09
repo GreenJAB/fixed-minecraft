@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
-import net.greenjab.fixedminecraft.items.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;

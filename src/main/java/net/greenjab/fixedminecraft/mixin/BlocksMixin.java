@@ -1,8 +1,8 @@
 package net.greenjab.fixedminecraft.mixin;
 
-import net.greenjab.fixedminecraft.blocks.BlueIceBlock;
-import net.greenjab.fixedminecraft.blocks.NewIceBlock;
-import net.greenjab.fixedminecraft.blocks.PackedIceBlock;
+import net.greenjab.fixedminecraft.registry.block.BlueIceBlock;
+import net.greenjab.fixedminecraft.registry.block.NewIceBlock;
+import net.greenjab.fixedminecraft.registry.block.PackedIceBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

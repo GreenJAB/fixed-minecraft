@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.blocks;
+package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.BlockState
@@ -13,7 +13,6 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
-import org.jetbrains.annotations.Nullable
 
 class PackedIceBlock (settings: Settings) : TranslucentBlock(settings) {
 

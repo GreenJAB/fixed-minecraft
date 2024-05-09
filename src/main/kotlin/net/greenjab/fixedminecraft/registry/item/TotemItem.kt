@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.items
+package net.greenjab.fixedminecraft.registry.item
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
@@ -10,7 +10,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
 
-
+// FIXME: Unused?
 class TotemItem(settings: Settings) : Item(settings) {
 
     /*fun TotemItem() {

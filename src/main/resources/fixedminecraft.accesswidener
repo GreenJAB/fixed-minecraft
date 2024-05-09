@@ -1,5 +1,7 @@
 accessWidener v2 named
 
+accessible method net/minecraft/entity/passive/AbstractHorseEntity setHorseFlag (IZ)V
+
 ## Classes
 # <access>   class   <className>
 

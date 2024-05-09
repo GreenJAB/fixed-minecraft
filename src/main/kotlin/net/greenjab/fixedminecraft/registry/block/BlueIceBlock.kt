@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.blocks;
+package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.BlockState
@@ -15,7 +15,6 @@ import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
 
 class BlueIceBlock (settings: Settings) : TranslucentBlock(settings) {
-
     public override fun getCodec() = CODEC
 
     companion object {
