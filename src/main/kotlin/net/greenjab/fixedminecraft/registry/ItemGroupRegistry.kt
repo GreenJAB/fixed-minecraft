@@ -16,6 +16,15 @@ object ItemGroupRegistry {
             entries.add(BlockRegistry.NETHERITE_ANVIL)
             entries.add(BlockRegistry.CHIPPED_NETHERITE_ANVIL)
             entries.add(BlockRegistry.DAMAGED_NETHERITE_ANVIL)
+
+            entries.add(BlockRegistry.COPPER_RAIL)
+            entries.add(BlockRegistry.EXPOSED_COPPER_RAIL)
+            entries.add(BlockRegistry.WEATHERED_COPPER_RAIL)
+            entries.add(BlockRegistry.OXIDIZED_COPPER_RAIL)
+            entries.add(BlockRegistry.WAXED_COPPER_RAIL)
+            entries.add(BlockRegistry.WAXED_EXPOSED_COPPER_RAIL)
+            entries.add(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL)
+            entries.add(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL)
         }
     }
 

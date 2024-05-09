@@ -9,21 +9,20 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 
 @Suppress("OVERRIDE_DEPRECATION")
-class OxidizableRail(private val oxidation: Oxidizable.OxidationLevel, settings: Settings) : CopperRailBlock(settings),
-                                                                                             Oxidizable {
-    override fun getCodec(): MapCodec<OxidizableRail> = CODEC
+class OxidizableRailBlock(private val oxidation: Oxidizable.OxidationLevel, settings: Settings) : CopperRailBlock(settings), Oxidizable {
+    override fun getCodec(): MapCodec<OxidizableRailBlock> = CODEC
     override fun hasRandomTicks(state: BlockState) = Oxidizable.getIncreasedOxidationBlock(state.block).isPresent
     override fun getDegradationLevel() = oxidation
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) =
         tickDegradation(state, world, pos, random)
 
     companion object {
-        val CODEC: MapCodec<OxidizableRail> = RecordCodecBuilder.mapCodec {
+        val CODEC: MapCodec<OxidizableRailBlock> = RecordCodecBuilder.mapCodec {
             it.group(
                 Oxidizable.OxidationLevel.CODEC.fieldOf("weathering_state")
-                    .forGetter(OxidizableRail::getDegradationLevel),
+                    .forGetter(OxidizableRailBlock::getDegradationLevel),
                 createSettingsCodec()
-            ).apply(it, ::OxidizableRail)
+            ).apply(it, ::OxidizableRailBlock)
         }
     }
 }

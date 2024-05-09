@@ -2,10 +2,12 @@ package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.block.AbstractRailBlock
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.block.enums.RailShape
 import net.minecraft.block.enums.RailShape.NORTH_SOUTH
+import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
@@ -19,6 +21,14 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
             .with(SHAPE, NORTH_SOUTH)
             .with(POWERED, false)
             .with(WATERLOGGED, false)
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
+        with(builder) {
+            add(SHAPE)
+            add(POWERED)
+            add(WATERLOGGED)
+        }
     }
 
     override fun getShapeProperty() = SHAPE
