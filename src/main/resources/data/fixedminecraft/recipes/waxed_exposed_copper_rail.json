@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "blocks",
+    "group": "fixedminecraft:copper_rails",
+    "ingredients": [
+        {
+            "item": "minecraft:honeycomb"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        }
+    ],
+    "result": {
+        "item": "fixedminecraft:waxed_exposed_copper_rail",
+        "count": 1
+    }
+}
