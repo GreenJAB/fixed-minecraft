@@ -18,6 +18,7 @@
     "transport.ArmorAbstractHorseEntityMixin",
     "transport.BreedingAbstractHorseEntityMixin",
     "transport.EnderPearlEntityMixin",
+    "transport.HoneycombItemMixin",
     "transport.LeavesBlockMixin",
     "transport.LivingEntityMixin",
     "transport.OxidizableMixin",
