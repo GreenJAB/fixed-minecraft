@@ -14,6 +14,7 @@
     "ServerPlayerEntityMixin",
     "StewItemMixin",
     "WorldMixin",
+    "transport.AbstractMinecartEntityMixin",
     "transport.ArmorAbstractHorseEntityMixin",
     "transport.BreedingAbstractHorseEntityMixin",
     "transport.EnderPearlEntityMixin",
