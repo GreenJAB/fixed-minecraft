@@ -54,6 +54,7 @@ dependencies {
     //     exclude(group = "net.fabricmc.fabric-api")
     //     include(this)
     // }
+    vineflowerDecompilerClasspath(libs.vineflower)
 }
 
 fabricApi {
@@ -61,6 +62,12 @@ fabricApi {
 }
 
 loom {
+    decompilers {
+        get("vineflower").apply {
+            options.put("mark-corresponding-synthetics", "1")
+        }
+    }
+
     val projectName = project.name.lowercase()
     accessWidenerPath = sourceSets["main"].resources.srcDirs.map { it.resolve("$projectName.accesswidener") }
         .first { it.exists() }
