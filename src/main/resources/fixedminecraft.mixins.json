@@ -19,6 +19,7 @@
     "transport.EnderPearlEntityMixin",
     "transport.LeavesBlockMixin",
     "transport.LivingEntityMixin",
+    "transport.OxidizableMixin",
     "transport.TridentItemMixin"
   ],
   "injectors": {
