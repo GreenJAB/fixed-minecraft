@@ -65,11 +65,11 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
         val CODEC: MapCodec<CopperRailBlock> = createCodec(::CopperRailBlock)
 
         @JvmStatic
-        fun getVelocityMultiplier(state: BlockState): Float = when((state.block as CopperRailBlock).level) {
-            UNAFFECTED -> 1.0F
-            EXPOSED -> 1.1F
-            WEATHERED -> 1.3F
-            OXIDIZED -> 1.5F
+        fun getMaxVelocity(state: BlockState): Double = when((state.block as CopperRailBlock).level) {
+            UNAFFECTED -> 15.0
+            EXPOSED -> 10.0
+            WEATHERED -> 6.0
+            OXIDIZED -> 3.0
         }
     }
 }
