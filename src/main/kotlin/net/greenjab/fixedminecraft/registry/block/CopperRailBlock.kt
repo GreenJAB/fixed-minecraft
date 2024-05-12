@@ -36,14 +36,12 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
     init {
         this.defaultState = stateManager.defaultState
             .with(SHAPE, NORTH_SOUTH)
-            .with(POWERED, false)
             .with(WATERLOGGED, false)
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block, BlockState>) {
         with(builder) {
             add(SHAPE)
-            add(POWERED)
             add(WATERLOGGED)
         }
     }
@@ -58,18 +56,24 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
         @JvmField
         val SHAPE: EnumProperty<RailShape> = Properties.STRAIGHT_RAIL_SHAPE
 
-        @JvmField
-        val POWERED: BooleanProperty = Properties.POWERED
 
         @JvmField
         val CODEC: MapCodec<CopperRailBlock> = createCodec(::CopperRailBlock)
 
         @JvmStatic
+        fun getVelocityMultiplier(state: BlockState): Float = when((state.block as CopperRailBlock).level) {
+            UNAFFECTED -> 0.50F
+            EXPOSED -> 1.0F
+            WEATHERED -> 1.5F
+            OXIDIZED -> 2.0F
+        }
+
+        @JvmStatic
         fun getMaxVelocity(state: BlockState): Double = when((state.block as CopperRailBlock).level) {
-            UNAFFECTED -> 15.0
-            EXPOSED -> 10.0
-            WEATHERED -> 6.0
-            OXIDIZED -> 3.0
+            UNAFFECTED -> 20.0 //15,10,6,3
+            EXPOSED -> 15.0
+            WEATHERED -> 10.0
+            OXIDIZED -> 5.0
         }
     }
 }
