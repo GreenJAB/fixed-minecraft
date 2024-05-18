@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.enchantment.Enchantment;
@@ -29,7 +27,7 @@ public class AnvilScreenHandlerMixin {
     /**
      * Makes the anvil costs solely based on the enchantment power held by the output item.
      */
-    // @Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;sendContentUpdates()V"))
+    @Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;sendContentUpdates()V"))
     private void calculateCost(CallbackInfo ci) {
 
         // System.out.println(((ForgingScreenHandlerAccessor) this).getOutput());

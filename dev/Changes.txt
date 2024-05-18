@@ -30,3 +30,13 @@ Extra ideas:
     Enchanting table:
         - chance of additional enchantments increases the lower the slot
         - level of enchantments increase with additional bookshelves
+
+    first slot: 1 high level
+    second slot: 2 mid level
+    third slot: 3 lower level
+    -> designed to fill the max enchantment power determined by the bookshelves
+
+
+Creative mode item capacity check
+Enchanting table levels bookshelves
+
