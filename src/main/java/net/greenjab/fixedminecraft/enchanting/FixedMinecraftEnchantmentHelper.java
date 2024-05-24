@@ -1,11 +1,14 @@
 package net.greenjab.fixedminecraft.enchanting;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Map;
 
 public class FixedMinecraftEnchantmentHelper {
@@ -28,10 +31,11 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
+        // TODO
         // check material
         // probably type
         // ...other things
-        return 10;
+        return 40;
         // 35 -> one max lvl and one lower level enchantment with 20 being the max enchantment power or
         //    3 max level and one mid-tier enchantment with 10 being the max enchantment power
     }
@@ -52,8 +56,37 @@ public class FixedMinecraftEnchantmentHelper {
         return power;
     }
 
-    @Deprecated
-    public static List<List<EnchantmentLevelEntry>> createUniqueEnchantmentCombinations(int count) {
-        return null;
+    /**
+     * Counts nearby bookshelves; turned vanilla code snippet into dedicated method
+     * @param world The world the enchanting table is in
+     * @param enchantingTablePosition Its position as a net.minecraft.util.math.BlockPos
+     * @return Bookshelf-count capped to 15
+     */
+    public static int countAccessibleBookshelves(World world, BlockPos enchantingTablePosition) {
+        int bookShelfCount = 0;
+        for(BlockPos p : EnchantingTableBlock.POWER_PROVIDER_OFFSETS) {
+            if (EnchantingTableBlock.canAccessPowerProvider(world, enchantingTablePosition, p)) {
+                bookShelfCount++;
+            }
+        }
+        // System.out.println("bookshelf count before math.min: " + bookShelfCount);
+        bookShelfCount = Math.min(bookShelfCount, 15);
+        // System.out.println("bookshelf count: " + bookShelfCount);
+        return bookShelfCount;
+    }
+
+    /**
+     * Similar to net.minecraft.block.EnchantingTableBlock.canAccessPowerProvider(World w, BlockPos tablePos, BlockPos providerOffset).
+     * Checks whether the enchanting table at the given position can access the given block.
+     * @param world The world the enchanting table is in
+     * @param enchantingTablePosition It's position as a net.minecraft.util.math.BlockPos
+     * @param providerOffset Given provider offset from the enchanting table's position
+     * @param block net.minecraft.block.Block to look for
+     * @return true if block matches and can be accessed, false otherwise
+     */
+    public static boolean canAccessBlock(World world, BlockPos enchantingTablePosition, BlockPos providerOffset, Block block) {
+        return world.getBlockState(enchantingTablePosition.add(providerOffset)).isOf(block)
+               && world.getBlockState(enchantingTablePosition.add(providerOffset.getX() / 2, providerOffset.getY(), providerOffset.getZ() / 2))
+                       .isIn(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
     }
 }
