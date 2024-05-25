@@ -73,21 +73,21 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     @Unique
     private int[] fixed_minecraft__inputEnchantmentPowers;
 
-    private static void printEnchantments(List<EnchantmentLevelEntry> enchantmentLevelEntryList, String before) {
-        Map<Enchantment, Integer> enchantmentLevelMap = new HashMap<>();
-        enchantmentLevelEntryList.forEach(levelEntry -> {
-            enchantmentLevelMap.put(levelEntry.enchantment, levelEntry.level);
-        });
-        System.out.println(before + enchantmentLevelMap);
-    }
+    // private static void debugPrintEnchantments(List<EnchantmentLevelEntry> enchantmentLevelEntryList, String before) {
+    //     Map<Enchantment, Integer> enchantmentLevelMap = new HashMap<>();
+    //     enchantmentLevelEntryList.forEach(levelEntry -> {
+    //         enchantmentLevelMap.put(levelEntry.enchantment, levelEntry.level);
+    //     });
+    //     System.out.println(before + enchantmentLevelMap);
+    // }
 
     @Inject(method = "generateEnchantments", at = @At("RETURN"), cancellable = true)
     private void generateOnlyOneEnchantment(ItemStack stack, int slot, int level, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        System.out.println("--- mixin generateEnchantments");
+        // System.out.println("--- mixin generateEnchantments");
         List<EnchantmentLevelEntry> originalReturnValue = cir.getReturnValue();
         // List<EnchantmentLevelEntry> randomEnchant = List.of(originalReturnValue.get(this.random.nextInt(originalReturnValue.size())));
         List<EnchantmentLevelEntry> enchantments = new ArrayList<>(List.of(originalReturnValue.get(this.random.nextInt(originalReturnValue.size()))));
-        printEnchantments(enchantments, "input enchantments");
+        // debugPrintEnchantments(enchantments, "input enchantments");
 
         this.context.run((world, tablePos) -> {
             // count bookshelves
@@ -95,14 +95,14 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
             // scan for chiseled bookshelves [bookShelfCount] times
             for (int i=0; i<bookShelfCount; i++) {
-                System.out.println("scan " + i + "/" + (bookShelfCount-1));
+                // System.out.println("scan " + i + "/" + (bookShelfCount-1));
 
                 // choose random index and check accessibility
                 int randomIndex = this.random.nextInt(EnchantingTableBlock.POWER_PROVIDER_OFFSETS.size());
                 if (!FixedMinecraftEnchantmentHelper.canAccessBlock(world, tablePos, EnchantingTableBlock.POWER_PROVIDER_OFFSETS.get(randomIndex), Blocks.CHISELED_BOOKSHELF)) {
                     continue;
                 }
-                System.out.println("chiseled bookshelf accessible, blockPos offset: " + EnchantingTableBlock.POWER_PROVIDER_OFFSETS.get(randomIndex).toString());
+                // System.out.println("chiseled bookshelf accessible, blockPos offset: " + EnchantingTableBlock.POWER_PROVIDER_OFFSETS.get(randomIndex).toString());
 
                 ChiseledBookshelfBlockEntity chiseledBookShelfEntity = (ChiseledBookshelfBlockEntity) world.getBlockEntity(tablePos.add(EnchantingTableBlock.POWER_PROVIDER_OFFSETS.get(randomIndex)));
 
@@ -140,19 +140,19 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 Map<Enchantment, Integer> bookEnchantments = EnchantmentHelper.get(itemStackAtRandomSlot);
                 bookEnchantments.forEach((enchantment, lvl) -> {
                     // System.out.println("enchantment " + enchantment.toString());
-                    if (!enchantment.isAcceptableItem(stack)) {
+                    if (!enchantment.isAcceptableItem(stack) || enchantments.stream().anyMatch(enchantmentLevelEntry -> enchantmentLevelEntry.enchantment == enchantment) /* Loops through the enchantments at each successful scan. Maybe fix later, remove doubles in the end. However, this way it's clearer */) {
                         // System.out.println("item " + stack.toString() + " is not compatible");
                         return;
                     }
                     enchantments.add(new EnchantmentLevelEntry(enchantment, lvl));
-                    System.out.println("added enchantment " + enchantment.toString());
+                    // System.out.println("added enchantment " + enchantment.toString());
                 });
             }
 
         });
         // cir.setReturnValue(randomEnchant);
-        printEnchantments(enchantments, "output enchantments ");
-        System.out.println("------- end mixin generateEnchantments");
+        // debugPrintEnchantments(enchantments, "output enchantments ");
+        // System.out.println("------- end mixin generateEnchantments");
         cir.setReturnValue(enchantments);
     }
 
@@ -176,7 +176,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 // System.out.println("power " + power);
 
                 // generate enchantments
-                System.out.println("generateEnchantments - onContentChanged on logical " + (world.isClient ? "client" : "server"));
+                // System.out.println("generateEnchantments - onContentChanged on logical " + (world.isClient ? "client" : "server"));
                 List<EnchantmentLevelEntry> enchantments = this.generateEnchantments(itemStack, slot, power);
 
                 // Map<Enchantment, Integer> eMap = new HashMap<>();
@@ -235,7 +235,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
      */
     @Inject(method = "onButtonClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandlerContext;run(Ljava/util/function/BiConsumer;)V", shift = At.Shift.AFTER))
     private void applyEnchantingCosts(PlayerEntity player, int id, CallbackInfoReturnable<Boolean> cir, @Local(ordinal = 1) int i) {
-        System.out.println("onButtonClick context.run Shift.AFTER; i reference " + i);
+        // System.out.println("onButtonClick context.run Shift.AFTER; i reference " + i);
         player.applyEnchantmentCosts(this.inventory.getStack(0), FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(this.inventory.getStack(0)) - i);
     }
 }
