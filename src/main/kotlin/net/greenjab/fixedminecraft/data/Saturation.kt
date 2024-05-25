@@ -22,7 +22,7 @@ object Saturation {
             if (ticksSinceLastExhaustion == 40) {
                 h *=0.015f+hunger.saturationLevel/200.0f
                 hunger.saturationLevel = min(hunger.saturationLevel+h,hunger.foodLevel.toFloat());
-                SaturationSinceLastHunger += h;
+                SaturationSinceLastHunger += h  * (if(player.isSneaking()) 2.0f else 1.0f);
                 if (SaturationSinceLastHunger >= 5) {
                     SaturationSinceLastHunger = 0.0f;
                      hunger.foodLevel--;
