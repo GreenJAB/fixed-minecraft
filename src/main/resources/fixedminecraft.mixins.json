@@ -28,7 +28,9 @@
     "redstone.BulbBlockMixin",
     "wolves.AttackWithOwnerGoalMixin",
     "wolves.GoatHornItemMixin",
-    "wolves.FollowOwnerGoalMixin"
+    "wolves.FollowOwnerGoalMixin",
+      "BeaconBlockEntityMixin",
+      "BeaconBlockMixin"
   ],
   "injectors": {
     "defaultRequire": 1
