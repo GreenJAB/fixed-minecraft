@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin;
 
 import net.greenjab.fixedminecraft.blocks.BlockRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -36,7 +37,7 @@ public class BeaconBlockEntityMixin {
                                      CallbackInfoReturnable<Integer> cir) {
 
         int i = 0;
-
+        Block base = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
         for(int j = 1; j <= 10; i = j++) {
             int k = y - j;
             if (k < world.getBottomY()) {
@@ -47,8 +48,7 @@ public class BeaconBlockEntityMixin {
 
             for(int l = x - j; l <= x + j && bl; ++l) {
                 for(int m = z - j; m <= z + j; ++m) {
-                   // if (!world.getBlockState(new BlockPos(l, k, m)).isIn(BlockTags.BEACON_BASE_BLOCKS)) {\
-                    if (!world.getBlockState(new BlockPos(l, k, m)).isOf(world.getBlockState(new BlockPos(x, y-1, z)).getBlock())) {
+                    if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
                         bl = false;
                         break;
                     }
@@ -97,10 +97,13 @@ public class BeaconBlockEntityMixin {
             case "Block{minecraft:redstone_block}":
                 primaryEffect = StatusEffects.HEALTH_BOOST;
                 break;
+            case "Block{minecraft:lapis_block}":
+                primaryEffect = StatusEffects.SATURATION;
+                break;
         }
 
         if (!world.isClient && primaryEffect != null) {
-            double d = (double)(beaconLevel * 10 + 10);
+            double d = (double)(beaconLevel * 20 + 10);
             int i = 0;
             if (beaconLevel >= 4 && primaryEffect == secondaryEffect) {
                 i = 1;
@@ -114,16 +117,7 @@ public class BeaconBlockEntityMixin {
             PlayerEntity playerEntity;
             while(var11.hasNext()) {
                 playerEntity = (PlayerEntity)var11.next();
-                playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, true));
-            }
-
-            if (beaconLevel >= 4 && primaryEffect != secondaryEffect && secondaryEffect != null) {
-                var11 = list.iterator();
-
-                while(var11.hasNext()) {
-                    playerEntity = (PlayerEntity)var11.next();
-                    playerEntity.addStatusEffect(new StatusEffectInstance(secondaryEffect, j, 0, true, true));
-                }
+                playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
             }
         }
     }

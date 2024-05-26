@@ -30,7 +30,8 @@
     "wolves.GoatHornItemMixin",
     "wolves.FollowOwnerGoalMixin",
       "BeaconBlockEntityMixin",
-      "BeaconBlockMixin"
+      "BeaconBlockMixin",
+      "StatusEffectInstanceMixin"
   ],
   "injectors": {
     "defaultRequire": 1
