@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin;
 
+import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.greenjab.fixedminecraft.blocks.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BeaconBlockEntity;
@@ -95,7 +96,7 @@ public class BeaconBlockEntityMixin {
                 primaryEffect = StatusEffects.NIGHT_VISION;
                 break;
             case "Block{minecraft:redstone_block}":
-                primaryEffect = StatusEffects.HEALTH_BOOST;
+                primaryEffect = StatusRegistry.INSTANCE.getREACH();
                 break;
             case "Block{minecraft:lapis_block}":
                 primaryEffect = StatusEffects.SATURATION;

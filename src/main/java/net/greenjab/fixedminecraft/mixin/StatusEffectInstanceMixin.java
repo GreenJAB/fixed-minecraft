@@ -25,31 +25,10 @@ import java.util.List;
 @Mixin(StatusEffectInstance.class)
 public class StatusEffectInstanceMixin {
 
-    /*@Inject(method = "update", at = @At("HEAD"))
-    public void ModifySaturation(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> cir) {
-        StatusEffectInstance SEI = (StatusEffectInstance)(Object)this;
-
-        //System.out.println(SEI.toString());
-        //System.out.println(SEI.getEffectType().toString());
-        //System.out.println(SEI.getEffectType().getName().toString());
-        boolean b = SEI.toString().contains("saturation");
-        System.out.println(b);
-    }*/
-   /* @Inject(method = "update", at = @At("HEAD"), cancellable = true)
-    private void ModifySaturation(LivingEntity entity, Runnable overwriteCallback, CallbackInfoReturnable<Boolean> cir) {
-        StatusEffectInstance SEI = (StatusEffectInstance)(Object)this;
-
-            int i = SEI.isInfinite() ? entity.age : SEI.getDuration();
-            if (SEI.getEffectType().canApplyUpdateEffect(i, SEI.getAmplifier())) {
-                SEI.getEffectType().applyUpdateEffect(entity, SEI.getAmplifier());
-            }
-    }*/
-
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;canApplyUpdateEffect(II)Z"))
     private boolean injected(StatusEffect instance, int duration, int amplifier) {
         StatusEffectInstance SEI = (StatusEffectInstance)(Object)this;
-        boolean b = instance.toString().contains("Saturation");
-        if (b) {
+        if (instance.toString().contains("Saturation")) {
             int i = 100 >> amplifier;
             if (i > 0) {
                 return duration % i == 0;
@@ -57,12 +36,8 @@ public class StatusEffectInstanceMixin {
                 return true;
             }
         } else {
-            boolean bb = SEI.getEffectType().canApplyUpdateEffect(duration, amplifier);
-            System.out.println(bb);
-            return bb;
-
+            return SEI.getEffectType().canApplyUpdateEffect(duration, amplifier);
         }
-        //return false;
     }
 
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;applyUpdateEffect(Lnet/minecraft/entity/LivingEntity;I)V"))

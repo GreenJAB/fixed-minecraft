@@ -31,7 +31,9 @@
     "wolves.FollowOwnerGoalMixin",
       "BeaconBlockEntityMixin",
       "BeaconBlockMixin",
-      "StatusEffectInstanceMixin"
+      "StatusEffectInstanceMixin",
+      "ServerPlayNetworkHandlerMixin",
+      "ServerPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

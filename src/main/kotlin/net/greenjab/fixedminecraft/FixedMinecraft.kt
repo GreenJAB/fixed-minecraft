@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ModInitializer
+import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry
 import net.greenjab.fixedminecraft.blocks.BlockRegistry
 import net.greenjab.fixedminecraft.items.ItemGroupRegistry
 import net.greenjab.fixedminecraft.items.ItemRegistry
@@ -21,6 +22,7 @@ object FixedMinecraft : ModInitializer {
 
         BlockRegistry.register()
         ItemRegistry.register()
+        StatusRegistry.register()
 
         ItemGroupRegistry.register()
     }
