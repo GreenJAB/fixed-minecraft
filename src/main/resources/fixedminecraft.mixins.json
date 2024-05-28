@@ -29,11 +29,11 @@
     "wolves.AttackWithOwnerGoalMixin",
     "wolves.GoatHornItemMixin",
     "wolves.FollowOwnerGoalMixin",
-      "BeaconBlockEntityMixin",
-      "BeaconBlockMixin",
-      "StatusEffectInstanceMixin",
-      "ServerPlayNetworkHandlerMixin",
-      "ServerPlayerInteractionManagerMixin"
+      "beacon.BeaconBlockEntityMixin",
+      "beacon.BeaconBlockMixin",
+      "beacon.StatusEffectInstanceMixin",
+      "beacon.ServerPlayNetworkHandlerMixin",
+      "beacon.ServerPlayerInteractionManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

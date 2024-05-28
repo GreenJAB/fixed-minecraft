@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.minecraft.block.BeaconBlock;
 import net.minecraft.block.BlockState;

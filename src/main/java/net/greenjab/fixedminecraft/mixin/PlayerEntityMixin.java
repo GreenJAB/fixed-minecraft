@@ -24,14 +24,4 @@ public class PlayerEntityMixin {
             cir.setReturnValue(false);
         }
     }
-
-    /*@Inject(method = "getReachDistance", at = @At("HEAD"), cancellable = true)
-    private void hasLongerReach(boolean creative, CallbackInfoReturnable<Float> cir) {
-        PlayerEntity instance = (PlayerEntity)(Object)this;
-        int level = instance.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier(); //TODO get instance of player
-        //cir.setReturnValue(10f);
-        cir.setReturnValue((creative ? 5.0F : 4.5F)+(level+1)*0.5f);
-    }*/
-
-
 }

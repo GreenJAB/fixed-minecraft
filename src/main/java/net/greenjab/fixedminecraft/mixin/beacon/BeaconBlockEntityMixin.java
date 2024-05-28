@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.greenjab.fixedminecraft.blocks.BlockRegistry;

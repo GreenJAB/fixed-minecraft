@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BeaconBlockEntity;
@@ -46,7 +46,7 @@ public class StatusEffectInstanceMixin {
         boolean b = instance.toString().contains("Saturation");
         if (b) {
             if (!entity.getWorld().isClient && entity instanceof PlayerEntity playerEntity) {
-                playerEntity.getHungerManager().add(amplifier + 1, 0.0F);
+                playerEntity.getHungerManager().add(+ 1, 0.0F);
             }
         } else {
             SEI.getEffectType().applyUpdateEffect(entity,amplifier);
