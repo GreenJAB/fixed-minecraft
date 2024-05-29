@@ -28,9 +28,10 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             u = CopperRailBlock.getMaxVelocity(state);
             if (instance.isTouchingWater()) u /= 2.0;
             u /= 20.0;
-
+            u = Math.max(u, vec3d2.horizontalLength()*.9);
             vec3d2 = new Vec3d(MathHelper.clamp(vec3d2.x, -u, u), 0.0, MathHelper.clamp(vec3d2.z, -u, u));
             instance.setVelocity(vec3d2);
+
             this.move(MovementType.SELF, new Vec3d(t * vec3d2.x, 0.0, t * vec3d2.z));
         } else {
             if (instance.isTouchingWater()) u /= 2.0;
