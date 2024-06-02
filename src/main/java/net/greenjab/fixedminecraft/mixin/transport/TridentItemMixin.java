@@ -17,6 +17,6 @@ public class TridentItemMixin {
     @ModifyArg(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;useRiptide(I)V"), index = 0)
     private int modifyRiptideTicks(int riptideTicks, @Local(argsOnly = true) ItemStack stack) {
         int level = EnchantmentHelper.getLevel(Enchantments.RIPTIDE, stack);
-        return riptideTicks * level;
+        return 15 + level*5;
     }
 }

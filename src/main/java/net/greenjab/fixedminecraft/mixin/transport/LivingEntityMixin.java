@@ -20,9 +20,9 @@ public abstract class LivingEntityMixin extends Entity {
     private static final float MODIFIER = 0.1F;
     @Unique
     private static final float DEG = (float) (Math.PI / 180F);
+
     @Shadow
-    @Final
-    protected static int USING_RIPTIDE_FLAG;
+    protected int riptideTicks;
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -39,7 +39,7 @@ public abstract class LivingEntityMixin extends Entity {
     )
     )
     private boolean boostWhenRiptide(boolean original) {
-        return original || getFlag(USING_RIPTIDE_FLAG);
+        return original || this.riptideTicks>0;
     }
 
     /**
