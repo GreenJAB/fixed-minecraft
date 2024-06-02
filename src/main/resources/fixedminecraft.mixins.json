@@ -33,7 +33,8 @@
       "beacon.BeaconBlockMixin",
       "beacon.StatusEffectInstanceMixin",
       "beacon.ServerPlayNetworkHandlerMixin",
-      "beacon.ServerPlayerInteractionManagerMixin"
+      "beacon.ServerPlayerInteractionManagerMixin",
+      "VineMixin"
   ],
   "injectors": {
     "defaultRequire": 1

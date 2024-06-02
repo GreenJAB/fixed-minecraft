@@ -32,7 +32,6 @@ public class ServerPlayerInteractionManagerMixin {
 
     @Redirect(method = "processBlockBreakingAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"))
     private double injected(Vec3d instance, Vec3d vec) {
-        System.out.println(instance.squaredDistanceTo(vec));
         return instance.squaredDistanceTo(vec)/2.0;
     }
 }
