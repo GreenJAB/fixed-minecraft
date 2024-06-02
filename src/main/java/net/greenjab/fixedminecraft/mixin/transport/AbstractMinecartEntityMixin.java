@@ -3,19 +3,28 @@ package net.greenjab.fixedminecraft.mixin.transport;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
+    @Shadow
+    public abstract AbstractMinecartEntity.Type getMinecartType();
+
     public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
         super(entityType, world);
     }
@@ -38,8 +47,13 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             u /= 20.0;
             this.move(MovementType.SELF, new Vec3d(MathHelper.clamp(t * vec3d2.x, -u, u), 0.0, MathHelper.clamp(t * vec3d2.z, -u, u)));
         }
+    }
 
-
-
+    @ModifyVariable(method = "moveOnRail", at = @At("STORE"), ordinal = 3)
+    private double injected(double x) {
+        if (this.getMinecartType() == AbstractMinecartEntity.Type.FURNACE) {
+            return 0;
+        }
+        return x;
     }
 }
