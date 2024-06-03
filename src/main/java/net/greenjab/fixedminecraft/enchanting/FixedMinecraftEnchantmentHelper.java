@@ -44,12 +44,12 @@ public class FixedMinecraftEnchantmentHelper {
         int power = 0;
         Map<Enchantment, Integer> enchantmentLevelsMap = EnchantmentHelper.get(itemStack);
 
-        System.out.println(enchantmentLevelsMap);
+        // System.out.println(enchantmentLevelsMap);
 
         for (Enchantment enchantment : enchantmentLevelsMap.keySet()) {
             int add = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, enchantmentLevelsMap.get(enchantment));
 
-            System.out.println("enchantment: " + enchantment + " with level: " + enchantmentLevelsMap.get(enchantment) + " has " + add + " ench power");
+            // System.out.println("enchantment: " + enchantment + " with level: " + enchantmentLevelsMap.get(enchantment) + " has " + add + " ench power");
 
             power += add;
         }
