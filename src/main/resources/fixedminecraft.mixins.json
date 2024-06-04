@@ -34,7 +34,8 @@
       "beacon.StatusEffectInstanceMixin",
       "beacon.ServerPlayNetworkHandlerMixin",
       "beacon.ServerPlayerInteractionManagerMixin",
-      "VineMixin"
+      "VineMixin",
+      "PhantomSpawnerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
