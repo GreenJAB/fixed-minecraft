@@ -35,7 +35,9 @@
       "beacon.ServerPlayNetworkHandlerMixin",
       "beacon.ServerPlayerInteractionManagerMixin",
       "VineMixin",
-      "PhantomSpawnerMixin"
+      "phantom.PhantomSpawnerMixin",
+      "phantom.MilkBucketItemMixin",
+      "phantom.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
