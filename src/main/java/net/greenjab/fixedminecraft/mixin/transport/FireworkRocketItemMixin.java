@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.transport;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FireworkRocketItem;
@@ -15,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FireworkRocketItem.class)
 public class FireworkRocketItemMixin {
 
-    //@Inject(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getStackInHand(I)V", shift = At.Shift.AFTER))
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void removeNormalFireworkElytraUse(World world, PlayerEntity user, Hand hand,
                                                CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {

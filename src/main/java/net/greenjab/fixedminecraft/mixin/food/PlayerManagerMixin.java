@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;

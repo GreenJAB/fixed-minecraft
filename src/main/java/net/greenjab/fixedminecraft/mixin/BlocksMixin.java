@@ -17,7 +17,8 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(Blocks.class)
 public class BlocksMixin {
 
-    @Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
+    //cancelled
+    /*@Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=ice"},ordinal = 0)),at = @At(
             value = "NEW",target = "Lnet/minecraft/block/IceBlock;*", ordinal = 0 ),method = "<clinit>")
     private static IceBlock Ice(AbstractBlock.Settings settings) {
@@ -34,6 +35,6 @@ public class BlocksMixin {
                     value = "NEW",target = "Lnet/minecraft/block/TranslucentBlock;*", ordinal = 0 ),method = "<clinit>")
     private static TranslucentBlock blueIce(AbstractBlock.Settings settings) {
         return new BlueIceBlock(settings.ticksRandomly());
-    }
+    }*/
 
 }

@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.data.Saturation;
 import net.minecraft.entity.LivingEntity;
@@ -20,18 +20,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @SuppressWarnings("unchecked")
 @Mixin(HungerManager.class)
 public class HungerManagerMixin {
-
-    /*@Inject(method = "update", at = @At("HEAD"), cancellable = true)
-    private void injected(CallbackInfoReturnable cir) {
-        PlayerEntity instance = (PlayerEntity)(Object)this;
-        if (instance.isWet() || instance.isInLava()) {
-            cir.setReturnValue(false);
-        }
-    }*/
-    /*@Inject(method = "eat", at = @At("HEAD"))//at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Item;getFoodComponent()Lnet/minecraft/item/FoodComponent"))
-    private void eatExhastion(CallbackInfo ci) {
-        ((HungerManager) (Object)this).addExhaustion(0.005f);
-    }*/
 
     @Inject(method = "add", at = @At("HEAD"), cancellable = true)
     private void dontCapSaturation(int food, float saturationModifier, CallbackInfo ci) {
@@ -64,9 +52,9 @@ public class HungerManagerMixin {
     }
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canFoodHeal()Z"))
     private boolean needSaturationToHeal(PlayerEntity instance) {
-        return instance.canFoodHeal() &&(
-                ((HungerManager) (Object)this).getSaturationLevel()>=((HungerManager) (Object)this).getFoodLevel()
-                ||(instance.isSneaking())&&((HungerManager) (Object)this).getSaturationLevel()>=4);
+        HungerManager HM = (HungerManager) (Object)this;
+        return instance.canFoodHeal() && HM.getSaturationLevel()>=4 &&
+               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()));
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {

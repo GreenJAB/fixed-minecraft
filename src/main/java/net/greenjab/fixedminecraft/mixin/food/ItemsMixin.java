@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
