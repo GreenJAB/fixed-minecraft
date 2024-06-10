@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.util.mobs;
+package net.greenjab.fixedminecraft.mobs;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.trim.ArmorTrim;

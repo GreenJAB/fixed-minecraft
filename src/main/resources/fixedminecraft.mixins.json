@@ -14,9 +14,11 @@
     "SuspiciousStewItemMixin",
     "WorldMixin",
     "enchanting.AnvilMixin",
+    "enchanting.AnvilScreenHandlerMixin",
     "enchanting.BookItemMixin",
     "enchanting.DamageUtilMixin",
     "enchanting.DepthStriderEnchantmentMixin",
+    "enchanting.EnchantmentHelperMixin",
     "enchanting.EnchantmentScreenHandlerMixin",
     "enchanting.FrostWalkerEnchantmentMixin",
     "enchanting.InfinityEnchantmentMixin",
@@ -29,12 +31,12 @@
     "wolves.AttackWithOwnerGoalMixin",
     "wolves.GoatHornItemMixin",
     "wolves.FollowOwnerGoalMixin",
-      "beacon.BeaconBlockEntityMixin",
-      "beacon.BeaconBlockMixin",
-      "beacon.StatusEffectInstanceMixin",
-      "beacon.ServerPlayNetworkHandlerMixin",
-      "beacon.ServerPlayerInteractionManagerMixin",
-      "VineMixin"
+    "beacon.BeaconBlockEntityMixin",
+    "beacon.BeaconBlockMixin",
+    "beacon.StatusEffectInstanceMixin",
+    "beacon.ServerPlayNetworkHandlerMixin",
+    "beacon.ServerPlayerInteractionManagerMixin",
+    "VineMixin"
   ],
   "injectors": {
     "defaultRequire": 1
