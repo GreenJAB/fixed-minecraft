@@ -29,8 +29,14 @@
     "mobs.PiglinEntityMixin",
     "redstone.BulbBlockMixin",
     "wolves.AttackWithOwnerGoalMixin",
+    "wolves.GoatHornItemMixin",
     "wolves.FollowOwnerGoalMixin",
-    "wolves.GoatHornItemMixin"
+    "beacon.BeaconBlockEntityMixin",
+    "beacon.BeaconBlockMixin",
+    "beacon.StatusEffectInstanceMixin",
+    "beacon.ServerPlayNetworkHandlerMixin",
+    "beacon.ServerPlayerInteractionManagerMixin",
+    "VineMixin"
   ],
   "injectors": {
     "defaultRequire": 1

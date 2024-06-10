@@ -4,5 +4,6 @@
     "block.fixedminecraft.netherite_anvil": "Netherite Anvil",
     "block.fixedminecraft.chipped_netherite_anvil": "Chipped Netherite Anvil",
     "block.fixedminecraft.damaged_netherite_anvil": "Damaged Netherite Anvil",
-    "itemgroup.fixed": "Fixed Group"
+    "itemgroup.fixed": "Fixed Group",
+    "effect.fixedminecraft.reach": "Reach"
 }
