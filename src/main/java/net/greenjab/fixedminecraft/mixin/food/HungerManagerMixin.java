@@ -5,8 +5,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,7 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("unchecked")
 @Mixin(HungerManager.class)
-public class HungerManagerMixin {
+public abstract class HungerManagerMixin {
+
+    @Shadow
+    public abstract void readNbt(NbtCompound nbt);
 
     @Inject(method = "add", at = @At("HEAD"), cancellable = true)
     private void dontCapSaturation(int food, float saturationModifier, CallbackInfo ci) {
@@ -48,11 +53,14 @@ public class HungerManagerMixin {
     }
     @ModifyConstant(method = "update", constant = @Constant(intValue = 80))
     private int fasterHeal(int value) {
-        return 20;
+        HungerManager HM = (HungerManager) (Object)this;
+        if (HM.getFoodLevel()==0) return 80;
+        return 30;
     }
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canFoodHeal()Z"))
     private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
+        if (instance.hurtTime>0) return false;
         return instance.canFoodHeal() && HM.getSaturationLevel()>=4 &&
                (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()));
     }

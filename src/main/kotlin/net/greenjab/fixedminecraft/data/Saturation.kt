@@ -18,6 +18,9 @@ object Saturation {
             ticksSinceLastExhaustion = 0
             lastExhaustion = hunger.exhaustion
         }
+        if (player.hurtTime>0) {
+            ticksSinceLastExhaustion = 0;
+        }
         if (hunger.saturationLevel< hunger.foodLevel) {
             if (ticksSinceLastExhaustion == 40) {
                 h *=0.015f+hunger.saturationLevel/200.0f
