@@ -1,12 +1,18 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +48,24 @@ public abstract class LivingEntityMixin {
         this.removeStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA());
         this.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, (i+1)*5*60*20, i, true, true));
 
+    }
+
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;emitGameEvent(Lnet/minecraft/world/event/GameEvent;)V"))
+    private void increaseInsomnia(DamageSource damageSource, CallbackInfo ci, @Local Entity entity) {
+        LivingEntity LE = (LivingEntity)(Object)this;
+        if (LE instanceof PhantomEntity) {
+            if (entity.isPlayer()) {
+                if (((ServerPlayerEntity)entity).hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+                    int i = ((ServerPlayerEntity)entity).getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
+                    if (i<4) {
+                        if (Math.random()<1/(5*Math.pow(i+1,2))) {
+                            ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), 999999999, ++i, true, true));
+                            ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, GameStateChangeS2CPacket.DEMO_OPEN_SCREEN));
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
