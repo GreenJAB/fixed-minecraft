@@ -17,7 +17,7 @@ public abstract class VehicleLeafCollisionMixin extends Block {
     @Unique
     private static final VoxelShape COLLISION_SHAPE = Block.createCuboidShape(0.0, 14.0, 0.0, 16.0, 16.0, 16.0);
 
-    public LeafBlockCollision(Settings settings) { super(settings); }
+    public VehicleLeafCollisionMixin (Settings settings) { super(settings); }
 
     // Allow the vehicle to both move through and walk on top of leaves
     @Override
