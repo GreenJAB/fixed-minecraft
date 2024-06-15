@@ -49,8 +49,10 @@
     "transport.LeavesBlockMixin",
     "transport.LivingEntityMixin",
     "transport.OxidizableMixin",
-    "transport.TridentItemMixin"
-
+    "transport.TridentItemMixin",
+    "phantom.PhantomSpawnerMixin",
+    "phantom.MilkBucketItemMixin",
+    "phantom.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
