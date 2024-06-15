@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.map_book
 
-import net.greenjab.fixedminecraft.items.ItemRegistry
+import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.items.map_book.MapBookItem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
@@ -76,6 +76,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         context.matrices.scale(8.0f, 8.0f, -3.0f)
 
         context.matrices.translate(-0.125f, 0.125f, -10f)
+        context.matrices.scale(1/this.scale, 1/this.scale, 1.0f)
         val b: Byte = MapIcon.Type.PLAYER.id
         val g = (b % 16 + 0).toFloat() / 16.0f
         val h = (b / 16 + 0).toFloat() / 16.0f

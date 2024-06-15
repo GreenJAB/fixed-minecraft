@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.registry
 
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.greenjab.fixedminecraft.items.map_book.MapBookItem
 import net.minecraft.item.FireworkRocketItem
 import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
@@ -9,7 +11,7 @@ import net.minecraft.util.Rarity
 @Suppress("MemberVisibilityCanBePrivate")
 object ItemRegistry {
     val DRAGON_FIREWORK_ROCKET = item(::FireworkRocketItem)
-    val MAP_BOOK = item(::Item)
+    val MAP_BOOK: Item = MapBookItem(FabricItemSettings().maxCount(1))
     val NETHERITE_HORSE_ARMOR = item({ HorseArmorItem(15, "netherite", it) }) {
         maxCount(1)
         rarity(Rarity.RARE)
