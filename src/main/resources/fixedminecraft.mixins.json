@@ -52,7 +52,10 @@
     "transport.TridentItemMixin",
     "phantom.PhantomSpawnerMixin",
     "phantom.MilkBucketItemMixin",
-    "phantom.LivingEntityMixin"
+    "phantom.LivingEntityMixin",
+    "inventory.CraftingInventoryAccessor",
+    "inventory.PlayerEntityMixin",
+    "inventory.PlayerScreenHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
