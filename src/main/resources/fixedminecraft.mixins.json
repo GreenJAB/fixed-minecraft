@@ -3,7 +3,7 @@
   "package": "net.greenjab.fixedminecraft.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "FireworkRocketItemMixin",
+
     "ItemMixin",
     "ItemsMixin",
     "LivingEntityMixin",
@@ -37,6 +37,27 @@
     "beacon.ServerPlayNetworkHandlerMixin",
     "beacon.ServerPlayerInteractionManagerMixin",
     "VineMixin"
+    "AnvilMixin",
+    "BlocksMixin",
+    "transport.FireworkRocketItemMixin",
+    "food.HungerManagerMixin",
+    "food.ItemMixin",
+    "food.ItemsMixin",
+    "food.FoodComponentsMixin",
+    "food.PlayerManagerMixin",
+    "food.ServerPlayerEntityMixin",
+    "transport.WorldMixin",
+    "transport.AbstractMinecartEntityMixin",
+    "transport.FurnaceMinecartEntityMixin",
+    "transport.ArmorAbstractHorseEntityMixin",
+    "transport.BreedingAbstractHorseEntityMixin",
+    "transport.EnderPearlEntityMixin",
+    "transport.HoneycombItemMixin",
+    "transport.LeavesBlockMixin",
+    "transport.LivingEntityMixin",
+    "transport.OxidizableMixin",
+    "transport.TridentItemMixin"
+
   ],
   "injectors": {
     "defaultRequire": 1

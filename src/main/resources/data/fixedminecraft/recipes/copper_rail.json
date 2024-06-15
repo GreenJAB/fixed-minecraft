@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "blocks",
+    "pattern": [
+        "C C",
+        "CSC",
+        "C C"
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:copper_ingot"
+        },
+        "S": {
+            "item": "minecraft:stick"
+        }
+    },
+    "result": {
+        "item": "fixedminecraft:copper_rail",
+        "count": 1
+    }
+}

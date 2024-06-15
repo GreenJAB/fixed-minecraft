@@ -5,6 +5,7 @@
     "mixins": [
         "InGameHudMixin",
         "ClientPlayerInteractionManagerMixin"
+        "ClientPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

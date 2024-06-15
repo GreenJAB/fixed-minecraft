@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "shape=ascending_north": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail_raised_ne"
+    },
+    "shape=ascending_east": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail_raised_ne",
+      "y": 90
+    },
+    "shape=ascending_south": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail_raised_sw"
+    },
+    "shape=ascending_west": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail_raised_sw",
+      "y": 90
+    },
+    "shape=north_south": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail"
+    },
+    "shape=east_west": {
+      "model": "fixedminecraft:block/copper_rail/exposed_copper_rail",
+      "y": 90
+    }
+  }
+}
