@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import net.greenjab.fixedminecraft.registry.item.TotemItem;
 import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;

@@ -4,15 +4,9 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
 
-    "ItemMixin",
-    "ItemsMixin",
     "LivingEntityMixin",
-    "PlayerEntityMixin",
-    "PlayerManagerMixin",
-    "ServerPlayerEntityMixin",
     "StewItemMixin",
     "SuspiciousStewItemMixin",
-    "WorldMixin",
     "enchanting.AnvilMixin",
     "enchanting.AnvilScreenHandlerMixin",
     "enchanting.BookItemMixin",
@@ -36,8 +30,7 @@
     "beacon.StatusEffectInstanceMixin",
     "beacon.ServerPlayNetworkHandlerMixin",
     "beacon.ServerPlayerInteractionManagerMixin",
-    "VineMixin"
-    "AnvilMixin",
+    "VineMixin",
     "BlocksMixin",
     "transport.FireworkRocketItemMixin",
     "food.HungerManagerMixin",
