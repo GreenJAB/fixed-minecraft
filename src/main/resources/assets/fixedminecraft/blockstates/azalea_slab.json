@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "fixedminecraft:block/azalea_slab"
+    },
+    "type=double": {
+      "model": "fixedminecraft:block/azalea_planks"
+    },
+    "type=top": {
+      "model": "fixedminecraft:block/azalea_slab_top"
+    }
+  }
+}

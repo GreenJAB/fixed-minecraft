@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    {
+      "item": "fixedminecraft:azalea_planks"
+    }
+  ],
+  "result": {
+    "item": "fixedminecraft:azalea_button"
+  }
+}
