@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.inventory.RecipeInputInventory
@@ -15,16 +14,16 @@ import net.minecraft.world.World
 
 class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : SpecialCraftingRecipe(craftingRecipeCategory) {
 
-    //TODO: https://github.com/MattiDragon/ExtendedDrawers/blob/1.20.4/src/main/java/io/github/mattidragon/extendeddrawers/recipe/CopyLimiterRecipe.java
-    //TODO: https://github.com/MattiDragon/ExtendedDrawers/blob/1.20.4/src/main/java/io/github/mattidragon/extendeddrawers/registry/ModRecipes.java
-
     override fun matches(recipeInputInventory: RecipeInputInventory, world: World): Boolean {
         return getFilledMap(recipeInputInventory) != null
     }
 
     override fun craft(recipeInputInventory: RecipeInputInventory, dynamicRegistryManager: DynamicRegistryManager): ItemStack {
-        FixedMinecraft.logger.info("crafting...")
-        return getFilledMap(recipeInputInventory) ?: ItemStack.EMPTY
+        val itemStack = getFilledMap(recipeInputInventory)
+        if (itemStack == null || itemStack.isEmpty) {
+            return ItemStack.EMPTY
+        }
+        return itemStack.copy()
     }
 
     fun getFilledMap(recipeInputInventory: RecipeInputInventory) : ItemStack? {
@@ -54,8 +53,6 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
         if (!emptyMap) {
             return null
         }
-
-        FixedMinecraft.logger.info("ended with: "+filledMap)
 
         return filledMap
     }
