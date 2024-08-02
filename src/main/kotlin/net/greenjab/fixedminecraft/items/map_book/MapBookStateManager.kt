@@ -43,6 +43,6 @@ object MapBookStateManager {
     }
 
     fun getMapBookName(mapId: Int): String {
-        return "fixed_minecraft_map_book_$mapId"
+        return "fixedminecraft_map_book_$mapId"
     }
 }
