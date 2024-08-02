@@ -30,6 +30,7 @@ import kotlin.math.max
 
 class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     private val MAP_BOOK_KEY = "fixedminecraft:map_book"
+    private val ADDITIONS_KEY = "fixedminecraft:additions"
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
         val blockState = context.world.getBlockState(context.blockPos)
@@ -87,6 +88,8 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         if (world == null || world.isClient()) return
         if (stack == null || entity !is PlayerEntity) return
         if (!selected && entity.offHandStack != stack) return
+
+        applyAdditions(stack, world as ServerWorld)
 
         for (mapStateData in getMapStates(stack, entity.world)) {
             mapStateData.mapState.update(entity, stack)
@@ -203,20 +206,47 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     }
 
     override fun getName(stack: ItemStack?): Text {
-        if (stack != null && getMapBookId(stack) == null) return Text.translatable("item.fixedminecraft.map_book_empty")
+        if (stack != null && getMapBookId(stack) == null) {
+            if (stack.getOrCreateNbt().contains(ADDITIONS_KEY)) {
+                return Text.translatable("item.fixedminecraft.map_book_new")
+            }
+            return Text.translatable("item.fixedminecraft.map_book_empty")
+        }
         return super.getName(stack)
     }
 
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
         if (stack == null) return
-        val id = getMapBookId(stack) ?: return
-        val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(
-            world.server!!,
-            id
-        )
-        val mapsCount = mapBookState?.mapIDs?.count() ?: 0
+        val id = getMapBookId(stack)
 
-        tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id+1).toString()).formatted(Formatting.GRAY))
-        tooltip.add(Text.translatable("item.fixedminecraft.map_book_maps").append(ScreenTexts.SPACE).append(mapsCount.toString()).formatted(Formatting.GRAY))
+        var mapsCount = stack.getOrCreateNbt().getIntArray((ADDITIONS_KEY)).size
+        if (id != null) {
+            val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(world.server!!, id)
+            mapsCount += mapBookState?.mapIDs?.count() ?: 0
+
+            tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id + 1).toString()).formatted(Formatting.GRAY))
+        }
+        if (mapsCount > 0) {
+            tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_maps").append(ScreenTexts.SPACE).append(mapsCount.toString()).formatted(Formatting.GRAY))
+        }
+    }
+
+    fun setAdditions(stack: ItemStack, additions: List<Int>) {
+        stack.getOrCreateNbt().putIntArray(ADDITIONS_KEY, additions)
+    }
+
+    private fun applyAdditions(stack: ItemStack, world: ServerWorld) {
+        val nbt = stack.getOrCreateNbt()
+        if (!nbt.contains(ADDITIONS_KEY)) return
+
+        val additions = nbt.getIntArray(ADDITIONS_KEY)
+        nbt.remove(ADDITIONS_KEY)
+        if (additions.isEmpty()) return
+
+        val state = getOrCreateMapBookState(stack, world.server)
+        for (id in additions) {
+            // TODO: replace old maps of the same location and scale?
+            state.addMapID(id)
+        }
     }
 }

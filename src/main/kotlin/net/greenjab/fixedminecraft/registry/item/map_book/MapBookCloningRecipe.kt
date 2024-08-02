@@ -15,18 +15,18 @@ import net.minecraft.world.World
 class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : SpecialCraftingRecipe(craftingRecipeCategory) {
 
     override fun matches(recipeInputInventory: RecipeInputInventory, world: World): Boolean {
-        return getFilledMap(recipeInputInventory) != null
+        return getResult(recipeInputInventory) != null
     }
 
     override fun craft(recipeInputInventory: RecipeInputInventory, dynamicRegistryManager: DynamicRegistryManager): ItemStack {
-        val itemStack = getFilledMap(recipeInputInventory)
+        val itemStack = getResult(recipeInputInventory)
         if (itemStack == null || itemStack.isEmpty) {
             return ItemStack.EMPTY
         }
         return itemStack.copy()
     }
 
-    fun getFilledMap(recipeInputInventory: RecipeInputInventory) : ItemStack? {
+    private fun getResult(recipeInputInventory: RecipeInputInventory) : ItemStack? {
         var filledMap: ItemStack? = null
         var emptyMap = false
 
