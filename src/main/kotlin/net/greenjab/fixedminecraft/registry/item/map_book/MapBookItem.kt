@@ -95,7 +95,9 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                 (Items.FILLED_MAP as FilledMapItem).updateColors(world, entity, mapStateData.mapState)
             }
         }
+
         sendMapUpdates(entity as ServerPlayerEntity, stack)
+        SyncHandler.mapBookSync(entity, stack)
     }
 
     fun getMapStates(stack: ItemStack, world: World?): ArrayList<MapStateData> {
