@@ -23,18 +23,21 @@
     "enchanting.MultishotEnchantmentMixin",
     "enchanting.PiercingEnchantmentMixin",
     "enchanting.ProtectionEnchantmentMixin",
+    "map_book.MapStateAccessor",
+    "map_book.MapStatePlayerUpdateTrackerMixin",
+    "map_book.MapUpdateS2CPacketMixin",
     "mobs.MobEntityMixin",
     "mobs.PiglinEntityMixin",
     "redstone.BulbBlockMixin",
     "wolves.AttackWithOwnerGoalMixin",
     "wolves.GoatHornItemMixin",
     "wolves.FollowOwnerGoalMixin",
-      "beacon.BeaconBlockEntityMixin",
-      "beacon.BeaconBlockMixin",
-      "beacon.StatusEffectInstanceMixin",
-      "beacon.ServerPlayNetworkHandlerMixin",
-      "beacon.ServerPlayerInteractionManagerMixin",
-      "VineMixin"
+    "beacon.BeaconBlockEntityMixin",
+    "beacon.BeaconBlockMixin",
+    "beacon.StatusEffectInstanceMixin",
+    "beacon.ServerPlayNetworkHandlerMixin",
+    "beacon.ServerPlayerInteractionManagerMixin",
+    "VineMixin"
   ],
   "injectors": {
     "defaultRequire": 1
