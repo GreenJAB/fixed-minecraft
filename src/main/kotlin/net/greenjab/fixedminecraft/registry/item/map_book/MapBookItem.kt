@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.items.map_book
+package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.network.SyncHandler
 import net.minecraft.client.item.TooltipContext
@@ -161,7 +161,10 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
     private fun allocateMapBookId(server: MinecraftServer): Int {
         val mapBookState = MapBookState()
-        val counts = server.overworld?.persistentStateManager?.getOrCreate(MapBookIdCountsState.persistentStateType, MapBookIdCountsState.IDCOUNTS_KEY)
+        val counts = server.overworld?.persistentStateManager?.getOrCreate(
+            MapBookIdCountsState.persistentStateType,
+            MapBookIdCountsState.IDCOUNTS_KEY
+        )
         val i = counts!!.nextMapBookId
         MapBookStateManager.putMapBookState(server, i, mapBookState)
         return i
@@ -205,7 +208,10 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     override fun appendTooltip(stack: ItemStack?, world: World?, tooltip: MutableList<Text>?, context: TooltipContext?) {
         if (stack == null) return
         val id = getMapBookId(stack) ?: return
-        val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(world.server!!, id)
+        val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(
+            world.server!!,
+            id
+        )
         val mapsCount = mapBookState?.mapIDs?.count() ?: 0
 
         tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id+1).toString()).formatted(Formatting.GRAY))

@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.registry
 
-import net.greenjab.fixedminecraft.items.map_book.MapBookCloningRecipe
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookCloningRecipe
 import net.minecraft.recipe.SpecialRecipeSerializer
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.registry.Registries

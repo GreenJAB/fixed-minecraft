@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.items.map_book
+package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.registry.ItemRegistry

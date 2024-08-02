@@ -2,8 +2,8 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.greenjab.fixedminecraft.items.map_book.MapBookItem;
-import net.greenjab.fixedminecraft.items.map_book.MapStateData;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.item.Item;

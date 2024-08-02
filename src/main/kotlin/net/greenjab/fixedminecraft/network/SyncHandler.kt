@@ -2,8 +2,8 @@ package net.greenjab.fixedminecraft.network
 
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.greenjab.fixedminecraft.items.map_book.MapBookItem
-import net.greenjab.fixedminecraft.items.map_book.MapBookStateManager
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity

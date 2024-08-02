@@ -4,8 +4,8 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
-import net.greenjab.fixedminecraft.items.map_book.MapBookState
-import net.greenjab.fixedminecraft.items.map_book.MapBookStateManager
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
 import net.greenjab.fixedminecraft.network.SyncHandler.EXHAUSTION_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_OPEN

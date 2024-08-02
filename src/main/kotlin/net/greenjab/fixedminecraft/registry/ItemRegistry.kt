@@ -1,8 +1,7 @@
 package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
-import net.greenjab.fixedminecraft.items.map_book.MapBookItem
-import net.greenjab.fixedminecraft.util.identifierOf
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.item.BoatItem
 import net.minecraft.item.FireworkRocketItem
@@ -10,7 +9,6 @@ import net.minecraft.item.HangingSignItem
 import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.SignItem
-import net.minecraft.registry.Registries
 import net.minecraft.registry.Registries.ITEM
 import net.minecraft.util.Rarity
 
@@ -60,9 +58,9 @@ object ItemRegistry {
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
-        ITEM.register("azalea_sign", ItemRegistry.AZALEA_SIGN)
-        ITEM.register("azalea_hanging_sign", ItemRegistry.AZALEA_HANGING_SIGN)
-        ITEM.register("azalea_boat", ItemRegistry.AZALEA_BOAT)
-        ITEM.register("azalea_chest_boat", ItemRegistry.AZALEA_CHEST_BOAT)
+        ITEM.register("azalea_sign", AZALEA_SIGN)
+        ITEM.register("azalea_hanging_sign", AZALEA_HANGING_SIGN)
+        ITEM.register("azalea_boat", AZALEA_BOAT)
+        ITEM.register("azalea_chest_boat", AZALEA_CHEST_BOAT)
     }
 }
