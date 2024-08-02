@@ -24,14 +24,14 @@ class MapBookIdCountsState : PersistentState() {
 
     val nextMapBookId: Int
         get() {
-            val i = idCounts.getInt("fixed_minecraft:map_book") + 1
-            idCounts.put("fixed_minecraft:map_book", i)
+            val i = idCounts.getInt("fixedminecraft:map_book") + 1
+            idCounts.put("fixedminecraft:map_book", i)
             markDirty()
             return i
         }
 
     companion object {
-        const val IDCOUNTS_KEY = "fixed_minecraft_idcounts"
+        const val IDCOUNTS_KEY = "fixedminecraft_idcounts"
         val persistentStateType: Type<MapBookIdCountsState>
             get() = Type(
                 { MapBookIdCountsState() },
