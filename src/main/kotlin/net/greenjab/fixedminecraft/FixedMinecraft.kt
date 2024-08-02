@@ -27,5 +27,7 @@ object FixedMinecraft : ModInitializer {
         ItemGroupRegistry.register()
 
         RecipeRegistry.register()
+
+        StatusRegistry.register()
     }
 }
