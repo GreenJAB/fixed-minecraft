@@ -38,11 +38,6 @@ object ItemRegistry {
     val WAXED_WEATHERED_COPPER_RAIL = blockItem(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL)
     val WAXED_OXIDIZED_COPPER_RAIL = blockItem(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL)
 
-    val AZALEA_SIGN: Item = SignItem((Item.Settings()).maxCount(16), BlockRegistry.AZALEA_SIGN, BlockRegistry.AZALEA_WALL_SIGN)
-    val AZALEA_HANGING_SIGN: Item = HangingSignItem(BlockRegistry.AZALEA_HANGING_SIGN, BlockRegistry.AZALEA_WALL_HANGING_SIGN, (Item.Settings()).maxCount(16))
-    val AZALEA_BOAT: Item = BoatItem(false, BoatEntity.Type.ACACIA, (Item.Settings()).maxCount(1))
-    val AZALEA_CHEST_BOAT: Item = BoatItem(true, BoatEntity.Type.ACACIA, (Item.Settings()).maxCount(1))
-
     fun register() {
         ITEM.register("dragon_firework_rocket", DRAGON_FIREWORK_ROCKET)
         ITEM.register("map_book", MAP_BOOK)
@@ -60,9 +55,5 @@ object ItemRegistry {
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
-        ITEM.register("azalea_sign", ItemRegistry.AZALEA_SIGN)
-        ITEM.register("azalea_hanging_sign", ItemRegistry.AZALEA_HANGING_SIGN)
-        ITEM.register("azalea_boat", ItemRegistry.AZALEA_BOAT)
-        ITEM.register("azalea_chest_boat", ItemRegistry.AZALEA_CHEST_BOAT)
     }
 }
