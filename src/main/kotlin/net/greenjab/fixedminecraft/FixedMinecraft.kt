@@ -7,6 +7,7 @@ import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.minecraft.util.Identifier
+import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import org.slf4j.LoggerFactory
 
 
@@ -23,9 +24,12 @@ object FixedMinecraft : ModInitializer {
 
         BlockRegistry.register()
         ItemRegistry.register()
-        StatusRegistry.register()
 
         ItemGroupRegistry.register()
+
+        RecipeRegistry.register()
+
+        StatusRegistry.register()
     }
 
     fun id(path: String): Identifier? {

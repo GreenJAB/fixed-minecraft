@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.items.map_book
+package net.greenjab.fixedminecraft.registry.item.map_book
 
 import com.google.common.collect.Maps
 import net.minecraft.datafixer.DataFixTypes
@@ -43,6 +43,6 @@ object MapBookStateManager {
     }
 
     fun getMapBookName(mapId: Int): String {
-        return "fixed_minecraft_map_book_$mapId"
+        return "fixedminecraft_map_book_$mapId"
     }
 }

@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.items.map_book
+package net.greenjab.fixedminecraft.registry.item.map_book
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap
@@ -24,14 +24,14 @@ class MapBookIdCountsState : PersistentState() {
 
     val nextMapBookId: Int
         get() {
-            val i = idCounts.getInt("fixed_minecraft:map_book") + 1
-            idCounts.put("fixed_minecraft:map_book", i)
+            val i = idCounts.getInt("fixedminecraft:map_book") + 1
+            idCounts.put("fixedminecraft:map_book", i)
             markDirty()
             return i
         }
 
     companion object {
-        const val IDCOUNTS_KEY = "fixed_minecraft_idcounts"
+        const val IDCOUNTS_KEY = "fixedminecraft_idcounts"
         val persistentStateType: Type<MapBookIdCountsState>
             get() = Type(
                 { MapBookIdCountsState() },
@@ -43,7 +43,7 @@ class MapBookIdCountsState : PersistentState() {
             )
 
         fun fromNbt(nbt: NbtCompound): MapBookIdCountsState {
-            val idCountsState =MapBookIdCountsState()
+            val idCountsState = MapBookIdCountsState()
             for (string in nbt.keys) {
                 if (!nbt.contains(string, NbtElement.NUMBER_TYPE.toInt())) continue
                 idCountsState.idCounts.put(string, nbt.getInt(string))

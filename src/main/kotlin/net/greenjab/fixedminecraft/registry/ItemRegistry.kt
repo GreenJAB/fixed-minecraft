@@ -1,8 +1,7 @@
 package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
-import net.greenjab.fixedminecraft.items.map_book.MapBookItem
-import net.greenjab.fixedminecraft.util.identifierOf
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.item.BoatItem
 import net.minecraft.item.FireworkRocketItem
@@ -10,7 +9,6 @@ import net.minecraft.item.HangingSignItem
 import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
 import net.minecraft.item.SignItem
-import net.minecraft.registry.Registries
 import net.minecraft.registry.Registries.ITEM
 import net.minecraft.util.Rarity
 

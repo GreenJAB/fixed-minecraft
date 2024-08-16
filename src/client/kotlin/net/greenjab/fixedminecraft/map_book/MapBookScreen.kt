@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.map_book
 
 import net.greenjab.fixedminecraft.registry.ItemRegistry
-import net.greenjab.fixedminecraft.items.map_book.MapBookItem
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
