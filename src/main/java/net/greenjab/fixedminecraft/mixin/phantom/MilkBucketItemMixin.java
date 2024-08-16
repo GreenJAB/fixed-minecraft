@@ -29,8 +29,10 @@ public class MilkBucketItemMixin {
 
     @Inject(method = "finishUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;clearStatusEffects()Z", shift = At.Shift.AFTER))
     private void resetSleepTimeOnMilkDrunk(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
-       PlayerEntity pe = (PlayerEntity) user;
-       pe.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
+        if (user instanceof PlayerEntity) {
+            PlayerEntity pe = (PlayerEntity) user;
+            pe.resetStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST));
+        }
     }
 
 }

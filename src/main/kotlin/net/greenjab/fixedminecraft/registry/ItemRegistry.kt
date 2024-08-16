@@ -22,6 +22,10 @@ object ItemRegistry {
         fireproof()
     }
 
+    val BROKEN_TOTEM = item(::Item)
+    val ECHO_TOTEM = item(::Item)
+    val ECHO_FRUIT = item(::Item)
+
     val NETHERITE_ANVIL = blockItem(BlockRegistry.NETHERITE_ANVIL, Item.Settings::fireproof)
     val CHIPPED_NETHERITE_ANVIL = blockItem(BlockRegistry.CHIPPED_NETHERITE_ANVIL, Item.Settings::fireproof)
     val DAMAGED_NETHERITE_ANVIL = blockItem(BlockRegistry.DAMAGED_NETHERITE_ANVIL, Item.Settings::fireproof)
@@ -40,6 +44,11 @@ object ItemRegistry {
         ITEM.register("dragon_firework_rocket", DRAGON_FIREWORK_ROCKET)
         ITEM.register("map_book", MAP_BOOK)
         ITEM.register("netherite_horse_armor", NETHERITE_HORSE_ARMOR)
+
+        ITEM.register("broken_totem", BROKEN_TOTEM)
+        ITEM.register("echo_totem", ECHO_TOTEM)
+        ITEM.register("echo_fruit", ECHO_FRUIT)
+
         ITEM.register("netherite_anvil", NETHERITE_ANVIL)
         ITEM.register("chipped_netherite_anvil", CHIPPED_NETHERITE_ANVIL)
         ITEM.register("damaged_netherite_anvil", DAMAGED_NETHERITE_ANVIL)
