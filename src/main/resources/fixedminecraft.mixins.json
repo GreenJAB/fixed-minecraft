@@ -59,8 +59,7 @@
     "phantom.LivingEntityMixin",
     "inventory.CraftingInventoryAccessor",
     "inventory.PlayerEntityMixin",
-    "inventory.PlayerScreenHandlerMixin",
-    "TreeConfiguredFeaturesMixin"
+    "inventory.PlayerScreenHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
