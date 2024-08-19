@@ -1,10 +1,13 @@
 package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
+import net.greenjab.fixedminecraft.registry.item.EchoFruitItem
+import net.greenjab.fixedminecraft.registry.item.TotemItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.entity.vehicle.BoatEntity
 import net.minecraft.item.BoatItem
 import net.minecraft.item.FireworkRocketItem
+import net.minecraft.item.FoodComponents
 import net.minecraft.item.HangingSignItem
 import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
@@ -22,9 +25,12 @@ object ItemRegistry {
         fireproof()
     }
 
-    val BROKEN_TOTEM = item(::Item)
-    val ECHO_TOTEM = item(::Item)
-    val ECHO_FRUIT = item(::Item)
+    val BROKEN_TOTEM = item(::Item) {
+        maxCount(1)
+        rarity(Rarity.UNCOMMON)
+    }
+    val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
+    val ECHO_FRUIT: Item =  EchoFruitItem(FabricItemSettings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 
     val NETHERITE_ANVIL = blockItem(BlockRegistry.NETHERITE_ANVIL, Item.Settings::fireproof)
     val CHIPPED_NETHERITE_ANVIL = blockItem(BlockRegistry.CHIPPED_NETHERITE_ANVIL, Item.Settings::fireproof)
@@ -61,6 +67,7 @@ object ItemRegistry {
         ITEM.register("waxed_exposed_copper_rail", WAXED_EXPOSED_COPPER_RAIL)
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
+
 
     }
 }

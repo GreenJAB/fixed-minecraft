@@ -26,7 +26,7 @@ public class ExitVehicleOnDamage {
         if (vehicle == null) return;
         EntityType<?> vehicleType = vehicle.getType();
 
-        if (vehicleType.isIn(ModTags.INSTANCE.getVEHICLES())) entity.dismountVehicle();
+        if (vehicleType.isIn(ModTags.INSTANCE.getVEHICLES())) entity.stopRiding();
     }
 
 }

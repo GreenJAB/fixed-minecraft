@@ -17,24 +17,24 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(Blocks.class)
 public class BlocksMixin {
 
-    //cancelled
-    /*@Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
-            "stringValue=ice"},ordinal = 0)),at = @At(
-            value = "NEW",target = "Lnet/minecraft/block/IceBlock;*", ordinal = 0 ),method = "<clinit>")
+
+    @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args= {
+            "stringValue=ice"}, ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/IceBlock;", ordinal = 0 ))
     private static IceBlock Ice(AbstractBlock.Settings settings) {
         return new NewIceBlock(settings);
     }
-    @Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=packed_ice"},ordinal = 0)),at = @At(
-            value = "NEW",target = "Lnet/minecraft/block/Block;*", ordinal = 0 ),method = "<clinit>")
+            value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0 ))
     private static Block packedIce(AbstractBlock.Settings settings) {
         return new PackedIceBlock(settings.ticksRandomly());
     }
-    @Redirect(slice = @Slice(from = @At(value = "CONSTANT",args= {
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=blue_ice"},ordinal = 0)),at = @At(
-                    value = "NEW",target = "Lnet/minecraft/block/TranslucentBlock;*", ordinal = 0 ),method = "<clinit>")
+                    value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/TranslucentBlock;", ordinal = 0 ))
     private static TranslucentBlock blueIce(AbstractBlock.Settings settings) {
         return new BlueIceBlock(settings.ticksRandomly());
-    }*/
+    }
 
 }

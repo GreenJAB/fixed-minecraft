@@ -37,9 +37,11 @@ class PackedIceBlock (settings: Settings) : TranslucentBlock(settings) {
 	}
 
 	override fun randomTick(state:BlockState, world:ServerWorld, pos:BlockPos, random:Random) {
-		if (world.getDimension().ultrawarm()) {
-			this.melt(state, world, pos);
-		}
+        if (random.nextFloat() < 0.33f) {
+            if (world.getDimension().ultrawarm()) {
+                this.melt(state, world, pos);
+            }
+        }
 	}
 
 	private fun melt(state:BlockState, world:World, pos:BlockPos) {
