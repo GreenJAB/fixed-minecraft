@@ -31,6 +31,7 @@ public class GoatHornItemMixin {
             // see PlayerPredicate
             Vec3d vec3d = serverPlayerEntity.getEyePos();
             Vec3d vec3d2 = serverPlayerEntity.getRotationVec(1.0F);
+            vec3d = vec3d.add(vec3d2.x * -3, vec3d2.y * -3, vec3d2.z * -3);
             Vec3d vec3d3 = vec3d.add(vec3d2.x * 100.0, vec3d2.y * 100.0, vec3d2.z * 100.0);
 
             EntityHitResult entityHitResult = ProjectileUtil.getEntityCollision(serverPlayerEntity.getWorld(), serverPlayerEntity, vec3d, vec3d3, (new Box(vec3d, vec3d3)).expand(1.0), (hitEntity) -> HitPredicate(hitEntity, serverPlayerEntity), 2.0F);

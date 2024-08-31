@@ -54,13 +54,15 @@ public abstract class LivingEntityMixin {
     private void increaseInsomnia(DamageSource damageSource, CallbackInfo ci, @Local Entity entity) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof PhantomEntity) {
-            if (entity.isPlayer()) {
-                if (((ServerPlayerEntity)entity).hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
-                    int i = ((ServerPlayerEntity)entity).getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
-                    if (i<4) {
-                        if (Math.random()<1/(5*Math.pow(i+1,2))) {
-                            ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, ++i, true, false));
-                            ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, GameStateChangeS2CPacket.DEMO_OPEN_SCREEN));
+            if (entity != null) {
+                if (entity.isPlayer()) {
+                    if (((ServerPlayerEntity) entity).hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+                        int i = ((ServerPlayerEntity) entity).getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
+                        if (i < 4) {
+                            if (Math.random() < 1 / (5 * Math.pow(i + 1, 2))) {
+                                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, ++i, true, false));
+                                ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, GameStateChangeS2CPacket.DEMO_OPEN_SCREEN));
+                            }
                         }
                     }
                 }

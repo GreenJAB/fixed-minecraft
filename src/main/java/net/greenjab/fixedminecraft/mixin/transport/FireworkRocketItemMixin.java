@@ -20,8 +20,11 @@ public class FireworkRocketItemMixin {
                                                CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
         ItemStack itemStack = user.getStackInHand(hand);
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
-            if (!(itemStack.getNbt().toString().contains("Explosions"))) {
+            if (!itemStack.hasNbt()) {
                 cir.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
+            } else {
+                if (!(itemStack.getNbt().toString().contains("Explosions")))
+                    cir.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
             }
         }
     }

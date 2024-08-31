@@ -8,10 +8,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.dimension.DimensionTypeRegistrar;
 import net.minecraft.world.dimension.DimensionTypes;
@@ -82,6 +84,10 @@ public class LivingEntityMixin  {
                 //user.moveToWorld(serverWorld2);
                 //user.teleport(pos.get().x,pos.get().y,pos.get().z);
 
+
+                //var deathWorld = playerEntity.world.registryManager.get(dmKey)
+                //RegistryKey<World> dmKey = user.getSpawnPointDimension();
+                //ServerWorld deathWorld = (ServerWorld) user.getWorld().getRegistryManager().get(dmKey.);
 
                 user.teleport(user.getServerWorld(), pos.get().x,pos.get().y,pos.get().z,user.getYaw(),user.getPitch());
             }

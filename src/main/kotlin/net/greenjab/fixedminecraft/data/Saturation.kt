@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.data
 
 import net.minecraft.entity.player.HungerManager
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.math.Vec3d
 import kotlin.math.min
 
 
@@ -11,7 +12,11 @@ object Saturation {
      private var lastExhaustion = 0.0f
      private var ticksSinceLastExhaustion = 0
 
+    public var lastPos = Vec3d(0.0, 0.0, 0.0);
+    public var lastPos2 = Vec3d(0.0, 0.0, 0.0);
+
     fun hungerToSaturation(player: PlayerEntity, hunger: HungerManager) {
+
         var h = if(player.isSneaking()) 2.0f else 1.0f
         if (hunger.exhaustion == lastExhaustion) {ticksSinceLastExhaustion = min(ticksSinceLastExhaustion+h.toInt(), 40);}
         else {
@@ -26,7 +31,7 @@ object Saturation {
                 h *=0.015f+hunger.saturationLevel/200.0f
                 hunger.saturationLevel = min(hunger.saturationLevel+h,hunger.foodLevel.toFloat());
                 SaturationSinceLastHunger += h  * (if(player.isSneaking()) 2.0f else 1.0f);
-                if (SaturationSinceLastHunger >= 5) {
+                if (SaturationSinceLastHunger >= 10) {
                     SaturationSinceLastHunger = 0.0f;
                      hunger.foodLevel--;
                 }

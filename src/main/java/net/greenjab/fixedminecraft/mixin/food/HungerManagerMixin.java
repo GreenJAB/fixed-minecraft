@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.Vec3d;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -61,8 +62,15 @@ public abstract class HungerManagerMixin {
     private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
+        //System.out.println(instance.getPos().toString());
+        //System.out.println(Saturation.INSTANCE.getLastPos());
+        //System.out.println(Saturation.INSTANCE.getLastPos().subtract(instance.getPos()).toString());
+        Vec3d d = Saturation.INSTANCE.getLastPos2().subtract(instance.getPos());
+        Saturation.INSTANCE.setLastPos2(Saturation.INSTANCE.getLastPos());
+        Saturation.INSTANCE.setLastPos(instance.getPos());
+        //System.out.println(d.horizontalLength());
         return instance.canFoodHeal() && HM.getSaturationLevel()>=4 &&
-               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()));
+               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()&&d.horizontalLength()<0.01f));
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
