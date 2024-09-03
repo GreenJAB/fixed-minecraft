@@ -21,16 +21,16 @@ import java.util.Map;
 public class FixedMinecraftEnchantmentHelper {
 
     // please rename lol
-    public static final int POWER_WHEN_MAX_LEVEL = 10;
+    public static final int POWER_WHEN_MAX_LEVEL = 7;
 
     public static int getEnchantmentPower(Enchantment enchantment, int level) {
-        return (int) Math.round(enchantment.isCursed() ?
+        return (int) Math.ceil(enchantment.isCursed() ?
                 Math.min(-1, curseEnchantmentPowerFunction(enchantment, level)) : Math.max(1, enchantmentPowerFunction(enchantment, level)));
     }
 
     private static double enchantmentPowerFunction(Enchantment enchantment, int level) {
         // 10 * ()^1.6 oder 20 * ()^2
-        return (enchantment.isTreasure() ? 1.5 : 1) * POWER_WHEN_MAX_LEVEL * Math.pow((double) level / enchantment.getMaxLevel(), 2);
+        return (enchantment.isTreasure() ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.getMaxLevel()) * Math.pow((double) level / enchantment.getMaxLevel(), 2);
     }
 
     private static double curseEnchantmentPowerFunction(Enchantment enchantment, int level) {
