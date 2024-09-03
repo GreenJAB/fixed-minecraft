@@ -1,20 +1,27 @@
 package net.greenjab.fixedminecraft.enchanting;
 
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class FixedMinecraftEnchantmentHelper {
 
     // please rename lol
-    public static final int POWER_WHEN_MAX_LEVEL = 20;
+    public static final int POWER_WHEN_MAX_LEVEL = 10;
 
     public static int getEnchantmentPower(Enchantment enchantment, int level) {
         return (int) Math.round(enchantment.isCursed() ?
@@ -27,7 +34,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     private static double curseEnchantmentPowerFunction(Enchantment enchantment, int level) {
-        return (-10) * Math.pow((double) level / enchantment.getMaxLevel(), 1.6);
+        return (-5) * Math.pow((double) level / enchantment.getMaxLevel(), 1.6);
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
@@ -35,9 +42,46 @@ public class FixedMinecraftEnchantmentHelper {
         // check material
         // probably type
         // ...other things
-        return 40;
+
+        //List<EnchantmentLevelEntry> list = EnchantmentHelper.getPossibleEntries(100, itemStack, true);
+
+
+        List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
+
+        int ii = list.size();
+        String s = "";
+        int power = 0;
+        for (int i = 0; i<ii;i++) {
+            s+=list.get(i).enchantment.getTranslationKey() + " " +list.get(i).level +", ";
+            power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
+        }
+
+        //System.out.println(power+"..."+s );
+
+        return (int)Math.ceil(power*0.6);
+        //return 40;
         // 35 -> one max lvl and one lower level enchantment with 20 being the max enchantment power or
         //    3 max level and one mid-tier enchantment with 10 being the max enchantment power
+    }
+
+    public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
+        List<EnchantmentLevelEntry> list = Lists.newArrayList();
+        Item item = stack.getItem();
+        Iterator var6 = Registries.ENCHANTMENT.iterator();
+
+        while(true) {
+            while(true) {
+                Enchantment enchantment;
+                do {
+                    if (!var6.hasNext()) {
+                        return list;
+                    }
+
+                    enchantment = (Enchantment) var6.next();
+                } while(!enchantment.target.isAcceptableItem(item));
+                if (!enchantment.isCursed()) list.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
+            }
+        }
     }
 
     public static int getOccupiedEnchantmentCapacity(ItemStack itemStack) {

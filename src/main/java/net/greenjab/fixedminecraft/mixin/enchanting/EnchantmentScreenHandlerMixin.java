@@ -319,14 +319,20 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 applyEnchantmentsStrategy.accept(targetItemStack, entry);
             }
 
+
+
             // apply enchanting costs
             int enchantingCosts = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(targetItemStack);
-            player.applyEnchantmentCosts(targetItemStack, enchantingCosts);
+            int newLapisCost = (int)Math.ceil(enchantingCosts/10.0);
+            player.applyEnchantmentCosts(targetItemStack, newLapisCost);
 
             // decrement lapislazuli
             // reimplemented from vanilla replacing original values with local values
+
+
+
             if (!player.getAbilities().creativeMode) {
-                lapislazuliStack.decrement(lapisCountToDecrement);
+                lapislazuliStack.decrement(newLapisCost);
                 if (lapislazuliStack.isEmpty()) {
                     this.inventory.setStack(1, ItemStack.EMPTY);
                 }
@@ -336,7 +342,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             // reimplemented from vanilla replacing original values with local values
             player.incrementStat(Stats.ENCHANT_ITEM);
             if (player instanceof ServerPlayerEntity) {
-                Criteria.ENCHANTED_ITEM.trigger((ServerPlayerEntity)player, targetItemStack, lapisCountToDecrement);
+                Criteria.ENCHANTED_ITEM.trigger((ServerPlayerEntity)player, targetItemStack, newLapisCost);
             }
 
             // lifecycle stuff
