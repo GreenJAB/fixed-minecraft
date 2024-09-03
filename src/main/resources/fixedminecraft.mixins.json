@@ -24,6 +24,7 @@
         "enchanting.MultishotEnchantmentMixin",
         "enchanting.PiercingEnchantmentMixin",
         "enchanting.ProtectionEnchantmentMixin",
+        "enchanting.PlayerEntityMixin",
         "food.FoodComponentsMixin",
         "food.HungerManagerMixin",
         "food.ItemMixin",

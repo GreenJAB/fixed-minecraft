@@ -74,7 +74,7 @@ public abstract class HungerManagerMixin {
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
-        return 4;
+        return 3;
     }
 
 }
