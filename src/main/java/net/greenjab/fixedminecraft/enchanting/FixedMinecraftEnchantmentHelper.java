@@ -21,7 +21,7 @@ import java.util.Map;
 public class FixedMinecraftEnchantmentHelper {
 
     // please rename lol
-    public static final int POWER_WHEN_MAX_LEVEL = 7;
+    public static final int POWER_WHEN_MAX_LEVEL = 12;
 
     public static int getEnchantmentPower(Enchantment enchantment, int level) {
         return (int) Math.ceil(enchantment.isCursed() ?
@@ -30,7 +30,7 @@ public class FixedMinecraftEnchantmentHelper {
 
     private static double enchantmentPowerFunction(Enchantment enchantment, int level) {
         // 10 * ()^1.6 oder 20 * ()^2
-        return (enchantment.isTreasure() ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.getMaxLevel()) * Math.pow((double) level / enchantment.getMaxLevel(), 2);
+        return (enchantment.isTreasure() ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.getMaxLevel()-5) * Math.pow((double) level / enchantment.getMaxLevel(), 2);
     }
 
     private static double curseEnchantmentPowerFunction(Enchantment enchantment, int level) {
@@ -38,30 +38,14 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
-        // TODO
-        // check material
-        // probably type
-        // ...other things
-
-        //List<EnchantmentLevelEntry> list = EnchantmentHelper.getPossibleEntries(100, itemStack, true);
-
-
         List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
 
         int ii = list.size();
-        String s = "";
         int power = 0;
         for (int i = 0; i<ii;i++) {
-            s+=list.get(i).enchantment.getTranslationKey() + " " +list.get(i).level +", ";
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
         }
-
-        //System.out.println(power+"..."+s );
-
         return (int)Math.ceil(power*0.6);
-        //return 40;
-        // 35 -> one max lvl and one lower level enchantment with 20 being the max enchantment power or
-        //    3 max level and one mid-tier enchantment with 10 being the max enchantment power
     }
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
