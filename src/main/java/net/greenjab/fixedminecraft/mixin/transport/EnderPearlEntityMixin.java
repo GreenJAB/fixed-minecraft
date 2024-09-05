@@ -44,7 +44,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
 
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
-     * FIXME: Player controlled mobs don't teleport I DO NOT KNOW WHY PLEASE HELP ME
+     * FIX ME: Player controlled mobs don't teleport I DO NOT KNOW WHY PLEASE HELP ME
      */
     @WrapOperation(
             method = "onCollision", at = @At(

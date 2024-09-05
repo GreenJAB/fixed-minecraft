@@ -10,7 +10,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.UseAction
 import net.minecraft.world.World
 
-// FIXME: Unused?
+//unused for now, want toggle for it
 class TotemItem(settings: Settings) : Item(settings) {
 
     override fun getUseAction(stack: ItemStack?): UseAction {

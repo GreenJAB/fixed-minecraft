@@ -15,6 +15,7 @@ import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandler;
@@ -180,6 +181,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
         for (ItemStack chosenStack : chosenItemStacks) {
             Map<Enchantment, Integer> bookEnchantments = EnchantmentHelper.get(chosenStack);
+            Map<Enchantment, Integer> enchantments2 = new HashMap<>();
             bookEnchantments.forEach((enchantment, level) -> {
                 // System.out.println("enchantment " + enchantment.toString() + ", level " + level);
 
@@ -197,17 +199,34 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                     return;
                 }
 
-                enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level));
-                enchantments.put(enchantment, level);
+                enchantments2.put(enchantment, level);
+
+
+
+
 
                 // System.out.println("added enchantment " + enchantment.toString() + " at level " + level);
             });
+            if (!enchantments2.isEmpty()) {
+                int rand = this.random.nextInt(enchantments2.size());
+                final int[] i = {0};
+                enchantments2.forEach((enchantment, level) -> {
+                    if (i[0] == rand) {
+                        enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level));
+                        enchantments.put(enchantment, level);
+                        i[0]++;
+                    }
+                });
+
+            }
         }
+
+        boolean isGold = stack.isIn(ItemTags.PIGLIN_LOVED);
 
         // wrap in list and return
         List<EnchantmentLevelEntry> enchantmentsResult = new ArrayList<>();
         enchantments.forEach((enchantment, level) -> {
-            enchantmentsResult.add(new EnchantmentLevelEntry(enchantment, level));
+            enchantmentsResult.add(new EnchantmentLevelEntry(enchantment, (isGold&&enchantment.getMaxLevel()!=1)?level+1:level));
         });
         // debugPrintEnchantments(enchantments, "output enchantments ");
         // System.out.println("------- end mixin generateEnchantments");
@@ -256,6 +275,9 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 for (EnchantmentLevelEntry entry : enchantments) {
                     enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment, entry.level);
                 }
+
+                boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
+                if (isGold) enchantmentPower/=2;
 
                 // set power for display purposes
                 this.enchantmentPower[slot] = enchantmentPower;

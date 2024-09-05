@@ -14,7 +14,7 @@ import java.util.Optional;
 
 public class ArmorTrimmer {
     public static ItemStack trimAtChanceIfTrimable(ItemStack stack, @NotNull Random random, @NotNull DynamicRegistryManager registryManager) {
-        if (random.nextInt(10) > 1 /* TODO: Make chance configurable */) {
+        if (random.nextInt(10) > 1) {
             return stack;
         }
 

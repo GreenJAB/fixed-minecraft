@@ -11,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,13 +41,13 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
-
         int ii = list.size();
         int power = 0;
         for (int i = 0; i<ii;i++) {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
         }
-        return (int)Math.ceil(power*0.6);
+        boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
+        return (int)Math.ceil(power*(isGold?0.6:0.6));
     }
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
@@ -81,7 +83,8 @@ public class FixedMinecraftEnchantmentHelper {
 
             power += add;
         }
-        return power;
+        boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
+        return Math.max((int)Math.ceil(power*(isGold?0.5:1)),1);
     }
 
     /**

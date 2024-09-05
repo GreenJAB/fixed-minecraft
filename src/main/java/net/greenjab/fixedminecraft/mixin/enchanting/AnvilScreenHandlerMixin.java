@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
@@ -15,7 +16,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
@@ -52,10 +55,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         // set rename cost
         int renameCost = 0;
         ItemStack firstInputStack = this.input.getStack(0);
-        // TODO: eventually do rework: no target item / sacrifice item logic (and prolly use newItemName field)
         if (outputItemStack.hasCustomName() && !firstInputStack.getName().equals(outputItemStack.getName())) {
             // System.out.println("item has been renamed");
-            renameCost = 1;
+            //renameCost = 1;
         }
 
         // calculate enchantmentPower for each enchantment
@@ -111,10 +113,21 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             // System.out.println("are enchanted books");
             return;
         }
+
+        //TODO If netherite return stack without mending
+
+
+
         // System.out.println("are no enchanted books");
         this.output.setStack(0, ItemStack.EMPTY);
         levelCost.set(0);
         // System.out.println("action prevented");
         ci.cancel();
+    }
+
+    @ModifyConstant(method = "updateResult", constant = @Constant(intValue = 40))
+    private int anvilCap(int value, @Local(ordinal = 0) ItemStack result) {
+        //TODO If netherite return infinite
+        return FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(result);
     }
 }
