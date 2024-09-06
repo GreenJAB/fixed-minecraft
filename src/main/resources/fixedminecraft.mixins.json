@@ -28,6 +28,7 @@
         "enchanting.GrindstoneScreenHandlerMixin",
         "enchanting.ToolMaterialsMixin",
         "enchanting.ArmorMaterialsMixin",
+        "fishing.FishingBobberEntityMixin",
         "food.FoodComponentsMixin",
         "food.HungerManagerMixin",
         "food.ItemMixin",
