@@ -1,76 +1,20 @@
-package net.greenjab.fixedminecraft.mixin.fishing;
+package net.greenjab.fixedminecraft.mixin.misc;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.llamalad7.mixinextras.sugar.Local;
-import kotlin.contracts.Effect;
-import net.fabricmc.yarn.constants.MiningLevels;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.ExperienceOrbEntity;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.RangedWeaponItem;
-import net.minecraft.item.ToolMaterials;
-import net.minecraft.loot.LootTable;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameterSet;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 @Mixin(FishingBobberEntity.class)
 public class FishingBobberEntityMixin {
-
-    /*@ModifyVariable(method = "use", at = @At("STORE"), ordinal = 0)
-    private Iterator fishingItem(Iterator x, @Local List<ItemStack> list) {
-        Iterator i = list.iterator();
-        while(i.hasNext()) {
-            ItemStack itemStack = (ItemStack)i.next();
-            System.out.println(itemStack.getName());
-        }
-        return i;
-    }*/
-
-    /*@Redirect(method = "use", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;next()Ljava/lang/Object;"))
-    private Iterator fishingItem(Iterator x, @Local List<ItemStack> list) {
-        Iterator i = list.iterator();
-        while(i.hasNext()) {
-            ItemStack itemStack = (ItemStack)i.next();
-            System.out.println(itemStack.getName());
-        }
-        return i;
-    }*/
-
-    /*@ModifyVariable(method = "use", at = @At(value = "STORE"), ordinal = 0)
-    private ItemStack fishingItem(ItemStack x) {
-        System.out.println(x.getName());
-        return x;
-    }*/
-    /*@ModifyArg(method = "use", at = @At(value = "INVOKE", target = "Ljava/util/Iterator;next()Ljava/lang/Object;"), index = 0)
-    private ItemStack fishingItem(ItemStack x) {
-        System.out.println(x.getName());
-        return x;
-    }*/
 
     @Shadow
     @Final
@@ -122,7 +66,7 @@ public class FishingBobberEntityMixin {
         //LootContext.Builder builder =
 
 
-        bait.decrement(1);
+        if (!playerEntity.getAbilities().creativeMode) bait.decrement(1);
         return x;
     }
 

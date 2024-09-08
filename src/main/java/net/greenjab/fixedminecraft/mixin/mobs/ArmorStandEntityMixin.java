@@ -9,14 +9,19 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ArmorStandEntity.class)
 public abstract class ArmorStandEntityMixin extends LivingEntity {
@@ -44,14 +49,15 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
             if (itemStack.isOf(Items.STICK)) {
                 if (!this.shouldShowArms()) {
                     this.setShowArms(true);
-                    itemStack.decrement(1);
+                    if (!player.isCreative()) itemStack.decrement(1);
+                    return true;
                 }
             }
-            else if (itemStack.isOf(Items.SHEARS)) {
+            if (itemStack.isOf(Items.SHEARS)) {
                 if (this.shouldShowArms()) {
                     this.setShowArms(false);
-                    this.dropItem(Items.STICK);
-                    itemStack.damage(1, player.getWorld().random, (ServerPlayerEntity) player);
+                    if (!player.getAbilities().creativeMode) this.dropItem(Items.STICK);
+                    if (!player.getAbilities().creativeMode) itemStack.damage(1, player.getWorld().random, (ServerPlayerEntity) player);
                     Iterable<ItemStack> hands = this.getHandItems();
                     hands.forEach((stack) -> {
                         if (!stack.isEmpty()) {
@@ -63,5 +69,12 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
             }
         }
         return itemStack.isEmpty();
+    }
+    @Inject(method = "interactAt", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/decoration/ArmorStandEntity;equip(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/Hand;)Z"), cancellable = true)
+    private void notStick(PlayerEntity player, Vec3d hitPos, Hand hand, CallbackInfoReturnable<ActionResult> cir, @Local ItemStack itemStack){
+        if (itemStack.isOf(Items.STICK)) {
+            cir.setReturnValue(ActionResult.FAIL);
+        }
+
     }
 }
