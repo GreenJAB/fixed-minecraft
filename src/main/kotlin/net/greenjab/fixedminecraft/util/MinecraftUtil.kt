@@ -27,26 +27,3 @@ operator fun TagKey<Block>.contains(state: BlockState): Boolean {
     return state.isIn(this)
 }
 
-fun <V, T : V> Registry<V>.register(id: Identifier, entry: T): T = Registry.register(this, id, entry)
-
-fun <T> Registry<T>.register(id: String, entry: T): T = Registry.register(this, id, entry)
-
-fun blockSettings(builder: FabricBlockSettings.() -> Unit): FabricBlockSettings {
-    return FabricBlockSettings.create().apply(builder)
-}
-
-fun blockSettings(copiedBlock: AbstractBlock, builder: FabricBlockSettings.() -> Unit): FabricBlockSettings {
-    return FabricBlockSettings.copyOf(copiedBlock).apply(builder)
-}
-
-fun blockSettings(copiedBlock: AbstractBlock.Settings, builder: FabricBlockSettings.() -> Unit): FabricBlockSettings {
-    return FabricBlockSettings.copyOf(copiedBlock).apply(builder)
-}
-
-fun itemGroup(displayName: Text? = null, builder: ItemGroup.Builder.() -> Unit): ItemGroup {
-    val itemGroupBuilder = FabricItemGroup.builder()
-    if (displayName != null)
-        itemGroupBuilder.displayName(displayName)
-
-    return itemGroupBuilder.apply(builder).build()
-}

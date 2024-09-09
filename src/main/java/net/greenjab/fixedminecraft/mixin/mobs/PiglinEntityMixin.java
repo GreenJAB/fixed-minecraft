@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import net.greenjab.fixedminecraft.util.mobs.ArmorTrimmer;
+import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.AbstractPiglinEntity;
 import net.minecraft.entity.mob.PiglinEntity;

@@ -1,0 +1,21 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "EEE",
+        "ETE",
+        "EEE"
+    ],
+    "key": {
+        "E": {
+            "item": "minecraft:echo_shard"
+        },
+        "T": {
+            "item": "minecraft:totem_of_undying"
+        }
+    },
+    "result": {
+        "item": "fixedminecraft:echo_totem",
+        "count": 1
+    }
+}

@@ -1,21 +1,16 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.greenjab.fixedminecraft.blocks.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,12 +21,6 @@ import java.util.List;
 
 @Mixin(BeaconBlockEntity.class)
 public class BeaconBlockEntityMixin {
-
-    /*@ModifyConstant(method = "updateLevel", constant = @Constant(intValue = 4))
-    private static int largerBeaconArea(int value) {
-        return 10;
-    }*/
-
 
     @Inject(method = "updateLevel", at = @At("HEAD"), cancellable = true)
     private static void ModifyBeaconPyramid(World world, int x, int y, int z,

@@ -1,9 +1,26 @@
 {
     "item.fixedminecraft.dragon_firework_rocket": "Dragon Firework Rocket",
+    "item.fixedminecraft.netherite_horse_armor": "Netherite Horse Armor",
     "item.fixedminecraft.map_book": "Map Book",
+    "item.fixedminecraft.map_book_empty": "Empty Map Book",
+    "item.fixedminecraft.map_book_new": "New Map Book",
+    "item.fixedminecraft.map_book_id": "Book:",
+    "item.fixedminecraft.map_book_maps": "Maps:",
+    "item.fixedminecraft.broken_totem": "Broken Totem",
+    "item.fixedminecraft.echo_totem": "Echo Totem",
+    "item.fixedminecraft.echo_fruit": "Echo Fruit",
     "block.fixedminecraft.netherite_anvil": "Netherite Anvil",
     "block.fixedminecraft.chipped_netherite_anvil": "Chipped Netherite Anvil",
     "block.fixedminecraft.damaged_netherite_anvil": "Damaged Netherite Anvil",
+    "block.fixedminecraft.copper_rail": "Copper Rail",
+    "block.fixedminecraft.exposed_copper_rail": "Exposed Copper Rail",
+    "block.fixedminecraft.weathered_copper_rail": "Weathered Copper Rail",
+    "block.fixedminecraft.oxidized_copper_rail": "Oxidized Copper Rail",
+    "block.fixedminecraft.waxed_copper_rail": "Waxed Copper Rail",
+    "block.fixedminecraft.waxed_exposed_copper_rail": "Waxed Exposed Copper Rail",
+    "block.fixedminecraft.waxed_weathered_copper_rail": "Waxed Weathered Copper Rail",
+    "block.fixedminecraft.waxed_oxidized_copper_rail": "Waxed Oxidized Copper Rail",
     "itemgroup.fixed": "Fixed Group",
-    "effect.fixedminecraft.reach": "Reach"
+    "effect.fixedminecraft.reach": "Reach",
+    "effect.fixedminecraft.insomnia": "Insomnia"
 }

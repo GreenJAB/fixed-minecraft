@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import net.greenjab.fixedminecraft.blocks.BlockRegistry;
+import net.greenjab.fixedminecraft.registry.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -16,16 +16,6 @@ public class AnvilMixin /*extends FallingBlock*/ {
 
     private static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
-    /*public AnvilMixin(Settings settings) {
-        super(settings);
-    }
-
-    @Override
-    protected MapCodec<? extends FallingBlock> getCodec() {
-        return null;
-    }*/
-
-
     @Inject(method = "getLandingState", at = @At("HEAD"), cancellable = true)
     private static void injected(BlockState fallingState, CallbackInfoReturnable cir) {
 
@@ -39,6 +29,5 @@ public class AnvilMixin /*extends FallingBlock*/ {
                     .getDefaultState()
                     .with(FACING, fallingState.get(FACING)));
         }
-
     }
 }
