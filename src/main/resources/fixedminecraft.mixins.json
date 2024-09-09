@@ -67,6 +67,7 @@
         "transport.WorldMixin",
         "villager.GolemLastSeenSensorMixin",
         "villager.VillagerEntityMixin",
+        "villager.TradeOfferMixin",
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
         "wolves.GoatHornItemMixin"
