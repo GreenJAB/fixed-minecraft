@@ -10,22 +10,6 @@ import net.minecraft.world.World
 
 @Suppress("MemberVisibilityCanBePrivate")
 object EntityRegistry {
-    // val BRICK: EntityType<BrickEntity> = Registry.register(Registries.ENTITY_TYPE, Identifier("fixedminecraft", "brick"),
-    //    FabricEntityTypeBuilder.create(SpawnGroup.MISC, BrickEntity::new))
-    // Object BrickEntity;
-   /* var BRICK: EntityType<BrickEntity?>? = Registry.register(Registries.ENTITY_TYPE,
-        Identifier("fixedminecraft", "brick"),
-        FabricEntityTypeBuilder.create(SpawnGroup.MISC, EntityType.EntityFactory { BrickEntity() })
-            .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackRangeBlocks(4).trackedUpdateRate(10).build())
-
-    fun register() {
-        // Registry.register(Registries.ENTITY_TYPE, Identifier("fixedminecraft", "brick"), BRICK)
-    }*/
-
-    /*public static final EntityType<BrickEntity> BRICK = Registry.register(Registries.ENTITY_TYPE,
-            new Identifier("fixedminecraft", "brick"),
-        FabricEntityTypeBuilder.create(SpawnGroup.MISC, BrickEntity::new)
-            .dimensions(EntityDimensions.fixed(0.25f, 0.25f)).trackRangeBlocks(4).trackedUpdateRate(10).build());// */
 
     val BRICK: EntityType<BrickEntity?> = register("brick",
         EntityType.Builder.create(
