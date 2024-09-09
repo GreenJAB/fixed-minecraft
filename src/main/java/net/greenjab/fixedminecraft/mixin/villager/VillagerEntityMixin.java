@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityInteraction;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
@@ -11,7 +13,9 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
@@ -57,4 +61,25 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         return false;
     }
 
+    @Inject(method = "onInteractionWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/VillagerGossips;startGossip(Ljava/util/UUID;Lnet/minecraft/village/VillageGossipType;I)V", ordinal = 2))
+    private void rideCamel(EntityInteraction interaction, Entity entity, CallbackInfo ci){
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        if (villagerEntity.hasVehicle()) {
+            Entity vehicle = villagerEntity.getVehicle();
+            if (vehicle.getType() == EntityType.CAMEL) {
+                villagerEntity.stopRiding();
+            }
+        } else {
+            if (entity.hasVehicle()) {
+                Entity vehicle = entity.getVehicle();
+                if (vehicle.getType() == EntityType.CAMEL) {
+                    List passengers = vehicle.getPassengerList();
+                    if (passengers.size() == 1) {
+                        villagerEntity.startRiding(vehicle);
+                    }
+                }
+            }
+        }
+
+    }
 }
