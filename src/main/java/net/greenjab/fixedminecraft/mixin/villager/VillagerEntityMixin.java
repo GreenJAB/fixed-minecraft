@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityInteraction;
 import net.minecraft.entity.EntityType;
@@ -29,21 +30,24 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     @Redirect(method = "summonGolem", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"))
-    private int injected(List instance) {
-        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        if (villagerEntity.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_HOSTILE)){
-            LivingEntity enemy = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.NEAREST_HOSTILE).get();
-            if (enemy.getCommandTags().contains("iron_golem")) {
-                return 0;
-            } else {
-                if (eat(villagerEntity)) {
-                    enemy.addCommandTag("iron_golem");
-                } else {
+    private int summon1GolemPerHostileMob(List instance, @Local int requiredCount) {
+        if (instance.size()>=requiredCount) {
+            VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
+            if (villagerEntity.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_HOSTILE)) {
+                LivingEntity enemy = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.NEAREST_HOSTILE).get();
+                if (enemy.getCommandTags().contains("iron_golem")) {
                     return 0;
+                }
+                else {
+                    if (eat(villagerEntity)) {
+                        enemy.addCommandTag("iron_golem");
+                    }
+                    else {
+                        return 0;
+                    }
                 }
             }
         }
-
         return instance.size();
     }
 

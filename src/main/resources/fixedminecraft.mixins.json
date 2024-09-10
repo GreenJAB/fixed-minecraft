@@ -49,6 +49,7 @@
         "mobs.ZombieEntityMixin",
         "mobs.LlamaEntityMixin",
         "mobs.ArmorStandEntityMixin",
+        "mobs.InfestedBlockMixin",
         "phantom.LivingEntityMixin",
         "phantom.MilkBucketItemMixin",
         "phantom.PhantomSpawnerMixin",
