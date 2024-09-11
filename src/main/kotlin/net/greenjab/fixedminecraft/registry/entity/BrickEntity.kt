@@ -40,7 +40,7 @@ class BrickEntity : ThrownItemEntity {
 
     override fun onEntityHit(entityHitResult: EntityHitResult) {
         super.onEntityHit(entityHitResult)
-        entityHitResult.entity.damage(this.damageSources.thrown(this, this.owner), 4.0f)
+        entityHitResult.entity.damage(this.damageSources.thrown(this, this.owner), 1.5f)
     }
 
     override fun onCollision(hitResult: HitResult) {

@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_totem": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:totem_of_undying"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_echo_shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:echo_shard"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fixedminecraft:echo_totem"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_totem",
+      "has_echo_shard"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fixedminecraft:echo_totem"
+    ]
+  }
+}

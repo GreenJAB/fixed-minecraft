@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 10387312,
+    "separation": 25,
+    "preferred_biomes": "#minecraft:stronghold_biased_to",
+    "spacing": 100
+  },
+  "structures": [
+    {
+      "structure": "minecraft:stronghold",
+      "weight": 1
+    }
+  ]
+}

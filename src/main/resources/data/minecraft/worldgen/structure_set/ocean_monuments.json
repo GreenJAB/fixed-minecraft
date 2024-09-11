@@ -1,0 +1,15 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 10387313,
+    "separation": 15,
+    "spacing": 90,
+    "spread_type": "triangular"
+  },
+  "structures": [
+    {
+      "structure": "minecraft:monument",
+      "weight": 1
+    }
+  ]
+}
