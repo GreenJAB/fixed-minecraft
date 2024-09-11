@@ -69,6 +69,10 @@
         "villager.GolemLastSeenSensorMixin",
         "villager.VillagerEntityMixin",
         "villager.TradeOfferMixin",
+        "villager.TradeOffersMixin",
+        "villager.TradeOffersEnchantBookMixin",
+        "villager.TradeOffersEnchantedToolMixin",
+        "villager.WanderingTraderEntityMixin",
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
         "wolves.GoatHornItemMixin"
