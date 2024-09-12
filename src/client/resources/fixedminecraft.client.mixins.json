@@ -8,7 +8,8 @@
     "ClientPlayerEntityMixin",
     "HeldItemRendererMixin",
     "InGameHudMixin",
-      "EnchantmentScreenMixin"
+      "EnchantmentScreenMixin",
+      "AnvilScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

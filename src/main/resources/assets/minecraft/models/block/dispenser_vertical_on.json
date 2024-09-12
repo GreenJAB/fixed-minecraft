@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/dispenser_vertical",
+	"textures": {
+		"0": "block/dispenser_top_on"
+	}
+}

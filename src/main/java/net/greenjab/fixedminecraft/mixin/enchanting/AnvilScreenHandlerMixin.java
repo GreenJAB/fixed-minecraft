@@ -61,7 +61,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
 
         // calculate enchantmentPower for each enchantment
-        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack);
+        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
         // System.out.println("power: " + enchantmentPower);
 
         // int oldLevelCost = this.levelCost.get();

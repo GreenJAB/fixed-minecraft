@@ -47,7 +47,7 @@ public class FixedMinecraftEnchantmentHelper {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
-        return (int)Math.ceil(power*(isGold?0.6:0.6));
+        return (int)Math.ceil(power*(isGold?0.75f:0.5f));
     }
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
@@ -70,21 +70,15 @@ public class FixedMinecraftEnchantmentHelper {
         }
     }
 
-    public static int getOccupiedEnchantmentCapacity(ItemStack itemStack) {
+    public static int getOccupiedEnchantmentCapacity(ItemStack itemStack, boolean atLeast1) {
         int power = 0;
         Map<Enchantment, Integer> enchantmentLevelsMap = EnchantmentHelper.get(itemStack);
-
-        // System.out.println(enchantmentLevelsMap);
-
         for (Enchantment enchantment : enchantmentLevelsMap.keySet()) {
             int add = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, enchantmentLevelsMap.get(enchantment));
-
-            // System.out.println("enchantment: " + enchantment + " with level: " + enchantmentLevelsMap.get(enchantment) + " has " + add + " ench power");
-
             power += add;
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
-        return Math.max((int)Math.ceil(power*(isGold?0.5:1)),1);
+        return Math.max((int)Math.ceil(power*(isGold?0.5:1)),atLeast1?1:0);
     }
 
     /**

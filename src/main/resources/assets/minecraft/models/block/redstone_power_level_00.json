@@ -1,0 +1,6 @@
+{
+    "parent": "block/template_redstone_power_level",
+    "textures": {
+        "level": "block/redstone_power_level_00"
+    }
+}

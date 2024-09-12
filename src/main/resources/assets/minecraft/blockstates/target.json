@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "power=0": { "model": "minecraft:block/target/0" },
+    "power=1": { "model": "minecraft:block/target/1" },
+    "power=2": { "model": "minecraft:block/target/2" },
+    "power=3": { "model": "minecraft:block/target/3" },
+    "power=4": { "model": "minecraft:block/target/4" },
+    "power=5": { "model": "minecraft:block/target/5" },
+    "power=6": { "model": "minecraft:block/target/6" },
+    "power=7": { "model": "minecraft:block/target/7" },
+    "power=8": { "model": "minecraft:block/target/8" },
+    "power=9": { "model": "minecraft:block/target/9" },
+    "power=10": { "model": "minecraft:block/target/10" },
+    "power=11": { "model": "minecraft:block/target/11" },
+    "power=12": { "model": "minecraft:block/target/12" },
+    "power=13": { "model": "minecraft:block/target/13" },
+    "power=14": { "model": "minecraft:block/target/14" },
+    "power=15": { "model": "minecraft:block/target/15" }
+  }
+}

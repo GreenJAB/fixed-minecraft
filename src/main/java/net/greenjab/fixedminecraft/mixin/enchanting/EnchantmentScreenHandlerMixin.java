@@ -344,7 +344,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
 
             // apply enchanting costs
-            int enchantingCosts = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(targetItemStack);
+            int enchantingCosts = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(targetItemStack, true);
             int newLapisCost = (int)Math.ceil(enchantingCosts/10.0);
             player.applyEnchantmentCosts(targetItemStack, newLapisCost);
 
