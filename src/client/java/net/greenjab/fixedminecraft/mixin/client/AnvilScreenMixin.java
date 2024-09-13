@@ -56,6 +56,9 @@ public class AnvilScreenMixin {
         if (IS1 != ItemStack.EMPTY) {
             isc = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS1);
             is1 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS1, false);
+            if (!ASH.getSlot(1).hasStack()) {
+                is2 = is1;
+            }
             context.fill(60, 37, barPos(is1,isc), 41, new Color(39, 174, 53).hashCode());
             if (is1 > isc) {
                 context.fill(60, 37, barPos(is1-isc,isc), 41, new Color(255, 0, 0).hashCode());

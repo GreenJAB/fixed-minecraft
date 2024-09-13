@@ -41,36 +41,26 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
      */
     @Inject(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;sendContentUpdates()V"))
     private void calculateCost(CallbackInfo ci) {
-
-        // System.out.println(this.output);
-
         ItemStack outputItemStack = this.output.getStack(0);
-
-        // System.out.println(EnchantmentHelper.getPossibleEntries(60, outputItemStack, true));
-
         if (outputItemStack.isEmpty()) {
             return;
         }
 
-        // set rename cost
-        int renameCost = 0;
         ItemStack firstInputStack = this.input.getStack(0);
-        if (outputItemStack.hasCustomName() && !firstInputStack.getName().equals(outputItemStack.getName())) {
-            // System.out.println("item has been renamed");
-            //renameCost = 1;
+        ItemStack secondInputStack = this.input.getStack(1);
+
+        //if just naming the item
+        if (secondInputStack.isEmpty()) {
+            if (outputItemStack.hasCustomName() && !firstInputStack.getName().equals(outputItemStack.getName())) {
+                this.levelCost.set(1);
+                return;
+            }
         }
 
         // calculate enchantmentPower for each enchantment
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
-        // System.out.println("power: " + enchantmentPower);
 
-        // int oldLevelCost = this.levelCost.get();
-
-        // set cost to enchantment power
-        this.levelCost.set(enchantmentPower + renameCost);
-
-        // System.out.println("old cost: " + oldLevelCost);
-
+        this.levelCost.set(enchantmentPower);
 
         // check if item can hold combined enchantment power
         if (this.player.getAbilities().creativeMode) {
@@ -78,9 +68,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
         int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
         if (enchantmentPower < 1 || enchantmentCapacity < enchantmentPower) {
-
-            // System.out.println("item " + outputItemStack + " can hold " + enchantmentCapacity + " enchantment power; " + enchantmentPower + " is invalid!");
-
             this.output.setStack(0, ItemStack.EMPTY);
         }
     }
