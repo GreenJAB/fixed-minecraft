@@ -13,11 +13,16 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:gold_ingot",
-                    "weight": 10
+                    "weight": 9
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:copper_ingot",
+                    "weight": 9
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:nautilus_shell",
                     "weight": 10
                 },
                 {
@@ -28,7 +33,7 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:brush",
-                    "weight": 5,
+                    "weight": 3,
                     "functions": [
                         {
                             "function": "minecraft:set_damage",
@@ -82,12 +87,12 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:water_bucket",
-                    "weight": 5
+                    "weight": 3
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:shears",
-                    "weight": 5,
+                    "weight": 3,
                     "functions": [
                         {
                             "function": "minecraft:set_damage",
@@ -103,11 +108,11 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:arrow",
-                    "weight": 10,
+                    "weight": 8,
                     "functions": [
                         {
                             "function": "minecraft:set_count",
-                            "count": 3,
+                            "count": 10,
                             "add": false
                         }
                     ]
