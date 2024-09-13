@@ -33,7 +33,7 @@ public class AnvilScreenMixin {
         AnvilScreen AS = (AnvilScreen)(Object)this;
         ItemStack IS = AS.getScreenHandler().slots.get(0).getStack();
 
-        return FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS);
+        return FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS)+1;
     }
 
     @Inject(method = "drawForeground", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getLevelCost()I"))
@@ -42,48 +42,45 @@ public class AnvilScreenMixin {
         AnvilScreenHandler ASH = AS.getScreenHandler();
         ItemStack IS1 = ItemStack.EMPTY;
         ItemStack IS2 = ItemStack.EMPTY;
-        ItemStack ISB = ItemStack.EMPTY;
         if (ASH.getSlot(0).hasStack()) {
             IS1 = ASH.slots.get(0).getStack();
         }
         if (ASH.getSlot(2).hasStack()) {
             IS2 = ASH.slots.get(2).getStack();
         }
-        if (ASH.getSlot(1).hasStack()) {
-            ISB = ASH.slots.get(1).getStack();
-        }
         //ASH.canUse(this.player);
         //System.out.println(this.player.currentScreenHandler.canUse(this.player));
         int isc = 0;
         int is1 = 0;
+        int is2 = ASH.getLevelCost();
         if (IS1 != ItemStack.EMPTY) {
             isc = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS1);
             is1 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS1, false);
+            context.fill(60, 37, barPos(is1,isc), 41, new Color(39, 174, 53).hashCode());
             if (is1 > isc) {
-                context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
-            } else {
-                context.fill(60, 37, 60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 41, new Color(0, 0, 255).hashCode());
+                context.fill(60, 37, barPos(is1-isc,isc), 41, new Color(255, 0, 0).hashCode());
             }
         }
-        if (IS2 != ItemStack.EMPTY) {
-            int is2 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS2, false);
+        if (IS2 != ItemStack.EMPTY||is2>isc) {
             if (is2 > isc) {
-                context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
+                context.fill(barPos(is1,isc), 37, 168, 41, new Color(0, 255, 0).hashCode());
+
+                context.fill(60, 37, barPos(is2-isc,isc), 41, new Color(255, 0, 0).hashCode());
             } else {
                 if (is2 > is1) {
-                    context.fill(60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 37, 60 + (int) ((168 - 60) * (is2 / (isc + 0.0f))), 41, new Color(0, 255, 0).hashCode());
+                    context.fill(barPos(is1,isc), 37, barPos(is2,isc), 41, new Color(0, 255, 0).hashCode());
                 } else {
-                    context.fill(60 + (int) ((168 - 60) * (is2 / (isc + 0.0f))), 37, 60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 41, new Color(255, 0, 0).hashCode());
+                    context.fill(60, 37, barPos(is1,isc), 41, new Color(39, 174, 53).hashCode());
+                    context.fill(barPos(is2,isc), 37, barPos(is1,isc), 41, new Color(205, 0, 0).hashCode());
                 }
             }
         }
-        if (IS1 != ItemStack.EMPTY && ISB.isOf(Items.ENCHANTED_BOOK) && IS2 == ItemStack.EMPTY) {
-            context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
-        }
         for (int i = 5; i < isc;i+=5) {
-            context.fill(60+(int) ((168 - 60) * (i / (isc + 0.0f)))-1, 38, 60+(int) ((168 - 60) * (i / (isc + 0.0f))), 40, new Color(255, 255, 255).hashCode());
+            context.fill(barPos(i,isc)-1, 38, barPos(i,isc), 40, new Color(255, 255, 255).hashCode());
         }
     }
+
+    private int barPos(int x, int isc) {return 60+Math.min((int) ((168 - 60) * (x / (isc + 0.0f))), 168 - 60);}
 
     @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
     private int higherTEXT_FIELD_TEXTURE(int x) {

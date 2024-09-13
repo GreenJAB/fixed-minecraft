@@ -82,7 +82,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             // System.out.println("item " + outputItemStack + " can hold " + enchantmentCapacity + " enchantment power; " + enchantmentPower + " is invalid!");
 
             this.output.setStack(0, ItemStack.EMPTY);
-            levelCost.set(0);
         }
     }
 

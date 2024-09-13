@@ -7,7 +7,7 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:cod",
-          "weight": 60
+          "weight": 50
         },
         {
           "type": "minecraft:item",
@@ -17,7 +17,7 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:tropical_fish",
-          "weight": 2
+          "weight": 12
         },
         {
           "type": "minecraft:item",

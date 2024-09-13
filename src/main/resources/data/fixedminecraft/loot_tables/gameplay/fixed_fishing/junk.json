@@ -100,7 +100,7 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:sea_grass",
+          "name": "minecraft:seagrass",
           "weight": 10
         },
         {
