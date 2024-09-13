@@ -14,11 +14,16 @@
           "name": "minecraft:saddle",
             "weight": 5
         },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:spyglass",
-            "weight": 5
-        },
+          {
+              "type": "minecraft:item",
+              "name": "minecraft:spyglass",
+              "weight": 5
+          },
+          {
+              "type": "minecraft:item",
+              "name": "minecraft:scute",
+              "weight": 5
+          },
         {
           "type": "minecraft:item",
           "functions": [
@@ -102,13 +107,11 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30.0,
-              "treasure": true
+              "function": "minecraft:enchant_randomly"
             }
           ],
           "name": "minecraft:book",
-            "weight": 20
+            "weight": 15
         },
         {
           "type": "minecraft:item",

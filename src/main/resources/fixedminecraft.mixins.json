@@ -54,6 +54,8 @@
         "phantom.MilkBucketItemMixin",
         "phantom.PhantomSpawnerMixin",
         "redstone.BulbBlockMixin",
+        "structure.OceanMonumentGeneratorBaseMixin",
+        "structure.OceanMonumentGeneratorCoreRoomMixin",
         "transport.AbstractMinecartEntityMixin",
         "transport.ArmorAbstractHorseEntityMixin",
         "transport.BreedingAbstractHorseEntityMixin",
