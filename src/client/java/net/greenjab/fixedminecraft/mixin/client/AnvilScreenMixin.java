@@ -7,6 +7,7 @@ import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
@@ -30,7 +31,7 @@ public class AnvilScreenMixin {
     @ModifyConstant(method = "drawForeground", constant = @Constant(intValue = 40, ordinal = 0))
     private int injected(int i, @Local DrawContext context) {
         AnvilScreen AS = (AnvilScreen)(Object)this;
-        ItemStack IS = AS.getScreenHandler().slots.get(2).getStack();
+        ItemStack IS = AS.getScreenHandler().slots.get(0).getStack();
 
         return FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS);
     }
@@ -39,23 +40,48 @@ public class AnvilScreenMixin {
     private void drawBar(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
         AnvilScreen AS = (AnvilScreen) (Object) this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        ItemStack IS = ItemStack.EMPTY;
-        if (ASH.getSlot(2).hasStack()) {
-            IS = ASH.slots.get(2).getStack();
-        } else if (ASH.getSlot(0).hasStack()) {
-            IS = ASH.slots.get(0).getStack();
+        ItemStack IS1 = ItemStack.EMPTY;
+        ItemStack IS2 = ItemStack.EMPTY;
+        ItemStack ISB = ItemStack.EMPTY;
+        if (ASH.getSlot(0).hasStack()) {
+            IS1 = ASH.slots.get(0).getStack();
         }
-        ASH.canUse(this.player);
+        if (ASH.getSlot(2).hasStack()) {
+            IS2 = ASH.slots.get(2).getStack();
+        }
+        if (ASH.getSlot(1).hasStack()) {
+            ISB = ASH.slots.get(1).getStack();
+        }
+        //ASH.canUse(this.player);
         //System.out.println(this.player.currentScreenHandler.canUse(this.player));
-
-        if (IS != ItemStack.EMPTY) {
-            int i1 = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS);
-            int i2 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS, false);
-            if (i2 > i1) {
+        int isc = 0;
+        int is1 = 0;
+        if (IS1 != ItemStack.EMPTY) {
+            isc = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS1);
+            is1 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS1, false);
+            if (is1 > isc) {
                 context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
             } else {
-                context.fill(60, 37, 60 + (int) ((168 - 60) * (i2 / (i1 + 0.0f))), 41, new Color(0, 255, 0).hashCode());
+                context.fill(60, 37, 60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 41, new Color(0, 0, 255).hashCode());
             }
+        }
+        if (IS2 != ItemStack.EMPTY) {
+            int is2 = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS2, false);
+            if (is2 > isc) {
+                context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
+            } else {
+                if (is2 > is1) {
+                    context.fill(60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 37, 60 + (int) ((168 - 60) * (is2 / (isc + 0.0f))), 41, new Color(0, 255, 0).hashCode());
+                } else {
+                    context.fill(60 + (int) ((168 - 60) * (is2 / (isc + 0.0f))), 37, 60 + (int) ((168 - 60) * (is1 / (isc + 0.0f))), 41, new Color(255, 0, 0).hashCode());
+                }
+            }
+        }
+        if (IS1 != ItemStack.EMPTY && ISB.isOf(Items.ENCHANTED_BOOK) && IS2 == ItemStack.EMPTY) {
+            context.fill(60, 37, 168, 41, new Color(255, 0, 0).hashCode());
+        }
+        for (int i = 5; i < isc;i+=5) {
+            context.fill(60+(int) ((168 - 60) * (i / (isc + 0.0f)))-1, 38, 60+(int) ((168 - 60) * (i / (isc + 0.0f))), 40, new Color(255, 255, 255).hashCode());
         }
     }
 

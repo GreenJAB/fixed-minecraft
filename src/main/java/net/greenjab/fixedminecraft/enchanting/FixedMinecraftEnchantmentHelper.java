@@ -40,6 +40,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
+        if (itemStack.isOf(Items.ENCHANTED_BOOK)) return 50;
         List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
         int ii = list.size();
         int power = 0;
@@ -47,7 +48,7 @@ public class FixedMinecraftEnchantmentHelper {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
-        return (int)Math.ceil(power*(isGold?0.75f:0.5f));
+        return Math.min((int)Math.ceil(power*(isGold?0.75f:0.52f)), 50);
     }
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
