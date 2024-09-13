@@ -11,6 +11,7 @@ import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.Util;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,10 +52,11 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         //if just naming the item
         if (secondInputStack.isEmpty()) {
-            if (outputItemStack.hasCustomName() && !firstInputStack.getName().equals(outputItemStack.getName())) {
+            if ((outputItemStack.hasCustomName() && !firstInputStack.getName().equals(outputItemStack.getName())) || Util.isBlank(this.newItemName)) {
                 this.levelCost.set(1);
                 return;
             }
+
         }
 
         // calculate enchantmentPower for each enchantment
@@ -80,23 +82,16 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         ItemStack firstInputStack = this.input.getStack(0);
         ItemStack secondInputStack = this.input.getStack(1);
         if (firstInputStack.isEmpty() || secondInputStack.isEmpty()) {
-            // System.out.println("one of the slots is empty");
             return;
         }
         if (!firstInputStack.isOf(secondInputStack.getItem())) {
-            // System.out.println("input stacks arent of same item");
             return;
         }
-        // System.out.println("input stacks are same item");
-        // System.out.println("enchantments first item: " + EnchantmentHelper.get(firstInputStack));
-        // System.out.println("enchantments second item: " + EnchantmentHelper.get(secondInputStack));
+
         if (EnchantmentHelper.get(firstInputStack).isEmpty() || EnchantmentHelper.get(secondInputStack).isEmpty()) {
-            // System.out.println("one of the inputs is unenchanted");
             return;
         }
-        // System.out.println("both inputs are enchanted");
         if (firstInputStack.isOf(Items.ENCHANTED_BOOK)) {
-            // System.out.println("are enchanted books");
             return;
         }
 
