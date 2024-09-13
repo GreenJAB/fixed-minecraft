@@ -55,7 +55,6 @@ public class FishingBobberEntityMixin {
         if (rand>chanceFish+chanceBad) lootPool = 2;
         if (rand>chanceFish+chanceBad+chanceMid) lootPool = 3;
 
-        lootPool = 3;
         LootTable lootTable;
         switch (lootPool){
             case 1: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/junk")); break;
