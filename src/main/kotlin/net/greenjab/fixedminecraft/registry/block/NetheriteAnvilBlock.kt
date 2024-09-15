@@ -59,6 +59,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         if (world.isClient) {
             return ActionResult.SUCCESS
         }
+        player.addCommandTag("netherite_anvil")
         player.openHandledScreen(state.createScreenHandlerFactory(world, pos))
         player.incrementStat(Stats.INTERACT_WITH_ANVIL)
         return ActionResult.CONSUME
