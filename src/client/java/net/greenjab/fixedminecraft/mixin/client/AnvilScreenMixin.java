@@ -6,6 +6,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +33,12 @@ public class AnvilScreenMixin {
         }
 
         ItemStack IS = AS.getScreenHandler().slots.get(0).getStack();
-        return FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS)+1;
+        int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS);
+        if (cap == 0) {
+
+            return 1000;
+        }
+        return cap+1;
     }
 
     @ModifyVariable(method = "drawForeground", at = @At(value = "STORE"), ordinal = 2)
@@ -75,8 +81,11 @@ public class AnvilScreenMixin {
             if (!ASH.getSlot(1).hasStack()) {
                 is2 = is1;
             }
+            if (isc == 0) {
+                is2 = 0;
+            }
             if (!IS2.isEmpty()) {
-                if (!IS2.hasEnchantments()) {
+                if (!IS2.hasEnchantments() && !IS1.isOf(Items.ENCHANTED_BOOK)) {
                     is2 = is1;
                 }
                 if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS2, false) == 0) {

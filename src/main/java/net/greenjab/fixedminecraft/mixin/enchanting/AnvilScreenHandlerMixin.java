@@ -259,7 +259,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
            // check if item can hold combined enchantment power
            if (!this.player.getAbilities().creativeMode) {
                int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
-               if (enchantmentPower < 1 || enchantmentCapacity < enchantmentPower) {
+               if ((enchantmentPower < 1 || enchantmentCapacity < enchantmentPower)&&enchantmentCapacity!=0) {
                     this.output.setStack(0, ItemStack.EMPTY);
                    this.sendContentUpdates();
                    ci.cancel();
