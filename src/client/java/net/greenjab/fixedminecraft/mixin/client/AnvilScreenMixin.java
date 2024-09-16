@@ -118,7 +118,8 @@ public class AnvilScreenMixin {
                     context.fill(barPos(is1,isc), 37, barPos(is2,isc), 41, new Color(0, 255, 0).hashCode());
                 } else {
                     context.fill(60, 37, barPos(is1,isc), 41, new Color(39, 174, 53).hashCode());
-                    context.fill(barPos(is2,isc), 37, barPos(is1,isc), 41, new Color(205, 0, 0).hashCode());
+                    if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(IS2, false) == 0) is2 = 0;
+                    context.fill(Math.max(barPos(is2,isc), 60), 37, barPos(is1,isc), 41, new Color(205, 0, 0).hashCode());
                 }
             }
         }
