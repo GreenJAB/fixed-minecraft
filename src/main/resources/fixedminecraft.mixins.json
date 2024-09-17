@@ -28,6 +28,7 @@
         "enchanting.GrindstoneScreenHandlerMixin",
         "enchanting.ToolMaterialsMixin",
         "enchanting.ArmorMaterialsMixin",
+        "enchanting.EnchantWithLevelsLootFunctionMixin",
         "food.FoodComponentsMixin",
         "food.HungerManagerMixin",
         "food.ItemMixin",

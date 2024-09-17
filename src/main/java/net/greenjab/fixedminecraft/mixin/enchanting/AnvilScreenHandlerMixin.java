@@ -286,6 +286,18 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             player.addExperienceLevels(-Math.abs(this.levelCost.get()));
         }
 
+        int superEnchants = 0;
+        Map<Enchantment, Integer> map = EnchantmentHelper.get(this.output.getStack(0));
+        Iterator iter = map.keySet().iterator();
+        while(iter.hasNext()) {
+            Enchantment enchantment = (Enchantment)iter.next();
+            int l1 = map.get(enchantment);
+            boolean isGold = this.output.getStack(0).isIn(ItemTags.PIGLIN_LOVED);
+            if (l1 > enchantment.getMaxLevel() && !isGold) {
+                superEnchants++;
+            }
+        }
+
         boolean netherite = this.levelCost.get()<0;
         int cost = 0;
         if (netherite) {
@@ -299,7 +311,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         } else {
             cost = 12;
         }
-        final int finalCost = cost;
+        final int finalCost = cost + 5*superEnchants;
+
+
+
 
         this.input.setStack(0, ItemStack.EMPTY);
         if (this.repairItemUsage > 0) {
