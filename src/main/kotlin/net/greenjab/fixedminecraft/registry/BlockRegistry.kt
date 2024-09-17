@@ -1,39 +1,28 @@
 package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock
-import net.greenjab.fixedminecraft.util.identifierOf
-import net.minecraft.block.AbstractBlock
+import net.greenjab.fixedminecraft.registry.entity.BrickEntity
 import net.minecraft.block.Block
-import net.minecraft.block.BlockSetType
 import net.minecraft.block.Blocks
-import net.minecraft.block.DoorBlock
-import net.minecraft.block.FenceBlock
-import net.minecraft.block.FenceGateBlock
-import net.minecraft.block.HangingSignBlock
-import net.minecraft.block.MapColor
+import net.minecraft.block.DispenserBlock
 import net.minecraft.block.Oxidizable
-import net.minecraft.block.PillarBlock
-import net.minecraft.block.PressurePlateBlock
-import net.minecraft.block.SignBlock
-import net.minecraft.block.SlabBlock
-import net.minecraft.block.StairsBlock
-import net.minecraft.block.TrapdoorBlock
-import net.minecraft.block.WallHangingSignBlock
-import net.minecraft.block.WallSignBlock
-import net.minecraft.block.WoodType
-import net.minecraft.block.enums.Instrument
+import net.minecraft.block.dispenser.ProjectileDispenserBehavior
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.entity.projectile.ProjectileEntity
+import net.minecraft.entity.projectile.thrown.SnowballEntity
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registries.BLOCK
 import net.minecraft.sound.BlockSoundGroup
-import net.minecraft.util.Identifier
+import net.minecraft.util.Util
+import net.minecraft.util.math.Position
+import net.minecraft.world.World
 
 object BlockRegistry {
     val NETHERITE_ANVIL = block(Blocks.NETHERITE_BLOCK, ::NetheriteAnvilBlock) {
@@ -76,6 +65,24 @@ object BlockRegistry {
         BLOCK.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         BLOCK.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
+        DispenserBlock.registerBehavior(Items.BRICK, object : ProjectileDispenserBehavior() {
+            override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
+                return Util.make(
+                    BrickEntity(world, position.x, position.y, position.z)
+                ) { entity: BrickEntity ->
+                    entity.setItem(stack)
+                } as ProjectileEntity
+            }
+        })
+        DispenserBlock.registerBehavior(Items.NETHER_BRICK, object : ProjectileDispenserBehavior() {
+            override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
+                return Util.make(
+                    BrickEntity(world, position.x, position.y, position.z)
+                ) { entity: BrickEntity ->
+                    entity.setItem(stack)
+                } as ProjectileEntity
+            }
+        })
     }
 
     private fun registerBlock(identifier: String, block: Block) {

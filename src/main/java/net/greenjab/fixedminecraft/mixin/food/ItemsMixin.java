@@ -9,6 +9,7 @@ import net.greenjab.fixedminecraft.registry.item.TotemItem;
         import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.PotionItem;
 import net.minecraft.item.StewItem;
 import net.minecraft.item.SuspiciousStewItem;
         import net.minecraft.util.Rarity;
@@ -62,6 +63,13 @@ public class ItemsMixin {
             value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SuspiciousStewItem;", ordinal = 0 ))
     private static SuspiciousStewItem stackedSuspiciousSoup(Item.Settings settings) {
         return new SuspiciousStewItem((new Item.Settings()).maxCount(16).food(FoodComponents.SUSPICIOUS_STEW));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=potion"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/PotionItem;", ordinal = 0 ))
+    private static PotionItem stackedPotions(Item.Settings settings) {
+        return new PotionItem((new Item.Settings()).maxCount(16));
     }
 
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {

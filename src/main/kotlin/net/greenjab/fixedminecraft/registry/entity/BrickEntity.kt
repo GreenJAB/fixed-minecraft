@@ -18,6 +18,7 @@ class BrickEntity : ThrownItemEntity {
     constructor(entityType: EntityType<out BrickEntity?>?, world: World?) : super(entityType, world)
 
     constructor(world: World?, owner: LivingEntity?) : super(EntityType.SNOWBALL, owner, world)
+    constructor(world: World, x: Double, y: Double, z: Double) : super(EntityType.SNOWBALL,x, y, z, world)
 
 
     override fun handleStatus(status: Byte) {
