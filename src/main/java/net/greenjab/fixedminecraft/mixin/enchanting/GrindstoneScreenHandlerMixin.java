@@ -47,6 +47,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
         ItemStack itemStack = item.copyWithCount(amount);
         itemStack.removeSubNbt("Enchantments");
         itemStack.removeSubNbt("StoredEnchantments");
+        itemStack.removeSubNbt("Super");
         if (damage > 0) {
             itemStack.setDamage(damage);
         } else {

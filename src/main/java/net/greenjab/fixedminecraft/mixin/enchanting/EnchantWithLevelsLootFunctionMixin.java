@@ -32,17 +32,20 @@ public class EnchantWithLevelsLootFunctionMixin {
         ItemStack IS2 = IS.getItem().getDefaultStack();
         Map<Enchantment, Integer> map = EnchantmentHelper.get(IS);
         Iterator iter = map.keySet().iterator();
+        boolean has = false;
         while (iter.hasNext()) {
             Enchantment e = (Enchantment)iter.next();
             int i =  (Integer)map.get(e);
             if (e.getMaxLevel() != 1) {
                 if (random.nextFloat() < 0.05f) {
                     i++;
+                    has = true;
                 }
             }
             System.out.println(e.getName(i));
             map.put(e, i);
         }
+        if (has) IS2.getOrCreateSubNbt("Super");
         EnchantmentHelper.set(map, IS2);
         cir.setReturnValue(IS2);
     }

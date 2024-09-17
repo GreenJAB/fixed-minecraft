@@ -346,5 +346,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         });
         this.input.setStack(0, ItemStack.EMPTY);
+        ci.cancel();
     }
 }
