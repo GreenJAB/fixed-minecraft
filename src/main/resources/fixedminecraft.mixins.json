@@ -55,6 +55,7 @@
         "phantom.MilkBucketItemMixin",
         "phantom.PhantomSpawnerMixin",
         "redstone.BulbBlockMixin",
+        "redstone.DaylightDetectorBlockMixin",
         "structure.OceanMonumentGeneratorBaseMixin",
         "structure.OceanMonumentGeneratorCoreRoomMixin",
         "transport.AbstractMinecartEntityMixin",
