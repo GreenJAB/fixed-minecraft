@@ -19,7 +19,7 @@ class NewDaylightDetectorBlock(settings: Settings) : DaylightDetectorBlock(setti
             if (bl) {
                 return world.moonPhase+1
             } else {
-                return ((world.timeOfDay%12000)/1000+1).toInt()
+                return (((world.timeOfDay+5000)%12000)/1000).toInt()+1
             }
         }
         return 0
