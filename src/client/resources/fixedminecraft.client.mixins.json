@@ -9,7 +9,11 @@
     "HeldItemRendererMixin",
     "InGameHudMixin",
       "EnchantmentScreenMixin",
-      "AnvilScreenMixin"
+      "AnvilScreenMixin",
+      "glint.ItemRendererMixin",
+      "glint.BufferBuilderStorageMixin",
+      "glint.ArmorFeatureRendererMixin",
+      "glint.ElytraFeatureRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
