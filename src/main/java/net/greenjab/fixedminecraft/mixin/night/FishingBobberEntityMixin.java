@@ -13,6 +13,7 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,7 +44,7 @@ public class FishingBobberEntityMixin {
         if (bait.isOf(Items.FERMENTED_SPIDER_EYE))baitpower=2;
 
         World world = FBE.getWorld();
-        if (world.isSkyVisible(playerEntity.getBlockPos().up())) {
+        if (world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) {
             if (world.isNight() && world.getMoonPhase()==0) luck+=2;
             if (world.isRaining())baitpower++;
         }

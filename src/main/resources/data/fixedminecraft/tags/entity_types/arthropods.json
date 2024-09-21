@@ -1,0 +1,12 @@
+{
+    "values": [
+        "minecraft:creeper",
+        "minecraft:slime",
+        "minecraft:magma_cube",
+        "minecraft:ghast",
+        "minecraft:guardian",
+        "minecraft:elder_guardian",
+        "minecraft:shulker",
+        "minecraft:blaze"
+    ]
+}

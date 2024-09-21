@@ -20,7 +20,7 @@ public class EnchantmentHelperMixin {
         World world = entity.getWorld();
         if (entity instanceof PlayerEntity) {
             if (world.isSkyVisible(entity.getBlockPos())) {
-                if (world.isNight() && world.getMoonPhase() == 4) {System.out.println("4");i++;}
+                if (world.isNight() && world.getMoonPhase() == 4) i++;
             }
         }
         cir.setReturnValue(i);

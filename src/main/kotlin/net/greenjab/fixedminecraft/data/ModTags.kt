@@ -8,5 +8,6 @@ import net.minecraft.registry.tag.TagKey
 object ModTags {
 
     val VEHICLES: TagKey<EntityType<*>> = TagKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id("vehicles"))
+    val ARTHROPODS: TagKey<EntityType<*>> = TagKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id("arthropods"))
 
 }

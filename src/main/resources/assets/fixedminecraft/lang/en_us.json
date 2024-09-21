@@ -22,5 +22,6 @@
     "block.fixedminecraft.waxed_oxidized_copper_rail": "Waxed Oxidized Copper Rail",
     "itemgroup.fixed": "Fixed Group",
     "effect.fixedminecraft.reach": "Reach",
-    "effect.fixedminecraft.insomnia": "Insomnia"
+    "effect.fixedminecraft.insomnia": "Insomnia",
+    "enchantment.minecraft.bane_of_arthropods": "Bane of Invertebrates"
 }
