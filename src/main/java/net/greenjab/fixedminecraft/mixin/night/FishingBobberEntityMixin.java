@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.misc;
+package net.greenjab.fixedminecraft.mixin.night;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -13,6 +13,7 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,12 +37,16 @@ public class FishingBobberEntityMixin {
         int luck = this.luckOfTheSeaLevel;
         if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
             luck += 3*(playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
-        //if (playerEntity.hasStatusEffect(StatusEffects.UNLUCK))
-        //    luck -= 3*(playerEntity.getStatusEffect(StatusEffects.UNLUCK).getAmplifier()+1);
 
         int baitpower = 0;
         if (bait.isOf(Items.SPIDER_EYE))baitpower=1;
         if (bait.isOf(Items.FERMENTED_SPIDER_EYE))baitpower=2;
+
+        World world = FBE.getWorld();
+        if (world.isSkyVisible(playerEntity.getBlockPos().up())) {
+            if (world.isNight() && world.getMoonPhase()==0) luck+=2;
+            if (world.isRaining())baitpower++;
+        }
 
 
         int chanceGood = Math.min(luck * baitpower + 3 * baitpower,100);

@@ -249,6 +249,19 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
 
+
+        if (netherite) {
+            Map<Enchantment, Integer> map = EnchantmentHelper.get(outputItemStack);
+            Iterator iter = map.keySet().iterator();
+            while(iter.hasNext()) {
+                Enchantment enchantment = (Enchantment)iter.next();
+                if (enchantment.getName(1).getString().toLowerCase().contains("mending")) {
+                    map.remove(enchantment);
+                }
+            }
+        }
+
+
         // calculate enchantmentPower for each enchantment
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
 
