@@ -92,8 +92,9 @@ public abstract class MobEntityMixin extends LivingEntity {
             int i = 0;
             if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
             if (world.getDifficulty() == Difficulty.HARD) i = 2;
+            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)+i*2);
             LE.setHealth(LE.getHealth() + i*2);
-            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(i+i/5f));
+            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+i/10f));
 
 
         }
