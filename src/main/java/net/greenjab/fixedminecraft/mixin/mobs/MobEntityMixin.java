@@ -83,7 +83,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         if (LE instanceof HostileEntity) {
             if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
                 if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {
-                    if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 5.0f)) {
+                    if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 3.0f)) {
                         StatusEffectInstance effect = getEffect(random, LE);
                         LE.addStatusEffect(effect);
                     }
@@ -125,7 +125,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         } else if (i == 9) {
             return new StatusEffectInstance(StatusEffects.REGENERATION, -1, 0);
         } else {
-            return new StatusEffectInstance(StatusEffects.GLOWING, -1, 0);
+            return new StatusEffectInstance(StatusEffects.ABSORPTION, -1, 0);
         }
     }
 

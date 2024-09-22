@@ -35,6 +35,7 @@
         "food.ItemsMixin",
         "food.PlayerManagerMixin",
         "food.ServerPlayerEntityMixin",
+        "food.LivingEntityMixin",
         "food.StewItemMixin",
         "food.SuspiciousStewItemMixin",
         "inventory.CraftingInventoryAccessor",
