@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -252,13 +253,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         if (netherite) {
             Map<Enchantment, Integer> map = EnchantmentHelper.get(outputItemStack);
-            Iterator iter = map.keySet().iterator();
-            while(iter.hasNext()) {
-                Enchantment enchantment = (Enchantment)iter.next();
-                if (enchantment.getName(1).getString().toLowerCase().contains("mending")) {
-                    map.remove(enchantment);
-                }
-            }
+            map.remove(Enchantments.MENDING);
+            EnchantmentHelper.set(map, outputItemStack);
         }
 
 

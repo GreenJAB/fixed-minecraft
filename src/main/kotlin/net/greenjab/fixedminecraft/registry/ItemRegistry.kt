@@ -25,11 +25,9 @@ object ItemRegistry {
         fireproof()
     }
 
-    val BROKEN_TOTEM = item(::Item) {
-        maxCount(1)
-        rarity(Rarity.UNCOMMON)
-    }
-    val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
+    val BROKEN_TOTEM = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
+    //val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
+    val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
     val ECHO_FRUIT: Item =  EchoFruitItem(FabricItemSettings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 
     val NETHERITE_ANVIL = blockItem(BlockRegistry.NETHERITE_ANVIL, Item.Settings::fireproof)

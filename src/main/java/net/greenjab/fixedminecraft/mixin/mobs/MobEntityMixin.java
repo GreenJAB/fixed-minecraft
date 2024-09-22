@@ -80,7 +80,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         LivingEntity LE = (LivingEntity)(Object)this;
         Random random = LE.getWorld().getRandom();
         int y= LE.getBlockPos().getY();
-        if (LE instanceof HostileEntity) {
+        if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
             if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
                 if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {
                     if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 3.0f)) {
@@ -92,12 +92,16 @@ public abstract class MobEntityMixin extends LivingEntity {
             int i = 0;
             if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
             if (world.getDifficulty() == Difficulty.HARD) i = 2;
-            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)+i*2);
-            LE.setHealth(LE.getHealth() + i*2);
-            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+i/10f));
+            float h = i*3*guassian(random);
+            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)+h);
+            LE.setHealth(LE.getHealth() + h);
+            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+(i*0.15f*guassian(random))));
 
 
         }
+    }
+    private float guassian(Random random){
+        return (float)(random.nextGaussian()/4.0f)+0.5f;
     }
 
     public StatusEffectInstance getEffect(Random random, LivingEntity LE) {
