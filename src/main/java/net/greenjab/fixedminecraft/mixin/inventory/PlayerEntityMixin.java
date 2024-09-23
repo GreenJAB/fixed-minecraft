@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -53,5 +55,14 @@ public class PlayerEntityMixin {
             items.add(stack);
         }
         nbt.put("CraftingItems", items);
+    }
+
+    @Inject(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setPickupDelay(I)V"))
+    private void onGroundForLonger(@Local ItemEntity itemEntity, @Local(ordinal = 0) boolean thrownRandomly){
+        if (thrownRandomly) {
+            int diff = itemEntity.getWorld().getDifficulty().getId();
+            if (diff == 2) itemEntity.setCovetedItem();
+            if (diff < 2) itemEntity.setNeverDespawn();
+        }
     }
 }

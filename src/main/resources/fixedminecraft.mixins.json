@@ -41,6 +41,7 @@
         "inventory.CraftingInventoryAccessor",
         "inventory.PlayerEntityMixin",
         "inventory.PlayerScreenHandlerMixin",
+        "inventory.BundleItemMixin",
         "map_book.MapStateAccessor",
         "map_book.MapStatePlayerUpdateTrackerMixin",
         "map_book.MapUpdateS2CPacketMixin",
