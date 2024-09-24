@@ -40,7 +40,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
-        if (itemStack.isOf(Items.ENCHANTED_BOOK)) return 50;
+        if (itemStack.isOf(Items.ENCHANTED_BOOK)||itemStack.isOf(Items.BOOK)) return 50;
         List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
         int ii = list.size();
         int power = 0;

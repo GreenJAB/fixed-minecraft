@@ -27,20 +27,20 @@
         {
           "type": "minecraft:item",
           "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 0.25,
-                "min": 0.0
+              {
+                  "function": "minecraft:enchant_with_levels",
+                  "levels": 30.0,
+                  "treasure": true
               },
-              "function": "minecraft:set_damage"
-            },
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30.0,
-              "treasure": true
-            }
+              {
+                  "function": "minecraft:set_damage",
+                  "add": false,
+                  "damage": {
+                      "type": "minecraft:uniform",
+                      "max": 0.25,
+                      "min": 0.0
+                  }
+              }
           ],
           "name": "minecraft:bow",
             "weight": 14
@@ -48,20 +48,20 @@
         {
           "type": "minecraft:item",
           "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 0.25,
-                "min": 0.0
+              {
+                  "function": "minecraft:enchant_with_levels",
+                  "levels": 30.0,
+                  "treasure": true
               },
-              "function": "minecraft:set_damage"
-            },
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30.0,
-              "treasure": true
-            }
+              {
+                  "function": "minecraft:set_damage",
+                  "add": false,
+                  "damage": {
+                      "type": "minecraft:uniform",
+                      "max": 0.25,
+                      "min": 0.0
+                  }
+              }
           ],
           "name": "minecraft:fishing_rod",
             "weight": 14
@@ -85,20 +85,20 @@
         {
           "type": "minecraft:item",
           "functions": [
-            {
-              "add": false,
-              "damage": {
-                "type": "minecraft:uniform",
-                "max": 0.25,
-                "min": 0.0
+              {
+                  "function": "minecraft:enchant_with_levels",
+                  "levels": 30.0,
+                  "treasure": true
               },
-              "function": "minecraft:set_damage"
-            },
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 30.0,
-              "treasure": true
-            }
+              {
+                  "function": "minecraft:set_damage",
+                  "add": false,
+                  "damage": {
+                      "type": "minecraft:uniform",
+                      "max": 0.25,
+                      "min": 0.0
+                  }
+              }
           ],
           "name": "minecraft:trident",
             "weight": 2

@@ -1,9 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.data.Saturation;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -15,7 +19,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Saves player crafting inventory across restarts.
@@ -33,7 +39,7 @@ public class PlayerEntityMixin {
         NbtList items = nbt.getList("CraftingItems", NbtElement.COMPOUND_TYPE);
         if (items == null) return;
         stacks.clear();
-        for(int i = 0; i < items.size(); ++i) {
+        for (int i = 0; i < items.size(); ++i) {
             NbtCompound nbtCompound = items.getCompound(i);
             int slot = nbtCompound.getByte("Slot") & 255;
             if (slot >= craftingGrid.size()) continue;
@@ -46,7 +52,7 @@ public class PlayerEntityMixin {
     private void writeCraftingGrid(NbtCompound nbt, CallbackInfo ci) {
         RecipeInputInventory craftingGrid = playerScreenHandler.getCraftingInput();
         NbtList items = new NbtList();
-        for(int i = 0; i < craftingGrid.size(); ++i) {
+        for (int i = 0; i < craftingGrid.size(); ++i) {
             ItemStack itemStack = craftingGrid.getStack(i);
             if (itemStack.isEmpty()) continue;
             NbtCompound stack = new NbtCompound();
@@ -56,13 +62,15 @@ public class PlayerEntityMixin {
         }
         nbt.put("CraftingItems", items);
     }
+    @Inject(method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setVelocity(DDD)V", ordinal = 0))
+    private void onGroundForLonger(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir, @Local ItemEntity itemEntity) {
+        int diff = itemEntity.getWorld().getDifficulty().getId();
+        if (diff == 2) itemEntity.setCovetedItem();
+        if (diff < 2) itemEntity.setNeverDespawn();
+    }
 
-    @Inject(method = "dropItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setPickupDelay(I)V"))
-    private void onGroundForLonger(@Local ItemEntity itemEntity, @Local(ordinal = 0) boolean thrownRandomly){
-        if (thrownRandomly) {
-            int diff = itemEntity.getWorld().getDifficulty().getId();
-            if (diff == 2) itemEntity.setCovetedItem();
-            if (diff < 2) itemEntity.setNeverDespawn();
-        }
+    @Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
+    private boolean cancelElytraInLiquid(PlayerEntity instance, StatusEffect effect) {
+        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() && Saturation.INSTANCE.getAirTime() > 15);
     }
 }

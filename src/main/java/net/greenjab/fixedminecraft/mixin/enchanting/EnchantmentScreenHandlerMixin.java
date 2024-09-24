@@ -40,6 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -259,7 +260,10 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
                 // generate enchantments
                 // System.out.println("generateEnchantments - onContentChanged on logical " + (world.isClient ? "client" : "server"));
-                List<EnchantmentLevelEntry> enchantments = this.generateEnchantments(itemStack, slot, power);
+                List<EnchantmentLevelEntry> enchantments = this.generateEnchantments(Items.AIR.getDefaultStack(), slot, power);;
+                if (!itemStack.isOf(Items.BOOK)) {
+                    enchantments = this.generateEnchantments(itemStack, slot, power);
+                }
 
                 // Map<Enchantment, Integer> eMap = new HashMap<>();
                 // enchantments.forEach((enchantmentLevelEntry -> {eMap.put(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);}));
@@ -327,19 +331,24 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
             // determine strategy to apply enchantments
             BiConsumer<ItemStack, EnchantmentLevelEntry> applyEnchantmentsStrategy;
-            if (targetItemStack.isOf(Items.ENCHANTED_BOOK)) {
-                applyEnchantmentsStrategy = EnchantedBookItem::addEnchantment;
-            }
-            else {
-                applyEnchantmentsStrategy = (itemStack, enchantmentLevelEntry) -> {
-                    itemStack.addEnchantment(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
-                };
-            }
-
+            applyEnchantmentsStrategy = (itemStack, enchantmentLevelEntry) -> {
+                itemStack.addEnchantment(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
+            };
             // apply enchantments
             for (EnchantmentLevelEntry entry : this.fixed_minecraft__enchantments[slotId]) {
                 applyEnchantmentsStrategy.accept(targetItemStack, entry);
             }
+
+            boolean isSuper = false;
+            Map<Enchantment, Integer> map = EnchantmentHelper.get(targetItemStack);
+            Iterator iter = map.keySet().iterator();
+            while(iter.hasNext()) {
+                Enchantment enchantment = (Enchantment)iter.next();
+                int i = (Integer)map.get(enchantment);
+                if (i > enchantment.getMaxLevel())isSuper = true;
+            }
+
+            if (isSuper) targetItemStack.getOrCreateSubNbt("Super");
 
 
 

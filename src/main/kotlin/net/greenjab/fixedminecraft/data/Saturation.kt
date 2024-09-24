@@ -15,7 +15,15 @@ object Saturation {
     public var lastPos = Vec3d(0.0, 0.0, 0.0);
     public var lastPos2 = Vec3d(0.0, 0.0, 0.0);
 
+    public var airTime = 0;
+
     fun hungerToSaturation(player: PlayerEntity, hunger: HungerManager) {
+        // player.addCommandTag("airTime");
+        // player.tag
+
+        if (player.isOnGround) airTime=0;
+        else if (player.getAbilities().flying) airTime = 10;
+        else airTime++;
 
         var h = if(player.isSneaking()) 2.0f else 1.0f
         if (hunger.exhaustion == lastExhaustion) {ticksSinceLastExhaustion = min(ticksSinceLastExhaustion+h.toInt(), 40);}
