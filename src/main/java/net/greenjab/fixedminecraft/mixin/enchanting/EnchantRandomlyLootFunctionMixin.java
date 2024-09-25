@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.context.LootContext;
@@ -40,7 +41,10 @@ public class EnchantRandomlyLootFunctionMixin {
 
                 map.put(e, i);
             }
-            if (isSuper) IS2.getOrCreateSubNbt("Super");
+            if (isSuper) {
+                IS2.getOrCreateSubNbt("Super");
+                map.remove(Enchantments.MENDING);
+            }
             EnchantmentHelper.set(map, IS2);
             cir.setReturnValue(IS2);
         } else {

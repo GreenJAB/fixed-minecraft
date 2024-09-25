@@ -37,7 +37,7 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isFallFlying()Z"))
     private void addMyTest(CallbackInfo ci) {
         ClientPlayerEntity CPE = (ClientPlayerEntity)(Object)this;
-        if (CPE.input.jumping && !CPE.getAbilities().flying && !CPE.hasVehicle() && !CPE.isClimbing()) {
+        if (CPE.input.jumping) {
             ItemStack itemStack = CPE.getEquippedStack(EquipmentSlot.CHEST);
             if (itemStack.isOf(Items.ELYTRA) && ElytraItem.isUsable(itemStack) && CPE.checkFallFlying()) {
                 CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));

@@ -21,9 +21,10 @@ object Saturation {
         // player.addCommandTag("airTime");
         // player.tag
 
-        if (player.isOnGround) airTime=0;
+        if (player.isOnGround|| player.hasVehicle() || player.isClimbing() || player.isTouchingWater) airTime=0;
         else if (player.getAbilities().flying) airTime = 10;
         else airTime++;
+        if (player.isUsingRiptide) airTime =20;
 
         var h = if(player.isSneaking()) 2.0f else 1.0f
         if (hunger.exhaustion == lastExhaustion) {ticksSinceLastExhaustion = min(ticksSinceLastExhaustion+h.toInt(), 40);}

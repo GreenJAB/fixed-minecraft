@@ -61,6 +61,8 @@
         "mobs.LlamaEntityMixin",
         "mobs.ArmorStandEntityMixin",
         "mobs.InfestedBlockMixin",
+        "mobs.ParrotEntityMixin",
+        "mobs.PlayerEntityMixin",
         "phantom.LivingEntityMixin",
         "phantom.MilkBucketItemMixin",
         "phantom.PhantomSpawnerMixin",
@@ -88,6 +90,7 @@
         "villager.TradeOffersEnchantBookMixin",
         "villager.TradeOffersEnchantedToolMixin",
         "villager.WanderingTraderEntityMixin",
+        "villager.WanderingTraderManagerMixin",
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
         "wolves.GoatHornItemMixin"
