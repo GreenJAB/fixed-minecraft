@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
-import net.minecraft.item.map.MapIcon
 import net.minecraft.item.map.MapState
 import net.minecraft.nbt.NbtElement
 import net.minecraft.registry.tag.BlockTags
@@ -61,7 +60,14 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     if (!player.abilities.creativeMode) {
                         otherHand.decrement(1)
                     }
-                    player.world.playSoundFromEntity(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.soundCategory, 1.0f, 1.0f)
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
                     openMap = false
                 }
             } else if (otherHand.isOf(Items.FILLED_MAP)) {
@@ -69,18 +75,31 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     if (!player.abilities.creativeMode) {
                         otherHand.decrement(1)
                     }
-                    player.world.playSoundFromEntity(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.soundCategory, 1.0f, 1.0f)
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
                     openMap = false
                 }
-            }
-            else {
+            } else {
                 var hasPaper = getPaper(user);
                 if (hasPaper.isOf(Items.PAPER)) {
                     if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, false)) {
                         if (!player.abilities.creativeMode) {
                             hasPaper.decrement(1)
                         }
-                        player.world.playSoundFromEntity(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.soundCategory, 1.0f, 1.0f)
+                        player.world.playSoundFromEntity(
+                            null,
+                            player,
+                            SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                            player.soundCategory,
+                            1.0f,
+                            1.0f
+                        )
                         openMap = false
                     }
                 }
@@ -116,6 +135,14 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     override fun inventoryTick(stack: ItemStack?, world: World?, entity: Entity?, slot: Int, selected: Boolean) {
         if (world == null || world.isClient()) return
         if (stack == null || entity !is PlayerEntity) return
+
+        (if (world.isClient) {
+            MapBookStateManager.getClientMapBookState(getMapBookId(stack))
+        } else {
+            MapBookStateManager.getMapBookState(world.server!!, getMapBookId(stack))
+        })?.update(entity, stack)
+
+
         if (!selected && entity.offHandStack != stack) return
 
         applyAdditions(stack, world as ServerWorld)
@@ -183,7 +210,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         // get signed distance to edge of map
         // so the edge of the map is 0, inside is negative and outside is positive
         // note the distance does not round the corners like a proper sdf would
-        return max(abs(pos.x-mapState.centerX), abs(pos.z-mapState.centerZ)) - 64*(1 shl mapState.scale.toInt())
+        return max(abs(pos.x - mapState.centerX), abs(pos.z - mapState.centerZ)) - 64 * (1 shl mapState.scale.toInt())
     }
 
     fun getMapBookId(stack: ItemStack): Int? {
@@ -210,25 +237,29 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         stack.getOrCreateNbt().putInt(MAP_BOOK_KEY, id)
     }
 
-    private fun createMapBookState(stack: ItemStack, server: MinecraftServer) : Int {
+    private fun createMapBookState(stack: ItemStack, server: MinecraftServer): Int {
         val i = allocateMapBookId(server)
         setMapBookId(stack, i)
         return i
     }
 
-    private fun getOrCreateMapBookState(stack: ItemStack, server: MinecraftServer) : MapBookState {
+    private fun getOrCreateMapBookState(stack: ItemStack, server: MinecraftServer): MapBookState {
         val state = MapBookStateManager.getMapBookState(server, getMapBookId(stack))
         if (state != null) return state
         val i = createMapBookState(stack, server)
         return MapBookStateManager.getMapBookState(server, i)!!
     }
 
-    private fun addNewMapAtPos(item: ItemStack, world: ServerWorld, pos: Vec3d, scale: Int, otherhand: Boolean) : Boolean {
+    private fun addNewMapAtPos(item: ItemStack, world: ServerWorld, pos: Vec3d, scale: Int, otherhand: Boolean): Boolean {
         val state = getOrCreateMapBookState(item, world.server)
 
         val nearestState = getNearestMap(item, world, pos)
         // make a new map if the book has no maps, the position is outside a map, or the map the position is in has a larger scale
-        if (nearestState == null || (nearestState.mapState.scale > scale && otherhand) || getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0) {
+        if (nearestState == null || (nearestState.mapState.scale > scale && otherhand) || getDistanceToEdgeOfMap(
+                nearestState.mapState,
+                pos
+            ) > 0
+        ) {
             val newMap = FilledMapItem.createMap(world, floor(pos.x).toInt(), floor(pos.z).toInt(), scale.toByte(), true, false)
             state.addMapID(FilledMapItem.getMapId(newMap)!!)
             return true
@@ -236,7 +267,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return false
     }
 
-    private fun addNewMapID(item: ItemStack, filledmap: ItemStack, world: ServerWorld) : Boolean {
+    private fun addNewMapID(item: ItemStack, filledmap: ItemStack, world: ServerWorld): Boolean {
         val state = getOrCreateMapBookState(item, world.server)
         var id = FilledMapItem.getMapId(filledmap)
         if (!state.mapIDs.contains(id)) {
@@ -262,13 +293,23 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
         var mapsCount = stack.getOrCreateNbt().getIntArray((ADDITIONS_KEY)).size
         if (id != null) {
-            val mapBookState = if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(world.server!!, id)
+            val mapBookState =
+                if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(
+                    world.server!!,
+                    id
+                )
             mapsCount += mapBookState?.mapIDs?.count() ?: 0
 
-            tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id + 1).toString()).formatted(Formatting.GRAY))
+            tooltip!!.add(
+                Text.translatable("item.fixedminecraft.map_book_id").append(ScreenTexts.SPACE).append((id + 1).toString())
+                    .formatted(Formatting.GRAY)
+            )
         }
         if (mapsCount > 0) {
-            tooltip!!.add(Text.translatable("item.fixedminecraft.map_book_maps").append(ScreenTexts.SPACE).append(mapsCount.toString()).formatted(Formatting.GRAY))
+            tooltip!!.add(
+                Text.translatable("item.fixedminecraft.map_book_maps").append(ScreenTexts.SPACE).append(mapsCount.toString())
+                    .formatted(Formatting.GRAY)
+            )
         }
     }
 

@@ -45,6 +45,7 @@
         "map_book.MapStateAccessor",
         "map_book.MapStatePlayerUpdateTrackerMixin",
         "map_book.MapUpdateS2CPacketMixin",
+        "map_book.MapIconMixin",
         "night.FishingBobberEntityMixin",
         "night.LocalDifficultyMixin",
         "night.EnchantmentHelperMixin",
