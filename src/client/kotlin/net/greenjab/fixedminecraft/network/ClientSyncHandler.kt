@@ -4,16 +4,19 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
+import net.greenjab.fixedminecraft.enchanting.Networking.BOOKSHELF_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.EXHAUSTION_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_OPEN
 import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.SATURATION_SYNC
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.util.Identifier
 
 object ClientSyncHandler {
     @Environment(EnvType.CLIENT)
@@ -49,6 +52,19 @@ object ClientSyncHandler {
                         MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids))
                     }
                 }
+            }
+        }
+        ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
+        ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
+            val pos = buf.readBlockPos()
+            client.execute {
+                assert(client.world != null)
+                client.world!!.updateListeners(
+                    pos,
+                    client.world!!.getBlockState(pos),
+                    client.world!!.getBlockState(pos),
+                    Block.NOTIFY_LISTENERS
+                )
             }
         }
 

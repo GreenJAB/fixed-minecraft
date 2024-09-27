@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.minecraft.client.item.ClampedModelPredicateProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -12,6 +13,7 @@ import net.minecraft.item.Items
 import net.minecraft.util.Identifier
 
 import net.greenjab.fixedminecraft.registry.BlockRegistry
+import net.greenjab.fixedminecraft.render.InGameHudBookPreview
 import net.minecraft.client.render.RenderLayer
 
 object FixedMinecraftClient : ClientModInitializer {
@@ -36,5 +38,7 @@ object FixedMinecraftClient : ClientModInitializer {
             BlockRegistry.WAXED_WEATHERED_COPPER_RAIL,
             BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL,
         )
+
+        HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair);
     }
 }

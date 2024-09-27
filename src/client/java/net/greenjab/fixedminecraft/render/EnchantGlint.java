@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft;
+package net.greenjab.fixedminecraft.render;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

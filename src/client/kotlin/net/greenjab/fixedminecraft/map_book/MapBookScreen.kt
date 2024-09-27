@@ -1,5 +1,8 @@
 package net.greenjab.fixedminecraft.map_book
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
+import net.greenjab.fixedminecraft.FixedMinecraft.SERVER
+import net.greenjab.fixedminecraft.enchanting.Networking
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
@@ -71,28 +74,20 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
         super.render(context, mouseX, mouseY, delta)
 
-        val player = client?.player ?: return
+        val thisPlayer = client?.player ?: return
 
         var stack = client?.player?.mainHandStack
         if (stack != null) {
             if (stack.item !is MapBookItem) stack = client?.player?.offHandStack
         }
-        //val mapBookState = MapBookStateManager.getClientMapBookState(getMapBookId(stack))
-        val mapBookState = if (client?.player!!.world.isClient) {
-            MapBookStateManager.getClientMapBookState(getMapBookId(stack))
-        } else {
-            MapBookStateManager.getMapBookState(client?.player!!.world.server!!, getMapBookId(stack))
-        }
-        //Doesn't work
-        if (mapBookState != null) {
-            if (stack != null) {
-                mapBookState.update(player, stack)
-            }
-            for (i in mapBookState.players) {
-                renderPlayerIcon(context, i)
+
+        for (player in SERVER!!.playerManager.playerList) {
+            if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
+                if (player.inventory.contains(stack)) {
+                    renderPlayerIcon(context, player)
+                }
             }
         }
-        renderPlayerIcon(context, player)//so for now
         renderIcons(context);
     }
 
@@ -107,7 +102,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
         context.matrices.translate(x + width/2.0, z + height/2.0, 0.0)
 
-        context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-rotation))
+        context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation))
         context.matrices.scale(8.0f, 8.0f, 1.0f)
 
         context.matrices.translate(0f, 0f, 15f)
@@ -265,7 +260,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     }
 
 
-    fun getMapStates(stack: ItemStack?, world: World?): ArrayList<MapStateData> {
+    private fun getMapStates(stack: ItemStack?, world: World?): ArrayList<MapStateData> {
         val list = ArrayList<MapStateData>()
         if (world == null) return list
 
@@ -288,7 +283,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         return list
     }
 
-    fun getMapBookId(stack: ItemStack?): Int? {
+    private fun getMapBookId(stack: ItemStack?): Int? {
         val nbtCompound = stack?.nbt
         return if (nbtCompound != null && nbtCompound.contains(
                 "fixedminecraft:map_book",
@@ -312,6 +307,8 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     private fun zoom(start: Float, scroll: Float, speed: Float): Float {
         // logarithmic zoom that doesn't drift when zooming in and out repeatedly
         val absScroll = abs(scroll)
-        return if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
+        var newZoom = if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
+        newZoom = Math.min(Math.max(newZoom, 0.01f), 10f)//Math.clamp(newZoom, 0.01f, 10f)
+        return newZoom
     }
 }

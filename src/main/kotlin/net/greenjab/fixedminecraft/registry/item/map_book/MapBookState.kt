@@ -7,11 +7,11 @@ import net.minecraft.item.map.MapIcon
 import net.minecraft.item.map.MapState.PlayerUpdateTracker
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.text.Text
+import net.minecraft.util.math.BlockPos
 import net.minecraft.world.PersistentState
 
 class MapBookState() : PersistentState() {
     val mapIDs: ArrayList<Int> = ArrayList()
-    val players: ArrayList<PlayerEntity> = ArrayList()
 
     constructor(ids: IntArray) : this() {
         mapIDs.clear()
@@ -36,21 +36,18 @@ class MapBookState() : PersistentState() {
         mapIDs.add(id)
         this.markDirty()
     }
-    fun update(player: PlayerEntity, stack: ItemStack) {
-        if (!players.contains(player)) {
-            println("0 " + mapIDs.toString())
-            println("1 " + player.name.literalString)
-            players.add(player)
-        }
-
-        for (i in players) {
-
-            if (i!=player) {
-                if (i.isRemoved || !i.getInventory().contains(stack) ) {
-                    players.remove(i)
-                }
+    fun update() {
+        var temp: ArrayList<Int> = ArrayList()
+        for (i in mapIDs) {
+            if (!temp.contains(i)) {
+                temp.add(i)
             }
         }
+        mapIDs.clear()
+        for (i in temp){
+            mapIDs.add(i)
+        }
+
         this.markDirty()
     }
 }

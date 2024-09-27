@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft;
+package net.greenjab.fixedminecraft.render;
 
 import java.util.ArrayList;
 import java.util.List;

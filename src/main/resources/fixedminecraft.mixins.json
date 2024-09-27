@@ -29,6 +29,8 @@
         "enchanting.ArmorMaterialsMixin",
         "enchanting.EnchantWithLevelsLootFunctionMixin",
         "enchanting.EnchantRandomlyLootFunctionMixin",
+        "enchanting.ChiseledBookshelfBlockEntityMixin",
+        "enchanting.ChiseledBookshelfBlockInvoker",
         "food.FoodComponentsMixin",
         "food.HungerManagerMixin",
         "food.ItemMixin",
@@ -94,7 +96,8 @@
         "villager.WanderingTraderManagerMixin",
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
-        "wolves.GoatHornItemMixin"
+        "wolves.GoatHornItemMixin",
+        "util.MinecraftServerMixin"
     ],
     "injectors": {
         "defaultRequire": 1

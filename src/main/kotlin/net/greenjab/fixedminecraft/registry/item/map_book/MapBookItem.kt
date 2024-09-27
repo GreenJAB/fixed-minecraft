@@ -9,7 +9,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
+import net.minecraft.item.map.MapIcon
 import net.minecraft.item.map.MapState
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
 import net.minecraft.registry.tag.BlockTags
 import net.minecraft.screen.ScreenTexts
@@ -108,6 +110,11 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
             sendMapUpdates(player, item)
             SyncHandler.mapBookSync(player, item)
             if (openMap && getMapBookId(item) != null) {
+                (if (world.isClient) {
+                    MapBookStateManager.getClientMapBookState(getMapBookId(item))
+                } else {
+                    MapBookStateManager.getMapBookState(world.server!!, getMapBookId(item))
+                })?.update()
                 SyncHandler.onOpenMapBook(player, item)
             }
         }
@@ -135,19 +142,12 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     override fun inventoryTick(stack: ItemStack?, world: World?, entity: Entity?, slot: Int, selected: Boolean) {
         if (world == null || world.isClient()) return
         if (stack == null || entity !is PlayerEntity) return
-
-        (if (world.isClient) {
-            MapBookStateManager.getClientMapBookState(getMapBookId(stack))
-        } else {
-            MapBookStateManager.getMapBookState(world.server!!, getMapBookId(stack))
-        })?.update(entity, stack)
-
-
         if (!selected && entity.offHandStack != stack) return
 
         applyAdditions(stack, world as ServerWorld)
 
-        for (mapStateData in getMapStates(stack, entity.world)) {
+        var m = getMapStates(stack, entity.world)
+        for (mapStateData in m) {
             mapStateData.mapState.update(entity, stack)
 
             if (!mapStateData.mapState.locked && getDistanceToEdgeOfMap(mapStateData.mapState, entity.pos) < 128) {
