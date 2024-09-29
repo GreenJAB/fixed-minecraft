@@ -83,7 +83,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             if (stack.item !is MapBookItem) stack = client?.player?.offHandStack
         }
 
-        for (player in client!!.player?.server?.playerManager?.playerList!!){//SERVER!!.playerManager.playerList) {
+        for (player in SERVER!!.playerManager.playerList) {
             if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
                 if (player.inventory.contains(stack)) {
                     renderPlayerIcon(context, player)
