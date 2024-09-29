@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
-
-    @Shadow
+    //TODO Doesn't work with carpet mod
+    /*@Shadow
     protected abstract void dropShoulderEntities();
 
     @Redirect(
@@ -36,5 +36,5 @@ public abstract class PlayerEntityMixin {
         if (!PE.getWorld().isClient && (PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isFallFlying() || PE.inPowderSnow)) {
             this.dropShoulderEntities();
         }
-    }
+    }*/
 }

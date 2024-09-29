@@ -1,8 +1,6 @@
 package net.greenjab.fixedminecraft.map_book
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.greenjab.fixedminecraft.FixedMinecraft.SERVER
-import net.greenjab.fixedminecraft.enchanting.Networking
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
@@ -19,6 +17,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.map.MapIcon
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.util.Identifier
@@ -82,15 +81,36 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         if (stack != null) {
             if (stack.item !is MapBookItem) stack = client?.player?.offHandStack
         }
-
+        val tag: NbtCompound? = stack?.nbt
+        var id = -1;
+        if (tag != null && tag.contains("fixedminecraft:map_book")) {
+            id = tag.getInt("fixedminecraft:map_book")
+        }
         for (player in SERVER!!.playerManager.playerList) {
             if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
-                if (player.inventory.contains(stack)) {
+                if (hasMapBook(player, id)) {
                     renderPlayerIcon(context, player)
                 }
             }
         }
         renderIcons(context);
+    }
+    fun hasMapBook(player: PlayerEntity, id: Int): Boolean {
+        if (player.offHandStack.isOf(ItemRegistry.MAP_BOOK)) {
+            val tag: NbtCompound? = player.offHandStack?.nbt
+            if (tag != null && tag.contains("fixedminecraft:map_book")) {
+               if (id == tag.getInt("fixedminecraft:map_book")) return true
+            }
+        }
+        for (item in player.inventory.main) {
+            if (item.isOf(ItemRegistry.MAP_BOOK)) {
+                val tag: NbtCompound? = item?.nbt
+                if (tag != null && tag.contains("fixedminecraft:map_book")) {
+                    if (id == tag.getInt("fixedminecraft:map_book")) return true
+                }
+            }
+        }
+        return false
     }
 
     private fun renderPlayerIcon(context: DrawContext, player: PlayerEntity) {
@@ -314,7 +334,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         // logarithmic zoom that doesn't drift when zooming in and out repeatedly
         val absScroll = abs(scroll)
         var newZoom = if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
-        newZoom = Math.min(Math.max(newZoom, 0.01f), 10f)//Math.clamp(newZoom, 0.01f, 10f)
+        newZoom = Math.min(Math.max(newZoom, 0.01f), 10f)// Math.clamp(newZoom, 0.01f, 10f)
         return newZoom
     }
 }
