@@ -49,7 +49,6 @@ class MapBookAdditionRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : S
             }
         }
 
-        // TODO: check if the map book already contains specified map ids
         if (mapBook == null || maps.isEmpty()) {
             return null
         }

@@ -8,6 +8,7 @@
     "ClientPlayerEntityMixin",
     "map.HeldItemRendererMixin",
     "map.ItemFrameEntityRendererMixin",
+    "map.TextRendererMixin",
     "InGameHudMixin",
       "EnchantmentScreenMixin",
       "AnvilScreenMixin",

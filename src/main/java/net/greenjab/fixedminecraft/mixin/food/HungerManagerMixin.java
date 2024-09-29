@@ -69,7 +69,7 @@ public abstract class HungerManagerMixin {
         Saturation.INSTANCE.setLastPos2(Saturation.INSTANCE.getLastPos());
         Saturation.INSTANCE.setLastPos(instance.getPos());
         //System.out.println(d.horizontalLength());
-        return instance.canFoodHeal() && HM.getSaturationLevel()>=4 &&
+        return instance.canFoodHeal() && HM.getSaturationLevel()>6 &&
                (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()&&d.horizontalLength()<0.01f));
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)

@@ -327,7 +327,6 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
         val state = getOrCreateMapBookState(stack, world.server)
         for (id in additions) {
-            // TODO: replace old maps of the same location and scale?
             state.addMapID(id)
         }
     }

@@ -38,6 +38,8 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     private val MAP_ICONS_RENDER_LAYER: RenderLayer = RenderLayer.getText(Identifier("textures/map/map_icons.png"))
 
     override fun init() {
+        scale = 1.0f
+        targetScale = 0.5f
         if (client != null && client!!.player != null) {
             x = -client!!.player!!.x
             y = -client!!.player!!.z
@@ -48,7 +50,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             addDrawable(MapTile(this, mapStateData.id, mapStateData.mapState, client!!))
         }
 
-        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button: ButtonWidget? -> this.close() }.dimensions(width / 2 - 100, height / 4 + 144, 200, 20).build())
+        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button: ButtonWidget? -> this.close() }.dimensions(width / 2 - 100, height -40, 200, 20).build())
     }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
@@ -81,7 +83,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             if (stack.item !is MapBookItem) stack = client?.player?.offHandStack
         }
 
-        for (player in SERVER!!.playerManager.playerList) {
+        for (player in client!!.player?.server?.playerManager?.playerList!!){//SERVER!!.playerManager.playerList) {
             if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
                 if (player.inventory.contains(stack)) {
                     renderPlayerIcon(context, player)
@@ -196,7 +198,14 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
                     context.matrices.translate(-0.125f, 0.125f, 0.0f)
 
-                    val b = mapIcon.typeId
+                    var b = mapIcon.typeId
+                    if (mapIcon.text() != null) {
+                        if (mapIcon.text()!!.literalString?.get(0) == '¶') {
+                            var s = mapIcon.text()!!.literalString?.split('¶');
+                            b = s?.get(1)?.toInt()?.toByte()!!
+                        }
+                    }
+
                     val g = (b % 16 + 0).toFloat() / 16.0f
                     val h = (b / 16 + 0).toFloat() / 16.0f
                     val l = (b % 16 + 1).toFloat() / 16.0f
@@ -229,14 +238,12 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                         context.matrices.translate(this.x, this.y, 11.0)
                         context.matrices.scale(this.scale, this.scale, 1.0f)
                         context.matrices.translate(
-                            mapStateData.mapState.centerX.toDouble() /*- offset*/ + mapIcon.x * mapScale / 2.0 + this.width / 2.0 ,
-                            mapStateData.mapState.centerZ.toDouble() /*- offset*/ + (mapIcon.z+1) * mapScale / 2.0 + this.height / 2.0,
+                            mapStateData.mapState.centerX.toDouble() /*- offset*/ + mapIcon.x * mapScale / 2.0 + this.width / 2.0,
+                            mapStateData.mapState.centerZ.toDouble() /*- offset*/ + (mapIcon.z + 1) * mapScale / 2.0 + this.height / 2.0,
                             0.0
                         )
                         context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
-                        context.matrices.translate(-o/2f, 8.0f, 0.1f)
-
-
+                        context.matrices.translate(-o / 2f, 8.0f, 0.1f)
 
                         textRenderer.draw(
                             text,
@@ -252,7 +259,6 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                         )
                         context.matrices.pop()
                     }
-
                     ++k
                 }
             }

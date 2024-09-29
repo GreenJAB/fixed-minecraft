@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(HeldItemRenderer.class)
@@ -40,5 +41,13 @@ public class HeldItemRendererMixin {
         ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
         map.getOrCreateNbt().putInt("map", nearestMap.getId());
         return map;
+    }
+
+    @ModifyArg(method = "renderFirstPersonMap",
+               at = @At(value = "INVOKE",
+              target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/map/MapState;ZI)V"
+    ), index = 4)
+    private boolean showIconsOnItemFrameMap(boolean hidePlayerIcons){
+        return false;
     }
 }
