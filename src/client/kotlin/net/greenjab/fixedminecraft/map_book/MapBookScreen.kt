@@ -115,20 +115,20 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
     private fun renderPlayerIcon(context: DrawContext, player: PlayerEntity) {
         var x = player.x.toFloat()
-        var z=  player.z.toFloat()
-        var rotation=player.yaw
+        var z = player.z.toFloat()
+        var rotation = player.yaw
         context.matrices.push()
 
         context.matrices.translate(this.x, this.y, 0.0)
         context.matrices.scale(this.scale, this.scale, 1.0f)
 
-        context.matrices.translate(x + width/2.0, z + height/2.0, 0.0)
+        context.matrices.translate(x + width / 2.0, z + height / 2.0, 0.0)
 
         context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation))
         context.matrices.scale(8.0f, 8.0f, 1.0f)
 
         context.matrices.translate(0f, 0f, 15f)
-        context.matrices.scale(1/this.scale, 1/this.scale, 1.0f)
+        context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
         val b: Byte = MapIcon.Type.PLAYER.id
         val g = (b % 16 + 0).toFloat() / 16.0f
         val h = (b / 16 + 0).toFloat() / 16.0f
@@ -146,39 +146,37 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             .light(LightmapTextureManager.MAX_LIGHT_COORDINATE).next()
         context.matrices.pop()
 
-        if (true) {
-            val textRenderer = MinecraftClient.getInstance().textRenderer
-            val text = player.name.literalString
-            val o = textRenderer.getWidth(text).toFloat()
-            val var10000 = 25.0f / o
-            Objects.requireNonNull(textRenderer)
-            val p = MathHelper.clamp(var10000, 0.0f, 6.0f / 9.0f)
-            context.matrices.push()
 
-            context.matrices.translate(this.x, this.y, 15.0)
-            context.matrices.scale(this.scale, this.scale, 1.0f)
+        val textRenderer = MinecraftClient.getInstance().textRenderer
+        val text = player.name.literalString
+        val o = textRenderer.getWidth(text).toFloat()
+        val var10000 = 25.0f / o
+        Objects.requireNonNull(textRenderer)
+        val p = MathHelper.clamp(var10000, 0.0f, 6.0f / 9.0f)
+        context.matrices.push()
 
-            context.matrices.translate(x + width/2.0, z + height/2.0, 0.0)
+        context.matrices.translate(this.x, this.y, 15.0)
+        context.matrices.scale(this.scale, this.scale, 1.0f)
 
-            context.matrices.scale(1/this.scale, 1/this.scale, 1.0f)
-            context.matrices.translate(-o/2f, 8.0f, 0.1f)
+        context.matrices.translate(x + width / 2.0, z + height / 2.0, 0.0)
 
+        context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
+        context.matrices.translate(-o / 2f, 8.0f, 0.1f)
 
+        textRenderer.draw(
+            text,
+            0.0f,
+            0.0f,
+            -1,
+            false,
+            context.matrices.peek().getPositionMatrix(),
+            context.vertexConsumers,
+            TextLayerType.NORMAL,
+            Int.MIN_VALUE,
+            LightmapTextureManager.MAX_LIGHT_COORDINATE
+        )
+        context.matrices.pop()
 
-            textRenderer.draw(
-                text,
-                0.0f,
-                0.0f,
-                -1,
-                false,
-                context.matrices.peek().getPositionMatrix(),
-                context.vertexConsumers,
-                TextLayerType.NORMAL,
-                Int.MIN_VALUE,
-                LightmapTextureManager.MAX_LIGHT_COORDINATE
-            )
-            context.matrices.pop()
-        }
     }
 
 
@@ -219,13 +217,6 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     context.matrices.translate(-0.125f, 0.125f, 0.0f)
 
                     var b = mapIcon.typeId
-                    if (mapIcon.text() != null) {
-                        if (mapIcon.text()!!.literalString?.get(0) == '¶') {
-                            var s = mapIcon.text()!!.literalString?.split('¶');
-                            b = s?.get(1)?.toInt()?.toByte()!!
-                        }
-                    }
-
                     val g = (b % 16 + 0).toFloat() / 16.0f
                     val h = (b / 16 + 0).toFloat() / 16.0f
                     val l = (b % 16 + 1).toFloat() / 16.0f
