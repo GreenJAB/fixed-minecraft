@@ -98,7 +98,9 @@
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
         "wolves.GoatHornItemMixin",
-        "util.MinecraftServerMixin"
+        "util.MinecraftServerMixin",
+        "boss.EndCrystalEntityMixin",
+        "boss.EnderDragonFightMixin"
     ],
     "injectors": {
         "defaultRequire": 1

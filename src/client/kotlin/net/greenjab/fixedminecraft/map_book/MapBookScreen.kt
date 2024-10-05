@@ -52,6 +52,11 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button: ButtonWidget? -> this.close() }.dimensions(width / 2 - 100, height -40, 200, 20).build())
     }
 
+    override fun shouldPause(): Boolean {
+        return false
+    }
+
+
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         x += deltaX
         y += deltaY
