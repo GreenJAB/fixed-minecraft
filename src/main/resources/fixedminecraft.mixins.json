@@ -104,7 +104,10 @@
         "boss.DragonFireballEntityMixin",
         "boss.EndCrystalEntityMixin",
         "boss.HoldingPatternPhaseMixin",
-        "boss.StrafePlayerPhaseMixin"
+        "boss.StrafePlayerPhaseMixin",
+        "boss.SittingScanningPhaseMixin",
+        "boss.SittingAttackingPhaseMixin",
+        "boss.SittingFlamingPhaseMixin"
     ],
     "injectors": {
         "defaultRequire": 1

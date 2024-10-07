@@ -2,9 +2,20 @@ package net.greenjab.fixedminecraft.mixin.boss;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
+import net.minecraft.entity.boss.dragon.phase.AbstractPhase;
 import net.minecraft.entity.boss.dragon.phase.HoldingPatternPhase;
+import net.minecraft.entity.boss.dragon.phase.Phase;
+import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.EndermiteEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,19 +29,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Random;
 
 @Mixin(HoldingPatternPhase.class)
-public class HoldingPatternPhaseMixin {
+public class HoldingPatternPhaseMixin extends AbstractPhase {
 
+
+    public HoldingPatternPhaseMixin(EnderDragonEntity dragon) {
+        super(dragon);
+    }
 
     @Inject(method = "tickInRange", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;getFight()Lnet/minecraft/entity/boss/dragon/EnderDragonFight;", ordinal = 0))
     private void checkForDragonFight(CallbackInfo ci) {
         System.out.println("tick");
+    }
+
+    @Inject(method = "tickInRange", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;getRandom()Lnet/minecraft/util/math/random/Random;", ordinal = 1))
+    private void checkForDragonFight2(CallbackInfo ci) {
+        //System.out.println("tick2");
 
 
     }
 
     @ModifyConstant(method = "tickInRange", constant = @Constant(intValue = 2))
-    private int moreFireballs(int constant){
-        return 1;
+    private int moreFireballs(int constant, @Local int i){
+        return 1-i;
     }
 
 
@@ -38,5 +58,20 @@ public class HoldingPatternPhaseMixin {
     private double lessYRange(double x, @Local Vec3i vec3i){
         Random random = new Random();
         return vec3i.getY() + ((random.nextGaussian()/4.0)+0.5)*20;
+    }
+
+    @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
+    private void chargeAtPlayer(CallbackInfo ci, @Local PlayerEntity player) {
+        if (this.dragon.getRandom().nextInt(3)==0) {
+            System.out.println("charging");
+            this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
+            this.dragon.getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(player.getX(), player.getY(), player.getZ()));
+            ci.cancel();
+        }
+    }
+
+    @Override
+    public PhaseType<? extends Phase> getType() {
+        return PhaseType.HOLDING_PATTERN;
     }
 }

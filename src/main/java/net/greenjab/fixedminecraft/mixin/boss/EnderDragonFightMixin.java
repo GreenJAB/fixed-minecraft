@@ -105,17 +105,6 @@ public abstract class EnderDragonFightMixin {
                 this.crystals = crystals;
             }
 
-            this.world.getWorldBorder().setSize(400);
-
-            List<ServerPlayerEntity> playerList = world.getPlayers();
-            for (ServerPlayerEntity player : playerList) {
-                System.out.println("testa");
-                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                    System.out.println("testb");
-                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
-                }
-            }
-
             ci.cancel();
         }
     }
@@ -158,17 +147,6 @@ public abstract class EnderDragonFightMixin {
                         endCrystalEntity.setShowBottom(false);
                         this.world.spawnEntity(endCrystalEntity);
                     }
-                }
-            }
-
-            this.world.getWorldBorder().setSize(400);
-
-            List<ServerPlayerEntity> playerList = world.getPlayers();
-            for (ServerPlayerEntity player : playerList) {
-                System.out.println("testa");
-                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                    System.out.println("testb");
-                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
                 }
             }
         }
