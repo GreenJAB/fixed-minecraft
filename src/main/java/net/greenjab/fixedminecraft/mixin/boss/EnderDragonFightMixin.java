@@ -18,7 +18,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -55,17 +57,25 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "respawnDragon()V", at = @At(value = "FIELD",
                                                   target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;exitPortalLocation:Lnet/minecraft/util/math/BlockPos;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
-    private void injected(CallbackInfo ci) {
-        List<ServerPlayerEntity> list = this.world.getNonSpectatingEntities(ServerPlayerEntity.class, new Box(-20, 0, -20, 20, 100, 20));
+    private void onlySpawnDragonWhenPlayersNearby(CallbackInfo ci) {
+        List<ServerPlayerEntity> list = this.world.getNonSpectatingEntities(ServerPlayerEntity.class, new Box(-40, 0, -40, 40, 100, 40));
         if (list.isEmpty()) {
             ci.cancel();
-        } else {
         }
     }
 
-    @Inject(method = "convertFromLegacy", at = @At(value = "HEAD"))
-    private void check(CallbackInfo ci){
-        System.out.println("legacy");
+    @Inject(method = "updatePlayers", at = @At(value = "HEAD"))
+    private void resetWorldBorder(CallbackInfo ci) {
+        if (!this.previouslyKilled) {
+            this.world.getWorldBorder().setSize(400);
+
+            List<ServerPlayerEntity> playerList = world.getPlayers();
+            for (ServerPlayerEntity player : playerList) {
+                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                }
+            }
+        }
     }
 
     @Redirect(method = "respawnDragon()V", at = @At(value = "INVOKE",
@@ -94,6 +104,18 @@ public abstract class EnderDragonFightMixin {
                 this.spawnStateTimer = 0;
                 this.crystals = crystals;
             }
+
+            this.world.getWorldBorder().setSize(400);
+
+            List<ServerPlayerEntity> playerList = world.getPlayers();
+            for (ServerPlayerEntity player : playerList) {
+                System.out.println("testa");
+                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    System.out.println("testb");
+                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                }
+            }
+
             ci.cancel();
         }
     }
@@ -129,15 +151,47 @@ public abstract class EnderDragonFightMixin {
             BlockPos b = blockPos.up(1);
             for (Direction d : Direction.values()) {
                 if (d.getAxis().isHorizontal()) {
-                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world);//.getWorld());
-                    endCrystalEntity.setInvulnerable(true);
-                    endCrystalEntity.setShowBottom(false);
-                    endCrystalEntity.setPos(b.offset(d, 3).getX() + 0.5, b.getY(), b.offset(d, 3).getZ() + 0.5);
-                    this.world.spawnEntity(endCrystalEntity);
-                    //structureWorldAccess.spawnEntity(endCrystalEntity);
+                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world.getWorldChunk(b.offset(d, 3)).getWorld());
+                    if (endCrystalEntity != null) {
+                        endCrystalEntity.refreshPositionAndAngles(b.offset(d, 3).getX()+0.5, b.getY(), b.offset(d, 3).getZ() + 0.5, 0, 0.0F);
+                        endCrystalEntity.setInvulnerable(true);
+                        endCrystalEntity.setShowBottom(false);
+                        this.world.spawnEntity(endCrystalEntity);
+                    }
+                }
+            }
+
+            this.world.getWorldBorder().setSize(400);
+
+            List<ServerPlayerEntity> playerList = world.getPlayers();
+            for (ServerPlayerEntity player : playerList) {
+                System.out.println("testa");
+                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    System.out.println("testb");
+                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
                 }
             }
         }
+    }
+
+    @Inject(method = "dragonKilled", at = @At(value = "INVOKE",
+                                              target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
+    ))
+    private void expandWorldBorder(CallbackInfo ci) {
+        this.world.getWorldBorder().setSize(60000000);
+        List<ServerPlayerEntity> playerList = world.getPlayers();
+        for (ServerPlayerEntity player : playerList) {
+            System.out.println("testa");
+            if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                System.out.println("testb");
+                world.getServer().getPlayerManager().sendWorldInfo(player, world);
+            }
+        }
+    }
+
+    @ModifyConstant(method = "createDragon", constant = @Constant(intValue = 128))
+    private int lowerDragonSpawn(int constant){
+        return 108;
     }
 
 }

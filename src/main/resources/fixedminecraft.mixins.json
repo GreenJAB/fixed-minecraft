@@ -99,8 +99,12 @@
         "wolves.FollowOwnerGoalMixin",
         "wolves.GoatHornItemMixin",
         "util.MinecraftServerMixin",
+        "boss.EnderDragonEntityMixin",
+        "boss.EnderDragonFightMixin",
+        "boss.DragonFireballEntityMixin",
         "boss.EndCrystalEntityMixin",
-        "boss.EnderDragonFightMixin"
+        "boss.HoldingPatternPhaseMixin",
+        "boss.StrafePlayerPhaseMixin"
     ],
     "injectors": {
         "defaultRequire": 1

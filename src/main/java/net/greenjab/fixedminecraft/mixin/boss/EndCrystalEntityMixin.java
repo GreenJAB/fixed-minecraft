@@ -1,33 +1,28 @@
 package net.greenjab.fixedminecraft.mixin.boss;
 
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
+import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.Optional;
 
 @Mixin(EndCrystalEntity.class)
 public class EndCrystalEntityMixin {
 
     @Shadow
     public int endCrystalAge;
+
+    @Shadow
+    @Final
+    private static TrackedData<Optional<BlockPos>> BEAM_TARGET;
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void checkForDragonFight(CallbackInfo ci) {
@@ -38,6 +33,19 @@ public class EndCrystalEntityMixin {
                 enderDragonFight.respawnDragon();
             }
         }
+    }
 
+    @Inject(method = "setBeamTarget", at = @At(
+            value = "HEAD"), cancellable = true)
+    private void lowerBeam(BlockPos beamTarget, CallbackInfo ci) {
+        if (beamTarget != null) {
+            EndCrystalEntity ECE = (EndCrystalEntity) (Object) this;
+            if (beamTarget.getY()==128) {
+                ECE.getDataTracker().set(this.BEAM_TARGET, Optional.ofNullable(beamTarget.down(20)));
+            } else {
+                ECE.getDataTracker().set(this.BEAM_TARGET, Optional.ofNullable(beamTarget.down(2)));
+            }
+            ci.cancel();
+        }
     }
 }
