@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldEvents;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,7 +59,9 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 .getClosestPlayer(CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
 
         if (this.ticks >= 100) {
-            if (this.timesRun >= 5) {
+            //if (this.timesRun >= 5) {
+            if (this.dragon.getRandom().nextFloat()<((this.timesRun-1)/(this.timesRun+1.0f))) {
+
                 livingEntity = this.dragon
                         .getWorld()
                         .getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
@@ -70,7 +73,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
             } else {
                 this.dragon.getPhaseManager().setPhase(PhaseType.SITTING_SCANNING);
             }
-        } else if (this.ticks == 10) {
+        } else if (this.ticks == 0) {
             double dp = 0;
             if (livingEntity!=null) {
                 double dx = this.dragon.getX() - livingEntity.getX();
@@ -115,27 +118,13 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 }
 
                 h = (double) (MathHelper.floor(h) + 1);
-                /*this.dragonBreathEntity = new AreaEffectCloudEntity(this.dragon.getWorld(), d, h, e);
-                this.dragonBreathEntity.setOwner(this.dragon);
-                this.dragonBreathEntity.setRadius(5.0F);
-                this.dragonBreathEntity.setRadiusGrowth((-1.0F - this.dragonBreathEntity.getRadius()) / (float)this.dragonBreathEntity.getDuration());
-                this.dragonBreathEntity.setDuration(300);
-                this.dragonBreathEntity.setParticleType(ParticleTypes.DRAGON_BREATH);
-                this.dragonBreathEntity.addEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE));
-                this.dragon.getWorld().spawnEntity(this.dragonBreathEntity);*/
-
-                AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getWorld(), d, h, e);
-                areaEffectCloudEntity.setOwner(this.dragon);
-                areaEffectCloudEntity.setParticleType(ParticleTypes.DRAGON_BREATH);
-                areaEffectCloudEntity.setRadius(5.0F);
-                areaEffectCloudEntity.setDuration(300);
-                areaEffectCloudEntity.setRadiusGrowth((-0.5F - areaEffectCloudEntity.getRadius()) / (float)areaEffectCloudEntity.getDuration());
+                AreaEffectCloudEntity areaEffectCloudEntity = dragonAreaEffectCloudEntity(d, h, e);
                 areaEffectCloudEntity.addEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 1));
 
                 this.dragon.getWorld().syncWorldEvent(WorldEvents.DRAGON_BREATH_CLOUD_SPAWNS, this.dragon.getBlockPos(), this.dragon.isSilent() ? -1 : 1);
                 this.dragon.getWorld().spawnEntity(areaEffectCloudEntity);
             }
-        } else if (this.ticks >= 50) {
+        } else if (this.ticks >= 30) {
 
             if (livingEntity != null) {
                 Vec3d vec3d = new Vec3d(
@@ -168,6 +157,17 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
             }
         }
         ci.cancel();
+    }
+
+    @NotNull
+    private AreaEffectCloudEntity dragonAreaEffectCloudEntity(double d, double h, double e) {
+        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getWorld(), d, h, e);
+        areaEffectCloudEntity.setOwner(this.dragon);
+        areaEffectCloudEntity.setParticleType(ParticleTypes.DRAGON_BREATH);
+        areaEffectCloudEntity.setRadius(5.0F);
+        areaEffectCloudEntity.setDuration(300);
+        areaEffectCloudEntity.setRadiusGrowth((-0.5F - areaEffectCloudEntity.getRadius()) / (float)areaEffectCloudEntity.getDuration());
+        return areaEffectCloudEntity;
     }
 
     @Override

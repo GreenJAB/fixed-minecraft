@@ -24,7 +24,7 @@ public class SittingAttackingPhaseMixin {
 
     @ModifyConstant(method = "serverTick", constant = @Constant(intValue = 40))
     private int fasterBreath(int constant){
-        return 10;
+        return 15;
     }
 
 }

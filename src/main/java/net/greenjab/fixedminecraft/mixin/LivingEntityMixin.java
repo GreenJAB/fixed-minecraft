@@ -25,6 +25,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -61,12 +62,17 @@ public class LivingEntityMixin  {
     }
 
     @Inject(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V", shift = At.Shift.AFTER))
-    private void brokenTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+    private void brokenTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir, @Local Hand hand) {
         ItemStack broken = new ItemStack(ItemRegistry.INSTANCE.getBROKEN_TOTEM());
         if ((LivingEntity)(Object)this instanceof PlayerEntity) {
             PlayerEntity user = (PlayerEntity) (Object) this;
-            if (!user.getInventory().insertStack(broken)) {
-                user.dropItem(broken, false);
+            ItemStack i = user.getStackInHand(hand);
+            if (i.isEmpty()) {
+                user.setStackInHand(hand, broken);
+            } else {
+                if (!user.getInventory().insertStack(broken)) {
+                    user.dropItem(broken, false);
+                }
             }
         }
     }

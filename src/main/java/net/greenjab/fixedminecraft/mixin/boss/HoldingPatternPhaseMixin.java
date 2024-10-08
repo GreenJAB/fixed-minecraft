@@ -41,16 +41,9 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
         System.out.println("tick");
     }
 
-    @Inject(method = "tickInRange", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;getRandom()Lnet/minecraft/util/math/random/Random;", ordinal = 1))
-    private void checkForDragonFight2(CallbackInfo ci) {
-        //System.out.println("tick2");
-
-
-    }
-
     @ModifyConstant(method = "tickInRange", constant = @Constant(intValue = 2))
-    private int moreFireballs(int constant, @Local int i){
-        return 1-i;
+    private int moreAttacks(int constant, @Local int i){
+        return 1-i+(6-2*this.dragon.getWorld().getDifficulty().getId());
     }
 
 

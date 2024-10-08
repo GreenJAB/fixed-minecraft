@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.boss;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings("unchecked")
 @Mixin(EnderDragonFight.class)
@@ -54,6 +56,13 @@ public abstract class EnderDragonFightMixin {
 
     @Shadow
     private @Nullable List<EndCrystalEntity> crystals;
+
+    @Shadow
+    @Final
+    private ServerBossBar bossBar;
+
+    @Shadow
+    private @Nullable UUID dragonUuid;
 
     @Inject(method = "respawnDragon()V", at = @At(value = "FIELD",
                                                   target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;exitPortalLocation:Lnet/minecraft/util/math/BlockPos;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
@@ -170,6 +179,23 @@ public abstract class EnderDragonFightMixin {
     @ModifyConstant(method = "createDragon", constant = @Constant(intValue = 128))
     private int lowerDragonSpawn(int constant){
         return 108;
+    }
+
+    /*@Inject(method = "updatePlayers", at = @At(value = "INVOKE", target = "Ljava/util/Set;add(Ljava/lang/Object;)Z"))
+    private void dontStartImmediately(CallbackInfo ci) {
+        System.out.println(!this.dragonKilled);
+        this.bossBar.setVisible(!this.dragonKilled);
+        System.out.println(this.bossBar.isVisible());
+    }*/
+
+    @Inject(method = "<init>(Lnet/minecraft/server/world/ServerWorld;JLnet/minecraft/entity/boss/dragon/EnderDragonFight$Data;Lnet/minecraft/util/math/BlockPos;)V", at = @At(value = "TAIL"))
+    private void dontStartImmediately(CallbackInfo ci) {
+        System.out.println(this.dragonUuid);
+        if (!this.previouslyKilled && this.dragonUuid==null) {
+            this.bossBar.setVisible(false);
+            this.dragonKilled = true;
+        }
+        //System.out.println(this.bossBar.isVisible());
     }
 
 }

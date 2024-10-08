@@ -3,11 +3,15 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.EndermanEntity;
+import net.minecraft.entity.mob.EndermiteEntity;
 import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -65,6 +69,17 @@ public abstract class LivingEntityMixin {
                             }
                         }
                     }
+                }
+            }
+        }
+        if (LE instanceof EndermiteEntity) {
+            if (entity != null) {
+                if (entity instanceof EndermanEntity endermanEntity) {
+                    LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
+                            TargetPredicate.createAttackable().setBaseMaxDistance(150.0).ignoreVisibility(),
+                            endermanEntity, endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ());
+                    endermanEntity.setTarget(livingEntity);
+                    endermanEntity.setAngerTime(999999);
                 }
             }
         }
