@@ -8,15 +8,18 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
 import net.minecraft.entity.boss.dragon.phase.PhaseManager;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -39,11 +42,11 @@ public abstract class EnderDragonEntityMixin {
     private PhaseManager phaseManager;
 
     @Shadow
-    protected abstract void launchLivingEntities(List<Entity> entities);
-
-    @Shadow
     @Final
     private EnderDragonPart body;
+
+    @Shadow
+    private @Nullable EnderDragonFight fight;
 
     @ModifyArg(method = "getNearestPathNodeIndex()I", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/pathing/PathNode;<init>(III)V"), index = 1)
     private int newMinHeight(int x) {
@@ -59,7 +62,7 @@ public abstract class EnderDragonEntityMixin {
     @ModifyConstant(method = "tickMovement", constant = @Constant(doubleValue = 0.01, ordinal = 0))
     private double fasterYMovement(double constant){
         if (this.phaseManager.getCurrent().getType() == PhaseType.CHARGING_PLAYER) {
-           // return 0.1;
+            return 0.1;
         }
         return 0.03;
     }
@@ -73,7 +76,7 @@ public abstract class EnderDragonEntityMixin {
             target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 2), index = 1)
     private Box smallerAttack2(Box box){
         if (this.phaseManager.getCurrent().getType() == PhaseType.CHARGING_PLAYER) {
-            return box.expand(2);
+            return box.expand(4);
         } else {
             return box.contract(1);
         }
@@ -94,9 +97,18 @@ public abstract class EnderDragonEntityMixin {
             double f = entity.getX() - EDE.getX();
             double g = entity.getZ() - EDE.getZ();
             double h = Math.max(f * f + g * g, 0.1);
-            System.out.println("attack");
             entity.addVelocity((f / h * 2.0)+EDE.getVelocity().getX()*1.5, 0.2F, (g / h * 2.0)+EDE.getVelocity().getZ()*1.5);
         }
+    }
+
+    @Inject(method = "damageLivingEntities", at = @At(value = "HEAD"), cancellable = true)
+    private void dontHitWhenDead(List<Entity> entities, CallbackInfo ci){
+        if (this.phaseManager.getCurrent()==PhaseType.DYING)  ci.cancel();
+    }
+
+    @Inject(method = "launchLivingEntities", at = @At(value = "HEAD"), cancellable = true)
+    private void dontHitWhenDead2(List<Entity> entities, CallbackInfo ci){
+        if (this.phaseManager.getCurrent()==PhaseType.DYING)  ci.cancel();
     }
 
     @Inject(method = "tickMovement", at = @At(
@@ -135,6 +147,14 @@ public abstract class EnderDragonEntityMixin {
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {100, 150, 200, 300};
         EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
+    }
 
+    @Inject(method = "destroyBlocks", at = @At(
+            value = "HEAD"), cancellable = true)
+    private void launch(Box box, CallbackInfoReturnable<Boolean> cir){
+        if (this.fight.hasPreviouslyKilled()) {
+            cir.setReturnValue(false);
+            cir.cancel();
+        }
     }
 }

@@ -36,11 +36,6 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
         super(dragon);
     }
 
-    @Inject(method = "tickInRange", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;getFight()Lnet/minecraft/entity/boss/dragon/EnderDragonFight;", ordinal = 0))
-    private void checkForDragonFight(CallbackInfo ci) {
-        System.out.println("tick");
-    }
-
     @ModifyConstant(method = "tickInRange", constant = @Constant(intValue = 2))
     private int moreAttacks(int constant, @Local int i){
         return 1-i+(6-2*this.dragon.getWorld().getDifficulty().getId());
@@ -56,7 +51,6 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
     @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
     private void chargeAtPlayer(CallbackInfo ci, @Local PlayerEntity player) {
         if (this.dragon.getRandom().nextInt(3)==0) {
-            System.out.println("charging");
             this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
             this.dragon.getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(player.getX(), player.getY(), player.getZ()));
             ci.cancel();

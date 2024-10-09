@@ -46,7 +46,7 @@ public class DragonFireballEntityMixin {
         DragonFireballEntity DFE = (DragonFireballEntity)(Object)this;
         ServerWorld world = DFE.getServer().getWorld(DFE.getWorld().getRegistryKey());
         world.createExplosion(
-                null, DFE.getX(), DFE.getY(), DFE.getZ(),2,World.ExplosionSourceType.NONE
+                null, DFE.getX(), DFE.getY(), DFE.getZ(),(DFE.getWorld().getDifficulty().getId()+1)/2,World.ExplosionSourceType.NONE
         );
     }
 

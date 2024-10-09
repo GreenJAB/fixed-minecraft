@@ -102,25 +102,14 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                     Vec3d vec3d3 = this.dragon.getRotationVec(1.0F);
 
                     if (this.seenTargetTimes >= 5 ){
-                        double l = this.dragon.head.getX() - vec3d3.x;
-                        double n = this.dragon.head.getZ() - vec3d3.z;
 
-                        if (l*l+n*n < 16*16) {
-                            System.out.println("endermite");
+                        double dx = this.dragon.getX() - this.target.getX();
+                        double dz = this.dragon.getZ() - this.target.getZ();
+
+                        if (dx*dx+dz*dz < 16*16 && this.dragon.getWorld().getDifficulty().getId()>1) {
                             if (!this.dragon.isSilent()) {
-                                //this.dragon.getWorld().syncWorldEvent(null, WorldEvents.ENDER, this.dragon.getBlockPos(), 0);
-                                this.dragon
-                                        .getWorld()
-                                        .playSound(
-                                                this.dragon.getX(),
-                                                this.dragon.getY(),
-                                                this.dragon.getZ(),
-                                                SoundEvents.ENTITY_ENDERMITE_AMBIENT,
-                                                this.dragon.getSoundCategory(),
-                                                12.5F,
-                                                0.8F + this.dragon.getRandom().nextFloat() * 0.3F,
-                                                false
-                                        );
+                                this.dragon.getWorld()
+                                        .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                             }
                             BlockPos b = this.dragon.getBodyParts()[5].getBlockPos();
                             EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld());
@@ -132,7 +121,6 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 endermiteEntity.setHealth(1);
                                 endermiteEntity.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(30);
                                 this.dragon.getWorld().spawnEntity(endermiteEntity);
-                                // this.dragon.getWorld().getTickManager().setFrozen(true);
 
                                 this.seenTargetTimes = 0;
                                 if (this.path != null) {
@@ -141,13 +129,11 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                     }
                                 }
 
-                                if (this.dragon.getRandom().nextInt(3)==0) {
-                                    this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
-                                }if (this.dragon.getRandom().nextInt(10)==0) {
+                                if (this.dragon.getRandom().nextInt(10)==0) {
                                     this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
                                     this.dragon.getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(this.target.getX(), this.target.getY(), this.target.getZ()));
                                 } else {
-                                    this.seenTargetTimes=-40;
+                                    this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
                                 }
                             }
                         } else {
@@ -157,15 +143,13 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                             if (k >= -45.0F && k < 45.0F) {
                                 double h = 1.0;
 
-
+                                double l = this.dragon.head.getX() - vec3d3.x;
                                 double m = this.dragon.head.getBodyY(0.5) + 0.5;
-
+                                double n = this.dragon.head.getZ() - vec3d3.z;
                                 double o = this.target.getX() - l;
                                 double p = this.target.getBodyY(0.5) - m;
                                 double q = this.target.getZ() - n;
 
-
-                                System.out.println("fireball");
                                 if (!this.dragon.isSilent()) {
                                     this.dragon.getWorld()
                                             .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
@@ -180,7 +164,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                     }
                                 }
 
-                                if (this.dragon.getRandom().nextInt(3)==0) {
+                                if (this.dragon.getRandom().nextBoolean()||this.dragon.getWorld().getDifficulty().getId()<2) {
                                     this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
                                 }if (this.dragon.getRandom().nextInt(10)==0) {
                                     this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);

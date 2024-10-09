@@ -107,7 +107,8 @@
         "boss.StrafePlayerPhaseMixin",
         "boss.SittingScanningPhaseMixin",
         "boss.SittingAttackingPhaseMixin",
-        "boss.SittingFlamingPhaseMixin"
+        "boss.SittingFlamingPhaseMixin",
+        "boss.EnderDragonPartMixin"
     ],
     "injectors": {
         "defaultRequire": 1

@@ -67,7 +67,7 @@ public abstract class EnderDragonFightMixin {
     @Inject(method = "respawnDragon()V", at = @At(value = "FIELD",
                                                   target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;exitPortalLocation:Lnet/minecraft/util/math/BlockPos;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
     private void onlySpawnDragonWhenPlayersNearby(CallbackInfo ci) {
-        List<ServerPlayerEntity> list = this.world.getNonSpectatingEntities(ServerPlayerEntity.class, new Box(-40, 0, -40, 40, 100, 40));
+        List<ServerPlayerEntity> list = this.world.getNonSpectatingEntities(ServerPlayerEntity.class, new Box(-50, 0, -50, 50, 100, 50));
         if (list.isEmpty()) {
             ci.cancel();
         }
@@ -76,12 +76,14 @@ public abstract class EnderDragonFightMixin {
     @Inject(method = "updatePlayers", at = @At(value = "HEAD"))
     private void resetWorldBorder(CallbackInfo ci) {
         if (!this.previouslyKilled) {
-            this.world.getWorldBorder().setSize(400);
+            if (this.world.getDifficulty().getId()>1) {
+                this.world.getWorldBorder().setSize(400);
 
-            List<ServerPlayerEntity> playerList = world.getPlayers();
-            for (ServerPlayerEntity player : playerList) {
-                if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                    world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                List<ServerPlayerEntity> playerList = world.getPlayers();
+                for (ServerPlayerEntity player : playerList) {
+                    if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                        world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                    }
                 }
             }
         }
@@ -168,9 +170,7 @@ public abstract class EnderDragonFightMixin {
         this.world.getWorldBorder().setSize(60000000);
         List<ServerPlayerEntity> playerList = world.getPlayers();
         for (ServerPlayerEntity player : playerList) {
-            System.out.println("testa");
             if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                System.out.println("testb");
                 world.getServer().getPlayerManager().sendWorldInfo(player, world);
             }
         }
@@ -181,13 +181,6 @@ public abstract class EnderDragonFightMixin {
         return 108;
     }
 
-    /*@Inject(method = "updatePlayers", at = @At(value = "INVOKE", target = "Ljava/util/Set;add(Ljava/lang/Object;)Z"))
-    private void dontStartImmediately(CallbackInfo ci) {
-        System.out.println(!this.dragonKilled);
-        this.bossBar.setVisible(!this.dragonKilled);
-        System.out.println(this.bossBar.isVisible());
-    }*/
-
     @Inject(method = "<init>(Lnet/minecraft/server/world/ServerWorld;JLnet/minecraft/entity/boss/dragon/EnderDragonFight$Data;Lnet/minecraft/util/math/BlockPos;)V", at = @At(value = "TAIL"))
     private void dontStartImmediately(CallbackInfo ci) {
         System.out.println(this.dragonUuid);
@@ -195,7 +188,6 @@ public abstract class EnderDragonFightMixin {
             this.bossBar.setVisible(false);
             this.dragonKilled = true;
         }
-        //System.out.println(this.bossBar.isVisible());
     }
 
 }

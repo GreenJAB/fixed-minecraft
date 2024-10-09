@@ -73,7 +73,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
             } else {
                 this.dragon.getPhaseManager().setPhase(PhaseType.SITTING_SCANNING);
             }
-        } else if (this.ticks == 0) {
+        } else if (this.ticks == 5) {
             double dp = 0;
             if (livingEntity!=null) {
                 double dx = this.dragon.getX() - livingEntity.getX();
