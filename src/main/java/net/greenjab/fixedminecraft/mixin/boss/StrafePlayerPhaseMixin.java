@@ -114,7 +114,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                             BlockPos b = this.dragon.getBodyParts()[5].getBlockPos();
                             EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld());
                             if (endermiteEntity != null) {
-                                endermiteEntity.refreshPositionAndAngles(b.getX()-this.dragon.getVelocity().getX(), b.up().getY(), b.getZ()-this.dragon.getVelocity().getY(), 0, 0.0F);
+                                endermiteEntity.refreshPositionAndAngles(b.getX()-this.dragon.getVelocity().getX(), b.up().getY(), b.getZ()-this.dragon.getVelocity().getZ(), 0, 0.0F);
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1));
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, -1));
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 2, 4));

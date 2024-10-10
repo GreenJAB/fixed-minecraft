@@ -108,7 +108,8 @@
         "boss.SittingScanningPhaseMixin",
         "boss.SittingAttackingPhaseMixin",
         "boss.SittingFlamingPhaseMixin",
-        "boss.EnderDragonPartMixin"
+        "boss.EnderDragonPartMixin",
+        "boss.ServerPlayerEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

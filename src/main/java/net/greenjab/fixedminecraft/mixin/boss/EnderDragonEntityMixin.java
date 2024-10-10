@@ -2,22 +2,19 @@ package net.greenjab.fixedminecraft.mixin.boss;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
+import net.minecraft.entity.boss.dragon.phase.Phase;
 import net.minecraft.entity.boss.dragon.phase.PhaseManager;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.Box;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -28,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -147,6 +145,34 @@ public abstract class EnderDragonEntityMixin {
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {100, 150, 200, 300};
         EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
+    }
+
+    @Inject(method = "tickMovement", at = @At(value = "TAIL"))
+    private void moveBackupHitbox(CallbackInfo ci){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
+        for (Entity e : entities) {
+            if (e instanceof InteractionEntity interactionEntity) {
+                if (interactionEntity.getCommandTags().contains("dragon")) {
+                    interactionEntity.teleport(EDE.head.getX(), EDE.head.getY()+1, EDE.head.getZ());
+                }
+                break;
+            }
+        }
+    }
+
+    @Inject(method = "damagePart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;setHealth(F)V"))
+    private void killBackupHitbox(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
+        for (Entity e : entities) {
+            if (e instanceof InteractionEntity interactionEntity) {
+                if (interactionEntity.getCommandTags().contains("dragon")) {
+                    interactionEntity.kill();
+                }
+                break;
+            }
+        }
     }
 
     @Inject(method = "destroyBlocks", at = @At(

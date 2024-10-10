@@ -8,11 +8,13 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
 import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -24,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.UUID;
@@ -187,6 +190,18 @@ public abstract class EnderDragonFightMixin {
         if (!this.previouslyKilled && this.dragonUuid==null) {
             this.bossBar.setVisible(false);
             this.dragonKilled = true;
+        }
+    }
+
+    @Inject(method = "createDragon", at= @At(value = "INVOKE",
+                                             target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
+    ))
+    private void summonBackupHitbox(CallbackInfoReturnable<EnderDragonEntity> cir){
+        InteractionEntity IE = EntityType.INTERACTION.create(this.world.getWorldChunk(new BlockPos(0, 0, 0)).getWorld());
+        if (IE != null) {
+            IE.refreshPositionAndAngles(0, 108, 0, 0, 0.0F);
+            IE.addCommandTag("dragon");
+            this.world.spawnEntity(IE);
         }
     }
 
