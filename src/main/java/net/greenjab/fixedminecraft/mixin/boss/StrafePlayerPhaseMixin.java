@@ -119,6 +119,9 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, -1));
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 2, 4));
                                 endermiteEntity.setHealth(1);
+                                if (this.dragon.getCommandTags().contains("omen")) {
+                                    endermiteEntity.setHealth(20);
+                                }
                                 endermiteEntity.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(30);
                                 this.dragon.getWorld().spawnEntity(endermiteEntity);
 

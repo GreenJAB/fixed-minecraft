@@ -3,17 +3,24 @@ package net.greenjab.fixedminecraft.mixin.boss;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.InteractionEntity;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.DragonFireballEntity;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -186,7 +193,6 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "<init>(Lnet/minecraft/server/world/ServerWorld;JLnet/minecraft/entity/boss/dragon/EnderDragonFight$Data;Lnet/minecraft/util/math/BlockPos;)V", at = @At(value = "TAIL"))
     private void dontStartImmediately(CallbackInfo ci) {
-        System.out.println(this.dragonUuid);
         if (!this.previouslyKilled && this.dragonUuid==null) {
             this.bossBar.setVisible(false);
             this.dragonKilled = true;
@@ -196,12 +202,30 @@ public abstract class EnderDragonFightMixin {
     @Inject(method = "createDragon", at= @At(value = "INVOKE",
                                              target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
     ))
-    private void summonBackupHitbox(CallbackInfoReturnable<EnderDragonEntity> cir){
+    private void summonBackupHitbox(CallbackInfoReturnable<EnderDragonEntity> cir, @Local EnderDragonEntity enderDragonEntity){
         InteractionEntity IE = EntityType.INTERACTION.create(this.world.getWorldChunk(new BlockPos(0, 0, 0)).getWorld());
         if (IE != null) {
             IE.refreshPositionAndAngles(0, 108, 0, 0, 0.0F);
             IE.addCommandTag("dragon");
             this.world.spawnEntity(IE);
+        }
+
+        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().ignoreVisibility(), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
+        if (playerEntity != null) {
+            if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
+                playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
+                enderDragonEntity.addCommandTag("omen");
+            }
+        }
+    }
+
+    @Inject(method = "dragonKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;generateEndPortal(Z)V"))
+    private void spawnElytraItem(EnderDragonEntity dragon, CallbackInfo ci) {
+        if (dragon.getCommandTags().contains("omen")) {
+            ItemEntity itemEntity = new ItemEntity(dragon.getWorld(), 0, dragon.getY()-2, 0, Items.ELYTRA.getDefaultStack());
+            itemEntity.refreshPositionAndAngles(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
+            itemEntity.setVelocity(new Vec3d(0, 0, 0));
+            dragon.getWorld().spawnEntity(itemEntity);
         }
     }
 

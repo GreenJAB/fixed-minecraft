@@ -18,7 +18,6 @@ public class ServerPlayerEntityMixin {
 
     @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
     private Entity check(Entity target) {
-        System.out.println("2, " + target);
         if (target instanceof InteractionEntity IE) {
             if (IE.getCommandTags().contains("dragon")) {
                 EnderDragonFight enderDragonFight = ((ServerWorld) target.getWorld()).getEnderDragonFight();

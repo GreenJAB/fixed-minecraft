@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.boss;
 import com.ibm.icu.text.Edits;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.projectile.DragonFireballEntity;
@@ -45,8 +46,12 @@ public class DragonFireballEntityMixin {
 
         DragonFireballEntity DFE = (DragonFireballEntity)(Object)this;
         ServerWorld world = DFE.getServer().getWorld(DFE.getWorld().getRegistryKey());
+        int explosionPower = (DFE.getWorld().getDifficulty().getId()+1)/2;
+        if (DFE.getOwner().getCommandTags().contains("omen")) {
+            explosionPower++;
+        }
         world.createExplosion(
-                null, DFE.getX(), DFE.getY(), DFE.getZ(),(DFE.getWorld().getDifficulty().getId()+1)/2,World.ExplosionSourceType.NONE
+                null, DFE.getX(), DFE.getY(), DFE.getZ(), explosionPower,World.ExplosionSourceType.NONE
         );
     }
 

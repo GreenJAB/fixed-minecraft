@@ -14,6 +14,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.DragonFireballEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -92,7 +93,6 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                     this.dragon.getWorld().syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
 
-
                 DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, o, p, q);
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
                 this.dragon.getWorld().spawnEntity(dragonFireballEntity);
@@ -115,6 +115,14 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                     }
 
                     mutable.set(d, h, e);
+                }
+
+                if (this.dragon.getCommandTags().contains("omen")) {
+                    List<Entity> entities = this.dragon.getWorld()
+                            .getOtherEntities(this.dragon, this.dragon.head.getBoundingBox().expand(2.0, 3.0, 2.0).offset(0.0, -1.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR);
+                    for (Entity ee : entities) {
+                        ee.setFireTicks(100);
+                    }
                 }
 
                 h = (double) (MathHelper.floor(h) + 1);

@@ -25,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @SuppressWarnings("unchecked")
@@ -74,17 +75,6 @@ public abstract class LivingEntityMixin {
                 }
             }
         }
-        if (LE instanceof EndermiteEntity) {
-            if (entity != null) {
-                if (entity instanceof EndermanEntity endermanEntity) {
-                    LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
-                            TargetPredicate.createAttackable().setBaseMaxDistance(150.0).ignoreVisibility(),
-                            endermanEntity, endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ());
-                    endermanEntity.setTarget(livingEntity);
-                    endermanEntity.setAngerTime(999999);
-                }
-            }
-        }
     }
 
     @Redirect(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 7))
@@ -97,4 +87,18 @@ public abstract class LivingEntityMixin {
         }
     }
 
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 5))
+    private void increaseInsomnia(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir,
+                                  @Local Entity entity) {
+        LivingEntity LE = (LivingEntity)(Object)this;
+        if (LE instanceof EndermiteEntity) {
+            if (entity instanceof EndermanEntity endermanEntity) {
+                LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
+                        TargetPredicate.createAttackable().setBaseMaxDistance(150.0).ignoreVisibility(),
+                        endermanEntity, endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ());
+                endermanEntity.setTarget(livingEntity);
+                endermanEntity.setAngerTime(999999);
+            }
+        }
+    }
 }

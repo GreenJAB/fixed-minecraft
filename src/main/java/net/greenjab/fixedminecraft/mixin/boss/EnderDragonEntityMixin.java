@@ -65,6 +65,22 @@ public abstract class EnderDragonEntityMixin {
         return 0.03;
     }
 
+    @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.06f))
+    private float fasterXZMovement(float value){
+        if (((EnderDragonEntity) (Object)this).getCommandTags().contains("omen")) {
+            return 0.08f;
+        }
+        return value;
+    }
+
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/phase/Phase;getYawAcceleration()F"))
+    private float fasterRotating(Phase instance) {
+        if (((EnderDragonEntity) (Object)this).getCommandTags().contains("omen")) {
+            return instance.getYawAcceleration() * 1.5f;
+        }
+        return instance.getYawAcceleration();
+    }
+
     @ModifyConstant(method = "tickMovement", constant = @Constant(doubleValue = 4.0))
     private double smallerAttack(double constant){
         return 2.0;
@@ -182,5 +198,18 @@ public abstract class EnderDragonEntityMixin {
             cir.setReturnValue(false);
             cir.cancel();
         }
+    }
+
+    @ModifyArg(method = "updatePostDeath", at = @At(
+            value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;floor(F)I"
+    ), index = 0)
+    private float moreOmenXP(float value){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        if (this.fight.hasPreviouslyKilled()) {
+            if (EDE.getCommandTags().contains("omen")) {
+                return Math.min(value*3, 12000);
+            }
+        }
+        return value;
     }
 }
