@@ -37,12 +37,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(StrafePlayerPhase.class)
 public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
 
-
-    /*@Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/pathing/Path;isFinished()Z", ordinal = 0))
-    private void checkForDragonFight(CallbackInfo ci) {
-        System.out.println("tick2");
-    }*/
-
     @Shadow
     private @Nullable LivingEntity target;
 
@@ -68,7 +62,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
 
     @Inject(method = "serverTick", at = @At(value = "HEAD"), cancellable = true)
     private void checkForDragonFight(CallbackInfo ci) {
-        if (this.target == null) {
+        if (this.target == null || this.seenTargetTimes < -100) {
             this.LOGGER.warn("Skipping player strafe phase because no player was found");
             this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
         } else {
@@ -118,9 +112,8 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1));
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, -1));
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 2, 4));
-                                endermiteEntity.setHealth(1);
-                                if (this.dragon.getCommandTags().contains("omen")) {
-                                    endermiteEntity.setHealth(20);
+                                if (!this.dragon.getCommandTags().contains("omen")) {
+                                    endermiteEntity.setHealth(1);
                                 }
                                 endermiteEntity.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(30);
                                 this.dragon.getWorld().spawnEntity(endermiteEntity);
@@ -142,7 +135,6 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                         } else {
                             float j = (float)vec3d2.dotProduct(vec3d);
                             float k = (float)(Math.acos((double)j) * 180.0F / (float)Math.PI);
-                            //k += 0.5F;< -5.0F || g > 5.0F)
                             if (k >= -45.0F && k < 45.0F) {
                                 double h = 1.0;
 
@@ -179,10 +171,10 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                         }
 
                     }
-                } else if (this.seenTargetTimes > 0) {
+                } else {
                     this.seenTargetTimes--;
                 }
-            } else if (this.seenTargetTimes > 0) {
+            } else {
                 this.seenTargetTimes--;
             }
         }

@@ -5,6 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
@@ -94,6 +96,14 @@ public abstract class EnderDragonFightMixin {
                     if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
                         world.getServer().getPlayerManager().sendWorldInfo(player, world);
                     }
+                }
+            }
+        }
+        this.bossBar.setColor(BossBar.Color.PINK);
+        if (this.dragonUuid!=null) {
+            if (this.world.getEntity(this.dragonUuid)!=null) {
+                if (this.world.getEntity(this.dragonUuid).getCommandTags().contains("omen")) {
+                    this.bossBar.setColor(BossBar.Color.PURPLE);
                 }
             }
         }
@@ -209,12 +219,13 @@ public abstract class EnderDragonFightMixin {
             IE.addCommandTag("dragon");
             this.world.spawnEntity(IE);
         }
-
-        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().ignoreVisibility(), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
+        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
         if (playerEntity != null) {
             if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
                 playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
                 enderDragonEntity.addCommandTag("omen");
+                enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getValue()*1.5);
+                enderDragonEntity.setHealth(enderDragonEntity.getMaxHealth());
             }
         }
     }

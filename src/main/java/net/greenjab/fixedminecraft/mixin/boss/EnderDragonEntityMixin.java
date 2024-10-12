@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -65,6 +67,13 @@ public abstract class EnderDragonEntityMixin {
         return 0.03;
     }
 
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Ljava/lang/Math;sqrt(D)D"))
+    private double fasterYMovement2(double m){
+        return Math.sqrt(m)*0.3;
+    }
+
+
+
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.06f))
     private float fasterXZMovement(float value){
         if (((EnderDragonEntity) (Object)this).getCommandTags().contains("omen")) {
@@ -89,30 +98,13 @@ public abstract class EnderDragonEntityMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 2), index = 1)
     private Box smallerAttack2(Box box){
-        if (this.phaseManager.getCurrent().getType() == PhaseType.CHARGING_PLAYER) {
-            return box.expand(4);
-        } else {
-            return box.contract(1);
-        }
+        return box.contract(1);
     }
     @ModifyArg(method = "tickMovement", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 3), index = 1)
     private Box smallerAttack3(Box box){
         return box.contract(1);
-    }
-
-    @Inject(method = "damageLivingEntities", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", ordinal = 0))
-    private void launch(List<Entity> entities, CallbackInfo ci, @Local Entity entity){
-        if (this.phaseManager.getCurrent().getType() == PhaseType.CHARGING_PLAYER) {
-            EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-            double f = entity.getX() - EDE.getX();
-            double g = entity.getZ() - EDE.getZ();
-            double h = Math.max(f * f + g * g, 0.1);
-            entity.addVelocity((f / h * 2.0)+EDE.getVelocity().getX()*1.5, 0.2F, (g / h * 2.0)+EDE.getVelocity().getZ()*1.5);
-        }
     }
 
     @Inject(method = "damageLivingEntities", at = @At(value = "HEAD"), cancellable = true)
@@ -167,12 +159,17 @@ public abstract class EnderDragonEntityMixin {
     private void moveBackupHitbox(CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
+        boolean found = false;
         for (Entity e : entities) {
             if (e instanceof InteractionEntity interactionEntity) {
                 if (interactionEntity.getCommandTags().contains("dragon")) {
-                    interactionEntity.teleport(EDE.head.getX(), EDE.head.getY()+1, EDE.head.getZ());
+                    if (!found) {
+                        interactionEntity.teleport(EDE.head.getX(), EDE.head.getY() + 1, EDE.head.getZ());
+                        found = true;
+                    } else {
+                        interactionEntity.kill();
+                    }
                 }
-                break;
             }
         }
     }
@@ -193,8 +190,9 @@ public abstract class EnderDragonEntityMixin {
 
     @Inject(method = "destroyBlocks", at = @At(
             value = "HEAD"), cancellable = true)
-    private void launch(Box box, CallbackInfoReturnable<Boolean> cir){
-        if (this.fight.hasPreviouslyKilled()) {
+    private void dontBreakBlocksAfterFirst(Box box, CallbackInfoReturnable<Boolean> cir){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        if (this.fight.hasPreviouslyKilled() && !EDE.getCommandTags().contains("omen")) {
             cir.setReturnValue(false);
             cir.cancel();
         }

@@ -60,7 +60,6 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 .getClosestPlayer(CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
 
         if (this.ticks >= 100) {
-            //if (this.timesRun >= 5) {
             if (this.dragon.getRandom().nextFloat()<((this.timesRun-1)/(this.timesRun+1.0f))) {
 
                 livingEntity = this.dragon
@@ -68,8 +67,12 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                         .getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
                 this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
                 if (livingEntity != null) {
-                    this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
-                    this.dragon.getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ()));
+                    if (livingEntity.squaredDistanceTo(this.dragon)>15*15) {
+                        this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
+                        this.dragon.getPhaseManager()
+                                .create(PhaseType.CHARGING_PLAYER)
+                                .setPathTarget(new Vec3d(livingEntity.getX(), livingEntity.getY() - 1, livingEntity.getZ()));
+                    }
                 }
             } else {
                 this.dragon.getPhaseManager().setPhase(PhaseType.SITTING_SCANNING);
