@@ -68,9 +68,4 @@ public class PlayerEntityMixin {
         if (diff == 2) itemEntity.setCovetedItem();
         if (diff < 2) itemEntity.setNeverDespawn();
     }
-
-    @Redirect(method = "checkFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
-    private boolean cancelElytraInLiquid(PlayerEntity instance, StatusEffect effect) {
-        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() && Saturation.INSTANCE.getAirTime() > 15);
-    }
 }

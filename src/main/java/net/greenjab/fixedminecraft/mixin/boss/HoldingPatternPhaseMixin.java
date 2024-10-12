@@ -50,10 +50,16 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
 
     @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
     private void chargeAtPlayer(CallbackInfo ci, @Local PlayerEntity player) {
-        if (this.dragon.getRandom().nextInt(3)==0) {
-            this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
-            this.dragon.getPhaseManager().create(PhaseType.CHARGING_PLAYER).setPathTarget(new Vec3d(player.getX(), player.getY(), player.getZ()));
+        if (player.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))>150*150) {
             ci.cancel();
+        } else {
+            if (this.dragon.getRandom().nextInt(3) == 0 || player.isFallFlying()) {
+                this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
+                this.dragon.getPhaseManager()
+                        .create(PhaseType.CHARGING_PLAYER)
+                        .setPathTarget(new Vec3d(player.getX(), player.getY()-1, player.getZ()));
+                ci.cancel();
+            }
         }
     }
 
