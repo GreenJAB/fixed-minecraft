@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.boss;
+package net.greenjab.fixedminecraft.mixin.dragon;
 
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
@@ -9,7 +9,6 @@ import net.minecraft.entity.boss.dragon.phase.AbstractSittingPhase;
 import net.minecraft.entity.boss.dragon.phase.Phase;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.boss.dragon.phase.SittingFlamingPhase;
-import net.minecraft.entity.boss.dragon.phase.SittingScanningPhase;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.DragonFireballEntity;
@@ -21,7 +20,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -124,7 +122,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                     List<Entity> entities = this.dragon.getWorld()
                             .getOtherEntities(this.dragon, this.dragon.head.getBoundingBox().expand(2.0, 3.0, 2.0).offset(0.0, -1.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR);
                     for (Entity ee : entities) {
-                        ee.setFireTicks(100);
+                        ee.setFireTicks(300);
                     }
                 }
 

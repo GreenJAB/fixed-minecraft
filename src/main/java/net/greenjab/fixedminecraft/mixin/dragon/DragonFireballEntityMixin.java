@@ -1,30 +1,18 @@
-package net.greenjab.fixedminecraft.mixin.boss;
+package net.greenjab.fixedminecraft.mixin.dragon;
 
-import com.ibm.icu.text.Edits;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.boss.dragon.EnderDragonEntity;
-import net.minecraft.entity.boss.dragon.EnderDragonFight;
-import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.projectile.DragonFireballEntity;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import net.minecraft.world.border.WorldBorder;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Iterator;
-import java.util.List;
 
 @Mixin(DragonFireballEntity.class)
 public class DragonFireballEntityMixin {
@@ -53,7 +41,7 @@ public class DragonFireballEntityMixin {
             }
         }
         world.createExplosion(
-                null, DFE.getX(), DFE.getY(), DFE.getZ(), explosionPower,World.ExplosionSourceType.NONE
+                DFE, DFE.getX(), DFE.getY(), DFE.getZ(), explosionPower,World.ExplosionSourceType.NONE
         );
     }
 

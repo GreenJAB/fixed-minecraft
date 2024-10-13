@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.boss;
+package net.greenjab.fixedminecraft.mixin.dragon;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -7,7 +7,6 @@ import net.minecraft.entity.boss.dragon.phase.AbstractSittingPhase;
 import net.minecraft.entity.boss.dragon.phase.Phase;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.boss.dragon.phase.SittingScanningPhase;
-import net.minecraft.entity.boss.dragon.phase.StrafePlayerPhase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;

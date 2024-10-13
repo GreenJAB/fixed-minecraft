@@ -3,20 +3,23 @@
   "package": "net.greenjab.fixedminecraft.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ClientPlayNetworkHandlerMixin",
-    "ClientPlayerInteractionManagerMixin",
+    "AnvilScreenMixin",
     "ClientPlayerEntityMixin",
-    "map.HeldItemRendererMixin",
-    "map.ItemFrameEntityRendererMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "EnchantmentScreenMixin",
     "InGameHudMixin",
-      "EnchantmentScreenMixin",
-      "AnvilScreenMixin",
-      "glint.ItemRendererMixin",
-      "glint.BufferBuilderStorageMixin",
-      "glint.ArmorFeatureRendererMixin",
-      "glint.ElytraFeatureRendererMixin"
+    "glint.ArmorFeatureRendererMixin",
+    "glint.BufferBuilderStorageMixin",
+    "glint.ElytraFeatureRendererMixin",
+    "glint.ItemRendererMixin",
+    "map.HeldItemRendererMixin",
+    "map.ItemFrameEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "EnderDragonEntityRendererMixin"
+  ]
 }

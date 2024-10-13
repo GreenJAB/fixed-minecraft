@@ -1,11 +1,9 @@
-package net.greenjab.fixedminecraft.mixin.boss;
+package net.greenjab.fixedminecraft.mixin.dragon;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonPart;
@@ -26,7 +24,6 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -151,7 +148,7 @@ public abstract class EnderDragonEntityMixin {
     ))
     private void moreHealth(EntityType entityType, World world, CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-        int[] health = {100, 150, 200, 300};
+        int[] health = {150, 200, 300, 400};
         EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
     }
 
@@ -186,6 +183,12 @@ public abstract class EnderDragonEntityMixin {
                 break;
             }
         }
+    }
+
+    @Inject(method = "damagePart", at = @At(
+            value = "HEAD"), cancellable = true)
+    private void ignoreExplosions(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if(source.getAttacker() instanceof EnderDragonEntity)cir.cancel();
     }
 
     @Inject(method = "destroyBlocks", at = @At(
