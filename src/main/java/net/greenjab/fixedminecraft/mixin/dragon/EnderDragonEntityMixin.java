@@ -12,6 +12,9 @@ import net.minecraft.entity.boss.dragon.phase.PhaseManager;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.decoration.InteractionEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -189,6 +192,27 @@ public abstract class EnderDragonEntityMixin {
             value = "HEAD"), cancellable = true)
     private void ignoreExplosions(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(source.getAttacker() instanceof EnderDragonEntity)cir.cancel();
+    }
+
+    @Inject(method = "addStatusEffect", at = @At(value = "HEAD"), cancellable = true)
+    private void addGlowingEffect(StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        System.out.println("add");
+        if (effect.getEffectType() == StatusEffects.GLOWING){
+            System.out.println("glow");
+            EDE.setStatusEffect(effect, source);
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
+    }
+
+    @Inject(method = "damagePart", at = @At(value = "HEAD"))
+    private void addGlowingEffect2(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        if (source.getSource() instanceof SpectralArrowEntity) {
+            System.out.println("glow2");
+            EDE.setStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 600), source.getAttacker());
+        }
     }
 
     @Inject(method = "destroyBlocks", at = @At(

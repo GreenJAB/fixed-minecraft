@@ -73,20 +73,14 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
                 double f = player.getX() - this.dragon.getX();
                 double g = player.getZ() - this.dragon.getZ();
                 double h = Math.max(f * f + g * g, 0.1);
-                //player.addVelocity(f / h * 4.0, 1.0, g / h * 4.0);
-                player.addVelocity((f / h * 2.0)+this.dragon.getVelocity().getX()*10, 1, (g / h * 2.0)+this.dragon.getVelocity().getZ()*10);
+                int v = 2*(1+this.dragon.getWorld().getDifficulty().getId() + (this.dragon.getCommandTags().contains("omen")?1:0));
+                player.addVelocity((f / h * 2.0)+this.dragon.getVelocity().getX()*v, 1, (g / h * 2.0)+this.dragon.getVelocity().getZ()*v);
 
                 player.damage(this.dragon.getDamageSources().mobAttack(this.dragon), 5.0F);
                 this.dragon.applyDamageEffects(this.dragon, player);
             }
         }
     }
-
-    /*@Inject(method = "getMaxYAcceleration", at = @At(value = "HEAD"), cancellable = true)
-    private void moreY(CallbackInfoReturnable<Float> cir) {
-        cir.setReturnValue(10f);
-        cir.cancel();
-    }*/
 
     @Override
     public PhaseType<? extends Phase> getType() {
