@@ -32,12 +32,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
 
     @Redirect(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 7))
-    private boolean dontSlowdownEnderdragon(DamageSource instance, TagKey<DamageType> tag) {
+    private boolean dontSlowdownEnderdragon(DamageSource source, TagKey<DamageType> tag) {
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (LE instanceof EnderDragonEntity) {
+        if (LE instanceof EnderDragonEntity || source.getAttacker() instanceof PhantomEntity) {
             return true;
         } else {
-            return instance.isIn(tag);
+            return source.isIn(tag);
         }
     }
 

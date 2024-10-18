@@ -2,11 +2,11 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.ServerStatHandler;
@@ -16,13 +16,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.World;
 import net.minecraft.world.spawner.PhantomSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 
 @SuppressWarnings("unchecked")
@@ -33,15 +34,14 @@ public class PhantomSpawnerMixin {
     private int phantomSpawnByEffect(ServerStatHandler instance, Stat stat,
                                      @Local ServerPlayerEntity serverPlayerEntity) {
         if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) return 0;
-        return serverPlayerEntity.getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier()*72000;
+        return 720000;
     }
 
     @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Difficulty;getId()I"))
-    private int phantomSpawnByEffect(Difficulty instance,
+    private int morePhantomsPerlevel(Difficulty instance,
                                      @Local ServerPlayerEntity serverPlayerEntity,
                                      @Local LocalDifficulty localDifficulty,
                                      @Local Random random) {
-        System.out.println("a");
         if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) return 0;
         return instance.getId() + serverPlayerEntity.getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier()*2;
     }
@@ -54,6 +54,16 @@ public class PhantomSpawnerMixin {
         if (j<72000) return;
         serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, 0, true, false));
         serverPlayerEntity.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT,  GameStateChangeS2CPacket.DEMO_OPEN_SCREEN));
+    }
+
+    @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/ServerStatHandler;getStat(Lnet/minecraft/stat/Stat;)I"), cancellable = true)
+    private void restrictPhantomSpawning(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals,
+                                         CallbackInfoReturnable<Integer> cir, @Local ServerPlayerEntity serverPlayerEntity) {
+        List<CatEntity> list = world.getEntitiesByClass(CatEntity.class, serverPlayerEntity.getBoundingBox().expand(16.0), EntityPredicates.VALID_ENTITY);
+        if  (!list.isEmpty()){
+            cir.setReturnValue(0);
+            cir.cancel();
+        }
     }
 
 }

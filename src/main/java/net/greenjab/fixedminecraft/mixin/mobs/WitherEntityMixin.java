@@ -1,11 +1,16 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
+import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.MathHelper;
@@ -20,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WitherEntity.class)
 public class WitherEntityMixin {
@@ -61,7 +67,7 @@ public class WitherEntityMixin {
     @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/WitherEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"), index = 0)
     private Vec3d floatUpInBlocks(Vec3d vec3d) {
         WitherEntity WE = (WitherEntity) (Object)this;
-        if (WE.getWorld().getBlockState(WE.getBlockPos()).isSolid()) {
+        if (WE.getWorld().getBlockState(WE.getBlockPos()).isSolid() && !WE.getWorld().getBlockState(WE.getBlockPos().up()).isOf(Blocks.BEDROCK)) {
             return vec3d.add(0, 0.05 - vec3d.y * 0.6F, 0);
         } else {
             return vec3d;
@@ -111,5 +117,13 @@ public class WitherEntityMixin {
             }
         }
          return WE.bodyYaw;
+    }
+
+    @Inject(method = "damage", at = @At(value = "HEAD"))
+    private void addGlowingEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        WitherEntity WE = (WitherEntity) (Object)this;
+        if (source.getSource() instanceof SpectralArrowEntity) {
+            WE.setStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 600), source.getAttacker());
+        }
     }
 }
