@@ -92,15 +92,15 @@ public abstract class MobEntityMixin extends LivingEntity {
             int i = 0;
             if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
             if (world.getDifficulty() == Difficulty.HARD) i = 2;
-            float h = i*3*guassian(random);
+            float h = i*3*gaussian(random);
             LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)+h);
             LE.setHealth(LE.getHealth() + h);
-            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+(i*0.15f*guassian(random))));
+            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+(i*0.15f*gaussian(random))));
 
 
         }
     }
-    private float guassian(Random random){
+    private float gaussian(Random random){
         return (float)(random.nextGaussian()/4.0f)+0.5f;
     }
 

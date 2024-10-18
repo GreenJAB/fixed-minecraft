@@ -94,11 +94,11 @@ public class WitherEntityMixin {
     }
     @ModifyConstant(method = "tickMovement", constant = @Constant(doubleValue = 0.3, ordinal = 1))
     private double moveSlower1(double v){
-        return v*(((WitherEntity) (Object)this).shouldRenderOverlay()?1:0.5);
+        return v*(((WitherEntity) (Object)this).shouldRenderOverlay()?0.9:0.5);
     }
     @ModifyConstant(method = "tickMovement", constant = @Constant(doubleValue = 0.3, ordinal = 2))
     private double moveSlower2(double v){
-        return v*(((WitherEntity) (Object)this).shouldRenderOverlay()?1:0.5);
+        return v*(((WitherEntity) (Object)this).shouldRenderOverlay()?0.9:0.5);
     }
 
     @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/WitherEntity;setYaw(F)V"), index = 0)

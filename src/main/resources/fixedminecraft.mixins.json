@@ -4,7 +4,6 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
         "BlocksMixin",
-        "LivingEntityMixin",
         "VineMixin",
         "beacon.BeaconBlockEntityMixin",
         "beacon.BeaconBlockMixin",
@@ -92,6 +91,10 @@
         "phantom.PhantomSpawnerMixin",
         "phantom.PhantomStartAttackGoalMixin",
         "phantom.PhantomSwoopMovementGoalMixin",
+        "raid.IllusionerBlindTargetGoalMixin",
+        "raid.IllusionerEntityMixin",
+        "raid.LivingEntityMixin",
+        "raid.RaidMixin",
         "redstone.BulbBlockMixin",
         "redstone.DaylightDetectorBlockMixin",
         "structure.IglooGeneratorMixin",

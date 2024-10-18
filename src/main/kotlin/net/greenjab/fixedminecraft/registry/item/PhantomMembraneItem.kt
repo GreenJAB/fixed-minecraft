@@ -28,7 +28,7 @@ class PhantomMembraneItem(settings: Settings?) : Item(settings) {
 
         if (!world.isClient) {
             user.addStatusEffect(StatusEffectInstance(INSOMNIA, -1))
-            user.addStatusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 1200))
+            user.addStatusEffect(StatusEffectInstance(StatusEffects.BLINDNESS, 400))
         }
 
         return stack

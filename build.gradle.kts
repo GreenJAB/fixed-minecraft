@@ -17,7 +17,7 @@ base {
 
 loom {
     splitEnvironmentSourceSets()
-
+    accessWidenerPath = file("src/main/resources/fixedminecraft.accesswidener")
     mods {
         register("fixedminecraft") {
             sourceSet(sourceSets["main"])
