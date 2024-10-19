@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -9,9 +9,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,6 +22,9 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.EnumSet;
+import java.util.Objects;
 
 @Mixin(EnderPearlEntity.class)
 public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
@@ -61,18 +67,29 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
             ref.set(false);
         }
         else {
-            vehicle = currentVehicle;
             vehicle.requestTeleport(x, y, z);
+
             if (vehicle instanceof PathAwareEntity pathAwareEntity)
                 pathAwareEntity.getNavigation().stop();
+
+            vehicle.onLanding();
+            if (!((PlayerEntity) Objects.requireNonNull(((EnderPearlEntity) (Object) this).getOwner())).getAbilities().creativeMode) {
+                vehicle.damage(this.getDamageSources().fall(), 5.0F);
+            }
             ref.set(true);
         }
     }
 
+    @Inject(method = "onCollision", at = @At(value = "HEAD",target = "Lnet/minecraft/server/network/ServerPlayerEntity;requestTeleportAndDismount(DDD)V"))
+    private void xAtStart(HitResult hitResult, CallbackInfo ci) {
+        System.out.println(((EnderPearlEntity) (Object) this).getOwner().getX());
+    }
+
+
     /**
      * Damages the saved vehicle and all passengers if the group teleportation was successful.
      */
-    @WrapOperation(
+    /*@WrapOperation(
             method = "onCollision",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z")
     )
@@ -84,9 +101,10 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
 
         boolean damaged = false;
         for (Entity passenger : vehicle.getPassengersDeep())
-            damaged |= original.call(passenger, source, amount);
+            passenger.damage(this.getDamageSources().fall(), 5.0F);
+            //damaged |= original.call(passenger, source, amount);
         return damaged;
-    }
+    }*/
 
     /**
      * Recursively gets the bottommost vehicle.

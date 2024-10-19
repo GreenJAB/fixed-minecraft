@@ -12,6 +12,7 @@ import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.EnchantedBookItem;
+import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -187,7 +188,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 // System.out.println("enchantment " + enchantment.toString() + ", level " + level);
 
                 // ensure enchantment fits on item
-                if (!enchantment.isAcceptableItem(stack)) {
+                if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
                     // System.out.println("item " + stack.toString() + " is not compatible");
                     return;
                 }

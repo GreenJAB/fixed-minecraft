@@ -6,6 +6,7 @@ import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -55,8 +56,6 @@ public class FixedMinecraftEnchantmentHelper {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
         Item item = stack.getItem();
         Iterator var6 = Registries.ENCHANTMENT.iterator();
-
-        while(true) {
             while(true) {
                 Enchantment enchantment;
                 do {
@@ -65,10 +64,9 @@ public class FixedMinecraftEnchantmentHelper {
                     }
 
                     enchantment = (Enchantment) var6.next();
-                } while(!enchantment.target.isAcceptableItem(item));
+                } while(!enchantment.target.isAcceptableItem(item instanceof HorseArmorItem?Items.DIAMOND_BOOTS:item));
                 if (!enchantment.isCursed()) list.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
             }
-        }
     }
 
     public static int getOccupiedEnchantmentCapacity(ItemStack itemStack, boolean atLeast1) {

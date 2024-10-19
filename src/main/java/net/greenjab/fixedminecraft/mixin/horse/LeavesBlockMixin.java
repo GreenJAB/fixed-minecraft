@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.horse;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

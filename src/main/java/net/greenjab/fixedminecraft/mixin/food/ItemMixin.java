@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.entity.mob.PiglinBrain;
+import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -29,6 +30,13 @@ public class ItemMixin {
             if (ingredient.isOf(Items.PRISMARINE_SHARD)) {
                 cir.setReturnValue(true);
             }
+        }
+    }
+
+    @Inject(method = "getEnchantability", at = @At("HEAD"), cancellable = true)
+    private void enchantableHorseArmor(CallbackInfoReturnable<Integer> cir) {
+        if (((Item)(Object)this) instanceof HorseArmorItem) {
+            cir.setReturnValue(1);
         }
     }
 }
