@@ -29,9 +29,10 @@ import java.util.Map;
 public class EnchantWithLevelsLootFunctionMixin {
 
     @Inject(method = "process", at = @At("RETURN"), cancellable = true)
-    private void addSuperEnchant(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir, @Local Random random) {
+    private void applySuperEnchant(ItemStack stack, LootContext context, CallbackInfoReturnable<ItemStack> cir, @Local Random random) {
         ItemStack IS = cir.getReturnValue();
-        if (!IS.isOf(Items.ENCHANTED_BOOK)) {
+        cir.setReturnValue(FixedMinecraftEnchantmentHelper.applySuperEnchants(IS, random));
+        /*if (!IS.isOf(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultStack();
             Map<Enchantment, Integer> map = EnchantmentHelper.get(IS);
             Iterator iter = map.keySet().iterator();
@@ -40,7 +41,7 @@ public class EnchantWithLevelsLootFunctionMixin {
                 Enchantment e = (Enchantment) iter.next();
                 int i = (Integer) map.get(e);
                 if (e.getMaxLevel() != 1) {
-                    if (random.nextFloat() < 0.1f) {
+                    if (random.nextFloat() < 1.03f) {
                         i = e.getMaxLevel() + 1;
                         isSuper = true;
                     }
@@ -55,7 +56,7 @@ public class EnchantWithLevelsLootFunctionMixin {
             cir.setReturnValue(IS2);
         } else {
             cir.setReturnValue(IS);
-        }
+        }*/
     }
 
 }

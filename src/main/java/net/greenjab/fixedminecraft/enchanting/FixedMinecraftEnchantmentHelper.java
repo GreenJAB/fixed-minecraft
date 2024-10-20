@@ -6,6 +6,7 @@ import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +16,7 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.util.math.random.Random;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,7 +66,7 @@ public class FixedMinecraftEnchantmentHelper {
                     }
 
                     enchantment = (Enchantment) var6.next();
-                } while(!enchantment.target.isAcceptableItem(item instanceof HorseArmorItem?Items.DIAMOND_BOOTS:item));
+                } while(!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, item));
                 if (!enchantment.isCursed()) list.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
             }
     }
@@ -112,5 +114,43 @@ public class FixedMinecraftEnchantmentHelper {
         return world.getBlockState(enchantingTablePosition.add(providerOffset)).isOf(block)
                && world.getBlockState(enchantingTablePosition.add(providerOffset.getX() / 2, providerOffset.getY(), providerOffset.getZ() / 2))
                        .isIn(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
+    }
+
+    public static boolean horseArmorCheck(Enchantment enchantment, Item item){
+        if (item instanceof HorseArmorItem) {
+            if (enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING) {
+                return false;
+            }
+            return enchantment.target.isAcceptableItem(Items.DIAMOND_BOOTS);
+        }
+        return enchantment.target.isAcceptableItem(item);
+    }
+
+    public static ItemStack applySuperEnchants(ItemStack IS, Random random) {
+        if (!IS.isOf(Items.ENCHANTED_BOOK)) {
+            ItemStack IS2 = IS.getItem().getDefaultStack();
+            Map<Enchantment, Integer> map = EnchantmentHelper.get(IS);
+            Iterator iter = map.keySet().iterator();
+            boolean isSuper = false;
+            while (iter.hasNext()) {
+                Enchantment e = (Enchantment) iter.next();
+                int i = (Integer) map.get(e);
+                if (e.getMaxLevel() != 1) {
+                    if (random.nextFloat() < 0.03f) {
+                        i = e.getMaxLevel() + 1;
+                        isSuper = true;
+                    }
+                }
+                map.put(e, i);
+            }
+            if (isSuper) {
+                IS2.getOrCreateSubNbt("Super");
+                map.remove(Enchantments.MENDING);
+            }
+            EnchantmentHelper.set(map, IS2);
+            return IS2;
+        } else {
+            return IS;
+        }
     }
 }

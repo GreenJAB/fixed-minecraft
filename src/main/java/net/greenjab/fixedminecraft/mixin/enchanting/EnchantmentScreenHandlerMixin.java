@@ -188,7 +188,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 // System.out.println("enchantment " + enchantment.toString() + ", level " + level);
 
                 // ensure enchantment fits on item
-                if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
+                //if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
+                if (!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack.getItem())) {
                     // System.out.println("item " + stack.toString() + " is not compatible");
                     return;
                 }

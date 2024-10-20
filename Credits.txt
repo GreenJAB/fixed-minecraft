@@ -1,0 +1,13 @@
+Main Development:
+Green_Jab
+
+Other Devs:
+Mapbook - Nettakrim
+Terrain - Quidivo
+Enchanting System setup - Laazuli
+Textures - Eleanor
+
+Other Mods Used:
+Stamina Rendering - Apple Skin
+Chiseled Bookshelf Rendering - Better Bookshelves
+Green Glint Rendering - Enchant The Rainbow

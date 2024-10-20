@@ -143,7 +143,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                         r = Math.max(r, q);
                     }
                     //r = q == r ? r + 1 : Math.max(r, q);
-                    boolean bl4 = enchantment.isAcceptableItem(outputItemStack);
+                    boolean bl4 = FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, outputItemStack.getItem());//enchantment.isAcceptableItem(outputItemStack);
                     if (this.player.getAbilities().creativeMode || outputItemStack.isOf(Items.ENCHANTED_BOOK)) {
                         bl4 = true;
                     }

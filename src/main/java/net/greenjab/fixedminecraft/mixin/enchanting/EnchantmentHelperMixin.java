@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
@@ -7,6 +8,7 @@ import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -40,12 +42,9 @@ public class EnchantmentHelperMixin {
         return power;
     }
 
-    @ModifyArg(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentTarget;isAcceptableItem(Lnet/minecraft/item/Item;)Z"), index = 0)
-    private static Item bypassCheck(Item item) {
-        if (item instanceof HorseArmorItem) {
-            return Items.DIAMOND_BOOTS;
-        }
-        return item;
+    @ModifyExpressionValue(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentTarget;isAcceptableItem(Lnet/minecraft/item/Item;)Z"))
+    private static boolean horseArmorCheck (boolean original, @Local() Item item, @Local Enchantment enchantment) {
+        return FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, item);
     }
 
     @Inject(method = "generateEnchantments", at = @At("HEAD"))

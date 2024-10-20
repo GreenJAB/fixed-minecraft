@@ -101,6 +101,22 @@
           "type": "minecraft:item",
           "name": "minecraft:diamond_horse_armor"
         },
+          {
+              "type": "minecraft:item",
+              "functions": [
+                  {
+                      "function": "minecraft:enchant_with_levels",
+                      "levels": {
+                          "type": "minecraft:uniform",
+                          "max": 50.0,
+                          "min": 30.0
+                      },
+                      "treasure": true
+                  }
+              ],
+              "name": "minecraft:diamond_horse_armor",
+              "weight": 1
+          },
         {
           "type": "minecraft:item",
           "functions": [
