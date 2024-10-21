@@ -3,9 +3,11 @@ package net.greenjab.fixedminecraft.mixin.client;
 import kotlin.jvm.JvmStatic;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,12 @@ public class ClientPlayerEntityMixin {
             if (itemStack.isOf(Items.ELYTRA) && ElytraItem.isUsable(itemStack) && CPE.checkFallFlying()) {
                 CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
             }
+        }
+    }
+    @Inject(method = "canVehicleSprint", at = @At("HEAD"), cancellable = true)
+    private void horsesCanSprint(Entity vehicle, CallbackInfoReturnable<Boolean> cir){
+        if (vehicle instanceof AbstractHorseEntity) {
+            cir.setReturnValue(true);
         }
     }
 }

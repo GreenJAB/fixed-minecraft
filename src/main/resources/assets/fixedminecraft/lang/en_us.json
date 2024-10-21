@@ -20,7 +20,7 @@
     "block.fixedminecraft.waxed_exposed_copper_rail": "Waxed Exposed Copper Rail",
     "block.fixedminecraft.waxed_weathered_copper_rail": "Waxed Weathered Copper Rail",
     "block.fixedminecraft.waxed_oxidized_copper_rail": "Waxed Oxidized Copper Rail",
-    "itemgroup.fixed": "Fixed Group",
+    "itemgroup.fixed": "Fixed",
     "effect.fixedminecraft.reach": "Reach",
     "effect.fixedminecraft.insomnia": "Insomnia"
 }

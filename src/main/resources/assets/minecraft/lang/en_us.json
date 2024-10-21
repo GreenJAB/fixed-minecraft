@@ -59,5 +59,9 @@
     "item.minecraft.tropical_fish":"Tropical Fish \u00a7f(\ueff3)",
     "item.minecraft.phantom_membrane":"Phantom Membrane \u00a7f(\ueff4\u00a7f\ueff4)",
     "item.minecraft.glistering_melon_slice":"Glistering Melon Slice \u00a7f(\ueff4)",
-    "enchantment.minecraft.bane_of_arthropods": "Bane of Invertebrates"
+    "enchantment.minecraft.bane_of_arthropods": "Bane of Invertebrates",
+    "item.minecraft.tipped_arrow.effect.blindness": "Arrow of Blindness",
+    "item.minecraft.lingering_potion.effect.blindness": "Lingering Potion of Blindness",
+    "item.minecraft.potion.effect.blindness": "Potion of Blindness",
+    "item.minecraft.splash_potion.effect.blindness": "Splash Potion of Blindness"
 }

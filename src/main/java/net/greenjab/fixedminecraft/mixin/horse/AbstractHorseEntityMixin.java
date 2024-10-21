@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -17,6 +18,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -117,5 +119,20 @@ public class AbstractHorseEntityMixin {
     @ModifyExpressionValue(method = "hasArmorInSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet(EquipmentSlot original){
         return EquipmentSlot.FEET;
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;canMoveVoluntarily()Z"))
+    private void sprintCheck(CallbackInfo ci) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        if (AHE.hasControllingPassenger()) {
+            if (!AHE.getControllingPassenger().isSprinting()) {
+                Vec3d v= AHE.getVelocity();
+                double d = v.horizontalLength();
+                if (d > 0.01) {
+                    double s = Math.min(0.1, d);
+                    AHE.setVelocity(s * v.x / d, v.y, s * v.z / d);
+                }
+            }
+        }
     }
 }

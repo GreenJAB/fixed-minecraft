@@ -2,17 +2,16 @@ package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem
-import net.greenjab.fixedminecraft.registry.item.TotemItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
-import net.minecraft.entity.vehicle.BoatEntity
-import net.minecraft.item.BoatItem
+import net.minecraft.entity.effect.StatusEffectInstance
+import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FireworkRocketItem
 import net.minecraft.item.FoodComponents
-import net.minecraft.item.HangingSignItem
 import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
-import net.minecraft.item.SignItem
+import net.minecraft.potion.Potion
 import net.minecraft.registry.Registries.ITEM
+import net.minecraft.registry.Registries.POTION
 import net.minecraft.util.Rarity
 
 @Suppress("MemberVisibilityCanBePrivate")
@@ -26,7 +25,7 @@ object ItemRegistry {
     }
 
     val BROKEN_TOTEM = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
-    //val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
+    // val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
     val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
     val ECHO_FRUIT: Item =  EchoFruitItem(FabricItemSettings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 
@@ -66,6 +65,7 @@ object ItemRegistry {
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
+        POTION.register("blindness", Potion("blindness", StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
 
     }
 }
