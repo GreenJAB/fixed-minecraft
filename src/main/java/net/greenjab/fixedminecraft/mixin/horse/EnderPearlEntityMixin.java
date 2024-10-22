@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Objects;
 
 @Mixin(EnderPearlEntity.class)
@@ -45,7 +46,11 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
      */
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;)V", at = @At("TAIL"))
     private void saveVehicle(World world, LivingEntity owner, CallbackInfo ci) {
-        vehicle = rootVehicle(owner);
+        if (owner.hasVehicle()) {
+            if (owner == rootVehicle(owner).getControllingPassenger()) {
+                vehicle = rootVehicle(owner);
+            }
+        }
     }
 
     /**
@@ -68,23 +73,19 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
         }
         else {
             vehicle.requestTeleport(x, y, z);
+            vehicle.addCommandTag("tp");
 
             if (vehicle instanceof PathAwareEntity pathAwareEntity)
                 pathAwareEntity.getNavigation().stop();
 
             vehicle.onLanding();
             if (!((PlayerEntity) Objects.requireNonNull(((EnderPearlEntity) (Object) this).getOwner())).getAbilities().creativeMode) {
+                System.out.println("damage");
                 vehicle.damage(this.getDamageSources().fall(), 5.0F);
             }
             ref.set(true);
         }
     }
-
-    @Inject(method = "onCollision", at = @At(value = "HEAD",target = "Lnet/minecraft/server/network/ServerPlayerEntity;requestTeleportAndDismount(DDD)V"))
-    private void xAtStart(HitResult hitResult, CallbackInfo ci) {
-        System.out.println(((EnderPearlEntity) (Object) this).getOwner().getX());
-    }
-
 
     /**
      * Damages the saved vehicle and all passengers if the group teleportation was successful.

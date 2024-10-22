@@ -18,6 +18,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -124,7 +125,7 @@ public class AbstractHorseEntityMixin {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;canMoveVoluntarily()Z"))
     private void sprintCheck(CallbackInfo ci) {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (AHE.hasControllingPassenger()) {
+        if (AHE.hasControllingPassenger() && AHE.isOnGround()) {
             if (!AHE.getControllingPassenger().isSprinting()) {
                 Vec3d v= AHE.getVelocity();
                 double d = v.horizontalLength();
@@ -134,5 +135,6 @@ public class AbstractHorseEntityMixin {
                 }
             }
         }
+        AHE.calculateDimensions();
     }
 }

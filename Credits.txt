@@ -1,13 +1,22 @@
 Main Development:
 Green_Jab
 
-Other Devs:
+Major Dev Contributions:
 Mapbook - Nettakrim
 Terrain - Quidivo
-Enchanting System setup - Laazuli
+Enchanting System Setup - Laazuli
 Textures - Eleanor
 
-Other Mods Used:
+Minor Dev Contributers:
+KikuGie
+Trigam
+
+Code from other Mods Used:
 Stamina Rendering - Apple Skin
 Chiseled Bookshelf Rendering - Better Bookshelves
 Green Glint Rendering - Enchant The Rainbow
+
+Other Credits:
+Dragon Fight Boss Music - Resonant Tonality
+Friend and Ideas Discussions: Bricky
+
