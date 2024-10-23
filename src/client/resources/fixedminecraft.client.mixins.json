@@ -9,6 +9,8 @@
     "ClientPlayNetworkHandlerMixin",
     "EnchantmentScreenMixin",
     "InGameHudMixin",
+      "EnderDragonEntityRendererMixin",
+      "BackgroundRendererMixin",
     "glint.ArmorFeatureRendererMixin",
     "glint.BufferBuilderStorageMixin",
     "glint.ElytraFeatureRendererMixin",
@@ -18,8 +20,5 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "client": [
-    "EnderDragonEntityRendererMixin"
-  ]
+  }
 }
