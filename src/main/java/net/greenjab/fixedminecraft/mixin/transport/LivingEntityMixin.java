@@ -1,14 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.greenjab.fixedminecraft.data.Saturation;
+import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -70,6 +69,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Redirect(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
     private boolean cancelElytraInLiquid(LivingEntity instance, StatusEffect effect) {
-        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() && Saturation.INSTANCE.getAirTime()>15);
+        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
+                 CustomData.getData(instance, "airTime") > 15);
     }
 }
