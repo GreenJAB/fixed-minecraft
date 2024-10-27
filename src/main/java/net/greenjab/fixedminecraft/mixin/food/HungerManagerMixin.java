@@ -54,7 +54,6 @@ public abstract class HungerManagerMixin {
         float saturationSinceLastHunger = CustomData.getData(player, "saturationSinceLastHunger")/1000.0f;
 
         float h = player.isSneaking() ? 2.0f : 1.0f;
-        System.out.println(this.exhaustion - lastExhaustion);
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f) {ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+(int)h, 40);
         } else {
             ticksSinceLastExhaustion = 0;
@@ -102,6 +101,7 @@ public abstract class HungerManagerMixin {
     private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
+
         return instance.canFoodHeal() && HM.getSaturationLevel()>6 &&
                (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()/*&& velocity<0.01f*/));
     }

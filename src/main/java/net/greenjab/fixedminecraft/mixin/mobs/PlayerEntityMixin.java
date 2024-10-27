@@ -12,29 +12,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin {
-    //TODO Doesn't work with carpet mod
-    /*@Shadow
-    protected abstract void dropShoulderEntities();
-
-    @Redirect(
-            method = "tickMovement",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;dropShoulderEntities()V")
-    )
-    private void removeParrotCheck(PlayerEntity instance) {
-    }
-
-    @Inject(
-            method = "tickMovement",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/entity/player/PlayerEntity;getShoulderEntityRight()Lnet/minecraft/nbt/NbtCompound;",
-                    shift = At.Shift.AFTER
-            )
-    )
-    private void addParrotCheck(CallbackInfo ci) {
+    @Inject(method = "dropShoulderEntities", at = @At("HEAD"), cancellable = true)
+    private void newCheck(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        if (!PE.getWorld().isClient && (PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isFallFlying() || PE.inPowderSnow)) {
-            this.dropShoulderEntities();
+        System.out.println(PE.hurtTime);
+        if (!PE.getWorld().isClient && (PE.hurtTime > 0 || PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isFallFlying() || PE.inPowderSnow)) {
+            //this.dropShoulderEntities();
+        } else {
+            ci.cancel();
         }
-    }*/
+    }
 }
