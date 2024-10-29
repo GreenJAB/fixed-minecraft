@@ -12,9 +12,10 @@ KikuGie
 Trigam
 
 Code from other Mods Used:
-Stamina Rendering - Apple Skin
-Chiseled Bookshelf Rendering - Better Bookshelves
-Green Glint Rendering - Enchant The Rainbow
+Stamina Rendering - Apple Skin - Squeek502
+Chiseled Bookshelf Rendering - Better Bookshelves - Bawnorton
+Green Glint Rendering - Enchant The Rainbow - Pepperoni-Jabroni
+Villager Armour Rendering - Villager Armor Layer - Viola-Siemens
 
 Other Credits:
 Dragon Fight Boss Music - Resonant Tonality

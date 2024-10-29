@@ -12,6 +12,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -85,7 +86,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                         public boolean canInsert(ItemStack stack) {
                             if (stack != null) {
                                 return equipmentSlot == MobEntity.getPreferredEquipmentSlot(stack) &&
-                                       stack.getItem().toString().toLowerCase().contains("leather");
+                                       stack.getItem() instanceof DyeableArmorItem;
                             }
                             return false;
                         }

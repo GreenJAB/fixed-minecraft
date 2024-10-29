@@ -15,6 +15,12 @@ public class CustomData {
 
         if(name == "airTime") {
             if (entity.getWorld()
+                    .getScoreboard()
+                    .getObjectiveForSlot(ScoreboardDisplaySlot.TEAM_AQUA) == null) {
+                entity.getWorld()
+                        .getScoreboard()
+                        .setObjectiveSlot(ScoreboardDisplaySlot.TEAM_AQUA, entity.getWorld().getScoreboard().getNullableObjective(name));
+            } else if (entity.getWorld()
                         .getScoreboard()
                         .getObjectiveForSlot(ScoreboardDisplaySlot.TEAM_AQUA)
                         .getDisplayName()

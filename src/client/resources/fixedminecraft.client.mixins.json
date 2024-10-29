@@ -1,24 +1,25 @@
 {
-  "required": true,
-  "package": "net.greenjab.fixedminecraft.mixin.client",
-  "compatibilityLevel": "JAVA_17",
-  "mixins": [
-    "AnvilScreenMixin",
-    "ClientPlayerEntityMixin",
-    "ClientPlayerInteractionManagerMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "EnchantmentScreenMixin",
-    "InGameHudMixin",
-      "EnderDragonEntityRendererMixin",
-      "BackgroundRendererMixin",
-    "glint.ArmorFeatureRendererMixin",
-    "glint.BufferBuilderStorageMixin",
-    "glint.ElytraFeatureRendererMixin",
-    "glint.ItemRendererMixin",
-    "map.HeldItemRendererMixin",
-    "map.ItemFrameEntityRendererMixin"
-  ],
-  "injectors": {
-    "defaultRequire": 1
-  }
+    "required": true,
+    "package": "net.greenjab.fixedminecraft.mixin.client",
+    "compatibilityLevel": "JAVA_17",
+    "mixins": [
+        "AnvilScreenMixin",
+        "BackgroundRendererMixin",
+        "ClientPlayerEntityMixin",
+        "ClientPlayerInteractionManagerMixin",
+        "ClientPlayNetworkHandlerMixin",
+        "EnchantmentScreenMixin",
+        "EnderDragonEntityRendererMixin",
+        "InGameHudMixin",
+        "VillagerEntityRendererMixin",
+        "glint.ArmorFeatureRendererMixin",
+        "glint.BufferBuilderStorageMixin",
+        "glint.ElytraFeatureRendererMixin",
+        "glint.ItemRendererMixin",
+        "map.HeldItemRendererMixin",
+        "map.ItemFrameEntityRendererMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
 }

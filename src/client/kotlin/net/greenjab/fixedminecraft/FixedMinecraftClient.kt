@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.greenjab.fixedminecraft.models.VALModelLayers
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.minecraft.client.item.ClampedModelPredicateProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -40,5 +41,7 @@ object FixedMinecraftClient : ClientModInitializer {
         )
 
         HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair);
+
+        VALModelLayers.onRegisterLayers()
     }
 }
