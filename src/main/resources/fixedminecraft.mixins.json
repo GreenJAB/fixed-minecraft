@@ -127,6 +127,7 @@
         "transport.WorldMixin",
         "util.MinecraftServerMixin",
         "villager.GolemLastSeenSensorMixin",
+        "villager.MerchantScreenHandlerMixin",
         "villager.TradeOfferMixin",
         "villager.TradeOffersEnchantBookMixin",
         "villager.TradeOffersEnchantedToolMixin",

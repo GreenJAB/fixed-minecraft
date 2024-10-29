@@ -80,7 +80,6 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
 
             vehicle.onLanding();
             if (!((PlayerEntity) Objects.requireNonNull(((EnderPearlEntity) (Object) this).getOwner())).getAbilities().creativeMode) {
-                System.out.println("damage");
                 vehicle.damage(this.getDamageSources().fall(), 5.0F);
             }
             ref.set(true);

@@ -15,7 +15,6 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "dropShoulderEntities", at = @At("HEAD"), cancellable = true)
     private void newCheck(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        System.out.println(PE.hurtTime);
         if (!PE.getWorld().isClient && (PE.hurtTime > 0 || PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isFallFlying() || PE.inPowderSnow)) {
             //this.dropShoulderEntities();
         } else {
