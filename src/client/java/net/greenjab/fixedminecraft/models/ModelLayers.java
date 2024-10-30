@@ -6,7 +6,7 @@ import net.minecraft.client.model.Dilation;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
-public class VALModelLayers {
+public class ModelLayers {
     public static final EntityModelLayer VILLAGER_INNER_ARMOR = registerInnerArmor("villager");
     public static final EntityModelLayer VILLAGER_OUTER_ARMOR = registerOuterArmor("villager");
 

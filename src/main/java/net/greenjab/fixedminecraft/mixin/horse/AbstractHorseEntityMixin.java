@@ -5,20 +5,23 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.entity.passive.PassiveEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.math.Box;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,10 +30,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Mixin(AbstractHorseEntity.class)
@@ -43,6 +48,9 @@ public class AbstractHorseEntityMixin {
 
     @Shadow
     protected SimpleInventory items;
+
+    @Unique
+    private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 
     static {
         rageChance.put(ItemRegistry.INSTANCE.getNETHERITE_HORSE_ARMOR(), 1F);
@@ -136,5 +144,82 @@ public class AbstractHorseEntityMixin {
             }
         }
         AHE.calculateDimensions();
+    }
+
+    @Inject(method = "hasArmorSlot", at = @At("HEAD"), cancellable = true)
+    private void muleArmor(CallbackInfoReturnable<Boolean> cir) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        if (AHE instanceof MuleEntity) {
+            cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "isHorseArmor", at = @At("HEAD"), cancellable = true)
+    private void muleArmor2(ItemStack item, CallbackInfoReturnable<Boolean> cir) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        if (AHE instanceof MuleEntity) {
+            cir.setReturnValue(item.getItem() instanceof HorseArmorItem);
+        }
+    }
+
+
+    @Inject(method = "updateSaddle", at = @At(value = "TAIL"))
+    private void armorIsFeet3(CallbackInfo ci){
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        if (AHE instanceof MuleEntity) {
+            if (!AHE.getWorld().isClient) {
+                setArmorTypeFromStack(this.items.getStack(1));
+                AHE.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
+            }
+        }
+    }
+
+    @Inject(method = "onInventoryChanged", at = @At(value = "HEAD"))
+    private void armorIsFeet3(Inventory sender, CallbackInfo ci){
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        if (AHE instanceof MuleEntity) {
+            ItemStack itemStack = getArmorType();
+            //AHE.onInventoryChanged(sender);
+            boolean bl = AHE.isSaddled();
+            if (!AHE.getWorld().isClient) {
+                AHE.setHorseFlag(4, !this.items.getStack(0).isEmpty());
+            }
+            if (AHE.age > 20 && !bl && AHE.isSaddled()) {
+                AHE.playSound(AHE.getSaddleSound(), 0.5F, 1.0F);
+            }
+            ItemStack itemStack2 = this.getArmorType();
+            if (AHE.age > 20 && AHE.isHorseArmor(itemStack2) && itemStack != itemStack2) {
+                AHE.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
+            }
+        }
+    }
+
+    @Unique
+    public ItemStack getArmorType() {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        return AHE.getEquippedStack(EquipmentSlot.FEET);
+    }
+
+    @Unique
+    private void equipArmor(ItemStack stack) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        AHE.equipStack(EquipmentSlot.FEET, stack);
+        AHE.setEquipmentDropChance(EquipmentSlot.FEET, 0.0F);
+    }
+
+    @Unique
+    private void setArmorTypeFromStack(ItemStack stack) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
+        equipArmor(stack);
+        if (!AHE.getWorld().isClient) {
+            AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(HORSE_ARMOR_BONUS_ID);
+            if (AHE.isHorseArmor(stack)) {
+                int i = ((HorseArmorItem)stack.getItem()).getBonus();
+                if (i != 0) {
+                    AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", (double)i, EntityAttributeModifier.Operation.ADDITION));
+                }
+            }
+        }
+
     }
 }

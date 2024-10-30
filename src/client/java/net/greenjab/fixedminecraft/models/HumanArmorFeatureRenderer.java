@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.models;
 
 import com.google.common.collect.Maps;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
@@ -9,7 +8,6 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.Sprite;
@@ -29,13 +27,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class HumanoidArmorLayer<T extends LivingEntity, M extends EntityModel<T>, A extends EntityModel<T> & IHumanoidModel> extends FeatureRenderer<T, M> {
+public class HumanArmorFeatureRenderer<T extends LivingEntity, M extends EntityModel<T>, A extends EntityModel<T>> extends FeatureRenderer<T, M> {
     private static final Map<String, Identifier> ARMOR_TEXTURE_CACHE = Maps.newHashMap();
     private final A innerModel;
     private final A outerModel;
     private final SpriteAtlasTexture armorTrimAtlas;
 
-    public HumanoidArmorLayer(FeatureRendererContext<T, M> renderer, A innerModel, A outerModel, BakedModelManager modelManager) {
+    public HumanArmorFeatureRenderer(FeatureRendererContext<T, M> renderer, A innerModel, A outerModel, BakedModelManager modelManager) {
         super(renderer);
         this.innerModel = innerModel;
         this.outerModel = outerModel;
@@ -56,9 +54,8 @@ public class HumanoidArmorLayer<T extends LivingEntity, M extends EntityModel<T>
         Item var9 = itemStack.getItem();
         if (var9 instanceof ArmorItem armorItem) {
             if (armorItem.getSlotType() == armorSlot) {
-                model.propertiesCopyFrom(this.getContextModel());
+                ((VillagerArmorModel<?>)model).propertiesCopyFrom(this.getContextModel());
                 this.setPartVisibility(model, armorSlot);
-                model.afterSetPartVisibility(this.getContextModel());
                 boolean bl = this.usesInnerModel(armorSlot);
                 if (armorItem instanceof DyeableArmorItem dyeableArmorItem) {
                     int i = dyeableArmorItem.getColor(itemStack);
@@ -83,21 +80,21 @@ public class HumanoidArmorLayer<T extends LivingEntity, M extends EntityModel<T>
     }
 
     protected void setPartVisibility(A model, EquipmentSlot slotType) {
-        model.setAllVisible(false);
+        ((VillagerArmorModel<?>)model).setAllVisible(false);
         switch (slotType) {
             case HEAD -> {
-                model.setHeadVisible(true);
-                model.setHatVisible(true);
+                ((VillagerArmorModel<?>)model).setHeadVisible(true);
+                ((VillagerArmorModel<?>)model).setHatVisible(true);
             }
             case CHEST -> {
-                model.setBodyVisible(true);
-                model.setArmsVisible(true);
+                ((VillagerArmorModel<?>)model).setBodyVisible(true);
+                ((VillagerArmorModel<?>)model).setArmsVisible(true);
             }
             case LEGS -> {
-                model.setBodyVisible(true);
-                model.setLegsVisible(true);
+                ((VillagerArmorModel<?>)model).setBodyVisible(true);
+                ((VillagerArmorModel<?>)model).setLegsVisible(true);
             }
-            case FEET -> model.setLegsVisible(true);
+            case FEET -> ((VillagerArmorModel<?>)model).setLegsVisible(true);
         }
     }
 

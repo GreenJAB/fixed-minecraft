@@ -12,6 +12,7 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.MerchantScreenHandler;
@@ -30,6 +31,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
 
@@ -38,11 +40,6 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
     @Shadow
     protected abstract void playYesSound();
-
-    /*private static final Identifier EMPTY_HELMET_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_helmet");
-        private static final Identifier EMPTY_CHESTPLATE_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_chestplate");
-        private static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_leggings");
-        private static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = new Identifier("item/empty_armor_slot_boots");*/
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES;
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
 
@@ -69,10 +66,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                 for (int i = 5-VE.getVillagerData().getLevel(); i < 4; i++) {
                     final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[i];
                     int finalI = i;
-                    //this.addSlot(new Slot(merchant.getCustomer().getInventory(), 39 - finalI, 252, 8 + finalI * 18) {
-                    this.addSlot(new Slot(inventory, 3 - i, 250, 8 + i * 18) {
+                    this.addSlot(new Slot(inventory, 3 - i, 252, 8 + i * 18) {
 
-                    //this.addSlot(new Slot(VE.getInventory(), 7 - finalI, 252, 8 + finalI * 18) {
                     public void setStack(ItemStack stack, ItemStack previousStack) {
                             merchant.getCustomer().onEquipStack(equipmentSlot, stack, previousStack);
                             super.setStack(stack, previousStack);
@@ -173,5 +168,57 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         }
 
         return items;
+    }
+
+    @Inject(method = "quickMove", at = @At("HEAD"), cancellable = true)
+    private void quickMove(PlayerEntity player, int slot, CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot2 = (Slot)this.slots.get(slot);
+        if (slot2 != null && slot2.hasStack()) {
+            ItemStack itemStack2 = slot2.getStack();
+            itemStack = itemStack2.copy();
+            if (slot <3 || slot > 38) {
+                if (this.insertItem(itemStack2, 3, 39, true)) {
+                    if (slot == 2) {
+                        slot2.onQuickTransfer(itemStack2, itemStack);
+                        this.playYesSound();
+                    }
+                } else {
+                    cir.setReturnValue(ItemStack.EMPTY);
+                }
+            } else {
+                if (itemStack2.getItem() instanceof ArmorItem) {
+                    if (this.slots.size()>38) {
+                        if (!this.insertItem(itemStack2, 39, this.slots.size(), false)) {
+                            cir.setReturnValue(ItemStack.EMPTY);
+                        }
+                    }
+                }
+                if (!this.insertItem(itemStack2, 0, 2, false)) {
+                    cir.setReturnValue( ItemStack.EMPTY);
+                }
+                if (slot >= 3 && slot < 30) {
+                    if (!this.insertItem(itemStack2, 30, 39, false)) {
+                        cir.setReturnValue( ItemStack.EMPTY);
+                    }
+                } else if (slot >= 30 && slot < 39 && !this.insertItem(itemStack2, 3, 30, false)) {
+                    cir.setReturnValue( ItemStack.EMPTY);
+                }
+            }
+
+            if (itemStack2.isEmpty()) {
+                slot2.setStack(ItemStack.EMPTY);
+            } else {
+                slot2.markDirty();
+            }
+
+            if (itemStack2.getCount() == itemStack.getCount()) {
+                cir.setReturnValue( ItemStack.EMPTY);
+            }
+
+            slot2.onTakeItem(player, itemStack2);
+        }
+
+        cir.setReturnValue( itemStack);
     }
 }

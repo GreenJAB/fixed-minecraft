@@ -121,6 +121,9 @@ public class FixedMinecraftEnchantmentHelper {
             if (enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING) {
                 return false;
             }
+            if (enchantment == Enchantments.THORNS) {
+                return true;
+            }
             return enchantment.target.isAcceptableItem(Items.DIAMOND_BOOTS);
         }
         return enchantment.target.isAcceptableItem(item);

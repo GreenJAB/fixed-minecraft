@@ -2,29 +2,22 @@ package net.greenjab.fixedminecraft.models;
 
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.model.Dilation;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.model.CompositeEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.render.entity.model.ModelWithHat;
-import net.minecraft.client.render.entity.model.ModelWithHead;
 import net.minecraft.client.render.entity.model.VillagerResemblingModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
-public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements IHumanoidModel, ModelWithHat {
+public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
     protected final ModelPart root;
     protected final ModelPart head;
     protected final ModelPart body;
@@ -64,42 +57,33 @@ public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntit
         return TexturedModelData.of(modelData, 64, 32);
     }
 
-    @Override
     public void setHeadVisible(boolean visible) {
         this.head.visible = visible;
     }
 
-    @Override
     public void setHatVisible(boolean visible) {
     }
 
-    @Override
     public void setBodyVisible(boolean visible) {
         this.body.visible = visible;
     }
 
-    @Override
     public void setArmsVisible(boolean visible) {
         this.arms.visible = visible;
     }
 
-    @Override
     public void setLegsVisible(boolean visible) {
         this.leftLeg.visible = this.rightLeg.visible = visible;
     }
 
-
-    @SuppressWarnings("unused")
-    public void copyPropertiesTo(VillagerArmorModel<T> model) {
-        super.copyStateTo(model);
-        model.head.copyTransform(this.head);
-        model.body.copyTransform(this.body);
-        model.arms.copyTransform(this.arms);
-        model.rightLeg.copyTransform(this.rightLeg);
-        model.leftLeg.copyTransform(this.leftLeg);
+    public void setAllVisible(boolean visible) {
+        this.setHeadVisible(visible);
+        this.setHatVisible(visible);
+        this.setBodyVisible(visible);
+        this.setArmsVisible(visible);
+        this.setLegsVisible(visible);
     }
 
-    @Override
     public <E extends Entity> void propertiesCopyFrom(EntityModel<E> model) {
         this.handSwingProgress = model.handSwingProgress;
         this.riding = model.riding;
