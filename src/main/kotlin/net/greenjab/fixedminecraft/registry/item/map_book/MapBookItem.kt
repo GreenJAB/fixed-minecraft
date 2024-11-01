@@ -1,19 +1,24 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.greenjab.fixedminecraft.network.SyncHandler
+import net.minecraft.block.Blocks
+import net.minecraft.block.LecternBlock
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
-import net.minecraft.item.map.MapIcon
 import net.minecraft.item.map.MapState
-import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.tag.BlockTags
+import net.minecraft.screen.LecternScreenHandler
+import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
@@ -35,15 +40,29 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     private val ADDITIONS_KEY = "fixedminecraft:additions"
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
-        val blockState = context.world.getBlockState(context.blockPos)
+        val world = context.world
+        val blockPos = context.blockPos
+        val blockState = world.getBlockState(blockPos)
         if (blockState.isIn(BlockTags.BANNERS)) {
-            if (!context.world.isClient) {
-                val mapState = getNearestMap(context.stack, context.world, context.blockPos.toCenterPos())?.mapState
-                if (mapState != null && !mapState.addBanner(context.world, context.blockPos)) {
+            if (!world.isClient) {
+                val mapState = getNearestMap(context.stack, world, blockPos.toCenterPos())?.mapState
+                if (mapState != null && !mapState.addBanner(world, blockPos)) {
                     return ActionResult.FAIL
                 }
             }
-            return ActionResult.success(context.world.isClient)
+            return ActionResult.success(world.isClient)
+        } else if (blockState.isOf(Blocks.LECTERN)) {
+            println("lectern")
+            var b = LecternBlock.putBookIfAbsent(
+                context.player,
+                world,
+                blockPos,
+                blockState,
+                context.stack
+            )
+            println(b)
+            return if (b
+            ) ActionResult.success(world.isClient) else ActionResult.PASS
         } else {
             return super.useOnBlock(context)
         }
@@ -329,5 +348,9 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         for (id in additions) {
             state.addMapID(id)
         }
+    }
+
+    override fun isEnchantable(stack: ItemStack?): Boolean {
+        return true;
     }
 }

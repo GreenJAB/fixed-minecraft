@@ -1,6 +1,9 @@
 package net.greenjab.fixedminecraft.enchanting;
 
 import com.google.common.collect.Lists;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.enchantment.Enchantment;
@@ -125,6 +128,11 @@ public class FixedMinecraftEnchantmentHelper {
                 return true;
             }
             return enchantment.target.isAcceptableItem(Items.DIAMOND_BOOTS);
+        }
+        if (item instanceof MapBookItem) {
+            if (enchantment == Enchantments.VANISHING_CURSE) {
+                return true;
+            }
         }
         return enchantment.target.isAcceptableItem(item);
     }

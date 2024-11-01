@@ -12,6 +12,7 @@
         "EnchantmentScreenMixin",
         "EnderDragonEntityRendererMixin",
         "InGameHudMixin",
+        "MerchantScreenMixin",
         "VillagerEntityRendererMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BufferBuilderStorageMixin",
@@ -22,8 +23,5 @@
     ],
     "injectors": {
         "defaultRequire": 1
-    },
-    "client": [
-        "MerchantScreenMixin"
-    ]
+    }
 }

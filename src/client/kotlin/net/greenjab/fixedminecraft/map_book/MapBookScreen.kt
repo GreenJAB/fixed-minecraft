@@ -23,6 +23,7 @@ import net.minecraft.screen.ScreenTexts
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.RotationAxis
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import org.joml.Matrix4f
 import java.util.Objects
@@ -99,6 +100,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             }
         }
         renderIcons(context);
+        renderPosition(context, mouseX, mouseY);
     }
     fun hasMapBook(player: PlayerEntity, id: Int): Boolean {
         if (player.offHandStack.isOf(ItemRegistry.MAP_BOOK)) {
@@ -116,6 +118,42 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             }
         }
         return false
+    }
+
+    private fun renderPosition(context: DrawContext, mouseX: Int, mouseY: Int) {
+
+        var pos = Vec3d(mouseX.toDouble(), mouseY.toDouble(), 0.0);
+        pos = pos.multiply((1/scale).toDouble())
+        pos = pos.subtract(width / 2.0, height / 2.0, 0.0)
+        pos = pos.subtract(this.x/scale, this.y/scale, 0.0)
+
+
+        val textRenderer = MinecraftClient.getInstance().textRenderer
+        val text = ""+pos.getX().toInt() + ", " + pos.getY().toInt()
+        val o = textRenderer.getWidth(text).toFloat()
+        val var10000 = 25.0f / o
+        Objects.requireNonNull(textRenderer)
+        val p = MathHelper.clamp(var10000, 0.0f, 6.0f / 9.0f)
+        context.matrices.push()
+
+        context.matrices.translate(width / 2.0, height -60.0, 20.0)
+
+        context.matrices.translate(-o / 2f, 8.0f, 0.1f)
+
+        textRenderer.draw(
+            text,
+            0.0f,
+            0.0f,
+            -1,
+            false,
+            context.matrices.peek().getPositionMatrix(),
+            context.vertexConsumers,
+            TextLayerType.NORMAL,
+            Int.MIN_VALUE,
+            LightmapTextureManager.MAX_LIGHT_COORDINATE
+        )
+        context.matrices.pop()
+
     }
 
     private fun renderPlayerIcon(context: DrawContext, player: PlayerEntity) {
