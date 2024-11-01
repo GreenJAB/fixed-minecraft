@@ -110,6 +110,7 @@
         "raid.IllusionerEntityMixin",
         "raid.LivingEntityMixin",
         "raid.RaidMixin",
+        "redstone.AbstractBlockMixin",
         "redstone.BulbBlockMixin",
         "redstone.DaylightDetectorBlockMixin",
         "structure.IglooGeneratorMixin",
