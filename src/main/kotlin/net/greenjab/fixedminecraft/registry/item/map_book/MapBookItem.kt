@@ -51,18 +51,6 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                 }
             }
             return ActionResult.success(world.isClient)
-        } else if (blockState.isOf(Blocks.LECTERN)) {
-            println("lectern")
-            var b = LecternBlock.putBookIfAbsent(
-                context.player,
-                world,
-                blockPos,
-                blockState,
-                context.stack
-            )
-            println(b)
-            return if (b
-            ) ActionResult.success(world.isClient) else ActionResult.PASS
         } else {
             return super.useOnBlock(context)
         }
@@ -75,8 +63,19 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
             val otherHand = if (hand == Hand.MAIN_HAND) player.offHandStack else player.mainHandStack
 
             var openMap = true
-
-            if (otherHand.isOf(Items.PAPER)) {
+            if (getNearestMap(item, world as ServerWorld, player.pos)==null) {
+                if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, true)) {
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
+                    openMap = false
+                }
+            } else if (otherHand.isOf(Items.PAPER)) {
                 if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, true)) {
                     if (!player.abilities.creativeMode) {
                         otherHand.decrement(1)

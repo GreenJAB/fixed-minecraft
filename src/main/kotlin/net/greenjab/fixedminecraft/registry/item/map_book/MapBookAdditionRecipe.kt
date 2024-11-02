@@ -21,7 +21,10 @@ class MapBookAdditionRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : S
     override fun craft(recipeInputInventory: RecipeInputInventory, dynamicRegistryManager: DynamicRegistryManager): ItemStack {
         val result = getResult(recipeInputInventory) ?: return ItemStack.EMPTY
 
-        val item = result.mapBook.copy()
+        var item = ItemRegistry.MAP_BOOK.defaultStack
+        if (result.mapBook.isOf(ItemRegistry.MAP_BOOK)) {
+            item =  result.mapBook.copy()
+        }
         (item.item as MapBookItem).setAdditions(item, result.maps)
 
         return item
@@ -33,7 +36,7 @@ class MapBookAdditionRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : S
 
         for (itemStack in recipeInputInventory.heldStacks) {
             if (itemStack.isEmpty) continue
-            if (itemStack.isOf(ItemRegistry.MAP_BOOK)) {
+            if (itemStack.isOf(ItemRegistry.MAP_BOOK) || itemStack.isOf(Items.BOOK)) {
                 if (mapBook != null) {
                     return null
                 }

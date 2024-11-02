@@ -71,6 +71,7 @@
         "horse.ServerPlayNetworkHandlerMixin",
         "inventory.BundleItemMixin",
         "inventory.CraftingInventoryAccessor",
+        "inventory.FletchingTableBlockMixin",
         "inventory.PlayerEntityMixin",
         "inventory.PlayerScreenHandlerMixin",
         "map_book.MapIconMixin",
