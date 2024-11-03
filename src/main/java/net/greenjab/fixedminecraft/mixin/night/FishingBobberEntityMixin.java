@@ -30,24 +30,30 @@ public class FishingBobberEntityMixin {
     @Final
     private int luckOfTheSeaLevel;
 
+    @ModifyArg(method = "use", at = @At(value = "INVOKE", target ="Lnet/minecraft/loot/context/LootContextParameterSet$Builder;luck(F)Lnet/minecraft/loot/context/LootContextParameterSet$Builder;"))
+    private float oneItem(float luck) {
+        return 0;
+    }
+
     @ModifyArg(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V"), index = 4)
     private ItemStack fishingItem(ItemStack loot, @Local(ordinal = 0) ItemStack rod) {
         FishingBobberEntity FBE = (FishingBobberEntity)(Object)this;
         PlayerEntity playerEntity = FBE.getPlayerOwner();
         ItemStack bait = getBait(playerEntity);
         int luck = this.luckOfTheSeaLevel;
-        if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
-            luck += 3*(playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
+
+        World world = FBE.getWorld();
+        if (world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) {
+            if (world.isNight() && world.getMoonPhase()==0) luck+=2;
+            if (world.isRaining())luck+=2;
+        }
 
         int baitpower = 0;
         if (bait.isOf(Items.SPIDER_EYE))baitpower=1;
         if (bait.isOf(Items.FERMENTED_SPIDER_EYE))baitpower=2;
 
-        World world = FBE.getWorld();
-        if (world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) {
-            if (world.isNight() && world.getMoonPhase()==0) luck+=2;
-            if (world.isRaining())baitpower++;
-        }
+        if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
+            baitpower += (playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
 
 
         int chanceGood = Math.min(luck * baitpower + 3 * baitpower,100);
@@ -69,7 +75,7 @@ public class FishingBobberEntityMixin {
             default: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/fish"));
         }
 
-        LootContextParameterSet lootContextParameterSet = (new LootContextParameterSet.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck((float)this.luckOfTheSeaLevel + playerEntity.getLuck()).build(LootContextTypes.FISHING);
+        LootContextParameterSet lootContextParameterSet = (new LootContextParameterSet.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
         ObjectArrayList<ItemStack> loots = lootTable.generateLoot(lootContextParameterSet);
         loot = loots.get(0);

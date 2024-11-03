@@ -115,8 +115,10 @@
         "redstone.BulbBlockMixin",
         "redstone.DaylightDetectorBlockMixin",
         "structure.IglooGeneratorMixin",
+        "structure.JungleTempleGeneratorMixin",
         "structure.OceanMonumentGeneratorBaseMixin",
         "structure.OceanMonumentGeneratorCoreRoomMixin",
+        "structure.StrongholdGeneratorMixin",
         "transport.AbstractMinecartEntityMixin",
         "transport.AreaEffectCloudEntityMixin",
         "transport.FireworkRocketItemMixin",
@@ -141,7 +143,8 @@
         "villager.WanderingTraderManagerMixin",
         "wolves.AttackWithOwnerGoalMixin",
         "wolves.FollowOwnerGoalMixin",
-        "wolves.GoatHornItemMixin"
+        "wolves.GoatHornItemMixin",
+        "zzz.LootPoolMixin"
     ],
     "injectors": {
         "defaultRequire": 1

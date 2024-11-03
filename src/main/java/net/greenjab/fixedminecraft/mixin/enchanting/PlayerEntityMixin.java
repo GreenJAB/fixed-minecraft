@@ -7,8 +7,8 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,5 +52,14 @@ public class PlayerEntityMixin {
         PlayerEntity PE = (PlayerEntity) (Object)this;
         int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
         return original + ((((LivingEntity)entity).getGroup() == EntityGroup.AQUATIC || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+    }
+
+    @ModifyExpressionValue(method = "getLuck", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
+    private double useLuckEffect(double original){
+        PlayerEntity PE = (PlayerEntity) (Object)this;
+        if (PE.hasStatusEffect(StatusEffects.LUCK)) {
+            return (PE.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
+        }
+        return 0;
     }
 }
