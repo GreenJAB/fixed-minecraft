@@ -130,6 +130,7 @@
         "transport.PotionEntityMixin",
         "transport.TridentItemMixin",
         "transport.WorldMixin",
+        "transport.ZombieSiegeManagerMixin",
         "util.MinecraftServerMixin",
         "villager.ArmorItemMixin",
         "villager.GolemLastSeenSensorMixin",

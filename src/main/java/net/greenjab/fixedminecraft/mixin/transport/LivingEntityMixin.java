@@ -6,15 +6,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -71,5 +75,16 @@ public abstract class LivingEntityMixin extends Entity {
     private boolean cancelElytraInLiquid(LivingEntity instance, StatusEffect effect) {
         return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
                  CustomData.getData(instance, "airTime") > 15);
+    }
+
+    @ModifyConstant(method = "getAttackDistanceScalingFactor",constant = @Constant(doubleValue = 0.8))
+    private double moreSneaky(double constant){
+        return 0.3;
+    }
+    @ModifyConstant(method = "getAttackDistanceScalingFactor",constant = @Constant(doubleValue = 1.0))
+    private double zombieHorseSneaky(double constant){
+        Entity vehicle = this.getVehicle();
+        if (vehicle instanceof ZombieHorseEntity) return 0.5;
+        return 1.0;
     }
 }
