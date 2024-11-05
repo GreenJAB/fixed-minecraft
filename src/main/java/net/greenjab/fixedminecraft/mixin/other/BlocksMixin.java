@@ -1,10 +1,12 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.other;
 
 import net.greenjab.fixedminecraft.registry.block.BlueIceBlock;
+import net.greenjab.fixedminecraft.registry.block.NewAmethystBlock;
 import net.greenjab.fixedminecraft.registry.block.NewDaylightDetectorBlock;
 import net.greenjab.fixedminecraft.registry.block.NewIceBlock;
 import net.greenjab.fixedminecraft.registry.block.PackedIceBlock;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.AmethystBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 
@@ -39,10 +41,15 @@ public class BlocksMixin {
         return new BlueIceBlock(settings.ticksRandomly());
     }
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=amethyst_block"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/AmethystBlock;", ordinal = 0 ))
+    private static AmethystBlock powerAmethystBlock(AbstractBlock.Settings settings) {
+        return new NewAmethystBlock(settings);
+    }
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=daylight_detector"},ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/DaylightDetectorBlock;", ordinal = 0 ))
     private static DaylightDetectorBlock compOutputDaylightDetector(AbstractBlock.Settings settings) {
         return new NewDaylightDetectorBlock(settings);
     }
-
 }

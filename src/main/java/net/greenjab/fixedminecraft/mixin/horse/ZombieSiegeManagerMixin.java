@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityData;

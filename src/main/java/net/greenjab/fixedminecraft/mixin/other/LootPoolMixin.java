@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.zzz;
+package net.greenjab.fixedminecraft.mixin.other;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;

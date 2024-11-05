@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin;
+package net.greenjab.fixedminecraft.mixin.other;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.block.Block;

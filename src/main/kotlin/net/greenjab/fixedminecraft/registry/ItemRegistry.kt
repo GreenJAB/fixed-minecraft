@@ -43,6 +43,9 @@ object ItemRegistry {
     val WAXED_WEATHERED_COPPER_RAIL = blockItem(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL)
     val WAXED_OXIDIZED_COPPER_RAIL = blockItem(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL)
 
+    val BLINDNESS = Potion("blindness", StatusEffectInstance(StatusEffects.BLINDNESS, 800))
+    val LEVITATION = Potion("levitation", StatusEffectInstance(StatusEffects.LEVITATION, 1200))
+
     fun register() {
         ITEM.register("dragon_firework_rocket", DRAGON_FIREWORK_ROCKET)
         ITEM.register("map_book", MAP_BOOK)
@@ -65,7 +68,7 @@ object ItemRegistry {
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
-        POTION.register("blindness", Potion("blindness", StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
-
+        POTION.register("blindness", BLINDNESS);
+        POTION.register("levitation", LEVITATION);
     }
 }

@@ -76,15 +76,4 @@ public abstract class LivingEntityMixin extends Entity {
         return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
                  CustomData.getData(instance, "airTime") > 15);
     }
-
-    @ModifyConstant(method = "getAttackDistanceScalingFactor",constant = @Constant(doubleValue = 0.8))
-    private double moreSneaky(double constant){
-        return 0.3;
-    }
-    @ModifyConstant(method = "getAttackDistanceScalingFactor",constant = @Constant(doubleValue = 1.0))
-    private double zombieHorseSneaky(double constant){
-        Entity vehicle = this.getVehicle();
-        if (vehicle instanceof ZombieHorseEntity) return 0.5;
-        return 1.0;
-    }
 }
