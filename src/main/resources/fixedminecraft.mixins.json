@@ -74,6 +74,7 @@
         "inventory.FletchingTableBlockMixin",
         "inventory.PlayerEntityMixin",
         "inventory.PlayerScreenHandlerMixin",
+        "map_book.MapBannerMarkerMixin",
         "map_book.MapIconMixin",
         "map_book.MapStateAccessor",
         "map_book.MapStateMixin",

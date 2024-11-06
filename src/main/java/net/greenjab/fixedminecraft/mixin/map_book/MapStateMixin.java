@@ -24,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Mixin(MapState.class)
 public class MapStateMixin {
@@ -34,7 +35,7 @@ public class MapStateMixin {
 
     @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;addIcon(Lnet/minecraft/item/map/MapIcon$Type;Lnet/minecraft/world/WorldAccess;Ljava/lang/String;DDDLnet/minecraft/text/Text;)V", ordinal = 2))
     private void addDecoToBanners(PlayerEntity player, ItemStack stack, CallbackInfo ci, @Local(ordinal = 1) NbtCompound nbt){
-        if (this.banners.size() == 0) {
+        if (this.banners.isEmpty()) {
             BlockPos bp = new BlockPos((int)nbt.getDouble("x"), -32768, (int)nbt.getDouble("z"));
             Text t = Text.of("¶" + nbt.getByte("type"));
             MapBannerMarker mapBannerMarker = new MapBannerMarker(bp, DyeColor.BLACK, t);
@@ -42,27 +43,10 @@ public class MapStateMixin {
         }
     }
 
-    /*@Redirect(method = "addIcon", at = @At(value = "INVOKE",
-                                           target = "Lnet/minecraft/item/map/MapIcon;<init>(Lnet/minecraft/item/map/MapIcon$Type;BBBLnet/minecraft/text/Text;)V"
-    ))
-    private void replaceBannerWithDeco(MapIcon instance, MapIcon.Type type, byte x, byte z, byte rotation, Text text) {
-        if (text.getLiteralString() != null) {
-            if (text.getLiteralString().charAt(0) == '¶') {
-                String[] s = text.getLiteralString().split("¶");
-                byte b = (byte) Integer.parseInt(s[1]);
-
-                type = MapIcon.Type.byId(b);
-                text = Text.empty();
-
-            }
-        }
-        new MapIcon(type, x, z, rotation, text);
-    }*/
-
     @ModifyVariable(method = "addIcon", at = @At("STORE"), ordinal = 0)
-    private MapIcon injected(MapIcon m, @Local MapIcon.Type type, @Local(ordinal = 0) byte x, @Local(ordinal = 1) byte z, @Local(ordinal = 2) byte rotation, @Local Text text) {
+    private MapIcon injected(MapIcon m, @Local(argsOnly = true) MapIcon.Type type, @Local(ordinal = 0) byte x, @Local(ordinal = 1) byte z, @Local(ordinal = 2) byte rotation, @Local Text text) {
         if (text != null) {
-            if (text.getLiteralString().charAt(0) == '¶') {
+            if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '¶') {
                 String[] s = text.getLiteralString().split("¶");
                 byte b = (byte) Integer.parseInt(s[1]);
 
@@ -150,7 +134,12 @@ public class MapStateMixin {
         if (instance.getPos().getY() == -32768) {
             return true;
         }
+        if (instance.getPos().getY() <= -1000) {
+            return false;
+        }
         return instance.equals(o);
     }
+
+
 
 }

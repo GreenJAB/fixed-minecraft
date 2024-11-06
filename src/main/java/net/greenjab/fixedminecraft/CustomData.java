@@ -1,12 +1,16 @@
 package net.greenjab.fixedminecraft;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.scoreboard.ScoreboardDisplaySlot;
 import net.minecraft.scoreboard.number.NumberFormat;
 import net.minecraft.text.Text;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
 
 public class CustomData {
+    public static RegistryKey<Biome> biomeSearch = BiomeKeys.FOREST;
     public static void setData(LivingEntity entity, String name, int data) {
         if (entity.getWorld().getScoreboard().getNullableObjective(name) == null) {
             entity.getWorld().getScoreboard().addObjective(

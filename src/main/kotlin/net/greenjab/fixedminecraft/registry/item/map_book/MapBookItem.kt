@@ -1,13 +1,9 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory
 import net.greenjab.fixedminecraft.network.SyncHandler
-import net.minecraft.block.Blocks
-import net.minecraft.block.LecternBlock
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
@@ -15,10 +11,7 @@ import net.minecraft.item.Items
 import net.minecraft.item.NetworkSyncedItem
 import net.minecraft.item.map.MapState
 import net.minecraft.nbt.NbtElement
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.registry.tag.BlockTags
-import net.minecraft.screen.LecternScreenHandler
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
@@ -135,6 +128,10 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                 })?.update()
                 SyncHandler.onOpenMapBook(player, item)
             }
+            if (!openMap) {
+                return TypedActionResult.consume(item)
+            }
+
         }
         return super.use(world, user, hand)
     }

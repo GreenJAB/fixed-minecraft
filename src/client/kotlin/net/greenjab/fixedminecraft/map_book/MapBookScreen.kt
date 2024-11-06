@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.map_book
 
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.greenjab.fixedminecraft.FixedMinecraft.SERVER
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
@@ -19,7 +21,9 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.map.MapIcon
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtElement
+import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket
 import net.minecraft.screen.ScreenTexts
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.RotationAxis
@@ -28,6 +32,8 @@ import net.minecraft.world.World
 import org.joml.Matrix4f
 import java.util.Objects
 import kotlin.math.abs
+import kotlin.reflect.jvm.internal.impl.builtins.StandardNames.FqNames.target
+
 
 class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     var x = 0.0
@@ -57,6 +63,20 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         return false
     }
 
+    override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
+        if (button == 2) {
+            if (client?.player?.abilities?.creativeMode == true) {
+                var pos = Vec3d(mouseX.toDouble(), mouseY.toDouble(), 0.0);
+                pos = pos.multiply((1/scale).toDouble())
+                pos = pos.subtract(width / 2.0, height / 2.0, 0.0)
+                pos = pos.subtract(this.x/scale, this.y/scale, 0.0)
+                MinecraftClient.getInstance().networkHandler?.sendCommand(String.format(
+                    "tp %.6f %.6f %.6f",
+                    pos.getX(), client?.player?.y, pos.getY()))
+            }
+        }
+        return super.mouseClicked(mouseX, mouseY, button)
+    }
 
     override fun mouseDragged(mouseX: Double, mouseY: Double, button: Int, deltaX: Double, deltaY: Double): Boolean {
         x += deltaX
