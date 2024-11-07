@@ -22,5 +22,5 @@ public class BackgroundRendererMixin {
     }
 
     @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 4.0f))
-    private static float moreSkyFog(float constant) { return 64f;}
+    private static float moreSkyFog(float constant, @Local(ordinal = 0, argsOnly = true) float viewDistance) { return Math.min(64f, viewDistance/2);}
 }

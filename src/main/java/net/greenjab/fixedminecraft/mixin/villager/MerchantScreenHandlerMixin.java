@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.block.Block;
+import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -15,6 +16,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
@@ -80,8 +82,14 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
                         public boolean canInsert(ItemStack stack) {
                             if (stack != null) {
-                                return equipmentSlot == MobEntity.getPreferredEquipmentSlot(stack) &&
-                                       stack.getItem() instanceof DyeableArmorItem;
+                                EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
+                                boolean other = merchant.getCustomer().getAbilities().creativeMode;
+                                if (slot == EquipmentSlot.HEAD && !other) {
+                                    other = stack.getItem() == Items.CARVED_PUMPKIN ||
+                                    stack.getItem() == Items.DRAGON_HEAD ||
+                                    stack.getItem() == Items.PLAYER_HEAD;                                    ;
+                                }
+                                return equipmentSlot == slot && (stack.getItem() instanceof DyeableArmorItem || other);
                             }
                             return false;
                         }
@@ -89,8 +97,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                         public boolean canTakeItems(PlayerEntity playerEntity) {
                             ItemStack itemStack = this.getStack();
                             if (itemStack == null) return false;
-                            return !itemStack.isEmpty() && !playerEntity.isCreative() &&
-                                   EnchantmentHelper.hasBindingCurse(itemStack) ? false : super.canTakeItems(playerEntity);
+                            return (itemStack.isEmpty() || playerEntity.isCreative() ||
+                                    !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
                         }
 
                         public Pair<Identifier, Identifier> getBackgroundSprite() {
@@ -111,7 +119,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
 
 
-    @Override
+    /*@Override
     public ItemStack quickMove(PlayerEntity player, int slot) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot2 = (Slot)this.slots.get(slot);
@@ -151,7 +159,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         }
 
         return itemStack;
-    }
+    }*/
 
     @Override
     public boolean canUse(PlayerEntity player) {

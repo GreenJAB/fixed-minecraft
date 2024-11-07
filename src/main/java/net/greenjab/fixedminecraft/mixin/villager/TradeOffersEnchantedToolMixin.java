@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(TradeOffers.SellEnchantedToolFactory.class)
 public class TradeOffersEnchantedToolMixin {
     @Inject(method = "create", at = @At(value = "RETURN"), cancellable = true)
-    private void lessBooks(Entity entity, Random random, CallbackInfoReturnable<TradeOffer> cir,
+    private void needDiamond(Entity entity, Random random, CallbackInfoReturnable<TradeOffer> cir,
                            @Local(ordinal = 0) ItemStack itemStack,
                            @Local(ordinal = 1) ItemStack itemStack2) {
         if (itemStack.getItem().getName().toString().toLowerCase().contains("diamond")) {
