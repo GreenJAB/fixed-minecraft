@@ -1,0 +1,39 @@
+{
+    "parent": "minecraft:story/enter_the_end",
+    "criteria": {
+        "killed_dragon": {
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "type": "minecraft:ender_dragon"
+                        }
+                    }
+                ]
+            },
+            "trigger": "minecraft:player_killed_entity"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.end.kill_dragon.description"
+        },
+        "icon": {
+            "item": "minecraft:dragon_head"
+        },
+        "title": {
+            "translate": "advancements.end.kill_dragon.title"
+        }
+    },
+    "requirements": [
+        [
+            "killed_dragon"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,29 @@
+{
+    "parent": "minecraft:husbandry/feed_snifflet",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_crossbow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.plant_any_sniffer_seed.description"
+        },
+        "hidden": true,
+        "icon": {
+            "item": "minecraft:pitcher_pod"
+        },
+        "title": {
+            "translate": "advancements.husbandry.plant_any_sniffer_seed.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,29 @@
+{
+    "parent": "minecraft:nether/brew_potion",
+    "criteria": {
+        "cured_zombie": {
+            "trigger": "minecraft:cured_zombie_villager"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.cure_zombie_villager.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "item": "minecraft:golden_apple"
+        },
+        "title": {
+            "translate": "advancements.story.cure_zombie_villager.title"
+        }
+    },
+    "requirements": [
+        [
+            "cured_zombie"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,37 @@
+{
+    "parent": "minecraft:husbandry/plant_seed",
+    "criteria": {
+        "bread": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:bread"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.bread.description"
+        },
+        "icon": {
+            "item": "minecraft:bread"
+        },
+        "title": {
+            "translate": "advancements.husbandry.bread.title"
+        }
+    },
+    "requirements": [
+        [
+            "bread"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

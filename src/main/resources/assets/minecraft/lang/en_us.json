@@ -63,5 +63,6 @@
     "item.minecraft.tipped_arrow.effect.blindness": "Arrow of Blindness",
     "item.minecraft.lingering_potion.effect.blindness": "Lingering Potion of Blindness",
     "item.minecraft.potion.effect.blindness": "Potion of Blindness",
-    "item.minecraft.splash_potion.effect.blindness": "Splash Potion of Blindness"
+    "item.minecraft.splash_potion.effect.blindness": "Splash Potion of Blindness",
+    "advancements.husbandry.allay_deliver_cake_to_note_block.description": "Have an Allay drop a Cookie at a Note Block"
 }

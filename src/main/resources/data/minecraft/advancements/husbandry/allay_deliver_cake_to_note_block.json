@@ -1,0 +1,51 @@
+{
+    "parent": "minecraft:adventure/play_jukebox_in_meadows",
+    "criteria": {
+        "allay_deliver_cake_to_note_block": {
+            "conditions": {
+                "location": [
+                    {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                            "block": {
+                                "blocks": [
+                                    "minecraft:note_block"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "condition": "minecraft:match_tool",
+                        "predicate": {
+                            "items": [
+                                "minecraft:cookie"
+                            ]
+                        }
+                    }
+                ]
+            },
+            "trigger": "minecraft:allay_drop_item_on_block"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.allay_deliver_cake_to_note_block.description"
+        },
+        "hidden": true,
+        "icon": {
+            "item": "minecraft:note_block"
+        },
+        "title": {
+            "translate": "advancements.husbandry.allay_deliver_cake_to_note_block.title"
+        }
+    },
+    "requirements": [
+        [
+            "allay_deliver_cake_to_note_block"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

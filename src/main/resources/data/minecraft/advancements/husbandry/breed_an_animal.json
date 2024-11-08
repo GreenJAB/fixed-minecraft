@@ -1,0 +1,28 @@
+{
+    "parent": "minecraft:husbandry/tame_an_animal",
+    "criteria": {
+        "bred": {
+            "trigger": "minecraft:bred_animals"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.breed_an_animal.description"
+        },
+        "icon": {
+            "item": "minecraft:wheat"
+        },
+        "title": {
+            "translate": "advancements.husbandry.breed_an_animal.title"
+        }
+    },
+    "requirements": [
+        [
+            "bred"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

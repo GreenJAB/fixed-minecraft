@@ -1,0 +1,28 @@
+{
+    "parent": "minecraft:end/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_crossbow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.leash_all_frog_variants.description"
+        },
+        "icon": {
+            "item": "minecraft:lead"
+        },
+        "title": {
+            "translate": "advancements.husbandry.leash_all_frog_variants.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

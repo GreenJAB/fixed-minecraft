@@ -1,0 +1,30 @@
+{
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_crossbow"
+        }
+    },
+    "display": {
+        "announce_to_chat": false,
+        "background": "minecraft:textures/gui/advancements/backgrounds/adventure.png",
+        "description": {
+            "translate": "advancements.adventure.root.description"
+        },
+        "icon": {
+            "item": "minecraft:map"
+        },
+        "show_toast": false,
+        "title": {
+            "translate": "advancements.adventure.root.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

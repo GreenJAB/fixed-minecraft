@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:nether/create_beacon",
+    "criteria": {
+        "beacon": {
+            "conditions": {
+                "level": 3
+            },
+            "trigger": "minecraft:construct_beacon"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.nether.create_full_beacon.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "item": "minecraft:beacon"
+        },
+        "title": {
+            "translate": "advancements.nether.create_full_beacon.title"
+        }
+    },
+    "requirements": [
+        [
+            "beacon"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

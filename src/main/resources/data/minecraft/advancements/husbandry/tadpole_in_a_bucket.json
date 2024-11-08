@@ -1,0 +1,35 @@
+{
+    "parent": "minecraft:husbandry/kill_axolotl_target",
+    "criteria": {
+        "tadpole_bucket": {
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:tadpole_bucket"
+                    ]
+                }
+            },
+            "trigger": "minecraft:filled_bucket"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.tadpole_in_a_bucket.description"
+        },
+        "icon": {
+            "item": "minecraft:tadpole_bucket"
+        },
+        "title": {
+            "translate": "advancements.husbandry.tadpole_in_a_bucket.title"
+        }
+    },
+    "requirements": [
+        [
+            "tadpole_bucket"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

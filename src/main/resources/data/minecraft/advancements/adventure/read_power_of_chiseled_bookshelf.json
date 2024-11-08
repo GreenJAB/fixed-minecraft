@@ -1,0 +1,28 @@
+{
+    "parent": "minecraft:adventure/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_crossbow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.read_power_from_chiseled_bookshelf.description"
+        },
+        "icon": {
+            "item": "minecraft:chiseled_bookshelf"
+        },
+        "title": {
+            "translate": "advancements.adventure.read_power_from_chiseled_bookshelf.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

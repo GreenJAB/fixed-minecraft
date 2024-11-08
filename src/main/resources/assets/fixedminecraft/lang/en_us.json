@@ -22,5 +22,11 @@
     "block.fixedminecraft.waxed_oxidized_copper_rail": "Waxed Oxidized Copper Rail",
     "itemgroup.fixed": "Fixed",
     "effect.fixedminecraft.reach": "Reach",
-    "effect.fixedminecraft.insomnia": "Insomnia"
+    "effect.fixedminecraft.insomnia": "Insomnia",
+    "advancements.husbandry.bread.title": "Bakers Delight",
+    "advancements.husbandry.bread.description": "Turn Wheat into Bread",
+    "advancements.husbandry.cake.title": "The Lie",
+    "advancements.husbandry.cake.description": "Bake a Cake",
+    "advancements.story.diamond_tools.title": "The Latest and Greatest",
+    "advancements.story.diamond_tools.description": "Craft a Diamond Pickaxe"
 }

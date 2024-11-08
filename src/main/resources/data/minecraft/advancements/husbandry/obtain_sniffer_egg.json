@@ -1,0 +1,29 @@
+{
+    "parent": "minecraft:husbandry/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_crossbow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.obtain_sniffer_egg.description"
+        },
+        "hidden": true,
+        "icon": {
+            "item": "minecraft:sniffer_egg"
+        },
+        "title": {
+            "translate": "advancements.husbandry.obtain_sniffer_egg.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

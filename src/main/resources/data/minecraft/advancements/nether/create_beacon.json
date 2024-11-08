@@ -1,0 +1,33 @@
+{
+    "parent": "minecraft:nether/summon_wither",
+    "criteria": {
+        "beacon": {
+            "conditions": {
+                "level": {
+                    "min": 1
+                }
+            },
+            "trigger": "minecraft:construct_beacon"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.nether.create_beacon.description"
+        },
+        "icon": {
+            "item": "minecraft:beacon"
+        },
+        "title": {
+            "translate": "advancements.nether.create_beacon.title"
+        }
+    },
+    "requirements": [
+        [
+            "beacon"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}
