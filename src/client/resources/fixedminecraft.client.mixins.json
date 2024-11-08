@@ -19,7 +19,10 @@
     "glint.ElytraFeatureRendererMixin",
     "glint.ItemRendererMixin",
     "map.HeldItemRendererMixin",
-    "map.ItemFrameEntityRendererMixin"
+    "map.ItemFrameEntityRendererMixin",
+    "AdvancementsScreenMixin",
+    "AdvancementTabMixin",
+    "DrawContextMixin"
   ],
   "injectors": {
     "defaultRequire": 1

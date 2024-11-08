@@ -1,6 +1,5 @@
 accessWidener v2 named
 
-accessible method net/minecraft/entity/passive/AbstractHorseEntity setHorseFlag (IZ)V
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
 
 ## Classes
