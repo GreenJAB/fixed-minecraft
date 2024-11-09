@@ -1,18 +1,33 @@
 {
-    "parent": "minecraft:husbandry/feed_snifflet",
+    "parent": "minecraft:husbandry/obtain_sniffer_egg",
     "criteria": {
-        "arbalistic": {
+        "pitcher_pod": {
             "conditions": {
-                "unique_entity_types": 50
+                "location": [
+                    {
+                        "block": "minecraft:pitcher_crop",
+                        "condition": "minecraft:block_state_property"
+                    }
+                ]
             },
-            "trigger": "minecraft:killed_by_crossbow"
+            "trigger": "minecraft:placed_block"
+        },
+        "torchflower": {
+            "conditions": {
+                "location": [
+                    {
+                        "block": "minecraft:torchflower_crop",
+                        "condition": "minecraft:block_state_property"
+                    }
+                ]
+            },
+            "trigger": "minecraft:placed_block"
         }
     },
     "display": {
         "description": {
             "translate": "advancements.husbandry.plant_any_sniffer_seed.description"
         },
-        "hidden": true,
         "icon": {
             "item": "minecraft:pitcher_pod"
         },
@@ -22,8 +37,14 @@
     },
     "requirements": [
         [
-            "arbalistic"
+            "torchflower"
+        ],
+        [
+            "pitcher_pod"
         ]
     ],
+    "rewards": {
+        "experience": 100
+    },
     "sends_telemetry_event": true
 }

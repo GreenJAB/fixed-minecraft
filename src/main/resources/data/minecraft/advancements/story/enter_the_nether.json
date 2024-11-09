@@ -12,6 +12,7 @@
         "description": {
             "translate": "advancements.story.enter_the_nether.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:flint_and_steel",
             "nbt": "{Damage:0}"

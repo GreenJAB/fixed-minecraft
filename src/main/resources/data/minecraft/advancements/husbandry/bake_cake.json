@@ -16,13 +16,13 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.husbandry.cake.description"
+            "translate": "advancements.husbandry.bake_cake.description"
         },
         "icon": {
             "item": "minecraft:cake"
         },
         "title": {
-            "translate": "advancements.husbandry.cake.title"
+            "translate": "advancements.husbandry.bake_cake.title"
         }
     },
     "requirements": [

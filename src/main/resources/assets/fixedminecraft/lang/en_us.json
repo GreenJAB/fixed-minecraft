@@ -23,10 +23,14 @@
     "itemgroup.fixed": "Fixed",
     "effect.fixedminecraft.reach": "Reach",
     "effect.fixedminecraft.insomnia": "Insomnia",
-    "advancements.husbandry.bread.title": "Bakers Delight",
-    "advancements.husbandry.bread.description": "Turn Wheat into Bread",
-    "advancements.husbandry.cake.title": "The Lie",
-    "advancements.husbandry.cake.description": "Bake a Cake",
+    "advancements.husbandry.bake_bread.title": "Bakers Delight",
+    "advancements.husbandry.bake_bread.description": "Turn Wheat into Bread",
+    "advancements.husbandry.bake_cake.title": "The Lie",
+    "advancements.husbandry.bake_cake.description": "Bake a Cake",
+    "advancements.husbandry.eat_enchanted_golden_apple.title": "The Power of Notch",
+    "advancements.husbandry.eat_enchanted_golden_apple.description": "Eat an Enchanted Golden Apple",
     "advancements.story.diamond_tools.title": "The Latest and Greatest",
-    "advancements.story.diamond_tools.description": "Craft a Diamond Pickaxe"
+    "advancements.story.diamond_tools.description": "Craft a Diamond Pickaxe",
+    "advancements.end.dragon_firework.title": "To Infinity, And Beyond",
+    "advancements.end.dragon_firework.description": "Use a Dragon Firework Rocket while flying with an Elytra"
 }

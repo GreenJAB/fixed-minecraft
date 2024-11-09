@@ -12,7 +12,7 @@
         "description": {
             "translate": "advancements.nether.create_full_beacon.description"
         },
-        "frame": "goal",
+        "frame": "challenge",
         "icon": {
             "item": "minecraft:beacon"
         },

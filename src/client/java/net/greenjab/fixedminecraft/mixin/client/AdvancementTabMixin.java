@@ -1,13 +1,25 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.client.gui.screen.advancement.AdvancementTab;
+import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
+import net.minecraft.util.math.MathHelper;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Redirect;
+
+import java.util.Map;
 
 
 @Mixin(AdvancementTab.class)
 public class AdvancementTabMixin {
+    @Shadow
+    @Final
+    private Map<AdvancementEntry, AdvancementWidget> widgets;
     int newPAGE_WIDTH = 423;
     int newPAGE_HEIGHT = 218;
     @ModifyConstant(method = "render", constant = @Constant(intValue = 117))
@@ -34,5 +46,10 @@ public class AdvancementTabMixin {
     private int largerScreenX5(int constant) {return 30;}
     @ModifyConstant(method = "render", constant = @Constant(intValue = 8))
     private int largerScreenY5(int constant) {return 16;}
+
+    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D"))
+    private double largerPan(double value, double min, double max) {
+        return MathHelper.clamp(value, min-50, max+50);
+    }
 
 }

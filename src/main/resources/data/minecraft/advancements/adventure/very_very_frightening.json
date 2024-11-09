@@ -1,7 +1,7 @@
 {
     "parent": "minecraft:adventure/throw_trident",
     "criteria": {
-        "struck_villager": {
+        "struck_creeper": {
             "conditions": {
                 "victims": [
                     [
@@ -9,7 +9,7 @@
                             "condition": "minecraft:entity_properties",
                             "entity": "this",
                             "predicate": {
-                                "type": "minecraft:villager"
+                                "type": "minecraft:creeper"
                             }
                         }
                     ]
@@ -32,7 +32,7 @@
     },
     "requirements": [
         [
-            "struck_villager"
+            "struck_creeper"
         ]
     ],
     "rewards": {

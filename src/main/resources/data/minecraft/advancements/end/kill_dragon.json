@@ -20,6 +20,7 @@
         "description": {
             "translate": "advancements.end.kill_dragon.description"
         },
+        "frame": "challenge",
         "icon": {
             "item": "minecraft:dragon_head"
         },

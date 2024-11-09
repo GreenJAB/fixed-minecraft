@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:husbandry/bake_cake",
+    "criteria": {
+        "enchanted_golden_apple": {
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:enchanted_golden_apple"
+                    ]
+                }
+            },
+            "trigger": "minecraft:consume_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.eat_enchanted_golden_apple.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "item": "minecraft:enchanted_golden_apple"
+        },
+        "title": {
+            "translate": "advancements.husbandry.eat_enchanted_golden_apple.title"
+        }
+    },
+    "requirements": [
+        [
+            "enchanted_golden_apple"
+        ]
+    ],
+    "rewards": {
+        "experience": 100
+    },
+    "sends_telemetry_event": true
+}

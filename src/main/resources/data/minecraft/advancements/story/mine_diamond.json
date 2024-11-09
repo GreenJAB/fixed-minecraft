@@ -18,6 +18,7 @@
         "description": {
             "translate": "advancements.story.mine_diamond.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:diamond"
         },

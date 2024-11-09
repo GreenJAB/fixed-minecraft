@@ -14,6 +14,7 @@
         "description": {
             "translate": "advancements.nether.create_beacon.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:beacon"
         },

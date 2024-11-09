@@ -22,6 +22,7 @@
     "map.ItemFrameEntityRendererMixin",
     "AdvancementsScreenMixin",
     "AdvancementTabMixin",
+    "AdvancementWidgetMixin",
     "DrawContextMixin"
   ],
   "injectors": {

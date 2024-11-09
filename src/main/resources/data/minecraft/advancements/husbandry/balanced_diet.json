@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/the_lie",
+    "parent": "minecraft:husbandry/eat_enchanted_golden_apple",
     "criteria": {
         "apple": {
             "conditions": {

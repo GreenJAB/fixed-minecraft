@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/obtain_sniffer_egg",
+    "parent": "minecraft:end/root",
     "criteria": {
         "arbalistic": {
             "conditions": {

@@ -12,6 +12,7 @@
         "description": {
             "translate": "advancements.story.enter_the_end.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:end_stone"
         },

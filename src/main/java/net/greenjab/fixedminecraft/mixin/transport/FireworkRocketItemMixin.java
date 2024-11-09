@@ -1,9 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
@@ -29,10 +32,8 @@ public class FireworkRocketItemMixin {
         }
     }
 
-    /*@Inject(method = "useOnBlock", at = @At("HEAD"),cancellable = true)
-    private void injected(ItemUsageContext context, CallbackInfoReturnable cir) {
-        ItemStack itemStack = context.getStack();
-        FixedMinecraft.LOGGER.info((itemStack.toString())+"");
-        //FireworkRocketItem.setFlight(itemStack, (byte) 1);
-    }*/
+    @Inject(method = "useOnBlock", at = @At("HEAD"),cancellable = true)
+    private void injected(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
+        if (context.getStack().getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) cir.setReturnValue(ActionResult.PASS);
+    }
 }
