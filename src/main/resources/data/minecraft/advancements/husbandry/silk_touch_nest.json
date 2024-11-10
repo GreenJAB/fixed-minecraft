@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/plant_seed",
+    "parent": "minecraft:husbandry/wax_off",
     "criteria": {
         "silk_touch_nest": {
             "conditions": {
@@ -36,7 +36,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 300
     },
     "sends_telemetry_event": true
 }

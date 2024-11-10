@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/bred_all_animals",
+    "parent": "minecraft:husbandry/breed_an_animal",
     "criteria": {
         "minecraft:all_black": {
             "conditions": {
@@ -237,7 +237,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 1000
     },
     "sends_telemetry_event": true
 }

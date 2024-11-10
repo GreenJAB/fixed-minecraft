@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.advancement.criterion.Criteria;
@@ -37,6 +38,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -385,5 +387,11 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             this.onContentChanged(this.inventory);
             world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
         };
+    }
+
+    @ModifyExpressionValue(method = "onButtonClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;getCount()I"))
+    private int newLapisCost(int value, @Local(ordinal = 1) int i) {
+        int newLapisCost = (int)Math.ceil(this.enchantmentPower[i-1]/10.0);
+        return value+i-newLapisCost;
     }
 }

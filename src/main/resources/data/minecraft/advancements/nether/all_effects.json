@@ -55,7 +55,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 10000
     },
     "sends_telemetry_event": true
 }

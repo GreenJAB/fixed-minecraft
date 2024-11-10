@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/silk_touch_nest",
+    "parent": "minecraft:husbandry/plant_seed",
     "criteria": {
         "safely_harvest_honey": {
             "conditions": {
@@ -43,7 +43,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 150
     },
     "sends_telemetry_event": true
 }

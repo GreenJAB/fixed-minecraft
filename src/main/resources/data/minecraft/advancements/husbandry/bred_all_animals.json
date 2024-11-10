@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/breed_an_animal",
+    "parent": "minecraft:husbandry/complete_catalogue",
     "criteria": {
         "minecraft:axolotl": {
             "conditions": {
@@ -452,7 +452,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 3000
     },
     "sends_telemetry_event": true
 }
