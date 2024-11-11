@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/play_jukebox_in_meadows",
+    "parent": "minecraft:husbandry/bake_cake",
     "criteria": {
         "allay_deliver_cake_to_note_block": {
             "conditions": {
@@ -45,7 +45,7 @@
         ]
     ],
     "rewards": {
-        "experience": 200
+        "experience": 300
     },
     "sends_telemetry_event": true
 }

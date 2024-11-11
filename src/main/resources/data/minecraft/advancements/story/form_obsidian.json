@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/diamond_tools",
+    "parent": "minecraft:story/lava_bucket",
     "criteria": {
         "obsidian": {
             "conditions": {
@@ -31,7 +31,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 200
     },
     "sends_telemetry_event": true
 }

@@ -1,12 +1,12 @@
 {
-    "parent": "minecraft:husbandry/bake_bread",
+    "parent": "minecraft:husbandry/ride_a_boat_with_a_goat",
     "criteria": {
-        "cake": {
+        "rail": {
             "conditions": {
                 "items": [
                     {
                         "items": [
-                            "minecraft:cake"
+                            "minecraft:rail"
                         ]
                     }
                 ]
@@ -16,18 +16,18 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.husbandry.bake_cake.description"
+            "translate": "advancements.adventure.on_a_rail.description"
         },
         "icon": {
-            "item": "minecraft:cake"
+            "item": "minecraft:rail"
         },
         "title": {
-            "translate": "advancements.husbandry.bake_cake.title"
+            "translate": "advancements.adventure.on_a_rail.title"
         }
     },
     "requirements": [
         [
-            "cake"
+            "rail"
         ]
     ],
     "rewards": {

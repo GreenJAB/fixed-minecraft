@@ -84,7 +84,7 @@
             "translate": "advancements.husbandry.plant_seed.description"
         },
         "icon": {
-            "item": "minecraft:wheat"
+            "item": "minecraft:wheat_seeds"
         },
         "title": {
             "translate": "advancements.husbandry.plant_seed.title"

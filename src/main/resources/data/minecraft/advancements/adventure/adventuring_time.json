@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/kill_mob_near_sculk_catalyst",
+    "parent": "minecraft:story/when_pigs_fly",
     "criteria": {
         "minecraft:badlands": {
             "conditions": {

@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/enter_the_nether",
+    "parent": "minecraft:story/diamond_tools",
     "criteria": {
         "lava_bucket": {
             "conditions": {
@@ -31,7 +31,7 @@
         ]
     ],
     "rewards": {
-        "experience": 100
+        "experience": 150
     },
     "sends_telemetry_event": true
 }

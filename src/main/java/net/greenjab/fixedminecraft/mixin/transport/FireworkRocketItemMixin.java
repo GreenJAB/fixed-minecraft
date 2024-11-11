@@ -1,11 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -25,10 +27,14 @@ public class FireworkRocketItemMixin {
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
             if (!itemStack.hasNbt()) {
                 cir.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
-            } else {
+            }
+            else {
                 if (!(itemStack.getNbt().toString().contains("Explosions")))
                     cir.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
             }
+        }
+        if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) {
+            Criteria.CONSUME_ITEM.trigger(SPE, itemStack);
         }
     }
 

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.GameruleRegistry;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -51,15 +52,20 @@ import java.util.Set;
 public class LivingEntityMixin  {
 
     //Need to "use" totem
-    /*@Redirect(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
-    private boolean requireUsingTotem(ItemStack itemStack2, Item item, DamageSource source) {
-        return (itemStack2.isOf(item) && ((LivingEntity)(Object)this).isUsingItem());
-    }*/
-
     @Redirect(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
+    private boolean requireUsingTotem(ItemStack itemStack2, Item item, DamageSource source) {
+        LivingEntity LE = (LivingEntity)(Object)this;
+        if (LE.getWorld().getGameRules().getBoolean(GameruleRegistry.INSTANCE.getRequire_Totem_Use())) {
+            return ((itemStack2.isOf(item)||itemStack2.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM())) && ((LivingEntity) (Object) this).isUsingItem());
+        } else {
+            return itemStack2.isOf(item)||itemStack2.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM());
+        }
+    }
+
+    /*@Redirect(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
     private boolean echoTotem(ItemStack instance, Item item) {
         return instance.isOf(item)||instance.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM());
-    }
+    }*/
 
     @Inject(method = "tryUseTotem", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V", shift = At.Shift.AFTER))
     private void brokenTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir, @Local Hand hand) {

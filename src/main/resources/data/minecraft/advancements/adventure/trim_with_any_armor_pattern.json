@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/mine_diamond",
+    "parent": "minecraft:story/repair_gear",
     "criteria": {
         "armor_trimmed_minecraft:coast_armor_trim_smithing_template_smithing_trim": {
             "conditions": {

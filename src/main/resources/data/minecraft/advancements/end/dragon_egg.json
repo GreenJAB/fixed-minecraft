@@ -19,6 +19,7 @@
             "translate": "advancements.end.dragon_egg.description"
         },
         "frame": "goal",
+        "hidden": true,
         "icon": {
             "item": "minecraft:dragon_egg"
         },

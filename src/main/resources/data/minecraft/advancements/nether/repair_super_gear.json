@@ -1,12 +1,12 @@
 {
-    "parent": "minecraft:husbandry/bake_bread",
+    "parent": "minecraft:husbandry/obtain_netherite_hoe",
     "criteria": {
-        "cake": {
+        "netherite_anvil": {
             "conditions": {
                 "items": [
                     {
                         "items": [
-                            "minecraft:cake"
+                            "fixedminecraft:netherite_anvil"
                         ]
                     }
                 ]
@@ -16,22 +16,23 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.husbandry.bake_cake.description"
+            "translate": "advancements.nether.repair_super_gear.description"
         },
+        "frame": "challenge",
         "icon": {
-            "item": "minecraft:cake"
+            "item": "fixedminecraft:netherite_anvil"
         },
         "title": {
-            "translate": "advancements.husbandry.bake_cake.title"
+            "translate": "advancements.nether.repair_super_gear.title"
         }
     },
     "requirements": [
         [
-            "cake"
+            "netherite_anvil"
         ]
     ],
     "rewards": {
-        "experience": 250
+        "experience": 3000
     },
     "sends_telemetry_event": true
 }

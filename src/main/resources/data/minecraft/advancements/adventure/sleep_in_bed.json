@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/smelt_iron",
+    "parent": "minecraft:story/upgrade_tools",
     "criteria": {
         "slept_in_bed": {
             "trigger": "minecraft:slept_in_bed"

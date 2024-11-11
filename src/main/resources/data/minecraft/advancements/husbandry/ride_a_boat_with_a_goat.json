@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/sleep_in_bed",
+    "parent": "minecraft:adventure/spyglass_at_parrot",
     "criteria": {
         "ride_a_boat_with_a_goat": {
             "conditions": {

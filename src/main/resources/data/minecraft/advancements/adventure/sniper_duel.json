@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/shoot_arrow",
+    "parent": "minecraft:adventure/bullseye",
     "criteria": {
         "killed_skeleton": {
             "conditions": {

@@ -66,5 +66,6 @@
     "item.minecraft.splash_potion.effect.blindness": "Splash Potion of Blindness",
     "advancements.husbandry.allay_deliver_cake_to_note_block.description": "Have an Allay drop a Cookie at a Note Block",
     "advancements.husbandry.plant_any_sniffer_seed.description": "Plant all Sniffer Seeds",
-    "advancements.adventure.very_very_frightening.description": "Strike a Creeper with Lightning"
+    "advancements.adventure.very_very_frightening.description": "Strike a Creeper with Lightning",
+    "advancements.adventure.kill_all_mobs.title": "Genocide!"
 }

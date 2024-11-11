@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:adventure/two_birds_one_arrow",
+    "criteria": {
+        "health": {
+            "conditions": {
+                "effects": {
+                    "minecraft:health_boost": {
+                        "amplifier": 4
+                    }
+                }
+            },
+            "trigger": "minecraft:effects_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.sleep_with_insomnia_5.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "item": "minecraft:phantom_membrane"
+        },
+        "title": {
+            "translate": "advancements.adventure.sleep_with_insomnia_5.title"
+        }
+    },
+    "requirements": [
+        [
+            "health"
+        ]
+    ],
+    "rewards": {
+        "experience": 2000
+    },
+    "sends_telemetry_event": true
+}

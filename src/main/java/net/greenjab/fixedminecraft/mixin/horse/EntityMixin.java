@@ -1,11 +1,16 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -29,5 +34,20 @@ public abstract class EntityMixin {
         }
 
         return original;
+    }
+
+    @Inject(method = "onLanding", at = @At("HEAD"))
+    private void whenPigsFly(CallbackInfo ci) {
+        Entity E = (Entity)(Object)this;
+        if (E instanceof PigEntity PE) {
+            if (E.fallDistance > 9.5) {
+                if (PE.hasPassengers()) {
+                    if (PE.getControllingPassenger() instanceof ServerPlayerEntity SPE) {
+                        PE.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 1, 0, true, false));
+                        Criteria.FALL_FROM_HEIGHT.trigger(SPE, PE.getPos().add(0, 0, 0));
+                    }
+                }
+            }
+        }
     }
 }

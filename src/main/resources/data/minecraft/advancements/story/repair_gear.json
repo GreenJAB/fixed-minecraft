@@ -1,12 +1,12 @@
 {
-    "parent": "minecraft:husbandry/bake_bread",
+    "parent": "minecraft:story/iron_tools",
     "criteria": {
-        "cake": {
+        "anvil": {
             "conditions": {
                 "items": [
                     {
                         "items": [
-                            "minecraft:cake"
+                            "minecraft:anvil"
                         ]
                     }
                 ]
@@ -16,22 +16,22 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.husbandry.bake_cake.description"
+            "translate": "advancements.story.repair_gear.description"
         },
         "icon": {
-            "item": "minecraft:cake"
+            "item": "minecraft:anvil"
         },
         "title": {
-            "translate": "advancements.husbandry.bake_cake.title"
+            "translate": "advancements.story.repair_gear.title"
         }
     },
     "requirements": [
         [
-            "cake"
+            "anvil"
         ]
     ],
     "rewards": {
-        "experience": 250
+        "experience": 100
     },
     "sends_telemetry_event": true
 }

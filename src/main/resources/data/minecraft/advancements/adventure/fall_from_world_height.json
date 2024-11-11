@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/walk_on_powder_snow_with_leather_boots",
+    "parent": "minecraft:adventure/play_jukebox_in_meadows",
     "criteria": {
         "fall_from_world_height": {
             "conditions": {

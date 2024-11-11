@@ -1,0 +1,39 @@
+{
+    "parent": "minecraft:adventure/very_very_frightening",
+    "criteria": {
+        "tnt": {
+            "conditions": {
+                "killing_blow": {
+                    "tags": [
+                        {
+                            "id": "minecraft:is_explosion",
+                            "expected": true
+                        }
+                    ]
+                }
+            },
+            "trigger": "minecraft:player_killed_entity"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.kill_with_tnt.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "item": "minecraft:tnt"
+        },
+        "title": {
+            "translate": "advancements.adventure.kill_with_tnt.title"
+        }
+    },
+    "requirements": [
+        [
+            "tnt"
+        ]
+    ],
+    "rewards": {
+        "experience": 500
+    },
+    "sends_telemetry_event": true
+}

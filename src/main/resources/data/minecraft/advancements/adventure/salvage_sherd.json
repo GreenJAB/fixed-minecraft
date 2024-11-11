@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:adventure/sleep_in_bed",
+    "parent": "minecraft:husbandry/make_a_sign_glow",
     "criteria": {
         "desert_pyramid": {
             "conditions": {
@@ -74,7 +74,7 @@
         ]
     ],
     "rewards": {
-        "experience": 75
+        "experience": 100
     },
     "sends_telemetry_event": true
 }

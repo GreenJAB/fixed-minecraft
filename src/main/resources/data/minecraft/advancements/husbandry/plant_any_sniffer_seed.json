@@ -28,6 +28,7 @@
         "description": {
             "translate": "advancements.husbandry.plant_any_sniffer_seed.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:pitcher_pod"
         },

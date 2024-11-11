@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:husbandry/bake_cake",
+    "parent": "minecraft:husbandry/allay_deliver_cake_to_note_block",
     "criteria": {
         "enchanted_golden_apple": {
             "conditions": {

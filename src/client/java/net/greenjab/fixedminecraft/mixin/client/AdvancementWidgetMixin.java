@@ -212,7 +212,7 @@ public class AdvancementWidgetMixin {
         if (!this.description.isEmpty()) {
             context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l + 26 - n, this.width, n);
         }
-        if (this.advancement.getAdvancement().rewards().experience()!=0 && advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED) {
+        if (this.advancement.getAdvancement().rewards().experience()!=0 /*&& advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED*/) {
             context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l, this.width, 32+9);
         }
 
@@ -233,11 +233,12 @@ public class AdvancementWidgetMixin {
 
 
         for (int o = 0; o < this.description.size(); o++) {
-            context.drawText(this.client.textRenderer, (OrderedText)this.description.get(o), m + 5, l + 26 - n + 7 + o * 9, -5592406, false);
+            context.drawText(this.client.textRenderer, this.description.get(o), m + 5, l + 26 - n + 7 + o * 9, -5592406, false);
         }
-        if (this.advancement.getAdvancement().rewards().experience()!=0 && advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED) {
+        if (this.advancement.getAdvancement().rewards().experience()!=0 /*&& advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED*/) {
             OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
-            context.drawText(this.client.textRenderer, (OrderedText)reward, m + 5, originY + this.y + 9 + 17 + 0, -5592406, false);
+            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
+            context.drawText(this.client.textRenderer, reward, m + 5, originY + this.y + 9 + 17, colour, false);
         }
 
         context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);

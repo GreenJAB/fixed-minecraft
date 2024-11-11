@@ -34,6 +34,7 @@
         "description": {
             "translate": "advancements.nether.charge_respawn_anchor.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:respawn_anchor"
         },

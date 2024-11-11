@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/mine_diamond",
+    "parent": "minecraft:adventure/walk_on_powder_snow_with_leather_boots",
     "criteria": {
         "play_jukebox_in_meadows": {
             "conditions": {

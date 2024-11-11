@@ -1,18 +1,30 @@
 {
-    "parent": "minecraft:end/root",
+    "parent": "minecraft:adventure/shoot_arrow",
     "criteria": {
-        "arbalistic": {
+        "bullseye": {
             "conditions": {
-                "unique_entity_types": 50
+                "projectile": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "distance": {
+                                "horizontal": {
+                                    "min": 30.0
+                                }
+                            }
+                        }
+                    }
+                ],
+                "signal_strength": 15
             },
-            "trigger": "minecraft:killed_by_crossbow"
+            "trigger": "minecraft:target_hit"
         }
     },
     "display": {
         "description": {
             "translate": "advancements.adventure.bullseye.description"
         },
-        "frame": "challenge",
         "icon": {
             "item": "minecraft:target"
         },
@@ -22,8 +34,11 @@
     },
     "requirements": [
         [
-            "arbalistic"
+            "bullseye"
         ]
     ],
+    "rewards": {
+        "experience": 200
+    },
     "sends_telemetry_event": true
 }

@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/lava_bucket",
+    "parent": "minecraft:story/enter_the_nether",
     "criteria": {
         "used_warped_fungus_on_a_stick": {
             "conditions": {

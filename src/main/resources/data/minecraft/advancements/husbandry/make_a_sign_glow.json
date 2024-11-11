@@ -1,11 +1,28 @@
 {
-    "parent": "minecraft:end/root",
+    "parent": "minecraft:adventure/sleep_in_bed",
     "criteria": {
-        "arbalistic": {
+        "make_a_sign_glow": {
             "conditions": {
-                "unique_entity_types": 50
+                "location": [
+                    {
+                        "condition": "minecraft:location_check",
+                        "predicate": {
+                            "block": {
+                                "tag": "minecraft:all_signs"
+                            }
+                        }
+                    },
+                    {
+                        "condition": "minecraft:match_tool",
+                        "predicate": {
+                            "items": [
+                                "minecraft:glow_ink_sac"
+                            ]
+                        }
+                    }
+                ]
             },
-            "trigger": "minecraft:killed_by_crossbow"
+            "trigger": "minecraft:item_used_on_block"
         }
     },
     "display": {
@@ -21,8 +38,11 @@
     },
     "requirements": [
         [
-            "arbalistic"
+            "make_a_sign_glow"
         ]
     ],
+    "rewards": {
+        "experience": 50
+    },
     "sends_telemetry_event": true
 }

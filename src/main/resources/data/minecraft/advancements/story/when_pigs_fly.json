@@ -1,0 +1,39 @@
+{
+    "parent": "minecraft:adventure/on_a_rail",
+    "criteria": {
+        "pig": {
+            "trigger": "minecraft:fall_from_height",
+            "conditions": {
+                "player": {
+                    "vehicle": {
+                        "type": "minecraft:pig",
+                        "effects": {
+                            "minecraft:nausea": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.when_pigs_fly.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "item": "minecraft:saddle"
+        },
+        "title": {
+            "translate": "advancements.story.when_pigs_fly.title"
+        }
+    },
+    "requirements": [
+        [
+            "pig"
+        ]
+    ],
+    "rewards": {
+        "experience": 300
+    },
+    "sends_telemetry_event": true
+}

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec
+import net.greenjab.fixedminecraft.registry.GameruleRegistry
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.block.TranslucentBlock
@@ -36,9 +37,11 @@ class BlueIceBlock (settings: Settings) : TranslucentBlock(settings) {
 	}
 
 	override fun randomTick(state:BlockState, world:ServerWorld, pos:BlockPos, random:Random) {
-        if (random.nextFloat() < 0.1f) {
-            if (world.getDimension().ultrawarm()) {
-                this.melt(state, world, pos);
+        if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
+            if (random.nextFloat() < 0.1f) {
+                if (world.getDimension().ultrawarm()) {
+                    this.melt(state, world, pos);
+                }
             }
         }
 	}

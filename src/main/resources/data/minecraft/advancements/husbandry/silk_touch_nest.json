@@ -23,6 +23,7 @@
         "description": {
             "translate": "advancements.husbandry.silk_touch_nest.description"
         },
+        "frame": "goal",
         "icon": {
             "item": "minecraft:bee_nest"
         },
