@@ -2,14 +2,14 @@
     "parent": "minecraft:adventure/two_birds_one_arrow",
     "criteria": {
         "health": {
+            "trigger": "minecraft:consume_item",
             "conditions": {
-                "effects": {
-                    "minecraft:health_boost": {
-                        "amplifier": 4
-                    }
+                "item": {
+                    "items": [
+                        "minecraft:red_bed"
+                    ]
                 }
-            },
-            "trigger": "minecraft:effects_changed"
+            }
         }
     },
     "display": {

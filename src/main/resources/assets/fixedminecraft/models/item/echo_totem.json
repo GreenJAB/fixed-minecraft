@@ -8,7 +8,7 @@
             "predicate": {
                 "saving": 1
             },
-            "model": "item/using_totem"
+            "model": "fixedminecraft:item/using_echo_totem"
         }
     ]
 }

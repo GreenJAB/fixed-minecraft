@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -15,6 +16,7 @@ import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -234,6 +236,13 @@ public abstract class EnderDragonFightMixin {
             itemEntity.refreshPositionAndAngles(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
             itemEntity.setVelocity(new Vec3d(0, 0, 0));
             dragon.getWorld().spawnEntity(itemEntity);
+        }
+
+        List<PlayerEntity> players = dragon.getWorld().getPlayers(TargetPredicate.createAttackable(), dragon, dragon.getBoundingBox().expand(100));
+        for (PlayerEntity player : players) {
+            if (player instanceof ServerPlayerEntity SPE) {
+                Criteria.CONSUME_ITEM.trigger(SPE, Items.DRAGON_EGG.getDefaultStack());
+            }
         }
     }
 

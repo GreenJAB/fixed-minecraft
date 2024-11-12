@@ -1,0 +1,11 @@
+{
+    "parent": "fixedminecraft:item/echo_totem",
+    "display": {
+
+        "firstperson_righthand": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, -4, -10 ],
+            "scale": [ 0.35, 0.35, 0.35 ]
+        }
+    }
+}

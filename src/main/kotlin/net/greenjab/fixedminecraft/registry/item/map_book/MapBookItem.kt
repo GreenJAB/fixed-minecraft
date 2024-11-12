@@ -128,10 +128,9 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                 })?.update()
                 SyncHandler.onOpenMapBook(player, item)
             }
-            if (!openMap) {
-                return TypedActionResult.consume(item)
-            }
-
+        }
+        if (user != null) {
+            return TypedActionResult.consume(user.getStackInHand(hand))
         }
         return super.use(world, user, hand)
     }

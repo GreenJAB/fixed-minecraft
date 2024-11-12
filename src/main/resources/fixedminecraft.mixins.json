@@ -121,6 +121,7 @@
     "redstone.BulbBlockMixin",
     "redstone.DaylightDetectorBlockMixin",
     "redstone.SculkSensorBlockMixin",
+    "structure.BlockAgeStructureProcessorMixin",
     "structure.IglooGeneratorMixin",
     "structure.JungleTempleGeneratorMixin",
     "structure.OceanMonumentGeneratorBaseMixin",

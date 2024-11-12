@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -14,6 +16,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.EndermiteEntity;
 import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.registry.tag.TagKey;
@@ -54,7 +57,9 @@ public abstract class LivingEntityMixin {
         int i = this.getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
         this.removeStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA());
         this.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, (i+1)*5*60*20, i, true, true));
-
+        if ((LivingEntity)(Object)this instanceof ServerPlayerEntity SPE && i == 4) {
+            Criteria.CONSUME_ITEM.trigger(SPE, Items.RED_BED.getDefaultStack());
+        }
     }
 
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;emitGameEvent(Lnet/minecraft/world/event/GameEvent;)V"))

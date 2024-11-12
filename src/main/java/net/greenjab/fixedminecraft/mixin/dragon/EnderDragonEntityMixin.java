@@ -219,9 +219,10 @@ public abstract class EnderDragonEntityMixin {
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         if (this.fight.hasPreviouslyKilled()) {
             if (EDE.getCommandTags().contains("omen")) {
-                return Math.min(value*3, 12000);
+                return Math.min(value*4, 12000);
             }
+            return Math.min(value*1.5f, 12000);
         }
-        return value;
+        return Math.min(value*0.75f, 12000);
     }
 }

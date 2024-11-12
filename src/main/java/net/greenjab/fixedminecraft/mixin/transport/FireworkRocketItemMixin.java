@@ -33,8 +33,10 @@ public class FireworkRocketItemMixin {
                     cir.setReturnValue(TypedActionResult.pass(user.getStackInHand(hand)));
             }
         }
-        if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) {
-            Criteria.CONSUME_ITEM.trigger(SPE, itemStack);
+        if (user.isFallFlying()) {
+            if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) {
+                Criteria.CONSUME_ITEM.trigger(SPE, itemStack);
+            }
         }
     }
 

@@ -2,14 +2,14 @@
     "parent": "minecraft:end/elytra",
     "criteria": {
         "dragon_fireworks": {
+            "trigger": "minecraft:consume_item",
             "conditions": {
-                "items": {
+                "item": {
                     "items": [
                         "fixedminecraft:dragon_firework_rocket"
                     ]
                 }
-            },
-            "trigger": "minecraft:consume_item"
+            }
         }
     },
     "display": {

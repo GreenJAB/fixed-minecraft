@@ -10,6 +10,7 @@ import net.greenjab.fixedminecraft.registry.item.TotemItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
+import net.minecraft.item.SaddleItem;
 import net.minecraft.item.StewItem;
 import net.minecraft.item.SuspiciousStewItem;
         import net.minecraft.util.Rarity;
@@ -84,6 +85,13 @@ public class ItemsMixin {
             value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
     private static Item throwableNetherBrick(Item.Settings settings) {
         return new BrickItem((new Item.Settings()).maxCount(16));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=saddle"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SaddleItem;"))
+    private static SaddleItem stackedSaddles(Item.Settings settings) {
+        return new SaddleItem((new Item.Settings()).maxCount(16));
     }
 
 }

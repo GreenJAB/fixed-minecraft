@@ -3,10 +3,15 @@ package net.greenjab.fixedminecraft
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper
+import net.fabricmc.fabric.api.resource.ResourcePackActivationType
+import net.fabricmc.loader.api.FabricLoader
+import net.fabricmc.loader.api.ModContainer
 import net.greenjab.fixedminecraft.models.ModelLayers
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
 
 import net.greenjab.fixedminecraft.registry.BlockRegistry
+import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.render.InGameHudBookPreview
 import net.minecraft.client.item.ClampedModelPredicateProvider
 import net.minecraft.client.item.ModelPredicateProviderRegistry
@@ -48,5 +53,18 @@ object FixedMinecraftClient : ClientModInitializer {
             Items.TOTEM_OF_UNDYING,
             Identifier("saving"),
             ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
+
+        ModelPredicateProviderRegistry.register(
+            ItemRegistry.ECHO_TOTEM,
+            Identifier("saving"),
+            ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
+
+        FabricLoader.getInstance().getModContainer("FixedMinecraft").ifPresent { modContainer: ModContainer? ->
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                Identifier("fixedminecraft", "GreenTweaks2"),
+                modContainer,
+                ResourcePackActivationType.DEFAULT_ENABLED
+            )
+        }
     }
 }

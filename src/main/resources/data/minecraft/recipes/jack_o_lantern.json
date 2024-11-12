@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "category": "blocks",
+    "ingredients": [
+        {
+            "item": "minecraft:torch"
+        },
+        {
+            "item": "minecraft:carved_pumpkin"
+        }
+    ],
+    "result": {
+        "item": "minecraft:jack_o_lantern",
+        "count": 1
+    }
+}

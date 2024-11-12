@@ -10,6 +10,7 @@ import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.EnchantedBookItem;
@@ -353,7 +354,9 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             }
 
             if (isSuper) targetItemStack.getOrCreateSubNbt("Super");
-
+            if (player instanceof ServerPlayerEntity SPE && map.size()>1) {
+                Criteria.CONSUME_ITEM.trigger(SPE, Items.CHISELED_BOOKSHELF.getDefaultStack());
+            }
 
 
             // apply enchanting costs

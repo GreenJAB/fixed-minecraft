@@ -1,7 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -19,26 +20,21 @@ import net.minecraft.screen.ForgingScreenHandler;
 import net.minecraft.screen.Property;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
 import java.util.Map;
-import java.util.function.BiConsumer;
 
 
 @Mixin(AnvilScreenHandler.class)
@@ -268,7 +264,13 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
            // check if item can hold combined enchantment power
            if (!this.player.getAbilities().creativeMode) {
                int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
-               if ((enchantmentPower < 1 || enchantmentCapacity < enchantmentPower)&&enchantmentCapacity!=0) {
+
+               boolean isSuper = firstInputStack.getNbt().contains("Super");
+               if (outputItemStack.isIn(ItemTags.PIGLIN_LOVED)) {
+                   isSuper = false;
+               }
+
+               if ((enchantmentPower < 1 || enchantmentCapacity < enchantmentPower)&&enchantmentCapacity!=0 || isSuper) {
                     this.output.setStack(0, ItemStack.EMPTY);
                    this.sendContentUpdates();
                    ci.cancel();
@@ -296,12 +298,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
 
         int superEnchants = 0;
-        Map<Enchantment, Integer> map = EnchantmentHelper.get(this.output.getStack(0));
-        Iterator iter = map.keySet().iterator();
-        while(iter.hasNext()) {
-            Enchantment enchantment = (Enchantment)iter.next();
+        Map<Enchantment, Integer> map = EnchantmentHelper.get(stack);
+        for (Enchantment enchantment : map.keySet()) {
             int l1 = map.get(enchantment);
-            boolean isGold = this.output.getStack(0).isIn(ItemTags.PIGLIN_LOVED);
+            boolean isGold = stack.isIn(ItemTags.PIGLIN_LOVED);
             if (l1 > enchantment.getMaxLevel() && !isGold) {
                 superEnchants++;
             }
@@ -311,7 +311,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         int cost = 0;
         if (netherite) {
             cost = -this.levelCost.get();
-            int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(this.input.getStack(0));
+            int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(stack);
             if (cost > cap){
                 cost = 5+cost-cap;
             } else {
@@ -322,10 +322,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
         final int finalCost = cost + 5*superEnchants;
 
-
-
-
-        this.input.setStack(0, ItemStack.EMPTY);
         if (this.repairItemUsage > 0) {
             ItemStack itemStack = this.input.getStack(1);
             if (!itemStack.isEmpty() && itemStack.getCount() > this.repairItemUsage) {
@@ -333,6 +329,14 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 this.input.setStack(1, itemStack);
             } else {
                 this.input.setStack(1, ItemStack.EMPTY);
+            }
+            if (player instanceof ServerPlayerEntity SPE) {
+                Criteria.CONSUME_ITEM.trigger(SPE, Items.ANVIL.getDefaultStack());
+                if (netherite) {
+                    if (stack.getNbt().contains("Super")) {
+                        Criteria.CONSUME_ITEM.trigger(SPE, ItemRegistry.INSTANCE.getNETHERITE_ANVIL().getDefaultStack());
+                    }
+                }
             }
         } else {
             this.input.setStack(1, ItemStack.EMPTY);
