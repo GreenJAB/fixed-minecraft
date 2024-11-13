@@ -111,7 +111,7 @@ public class BeaconBlockEntityMixin {
             PlayerEntity playerEntity;
             while(var11.hasNext()) {
                 playerEntity = (PlayerEntity)var11.next();
-                playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
+                playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false, true));
             }
 
 

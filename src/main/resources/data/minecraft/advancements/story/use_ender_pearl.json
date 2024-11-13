@@ -1,12 +1,12 @@
 {
-    "parent": "minecraft:adventure/on_a_rail",
+    "parent": "minecraft:story/when_pigs_fly",
     "criteria": {
-        "pig": {
+        "pearl": {
             "trigger": "minecraft:consume_item",
             "conditions": {
                 "item": {
                     "items": [
-                        "minecraft:saddle"
+                        "minecraft:ender_pearl"
                     ]
                 }
             }
@@ -14,22 +14,23 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.story.when_pigs_fly.description"
+            "translate": "advancements.story.use_ender_pearl.description"
         },
+        "frame": "goal",
         "icon": {
-            "item": "minecraft:saddle"
+            "item": "minecraft:ender_pearl"
         },
         "title": {
-            "translate": "advancements.story.when_pigs_fly.title"
+            "translate": "advancements.story.use_ender_pearl.title"
         }
     },
     "requirements": [
         [
-            "pig"
+            "pearl"
         ]
     ],
     "rewards": {
-        "experience": 300
+        "experience": 500
     },
     "sends_telemetry_event": true
 }

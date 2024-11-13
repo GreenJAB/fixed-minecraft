@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:story/when_pigs_fly",
+    "parent": "minecraft:story/use_ender_pearl",
     "criteria": {
         "minecraft:badlands": {
             "conditions": {

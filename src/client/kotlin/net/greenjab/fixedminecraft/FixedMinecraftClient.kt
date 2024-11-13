@@ -26,13 +26,6 @@ object FixedMinecraftClient : ClientModInitializer {
     override fun onInitializeClient() {
         ClientSyncHandler.init()
 
-        /*ModelPredicateProviderRegistry.register(
-            Items.TOTEM_OF_UNDYING,
-            Identifier("saving"),
-            ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int ->
-                entity != null && entity.isUsingItem && entity.activeItem == stack 1.0f else 0.0f
-            })
-*/
         BlockRenderLayerMap.INSTANCE.putBlocks(
             RenderLayer.getCutout(),
             BlockRegistry.COPPER_RAIL,
@@ -59,12 +52,12 @@ object FixedMinecraftClient : ClientModInitializer {
             Identifier("saving"),
             ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
 
-        FabricLoader.getInstance().getModContainer("FixedMinecraft").ifPresent { modContainer: ModContainer? ->
+        /*FabricLoader.getInstance().getModContainer("FixedMinecraft").ifPresent { modContainer: ModContainer? ->
             ResourceManagerHelper.registerBuiltinResourcePack(
                 Identifier("fixedminecraft", "GreenTweaks2"),
                 modContainer,
                 ResourcePackActivationType.DEFAULT_ENABLED
             )
-        }
+        }*/
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
@@ -43,8 +44,7 @@ public abstract class EntityMixin {
             if (E.fallDistance > 9.5) {
                 if (PE.hasPassengers()) {
                     if (PE.getControllingPassenger() instanceof ServerPlayerEntity SPE) {
-                        PE.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 1, 0, true, false));
-                        Criteria.FALL_FROM_HEIGHT.trigger(SPE, PE.getPos().add(0, 0, 0));
+                        Criteria.CONSUME_ITEM.trigger(SPE, Items.SADDLE.getDefaultStack());
                     }
                 }
             }

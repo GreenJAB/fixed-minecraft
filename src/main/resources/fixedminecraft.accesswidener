@@ -3,6 +3,8 @@ accessWidener v2 named
 accessible method net/minecraft/entity/passive/AbstractHorseEntity setHorseFlag (IZ)V
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
 accessible field net/minecraft/client/gui/screen/advancement/AdvancementWidget progress Lnet/minecraft/advancement/AdvancementProgress;
+accessible field net/minecraft/client/particle/Particle y D
+
 
 ## Classes
 # <access>   class   <className>
