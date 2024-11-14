@@ -1,0 +1,14 @@
+{
+    "parent": "minecraft:item/smaller_util",
+    "textures": {
+        "layer0": "fixedminecraft:item/echo_totem"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "saving": 1
+            },
+            "model": "fixedminecraft:item/using_echo_totem"
+        }
+    ]
+}

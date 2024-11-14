@@ -1,0 +1,448 @@
+{
+    "multipart": [
+        {
+            "when": {
+                "OR": [
+                    {
+                        "north": "none",
+                        "east": "none",
+                        "south": "none",
+                        "west": "none"
+                    },
+                    {
+                        "north": "side|up",
+                        "east": "side|up"
+                    },
+                    {
+                        "east": "side|up",
+                        "south": "side|up"
+                    },
+                    {
+                        "south": "side|up",
+                        "west": "side|up"
+                    },
+                    {
+                        "west": "side|up",
+                        "north": "side|up"
+                    }
+                ]
+            },
+            "apply": {
+                "model": "block/redstone_dust_dot"
+            }
+        },
+        {
+            "when": {
+                "OR": [
+                    {
+                        "north": "side|up"
+                    },
+                    {
+                        "north": "none",
+                        "east": "none",
+                        "south": "side|up",
+                        "west": "none"
+                    }
+                ]
+            },
+            "apply": {
+                "model": "block/redstone_dust_side0"
+            }
+        },
+        {
+            "when": {
+                "OR": [
+                    {
+                        "south": "side|up"
+                    },
+                    {
+                        "north": "side|up",
+                        "east": "none",
+                        "south": "none",
+                        "west": "none"
+                    }
+                ]
+            },
+            "apply": {
+                "model": "block/redstone_dust_side_alt0"
+            }
+        },
+        {
+            "when": {
+                "OR": [
+                    {
+                        "east": "side|up"
+                    },
+                    {
+                        "north": "none",
+                        "east": "none",
+                        "south": "none",
+                        "west": "side|up"
+                    }
+                ]
+            },
+            "apply": {
+                "model": "block/redstone_dust_side_alt1",
+                "y": 270
+            }
+        },
+        {
+            "when": {
+                "OR": [
+                    {
+                        "west": "side|up"
+                    },
+                    {
+                        "north": "none",
+                        "east": "side|up",
+                        "south": "none",
+                        "west": "none"
+                    }
+                ]
+            },
+            "apply": {
+                "model": "block/redstone_dust_side1",
+                "y": 270
+            }
+        },
+        {
+            "when": {
+                "north": "up"
+            },
+            "apply": {
+                "model": "block/redstone_dust_up"
+            }
+        },
+        {
+            "when": {
+                "east": "up"
+            },
+            "apply": {
+                "model": "block/redstone_dust_up",
+                "y": 90
+            }
+        },
+        {
+            "when": {
+                "south": "up"
+            },
+            "apply": {
+                "model": "block/redstone_dust_up",
+                "y": 180
+            }
+        },
+        {
+            "when": {
+                "west": "up"
+            },
+            "apply": {
+                "model": "block/redstone_dust_up",
+                "y": 270
+            }
+        },
+        {
+            "when": {
+				"OR": [{"power": 0,"north": "none","east": "none","south": "none","west": "none"},{"power": 0,"north": "side|up","east": "side|up"},{"power": 0,"east": "side|up",
+                        "south": "side|up"},{"power": 0,"south": "side|up","west": "side|up"},{"power": 0,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel00"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 0,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 0,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel00a"
+            }
+        },
+        {
+            "when": {
+				"OR": [{"power": 1,"north": "none","east": "none","south": "none","west": "none"},{"power": 1,"north": "side|up","east": "side|up"},{"power": 1,"east": "side|up",
+                        "south": "side|up"},{"power": 1,"south": "side|up","west": "side|up"},{"power": 1,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel01"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 1,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 1,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel01a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 2,"north": "none","east": "none","south": "none","west": "none"},{"power": 2,"north": "side|up","east": "side|up"},{"power": 2,"east": "side|up",
+                        "south": "side|up"},{"power": 2,"south": "side|up","west": "side|up"},{"power": 2,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel02"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 2,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 2,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel02a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 3,"north": "none","east": "none","south": "none","west": "none"},{"power": 3,"north": "side|up","east": "side|up"},{"power": 3,"east": "side|up",
+                        "south": "side|up"},{"power": 3,"south": "side|up","west": "side|up"},{"power": 3,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel03"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 3,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 3,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel03a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 4,"north": "none","east": "none","south": "none","west": "none"},{"power": 4,"north": "side|up","east": "side|up"},{"power": 4,"east": "side|up",
+                        "south": "side|up"},{"power": 4,"south": "side|up","west": "side|up"},{"power": 4,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel04"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 4,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 4,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel04a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 5,"north": "none","east": "none","south": "none","west": "none"},{"power": 5,"north": "side|up","east": "side|up"},{"power": 5,"east": "side|up",
+                        "south": "side|up"},{"power": 5,"south": "side|up","west": "side|up"},{"power": 5,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel05"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 5,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 5,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel05a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 6,"north": "none","east": "none","south": "none","west": "none"},{"power": 6,"north": "side|up","east": "side|up"},{"power": 6,"east": "side|up",
+                        "south": "side|up"},{"power": 6,"south": "side|up","west": "side|up"},{"power": 6,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel06"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 6,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 6,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel06a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 7,"north": "none","east": "none","south": "none","west": "none"},{"power": 7,"north": "side|up","east": "side|up"},{"power": 7,"east": "side|up",
+                        "south": "side|up"},{"power": 7,"south": "side|up","west": "side|up"},{"power": 7,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel07"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 7,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 7,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel07a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 8,"north": "none","east": "none","south": "none","west": "none"},{"power": 8,"north": "side|up","east": "side|up"},{"power": 8,"east": "side|up",
+                        "south": "side|up"},{"power": 8,"south": "side|up","west": "side|up"},{"power": 8,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel08"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 8,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 8,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel08a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 9,"north": "none","east": "none","south": "none","west": "none"},{"power": 9,"north": "side|up","east": "side|up"},{"power": 9,"east": "side|up",
+                        "south": "side|up"},{"power": 9,"south": "side|up","west": "side|up"},{"power": 9,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel09"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 9,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 9,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel09a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 10,"north": "none","east": "none","south": "none","west": "none"},{"power": 10,"north": "side|up","east": "side|up"},{"power": 10,"east": "side|up",
+                        "south": "side|up"},{"power": 10,"south": "side|up","west": "side|up"},{"power": 10,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel10"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 10,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 10,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel10a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 11,"north": "none","east": "none","south": "none","west": "none"},{"power": 11,"north": "side|up","east": "side|up"},{"power": 11,"east": "side|up",
+                        "south": "side|up"},{"power": 11,"south": "side|up","west": "side|up"},{"power": 11,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel11"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 11,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 11,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel11a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 12,"north": "none","east": "none","south": "none","west": "none"},{"power": 12,"north": "side|up","east": "side|up"},{"power": 12,"east": "side|up",
+                        "south": "side|up"},{"power": 12,"south": "side|up","west": "side|up"},{"power": 12,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel12"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 12,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 12,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel12a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 13,"north": "none","east": "none","south": "none","west": "none"},{"power": 13,"north": "side|up","east": "side|up"},{"power": 13,"east": "side|up",
+                        "south": "side|up"},{"power": 13,"south": "side|up","west": "side|up"},{"power": 13,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel13"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 13,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 13,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel13a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 14,"north": "none","east": "none","south": "none","west": "none"},{"power": 14,"north": "side|up","east": "side|up"},{"power": 14,"east": "side|up",
+                        "south": "side|up"},{"power": 14,"south": "side|up","west": "side|up"},{"power": 14,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel14"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 14,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 14,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel14a"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 15,"north": "none","east": "none","south": "none","west": "none"},{"power": 15,"north": "side|up","east": "side|up"},{"power": 15,"east": "side|up",
+                        "south": "side|up"},{"power": 15,"south": "side|up","west": "side|up"},{"power": 15,"west": "side|up","north": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel15"
+            }
+        },
+		{
+            "when": {
+				"OR": [{"power": 15,"north": "side|up","east": "none","south": "side|up","west": "none"},{"power": 15,"north": "none","east": "side|up","south": "none","west": "side|up"}
+                ]
+            },
+            "apply": {
+                "model": "block/powerlevel15a"
+            }
+        }
+    ]
+}

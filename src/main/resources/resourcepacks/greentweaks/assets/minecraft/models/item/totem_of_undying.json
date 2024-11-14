@@ -1,0 +1,14 @@
+{
+    "parent": "item/smaller_util",
+    "textures": {
+        "layer0": "item/totem_of_undying"
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "saving": 1
+            },
+            "model": "fixedminecraft:item/using_totem"
+        }
+    ]
+}

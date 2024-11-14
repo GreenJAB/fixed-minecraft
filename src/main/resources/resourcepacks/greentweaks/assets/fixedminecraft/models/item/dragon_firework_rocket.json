@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/smaller_util",
+  "textures": {
+      "layer0": "fixedminecraft:item/dragon_firework_rocket"
+  }
+}

@@ -1,0 +1,6 @@
+{
+    "parent": "block/scoutera",
+    "textures": {
+        "power": "block/powerlevel09"
+    }
+}

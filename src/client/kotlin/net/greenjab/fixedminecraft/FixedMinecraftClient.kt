@@ -20,6 +20,7 @@ import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 object FixedMinecraftClient : ClientModInitializer {
@@ -52,12 +53,13 @@ object FixedMinecraftClient : ClientModInitializer {
             Identifier("saving"),
             ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
 
-        /*FabricLoader.getInstance().getModContainer("FixedMinecraft").ifPresent { modContainer: ModContainer? ->
+        FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent { modContainer: ModContainer? ->
             ResourceManagerHelper.registerBuiltinResourcePack(
-                Identifier("fixedminecraft", "GreenTweaks2"),
+                Identifier("fixedminecraft", "greentweaks"),
                 modContainer,
+                Text.of("Green Tweaks"),
                 ResourcePackActivationType.DEFAULT_ENABLED
             )
-        }*/
+        }
     }
 }
