@@ -180,8 +180,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         } else {
             villagerEntity.getBrain().remember(MemoryModuleType.LAST_WOKEN, time);
         }
-        System.out.println(timeSinceSleep);
-        System.out.println(timeSinceGossip);
         if (timeSinceSleep>36000) {
             for (TradeOffer tradeOffer : this.getOffers()) {
                 tradeOffer.increaseSpecialPrice((int) Math.min(5*(timeSinceSleep - 36000) / 24000.0, 32));

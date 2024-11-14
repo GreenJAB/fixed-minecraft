@@ -19,8 +19,14 @@ public class HostileEntityMixin {
     @Inject(method = "canSpawnInDark", at = @At(value = "RETURN"), cancellable = true)
     private static void zombieVillagerOnSurface(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason,
                                      BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
-        if (type == EntityType.ZOMBIE_VILLAGER) {
+        if (type == EntityType.ZOMBIE_VILLAGER ) {
             cir.setReturnValue(cir.getReturnValue() && (SpawnReason.isAnySpawner(spawnReason) || world.isSkyVisible(pos)));
+        }
+        if (type == EntityType.CAVE_SPIDER) {
+            if (spawnReason==SpawnReason.NATURAL) {
+                cir.setReturnValue(!world.isSkyVisible(pos));
+            }
+            cir.setReturnValue(cir.getReturnValue());
         }
     }
 }

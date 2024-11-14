@@ -1,0 +1,56 @@
+{
+  "type": "minecraft:spline",
+  "spline": {
+    "coordinate": "minecraft:overworld/continents",
+    "points": [
+      {
+        "location": -1.05,
+        "derivative": 0,
+        "value": {
+          "coordinate": "fixedminecraft:aquifer/default_fluid_level_floodedness",
+          "points": [
+            {
+              "location": -1,
+              "derivative": 1,
+              "value": -1
+            },
+            {
+              "location": 1,
+              "derivative": 1,
+              "value": 1
+            }
+          ]
+        }
+      },
+      {
+        "location": -1,
+        "derivative": 0,
+        "value": 0.6
+      },
+      {
+        "location": -0.22,
+        "derivative": 0,
+        "value": 0.6
+      },
+      {
+        "location": -0.19,
+        "derivative": 0,
+        "value": {
+          "coordinate": "fixedminecraft:aquifer/default_fluid_level_floodedness",
+          "points": [
+            {
+              "location": -1,
+              "derivative": 1,
+              "value": -1
+            },
+            {
+              "location": 1,
+              "derivative": 1,
+              "value": 1
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

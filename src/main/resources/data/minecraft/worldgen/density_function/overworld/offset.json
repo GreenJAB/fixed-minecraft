@@ -29,7 +29,7 @@
         "argument1": {
           "type": "minecraft:add",
           "argument1": -0.5037500262260437,
-          "argument2": "fixedminecraft:combined_offset_spline"
+          "argument2": "fixedminecraft:overworld/combined_offset"
         },
         "argument2": {
           "type": "minecraft:cache_once",

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:redstone_block",
+    "minecraft:coal_block",
+    "minecraft:lapis_block",
+    "minecraft:ancient_debris",
+    "minecraft:waxed_copper_block"
+  ]
+}

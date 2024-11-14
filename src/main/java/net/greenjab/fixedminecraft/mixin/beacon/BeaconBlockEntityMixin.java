@@ -12,6 +12,7 @@ import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -43,6 +44,10 @@ public class BeaconBlockEntityMixin {
 
             for(int l = x - j; l <= x + j && bl; ++l) {
                 for(int m = z - j; m <= z + j; ++m) {
+                    if (!world.getBlockState(new BlockPos(l, k, m)).isIn(BlockTags.BEACON_BASE_BLOCKS)) {
+                        bl = false;
+                        break;
+                    }
                     if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
                         bl = false;
                         break;
