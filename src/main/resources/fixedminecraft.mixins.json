@@ -133,6 +133,7 @@
     "transport.AreaEffectCloudEntityMixin",
     "transport.BrewingRecipeRegistryMixin",
     "transport.FireworkRocketItemMixin",
+    "transport.FormCaravanGoalMixin",
     "transport.FurnaceMinecartEntityMixin",
     "transport.HoneycombItemMixin",
     "transport.LivingEntityMixin",

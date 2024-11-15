@@ -27,6 +27,7 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -88,7 +89,7 @@ public abstract class MobEntityMixin extends LivingEntity {
     @Inject(method = "initialize", at=@At(value = "HEAD"))
     private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, SpawnReason spawnReason, EntityData entityData,
                              NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
-        LivingEntity LE = (LivingEntity)(Object)this;
+        MobEntity LE = (MobEntity)(Object)this;
         Random random = LE.getWorld().getRandom();
         int y= LE.getBlockPos().getY();
         if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
@@ -111,10 +112,12 @@ public abstract class MobEntityMixin extends LivingEntity {
 
         }
     }
+    @Unique
     private float gaussian(Random random){
         return (float)(random.nextGaussian()/4.0f)+0.5f;
     }
 
+    @Unique
     public StatusEffectInstance getEffect(Random random, LivingEntity LE) {
 
         int i = random.nextInt(6);
