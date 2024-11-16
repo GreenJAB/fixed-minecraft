@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "#": {
-      "item": "minecraft:stone_crafting_materials"
+      "tag": "minecraft:stone_crafting_materials"
     },
     "X": {
       "item": "minecraft:stick"

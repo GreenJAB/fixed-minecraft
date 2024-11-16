@@ -87,33 +87,59 @@ public abstract class MobEntityMixin extends LivingEntity {
     }
 
     @Inject(method = "initialize", at=@At(value = "HEAD"))
-    private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, SpawnReason spawnReason, EntityData entityData,
+    private void addStuff(ServerWorldAccess world, LocalDifficulty localDifficulty, SpawnReason spawnReason, EntityData entityData,
                              NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
         Random random = LE.getWorld().getRandom();
         int y= LE.getBlockPos().getY();
         if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
-            if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
-                if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {
-                    if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 3.0f)) {
-                        StatusEffectInstance effect = getEffect(random, LE);
-                        LE.addStatusEffect(effect);
-                    }
-                }
-            }
-            int i = 0;
-            if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
-            if (world.getDifficulty() == Difficulty.HARD) i = 2;
-            float h = i*3*gaussian(random);
-            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)+h);
-            LE.setHealth(LE.getHealth() + h);
-            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED)*(1+(i*0.15f*gaussian(random))));
+            addEffect(world, localDifficulty, LE, y);
+            addModifiers(world, random, LE);
 
 
         }
     }
+
+    private void addModifiers(ServerWorldAccess world, Random random, MobEntity LE) {
+        int i = 0;
+        if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
+        if (world.getDifficulty() == Difficulty.HARD) i = 2;
+        float h = i*3*gaussian(random);
+        increaseHealth(LE, h);
+        increaseSpeed(random, LE, i);
+    }
+
     @Unique
-    private float gaussian(Random random){
+    private static void increaseSpeed(Random random, MobEntity LE, int i) {
+        if (LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)!=null) {
+            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(
+                    LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
+        }
+    }
+
+    @Unique
+    private static void increaseHealth(MobEntity LE, float h) {
+        if (LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!=null) {
+            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(
+                    LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH) + h);
+            LE.setHealth(LE.getHealth() + h);
+        }
+    }
+
+    private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, MobEntity LE, int y){
+        if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
+            if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {
+                if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 3.0f)) {
+                    StatusEffectInstance effect = getEffect(random, LE);
+                    LE.addStatusEffect(effect);
+                }
+            }
+        }
+    }
+
+
+    @Unique
+    private static float gaussian(Random random){
         return (float)(random.nextGaussian()/4.0f)+0.5f;
     }
 

@@ -2,17 +2,14 @@
     "parent": "minecraft:adventure/very_very_frightening",
     "criteria": {
         "tnt": {
+            "trigger": "minecraft:consume_item",
             "conditions": {
-                "killing_blow": {
-                    "tags": [
-                        {
-                            "id": "minecraft:is_explosion",
-                            "expected": true
-                        }
+                "item": {
+                    "items": [
+                        "minecraft:tnt"
                     ]
                 }
-            },
-            "trigger": "minecraft:player_killed_entity"
+            }
         }
     },
     "display": {

@@ -27,6 +27,11 @@ public abstract class HugeMushroomFeatureMixin {
             target = "Lnet/minecraft/world/gen/feature/HugeMushroomFeature;isSoil(Lnet/minecraft/block/BlockState;)Z"
     ))
     private boolean genOnStone(BlockState blockState) {
-        return true;
+        return
+                blockState== Blocks.GRASS_BLOCK.getDefaultState() ||
+                blockState== Blocks.MYCELIUM.getDefaultState() ||
+                blockState== Blocks.DIRT.getDefaultState() ||
+                blockState== Blocks.STONE.getDefaultState() ||
+                blockState== Blocks.DEEPSLATE.getDefaultState();
     }
 }

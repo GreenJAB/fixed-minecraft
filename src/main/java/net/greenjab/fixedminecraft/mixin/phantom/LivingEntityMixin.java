@@ -73,7 +73,7 @@ public abstract class LivingEntityMixin {
                         if (i < 4) {
                             if (Math.random() < 1 / (5 * Math.pow(i + 1, 2))) {
                                 ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, ++i, true, false, true));
-                                ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, GameStateChangeS2CPacket.DEMO_OPEN_SCREEN));
+                                ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
                             }
                         }
                     }

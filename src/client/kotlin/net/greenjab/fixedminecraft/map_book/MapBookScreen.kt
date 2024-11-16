@@ -112,10 +112,12 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         if (tag != null && tag.contains("fixedminecraft:map_book")) {
             id = tag.getInt("fixedminecraft:map_book")
         }
-        for (player in SERVER!!.playerManager.playerList) {
-            if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
-                if (hasMapBook(player, id)) {
-                    renderPlayerIcon(context, player)
+        if (SERVER != null) {
+            for (player in SERVER!!.playerManager.playerList) {
+                if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
+                    if (hasMapBook(player, id)) {
+                        renderPlayerIcon(context, player)
+                    }
                 }
             }
         }
