@@ -48,7 +48,7 @@ public abstract class LivingEntityMixin {
     private void witherSkeletonIgnoreWither(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof WitherSkeletonEntity) {
-            if (source.getAttacker() instanceof WitherEntity) cir.cancel();
+            if (source.getAttacker() instanceof WitherEntity) cir.setReturnValue(false);
         }
     }
 

@@ -2,18 +2,14 @@
     "parent": "minecraft:end/kill_dragon",
     "criteria": {
         "summoned_dragon": {
+            "trigger": "minecraft:consume_item",
             "conditions": {
-                "entity": [
-                    {
-                        "condition": "minecraft:entity_properties",
-                        "entity": "this",
-                        "predicate": {
-                            "type": "minecraft:ender_dragon"
-                        }
-                    }
-                ]
-            },
-            "trigger": "minecraft:summoned_entity"
+                "item": {
+                    "items": [
+                        "minecraft:end_crystal"
+                    ]
+                }
+            }
         }
     },
     "display": {

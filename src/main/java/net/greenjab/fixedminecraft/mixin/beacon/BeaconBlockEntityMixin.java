@@ -3,14 +3,11 @@ package net.greenjab.fixedminecraft.mixin.beacon;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BeaconBlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.HorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -103,38 +100,34 @@ public class BeaconBlockEntityMixin {
         }
 
         if (!world.isClient && primaryEffect != null) {
-            double d = (double)(beaconLevel * 20 + 10);
-            int i = 0;
-            if (beaconLevel >= 4 && primaryEffect == secondaryEffect) {
-                i = 1;
-            }
+            double d = (beaconLevel * 20 + 10);
 
             int j = (9 + beaconLevel * 2) * 20;
             Box box = (new Box(pos)).expand(d).stretch(0.0, (double)world.getHeight(), 0.0);
             List<PlayerEntity> list = world.getNonSpectatingEntities(PlayerEntity.class, box);
-            Iterator var11 = list.iterator();
+            Iterator<PlayerEntity> var11 = list.iterator();
             PlayerEntity playerEntity;
             while(var11.hasNext()) {
-                playerEntity = (PlayerEntity)var11.next();
+                playerEntity = var11.next();
                 playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false, true));
             }
 
 
             List<AbstractHorseEntity> listHorse = world.getNonSpectatingEntities(AbstractHorseEntity.class, box);
-            Iterator var11Horse = listHorse.iterator();
+            Iterator<AbstractHorseEntity> var11Horse = listHorse.iterator();
             AbstractHorseEntity horse;
             while(var11Horse.hasNext()) {
-                horse = (AbstractHorseEntity) var11Horse.next();
+                horse = var11Horse.next();
                 if (horse.isTame()) {
                     horse.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
                 }
             }
 
             List<TameableEntity> listPet = world.getNonSpectatingEntities(TameableEntity.class, box);
-            Iterator var11Pet = listPet.iterator();
+            Iterator<TameableEntity> var11Pet = listPet.iterator();
             TameableEntity pet;
             while(var11Pet.hasNext()) {
-                pet = (TameableEntity) var11Pet.next();
+                pet = var11Pet.next();
                 if (pet.isTamed()) {
                     pet.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
                 }

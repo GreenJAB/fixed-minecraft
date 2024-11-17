@@ -34,12 +34,14 @@ object MapBookStateManager {
 
     fun getClientMapBookState(id: Int?): MapBookState? {
         if (id == null) return null
+        //println("d, "+ id + ", " + clientMapBooks.size + ", " + clientMapBooks[getMapBookName(id)]?.players?.size)
         return clientMapBooks[getMapBookName(id)]
     }
 
     fun putClientMapBookState(id: Int?, state: MapBookState?) {
         if (id == null || state == null) return
         clientMapBooks[getMapBookName(id)] = state
+        println("f, "+ id + ", " + clientMapBooks.size + ", " + clientMapBooks[getMapBookName(id)]?.players?.size)
     }
 
     fun getMapBookName(mapId: Int): String {

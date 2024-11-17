@@ -52,7 +52,7 @@ public class PhantomSpawnerMixin {
         ServerStatHandler serverStatHandler = serverPlayerEntity.getStatHandler();
         int j = MathHelper.clamp(serverStatHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
         if (j<72000) return;
-        if (serverPlayerEntity.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+        if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
             serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, 0, true, false, true));
             serverPlayerEntity.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
         }

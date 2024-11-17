@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.StatusEffects.LongReachEffect;
+import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.block.BeaconBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.effect.StatusEffect;
@@ -30,8 +32,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerPlayerInteractionManager.class)
 public class ServerPlayerInteractionManagerMixin {
 
-    @Redirect(method = "processBlockBreakingAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"))
-    private double injected(Vec3d instance, Vec3d vec) {
-        return instance.squaredDistanceTo(vec)/2.0;
+    @Shadow
+    @Final
+    protected ServerPlayerEntity player;
+
+    @ModifyExpressionValue(method = "processBlockBreakingAction", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;MAX_BREAK_SQUARED_DISTANCE:D"
+    ))
+    private double injected(double original) {
+        double d =  Math.sqrt(original);
+        if (this.player.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
+            d+=0.5*(1+this.player.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
+        }
+        return d*d;
     }
 }

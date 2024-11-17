@@ -4,19 +4,21 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
-import net.greenjab.fixedminecraft.map_book.MapBookScreen
 import net.greenjab.fixedminecraft.enchanting.Networking.BOOKSHELF_SYNC
+import net.greenjab.fixedminecraft.map_book.MapBookScreen
 import net.greenjab.fixedminecraft.network.SyncHandler.EXHAUSTION_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_OPEN
 import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_SYNC
 import net.greenjab.fixedminecraft.network.SyncHandler.SATURATION_SYNC
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+import net.minecraft.advancement.AdvancementDisplay
 import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.util.Identifier
+import java.util.Optional
 
 object ClientSyncHandler {
     @Environment(EnvType.CLIENT)
@@ -49,9 +51,20 @@ object ClientSyncHandler {
 
                 if (ids.isNotEmpty()) {
                     client.execute {
-                        MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids))
+                        MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids, MapBookStateManager.getClientMapBookState(bookID)?.players))
                     }
                 }
+                val ps = buf.readVarInt()
+                println("z3 "+ps)
+                var i = 0
+                MapBookStateManager.getClientMapBookState(bookID)?.players = ArrayList()
+                while (i < ps) {
+                    var p = MapBookPlayer()
+                    p=p.fromPacket(buf)
+                    MapBookStateManager.getClientMapBookState(bookID)?.players?.add(p)
+                    i++
+                }
+                println("z5 " + MapBookStateManager.getClientMapBookState(bookID)?.players?.size + ", " + MapBookStateManager.getClientMapBookState(bookID)?.players.hashCode())
             }
         }
         ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC

@@ -99,7 +99,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     openMap = false
                 }
             } else {
-                var hasPaper = getPaper(user);
+                val hasPaper = getPaper(user);
                 if (hasPaper.isOf(Items.PAPER)) {
                     if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, false)) {
                         if (!player.abilities.creativeMode) {
@@ -122,9 +122,10 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
             SyncHandler.mapBookSync(player, item)
             if (openMap && getMapBookId(item) != null) {
                 (if (world.isClient) {
+                    println("z6 " + MapBookStateManager.getClientMapBookState(getMapBookId(item))?.players?.size)
                     MapBookStateManager.getClientMapBookState(getMapBookId(item))
                 } else {
-                    MapBookStateManager.getMapBookState(world.server!!, getMapBookId(item))
+                    MapBookStateManager.getMapBookState(world.server, getMapBookId(item))
                 })?.update()
                 SyncHandler.onOpenMapBook(player, item)
             }
@@ -144,6 +145,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     }
 
     fun sendMapUpdates(player: ServerPlayerEntity, item: ItemStack) {
+        println("y2 " + MapBookStateManager.getClientMapBookState(getMapBookId(item))?.players?.size)
         for (mapStateData in getMapStates(item, player.world)) {
             mapStateData.mapState.getPlayerSyncData(player)
             val packet = mapStateData.mapState.getPlayerMarkerPacket(mapStateData.id, player)
@@ -159,7 +161,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         if (!selected && entity.offHandStack != stack) return
 
         applyAdditions(stack, world as ServerWorld)
-
+        println("y3 " + MapBookStateManager.getClientMapBookState(getMapBookId(stack))?.players?.size)
         var m = getMapStates(stack, entity.world)
         for (mapStateData in m) {
             mapStateData.mapState.update(entity, stack)
@@ -169,8 +171,10 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
             }
         }
 
+        MapBookStateManager.getMapBookState(world.server, getMapBookId(stack))?.addPlayer(entity)
         sendMapUpdates(entity as ServerPlayerEntity, stack)
         SyncHandler.mapBookSync(entity, stack)
+        MapBookStateManager.getMapBookState(world.server, getMapBookId(stack))?.players=ArrayList()
     }
 
     fun getMapStates(stack: ItemStack, world: World?): ArrayList<MapStateData> {
@@ -178,6 +182,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         if (world == null) return list
 
         val mapBookState = if (world.isClient) {
+            println("z7 " + MapBookStateManager.getClientMapBookState(getMapBookId(stack))?.players?.size)
             MapBookStateManager.getClientMapBookState(getMapBookId(stack))
         } else {
             MapBookStateManager.getMapBookState(world.server!!, getMapBookId(stack))
@@ -201,7 +206,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         var nearestDistance = Double.MAX_VALUE
         var nearestScale: Byte = Byte.MAX_VALUE
         var nearestMap: MapStateData? = null
-
+        println("y4 " + MapBookStateManager.getClientMapBookState(getMapBookId(stack))?.players?.size + ", " + MapBookStateManager.getClientMapBookState(getMapBookId(stack))?.players.hashCode())
         for (mapStateData in getMapStates(stack, world)) {
             var distance = getDistanceToEdgeOfMap(mapStateData.mapState, pos)
             if (distance < 0) distance = -1.0
@@ -307,6 +312,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
         var mapsCount = stack.getOrCreateNbt().getIntArray((ADDITIONS_KEY)).size
         if (id != null) {
+            println("z8 " + MapBookStateManager.getClientMapBookState(id)?.players?.size)
             val mapBookState =
                 if (world == null || world.isClient) MapBookStateManager.getClientMapBookState(id) else MapBookStateManager.getMapBookState(
                     world.server!!,

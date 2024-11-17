@@ -139,16 +139,14 @@ public class AdvancementWidgetMixin {
 
     @Inject(method = "renderLines", at = @At("HEAD"))
     private void drawDot(DrawContext context, int x, int y, boolean border, CallbackInfo ci){
-        //if (this.children.isEmpty()){
-            int l = x + this.x + 13+3;
-            int m = y + this.y + 13;
-            int n = border ? Colors.BLACK : Colors.WHITE;
-            if (border) {
-                context.fill(l-2, m-2, l+3,m+3, n);
-            } else {
-                context.fill(l-1, m-1, l+2,m+2, n);
-            }
-        //}
+        int l = x + this.x + 13+3;
+        int m = y + this.y + 13;
+        int n = border ? Colors.BLACK : Colors.WHITE;
+        if (border) {
+            context.fill(l-2, m-2, l+3,m+3, n);
+        } else {
+           context.fill(l-1, m-1, l+2,m+2, n);
+        }
     }
 
     @ModifyArg(method = "renderLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawHorizontalLine(IIII)V", ordinal = 0), index = 0)
@@ -165,13 +163,14 @@ public class AdvancementWidgetMixin {
     }
 
 
+    @Unique
     private static final Identifier TITLE_BOX_TEXTURE = new Identifier("advancements/title_box");
 
+    @Unique
     public void drawTooltip2(DrawContext context, int originX, int originY, float alpha, int x, int y) {
         boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
         Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
         int i = text == null ? 0 : this.client.textRenderer.getWidth(text);
-        //boolean bl2 = 113 - originY - this.y - 26 <= 6 + this.description.size() * 9;
         float f = this.progress == null ? 0.0F : this.progress.getProgressBarPercentage();
         int j = MathHelper.floor(f * (float)this.width);
         AdvancementObtainedStatus advancementObtainedStatus;
@@ -212,7 +211,7 @@ public class AdvancementWidgetMixin {
         if (!this.description.isEmpty()) {
             context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l + 26 - n, this.width, n);
         }
-        if (this.advancement.getAdvancement().rewards().experience()!=0 /*&& advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED*/) {
+        if (this.advancement.getAdvancement().rewards().experience()!=0) {
             context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l, this.width, 32+9);
         }
 
@@ -235,7 +234,7 @@ public class AdvancementWidgetMixin {
         for (int o = 0; o < this.description.size(); o++) {
             context.drawText(this.client.textRenderer, this.description.get(o), m + 5, l + 26 - n + 7 + o * 9, -5592406, false);
         }
-        if (this.advancement.getAdvancement().rewards().experience()!=0 /*&& advancementObtainedStatus == AdvancementObtainedStatus.UNOBTAINED*/) {
+        if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
             OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
             int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
             context.drawText(this.client.textRenderer, reward, m + 5, originY + this.y + 9 + 17, colour, false);

@@ -19,6 +19,7 @@ import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.stat.Stats;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -86,7 +87,7 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "updatePlayers", at = @At(value = "HEAD"))
     private void resetWorldBorder(CallbackInfo ci) {
-        if (!this.previouslyKilled) {
+        /*if (!this.previouslyKilled) {
             if (this.world.getDifficulty().getId()>1) {
                 this.world.getWorldBorder().setSize(400);
 
@@ -97,7 +98,7 @@ public abstract class EnderDragonFightMixin {
                     }
                 }
             }
-        }
+        }*/
         this.bossBar.setColor(BossBar.Color.PINK);
         if (this.dragonUuid!=null) {
             if (this.world.getEntity(this.dragonUuid)!=null) {
@@ -123,6 +124,10 @@ public abstract class EnderDragonFightMixin {
     private void dontResetPortal2(EnderDragonFight instance, boolean previouslyKilled){
         if (this.previouslyKilled) {
             this.generateEndPortal(false);
+            for (ServerPlayerEntity serverPlayerEntity : (this.world)
+                    .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 128.0F)) {
+                Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.END_CRYSTAL.getDefaultStack());
+            }
         }
     }
 
@@ -182,7 +187,7 @@ public abstract class EnderDragonFightMixin {
         }
     }
 
-    @Inject(method = "dragonKilled", at = @At(value = "INVOKE",
+    /*@Inject(method = "dragonKilled", at = @At(value = "INVOKE",
                                               target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
     ))
     private void expandWorldBorder(CallbackInfo ci) {
@@ -193,7 +198,7 @@ public abstract class EnderDragonFightMixin {
                 world.getServer().getPlayerManager().sendWorldInfo(player, world);
             }
         }
-    }
+    }*/
 
     @ModifyConstant(method = "createDragon", constant = @Constant(intValue = 128))
     private int lowerDragonSpawn(int constant){
@@ -238,10 +243,11 @@ public abstract class EnderDragonFightMixin {
             dragon.getWorld().spawnEntity(itemEntity);
         }
 
-        List<PlayerEntity> players = dragon.getWorld().getPlayers(TargetPredicate.createAttackable(), dragon, dragon.getBoundingBox().expand(100));
-        for (PlayerEntity player : players) {
-            if (player instanceof ServerPlayerEntity SPE) {
-                Criteria.CONSUME_ITEM.trigger(SPE, Items.DRAGON_EGG.getDefaultStack());
+        for (ServerPlayerEntity serverPlayerEntity : (this.world)
+                .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 128.0F)) {
+            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_EGG.getDefaultStack());
+            if (serverPlayerEntity.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON))==0) {
+                serverPlayerEntity.increaseStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON), 1);
             }
         }
     }

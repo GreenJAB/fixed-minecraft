@@ -1,27 +1,42 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayNetworkHandler.class)
 public class ServerPlayNetworkHandlerMixin {
 
-    @Redirect(method = "onPlayerInteractBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(Lnet/minecraft/util/math/Vec3d;)D"))
-    private double injected(Vec3d instance, Vec3d vec) {
-        return instance.squaredDistanceTo(vec)/2.0;
+    @Shadow
+    public ServerPlayerEntity player;
+
+    @ModifyExpressionValue(method = "onPlayerInteractBlock", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;MAX_BREAK_SQUARED_DISTANCE:D"
+    ))
+    private double largerReach(double original) {
+        double d =  Math.sqrt(original);
+        if (this.player.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
+            d+=0.5*(1+this.player.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
+        }
+        return d*d;
+    }
+
+    @ModifyConstant(method = "onPlayerInteractBlock", constant = @Constant(doubleValue = 64.0))
+    private double largerReach2(double original) {
+        double d =  Math.sqrt(original);
+        if (this.player.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
+            d+=0.5*(1+this.player.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
+        }
+        return d*d;
     }
 }

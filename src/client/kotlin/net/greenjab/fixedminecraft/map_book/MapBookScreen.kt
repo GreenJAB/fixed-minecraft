@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.greenjab.fixedminecraft.FixedMinecraft.SERVER
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData
 import net.minecraft.client.MinecraftClient
@@ -31,6 +32,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import org.joml.Matrix4f
 import java.util.Objects
+import java.util.Optional
 import kotlin.math.abs
 import kotlin.reflect.jvm.internal.impl.builtins.StandardNames.FqNames.target
 
@@ -51,7 +53,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             y = -client!!.player!!.z
         }
         setScale(targetScale, width/2.0, height/2.0)
-
+        println("y1 " + MapBookStateManager.getClientMapBookState(getMapBookId(item))?.players?.size + ", " + MapBookStateManager.getClientMapBookState(getMapBookId(item))?.players.hashCode())
         for (mapStateData in (ItemRegistry.MAP_BOOK as MapBookItem).getMapStates(item, client?.world)) {
             addDrawable(MapTile(this, mapStateData.id, mapStateData.mapState, client!!))
         }
@@ -112,7 +114,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         if (tag != null && tag.contains("fixedminecraft:map_book")) {
             id = tag.getInt("fixedminecraft:map_book")
         }
-        if (SERVER != null) {
+        /*if (SERVER != null) {
             for (player in SERVER!!.playerManager.playerList) {
                 if (thisPlayer.world.dimensionKey == player.world.dimensionKey) {
                     if (hasMapBook(player, id)) {
@@ -120,6 +122,12 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     }
                 }
             }
+        }*/
+        println("z1 " + MapBookStateManager.getClientMapBookState(id)?.players?.size)
+        val m = MapBookStateManager.getClientMapBookState(id)?.players
+        for (player in m!!) {
+            println(player.name)
+            renderPlayerIcon(context, player)
         }
         renderIcons(context);
         renderPosition(context, mouseX, mouseY);
@@ -214,6 +222,72 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
         val textRenderer = MinecraftClient.getInstance().textRenderer
         val text = player.name.literalString
+        val o = textRenderer.getWidth(text).toFloat()
+        val var10000 = 25.0f / o
+        Objects.requireNonNull(textRenderer)
+        val p = MathHelper.clamp(var10000, 0.0f, 6.0f / 9.0f)
+        context.matrices.push()
+
+        context.matrices.translate(this.x, this.y, 15.0)
+        context.matrices.scale(this.scale, this.scale, 1.0f)
+
+        context.matrices.translate(x + width / 2.0, z + height / 2.0, 0.0)
+
+        context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
+        context.matrices.translate(-o / 2f, 8.0f, 0.1f)
+
+        textRenderer.draw(
+            text,
+            0.0f,
+            0.0f,
+            -1,
+            false,
+            context.matrices.peek().getPositionMatrix(),
+            context.vertexConsumers,
+            TextLayerType.NORMAL,
+            Int.MIN_VALUE,
+            LightmapTextureManager.MAX_LIGHT_COORDINATE
+        )
+        context.matrices.pop()
+
+    }
+
+    private fun renderPlayerIcon(context: DrawContext, player: MapBookPlayer) {
+        var x = player.x.toFloat()
+        var z = player.z.toFloat()
+        var rotation = player.yaw
+        context.matrices.push()
+
+        context.matrices.translate(this.x, this.y, 0.0)
+        context.matrices.scale(this.scale, this.scale, 1.0f)
+
+        context.matrices.translate(x + width / 2.0, z + height / 2.0, 0.0)
+
+        context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation))
+        context.matrices.scale(8.0f, 8.0f, 1.0f)
+
+        context.matrices.translate(0f, 0f, 15f)
+        context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
+        val b: Byte = MapIcon.Type.PLAYER.id
+        val g = (b % 16 + 0).toFloat() / 16.0f
+        val h = (b / 16 + 0).toFloat() / 16.0f
+        val l = (b % 16 + 1).toFloat() / 16.0f
+        val m = (b / 16 + 1).toFloat() / 16.0f
+        val matrix4f2: Matrix4f = context.matrices.peek().positionMatrix
+        val vertexConsumer2: VertexConsumer = context.vertexConsumers.getBuffer(MAP_ICONS_RENDER_LAYER)
+        vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(g, h)
+            .light(LightmapTextureManager.MAX_LIGHT_COORDINATE).next()
+        vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(l, h)
+            .light(LightmapTextureManager.MAX_LIGHT_COORDINATE).next()
+        vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(l, m)
+            .light(LightmapTextureManager.MAX_LIGHT_COORDINATE).next()
+        vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m)
+            .light(LightmapTextureManager.MAX_LIGHT_COORDINATE).next()
+        context.matrices.pop()
+
+
+        val textRenderer = MinecraftClient.getInstance().textRenderer
+        val text = player.name
         val o = textRenderer.getWidth(text).toFloat()
         val var10000 = 25.0f / o
         Objects.requireNonNull(textRenderer)
@@ -347,6 +421,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         if (world == null) return list
 
         val mapBookState = if (world.isClient) {
+            println("z2 " + MapBookStateManager.getClientMapBookState(getMapBookId(stack))?.players?.size)
             MapBookStateManager.getClientMapBookState(getMapBookId(stack))
         } else {
             MapBookStateManager.getMapBookState(world.server!!, getMapBookId(stack))

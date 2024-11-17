@@ -47,8 +47,8 @@ public abstract class WanderingTraderEntityMixin {
     }
 
     @ModifyVariable(method = "fillRebalancedRecipes", at = @At("STORE"), ordinal = 0)
-    private Iterator newTrades(Iterator iter){
-        List<Pair<TradeOffers.Factory[], Integer>> list = List.of(//);
+    private Iterator<Pair<TradeOffers.Factory[], Integer>> newTrades(Iterator<Pair<TradeOffers.Factory[], Integer>> iter){
+        List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.BuyItemFactory(createPotionStack(Potions.WATER), 1, 1, 1),
                         new TradeOffers.BuyItemFactory(Items.WATER_BUCKET, 1, 1, 1, 2),
@@ -148,16 +148,25 @@ public abstract class WanderingTraderEntityMixin {
                         new TradeOffers.SellItemFactory(Items.MOSS_BLOCK, 1, 2, 5, 1)
                 }, 2+(int)(Math.random()*2)),
                 Pair.of(new TradeOffers.Factory[]{
-                        new TradeOffers.SellItemFactory(createMusicDiscStack(), 10, 1, 1, 1),
-                        new TradeOffers.SellItemFactory(createSherdStack(), 10, 1, 1, 1),
-                        new TradeOffers.SellItemFactory(createTrimStack(), 10, 1, 1, 1),
-                        new TradeOffers.SellItemFactory(createMobHeadStack(), 10, 1, 1, 1),
-                        new TradeOffers.SellItemFactory(createBiomeMapStack(), 10, 1, 1, 1)
+                        new TradeOffers.SellItemFactory(createSpecialItem(), 10, 1, 1, 1)
                 }, 1)
 
         );
         return list.iterator();
     }
+
+    @Unique
+    private ItemStack createSpecialItem() {
+        int i = (int)(Math.random()*5);
+        return switch (i) {
+            case 0 -> createMusicDiscStack();
+            case 1 -> createSherdStack();
+            case 2 -> createTrimStack();
+            case 3 -> createMobHeadStack();
+            default -> createBiomeMapStack();
+        };
+    }
+
     @Unique
     private ItemStack createPotionStack(Potion potion) {
         return PotionUtil.setPotion(new ItemStack(Items.POTION), potion);
