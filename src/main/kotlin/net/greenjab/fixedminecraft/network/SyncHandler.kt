@@ -58,17 +58,14 @@ object SyncHandler {
         return buf
     }
 
-    fun makeMapBookSyncBuf(player: ServerPlayerEntity, item: ItemStack): PacketByteBuf {
+    fun makeMapBookSyncBuf(player: ServerPlayerEntity, id: Int): PacketByteBuf {
         val buf = PacketByteBuf(Unpooled.buffer())
-
-        val id = (item.item as MapBookItem).getMapBookId(item)
         val mapBookState = MapBookStateManager.getMapBookState(player.server, id)
 
         if (mapBookState != null) {
             buf.writeVarInt(id!!)
             buf.writeIntArray(mapBookState.mapIDs.toIntArray())
             buf.writeVarInt(mapBookState.players.size)
-            println("a  "+mapBookState.players.size)
             for (p in mapBookState.players) {
                 p.toPacket(buf)
             }
@@ -81,17 +78,13 @@ object SyncHandler {
 
     val MAP_BOOK_OPEN: Identifier = Identifier("fixedminecraft", "map_book_open")
     val MAP_BOOK_SYNC: Identifier = Identifier("fixedminecraft", "map_book_sync")
-    val MAP_BOOK_PLAYER_SYNC: Identifier = Identifier("fixedminecraft", "map_book_player_sync")
 
     fun onOpenMapBook(player: ServerPlayerEntity, item: ItemStack) {
         ServerPlayNetworking.send(player, MAP_BOOK_OPEN, makeItemStackBuf(item))
     }
 
-    fun mapBookSync(player: ServerPlayerEntity, item: ItemStack) {
-        ServerPlayNetworking.send(player, MAP_BOOK_SYNC, makeMapBookSyncBuf(player, item))
+    fun mapBookSync(player: ServerPlayerEntity, id: Int) {
+        ServerPlayNetworking.send(player, MAP_BOOK_SYNC, makeMapBookSyncBuf(player, id))
     }
 
-    fun mapBookPlayerSync(player: ServerPlayerEntity, item: ItemStack) {
-        ServerPlayNetworking.send(player, MAP_BOOK_PLAYER_SYNC, makeMapBookSyncBuf(player, item))
-    }
 }

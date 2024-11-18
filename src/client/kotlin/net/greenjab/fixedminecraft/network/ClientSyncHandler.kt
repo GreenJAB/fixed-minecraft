@@ -51,11 +51,10 @@ object ClientSyncHandler {
 
                 if (ids.isNotEmpty()) {
                     client.execute {
-                        MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids, MapBookStateManager.getClientMapBookState(bookID)?.players))
+                        MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids))
                     }
                 }
                 val ps = buf.readVarInt()
-                println("z3 "+ps)
                 var i = 0
                 MapBookStateManager.getClientMapBookState(bookID)?.players = ArrayList()
                 while (i < ps) {
@@ -64,7 +63,6 @@ object ClientSyncHandler {
                     MapBookStateManager.getClientMapBookState(bookID)?.players?.add(p)
                     i++
                 }
-                println("z5 " + MapBookStateManager.getClientMapBookState(bookID)?.players?.size + ", " + MapBookStateManager.getClientMapBookState(bookID)?.players.hashCode())
             }
         }
         ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC

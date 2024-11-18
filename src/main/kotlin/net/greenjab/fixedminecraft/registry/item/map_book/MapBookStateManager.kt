@@ -8,6 +8,7 @@ import net.minecraft.world.PersistentState
 
 object MapBookStateManager {
     private val clientMapBooks: MutableMap<String, MapBookState> = Maps.newHashMap()
+    var currentBooks: ArrayList<Int> = ArrayList()
 
     fun getPersistentStateType(): PersistentState.Type<MapBookState> {
         return PersistentState.Type(
@@ -34,14 +35,17 @@ object MapBookStateManager {
 
     fun getClientMapBookState(id: Int?): MapBookState? {
         if (id == null) return null
-        //println("d, "+ id + ", " + clientMapBooks.size + ", " + clientMapBooks[getMapBookName(id)]?.players?.size)
         return clientMapBooks[getMapBookName(id)]
     }
 
     fun putClientMapBookState(id: Int?, state: MapBookState?) {
         if (id == null || state == null) return
-        clientMapBooks[getMapBookName(id)] = state
-        println("f, "+ id + ", " + clientMapBooks.size + ", " + clientMapBooks[getMapBookName(id)]?.players?.size)
+        val s = getMapBookName(id)
+        if (!clientMapBooks.keys.contains(s)) {
+            clientMapBooks[getMapBookName(id)] = state
+        } else {
+            clientMapBooks[getMapBookName(id)]?.mapIDs = state.mapIDs
+        }
     }
 
     fun getMapBookName(mapId: Int): String {
