@@ -104,22 +104,26 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         if (tag != null && tag.contains("fixedminecraft:map_book")) {
             id = tag.getInt("fixedminecraft:map_book")
         }
-        val p = MapBookPlayer()
-        p.setPlayer(thisPlayer)
-        val m = MapBookStateManager.getClientMapBookState(id)?.players
-        if (m!=null) {
-            for (player in m) {
-                if (player.dimension==p.dimension) {
-                    if (player.name != p.name) {
-                        renderPlayerIcon(context, player)
+        if (id != -1) {
+            val p = MapBookPlayer()
+            p.setPlayer(thisPlayer)
+            val m = MapBookStateManager.getClientMapBookState(id)?.players
+            if (m != null) {
+                try {
+                    for (player in m) {
+                        if (player.dimension == p.dimension) {
+                            if (player.name != p.name) {
+                                renderPlayerIcon(context, player)
+                            }
+                        }
                     }
+                } catch (e: ConcurrentModificationException) {
                 }
             }
+            renderPlayerIcon(context, p)
+            renderIcons(context);
+            renderPosition(context, mouseX, mouseY);
         }
-
-        renderPlayerIcon(context, p)
-        renderIcons(context);
-        renderPosition(context, mouseX, mouseY);
     }
 
     private fun renderPosition(context: DrawContext, mouseX: Int, mouseY: Int) {

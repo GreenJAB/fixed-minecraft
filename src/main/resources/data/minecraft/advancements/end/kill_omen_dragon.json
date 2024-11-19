@@ -1,12 +1,12 @@
 {
-    "parent": "minecraft:story/enter_the_end",
+    "parent": "minecraft:end/dragon_breath",
     "criteria": {
         "killed_dragon": {
             "trigger": "minecraft:consume_item",
             "conditions": {
                 "item": {
                     "items": [
-                        "minecraft:dragon_head"
+                        "minecraft:dragon_egg"
                     ]
                 }
             }
@@ -14,14 +14,15 @@
     },
     "display": {
         "description": {
-            "translate": "advancements.end.kill_dragon.description"
+            "translate": "advancements.end.kill_omen_dragon.description"
         },
         "frame": "challenge",
         "icon": {
-            "item": "minecraft:dragon_head"
+            "item": "minecraft:dragon_egg",
+            "nbt": "{Super:{},Enchantments:[{}]}"
         },
         "title": {
-            "translate": "advancements.end.kill_dragon.title"
+            "translate": "advancements.end.kill_omen_dragon.title"
         }
     },
     "requirements": [
@@ -30,7 +31,7 @@
         ]
     ],
     "rewards": {
-        "experience": 3000
+        "experience": 5000
     },
     "sends_telemetry_event": true
 }

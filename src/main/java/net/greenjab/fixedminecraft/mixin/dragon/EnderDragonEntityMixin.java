@@ -217,6 +217,7 @@ public abstract class EnderDragonEntityMixin {
     ), index = 0)
     private float moreOmenXP(float value){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        EDE.getWorld().getWorldBorder().setSize(60000000);
         if (this.fight.hasPreviouslyKilled()) {
             if (EDE.getCommandTags().contains("omen")) {
                 return Math.min(value*4, 12000);

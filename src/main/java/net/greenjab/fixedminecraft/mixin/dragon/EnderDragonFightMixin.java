@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.screen.FletchingScreenHandler;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.ai.TargetPredicate;
@@ -17,13 +19,18 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.gen.feature.EndPortalFeature;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -76,6 +83,10 @@ public abstract class EnderDragonFightMixin {
     @Shadow
     private @Nullable UUID dragonUuid;
 
+    @Shadow
+    @Final
+    private BlockPos origin;
+
     @Inject(method = "respawnDragon()V", at = @At(value = "FIELD",
                                                   target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;exitPortalLocation:Lnet/minecraft/util/math/BlockPos;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
     private void onlySpawnDragonWhenPlayersNearby(CallbackInfo ci) {
@@ -87,14 +98,16 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "updatePlayers", at = @At(value = "HEAD"))
     private void resetWorldBorder(CallbackInfo ci) {
-        /*if (!this.previouslyKilled) {
-            if (this.world.getDifficulty().getId()>1) {
-                this.world.getWorldBorder().setSize(400);
+        /*if (!this.world.isClient) {
+            if (!this.previouslyKilled) {
+                if (this.world.getDifficulty().getId() > 1) {
+                    this.world.getWorldBorder().setSize(300);
 
-                List<ServerPlayerEntity> playerList = world.getPlayers();
-                for (ServerPlayerEntity player : playerList) {
-                    if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                        world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                    List<ServerPlayerEntity> playerList = world.getPlayers();
+                    for (ServerPlayerEntity player : playerList) {
+                        if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                            world.getServer().getPlayerManager().sendWorldInfo(player, world);
+                        }
                     }
                 }
             }
@@ -241,15 +254,43 @@ public abstract class EnderDragonFightMixin {
             itemEntity.refreshPositionAndAngles(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
             itemEntity.setVelocity(new Vec3d(0, 0, 0));
             dragon.getWorld().spawnEntity(itemEntity);
+            this.world
+                    .setBlockState(this.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, EndPortalFeature.offsetOrigin(this.origin)), Blocks.DRAGON_EGG.getDefaultState());
+
         }
 
         for (ServerPlayerEntity serverPlayerEntity : (this.world)
                 .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 128.0F)) {
-            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_EGG.getDefaultStack());
-            if (serverPlayerEntity.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON))==0) {
-                serverPlayerEntity.increaseStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON), 1);
+            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_HEAD.getDefaultStack());
+            if (dragon.getCommandTags().contains("omen")) {
+                Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_EGG.getDefaultStack());
             }
+            /*if (serverPlayerEntity.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON))==0) {
+                serverPlayerEntity.increaseStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON), 1);
+                serverPlayerEntity.openHandledScreen(
+                    new StatsScreen(syncId, inventory, ScreenHandlerContext.create(world, pos));
+              ));
+                //serverPlayerEntity.getStatHandler().sendStats(serverPlayerEntity);
+            }*/
+            //this.world.getWorldBorder().setSize(60000000);
+            //List<ServerPlayerEntity> playerList = world.getPlayers();
+            //for (ServerPlayerEntity player : playerList) {
+                //if (serverPlayerEntity.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    //world.getServer().getPlayerManager().sendWorldInfo(serverPlayerEntity, world);
+                //}
+            //}
         }
+        //this.world.getWorldBorder().setSize(60000000);
+        //world.getServer().getPlayerManager().sendWorldInfo(serverPlayerEntity, world);
+        /*if (this.world.isClient) {
+            for (PlayerEntity serverPlayerEntity : (this.world)
+                    .getPlayers(serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 1000.0F)) {
+                //if (serverPlayerEntity.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON))==0) {
+                //serverPlayerEntity.increaseStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON), 1);
+                //serverPlayerEntity.getStatHandler().sendStats(serverPlayerEntity);
+                //}
+            }
+        }*/
     }
 
 }

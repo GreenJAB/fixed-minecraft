@@ -81,6 +81,7 @@
         "map_book.MapStatePlayerUpdateTrackerMixin",
         "map_book.MapUpdateS2CPacketMixin",
         "mobs.ArmorStandEntityMixin",
+        "mobs.BeeEntityMixin",
         "mobs.BiomeSourceMixin",
         "mobs.CreeperEntityMixin",
         "mobs.InfestedBlockMixin",
