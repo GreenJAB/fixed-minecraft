@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier
 
 
 object RecipeRegistry {
-    val MAP_BOOK_ADDITION_SERIALIZER: SpecialRecipeSerializer<MapBookAdditionRecipe> = SpecialRecipeSerializer {
+    private val MAP_BOOK_ADDITION_SERIALIZER: SpecialRecipeSerializer<MapBookAdditionRecipe> = SpecialRecipeSerializer {
             craftingRecipeCategory: CraftingRecipeCategory? -> MapBookAdditionRecipe(craftingRecipeCategory)
     }
 

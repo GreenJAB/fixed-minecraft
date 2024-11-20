@@ -1,24 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.client.gui.screen.advancement.AdvancementsScreen;
-import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 
 @Mixin(AdvancementsScreen.class)
 public class AdvancementsScreenMixin {
+     @Unique
      int newWINDOW_WIDTH = 441;
+    @Unique
     int newWINDOW_HEIGHT = 245;
+    @Unique
     int newPAGE_WIDTH = 423;
+     @Unique
      int newPAGE_HEIGHT = 218;
     @ModifyConstant(method = "render", constant = @Constant(intValue = 252))
     private int largerScreenX1(int constant) {return newWINDOW_WIDTH;}

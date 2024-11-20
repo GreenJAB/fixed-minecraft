@@ -8,7 +8,6 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombieVillagerEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;

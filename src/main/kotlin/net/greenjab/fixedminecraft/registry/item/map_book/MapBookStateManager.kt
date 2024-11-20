@@ -10,14 +10,14 @@ object MapBookStateManager {
     private val clientMapBooks: MutableMap<String, MapBookState> = Maps.newHashMap()
     var currentBooks: ArrayList<Int> = ArrayList()
 
-    fun getPersistentStateType(): PersistentState.Type<MapBookState> {
+    private fun getPersistentStateType(): PersistentState.Type<MapBookState> {
         return PersistentState.Type(
             { throw IllegalStateException("Should never create an empty map saved data - but for map books") },
             { nbt: NbtCompound -> createMapBookState(nbt) }, DataFixTypes.SAVED_DATA_MAP_DATA
         )
     }
 
-    fun createMapBookState(nbt: NbtCompound): MapBookState {
+    private fun createMapBookState(nbt: NbtCompound): MapBookState {
         val state = MapBookState()
         state.fromNbt(nbt)
         return state
@@ -48,7 +48,7 @@ object MapBookStateManager {
         }
     }
 
-    fun getMapBookName(mapId: Int): String {
+    private fun getMapBookName(mapId: Int): String {
         return "fixedminecraft_map_book_$mapId"
     }
 }

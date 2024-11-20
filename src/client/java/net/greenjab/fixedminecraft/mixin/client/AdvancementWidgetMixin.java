@@ -133,7 +133,7 @@ public class AdvancementWidgetMixin {
 
     @Inject(method = "drawTooltip", at = @At("HEAD"), cancellable = true)
     private void drawXP(DrawContext context, int originX, int originY, float alpha, int x, int y, CallbackInfo ci){
-        drawTooltip2(context, originX, originY, alpha, x, y);
+        drawTooltip2(context, originX, originY, x);
         ci.cancel();
     }
 
@@ -167,7 +167,7 @@ public class AdvancementWidgetMixin {
     private static final Identifier TITLE_BOX_TEXTURE = new Identifier("advancements/title_box");
 
     @Unique
-    public void drawTooltip2(DrawContext context, int originX, int originY, float alpha, int x, int y) {
+    public void drawTooltip2(DrawContext context, int originX, int originY, int x) {
         boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
         Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
         int i = text == null ? 0 : this.client.textRenderer.getWidth(text);

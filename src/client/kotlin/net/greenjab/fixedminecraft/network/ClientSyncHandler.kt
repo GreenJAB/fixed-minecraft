@@ -13,12 +13,10 @@ import net.greenjab.fixedminecraft.network.SyncHandler.SATURATION_SYNC
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
-import net.minecraft.advancement.AdvancementDisplay
 import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.network.PacketByteBuf
-import java.util.Optional
 
 object ClientSyncHandler {
     @Environment(EnvType.CLIENT)
@@ -78,7 +76,5 @@ object ClientSyncHandler {
                 )
             }
         }
-
-
     }
 }

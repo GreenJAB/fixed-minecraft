@@ -1,15 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.google.common.collect.ImmutableMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffers;
-import net.minecraft.village.VillagerData;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
 import org.spongepowered.asm.mixin.Mixin;

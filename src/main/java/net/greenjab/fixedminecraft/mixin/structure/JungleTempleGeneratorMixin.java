@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
-import net.minecraft.block.AbstractTorchBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeverBlock;
@@ -9,7 +8,6 @@ import net.minecraft.block.PistonBlock;
 import net.minecraft.block.RedstoneTorchBlock;
 import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.block.RepeaterBlock;
-import net.minecraft.block.TorchBlock;
 import net.minecraft.block.WallTorchBlock;
 import net.minecraft.block.enums.BlockFace;
 import net.minecraft.block.enums.WireConnection;
@@ -39,7 +37,7 @@ public abstract class JungleTempleGeneratorMixin extends ShiftableStructurePiece
     }
 
     @Inject(method = "generate", at = @At(value = "FIELD", target = "Lnet/minecraft/block/Blocks;CHISELED_STONE_BRICKS:Lnet/minecraft/block/Block;"), cancellable = true)
-    private void alwaysBasement(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator,
+    private void betterRedstone(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator,
                                 Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot, CallbackInfo ci) {
         this.addBlock(world, Blocks.REDSTONE_WALL_TORCH.getDefaultState().with(RedstoneTorchBlock.LIT, true).with(WallTorchBlock.FACING, Direction.EAST), 8, -1, 10, chunkBox);
         this.addBlock(world, Blocks.CHISELED_STONE_BRICKS.getDefaultState(), 8, -3, 11, chunkBox);

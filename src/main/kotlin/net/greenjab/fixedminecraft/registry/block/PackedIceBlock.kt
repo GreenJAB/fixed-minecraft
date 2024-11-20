@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.registry.block;
+package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
 import net.greenjab.fixedminecraft.registry.GameruleRegistry
@@ -24,31 +24,32 @@ class PackedIceBlock (settings: Settings) : TranslucentBlock(settings) {
     }
 
 	private fun getMeltedState():BlockState {
-		return Blocks.ICE.getDefaultState();
+		return Blocks.ICE.defaultState
 	}
 
     override fun afterBreak(world:World, player: PlayerEntity, pos:BlockPos, state:BlockState, blockEntity: BlockEntity?, tool: ItemStack) {
-        super.afterBreak(world, player, pos, state, blockEntity, tool);
+        super.afterBreak(world, player, pos, state, blockEntity, tool)
 		if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, tool) == 0) {
-			if (world.getDimension().ultrawarm()) {
-				world.removeBlock(pos, false);
-				return;
+			if (world.dimension.ultrawarm()) {
+				world.removeBlock(pos, false)
+				return
 			}
 		}
 	}
 
-	override fun randomTick(state:BlockState, world:ServerWorld, pos:BlockPos, random:Random) {
-        if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
+	@Deprecated("Deprecated in Java")
+    override fun randomTick(state:BlockState, world:ServerWorld, pos:BlockPos, random:Random) {
+        if (world.gameRules.getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
             if (random.nextFloat() < 0.33f) {
-                if (world.getDimension().ultrawarm()) {
-                    this.melt(state, world, pos);
+                if (world.dimension.ultrawarm()) {
+                    this.melt(world, pos)
                 }
             }
         }
 	}
 
-	private fun melt(state:BlockState, world:World, pos:BlockPos) {
-        world.setBlockState(pos, getMeltedState());
-        world.updateNeighbor(pos, getMeltedState().getBlock(), pos);
+	private fun melt(world:World, pos:BlockPos) {
+        world.setBlockState(pos, getMeltedState())
+        world.updateNeighbor(pos, getMeltedState().block, pos)
 	}
 }

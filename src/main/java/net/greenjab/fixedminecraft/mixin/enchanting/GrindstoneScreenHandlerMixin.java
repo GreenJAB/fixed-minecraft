@@ -3,12 +3,12 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -19,9 +19,8 @@ import java.util.stream.Collectors;
 @Mixin(GrindstoneScreenHandler.class)
 public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
 
-
     public GrindstoneScreenHandlerMixin(
-            @Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
+            @Nullable ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
     }
 
@@ -43,6 +42,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
         }
     }
 
+    @Unique
     private ItemStack grind(ItemStack item, int damage, int amount) {
         ItemStack itemStack = item.copyWithCount(amount);
         itemStack.removeSubNbt("Enchantments");
@@ -54,12 +54,12 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
             itemStack.removeSubNbt("Damage");
         }
 
-        Map<Enchantment, Integer> map = (Map)EnchantmentHelper.get(item).entrySet().stream().filter((entry) -> {
-            return ((Enchantment)entry.getKey()).isCursed();
+        Map<Enchantment, Integer> map = EnchantmentHelper.get(item).entrySet().stream().filter((entry) -> {
+            return (entry.getKey()).isCursed();
         }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         EnchantmentHelper.set(map, itemStack);
         itemStack.setRepairCost(0);
-        if (itemStack.isOf(Items.ENCHANTED_BOOK) && map.size() == 0) {
+        if (itemStack.isOf(Items.ENCHANTED_BOOK) && map.isEmpty()) {
             itemStack = new ItemStack(Items.BOOK);
             if (item.hasCustomName()) {
                 itemStack.setCustomName(item.getName());

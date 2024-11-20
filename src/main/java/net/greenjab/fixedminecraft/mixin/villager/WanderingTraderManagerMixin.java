@@ -1,12 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
-import net.greenjab.fixedminecraft.data.ModTags;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnRestriction;
-import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.resource.featuretoggle.FeatureFlag;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.WanderingTraderManager;

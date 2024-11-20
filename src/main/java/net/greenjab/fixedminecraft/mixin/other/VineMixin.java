@@ -23,14 +23,14 @@ public class VineMixin {
                           @Local Direction direction) {
         VineBlock VN = (VineBlock)(Object)this;
         if (!direction.getAxis().isHorizontal()) return;
-        if (state.get(VN.getFacingProperty(Direction.UP))){
+        if (state.get(VineBlock.getFacingProperty(Direction.UP))){
             int i =0;
             int k = 0;
 
-            i+= state.get(VN.getFacingProperty(Direction.NORTH)) ?1:0;
-            i+= state.get(VN.getFacingProperty(Direction.SOUTH)) ?1:0;
-            i+= state.get(VN.getFacingProperty(Direction.EAST)) ?1:0;
-            i+= state.get(VN.getFacingProperty(Direction.WEST)) ?1:0;
+            i+= state.get(VineBlock.getFacingProperty(Direction.NORTH)) ?1:0;
+            i+= state.get(VineBlock.getFacingProperty(Direction.SOUTH)) ?1:0;
+            i+= state.get(VineBlock.getFacingProperty(Direction.EAST)) ?1:0;
+            i+= state.get(VineBlock.getFacingProperty(Direction.WEST)) ?1:0;
 
             i+=(world.getBlockState(pos.north()).isOf(Blocks.VINE))?1:0;
             i+=(world.getBlockState(pos.south()).isOf(Blocks.VINE))?1:0;
@@ -46,13 +46,13 @@ public class VineMixin {
                 if (k != 0) {
                     if (world.getBlockState(pos.offset(direction)).isSideSolid(world, pos.offset(direction), direction.getOpposite(), SideShapeType.FULL))
                         world.setBlockState(pos, VN.getDefaultState()
-                                .with(VN.getFacingProperty(direction), true)
-                                .with(VN.getFacingProperty(Direction.UP), true), Block.NOTIFY_LISTENERS);
+                                .with(VineBlock.getFacingProperty(direction), true)
+                                .with(VineBlock.getFacingProperty(Direction.UP), true), Block.NOTIFY_LISTENERS);
                 }
                 else {
                     world.setBlockState(pos, VN.getDefaultState()
-                            .with(VN.getFacingProperty(direction), true)
-                            .with(VN.getFacingProperty(Direction.UP), true), Block.NOTIFY_LISTENERS);
+                            .with(VineBlock.getFacingProperty(direction), true)
+                            .with(VineBlock.getFacingProperty(Direction.UP), true), Block.NOTIFY_LISTENERS);
                 }
 
             }

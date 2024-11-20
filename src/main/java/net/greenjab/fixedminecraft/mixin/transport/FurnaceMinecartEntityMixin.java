@@ -1,21 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MovementType;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FurnaceMinecartEntity.class)

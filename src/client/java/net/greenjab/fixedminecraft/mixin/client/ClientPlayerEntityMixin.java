@@ -1,13 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import net.minecraft.advancement.Advancement;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.StatsScreen;
-import net.minecraft.client.network.ClientAdvancementManager;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,10 +10,6 @@ import net.minecraft.item.ElytraItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
-import net.minecraft.network.packet.c2s.play.ClientStatusC2SPacket;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.dimension.DimensionTypes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -38,7 +29,7 @@ public class ClientPlayerEntityMixin {
     @Inject(method = "canSprint", at = @At("HEAD"), cancellable = true)
     private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
         PlayerEntity instance = (PlayerEntity)(Object)this;
-        cir.setReturnValue(instance.hasVehicle() || (float)instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);
+        cir.setReturnValue(instance.hasVehicle() || instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);
     }
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isClimbing()Z"))
@@ -55,24 +46,6 @@ public class ClientPlayerEntityMixin {
                 CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
             }
         }
-
-        /*assert this.client.world != null;
-        ClientWorld world = this.client.world;
-        if (CPE.age%100 == 5) {
-            world.getWorldBorder().setSize(60000000);
-            if (world.getDifficulty().getId() > 1) {
-                if (world.getDimensionKey() == DimensionTypes.THE_END) {
-                    if (world.getWorldBorder().getSize() > 500) {
-                        //this.client.getNetworkHandler().sendPacket(new ClientStatusC2SPacket(ClientStatusC2SPacket.Mode.REQUEST_STATS));
-                        //this.client.setScreen(new StatsScreen(null, this.client.player.getStatHandler()));
-                        if (CPE.getStatHandler().getStat(Stats.KILLED.getOrCreateStat(EntityType.ENDER_DRAGON)) == 0) {
-                        //if (this.client.getNetworkHandler().getAdvancementHandler().) {
-                            world.getWorldBorder().setSize(300);
-                        }
-                    }
-                }
-            }
-        }*/
     }
     @Inject(method = "canVehicleSprint", at = @At("HEAD"), cancellable = true)
     private void horsesCanSprint(Entity vehicle, CallbackInfoReturnable<Boolean> cir){

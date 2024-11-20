@@ -42,7 +42,7 @@ class MapBookIdCountsState : PersistentState() {
                 }, DataFixTypes.SAVED_DATA_MAP_INDEX
             )
 
-        fun fromNbt(nbt: NbtCompound): MapBookIdCountsState {
+        private fun fromNbt(nbt: NbtCompound): MapBookIdCountsState {
             val idCountsState = MapBookIdCountsState()
             for (string in nbt.keys) {
                 if (!nbt.contains(string, NbtElement.NUMBER_TYPE.toInt())) continue

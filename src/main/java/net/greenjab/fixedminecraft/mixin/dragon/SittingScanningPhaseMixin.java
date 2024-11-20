@@ -52,13 +52,13 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
             } else {
                 Vec3d vec3d = new Vec3d(livingEntity.getX() - this.dragon.getX(), 0.0, livingEntity.getZ() - this.dragon.getZ()).normalize();
                 Vec3d vec3d2 = new Vec3d(
-                        (double) MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
+                         MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
                         0.0,
-                        (double)(-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
+                        (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
                 )
                         .normalize();
                 float f = (float)vec3d2.dotProduct(vec3d);
-                float g = (float)(Math.acos((double)f) * 180.0F / (float)Math.PI);
+                float g = (float)(Math.acos(f) * 180.0F / (float)Math.PI);
 
                 if (g < -5.0F || g > 5.0F) {
                     double d = livingEntity.getX() - this.dragon.getX();
@@ -80,7 +80,7 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
         } else if (this.ticks >= 100) {
             livingEntity = this.dragon
                     .getWorld()
-                    .getClosestPlayer(this.PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+                    .getClosestPlayer(PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
             this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
             if (livingEntity != null) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);

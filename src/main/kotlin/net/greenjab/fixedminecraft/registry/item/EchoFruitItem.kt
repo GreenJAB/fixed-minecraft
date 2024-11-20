@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.registry.item
 
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.passive.FoxEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
@@ -17,10 +16,9 @@ class EchoFruitItem(settings: Settings?) : Item(settings) {
     override fun finishUsing(stack: ItemStack, world: World, user: LivingEntity): ItemStack {
         val itemStack = super.finishUsing(stack, world, user)
         if (user is PlayerEntity) {
-            var deathOpt = user.lastDeathPos;
+            val deathOpt = user.lastDeathPos
             if (!world.isClient && deathOpt.isPresent) {
-                val playerEntity = user
-                var deathPos =  playerEntity.lastDeathPos.get();
+                val deathPos = user.lastDeathPos.get()
                 val d = deathPos.pos.x.toDouble()
                 val e = deathPos.pos.y.toDouble()
                 val f = deathPos.pos.z.toDouble()
@@ -31,7 +29,7 @@ class EchoFruitItem(settings: Settings?) : Item(settings) {
                 val vec3d = user.getPos()
                 val serverWorld: ServerWorld? = user.server!!.getWorld(user.lastDeathPos.get().dimension)
                 if (user.teleport(serverWorld as ServerWorld, d, e, f, setOf(), user.getYaw(), user.getPitch())) {
-                    while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.getTopY().toDouble()) {
+                    while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.topY.toDouble()) {
                         user.setPosition(user.getX(), user.getY() + 1.0, user.getZ())
                     }
                     world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(user as Entity))
@@ -41,7 +39,7 @@ class EchoFruitItem(settings: Settings?) : Item(settings) {
                     world.playSound(null as PlayerEntity?, vec3d.getX(), vec3d.getY(), vec3d.getZ(), soundEvent, soundCategory)
                     user.onLanding()
 
-                    playerEntity.itemCooldownManager[this] = 20
+                    user.itemCooldownManager[this] = 20
                 }
             }
         }

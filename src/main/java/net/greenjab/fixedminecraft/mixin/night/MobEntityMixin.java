@@ -12,11 +12,8 @@ import net.minecraft.world.ServerWorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
-@SuppressWarnings("unchecked")
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin {
 

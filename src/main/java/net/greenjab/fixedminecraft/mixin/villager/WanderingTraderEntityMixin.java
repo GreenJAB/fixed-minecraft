@@ -228,7 +228,7 @@ public abstract class WanderingTraderEntityMixin {
             World world = WTE.getWorld();
             if (world instanceof ServerWorld serverWorld) {
 
-                int map = serverWorld.random.nextInt(4);
+                int map = serverWorld.random.nextInt(5);
                 //map = 3;
                 switch (map) {
                     case 0:

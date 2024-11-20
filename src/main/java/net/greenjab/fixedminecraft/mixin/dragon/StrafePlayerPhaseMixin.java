@@ -55,7 +55,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
     @Inject(method = "serverTick", at = @At(value = "HEAD"), cancellable = true)
     private void checkForDragonFight(CallbackInfo ci) {
         if (this.target == null || this.seenTargetTimes < -100) {
-            this.LOGGER.warn("Skipping player strafe phase because no player was found");
+            LOGGER.warn("Skipping player strafe phase because no player was found");
             this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
         } else {
             if (this.path != null && this.path.isFinished()) {
@@ -73,16 +73,15 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                 this.updatePath();
             }
 
-            double e = 64.0;
             if (this.target.squaredDistanceTo(this.dragon) < 22500.0) {
                 if (this.dragon.canSee(this.target)) {
                     this.seenTargetTimes++;
 
                     Vec3d vec3d = new Vec3d(this.target.getX() - this.dragon.getX(), 0.0, this.target.getZ() - this.dragon.getZ()).normalize();
                     Vec3d vec3d2 = new Vec3d(
-                            (double) MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
+                            MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
                             0.0,
-                            (double)(-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
+                            (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
                     )
                             .normalize();
                     Vec3d vec3d3 = this.dragon.getRotationVec(1.0F);
@@ -126,9 +125,8 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                             }
                         } else {
                             float j = (float)vec3d2.dotProduct(vec3d);
-                            float k = (float)(Math.acos((double)j) * 180.0F / (float)Math.PI);
+                            float k = (float)(Math.acos(j) * 180.0F / (float)Math.PI);
                             if (k >= -45.0F && k < 45.0F) {
-                                double h = 1.0;
 
                                 double l = this.dragon.head.getX() - vec3d3.x;
                                 double m = this.dragon.head.getBodyY(0.5) + 0.5;

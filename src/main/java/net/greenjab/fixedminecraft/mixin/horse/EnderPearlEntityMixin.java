@@ -9,13 +9,11 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
@@ -26,8 +24,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.EnumSet;
-import java.util.List;
 import java.util.Objects;
 
 @Mixin(EnderPearlEntity.class)
@@ -82,7 +78,8 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                 pathAwareEntity.getNavigation().stop();
 
             vehicle.onLanding();
-            if (!((PlayerEntity) Objects.requireNonNull(((EnderPearlEntity) (Object) this).getOwner())).getAbilities().creativeMode) {
+            EnderPearlEntity EPE = (EnderPearlEntity) (Object) this;
+            if (!((PlayerEntity) Objects.requireNonNull((EPE).getOwner())).getAbilities().creativeMode) {
                 vehicle.damage(this.getDamageSources().fall(), 5.0F);
             }
             ref.set(true);
@@ -95,26 +92,6 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
             Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.ENDER_PEARL.getDefaultStack());
         }
     }
-
-    /**
-     * Damages the saved vehicle and all passengers if the group teleportation was successful.
-     */
-    /*@WrapOperation(
-            method = "onCollision",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z")
-    )
-    private boolean damagePassengers(Entity instance, DamageSource source, float amount, Operation<Boolean> original,
-                                     @Share("passed")
-                                     LocalBooleanRef ref) {
-        if (!ref.get()) return original.call(instance, source, amount);
-        assert vehicle != null;
-
-        boolean damaged = false;
-        for (Entity passenger : vehicle.getPassengersDeep())
-            passenger.damage(this.getDamageSources().fall(), 5.0F);
-            //damaged |= original.call(passenger, source, amount);
-        return damaged;
-    }*/
 
     /**
      * Recursively gets the bottommost vehicle.

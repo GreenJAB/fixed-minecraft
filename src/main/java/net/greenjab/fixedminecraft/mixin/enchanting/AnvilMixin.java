@@ -12,18 +12,19 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@SuppressWarnings("unchecked")
 @Mixin(AnvilBlock.class)
-public class AnvilMixin /*extends FallingBlock*/ {
+public class AnvilMixin  {
 
+    @Unique
     private static final DirectionProperty FACING = HorizontalFacingBlock.FACING;
 
     @Inject(method = "getLandingState", at = @At("HEAD"), cancellable = true)
-    private static void damageNetheriteAnvil(BlockState fallingState, CallbackInfoReturnable cir) {
+    private static void damageNetheriteAnvil(BlockState fallingState, CallbackInfoReturnable<BlockState> cir) {
 
         if (fallingState.isOf(BlockRegistry.INSTANCE.getNETHERITE_ANVIL())) {
             cir.setReturnValue(BlockRegistry.INSTANCE.getCHIPPED_NETHERITE_ANVIL()

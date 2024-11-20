@@ -1,20 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

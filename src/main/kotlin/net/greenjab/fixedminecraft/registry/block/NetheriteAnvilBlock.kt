@@ -48,6 +48,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         return defaultState.with(FACING, ctx.horizontalPlayerFacing.rotateYClockwise()) as BlockState
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onUse(
         state: BlockState,
         world: World,
@@ -65,6 +66,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         return ActionResult.CONSUME
     }
 
+    @Deprecated("Deprecated in Java")
     override fun createScreenHandlerFactory(state: BlockState, world: World, pos: BlockPos): NamedScreenHandlerFactory {
         return SimpleNamedScreenHandlerFactory({ syncId: Int, inventory: PlayerInventory?, player: PlayerEntity? ->
             AnvilScreenHandler(
@@ -75,6 +77,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         }, TITLE)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun getOutlineShape(state: BlockState, world: BlockView, pos: BlockPos, context: ShapeContext): VoxelShape {
         val direction = state.get(FACING)
         if (direction.axis === Direction.Axis.X) {
@@ -109,6 +112,13 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         return attacker.damageSources.fallingAnvil(attacker)
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith(
+        "state.with(FACING, rotation.rotate(state.get(FACING))) as BlockState",
+        "net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock.Companion.FACING",
+        "net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock.Companion.FACING",
+        "net.minecraft.block.BlockState"
+    )
+    )
     override fun rotate(state: BlockState, rotation: BlockRotation): BlockState {
         return state.with(FACING, rotation.rotate(state.get(FACING))) as BlockState
     }
@@ -117,6 +127,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         builder.add(FACING)
     }
 
+    @Deprecated("Deprecated in Java", ReplaceWith("false"))
     override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType): Boolean {
         return false
     }
@@ -139,18 +150,6 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         private val X_AXIS_SHAPE: VoxelShape = VoxelShapes.union(BASE_SHAPE, X_STEP_SHAPE, X_STEM_SHAPE, X_FACE_SHAPE)
         private val Z_AXIS_SHAPE: VoxelShape = VoxelShapes.union(BASE_SHAPE, Z_STEP_SHAPE, Z_STEM_SHAPE, Z_FACE_SHAPE)
         private val TITLE: Text = Text.translatable("container.repair")
-        private const val FALLING_BLOCK_ENTITY_DAMAGE_MULTIPLIER = 2.0f
-        private const val FALLING_BLOCK_ENTITY_MAX_DAMAGE = 40
-
-        /*fun getLandingState(fallingState: BlockState): BlockState? {
-            if (fallingState.isOf(BlockRegistry.NETHERITE_ANVIL)) {
-                return BlockRegistry.CHIPPED_NETHERITE_ANVIL.defaultState.with(FACING, fallingState.get(FACING)) as BlockState
-            }
-            if (fallingState.isOf(BlockRegistry.CHIPPED_NETHERITE_ANVIL)) {
-                return BlockRegistry.DAMAGED_NETHERITE_ANVIL.defaultState.with(FACING, fallingState.get(FACING)) as BlockState
-            }
-            return null
-        }*/
     }
 }
 

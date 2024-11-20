@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.night;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
@@ -16,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class ApplyBonusLootFunctionMixin {
 
     @ModifyVariable(method = "process", at = @At("STORE"), ordinal = 0)
-    private int nightFortune(int i, @Local LootContext context) {
-        Entity entity = (Entity)context.get(LootContextParameters.THIS_ENTITY);
+    private int nightFortune(int i, @Local(argsOnly = true) LootContext context) {
+        Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         if (entity!=null) {
             World world = entity.getWorld();
             if (entity instanceof PlayerEntity) {

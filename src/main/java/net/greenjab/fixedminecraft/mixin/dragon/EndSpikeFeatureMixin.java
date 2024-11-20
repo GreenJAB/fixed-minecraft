@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(EndSpikeFeature.class)
-public class EndSpikeFeatureMixin /*extends Feature<EndSpikeFeatureConfig>*/ {
+public class EndSpikeFeatureMixin {
 
     @ModifyConstant(method = "generateSpike", constant = @Constant(intValue = 0, ordinal = 0))
     private int removeBowCheese(int constant) {

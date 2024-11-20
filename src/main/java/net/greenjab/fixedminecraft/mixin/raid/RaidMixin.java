@@ -1,15 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.EvokerEntity;
 import net.minecraft.entity.raid.RaiderEntity;
 import net.minecraft.village.raid.Raid;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Raid.class)
 public class RaidMixin {

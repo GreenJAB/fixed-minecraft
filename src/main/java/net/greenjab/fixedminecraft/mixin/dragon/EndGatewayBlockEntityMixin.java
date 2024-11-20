@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EndGatewayBlockEntity.class)
-public class EndGatewayBlockEntityMixin /*extends Feature<EndSpikeFeatureConfig>*/ {
+public class EndGatewayBlockEntityMixin  {
 
     @Inject(method = "canTeleport", at = @At("HEAD"), cancellable = true)
     private static void dontTeleportDragon(Entity entity, CallbackInfoReturnable<Boolean> cir){

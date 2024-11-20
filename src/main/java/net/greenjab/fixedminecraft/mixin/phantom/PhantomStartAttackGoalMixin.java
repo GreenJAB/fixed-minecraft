@@ -1,8 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
 import net.minecraft.entity.mob.PhantomEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;

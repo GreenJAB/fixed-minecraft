@@ -40,7 +40,7 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
     }
 
     @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
-    private void chargeAtPlayer(CallbackInfo ci, @Local PlayerEntity player) {
+    private void chargeAtPlayer(CallbackInfo ci, @Local(argsOnly = true) PlayerEntity player) {
         if (player.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))>150*150) {
             ci.cancel();
         } else {

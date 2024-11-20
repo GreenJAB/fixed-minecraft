@@ -1,20 +1,19 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 
-//import net.greenjab.fixedminecraft.registry.entity.BrickEntity;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
 import net.greenjab.fixedminecraft.registry.item.TotemItem;
-        import net.minecraft.item.FoodComponents;
+import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SaddleItem;
 import net.minecraft.item.StewItem;
 import net.minecraft.item.SuspiciousStewItem;
-        import net.minecraft.util.Rarity;
-        import org.spongepowered.asm.mixin.Mixin;
+import net.minecraft.util.Rarity;
+import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;

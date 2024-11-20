@@ -14,7 +14,7 @@ public class ProtectionEnchantmentMixin {
 
     @Inject(method = "canAccept", at = @At("HEAD"), cancellable = true)
     private void removeExclusivity(Enchantment other, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue((ProtectionEnchantment)(Object)this != other);
+        cir.setReturnValue(true);
     }
 
     @Inject(method = "getProtectionAmount", at = @At("HEAD"), cancellable = true)

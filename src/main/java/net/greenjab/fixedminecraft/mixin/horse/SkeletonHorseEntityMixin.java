@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.SkeletonHorseEntity;
-import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

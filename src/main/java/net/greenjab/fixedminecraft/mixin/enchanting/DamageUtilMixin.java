@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.InfinityEnchantment;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;

@@ -58,7 +58,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
             var openMap = true
             if (getNearestMap(item, world as ServerWorld, player.pos)==null) {
-                if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, true)) {
+                if (addNewMapAtPos(item, world, player.pos,true)) {
                     player.world.playSoundFromEntity(
                         null,
                         player,
@@ -70,7 +70,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     openMap = false
                 }
             } else if (otherHand.isOf(Items.PAPER)) {
-                if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, true)) {
+                if (addNewMapAtPos(item, world, player.pos, true)) {
                     if (!player.abilities.creativeMode) {
                         otherHand.decrement(1)
                     }
@@ -85,7 +85,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     openMap = false
                 }
             } else if (otherHand.isOf(Items.FILLED_MAP)) {
-                if (addNewMapID(item, otherHand, world as ServerWorld)) {
+                if (addNewMapID(item, otherHand, world)) {
                     if (!player.abilities.creativeMode) {
                         otherHand.decrement(1)
                     }
@@ -100,9 +100,9 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
                     openMap = false
                 }
             } else {
-                val hasPaper = getPaper(user);
+                val hasPaper = getPaper(user)
                 if (hasPaper.isOf(Items.PAPER)) {
-                    if (addNewMapAtPos(item, world as ServerWorld, player.pos, 0, false)) {
+                    if (addNewMapAtPos(item, world, player.pos, false)) {
                         if (!player.abilities.creativeMode) {
                             hasPaper.decrement(1)
                         }
@@ -143,7 +143,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return ItemStack.EMPTY
     }
 
-    fun sendMapUpdates(player: ServerPlayerEntity, item: ItemStack) {
+    private fun sendMapUpdates(player: ServerPlayerEntity, item: ItemStack) {
         for (mapStateData in getMapStates(item, player.world)) {
             mapStateData.mapState.getPlayerSyncData(player)
             val packet = mapStateData.mapState.getPlayerMarkerPacket(mapStateData.id, player)
@@ -188,7 +188,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         for (i in mapBookState.mapIDs) {
             val mapState = FilledMapItem.getMapState(i, world)
             if (mapState != null) {
-                if (world.dimensionKey.value.toString().equals(mapState.dimension.value.toString())) {
+                if (world.dimensionKey.value.toString() == mapState.dimension.value.toString()) {
                     list.add(MapStateData(i, mapState))
                 }
             }
@@ -219,7 +219,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return nearestMap
     }
 
-    fun getDistanceToEdgeOfMap(mapState: MapState, pos: Vec3d): Double {
+    private fun getDistanceToEdgeOfMap(mapState: MapState, pos: Vec3d): Double {
         // get signed distance to edge of map
         // so the edge of the map is 0, inside is negative and outside is positive
         // note the distance does not round the corners like a proper sdf would
@@ -263,17 +263,17 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
         return MapBookStateManager.getMapBookState(server, i)!!
     }
 
-    private fun addNewMapAtPos(item: ItemStack, world: ServerWorld, pos: Vec3d, scale: Int, otherhand: Boolean): Boolean {
+    private fun addNewMapAtPos(item: ItemStack, world: ServerWorld, pos: Vec3d, otherhand: Boolean): Boolean {
         val state = getOrCreateMapBookState(item, world.server)
 
         val nearestState = getNearestMap(item, world, pos)
         // make a new map if the book has no maps, the position is outside a map, or the map the position is in has a larger scale
-        if (nearestState == null || (nearestState.mapState.scale > scale && otherhand) || getDistanceToEdgeOfMap(
+        if (nearestState == null || (nearestState.mapState.scale > 0 && otherhand) || getDistanceToEdgeOfMap(
                 nearestState.mapState,
                 pos
             ) > 0
         ) {
-            val newMap = FilledMapItem.createMap(world, floor(pos.x).toInt(), floor(pos.z).toInt(), scale.toByte(), true, false)
+            val newMap = FilledMapItem.createMap(world, floor(pos.x).toInt(), floor(pos.z).toInt(), 0, true, false)
             state.addMapID(FilledMapItem.getMapId(newMap)!!)
             return true
         }
@@ -282,7 +282,7 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
 
     private fun addNewMapID(item: ItemStack, filledmap: ItemStack, world: ServerWorld): Boolean {
         val state = getOrCreateMapBookState(item, world.server)
-        var id = FilledMapItem.getMapId(filledmap)
+        val id = FilledMapItem.getMapId(filledmap)
         if (!state.mapIDs.contains(id)) {
             state.addMapID(id!!)
             return true
@@ -345,6 +345,6 @@ class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
     }
 
     override fun isEnchantable(stack: ItemStack?): Boolean {
-        return true;
+        return true
     }
 }

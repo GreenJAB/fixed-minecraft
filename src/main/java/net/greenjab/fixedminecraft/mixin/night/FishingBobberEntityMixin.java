@@ -18,10 +18,9 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-import java.util.Iterator;
 
 @Mixin(FishingBobberEntity.class)
 public class FishingBobberEntityMixin {
@@ -36,9 +35,10 @@ public class FishingBobberEntityMixin {
     }
 
     @ModifyArg(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;<init>(Lnet/minecraft/world/World;DDDLnet/minecraft/item/ItemStack;)V"), index = 4)
-    private ItemStack fishingItem(ItemStack loot, @Local(ordinal = 0) ItemStack rod) {
+    private ItemStack fishingItem(ItemStack loot, @Local(ordinal = 0, argsOnly = true) ItemStack rod) {
         FishingBobberEntity FBE = (FishingBobberEntity)(Object)this;
         PlayerEntity playerEntity = FBE.getPlayerOwner();
+        assert playerEntity != null;
         ItemStack bait = getBait(playerEntity);
         int luck = this.luckOfTheSeaLevel;
 
@@ -67,13 +67,16 @@ public class FishingBobberEntityMixin {
         if (rand>chanceFish+chanceBad) lootPool = 2;
         if (rand>chanceFish+chanceBad+chanceMid) lootPool = 3;
 
-        LootTable lootTable;
-        switch (lootPool){
-            case 1: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/junk")); break;
-            case 2: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/mid")); break;
-            case 3: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/treasure")); break;
-            default: lootTable = playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/fish"));
-        }
+        LootTable lootTable = switch (lootPool) {
+            case 1 ->
+                    playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/junk"));
+            case 2 ->
+                    playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/mid"));
+            case 3 ->
+                    playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/treasure"));
+            default ->
+                    playerEntity.getWorld().getServer().getLootManager().getLootTable(new Identifier("gameplay/fixed_fishing/fish"));
+        };
 
         LootContextParameterSet lootContextParameterSet = (new LootContextParameterSet.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
@@ -84,11 +87,10 @@ public class FishingBobberEntityMixin {
         return loot;
     }
 
+    @Unique
     private ItemStack getBait(PlayerEntity playerEntity) {
-        Iterator handItems = playerEntity.getHandItems().iterator();
-        while (handItems.hasNext()) {
-            ItemStack item = (ItemStack)handItems.next();
-            if (item.isOf(Items.SPIDER_EYE)||item.isOf(Items.FERMENTED_SPIDER_EYE)) return item;
+        for (ItemStack item : playerEntity.getHandItems()) {
+            if (item.isOf(Items.SPIDER_EYE) || item.isOf(Items.FERMENTED_SPIDER_EYE)) return item;
         }
         for(int i = 0; i < playerEntity.getInventory().size(); ++i) {
             ItemStack item = playerEntity.getInventory().getStack(i);

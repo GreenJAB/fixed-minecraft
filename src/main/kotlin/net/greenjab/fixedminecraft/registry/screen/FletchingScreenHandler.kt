@@ -35,25 +35,13 @@ class FletchingScreenHandler @JvmOverloads constructor(
         return items
     }
     init {
-        // this.addSlot(CraftingResultSlot(playerInventory.player, this.input, this.result, 0, 124, 35))
         this.addSlot(object : Slot(this.result, 0, 124, 35){
             override fun canInsert(stack: ItemStack?): Boolean {return false}
             override fun onTakeItem(player: PlayerEntity?, stack: ItemStack?) {
                 this.onCrafted(stack)
 
                 for (stack in input.heldStacks.indices) {
-
                     input.removeStack(stack, 1)
-                    /*if (!stack.isEmpty) {
-                        if (itemStack.isEmpty) {
-                            input.setStack(i, itemStack2)
-                        } else if (ItemStack.canCombine(itemStack, itemStack2)) {
-                            itemStack2.increment(itemStack.count)
-                            this.input.setStack(i, itemStack2)
-                        } else if (!this.player.getInventory().insertStack(itemStack2)) {
-                            this.player.dropItem(itemStack2, false)
-                        }
-                    }*/
                 }
             }
         })
@@ -144,7 +132,7 @@ class FletchingScreenHandler @JvmOverloads constructor(
     override fun quickMove(player: PlayerEntity, slot: Int): ItemStack {
         var itemStack = ItemStack.EMPTY
         val slot2 = slots[slot]
-        if (slot2 != null && slot2.hasStack()) {
+        if (slot2.hasStack()) {
             val itemStack2 = slot2.stack
             itemStack = itemStack2.copy()
             if (slot == 0) {
@@ -156,7 +144,7 @@ class FletchingScreenHandler @JvmOverloads constructor(
                 }
 
                 slot2.onQuickTransfer(itemStack2, itemStack)
-            } else if (slot >= 10 && slot < 46) {
+            } else if (slot in 10..45) {
                 if (!this.insertItem(itemStack2, 1, 10, false)) {
                     if (slot < 37) {
                         if (!this.insertItem(itemStack2, 37, 46, false)) {
@@ -194,14 +182,7 @@ class FletchingScreenHandler @JvmOverloads constructor(
     }
 
     companion object {
-        const val RESULT_ID: Int = 0
-        private const val INPUT_START = 1
-        private const val INPUT_END = 10
-        private const val INVENTORY_START = 10
-        private const val INVENTORY_END = 37
-        private const val HOTBAR_START = 37
-        private const val HOTBAR_END = 46
-        protected fun updateResult(
+        private fun updateResult(
             handler: ScreenHandler,
             world: World,
             player: PlayerEntity,
@@ -211,9 +192,9 @@ class FletchingScreenHandler @JvmOverloads constructor(
             if (!world.isClient) {
                 val serverPlayerEntity = player as ServerPlayerEntity
                 var itemStack = ItemStack.EMPTY
-                var b = !craftingInventory.getStack(0).isEmpty&&!craftingInventory.getStack(3).isEmpty&&!craftingInventory.getStack(6).isEmpty
+                val b = !craftingInventory.getStack(0).isEmpty&&!craftingInventory.getStack(3).isEmpty&&!craftingInventory.getStack(6).isEmpty
                 if (b) {
-                    var extra = craftingInventory.getStack(5)
+                    val extra = craftingInventory.getStack(5)
                     if (extra.isEmpty) itemStack = ItemStack(Items.ARROW, 8)
                     else if (extra.isOf(Items.GLOWSTONE)) itemStack = ItemStack(Items.SPECTRAL_ARROW, 8)
                     else {

@@ -16,7 +16,7 @@ import java.util.UUID;
 public class ServerPlayerEntityMixin {
 
     @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
-    private Entity check(Entity target) {
+    private Entity hitFakehitbox(Entity target) {
         if (target instanceof InteractionEntity IE) {
             if (IE.getCommandTags().contains("dragon")) {
                 EnderDragonFight enderDragonFight = ((ServerWorld) target.getWorld()).getEnderDragonFight();
@@ -30,16 +30,7 @@ public class ServerPlayerEntityMixin {
                     }
                 }
             }
-            /*List<Entity> entities = target.getWorld().getOtherEntities(IE, IE.getBoundingBox().expand(3));
-            EnderDragonEntity dragon = null;
-            for (Entity e : entities) {
-                if (e instanceof EnderDragonEntity dragonEntity) {
-                    dragon = dragonEntity;
-                    return dragon.head;
-                }
-            }*/
         }
         return target;
     }
-
 }

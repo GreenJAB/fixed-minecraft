@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class SuspiciousStewItemMixin {
 
     @Inject(method = "finishUsing", at = @At("TAIL"), cancellable = true)
-    private void fixStackedBowlUse(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable cir) {
+    private void fixStackedBowlUse(ItemStack stack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         if (user instanceof ServerPlayerEntity serverPlayerEntity) {
             Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, stack);
             serverPlayerEntity.incrementStat(Stats.USED.getOrCreateStat((SuspiciousStewItem)(Object)this));
@@ -26,8 +26,7 @@ public class SuspiciousStewItemMixin {
         if (stack.isEmpty()) {
             cir.setReturnValue( new ItemStack(Items.BOWL));
         } else {
-            if (user instanceof PlayerEntity) {
-                PlayerEntity playerEntity = (PlayerEntity)user;
+            if (user instanceof PlayerEntity playerEntity) {
                 if (!playerEntity.getAbilities().creativeMode) {
                     ItemStack itemStack2 = new ItemStack(Items.BOWL);
                     if (!playerEntity.getInventory().insertStack(itemStack2)) {

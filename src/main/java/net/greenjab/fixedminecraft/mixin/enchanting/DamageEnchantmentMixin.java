@@ -12,6 +12,6 @@ public class DamageEnchantmentMixin {
 
     @Inject(method = "canAccept", at = @At("HEAD"), cancellable = true)
     private void removeExclusivity(Enchantment other, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue((DamageEnchantment)(Object)this != other);
+        cir.setReturnValue(true);
     }
 }

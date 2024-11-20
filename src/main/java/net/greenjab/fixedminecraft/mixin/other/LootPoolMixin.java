@@ -14,7 +14,7 @@ public class LootPoolMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/loot/provider/number/LootNumberProvider;nextInt(Lnet/minecraft/loot/context/LootContext;)I"
     ))
-    private int stillLucky(int original, @Local LootContext context) {
+    private int stillLucky(int original, @Local(argsOnly = true) LootContext context) {
         return original + (int)context.getLuck();
     }
 }

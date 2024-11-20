@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-import net.minecraft.entity.mob.PiglinBrain;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -12,6 +12,6 @@ public class InfinityEnchantmentMixin {
 
     @Inject(method = "canAccept", at = @At("HEAD"), cancellable = true)
     private void removeExclusivity(Enchantment other, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue((InfinityEnchantment)(Object)this != other);
+        cir.setReturnValue(true);
     }
 }

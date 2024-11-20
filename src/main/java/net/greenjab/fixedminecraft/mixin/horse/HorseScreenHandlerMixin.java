@@ -11,14 +11,12 @@ import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
-
-@SuppressWarnings("unchecked")
 @Mixin(HorseScreenHandler.class)
 public class HorseScreenHandlerMixin {
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/HorseScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 1), index = 0)
     private Slot lapiscost(Slot par1, @Local(argsOnly = true) Inventory inventory, @Local(argsOnly = true) AbstractHorseEntity entity) {
-        return new Slot(inventory, 1, 8, 36) /* HorseScreenHandler$2 */ {
+        return new Slot(inventory, 1, 8, 36) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return entity.isHorseArmor(stack);
@@ -37,11 +35,8 @@ public class HorseScreenHandlerMixin {
             @Override
             public boolean canTakeItems(PlayerEntity playerEntity) {
                 ItemStack itemStack = this.getStack();
-                return !itemStack.isEmpty() && !playerEntity.isCreative() && EnchantmentHelper.hasBindingCurse(itemStack) ? false : super.canTakeItems(playerEntity);
+                return (itemStack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
             }
         };
     }
-
-
-
 }

@@ -18,7 +18,6 @@
         "description": {
             "translate": "advancements.husbandry.obtain_sniffer_egg.description"
         },
-        "hidden": true,
         "icon": {
             "item": "minecraft:sniffer_egg"
         },

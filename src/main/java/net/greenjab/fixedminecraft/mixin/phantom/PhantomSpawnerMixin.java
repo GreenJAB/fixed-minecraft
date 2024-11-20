@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -25,8 +24,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-
-@SuppressWarnings("unchecked")
 @Mixin(PhantomSpawner.class)
 public class PhantomSpawnerMixin {
 

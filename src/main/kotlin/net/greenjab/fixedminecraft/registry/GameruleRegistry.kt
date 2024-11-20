@@ -15,10 +15,6 @@ object GameruleRegistry {
         GameRuleRegistry.register("requireTotemUse", GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(false))
 
     fun register() {
-        //Ice_Melt_In_Nether = GameRuleRegistry.register("iceMeltInNether", GameRules.Category.UPDATES, GameRuleFactory.createBooleanRule(true))
-        //Insomnia_Sleep_Requirement = GameRuleRegistry.register("insomniaSleepRequirement", GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true))
-        //Require_Totem_Use = GameRuleRegistry.register("requireTotemUse", GameRules.Category.PLAYER, GameRuleFactory.createBooleanRule(true))
-
     }
 
 }

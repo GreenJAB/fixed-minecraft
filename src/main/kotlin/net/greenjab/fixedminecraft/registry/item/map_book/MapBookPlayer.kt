@@ -1,10 +1,7 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.minecraft.advancement.AdvancementDisplay
-import net.minecraft.advancement.AdvancementFrame
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
-import java.util.Optional
 
 class MapBookPlayer {
     var name: String = ""

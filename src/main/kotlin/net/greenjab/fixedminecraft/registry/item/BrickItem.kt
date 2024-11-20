@@ -25,14 +25,14 @@ class BrickItem(settings: Settings) : Item(settings) {
             SoundEvents.ENTITY_EGG_THROW,
             SoundCategory.PLAYERS,
             0.5f,
-            0.4f / (world!!.getRandom().nextFloat() * 0.4f + 0.8f)
+            0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f)
         )
-        user.itemCooldownManager[this] = 20;
-        if (!world!!.isClient) {
+        user.itemCooldownManager[this] = 20
+        if (!world.isClient) {
             val brickEntity = BrickEntity(world, user)
             brickEntity.setItem(itemStack)
             brickEntity.setVelocity(user, user.pitch, user.yaw, 0.0f, 1.5f, 1.0f)
-            world!!.spawnEntity(brickEntity)
+            world.spawnEntity(brickEntity)
         }
 
         user.incrementStat(Stats.USED.getOrCreateStat(this))
@@ -40,6 +40,6 @@ class BrickItem(settings: Settings) : Item(settings) {
             itemStack.decrement(1)
         }
 
-        return TypedActionResult.success(itemStack, world!!.isClient())
+        return TypedActionResult.success(itemStack, world.isClient())
     }
 }

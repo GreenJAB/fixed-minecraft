@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ElytraFeatureRenderer.class)
 @Environment(EnvType.CLIENT)
-public abstract class ElytraFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>, A extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
+public abstract class ElytraFeatureRendererMixin<T extends LivingEntity, M extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
 
     public ElytraFeatureRendererMixin(FeatureRendererContext<T, M> context) {
         super(context);
     }
 
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render*", at = @At("HEAD"))
     private void setEnchantTheRainbowItemStack(
             MatrixStack matrixStack,
             VertexConsumerProvider vertexConsumerProvider,

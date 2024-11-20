@@ -12,7 +12,7 @@ public class ThrowablePotionItemMixin {
     private float longerLingeringThrows(float constant){
         ThrowablePotionItem TPI = (ThrowablePotionItem)(Object)this;
         if (TPI instanceof LingeringPotionItem) {
-            return 0.8f;
+            return 0.85f;
         }
         return constant;
     }

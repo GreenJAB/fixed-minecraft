@@ -17,8 +17,7 @@ public class EnchantGlint {
         ItemStack target = targetStack.get();
 
         if (target == null || target.isEmpty() || !target.hasNbt()) return false;
-        if (target.getNbt().contains("Super")) return true;
-        return false;
+        return target.getNbt().contains("Super");
     }
 
     @Environment(EnvType.CLIENT)

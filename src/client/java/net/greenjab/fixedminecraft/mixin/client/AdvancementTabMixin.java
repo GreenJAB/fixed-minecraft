@@ -1,26 +1,19 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.client.gui.screen.advancement.AdvancementTab;
-import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
 import net.minecraft.util.math.MathHelper;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Map;
-
-
 @Mixin(AdvancementTab.class)
 public class AdvancementTabMixin {
-    @Shadow
-    @Final
-    private Map<AdvancementEntry, AdvancementWidget> widgets;
+    @Unique
     int newPAGE_WIDTH = 423;
+    @Unique
     int newPAGE_HEIGHT = 218;
     @ModifyConstant(method = "render", constant = @Constant(intValue = 117))
     private int largerScreenX1(int constant) {return newPAGE_WIDTH/2;}

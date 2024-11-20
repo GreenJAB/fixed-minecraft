@@ -1,26 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.entity.BeaconBlockEntity;
-//import net.minecraft.entity.effect.SaturationStatusEffect;
-
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Iterator;
-import java.util.List;
 
 @Mixin(StatusEffectInstance.class)
 public class StatusEffectInstanceMixin {

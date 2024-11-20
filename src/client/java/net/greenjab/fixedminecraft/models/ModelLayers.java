@@ -7,19 +7,19 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
 public class ModelLayers {
-    public static final EntityModelLayer VILLAGER_INNER_ARMOR = registerInnerArmor("villager");
-    public static final EntityModelLayer VILLAGER_OUTER_ARMOR = registerOuterArmor("villager");
+    public static final EntityModelLayer VILLAGER_INNER_ARMOR = registerInnerArmor();
+    public static final EntityModelLayer VILLAGER_OUTER_ARMOR = registerOuterArmor();
 
-    private static EntityModelLayer registerInnerArmor(String name) {
-        return register(name, "inner_armor");
+    private static EntityModelLayer registerInnerArmor() {
+        return register("inner_armor");
     }
 
-    private static EntityModelLayer registerOuterArmor(String name) {
-        return register(name, "outer_armor");
+    private static EntityModelLayer registerOuterArmor() {
+        return register("outer_armor");
     }
 
-    private static EntityModelLayer register(String name, String layer) {
-        return new EntityModelLayer(new Identifier("fixedminecraft", name), layer);
+    private static EntityModelLayer register(String layer) {
+        return new EntityModelLayer(new Identifier("fixedminecraft", "villager"), layer);
     }
 
     public static void onRegisterLayers() {

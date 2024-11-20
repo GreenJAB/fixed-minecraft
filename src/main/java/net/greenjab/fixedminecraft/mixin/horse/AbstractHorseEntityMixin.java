@@ -32,8 +32,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
@@ -104,8 +102,6 @@ public class AbstractHorseEntityMixin {
 
     @Unique
     private double modifyAttribute(double original, EntityAttribute attribute, Collection<StatusEffectInstance> effects) {
-        ArrayList<StatusEffectInstance> validEffects = new ArrayList<>();
-
         StatusEffectInstance chosenEffect = null;
         int longestDuration = -1;
 
@@ -226,7 +222,7 @@ public class AbstractHorseEntityMixin {
             if (AHE.isHorseArmor(stack)) {
                 int i = ((HorseArmorItem)stack.getItem()).getBonus();
                 if (i != 0) {
-                    AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", (double)i, EntityAttributeModifier.Operation.ADDITION));
+                    AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", i, EntityAttributeModifier.Operation.ADDITION));
                 }
             }
         }

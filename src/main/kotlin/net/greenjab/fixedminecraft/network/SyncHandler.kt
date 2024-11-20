@@ -2,22 +2,20 @@ package net.greenjab.fixedminecraft.network
 
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
-import net.minecraft.advancement.AdvancementDisplay
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import java.util.UUID
+import kotlin.math.abs
 
 object SyncHandler {
     val EXHAUSTION_SYNC: Identifier = Identifier("fixedminecraft", "exhaustion_sync")
     val SATURATION_SYNC: Identifier = Identifier("fixedminecraft", "saturation_sync")
 
-    fun makePacketBuf(value: Float): PacketByteBuf {
-        var buf = PacketByteBuf(Unpooled.buffer())
+    private fun makePacketBuf(value: Float): PacketByteBuf {
+        val buf = PacketByteBuf(Unpooled.buffer())
         buf.writeFloat(value)
         return buf
     }
@@ -26,24 +24,24 @@ object SyncHandler {
      * Sync saturation (vanilla MC only syncs when it hits 0)
      * Sync exhaustion (vanilla MC does not sync it at all)
      */
-    var lastSaturationLevels: HashMap<UUID, Float> = HashMap<UUID, Float>()
-    var lastExhaustionLevels: HashMap<UUID, Float> = HashMap<UUID, Float>()
+    private var lastSaturationLevels: HashMap<UUID, Float> = HashMap()
+    private var lastExhaustionLevels: HashMap<UUID, Float> = HashMap()
 
     fun onPlayerUpdate(player: ServerPlayerEntity) {
 
-        var lastSaturationLevel = lastSaturationLevels.get(player.uuid)
-        var lastExhaustionLevel = lastExhaustionLevels.get(player.uuid)
+        val lastSaturationLevel = lastSaturationLevels[player.uuid]
+        val lastExhaustionLevel = lastExhaustionLevels[player.uuid]
 
-        var saturation: Float = player.hungerManager.saturationLevel
+        val saturation: Float = player.hungerManager.saturationLevel
         if (lastSaturationLevel == null || lastSaturationLevel != saturation) {
             ServerPlayNetworking.send(player, SATURATION_SYNC, makePacketBuf(saturation))
-            lastSaturationLevels.put(player.uuid, saturation)
+            lastSaturationLevels[player.uuid] = saturation
         }
 
-        var exhaustionLevel: Float = player.hungerManager.exhaustion
-        if (lastExhaustionLevel == null || Math.abs(lastExhaustionLevel - exhaustionLevel) >= 0.01f) {
+        val exhaustionLevel: Float = player.hungerManager.exhaustion
+        if (lastExhaustionLevel == null || abs(lastExhaustionLevel - exhaustionLevel) >= 0.01f) {
             ServerPlayNetworking.send(player, EXHAUSTION_SYNC, makePacketBuf(exhaustionLevel))
-            lastExhaustionLevels.put(player.uuid, exhaustionLevel)
+            lastExhaustionLevels[player.uuid] = exhaustionLevel
         }
     }
 
@@ -52,18 +50,18 @@ object SyncHandler {
         lastExhaustionLevels.remove(player.uuid)
     }
 
-    fun makeItemStackBuf(item: ItemStack): PacketByteBuf {
+    private fun makeItemStackBuf(item: ItemStack): PacketByteBuf {
         val buf = PacketByteBuf(Unpooled.buffer())
         buf.writeItemStack(item)
         return buf
     }
 
-    fun makeMapBookSyncBuf(player: ServerPlayerEntity, id: Int): PacketByteBuf {
+    private fun makeMapBookSyncBuf(player: ServerPlayerEntity, id: Int): PacketByteBuf {
         val buf = PacketByteBuf(Unpooled.buffer())
         val mapBookState = MapBookStateManager.getMapBookState(player.server, id)
 
         if (mapBookState != null) {
-            buf.writeVarInt(id!!)
+            buf.writeVarInt(id)
             buf.writeIntArray(mapBookState.mapIDs.toIntArray())
             buf.writeVarInt(mapBookState.players.size)
             for (p in mapBookState.players) {

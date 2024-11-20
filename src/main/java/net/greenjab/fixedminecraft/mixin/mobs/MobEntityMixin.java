@@ -18,7 +18,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
@@ -43,20 +42,18 @@ public abstract class MobEntityMixin extends LivingEntity {
     @Inject(method = "initEquipment", at = @At(value = "HEAD"),cancellable = true)
     private void Armor(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         int y= this.getBlockPos().getY();
-        float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.1F : 0.25F;
+        float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.15F : 0.1F;
 
         EquipmentSlot[] var6 = EquipmentSlot.values();
-        int var7 = var6.length;
-        for(int var8 = 0; var8 < var7; ++var8) {
-            float x = 0.15F;
-            if (y < this.getWorld().getSeaLevel()) x+= (this.getWorld().getSeaLevel()-y)/(128*10);
-            if (random.nextFloat() < x * localDifficulty.getClampedLocalDifficulty()) {
-                int i = random.nextInt(2);
-                if (random.nextFloat() < x)  i++;
-                if (random.nextFloat() < x)  i++;
-                if (random.nextFloat() < x)  i++;
+        for (EquipmentSlot equipmentSlot : var6) {
 
-                EquipmentSlot equipmentSlot = var6[var8];
+            if (y < this.getWorld().getSeaLevel()) f += (this.getWorld().getSeaLevel() - y) / (128 * 10f);
+            if (random.nextFloat() < f * localDifficulty.getClampedLocalDifficulty()) {
+                int i = random.nextInt(2);
+                if (random.nextFloat() < f) i++;
+                if (random.nextFloat() < f) i++;
+                if (random.nextFloat() < f) i++;
+
                 if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR) {
                     ItemStack itemStack = this.getEquippedStack(equipmentSlot);
 
@@ -75,14 +72,14 @@ public abstract class MobEntityMixin extends LivingEntity {
     @ModifyExpressionValue(method = "enchantEquipment", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/enchantment/EnchantmentHelper;enchant(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/item/ItemStack;IZ)Lnet/minecraft/item/ItemStack;"))
     private ItemStack applySuperEnchantArmor(ItemStack original,
-                                        @Local Random random) {
+                                        @Local(argsOnly = true) Random random) {
         return FixedMinecraftEnchantmentHelper.applySuperEnchants(original, random);
     }
 
     @ModifyExpressionValue(method = "enchantMainHandItem", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/enchantment/EnchantmentHelper;enchant(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/item/ItemStack;IZ)Lnet/minecraft/item/ItemStack;"))
     private ItemStack applySuperEnchantHand(ItemStack original,
-                                        @Local Random random) {
+                                        @Local(argsOnly = true) Random random) {
         return FixedMinecraftEnchantmentHelper.applySuperEnchants(original, random);
     }
 
@@ -100,6 +97,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         }
     }
 
+    @Unique
     private void addModifiers(ServerWorldAccess world, Random random, MobEntity LE) {
         int i = 0;
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
@@ -126,6 +124,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         }
     }
 
+    @Unique
     private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, MobEntity LE, int y){
         if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
             if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {

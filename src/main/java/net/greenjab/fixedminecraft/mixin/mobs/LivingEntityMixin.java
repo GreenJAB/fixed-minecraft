@@ -15,27 +15,16 @@ import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
-@SuppressWarnings("unchecked")
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Shadow
-    public int hurtTime;
-
-    @Shadow
-    protected float lastDamageTaken;
-
-    @Redirect(method = "getGroup", at = @At(value = "FIELD",
-                                            target = "Lnet/minecraft/entity/EntityGroup;DEFAULT:Lnet/minecraft/entity/EntityGroup;"//, opcode = Opcodes.GETFIELD
-                                            ))
+    @Redirect(method = "getGroup", at = @At(value = "FIELD",target = "Lnet/minecraft/entity/EntityGroup;DEFAULT:Lnet/minecraft/entity/EntityGroup;"))
     private EntityGroup moreArthropods(){
         LivingEntity LE = (LivingEntity)(Object)this;
         EntityType<?> EntityType = LE.getType();

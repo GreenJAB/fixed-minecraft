@@ -54,12 +54,12 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     @ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Lcom/google/common/collect/ImmutableList;"))
-    private static ImmutableList<MemoryModuleType> addModules(ImmutableList<MemoryModuleType> original) {
+    private static ImmutableList<MemoryModuleType<?>> addModules(ImmutableList<MemoryModuleType<?>> original) {
         return ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY, MemoryModuleType.ROAR_TARGET);
     }
 
     @Redirect(method = "summonGolem", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"))
-    private int summon1GolemPerHostileMob(List instance, @Local(argsOnly = true) int requiredCount) {
+    private int summon1GolemPerHostileMob(List<VillagerEntity> instance, @Local(argsOnly = true) int requiredCount) {
         if (instance.size()>=requiredCount) {
             VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
             if (villagerEntity.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_HOSTILE)) {
@@ -234,7 +234,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .put(VillagerType.SNOW, new Enchantment[]{Enchantments.AQUA_AFFINITY, Enchantments.QUICK_CHARGE, Enchantments.FROST_WALKER, Enchantments.LOOTING, Enchantments.SILK_TOUCH})
                 .put(VillagerType.SWAMP, new Enchantment[]{Enchantments.PROJECTILE_PROTECTION, Enchantments.PIERCING, Enchantments.RESPIRATION, Enchantments.VANISHING_CURSE, Enchantments.MENDING})
                 .put(VillagerType.TAIGA, new Enchantment[]{Enchantments.BLAST_PROTECTION, Enchantments.BANE_OF_ARTHROPODS, Enchantments.RIPTIDE, Enchantments.FORTUNE, Enchantments.FLAME})
-                .build()); //lure, luck of the sea
+                .build());
 
         Enchantment[] enchants = biomeEnchants.get(villagerData.getType());
         boolean includeSpecial = master || enchants[enchants.length-1].getMaxLevel()!=1;

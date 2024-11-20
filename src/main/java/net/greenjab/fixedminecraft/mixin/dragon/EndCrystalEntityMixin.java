@@ -44,9 +44,9 @@ public class EndCrystalEntityMixin {
         if (beamTarget != null) {
             EndCrystalEntity ECE = (EndCrystalEntity) (Object) this;
             if (beamTarget.getY()==128) {
-                ECE.getDataTracker().set(this.BEAM_TARGET, Optional.ofNullable(beamTarget.down(20)));
+                ECE.getDataTracker().set(BEAM_TARGET, Optional.ofNullable(beamTarget.down(20)));
             } else {
-                ECE.getDataTracker().set(this.BEAM_TARGET, Optional.ofNullable(beamTarget.down(2)));
+                ECE.getDataTracker().set(BEAM_TARGET, Optional.ofNullable(beamTarget.down(2)));
             }
             ci.cancel();
         }
@@ -55,6 +55,6 @@ public class EndCrystalEntityMixin {
     @Inject(method = "damage", at = @At(
             value = "HEAD"), cancellable = true)
     private void ignoreExplosions(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source.getAttacker() instanceof EnderDragonEntity)cir.cancel();
+        if(source.getAttacker() instanceof EnderDragonEntity)cir.setReturnValue(false);
     }
 }

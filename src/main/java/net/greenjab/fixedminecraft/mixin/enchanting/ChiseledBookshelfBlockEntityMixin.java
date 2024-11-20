@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.greenjab.fixedminecraft.enchanting.Networking;
-import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -22,7 +21,8 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(ChiseledBookshelfBlockEntity.class)
 public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
     @Shadow private int lastInteractedSlot;
-    @Shadow @Final public DefaultedList<ItemStack> inventory;
+    @Shadow @Final
+    private DefaultedList<ItemStack> inventory;
 
     public ChiseledBookshelfBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

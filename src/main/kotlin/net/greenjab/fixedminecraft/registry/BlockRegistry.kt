@@ -1,23 +1,17 @@
 package net.greenjab.fixedminecraft.registry
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock
 import net.greenjab.fixedminecraft.registry.entity.BrickEntity
-import net.minecraft.block.Block
 import net.minecraft.block.Blocks
 import net.minecraft.block.DispenserBlock
 import net.minecraft.block.Oxidizable
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior
 import net.minecraft.block.piston.PistonBehavior
 import net.minecraft.entity.projectile.ProjectileEntity
-import net.minecraft.entity.projectile.thrown.SnowballEntity
-import net.minecraft.item.BlockItem
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.registry.Registries
 import net.minecraft.registry.Registries.BLOCK
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Util
@@ -83,14 +77,5 @@ object BlockRegistry {
                 } as ProjectileEntity
             }
         })
-    }
-
-    private fun registerBlock(identifier: String, block: Block) {
-        Registries.BLOCK.register(identifier, block)
-    }
-
-    private fun registerBlockWithItem(identifier: String, block: Block, itemSettings: Item.Settings = FabricItemSettings()) {
-        registerBlock(identifier, block)
-        Registries.ITEM.register(identifier, BlockItem(block, itemSettings))
     }
 }

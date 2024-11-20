@@ -19,7 +19,7 @@ public class DragonFireballEntityMixin {
 
 
     @Inject(method = "onCollision", at = @At("HEAD"), cancellable = true)
-    private void checkForDragonFight(CallbackInfo ci, @Local HitResult hitResult) {
+    private void checkForDragonFight(CallbackInfo ci, @Local(argsOnly = true) HitResult hitResult) {
         if (hitResult.getType()==HitResult.Type.ENTITY) {
             if (((EntityHitResult) hitResult).getEntity().getType() == EntityType.ENDER_DRAGON) {
                 ci.cancel();

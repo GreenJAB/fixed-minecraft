@@ -12,10 +12,8 @@ import net.minecraft.block.Oxidizable.OxidationLevel.UNAFFECTED
 import net.minecraft.block.Oxidizable.OxidationLevel.WEATHERED
 import net.minecraft.block.enums.RailShape
 import net.minecraft.block.enums.RailShape.NORTH_SOUTH
-import net.minecraft.entity.vehicle.AbstractMinecartEntity
 import net.minecraft.registry.Registries
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.BlockMirror
@@ -59,14 +57,6 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
 
         @JvmField
         val CODEC: MapCodec<CopperRailBlock> = createCodec(::CopperRailBlock)
-
-        @JvmStatic
-        fun getVelocityMultiplier(state: BlockState): Float = when((state.block as CopperRailBlock).level) {
-            UNAFFECTED -> 0.50F
-            EXPOSED -> 1.0F
-            WEATHERED -> 1.5F
-            OXIDIZED -> 2.0F
-        }
 
         @JvmStatic
         fun getMaxVelocity(state: BlockState): Double = when((state.block as CopperRailBlock).level) {

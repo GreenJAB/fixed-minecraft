@@ -69,7 +69,7 @@ object ItemRegistry {
         ITEM.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         ITEM.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
-        POTION.register("blindness", BLINDNESS);
-        POTION.register("levitation", LEVITATION);
+        POTION.register("blindness", BLINDNESS)
+        POTION.register("levitation", LEVITATION)
     }
 }

@@ -1,15 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.EvokerEntity;
-import net.minecraft.entity.mob.IllusionerEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
-import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(EvokerEntity.class)
 public abstract class EvokerEntityMixin {

@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.render;
 
-import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.mixin.enchanting.ChiseledBookshelfBlockInvoker;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -12,11 +11,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.TextColor;
-import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;

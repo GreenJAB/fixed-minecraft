@@ -14,8 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class InGameHudMixin {
      @Inject(at = @At(value = "CONSTANT", args = "stringValue=food", shift = At.Shift.BY, by = 2), method = "renderStatusBars")
      private void renderFoodPre(DrawContext context, CallbackInfo info) {
-         if (HUDOverlayHandler.INSTANCE != null)
-             HUDOverlayHandler.INSTANCE.onPreRender(context);
+         HUDOverlayHandler.INSTANCE.onPreRender(context);
      }
 
      @Inject(
@@ -24,7 +23,6 @@ public class InGameHudMixin {
              method = "renderStatusBars"
      )
      private void renderFoodPost(DrawContext context, CallbackInfo info) {
-         if (HUDOverlayHandler.INSTANCE != null)
-             HUDOverlayHandler.INSTANCE.onRender(context);
+         HUDOverlayHandler.INSTANCE.onRender(context);
      }
 }

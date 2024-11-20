@@ -1,10 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.redstone;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DaylightDetectorBlock;
-import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;

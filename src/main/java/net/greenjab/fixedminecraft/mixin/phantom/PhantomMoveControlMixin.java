@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.PhantomEntity;
 import org.spongepowered.asm.mixin.Final;
@@ -10,8 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
 
 @Mixin(targets = "net.minecraft.entity.mob.PhantomEntity$PhantomMoveControl")
 class PhantomMoveControlMixin {

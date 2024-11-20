@@ -1,10 +1,10 @@
 package net.greenjab.fixedminecraft.hud
 
-import net.greenjab.fixedminecraft.helpers.TextureHelper
 import net.greenjab.fixedminecraft.util.IntPoint
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.util.Identifier
 import java.util.Random
 import java.util.Vector
 import kotlin.math.ceil
@@ -21,8 +21,8 @@ object HUDOverlayHandler {
 
     fun onPreRender(context: DrawContext) {
         foodIconsOffset = FOOD_BAR_HEIGHT
-        var mc = MinecraftClient.getInstance()
-        var player = mc.player
+        val mc = MinecraftClient.getInstance()
+        val player = mc.player
         requireNotNull(player)
         val right = mc.window.scaledWidth / 2 + 91
         val top = mc.window.scaledHeight - foodIconsOffset
@@ -56,9 +56,9 @@ object HUDOverlayHandler {
 
     private fun drawSaturationOverlay(context: DrawContext, saturationLevel: Float, mc: MinecraftClient, right: Int, top: Int) {
 
-        var modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f))
-        var endSaturationBar = (ceil(modifiedSaturation / 2)).toInt()
-        var iconSize = 9
+        val modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f))
+        val endSaturationBar = (ceil(modifiedSaturation / 2)).toInt()
+        val iconSize = 9
 
         for (i in 0 until endSaturationBar) {
             // gets the offset that needs to be render of icon
@@ -69,7 +69,7 @@ object HUDOverlayHandler {
             val x = right + offset.x
             val y = top + offset.y
 
-            var v = 0
+            val v = 0
             var u = 0
 
             val effectiveSaturationOfBar = (modifiedSaturation / 2.0F) - i
@@ -80,7 +80,7 @@ object HUDOverlayHandler {
                 u = 2 * iconSize
             else if (effectiveSaturationOfBar > .25)
                 u = 1 * iconSize
-            context.drawTexture(TextureHelper.MOD_ICONS, x, y, u, v, iconSize, iconSize)
+            context.drawTexture(Identifier("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize)
         }
 
     }
@@ -92,7 +92,7 @@ object HUDOverlayHandler {
         val width = (ratio * 81).toInt()
         val height = 9
 
-        context.drawTexture(TextureHelper.MOD_ICONS, right - width, top, 81 - width, 18, width, height)
+        context.drawTexture(Identifier("fixedminecraft", "textures/icons.png"), right - width, top, 81 - width, 18, width, height)
     }
 
 
@@ -106,13 +106,13 @@ object HUDOverlayHandler {
     }
 
     private fun generateBarOffsets(top: Int, left: Int, right: Int, ticks: Int, player: PlayerEntity) {
-        var preferFoodBars = 10
+        val preferFoodBars = 10
         var shouldAnimatedFood = false
-        var hungerManager = player.hungerManager
+        val hungerManager = player.hungerManager
 
             // in vanilla saturation level is zero will show hunger animation
-        var saturationLevel = hungerManager.saturationLevel
-        var foodLevel = hungerManager.foodLevel
+        val saturationLevel = hungerManager.saturationLevel
+        val foodLevel = hungerManager.foodLevel
         shouldAnimatedFood = saturationLevel <= 0.0F && ticks % (foodLevel * 3 + 1) == 0
 
 
@@ -124,7 +124,7 @@ object HUDOverlayHandler {
 
         // right alignment, single row
         for (i in 0 until preferFoodBars) {
-            var x = right - i * 8 - 9
+            val x = right - i * 8 - 9
             var y = top
 
             // apply the animated offset

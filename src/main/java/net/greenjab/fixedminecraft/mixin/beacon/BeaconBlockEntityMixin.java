@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,6 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(BeaconBlockEntity.class)
 public class BeaconBlockEntityMixin {
@@ -61,49 +65,30 @@ public class BeaconBlockEntityMixin {
 
     }
 
+    @Unique
+    private static Map<BlockState, StatusEffect> effects = Map.of(
+            Blocks.GOLD_BLOCK.getDefaultState(), StatusEffects.HASTE,
+            Blocks.EMERALD_BLOCK.getDefaultState(), StatusEffects.JUMP_BOOST,
+            Blocks.IRON_BLOCK.getDefaultState(), StatusEffects.STRENGTH,
+            Blocks.DIAMOND_BLOCK.getDefaultState(), StatusEffects.REGENERATION,
+            Blocks.ANCIENT_DEBRIS.getDefaultState(), StatusEffects.RESISTANCE,
+            Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE,
+            Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
+            Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
+            Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION);
+
     @Inject(method = "applyPlayerEffects", at = @At("HEAD"), cancellable = true)
     private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, StatusEffect primaryEffect,
                                             StatusEffect secondaryEffect, CallbackInfo ci) {
+        primaryEffect = effects.get(world.getBlockState(pos.down()));
         int statusLevel = beaconLevel >= 3?1:0;
-        switch (world.getBlockState(pos.down()).getBlock().toString()) {
-            case "Block{minecraft:gold_block}":
-                primaryEffect = StatusEffects.HASTE;
-                break;
-            case "Block{minecraft:emerald_block}":
-                primaryEffect = StatusEffects.JUMP_BOOST;
-                break;
-            case "Block{minecraft:iron_block}":
-                primaryEffect = StatusEffects.STRENGTH;
-                break;
-            case "Block{minecraft:diamond_block}":
-                primaryEffect = StatusEffects.REGENERATION;
-                break;
-            case "Block{minecraft:ancient_debris}":
-                primaryEffect = StatusEffects.RESISTANCE;
-                break;
-            case "Block{minecraft:netherite_block}":
-                statusLevel+=2;
-                primaryEffect = StatusEffects.RESISTANCE;
-                break;
-            case "Block{minecraft:waxed_copper_block}":
-                primaryEffect = StatusEffects.SPEED;
-                break;
-            case "Block{minecraft:coal_block}":
-                primaryEffect = StatusEffects.NIGHT_VISION;
-                break;
-            case "Block{minecraft:redstone_block}":
-                primaryEffect = StatusRegistry.INSTANCE.getREACH();
-                break;
-            case "Block{minecraft:lapis_block}":
-                primaryEffect = StatusEffects.SATURATION;
-                break;
-        }
+        if (world.getBlockState(pos.down()) == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
 
         if (!world.isClient && primaryEffect != null) {
             double d = (beaconLevel * 20 + 10);
 
             int j = (9 + beaconLevel * 2) * 20;
-            Box box = (new Box(pos)).expand(d).stretch(0.0, (double)world.getHeight(), 0.0);
+            Box box = (new Box(pos)).expand(d).stretch(0.0, world.getHeight(), 0.0);
             List<PlayerEntity> list = world.getNonSpectatingEntities(PlayerEntity.class, box);
             Iterator<PlayerEntity> var11 = list.iterator();
             PlayerEntity playerEntity;

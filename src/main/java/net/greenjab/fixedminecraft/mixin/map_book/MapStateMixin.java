@@ -1,12 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.item.map.MapIcon;
 import net.minecraft.item.map.MapState;
@@ -44,7 +40,9 @@ public class MapStateMixin {
     }
 
     @ModifyVariable(method = "addIcon", at = @At("STORE"), ordinal = 0)
-    private MapIcon injected(MapIcon m, @Local(argsOnly = true) MapIcon.Type type, @Local(ordinal = 0) byte x, @Local(ordinal = 1) byte z, @Local(ordinal = 2) byte rotation, @Local Text text) {
+    private MapIcon injected(MapIcon m, @Local(argsOnly = true) MapIcon.Type type, @Local(ordinal = 0) byte x, @Local(ordinal = 1) byte z, @Local(ordinal = 2) byte rotation, @Local(
+            argsOnly = true
+    ) Text text) {
         if (text != null) {
             if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '¶') {
                 String[] s = text.getLiteralString().split("¶");
@@ -55,76 +53,6 @@ public class MapStateMixin {
             }
         }
         return m;
-    }
-
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;contains(Lnet/minecraft/item/ItemStack;)Z"))
-    private boolean dontRemoveMapbookPlayers(PlayerInventory instance, ItemStack stack) {
-        int bookid = -1;
-        int mapid = -1;
-        if (stack.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-            NbtCompound tag = stack.getNbt();
-            if (tag != null && tag.contains("fixedminecraft:map_book")) {
-                bookid = tag.getInt("fixedminecraft:map_book");
-            }
-            ItemStack offHand = instance.offHand.get(0);
-            if (offHand.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-                NbtCompound thistag = offHand.getNbt();
-                if (thistag != null && thistag.contains("fixedminecraft:map_book")) {
-                    if (bookid == thistag.getInt("fixedminecraft:map_book")) return true;
-                }
-            } else if (offHand.isOf(Items.FILLED_MAP)) {
-                NbtCompound thistag = offHand.getNbt();
-                if (thistag != null && thistag.contains("map")) {
-                    if (MapBookStateManager.INSTANCE.getMapBookState(instance.player.getServer(), bookid).getMapIDs().contains(thistag.getInt("map"))) return true;
-                }
-            }
-            for (ItemStack item : instance.main) {
-                if (item.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-                    NbtCompound thistag = item.getNbt();
-                    if (thistag != null && thistag.contains("fixedminecraft:map_book")) {
-                        if (bookid == thistag.getInt("fixedminecraft:map_book")) return true;
-                    }
-                } else if (item.isOf(Items.FILLED_MAP)) {
-                    NbtCompound thistag = item.getNbt();
-                    if (thistag != null && thistag.contains("map")) {
-                        if (MapBookStateManager.INSTANCE.getMapBookState(instance.player.getServer(), bookid).getMapIDs().contains(thistag.getInt("map"))) return true;
-                    }
-                }
-            }
-        } else if (stack.isOf(Items.FILLED_MAP)) {
-            //return instance.contains(stack);
-            NbtCompound tag = stack.getNbt();
-            if (tag != null && tag.contains("map")) {
-                mapid = tag.getInt("map");
-            }
-
-            ItemStack offHand = instance.offHand.get(0);
-            if (offHand.isOf(Items.FILLED_MAP)) {
-                NbtCompound thistag = offHand.getNbt();
-                if (thistag != null && thistag.contains("map")) {
-                    if (mapid == thistag.getInt("map")) return true;
-                }
-            }else if (offHand.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-                NbtCompound thistag = offHand.getNbt();
-                if (thistag != null && thistag.contains("fixedminecraft:map_book")) {
-                    if (MapBookStateManager.INSTANCE.getMapBookState(instance.player.getServer(), thistag.getInt("fixedminecraft:map_book")).getMapIDs().contains(mapid)) return true;
-                }
-            }
-            for (ItemStack item : instance.main) {
-                if (item.isOf(Items.FILLED_MAP)) {
-                    NbtCompound thistag = item.getNbt();
-                    if (thistag != null && thistag.contains("map")) {
-                        if (mapid == thistag.getInt("map")) return true;
-                    }
-                }else if (item.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-                    NbtCompound thistag = item.getNbt();
-                    if (thistag != null && thistag.contains("fixedminecraft:map_book")) {
-                        if (MapBookStateManager.INSTANCE.getMapBookState(instance.player.getServer(), thistag.getInt("fixedminecraft:map_book")).getMapIDs().contains(mapid)) return true;
-                    }
-                }
-            }
-        }
-        return false;
     }
 
     @Redirect(method = "removeBanner", at = @At(value = "INVOKE",

@@ -2,13 +2,9 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.network.SyncHandler
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
 import net.minecraft.world.PersistentState
-import java.util.Optional
 
 class MapBookState() : PersistentState() {
     var mapIDs: ArrayList<Int> = ArrayList()
@@ -27,11 +23,12 @@ class MapBookState() : PersistentState() {
     }
 
     fun sendData(server: MinecraftServer, id:Int) {
-        for (player2 in players) {
-            for (player in server.playerManager.playerList) {
-                if (player.name.literalString.toString() == player2.name) {
-                    SyncHandler.mapBookSync(player, id)
-                }
+        for (player in players) {
+            val SPE = server.playerManager.getPlayer(player.name)
+            if (SPE != null) {
+                //if (SPE.handItems.contains(ItemRegistry.MAP_BOOK.defaultStack)) {
+                    SyncHandler.mapBookSync(SPE, id)
+                //}
             }
         }
         MapBookStateManager.getMapBookState(server, id)?.players=ArrayList()

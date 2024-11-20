@@ -22,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,7 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
-@SuppressWarnings("unchecked")
 @Mixin(EnderDragonEntity.class)
 public abstract class EnderDragonEntityMixin {
 
@@ -71,8 +71,6 @@ public abstract class EnderDragonEntityMixin {
     private double fasterYMovement2(double m){
         return Math.sqrt(m)*0.3;
     }
-
-
 
     @ModifyConstant(method = "tickMovement", constant = @Constant(floatValue = 0.06f))
     private float fasterXZMovement(float value){
@@ -130,6 +128,7 @@ public abstract class EnderDragonEntityMixin {
         }
     }
 
+    @Unique
     private void launchLivingEntities2(List<Entity> entities) {
         double d = (this.body.getBoundingBox().minX + this.body.getBoundingBox().maxX) / 2.0;
         double e = (this.body.getBoundingBox().minZ + this.body.getBoundingBox().maxZ) / 2.0;
@@ -149,7 +148,7 @@ public abstract class EnderDragonEntityMixin {
     @Inject(method = "<init>", at= @At(value = "INVOKE",
                                        target = "Lnet/minecraft/entity/boss/dragon/EnderDragonPart;<init>(Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;Ljava/lang/String;FF)V", ordinal = 0
     ))
-    private void moreHealth(EntityType entityType, World world, CallbackInfo ci){
+    private void moreHealth(EntityType<? extends EnderDragonEntity> entityType, World world, CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {150, 200, 300, 400};
         EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
@@ -191,7 +190,7 @@ public abstract class EnderDragonEntityMixin {
     @Inject(method = "damagePart", at = @At(
             value = "HEAD"), cancellable = true)
     private void ignoreExplosions(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if(source.getAttacker() instanceof EnderDragonEntity)cir.cancel();
+        if(source.getAttacker() instanceof EnderDragonEntity)cir.setReturnValue(false);
     }
 
     @Inject(method = "damagePart", at = @At(value = "HEAD"))

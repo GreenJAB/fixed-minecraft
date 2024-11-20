@@ -1,8 +1,5 @@
 package net.greenjab.fixedminecraft.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,7 +8,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -25,17 +21,8 @@ public class GlintRenderLayer extends RenderLayer{
     public static RenderLayer armorGlintColor = buildArmorGlintRenderLayer();
     public static RenderLayer armorEntityGlintColor = buildArmorEntityGlintRenderLayer();
 
-    public static RenderLayer translucentGlintColor = buildTranslucentGlint();//*/
+    public static RenderLayer translucentGlintColor = buildTranslucentGlint();
 
-    /*public static List<RenderLayer> glintColor = newRenderList(GlintRenderLayer::buildGlintRenderLayer);
-    public static List<RenderLayer> entityGlintColor = newRenderList(GlintRenderLayer::buildEntityGlintRenderLayer);
-    public static List<RenderLayer> glintDirectColor = newRenderList(GlintRenderLayer::buildGlintDirectRenderLayer);
-    public static List<RenderLayer> entityGlintDirectColor = newRenderList(GlintRenderLayer::buildEntityGlintDirectRenderLayer);
-
-    public static List<RenderLayer> armorGlintColor = newRenderList(GlintRenderLayer::buildArmorGlintRenderLayer);
-    public static List<RenderLayer> armorEntityGlintColor = newRenderList(GlintRenderLayer::buildArmorEntityGlintRenderLayer);
-
-    public static List<RenderLayer> translucentGlintColor = newRenderList(GlintRenderLayer::buildTranslucentGlint);//*/
 
     public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferBuilder> map) {
         addGlintTypes(map, glintColor);
@@ -46,15 +33,6 @@ public class GlintRenderLayer extends RenderLayer{
         addGlintTypes(map, armorEntityGlintColor);
         addGlintTypes(map, translucentGlintColor);
     }
-
-   /* private static List<RenderLayer> newRenderList(Function<String, RenderLayer> func) {
-        ArrayList<RenderLayer> list = new ArrayList<>(DyeColor.values().length);
-
-        for (DyeColor color : DyeColor.values())
-            list.add(func.apply(color.getName()));
-
-        return list;
-    }*/
 
     public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferBuilder> map, RenderLayer renderType) {
             if (!map.containsKey(renderType))

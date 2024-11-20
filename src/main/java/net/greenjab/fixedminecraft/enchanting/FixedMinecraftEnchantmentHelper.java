@@ -1,8 +1,6 @@
 package net.greenjab.fixedminecraft.enchanting;
 
 import com.google.common.collect.Lists;
-import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.EnchantingTableBlock;
@@ -21,14 +19,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.math.random.Random;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 public class FixedMinecraftEnchantmentHelper {
 
-    // please rename lol
     public static final int POWER_WHEN_MAX_LEVEL = 12;
 
     public static int getEnchantmentPower(Enchantment enchantment, int level) {
@@ -47,20 +43,19 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         if (itemStack.isOf(Items.ENCHANTED_BOOK)||itemStack.isOf(Items.BOOK)) return 50;
-        List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack, true);
-        int ii = list.size();
+        List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack);
         int power = 0;
-        for (int i = 0; i<ii;i++) {
-            power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(list.get(i).enchantment, list.get(i).level);
+        for (EnchantmentLevelEntry enchantmentLevelEntry : list) {
+            power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
         return Math.min((int)Math.ceil(power*(isGold?0.75f:0.52f)), 50);
     }
 
-    public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack, boolean treasureAllowed) {
+    public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
         Item item = stack.getItem();
-        Iterator var6 = Registries.ENCHANTMENT.iterator();
+        Iterator<Enchantment> var6 = Registries.ENCHANTMENT.iterator();
             while(true) {
                 Enchantment enchantment;
                 do {
@@ -68,7 +63,7 @@ public class FixedMinecraftEnchantmentHelper {
                         return list;
                     }
 
-                    enchantment = (Enchantment) var6.next();
+                    enchantment = var6.next();
                 } while(!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, item));
                 if (!enchantment.isCursed()) list.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
             }
@@ -98,9 +93,7 @@ public class FixedMinecraftEnchantmentHelper {
                 bookShelfCount++;
             }
         }
-        // System.out.println("bookshelf count before math.min: " + bookShelfCount);
         bookShelfCount = Math.min(bookShelfCount, 15);
-        // System.out.println("bookshelf count: " + bookShelfCount);
         return bookShelfCount;
     }
 
@@ -141,11 +134,11 @@ public class FixedMinecraftEnchantmentHelper {
         if (!IS.isOf(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultStack();
             Map<Enchantment, Integer> map = EnchantmentHelper.get(IS);
-            Iterator iter = map.keySet().iterator();
+            Iterator<Enchantment> iter = map.keySet().iterator();
             boolean isSuper = false;
             while (iter.hasNext()) {
-                Enchantment e = (Enchantment) iter.next();
-                int i = (Integer) map.get(e);
+                Enchantment e = iter.next();
+                int i = map.get(e);
                 if (e.getMaxLevel() != 1) {
                     if (random.nextFloat() < 0.03f) {
                         i = e.getMaxLevel() + 1;

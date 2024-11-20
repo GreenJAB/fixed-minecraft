@@ -1,19 +1,9 @@
 package net.greenjab.fixedminecraft.map_book
 
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
-import net.minecraft.block.MapColor
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.Drawable
-import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.VertexConsumerProvider
-import net.minecraft.client.texture.NativeImageBackedTexture
-import net.minecraft.client.texture.TextureManager
-import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.map.MapState
-import net.minecraft.util.Identifier
-
 class MapTile(var screen: MapBookScreen, var id: Int, var mapState: MapState, var client: MinecraftClient) : Drawable {
 
     override fun render(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {

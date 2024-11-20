@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(LocalDifficulty.class)
 public class LocalDifficultyMixin {
 
-    @ModifyVariable(method = "setLocalDifficulty",at = @At(value = "HEAD"), ordinal = 0)
+    @ModifyVariable(method = "setLocalDifficulty", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private float inverseMoon(float x) {
         return 1 - x;
     }

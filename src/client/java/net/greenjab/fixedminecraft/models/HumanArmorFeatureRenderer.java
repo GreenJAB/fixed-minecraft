@@ -21,7 +21,6 @@ import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimPattern;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,10 +61,10 @@ public class HumanArmorFeatureRenderer<T extends LivingEntity, M extends EntityM
                     float f = (float)(i >> 16 & 255) / 255.0F;
                     float g = (float)(i >> 8 & 255) / 255.0F;
                     float h = (float)(i & 255) / 255.0F;
-                    this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, bl, f, g, h, (String)null);
+                    this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, bl, f, g, h, null);
                     this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, bl, 1.0F, 1.0F, 1.0F, "overlay");
                 } else {
-                    this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, bl, 1.0F, 1.0F, 1.0F, (String)null);
+                    this.renderArmorParts(matrices, vertexConsumers, light, armorItem, model, bl, 1.0F, 1.0F, 1.0F, null);
                 }
 
                 ArmorTrim.getTrim(entity.getWorld().getRegistryManager(), itemStack, true).ifPresent((trim) -> {
@@ -106,7 +105,7 @@ public class HumanArmorFeatureRenderer<T extends LivingEntity, M extends EntityM
 
     private void renderTrim(ArmorMaterial material, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, ArmorTrim trim, A model, boolean leggings) {
         Sprite sprite = this.armorTrimAtlas.getSprite(leggings ? trim.getLeggingsModelId(material) : trim.getGenericModelId(material));
-        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(TexturedRenderLayers.getArmorTrims(((ArmorTrimPattern)trim.getPattern().value()).decal())));
+        VertexConsumer vertexConsumer = sprite.getTextureSpecificVertexConsumer(vertexConsumers.getBuffer(TexturedRenderLayers.getArmorTrims((trim.getPattern().value()).decal())));
         model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV, 1.0F, 1.0F, 1.0F, 1.0F);
     }
 
@@ -121,7 +120,7 @@ public class HumanArmorFeatureRenderer<T extends LivingEntity, M extends EntityM
     private Identifier getArmorTexture(ArmorItem item, boolean secondLayer, @Nullable String overlay) {
         String var10000 = item.getMaterial().getName();
         String string = "textures/models/armor/" + var10000 + "_layer_" + (secondLayer ? 2 : 1) + (overlay == null ? "" : "_" + overlay) + ".png";
-        return (Identifier)ARMOR_TEXTURE_CACHE.computeIfAbsent(string, Identifier::new);
+        return ARMOR_TEXTURE_CACHE.computeIfAbsent(string, Identifier::new);
     }
 
     private boolean usesInnerModel(EquipmentSlot slotType) {

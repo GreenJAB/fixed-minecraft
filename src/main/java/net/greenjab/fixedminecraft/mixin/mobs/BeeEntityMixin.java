@@ -2,9 +2,6 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.AreaEffectCloudEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -51,5 +48,4 @@ public abstract class BeeEntityMixin {
         }
         instance.setFlowerPos(new BlockPos(0, -1000, 0));
     }
-
 }

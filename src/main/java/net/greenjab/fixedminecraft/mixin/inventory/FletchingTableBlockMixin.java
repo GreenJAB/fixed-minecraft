@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.screen.SmithingScreenHandler;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -25,10 +24,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class FletchingTableBlockMixin {
 
     @Unique
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos) {
-        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> {
-            return new FletchingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
-        }, Text.of("Arrow Crafting"));//Text.translatable("container.upgrade"));
+    public NamedScreenHandlerFactory createScreenHandlerFactory(World world, BlockPos pos) {
+        return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new FletchingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.of(Text.translatable("container.fletching")));
     }
 
    @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
@@ -37,7 +34,7 @@ public class FletchingTableBlockMixin {
        if (world.isClient) {
            cir.setReturnValue(ActionResult.SUCCESS);
        } else {
-           player.openHandledScreen(createScreenHandlerFactory(state, world, pos));
+           player.openHandledScreen(createScreenHandlerFactory(world, pos));
            player.incrementStat(Stats.INTERACT_WITH_SMITHING_TABLE);
            cir.setReturnValue( ActionResult.CONSUME);
        }

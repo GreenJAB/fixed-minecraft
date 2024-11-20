@@ -5,7 +5,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import net.minecraft.util.Identifier
 
-
 object StatusRegistry {
     val REACH: StatusEffect = LongReachEffect()
     val INSOMNIA: StatusEffect = InsomniaEffect()
@@ -14,6 +13,4 @@ object StatusRegistry {
         Registry.register(Registries.STATUS_EFFECT, Identifier("fixedminecraft", "reach"), REACH)
         Registry.register(Registries.STATUS_EFFECT, Identifier("fixedminecraft", "insomnia"), INSOMNIA)
     }
-
-
 }

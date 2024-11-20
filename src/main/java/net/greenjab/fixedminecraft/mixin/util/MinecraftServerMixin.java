@@ -5,7 +5,6 @@ import net.greenjab.fixedminecraft.enchanting.Networking;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

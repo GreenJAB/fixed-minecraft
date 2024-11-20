@@ -39,7 +39,7 @@ object FixedMinecraftClient : ClientModInitializer {
             BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL,
         )
 
-        HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair);
+        HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
 
         ModelLayers.onRegisterLayers()
 

@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import net.minecraft.enchantment.FrostWalkerEnchantment;
 import net.minecraft.enchantment.ImpalingEnchantment;
 import net.minecraft.entity.EntityGroup;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,8 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.Block;
-import net.minecraft.block.CarvedPumpkinBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -17,6 +15,7 @@ import net.minecraft.item.ArmorItem;
 import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
@@ -30,6 +29,7 @@ import net.minecraft.village.Merchant;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,7 +42,9 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
     @Shadow
     protected abstract void playYesSound();
+    @Unique
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES;
+    @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
 
     protected MerchantScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
@@ -82,14 +84,15 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
                         public boolean canInsert(ItemStack stack) {
                             if (stack != null) {
-                                EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
-                                boolean other = merchant.getCustomer().getAbilities().creativeMode;
-                                if (slot == EquipmentSlot.HEAD && !other) {
-                                    other = stack.getItem() == Items.CARVED_PUMPKIN ||
+                                if (equipmentSlot == EquipmentSlot.HEAD) {
+                                    return
+                                    stack.getItem() == Items.CARVED_PUMPKIN ||
                                     stack.getItem() == Items.DRAGON_HEAD ||
-                                    stack.getItem() == Items.PLAYER_HEAD;                                    ;
+                                    stack.getItem() == Items.PLAYER_HEAD ||
+                                    stack.isIn(ItemTags.BANNERS);
                                 }
-                                return equipmentSlot == slot && (stack.getItem() instanceof DyeableArmorItem || other);
+                                EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
+                                return equipmentSlot == slot && stack.getItem() instanceof DyeableArmorItem;
                             }
                             return false;
                         }
@@ -116,73 +119,27 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     }
 
-
-
-
-    /*@Override
-    public ItemStack quickMove(PlayerEntity player, int slot) {
-        ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot2 = (Slot)this.slots.get(slot);
-        if (slot2 != null && slot2.hasStack()) {
-            ItemStack itemStack2 = slot2.getStack();
-            itemStack = itemStack2.copy();
-            if (slot == 2) {
-                if (!this.insertItem(itemStack2, 3, 39, true)) {
-                    return ItemStack.EMPTY;
-                }
-
-                slot2.onQuickTransfer(itemStack2, itemStack);
-                this.playYesSound();
-            } else if (slot != 0 && slot != 1) {
-                if (slot >= 3 && slot < 30) {
-                    if (!this.insertItem(itemStack2, 30, 39, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else if (slot >= 30 && slot < 39 && !this.insertItem(itemStack2, 3, 30, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (!this.insertItem(itemStack2, 3, 39, false)) {
-                return ItemStack.EMPTY;
-            }
-
-            if (itemStack2.isEmpty()) {
-                slot2.setStack(ItemStack.EMPTY);
-            } else {
-                slot2.markDirty();
-            }
-
-            if (itemStack2.getCount() == itemStack.getCount()) {
-                return ItemStack.EMPTY;
-            }
-
-            slot2.onTakeItem(player, itemStack2);
-        }
-
-        return itemStack;
-    }*/
-
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
     }
 
+    @Unique
     Inventory Inv(Iterable<ItemStack> armorItems) {
-
         SimpleInventory items= new SimpleInventory(4);
         Iterator<ItemStack> iter = armorItems.iterator();
         int i = 0;
         while (iter.hasNext()) {
             items.heldStacks.set(i++, iter.next());
         }
-
         return items;
     }
 
     @Inject(method = "quickMove", at = @At("HEAD"), cancellable = true)
     private void quickMove(PlayerEntity player, int slot, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot2 = (Slot)this.slots.get(slot);
-        if (slot2 != null && slot2.hasStack()) {
+        Slot slot2 = this.slots.get(slot);
+        if (slot2.hasStack()) {
             ItemStack itemStack2 = slot2.getStack();
             itemStack = itemStack2.copy();
             if (slot <3 || slot > 38) {
@@ -205,11 +162,11 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                 if (!this.insertItem(itemStack2, 0, 2, false)) {
                     cir.setReturnValue( ItemStack.EMPTY);
                 }
-                if (slot >= 3 && slot < 30) {
+                if (slot < 30) {
                     if (!this.insertItem(itemStack2, 30, 39, false)) {
                         cir.setReturnValue( ItemStack.EMPTY);
                     }
-                } else if (slot >= 30 && slot < 39 && !this.insertItem(itemStack2, 3, 30, false)) {
+                } else if (!this.insertItem(itemStack2, 3, 30, false)) {
                     cir.setReturnValue( ItemStack.EMPTY);
                 }
             }

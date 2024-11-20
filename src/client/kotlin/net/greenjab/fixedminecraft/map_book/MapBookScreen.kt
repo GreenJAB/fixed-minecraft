@@ -13,7 +13,6 @@ import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.VertexConsumer
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.FilledMapItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.map.MapIcon
@@ -58,7 +57,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
         if (button == 2) {
             if (client?.player?.abilities?.creativeMode == true) {
-                var pos = Vec3d(mouseX.toDouble(), mouseY.toDouble(), 0.0);
+                var pos = Vec3d(mouseX, mouseY, 0.0)
                 pos = pos.multiply((1/scale).toDouble())
                 pos = pos.subtract(width / 2.0, height / 2.0, 0.0)
                 pos = pos.subtract(this.x/scale, this.y/scale, 0.0)
@@ -78,7 +77,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
     override fun mouseScrolled(mouseX: Double, mouseY: Double, horizontalAmount: Double, verticalAmount: Double): Boolean {
         if (verticalAmount != 0.0) {
-            targetScale = zoom(scale, -verticalAmount.toFloat(), 5.0f)
+            targetScale = zoom(scale, -verticalAmount.toFloat())
         }
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)
     }
@@ -100,7 +99,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             if (stack.item !is MapBookItem) stack = client?.player?.offHandStack
         }
         val tag: NbtCompound? = stack?.nbt
-        var id = -1;
+        var id = -1
         if (tag != null && tag.contains("fixedminecraft:map_book")) {
             id = tag.getInt("fixedminecraft:map_book")
         }
@@ -121,14 +120,14 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                 }
             }
             renderPlayerIcon(context, p)
-            renderIcons(context);
-            renderPosition(context, mouseX, mouseY);
+            renderIcons(context)
+            renderPosition(context, mouseX, mouseY)
         }
     }
 
     private fun renderPosition(context: DrawContext, mouseX: Int, mouseY: Int) {
 
-        var pos = Vec3d(mouseX.toDouble(), mouseY.toDouble(), 0.0);
+        var pos = Vec3d(mouseX.toDouble(), mouseY.toDouble(), 0.0)
         pos = pos.multiply((1/scale).toDouble())
         pos = pos.subtract(width / 2.0, height / 2.0, 0.0)
         pos = pos.subtract(this.x/scale, this.y/scale, 0.0)
@@ -365,9 +364,10 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         scale = newScale
     }
 
-    private fun zoom(start: Float, scroll: Float, speed: Float): Float {
+    private fun zoom(start: Float, scroll: Float): Float {
         // logarithmic zoom that doesn't drift when zooming in and out repeatedly
         val absScroll = abs(scroll)
+        val speed = 5.0f
         var newZoom = if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
         newZoom = Math.min(Math.max(newZoom, 0.01f), 10f)
         return newZoom

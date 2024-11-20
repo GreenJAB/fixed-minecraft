@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.entity
 
-//import kotlin.net.greenjab.fixedminecraft.registry.EntityRegistry
 import net.minecraft.entity.EntityStatuses
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -13,13 +12,10 @@ import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.world.World
 
-
 class BrickEntity : ThrownItemEntity {
-    constructor(entityType: EntityType<out BrickEntity?>?, world: World?) : super(entityType, world)
 
     constructor(world: World?, owner: LivingEntity?) : super(EntityType.SNOWBALL, owner, world)
     constructor(world: World, x: Double, y: Double, z: Double) : super(EntityType.SNOWBALL,x, y, z, world)
-
 
     override fun handleStatus(status: Byte) {
         if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
@@ -31,9 +27,9 @@ class BrickEntity : ThrownItemEntity {
                     this.x,
                     this.y,
                     this.z,
-                    (random.nextFloat().toDouble() - 0.5) * 0.08,
-                    (random.nextFloat().toDouble() - 0.5) * 0.08,
-                    (random.nextFloat().toDouble() - 0.5) * 0.08
+                    (random.nextFloat().toDouble() - 0.5) * d,
+                    (random.nextFloat().toDouble() - 0.5) * d,
+                    (random.nextFloat().toDouble() - 0.5) * d
                 )
             }
         }

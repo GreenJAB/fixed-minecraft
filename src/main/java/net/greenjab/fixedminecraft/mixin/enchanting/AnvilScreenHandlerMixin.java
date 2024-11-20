@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,6 +43,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Shadow
     @Final
     private Property levelCost;
+    @Unique
     private int repairItemUsage;
 
     @Shadow
@@ -57,10 +59,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
      */
     @Inject(method = "updateResult", at = @At(value = "HEAD"), cancellable = true)
     private void calculateCost(CallbackInfo ci) {
-        /*ItemStack outputItemStack = this.output.getStack(0);
-        if (outputItemStack.isEmpty()) {
-            return;
-        }*/
         boolean netherite = false;
         if (!player.getWorld().isClient) {
             netherite = player.getCommandTags().contains("netherite_anvil");
@@ -109,7 +107,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 Map<Enchantment, Integer> map2 = EnchantmentHelper.get(secondInputStack);
                 boolean bl2 = false;
                 boolean bl3 = false;
-                Iterator var23 = map2.keySet().iterator();
+                Iterator<Enchantment> var23 = map2.keySet().iterator();
 
                 label159:
                 while(true) {
@@ -126,11 +124,11 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                             break label159;
                         }
 
-                        enchantment = (Enchantment)var23.next();
+                        enchantment = var23.next();
                     } while(enchantment == null);
 
-                    int q = (Integer)map.getOrDefault(enchantment, 0);
-                    int r = (Integer)map2.get(enchantment);
+                    int q = map.getOrDefault(enchantment, 0);
+                    int r = map2.get(enchantment);
                     if (q == r) {
                         if (r < enchantment.getMaxLevel()){
                             r = r + 1;
@@ -138,16 +136,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     } else {
                         r = Math.max(r, q);
                     }
-                    //r = q == r ? r + 1 : Math.max(r, q);
                     boolean bl4 = FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, outputItemStack.getItem());//enchantment.isAcceptableItem(outputItemStack);
                     if (this.player.getAbilities().creativeMode || outputItemStack.isOf(Items.ENCHANTED_BOOK)) {
                         bl4 = true;
                     }
 
-                    Iterator var17 = map.keySet().iterator();
-
-                    while(var17.hasNext()) {
-                        Enchantment enchantment2 = (Enchantment)var17.next();
+                    for (Enchantment enchantment2 : map.keySet()) {
                         if (enchantment2 != enchantment && !enchantment.canCombine(enchantment2)) {
                             bl4 = false;
                         }
@@ -157,8 +151,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                         bl3 = true;
                     } else {
                         bl2 = true;
-                                                map.put(enchantment, r);
-
+                         map.put(enchantment, r);
                     }
                 }
                 EnchantmentHelper.set(map, outputItemStack);
@@ -166,16 +159,14 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 boolean isSame = true;
                 Map<Enchantment, Integer> newMap1 = EnchantmentHelper.get(outputItemStack);
                 Map<Enchantment, Integer> newMap2 = EnchantmentHelper.get(firstInputStack);
-                Iterator iter = newMap1.keySet().iterator();
-                while(iter.hasNext()) {
+                for (Enchantment enchantment : newMap1.keySet()) {
                     boolean hasSameEnchant = false;
-                    Enchantment enchantment = (Enchantment)iter.next();
-                    int l1 = (Integer)newMap1.get(enchantment);
+                    int l1 = newMap1.get(enchantment);
 
                     boolean isGold = firstInputStack.isIn(ItemTags.PIGLIN_LOVED);
                     if (l1 > enchantment.getMaxLevel() && !isGold) {
-                        if (!netherite){
-                            this.levelCost.set(netherite?-1:1);
+                        if (!netherite) {
+                            this.levelCost.set(1);
                             this.output.setStack(0, ItemStack.EMPTY);
                             this.sendContentUpdates();
                             ci.cancel();
@@ -184,8 +175,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     }
 
                     if (newMap2.containsKey(enchantment)) {
-                        int l2 = (Integer)newMap2.get(enchantment);
-                        if (l1==l2) {
+                        int l2 =  newMap2.get(enchantment);
+                        if (l1 == l2) {
                             hasSameEnchant = true;
                         }
                     }

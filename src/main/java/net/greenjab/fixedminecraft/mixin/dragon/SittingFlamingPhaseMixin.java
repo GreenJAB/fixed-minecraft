@@ -19,9 +19,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,9 +35,6 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
 
     @Shadow
     private int timesRun;
-
-    @Shadow
-    private @Nullable AreaEffectCloudEntity dragonBreathEntity;
 
     public SittingFlamingPhaseMixin(EnderDragonEntity enderDragonEntity) {
         super(enderDragonEntity);
@@ -84,9 +81,9 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
             }
             if (dp>25 && dp < 60) {
                 Vec3d vec3d3 = this.dragon.getRotationVec(1.0F);
-                double l = this.dragon.head.getX() - vec3d3.x * 1.0;
+                double l = this.dragon.head.getX() - vec3d3.x;
                 double m = this.dragon.head.getBodyY(0.5) + 0.5;
-                double n = this.dragon.head.getZ() - vec3d3.z * 1.0;
+                double n = this.dragon.head.getZ() - vec3d3.z;
                 double o = livingEntity.getX() - l;
                 double p = livingEntity.getBodyY(0.5) - m;
                 double q = livingEntity.getZ() - n;
@@ -102,7 +99,6 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
 
                 Vec3d vec3d = new Vec3d(
                         this.dragon.head.getX() - this.dragon.getX(), 0.0, this.dragon.head.getZ() - this.dragon.getZ()).normalize();
-                float f = 5.0F;
                 double d = this.dragon.head.getX() + vec3d.x * 5.0 / 2.0;
                 double e = this.dragon.head.getZ() + vec3d.z * 5.0 / 2.0;
                 double g = this.dragon.head.getBodyY(0.5);
@@ -126,7 +122,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                     }
                 }
 
-                h = (double) (MathHelper.floor(h) + 1);
+                h = (MathHelper.floor(h) + 1);
                 AreaEffectCloudEntity areaEffectCloudEntity = dragonAreaEffectCloudEntity(d, h, e);
                 areaEffectCloudEntity.addEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 1));
 
@@ -139,13 +135,13 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 Vec3d vec3d = new Vec3d(
                         livingEntity.getX() - this.dragon.getX(), 0.0, livingEntity.getZ() - this.dragon.getZ()).normalize();
                 Vec3d vec3d2 = new Vec3d(
-                        (double) MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
+                         MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
                         0.0,
-                        (double) (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
+                         (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
                 )
                         .normalize();
                 float f = (float) vec3d2.dotProduct(vec3d);
-                float g = (float) (Math.acos((double) f) * 180.0F / (float) Math.PI);
+                float g = (float) (Math.acos(f) * 180.0F / (float) Math.PI);
 
                 if (g < -5.0F || g > 5.0F) {
                     double d = livingEntity.getX() - this.dragon.getX();
@@ -168,6 +164,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
         ci.cancel();
     }
 
+    @Unique
     @NotNull
     private AreaEffectCloudEntity dragonAreaEffectCloudEntity(double d, double h, double e) {
         AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getWorld(), d, h, e);
