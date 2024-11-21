@@ -16,9 +16,14 @@ import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.DyeableArmorItem;
+import net.minecraft.item.DyeableItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LightType;
@@ -32,6 +37,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
+
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity {
 
@@ -42,26 +49,27 @@ public abstract class MobEntityMixin extends LivingEntity {
     @Inject(method = "initEquipment", at = @At(value = "HEAD"),cancellable = true)
     private void Armor(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         int y= this.getBlockPos().getY();
-        float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.15F : 0.1F;
-
+        float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.20F : 0.125F;
+        if (y < this.getWorld().getSeaLevel()) f += (this.getWorld().getSeaLevel() - y) / (128 * 10f);
         EquipmentSlot[] var6 = EquipmentSlot.values();
         for (EquipmentSlot equipmentSlot : var6) {
-
-            if (y < this.getWorld().getSeaLevel()) f += (this.getWorld().getSeaLevel() - y) / (128 * 10f);
             if (random.nextFloat() < f * localDifficulty.getClampedLocalDifficulty()) {
-                int i = random.nextInt(2);
+                int i = 0;
+                if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
 
                 if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR) {
                     ItemStack itemStack = this.getEquippedStack(equipmentSlot);
-
                     if (itemStack.isEmpty()) {
-                        Item item = MobEntity.getEquipmentForSlot(equipmentSlot, i);
-                        if (item != null) {
-                            this.equipStack(equipmentSlot, ArmorTrimmer.trimAtChanceIfTrimable(new ItemStack(item), this.random, this.getWorld().getRegistryManager()));
+                        ItemStack item = new ItemStack(MobEntity.getEquipmentForSlot(equipmentSlot, i));
+                        if (i==0) {
+                            DyeItem dye = DyeItem.byColor(DyeColor.byId(this.getWorld().random.nextInt(16)));
+                            List<DyeItem> colour = List.of(dye);
+                            item = DyeableItem.blendAndSetColor(item, colour);
                         }
+                        this.equipStack(equipmentSlot, ArmorTrimmer.trimAtChanceIfTrimable(item, this.random, this.getWorld().getRegistryManager()));
                     }
                 }
             }

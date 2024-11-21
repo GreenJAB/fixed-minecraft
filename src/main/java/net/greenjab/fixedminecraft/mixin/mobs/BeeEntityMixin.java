@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.TallPlantBlock;
+import net.minecraft.block.enums.DoubleBlockHalf;
 import net.minecraft.entity.passive.BeeEntity;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -17,9 +19,16 @@ public abstract class BeeEntityMixin {
     private void spreadFlowers(BeeEntity instance){
         World world = instance.getWorld();
         BlockPos pos = instance.getFlowerPos();
-        BlockState flower = world.getBlockState(instance.getFlowerPos());
         if (pos != null) {
-            if (pos.getY() > -500) {
+            BlockState flower = world.getBlockState(pos);
+            if (pos.getY() > -500 && flower.isIn(BlockTags.FLOWERS)) {
+                boolean tall = false;
+                if (flower.isIn(BlockTags.TALL_FLOWERS)) {
+                    tall = true;
+                    if (flower.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+                        pos = pos.down();
+                    }
+                }
                 int count = 0;
                 for (int x = -4; x <= 4; x++) {
                     for (int y = -2; y <= 2; y++) {
@@ -37,11 +46,19 @@ public abstract class BeeEntityMixin {
                         BlockPos newFlower = pos.add(x, y, z);
                         if (world.getBlockState(newFlower) == Blocks.AIR.getDefaultState()) {
                             if (world.getBlockState(newFlower.down()).isIn(BlockTags.DIRT)) {
-                                world.setBlockState(newFlower, flower);
-                                i = 10;
+                                if (!tall) {
+                                    world.setBlockState(newFlower, flower);
+                                    i = 10;
+                                } else {
+                                    if (world.getBlockState(newFlower.up()) == Blocks.AIR.getDefaultState()) {
+                                        world.setBlockState(newFlower, flower.with(TallPlantBlock.HALF, DoubleBlockHalf.LOWER));
+                                        world.setBlockState(newFlower.up(), flower.with(TallPlantBlock.HALF, DoubleBlockHalf.UPPER));
+                                        i = 10;
+                                    }
+                                }
                             }
-                        }
                         i++;
+                        }
                     }
                 }
             }
