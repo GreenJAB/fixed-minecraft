@@ -24,7 +24,7 @@
         },
         "icon": {
             "item": "minecraft:trident",
-            "nbt": "{Damage:0}"
+            "nbt": "{Damage:0,Enchantments:[{}]}"
         },
         "title": {
             "translate": "advancements.adventure.very_very_frightening.title"

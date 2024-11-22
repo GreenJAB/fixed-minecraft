@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "fixedminecraft:block/oxidized_copper_rail"
+    "layer0": "fixedminecraft:item/waxed_oxidized_copper_rail"
   }
 }

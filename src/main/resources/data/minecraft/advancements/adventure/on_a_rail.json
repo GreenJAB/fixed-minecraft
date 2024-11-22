@@ -17,7 +17,7 @@
             "translate": "advancements.adventure.on_a_rail.description"
         },
         "icon": {
-            "item": "minecraft:rail"
+            "item": "minecraft:powered_rail"
         },
         "title": {
             "translate": "advancements.adventure.on_a_rail.title"

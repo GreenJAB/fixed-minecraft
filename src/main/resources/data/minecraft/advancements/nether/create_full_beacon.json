@@ -14,7 +14,8 @@
         },
         "frame": "challenge",
         "icon": {
-            "item": "minecraft:beacon"
+            "item": "minecraft:beacon",
+            "nbt": "{Enchantments:[{}]}"
         },
         "title": {
             "translate": "advancements.nether.create_full_beacon.title"

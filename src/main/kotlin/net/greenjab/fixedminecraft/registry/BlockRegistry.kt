@@ -9,13 +9,17 @@ import net.minecraft.block.DispenserBlock
 import net.minecraft.block.Oxidizable
 import net.minecraft.block.dispenser.ProjectileDispenserBehavior
 import net.minecraft.block.piston.PistonBehavior
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.passive.PigEntity
 import net.minecraft.entity.projectile.ProjectileEntity
+import net.minecraft.entity.projectile.TridentEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.registry.Registries.BLOCK
 import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.Util
 import net.minecraft.util.math.Position
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 object BlockRegistry {
@@ -75,6 +79,17 @@ object BlockRegistry {
                 ) { entity: BrickEntity ->
                     entity.setItem(stack)
                 } as ProjectileEntity
+            }
+        })
+        /** Had issues with pickup and loyalty */
+        DispenserBlock.registerBehavior(Items.TRIDENT, object : ProjectileDispenserBehavior() {
+            override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
+                val temp = PigEntity(EntityType.PIG, world)
+                val v = Vec3d(position.x, position.y, position.z)
+                temp.setPosition(v)
+                val T = TridentEntity(world, temp, stack)
+                temp.discard()
+                return Util.make(T) {} as ProjectileEntity
             }
         })
     }

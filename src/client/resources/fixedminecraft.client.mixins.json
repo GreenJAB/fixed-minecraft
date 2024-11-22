@@ -1,36 +1,34 @@
 {
-    "required": true,
-    "package": "net.greenjab.fixedminecraft.mixin.client",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "AdvancementsScreenMixin",
-        "AdvancementTabMixin",
-        "AdvancementWidgetMixin",
-        "AnvilScreenMixin",
-        "BackgroundRendererMixin",
-        "ClientPlayerEntityMixin",
-        "ClientPlayerInteractionManagerMixin",
-        "ClientPlayNetworkHandlerMixin",
-        "DonkeyEntityRendererMixin",
-        "DrawContextMixin",
-        "ElderGuardianAppearanceParticleMixin",
-        "EnchantmentScreenMixin",
-        "EnderDragonEntityRendererMixin",
-        "FireworksSparkParticleMixin",
-        "InGameHudMixin",
-        "MerchantScreenMixin",
-        "VillagerEntityRendererMixin",
-        "glint.ArmorFeatureRendererMixin",
-        "glint.BufferBuilderStorageMixin",
-        "glint.ElytraFeatureRendererMixin",
-        "glint.ItemRendererMixin",
-        "map.HeldItemRendererMixin",
-        "map.ItemFrameEntityRendererMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "client": [
-        "GameRendererMixin"
-    ]
+  "required": true,
+  "package": "net.greenjab.fixedminecraft.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AdvancementsScreenMixin",
+    "AdvancementTabMixin",
+    "AdvancementWidgetMixin",
+    "AnvilScreenMixin",
+    "BackgroundRendererMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "DonkeyEntityRendererMixin",
+    "DrawContextMixin",
+    "ElderGuardianAppearanceParticleMixin",
+    "EnchantmentScreenMixin",
+    "EnderDragonEntityRendererMixin",
+    "FireworksSparkParticleMixin",
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "MerchantScreenMixin",
+    "VillagerEntityRendererMixin",
+    "glint.ArmorFeatureRendererMixin",
+    "glint.BufferBuilderStorageMixin",
+    "glint.ElytraFeatureRendererMixin",
+    "glint.ItemRendererMixin",
+    "map.HeldItemRendererMixin",
+    "map.ItemFrameEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

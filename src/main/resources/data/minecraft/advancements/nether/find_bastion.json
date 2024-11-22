@@ -23,7 +23,7 @@
             "translate": "advancements.nether.find_bastion.description"
         },
         "icon": {
-            "item": "minecraft:polished_blackstone_bricks"
+            "item": "minecraft:gilded_blackstone"
         },
         "title": {
             "translate": "advancements.nether.find_bastion.title"

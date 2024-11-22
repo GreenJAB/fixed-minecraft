@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.network.SyncHandler
+import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.server.MinecraftServer
@@ -26,9 +27,15 @@ class MapBookState() : PersistentState() {
         for (player in players) {
             val SPE = server.playerManager.getPlayer(player.name)
             if (SPE != null) {
-                //if (SPE.handItems.contains(ItemRegistry.MAP_BOOK.defaultStack)) {
+                var hold = false
+                for (item in SPE.handItems) {
+                    if (item.isOf(ItemRegistry.MAP_BOOK)) {
+                        hold = true
+                    }
+                }
+                if (hold) {
                     SyncHandler.mapBookSync(SPE, id)
-                //}
+                }
             }
         }
         MapBookStateManager.getMapBookState(server, id)?.players=ArrayList()

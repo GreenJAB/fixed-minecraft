@@ -15,6 +15,7 @@ import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.util.Rarity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
@@ -91,6 +92,15 @@ public class ItemsMixin {
             value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SaddleItem;"))
     private static SaddleItem stackedSaddles(Item.Settings settings) {
         return new SaddleItem((new Item.Settings()).maxCount(16));
+    }
+
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/HoeItem;<init>(Lnet/minecraft/item/ToolMaterial;IFLnet/minecraft/item/Item$Settings;)V", ordinal = 4), index = 2)
+    private static float hoeInditcatorDiamond(float attackSpeed) {
+        return -0.5f;
+    }
+    @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/HoeItem;<init>(Lnet/minecraft/item/ToolMaterial;IFLnet/minecraft/item/Item$Settings;)V", ordinal = 5), index = 2)
+    private static float hoeInditcatorNetherite(float attackSpeed) {
+        return -0.5f;
     }
 
 }

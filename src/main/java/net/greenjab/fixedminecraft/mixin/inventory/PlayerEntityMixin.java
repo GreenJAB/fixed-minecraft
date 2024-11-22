@@ -41,6 +41,12 @@ public class PlayerEntityMixin {
             ItemStack itemStack = ItemStack.fromNbt(nbtCompound);
             stacks.set(slot, itemStack);
         }
+        /** Gave errors even with access widener */
+        /*NbtCompound nbtCompound = nbt.getCompound("CraftingResult");
+        if (nbtCompound != null && !nbtCompound.isEmpty()) {
+            ItemStack itemStack = ItemStack.fromNbt(nbtCompound);
+            playerScreenHandler.craftingResult.setStack(0, itemStack);
+        }*/
     }
 
     @Inject(method = "writeCustomDataToNbt", at = @At("RETURN"))
@@ -55,7 +61,11 @@ public class PlayerEntityMixin {
             itemStack.writeNbt(stack);
             items.add(stack);
         }
-        nbt.put("CraftingItems", items);
+        /*nbt.put("CraftingItems", items);
+        ItemStack itemStack  = playerScreenHandler.craftingResult.getStack(0);
+        if (itemStack!=null) {
+            nbt.put("CraftingResult", playerScreenHandler.craftingResult.getStack(0).writeNbt(new NbtCompound()));
+        }*/
     }
     @Inject(method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setVelocity(DDD)V", ordinal = 0))
     private void onGroundForLonger(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir, @Local ItemEntity itemEntity) {
