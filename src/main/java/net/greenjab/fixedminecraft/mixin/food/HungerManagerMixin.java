@@ -96,9 +96,11 @@ public abstract class HungerManagerMixin {
     private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
+        boolean isMoving = instance.speed>0.005;
+        instance.speed *= 0.5F;
 
         return instance.canFoodHeal() && HM.getSaturationLevel()>6 &&
-               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking()/*&& velocity<0.01f*/));
+               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking() && !isMoving));
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {

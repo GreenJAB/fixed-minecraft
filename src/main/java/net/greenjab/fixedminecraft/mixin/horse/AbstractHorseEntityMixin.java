@@ -15,7 +15,6 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.HorseArmorItem;
@@ -48,8 +47,6 @@ public class AbstractHorseEntityMixin {
     @Shadow
     protected SimpleInventory items;
 
-    @Shadow
-    protected float jumpStrength;
     @Unique
     private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 
@@ -71,15 +68,15 @@ public class AbstractHorseEntityMixin {
         float chance = rageChance.getOrDefault(armor.getItem(), 0F);
         if (chance > 0 && chance < 1 || Math.random() <= chance) ci.cancel();
     }
-
-    @Inject(method = "tickControlled", at = @At(
+    /** Causes Server-Client Desync */
+    /*@Inject(method = "tickControlled", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;isOnGround()Z"
     ))
     private void jumpOutOfBoat(PlayerEntity controllingPlayer, Vec3d movementInput, CallbackInfo ci) {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (this.jumpStrength> 0.0F && AHE.hasVehicle()) AHE.stopRiding();
-    }
+    }*/
 
     @ModifyArg(method = "setChildAttribute", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;calculateAttributeBaseValue(DDDDLnet/minecraft/util/math/random/Random;)D"
