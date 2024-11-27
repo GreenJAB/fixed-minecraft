@@ -96,7 +96,7 @@ public abstract class HungerManagerMixin {
     private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
-        boolean isMoving = instance.speed>0.005;
+        boolean isMoving = instance.speed>0.001;
         instance.speed *= 0.5F;
 
         return instance.canFoodHeal() && HM.getSaturationLevel()>6 &&

@@ -55,7 +55,17 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     @ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableList;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;[Ljava/lang/Object;)Lcom/google/common/collect/ImmutableList;"))
     private static ImmutableList<MemoryModuleType<?>> addModules(ImmutableList<MemoryModuleType<?>> original) {
-        return ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT, MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES, MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS, MemoryModuleType.WALK_TARGET, MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH, MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY, MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT, MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY, MemoryModuleType.ROAR_TARGET);
+        return ImmutableList.of(
+                MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.POTENTIAL_JOB_SITE, MemoryModuleType.MEETING_POINT,
+                MemoryModuleType.MOBS, MemoryModuleType.VISIBLE_MOBS, MemoryModuleType.VISIBLE_VILLAGER_BABIES,
+                MemoryModuleType.NEAREST_PLAYERS, MemoryModuleType.NEAREST_VISIBLE_PLAYER, MemoryModuleType.NEAREST_VISIBLE_TARGETABLE_PLAYER,
+                MemoryModuleType.NEAREST_VISIBLE_WANTED_ITEM, MemoryModuleType.ITEM_PICKUP_COOLDOWN_TICKS, MemoryModuleType.WALK_TARGET,
+                MemoryModuleType.LOOK_TARGET, MemoryModuleType.INTERACTION_TARGET, MemoryModuleType.BREED_TARGET, MemoryModuleType.PATH,
+                MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.NEAREST_BED, MemoryModuleType.HURT_BY, MemoryModuleType.HURT_BY_ENTITY,
+                MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE,
+                MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
+                MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY,
+                MemoryModuleType.ROAR_TARGET, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
     }
 
     @Redirect(method = "summonGolem", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"))
@@ -85,7 +95,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         for(int i = 0; i < villagerEntity.getInventory().size(); ++i) {
             ItemStack itemStack = villagerEntity.getInventory().getStack(i);
             if (!itemStack.isEmpty()) {
-                Integer integer = (Integer) VillagerEntity.ITEM_FOOD_VALUES.get(itemStack.getItem());
+                Integer integer = VillagerEntity.ITEM_FOOD_VALUES.get(itemStack.getItem());
                 if (integer != null) {
                     villagerEntity.getInventory().removeStack(i, 1);
                     return true;
@@ -131,63 +141,67 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             }
         }
         if (canSee>1)ci.cancel();
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, 0);
     }
 
     @Inject(method = "talkWithVillager", at = @At("HEAD"))
     private void talktime(ServerWorld world, VillagerEntity villager, long time, CallbackInfo ci){
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Optional<LivingEntity> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ROAR_TARGET);
-        if (lastVillager!=null) {
-            if (lastVillager.isPresent()) {
-                if (lastVillager.get().getUuid()!=villager.getUuid()){
-                    villagerEntity.getBrain().remember(MemoryModuleType.LAST_WOKEN, time);
-                    villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, villager);
-                }
-            } else {
+        if (lastVillager!=null && lastVillager.isPresent()) {
+            if (lastVillager.get().getUuid() != villager.getUuid()) {
+                villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, 0);
                 villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, villager);
             }
         } else {
             villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, villager);
         }
     }
-    @Inject(method = "wakeUp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/brain/Brain;remember(Lnet/minecraft/entity/ai/brain/MemoryModuleType;Ljava/lang/Object;)V"), cancellable = true)
-    private void dontRememberWakeUp(CallbackInfo ci) {
-        ci.cancel();
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void increaseStats(CallbackInfo ci){
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+
+        Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
+        if (sleepTime!=null && sleepTime.isPresent()) {
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, sleepTime.get()+1);
+        } else {
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, 0);
+        }
+        Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
+        if (gossipTime!=null && gossipTime.isPresent()) {
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, gossipTime.get()+1);
+        } else {
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, 0);
+        }
     }
+
     @Inject(method = "prepareOffersFor", at = @At("TAIL"))
     private void happiness(PlayerEntity player, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Long time = villagerEntity.getWorld().getTime();
-        Optional<Long> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.LAST_SLEPT);
-        long timeSinceSleep = 0L;
-        if (sleepTime!=null) {
-            if (sleepTime.isPresent()) {
-                timeSinceSleep = time - sleepTime.get();
-            } else {
-                villagerEntity.getBrain().remember(MemoryModuleType.LAST_SLEPT, time);
-            }
+        Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
+        int timeSinceSleep = 0;
+        if (sleepTime!=null && sleepTime.isPresent()) {
+            timeSinceSleep = sleepTime.get();
         } else {
-            villagerEntity.getBrain().remember(MemoryModuleType.LAST_SLEPT, time);
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, 0);
         }
-        Optional<Long> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.LAST_WOKEN);
-        long timeSinceGossip = 0;
-        if (gossipTime!=null) {
-            if (gossipTime.isPresent()) {
-                timeSinceGossip = time - gossipTime.get();
-            } else {
-                villagerEntity.getBrain().remember(MemoryModuleType.LAST_WOKEN, time);
-            }
+        Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
+        int timeSinceGossip = 0;
+        if (gossipTime!=null && gossipTime.isPresent()) {
+            timeSinceGossip = gossipTime.get();
         } else {
-            villagerEntity.getBrain().remember(MemoryModuleType.LAST_WOKEN, time);
+            villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, 0);
         }
-        if (timeSinceSleep>36000) {
+        if (timeSinceSleep > 48000) {
             for (TradeOffer tradeOffer : this.getOffers()) {
-                tradeOffer.increaseSpecialPrice((int) Math.min(5*(timeSinceSleep - 36000) / 24000.0, 32));
+                tradeOffer.increaseSpecialPrice((int) Math.min(5*(timeSinceSleep - 48000) / 24000.0, 32));
             }
         }
-        if (timeSinceGossip>36000) {
+        if (timeSinceGossip > 48000) {
             for (TradeOffer tradeOffer : this.getOffers()) {
-                tradeOffer.increaseSpecialPrice((int) Math.min(5*(timeSinceGossip - 36000) / 24000.0, 32));
+                tradeOffer.increaseSpecialPrice((int) Math.min(5*(timeSinceGossip - 48000) / 24000.0, 32));
             }
         }
     }
