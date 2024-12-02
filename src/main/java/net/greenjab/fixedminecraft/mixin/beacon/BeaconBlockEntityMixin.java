@@ -73,6 +73,7 @@ public class BeaconBlockEntityMixin {
             Blocks.DIAMOND_BLOCK.getDefaultState(), StatusEffects.REGENERATION,
             Blocks.ANCIENT_DEBRIS.getDefaultState(), StatusEffects.RESISTANCE,
             Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE,
+            Blocks.WAXED_COPPER_BLOCK.getDefaultState(), StatusEffects.SPEED,
             Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
             Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
             Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION);
