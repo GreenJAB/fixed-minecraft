@@ -47,6 +47,10 @@ public abstract class ServerPlayerEntityMixin extends Entity
 
     @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.01f, ordinal = 0))
     public float swimDrainsStamina(float constant) {
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        if (player.isUsingRiptide()) {
+            return 0;
+        }
         int weight = 0;
         Iterator<ItemStack> e = this.getArmorItems().iterator();
         for (int i = 0;i<4;i++) {
@@ -56,7 +60,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
         }
         int diff = this.getWorld().getDifficulty().getId();
         float multiplier = (diff*weight)/48.0f;
-        return 0.05f*(multiplier+1.0f);
+        return 0.03f*(multiplier+1.0f);
     }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))

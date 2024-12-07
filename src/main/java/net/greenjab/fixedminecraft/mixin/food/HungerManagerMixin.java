@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.CustomData;
+import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -48,6 +50,8 @@ public abstract class HungerManagerMixin {
         int ticksSinceLastExhaustion = CustomData.getData(player, "ticksSinceLastExhaustion");
         float saturationSinceLastHunger = CustomData.getData(player, "saturationSinceLastHunger")/1000.0f;
 
+
+
         float h = player.isSneaking() ? 2.0f : 1.0f;
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f) {ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+(int)h, 40);
         } else {
@@ -66,6 +70,13 @@ public abstract class HungerManagerMixin {
                     saturationSinceLastHunger = 0.0f;
                     this.foodLevel--;
                 }
+            }
+        }
+
+        if (player.hasStatusEffect(StatusEffects.SATURATION)) {
+            if (player.getStatusEffect(StatusEffects.SATURATION).getAmplifier() > 0 && this.saturationLevel <= 1) {
+                this.saturationLevel = 1;
+                this.exhaustion = 0;
             }
         }
 

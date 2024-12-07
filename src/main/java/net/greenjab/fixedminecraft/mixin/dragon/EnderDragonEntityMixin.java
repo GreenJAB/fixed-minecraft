@@ -211,18 +211,21 @@ public abstract class EnderDragonEntityMixin {
         }
     }
 
-    @ModifyArg(method = "updatePostDeath", at = @At(
-            value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;floor(F)I"
-    ), index = 0)
-    private float moreOmenXP(float value){
+    @ModifyConstant(method = "updatePostDeath", constant = @Constant(intValue = 500))
+    private int moreOmenXP(int constant){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-        EDE.getWorld().getWorldBorder().setSize(60000000);
-        if (this.fight.hasPreviouslyKilled()) {
-            if (EDE.getCommandTags().contains("omen")) {
-                return Math.min(value*4, 12000);
-            }
-            return Math.min(value*1.5f, 12000);
+        if (EDE.getCommandTags().contains("omen")) {
+            return constant*3;
         }
-        return Math.min(value*0.75f, 12000);
+        return constant;
+    }
+
+    @ModifyConstant(method = "updatePostDeath", constant = @Constant(intValue = 12000))
+    private int lessNormalXP(int constant){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        if (EDE.getCommandTags().contains("omen")) {
+            return 8000*3;
+        }
+        return 8000;
     }
 }

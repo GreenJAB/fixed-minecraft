@@ -240,8 +240,22 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         if (netherite) {
             Map<Enchantment, Integer> map = EnchantmentHelper.get(outputItemStack);
-            map.remove(Enchantments.MENDING);
-            EnchantmentHelper.set(map, outputItemStack);
+            if (map.containsKey(Enchantments.MENDING)) {
+                map.remove(Enchantments.MENDING);
+                EnchantmentHelper.set(map, outputItemStack);
+
+                if (secondInputStack.isOf(Items.ENCHANTED_BOOK)) {
+                    Map<Enchantment, Integer> bookEnchants = EnchantmentHelper.get(secondInputStack);
+                    if (bookEnchants.size()==1) {
+                        if (bookEnchants.containsKey(Enchantments.MENDING)) {
+                            this.output.setStack(0, ItemStack.EMPTY);
+                            this.sendContentUpdates();
+                            ci.cancel();
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
 

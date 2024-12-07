@@ -15,15 +15,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MobEntity.class)
-public abstract class MobEntityMixin {
+public class MobEntityMixin {
 
     @Inject(method = "initialize", at=@At(value = "HEAD"))
     private void addNightTag(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData,
                              NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
-        LivingEntity LE = (LivingEntity)(Object)this;
-        if (LE instanceof HostileEntity) {
-            if (world.isSkyVisible(LE.getBlockPos()) && ((ServerWorld) world).isNight()) {
-                LE.addCommandTag("Night");
+        MobEntity LE = (MobEntity)(Object)this;
+        if (LE instanceof HostileEntity HE) {
+            if (world.isSkyVisible(HE.getBlockPos()) && world.getAmbientDarkness()<5) {
+                HE.addCommandTag("Night");
             }
         }
     }

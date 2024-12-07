@@ -4,7 +4,7 @@
     "coordinate": "fixedminecraft:overworld/amplification",
     "points": [
       {
-        "location": 0.55,
+        "location": 0.5,
         "derivative": 0,
         "value": {
           "coordinate": "minecraft:overworld/continents",
@@ -1577,7 +1577,7 @@
         }
       },
       {
-        "location": 0.6,
+        "location": 0.55,
         "derivative": 0,
         "value": {
           "coordinate": "minecraft:overworld/continents",

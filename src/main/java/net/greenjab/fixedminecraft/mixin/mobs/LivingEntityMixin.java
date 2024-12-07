@@ -7,24 +7,49 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.VexEntity;
+import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
+import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.ZombieVillagerEntity;
+import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldEvents;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
 
-    @Redirect(method = "getGroup", at = @At(value = "FIELD",target = "Lnet/minecraft/entity/EntityGroup;DEFAULT:Lnet/minecraft/entity/EntityGroup;"))
+    @Shadow
+    protected boolean dead;
+
+    @Shadow
+    public abstract @Nullable LivingEntity getPrimeAdversary();
+
+    @Shadow
+    protected abstract void drop(DamageSource source);
+
+    @Redirect(method = "getGroup", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EntityGroup;DEFAULT:Lnet/minecraft/entity/EntityGroup;"))
     private EntityGroup moreArthropods(){
         LivingEntity LE = (LivingEntity)(Object)this;
         EntityType<?> EntityType = LE.getType();
@@ -96,6 +121,33 @@ public abstract class LivingEntityMixin {
                 }
 
                 return amount;
+            }
+        }
+    }
+
+    @Inject(method = "onDeath", at = @At("HEAD"), cancellable = true)
+    private void renewableEchoShards(DamageSource damageSource, CallbackInfo ci){
+
+        LivingEntity LE = ((LivingEntity) (Object) this);
+        if (!LE.isRemoved() && !this.dead) {
+            if (LE instanceof AllayEntity AE) {
+                if (damageSource.isOf(DamageTypes.SONIC_BOOM)) {
+                    AE.dropItem(Items.ECHO_SHARD);
+                    this.drop(damageSource);
+
+                    VexEntity VE = AE.convertTo(EntityType.VEX, false);
+                    ServerWorld world = (ServerWorld) AE.getWorld();
+                    if (VE != null) {
+                        VE.initialize(
+                                world, world.getLocalDifficulty(VE.getBlockPos()), SpawnReason.CONVERSION, null, null
+                        );
+                        if (!AE.isSilent()) {
+                            world.syncWorldEvent(null, WorldEvents.ZOMBIE_INFECTS_VILLAGER, AE.getBlockPos(), 0);
+                        }
+                    }
+                    AE.discard();
+                    ci.cancel();
+                }
             }
         }
     }

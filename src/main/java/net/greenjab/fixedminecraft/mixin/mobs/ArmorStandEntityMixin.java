@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -41,6 +42,9 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
     @Shadow
     public abstract void tick();
 
+    @Shadow
+    protected abstract boolean equip(PlayerEntity player, EquipmentSlot slot, ItemStack stack, Hand hand);
+
     public ArmorStandEntityMixin(EntityType<? extends ArmorStandEntityMixin> entityType, World world) {
         super(entityType, world);
     }
@@ -66,7 +70,8 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
                             this.dropStack(stack);
                         }
                     });
-                    this.heldItems = DefaultedList.ofSize(2, ItemStack.EMPTY);
+                    this.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());
+                    this.equipStack(EquipmentSlot.OFFHAND, Items.AIR.getDefaultStack());
                 }
             }
         }
