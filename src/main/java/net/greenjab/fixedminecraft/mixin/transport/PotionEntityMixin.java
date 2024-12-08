@@ -16,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PotionEntity.class)
@@ -31,9 +32,6 @@ public class PotionEntityMixin {
         }
     }
 
-
-
-
     @Unique
     private void applyLingeringPotion(ItemStack stack) {
         PotionEntity PE = (PotionEntity) (Object)this;
@@ -44,7 +42,6 @@ public class PotionEntityMixin {
         }
 
         areaEffectCloudEntity.setRadius(3.0F);
-        areaEffectCloudEntity.setRadiusOnUse(-0.5F);
         areaEffectCloudEntity.setWaitTime(10);
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setPotion(Potions.WATER);
@@ -60,5 +57,10 @@ public class PotionEntityMixin {
         }
 
         PE.getWorld().spawnEntity(areaEffectCloudEntity);
+    }
+
+    @ModifyArg(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setRadiusOnUse(F)V"))
+    private float noShrinkOnUse(float radiusOnUse){
+        return 0;
     }
 }

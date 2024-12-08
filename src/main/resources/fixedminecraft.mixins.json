@@ -45,6 +45,7 @@
     "enchanting.PiercingEnchantmentMixin",
     "enchanting.PlayerEntityMixin",
     "enchanting.ProtectionEnchantmentMixin",
+    "enchanting.ThornsEnchantmentMixin",
     "enchanting.ToolMaterialsMixin",
     "enchanting.TridentEntityMixin",
     "food.FoodComponentsMixin",

@@ -150,24 +150,27 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                     }
                 } else {
                     cir.setReturnValue(ItemStack.EMPTY);
+                    return;
                 }
             } else {
-                if (itemStack2.getItem() instanceof ArmorItem) {
+                if (itemStack2.getItem() instanceof DyeableArmorItem) {
                     if (this.slots.size()>38) {
                         if (!this.insertItem(itemStack2, 39, this.slots.size(), false)) {
                             cir.setReturnValue(ItemStack.EMPTY);
+                            return;
                         }
                     }
                 }
                 if (!this.insertItem(itemStack2, 0, 2, false)) {
-                    cir.setReturnValue( ItemStack.EMPTY);
-                }
-                if (slot < 30) {
-                    if (!this.insertItem(itemStack2, 30, 39, false)) {
+                    if (slot < 30) {
+                        if (!this.insertItem(itemStack2, 30, 39, false)) {
+                            cir.setReturnValue( ItemStack.EMPTY);
+                            return;
+                        }
+                    } else if (!this.insertItem(itemStack2, 3, 30, false)) {
                         cir.setReturnValue( ItemStack.EMPTY);
+                        return;
                     }
-                } else if (!this.insertItem(itemStack2, 3, 30, false)) {
-                    cir.setReturnValue( ItemStack.EMPTY);
                 }
             }
 
@@ -179,11 +182,10 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
             if (itemStack2.getCount() == itemStack.getCount()) {
                 cir.setReturnValue( ItemStack.EMPTY);
+                return;
             }
-
             slot2.onTakeItem(player, itemStack2);
         }
-
         cir.setReturnValue( itemStack);
     }
 }

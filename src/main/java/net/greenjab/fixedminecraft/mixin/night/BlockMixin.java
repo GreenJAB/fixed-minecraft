@@ -4,6 +4,7 @@ import net.minecraft.block.BeetrootsBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.CocoaBlock;
 import net.minecraft.block.CropBlock;
 import net.minecraft.block.NetherWartBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,7 +31,8 @@ public class BlockMixin {
                  state == Blocks.CARROTS.getDefaultState().with(CropBlock.AGE, 7) ||
                  state == Blocks.POTATOES.getDefaultState().with(CropBlock.AGE, 7) ||
                  state == Blocks.BEETROOTS.getDefaultState().with(BeetrootsBlock.AGE, 3) ||
-                 state == Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, 3)) {
+                 state == Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, 3) ||
+                 state == Blocks.COCOA.getDefaultState().with(CocoaBlock.AGE, 2)) {
             if (world.isSkyVisible(pos)) {
                 if (world.isNight() && world.getMoonPhase() == 2) {
                     Block.getDroppedStacks(state, (ServerWorld)world, pos, blockEntity, entity, tool).forEach((stack) -> {
