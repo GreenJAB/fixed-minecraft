@@ -180,8 +180,16 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 final int[] i = {0};
                 enchantments2.forEach((enchantment, level) -> {
                     if (i[0] == rand) {
-                        enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level));
-                        enchantments.put(enchantment, level);
+                        boolean can = true;
+                        for (Enchantment enchantment3 : enchantments.keySet()) {
+                            if (!enchantment.canCombine(enchantment3)) {
+                                can = false;
+                            }
+                        }
+                        if (can) {
+                            enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level));
+                            enchantments.put(enchantment, level);
+                        }
                         i[0]++;
                     }
                 });
