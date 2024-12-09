@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "Du kan ikke sove, du er ikke trøtt",
     "container.fletching": "Pilhåndverk",
     "itemgroup.fixed": "Fikset",
+    "effect.fixedminecraft.awkward": "Ingen effekter",
     "effect.fixedminecraft.reach": "Rekkevidde",
     "effect.fixedminecraft.insomnia": "Søvnløshet",
     "gamerule.iceMeltInNether": "Is smelter i Nether",

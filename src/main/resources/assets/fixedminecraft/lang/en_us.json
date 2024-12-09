@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "You can not sleep, You are not tired",
     "container.fletching": "Arrow Crafting",
     "itemgroup.fixed": "Fixed",
+    "effect.fixedminecraft.awkward": "No Effects",
     "effect.fixedminecraft.reach": "Reach",
     "effect.fixedminecraft.insomnia": "Insomnia",
     "gamerule.iceMeltInNether": "Ice melts in the Nether",

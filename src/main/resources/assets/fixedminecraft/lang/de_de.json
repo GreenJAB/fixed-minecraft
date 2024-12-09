@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "Du kannst nicht schlafen, du bist noch nicht müde genug",
     "container.fletching": "Pfeilherstellung",
     "itemgroup.fixed": "Behoben",
+    "effect.fixedminecraft.awkward": "Wirkungslos",
     "effect.fixedminecraft.reach": "Reichweite",
     "effect.fixedminecraft.insomnia": "Schlaflosigkeit",
     "gamerule.iceMeltInNether": "Eis schmilzt im Nether",

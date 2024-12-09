@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "Вы не можете спать, вы не устали",
     "container.fletching": "Создание Стрел",
     "itemgroup.fixed": "Исправленные",
+    "effect.fixedminecraft.awkward": "Бет эффектов",
     "effect.fixedminecraft.reach": "Досягаемость",
     "effect.fixedminecraft.insomnia": "Бессонница",
     "gamerule.iceMeltInNether": "Лед тает в нижнем мире",

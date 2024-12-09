@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "Du kan ikkje sove, du er ikkje trøytt",
     "container.fletching": "Pilhandverk",
     "itemgroup.fixed": "Fiksa",
+    "effect.fixedminecraft.awkward": "Ingen verknader",
     "effect.fixedminecraft.reach": "Rekkjevidde",
     "effect.fixedminecraft.insomnia": "Søvnløyse",
     "gamerule.iceMeltInNether": "Is smeltar i Nether",
