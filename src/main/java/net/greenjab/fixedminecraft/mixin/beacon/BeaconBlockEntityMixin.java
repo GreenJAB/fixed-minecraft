@@ -66,22 +66,30 @@ public class BeaconBlockEntityMixin {
     }
 
     @Unique
-    private static Map<BlockState, StatusEffect> effects = Map.of(
+    private static Map<BlockState, StatusEffect> vanillaEffects = Map.of(
             Blocks.GOLD_BLOCK.getDefaultState(), StatusEffects.HASTE,
             Blocks.EMERALD_BLOCK.getDefaultState(), StatusEffects.JUMP_BOOST,
             Blocks.IRON_BLOCK.getDefaultState(), StatusEffects.STRENGTH,
             Blocks.DIAMOND_BLOCK.getDefaultState(), StatusEffects.REGENERATION,
             Blocks.ANCIENT_DEBRIS.getDefaultState(), StatusEffects.RESISTANCE,
             Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE,
-            Blocks.WAXED_COPPER_BLOCK.getDefaultState(), StatusEffects.SPEED,
+            Blocks.WAXED_COPPER_BLOCK.getDefaultState(), StatusEffects.SPEED);
+
+    @Unique
+    private static Map<BlockState, StatusEffect> newEffects = Map.of(
             Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
             Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
-            Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION);
+            Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION,
+            Blocks.QUARTZ_BLOCK.getDefaultState(), StatusEffects.INVISIBILITY);
 
     @Inject(method = "applyPlayerEffects", at = @At("HEAD"), cancellable = true)
     private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, StatusEffect primaryEffect,
                                             StatusEffect secondaryEffect, CallbackInfo ci) {
-        primaryEffect = effects.get(world.getBlockState(pos.down()));
+
+        primaryEffect = vanillaEffects.get(world.getBlockState(pos.down()));
+        if (primaryEffect == null) {
+            primaryEffect = newEffects.get(world.getBlockState(pos.down()));
+        }
         int statusLevel = beaconLevel >= 3?1:0;
         if (world.getBlockState(pos.down()) == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
 

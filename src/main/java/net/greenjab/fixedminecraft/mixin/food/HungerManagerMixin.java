@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.CustomData;
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;

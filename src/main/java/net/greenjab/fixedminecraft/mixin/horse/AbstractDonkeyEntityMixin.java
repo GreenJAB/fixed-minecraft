@@ -11,7 +11,9 @@ import net.minecraft.world.EntityView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -50,5 +52,13 @@ public class AbstractDonkeyEntityMixin extends AbstractHorseEntity {
     @Override
     public EntityView method_48926() {
         return null;
+    }
+
+    @ModifyConstant(method = "getInventorySize", constant = @Constant(intValue = 17))
+    private int muleLessChestSpace(int constant){
+        if ((AbstractDonkeyEntity)(Object)this instanceof MuleEntity) {
+            return 11;
+        }
+        return constant;
     }
 }
