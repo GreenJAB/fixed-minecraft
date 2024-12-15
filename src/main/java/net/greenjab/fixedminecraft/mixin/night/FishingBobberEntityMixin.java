@@ -44,7 +44,8 @@ public class FishingBobberEntityMixin {
 
         World world = FBE.getWorld();
         if (world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) {
-            if (world.isNight() && world.getMoonPhase()==0) luck+=2;
+            if (playerEntity.hasStatusEffect(StatusEffects.CONDUIT_POWER))
+                luck += 2;
             if (world.isRaining())luck+=2;
         }
 
@@ -54,7 +55,9 @@ public class FishingBobberEntityMixin {
 
         if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
             baitpower += (playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
+        if (world.isNight() && world.getMoonPhase()==0) baitpower++;
 
+        //https://www.desmos.com/calculator/xgxywuavpe
 
         int chanceGood = Math.min(luck * baitpower + 3 * baitpower,100);
         int chanceFish = Math.max(40-chanceGood, 0);

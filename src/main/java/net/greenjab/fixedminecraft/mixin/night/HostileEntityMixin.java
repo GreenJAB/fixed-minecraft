@@ -5,6 +5,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LightType;
 import net.minecraft.world.ServerWorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +23,7 @@ public class HostileEntityMixin {
         }
         if (type == EntityType.CAVE_SPIDER) {
             if (spawnReason==SpawnReason.NATURAL) {
-                cir.setReturnValue(!world.isSkyVisible(pos));
+                cir.setReturnValue(world.getLightLevel(LightType.SKY, pos)==0);
             }
             cir.setReturnValue(cir.getReturnValue());
         }

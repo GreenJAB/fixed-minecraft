@@ -134,7 +134,7 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Unique
     private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, MobEntity LE, int y){
-        if (random.nextFloat() < 0.1f * localDifficulty.getClampedLocalDifficulty()) {
+        if (random.nextFloat() < 0.2f * localDifficulty.getClampedLocalDifficulty()) {
             if (world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 && !(LE instanceof SpiderEntity)) {
                 if (random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / (128 * 3.0f)) {
                     StatusEffectInstance effect = getEffect(random, LE);
@@ -157,23 +157,23 @@ public abstract class MobEntityMixin extends LivingEntity {
         if (LE instanceof CreeperEntity) {
             if (random.nextFloat()<0.5f) i+=5;
         }
-        if (i == 1) {
+        if (i == 0) {
             return new StatusEffectInstance(StatusEffects.SPEED, -1, 0);
-        } else if (i == 2) {
+        } else if (i == 1) {
             return new StatusEffectInstance(StatusEffects.STRENGTH, -1, 0);
-        } else if (i == 3) {
+        } else if (i == 2) {
             return new StatusEffectInstance(StatusEffects.JUMP_BOOST, -1, 1);
-        } else if (i == 4) {
+        } else if (i == 3) {
             return new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1, 0);
-        } else if (i == 5) {
+        } else if (i == 4) {
             return new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, -1, 0);
-        } else if (i == 6) {
+        } else if (i == 5) {
             return new StatusEffectInstance(StatusEffects.LUCK, -1, 0);
-        } else if (i == 7) {
+        } else if (i == 6) {
             return new StatusEffectInstance(StatusEffects.MINING_FATIGUE, -1, 0);
-        } else if (i == 8) {
+        } else if (i == 7) {
             return new StatusEffectInstance(StatusEffects.BLINDNESS, -1, 0);
-        } else if (i == 9) {
+        } else if (i == 8) {
             return new StatusEffectInstance(StatusEffects.REGENERATION, -1, 0);
         } else {
             return new StatusEffectInstance(StatusEffects.ABSORPTION, -1, 0);
