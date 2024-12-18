@@ -49,6 +49,9 @@ public abstract class LivingEntityMixin {
     @Shadow
     protected abstract void drop(DamageSource source);
 
+    @Shadow
+    public abstract boolean blockedByShield(DamageSource source);
+
     @Redirect(method = "getGroup", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EntityGroup;DEFAULT:Lnet/minecraft/entity/EntityGroup;"))
     private EntityGroup moreArthropods(){
         LivingEntity LE = (LivingEntity)(Object)this;
@@ -83,7 +86,8 @@ public abstract class LivingEntityMixin {
             cancellable = true
     )
     private void cancel0Damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (modifyAppliedDamage(source, amount)<0.05) {
+        if (modifyAppliedDamage(source, amount)<0.05 && !this.blockedByShield(source)) {
+            System.out.println("cancel");
             cir.setReturnValue(false);
         }
     }

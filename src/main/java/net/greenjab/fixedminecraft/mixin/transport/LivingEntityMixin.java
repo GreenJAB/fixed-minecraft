@@ -6,13 +6,18 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -25,6 +30,13 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow
     protected int riptideTicks;
+
+    @Shadow
+    public abstract boolean hasStatusEffect(StatusEffect effect);
+
+    @Shadow
+    @Nullable
+    public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -71,5 +83,17 @@ public abstract class LivingEntityMixin extends Entity {
     private boolean cancelElytraInLiquid(LivingEntity instance, StatusEffect effect) {
         return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
                  CustomData.getData(instance, "airTime") > 15);
+    }
+
+    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2F))
+    private float speedJump(float constant) {
+        float i = 0;
+        if (this.hasStatusEffect(StatusEffects.SPEED)) {
+            i += 1+ this.getStatusEffect(StatusEffects.SPEED).getAmplifier();
+        }
+        if (this.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
+            i +=0.5f*( 1+ this.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier());
+        }
+        return constant+0.05F*i;
     }
 }

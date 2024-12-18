@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -207,6 +208,13 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         cir.setReturnValue(enchantmentsResult);
     }
 
+    @Redirect(method = "onContentChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEnchantable()Z"))
+    private boolean noEnchantBook(ItemStack itemStack) {
+        if (itemStack.isOf(Items.BOOK)) return false;
+        System.out.println("isEnchantable");
+        return itemStack.isEnchantable();
+    }
+
     /**
      * Rewrite logic for generating enchantments
      * <br>
@@ -230,30 +238,34 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
                 // generate enchantments
                 List<EnchantmentLevelEntry> enchantments = this.generateEnchantments(Items.AIR.getDefaultStack(), slot, power);
-                if (!itemStack.isOf(Items.BOOK)) {
-                    enchantments = this.generateEnchantments(itemStack, slot, power);
+                enchantments = this.generateEnchantments(itemStack, slot, power);
+                if (!enchantments.isEmpty()) {
+                    // set displayed enchantment
+                    EnchantmentLevelEntry displayedEnchantment = enchantments.get(0);
+                    this.enchantmentId[slot] = Registries.ENCHANTMENT.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
+                    this.enchantmentLevel[slot] = displayedEnchantment.level; // again, for display purposes only
+
+                    // calculate enchantment power
+                    int enchantmentPower = 0;
+                    for (EnchantmentLevelEntry entry : enchantments) {
+                        enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment, entry.level);
+                    }
+
+                    boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
+                    if (isGold) enchantmentPower /= 2;
+
+                    // set power for display purposes
+                    this.enchantmentPower[slot] = enchantmentPower;
+
+                    // save generated enchantments
+                    this.fixed_minecraft__enchantments[slot] = enchantments;
+                } else {
+                    for (int i = 0; i < 3; i++) {
+                        this.enchantmentPower[i] = 0;
+                        this.enchantmentId[i] = -1;
+                        this.enchantmentLevel[i] = -1;
+                    }
                 }
-
-
-                // set displayed enchantment
-                EnchantmentLevelEntry displayedEnchantment = enchantments.get(0);
-                this.enchantmentId[slot] = Registries.ENCHANTMENT.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
-                this.enchantmentLevel[slot] = displayedEnchantment.level; // again, for display purposes only
-
-                // calculate enchantment power
-                int enchantmentPower = 0;
-                for (EnchantmentLevelEntry entry : enchantments) {
-                    enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment, entry.level);
-                }
-
-                boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
-                if (isGold) enchantmentPower/=2;
-
-                // set power for display purposes
-                this.enchantmentPower[slot] = enchantmentPower;
-
-                // save generated enchantments
-                this.fixed_minecraft__enchantments[slot] = enchantments;
             }
 
             // send changes
@@ -272,11 +284,6 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     @ModifyArg(method = "onButtonClick", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/ScreenHandlerContext;run(Ljava/util/function/BiConsumer;)V"))
     private BiConsumer<World, BlockPos> overwriteApplyEnchantmentsLogic(BiConsumer<World, BlockPos> original, @Local(argsOnly = true) PlayerEntity player, @Local(argsOnly = true) int slotId, @Local(ordinal = 1) int lapisCountToDecrement) {
         return (world, blockPos) -> {
-
-            // set book to enchanted book
-            if (this.inventory.getStack(0).isOf(Items.BOOK)) {
-                this.inventory.setStack(0, new ItemStack(Items.ENCHANTED_BOOK));
-            }
 
             ItemStack targetItemStack = this.inventory.getStack(0);
             ItemStack lapislazuliStack = this.inventory.getStack(1);
