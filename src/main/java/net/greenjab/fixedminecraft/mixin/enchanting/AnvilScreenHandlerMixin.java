@@ -212,7 +212,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     }
                 }
             } else if (outputItemStack.isDamageable() && outputItemStack.getItem().canRepair(firstInputStack, secondInputStack)) {
-                int l = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 4);
+                int l = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 if (l <= 0) {
                     this.levelCost.set(netherite?-1:1);
                     this.output.setStack(0, ItemStack.EMPTY);

@@ -7,6 +7,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,7 +23,7 @@ public class MobEntityMixin {
                              NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
         if (LE instanceof HostileEntity HE) {
-            if (world.isSkyVisible(HE.getBlockPos()) && world.getAmbientDarkness()<5) {
+            if (world.getLightLevel(LightType.SKY, HE.getBlockPos())>10 && world.getAmbientDarkness() < 5) {
                 HE.addCommandTag("Night");
             }
         }

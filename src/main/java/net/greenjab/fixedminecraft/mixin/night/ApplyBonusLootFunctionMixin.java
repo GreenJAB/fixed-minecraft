@@ -6,6 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.ApplyBonusLootFunction;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +21,7 @@ public class ApplyBonusLootFunctionMixin {
         if (entity!=null) {
             World world = entity.getWorld();
             if (entity instanceof PlayerEntity) {
-                if (world.isSkyVisible(entity.getBlockPos())) {
+                if (world.getLightLevel(LightType.SKY, entity.getBlockPos()) > 10) {
                     if (world.isNight() && world.getMoonPhase() == 6) i++;
                 }
             }

@@ -36,7 +36,7 @@ public class GameRendererMixin {
 
 
     @Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F"), cancellable = true)
-    private void i(float tickDelta, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
+    private void getEntityThroughGrass(float tickDelta, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
         double d = client.interactionManager.getReachDistance();
         client.crosshairTarget = entity.raycast(d, tickDelta, false);
         Vec3d vec3d = entity.getCameraPosVec(tickDelta);

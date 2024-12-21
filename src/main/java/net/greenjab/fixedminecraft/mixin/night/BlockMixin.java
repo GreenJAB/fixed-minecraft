@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,7 +34,7 @@ public class BlockMixin {
                  state == Blocks.BEETROOTS.getDefaultState().with(BeetrootsBlock.AGE, 3) ||
                  state == Blocks.NETHER_WART.getDefaultState().with(NetherWartBlock.AGE, 3) ||
                  state == Blocks.COCOA.getDefaultState().with(CocoaBlock.AGE, 2)) {
-            if (world.isSkyVisible(pos)) {
+            if (world.getLightLevel(LightType.SKY, pos) > 10) {
                 if (world.isNight() && world.getMoonPhase() == 2) {
                     Block.getDroppedStacks(state, (ServerWorld)world, pos, blockEntity, entity, tool).forEach((stack) -> {
                         Block.dropStack(world, pos, stack);

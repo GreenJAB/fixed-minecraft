@@ -61,8 +61,8 @@ public class PlayerEntityMixin {
             itemStack.writeNbt(stack);
             items.add(stack);
         }
-        /*nbt.put("CraftingItems", items);
-        ItemStack itemStack  = playerScreenHandler.craftingResult.getStack(0);
+        nbt.put("CraftingItems", items);
+        /*ItemStack itemStack  = playerScreenHandler.craftingResult.getStack(0);
         if (itemStack!=null) {
             nbt.put("CraftingResult", playerScreenHandler.craftingResult.getStack(0).writeNbt(new NbtCompound()));
         }*/
