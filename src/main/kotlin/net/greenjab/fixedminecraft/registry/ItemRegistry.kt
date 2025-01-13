@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem
 import net.greenjab.fixedminecraft.registry.item.TotemItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
+import net.minecraft.component.type.FoodComponents
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.FireworkRocketItem

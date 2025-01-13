@@ -11,8 +11,8 @@ object StatusRegistry {
     val INSOMNIA: StatusEffect = InsomniaEffect()
 
     fun register() {
-        Registry.register(Registries.STATUS_EFFECT, Identifier("fixedminecraft", "awkward"), AWKWARD)
-        Registry.register(Registries.STATUS_EFFECT, Identifier("fixedminecraft", "reach"), REACH)
-        Registry.register(Registries.STATUS_EFFECT, Identifier("fixedminecraft", "insomnia"), INSOMNIA)
+        Registry.register(Registries.STATUS_EFFECT, Identifier.of("fixedminecraft", "awkward"), AWKWARD)
+        Registry.register(Registries.STATUS_EFFECT, Identifier.of("fixedminecraft", "reach"), REACH)
+        Registry.register(Registries.STATUS_EFFECT, Identifier.of("fixedminecraft", "insomnia"), INSOMNIA)
     }
 }
