@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class Networking {
     public static final Object SERVER_LOCK = new Object();
-    public static Identifier BOOKSHELF_SYNC= new Identifier("fixedminecraft", "update_block");
+    public static Identifier BOOKSHELF_SYNC= Identifier.of("fixedminecraft", "update_block");
 
     public static void sendUpdatePacket(BlockPos pos) {
             PacketByteBuf buf = PacketByteBufs.create();

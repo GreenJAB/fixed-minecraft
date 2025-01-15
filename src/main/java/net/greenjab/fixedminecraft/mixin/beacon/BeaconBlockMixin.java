@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BeaconBlockMixin {
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    private void removeBeaconUI(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit,
+    private void removeBeaconUI(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                 CallbackInfoReturnable<ActionResult> cir) {
         cir.setReturnValue(ActionResult.FAIL);
     }

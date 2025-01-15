@@ -17,10 +17,12 @@ import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,9 +59,9 @@ public class AbstractHorseEntityMixin {
         rageChance.put(Items.GOLDEN_HORSE_ARMOR, 0.6F);
         rageChance.put(Items.LEATHER_HORSE_ARMOR, 0.45F);
 
-        effectModififers.put(StatusEffects.SPEED, EntityAttributes.GENERIC_MOVEMENT_SPEED);
-        effectModififers.put(StatusEffects.JUMP_BOOST, EntityAttributes.HORSE_JUMP_STRENGTH);
-        effectModififers.put(StatusEffects.REGENERATION, EntityAttributes.GENERIC_MAX_HEALTH);
+        effectModififers.put(StatusEffects.SPEED, EntityAttributes.MOVEMENT_SPEED);
+        effectModififers.put(StatusEffects.JUMP_BOOST, EntityAttributes.JUMP_STRENGTH);
+        effectModififers.put(StatusEffects.REGENERATION, EntityAttributes.MAX_HEALTH);
     }
 
     @Inject(method = "updateAnger", at = @At("HEAD"), cancellable = true)
@@ -82,19 +84,19 @@ public class AbstractHorseEntityMixin {
             target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;calculateAttributeBaseValue(DDDDLnet/minecraft/util/math/random/Random;)D"
     ), index = 0)
     private double modifyBaseAttributeParent1(double original,
-                                              @Local(argsOnly = true) EntityAttribute attribute) {
+                                              @Local(argsOnly = true) RegistryEntry<EntityAttribute> attribute) {
         PassiveEntity PE = (PassiveEntity) (Object)this;
-        return modifyAttribute(original, attribute, PE.getStatusEffects());
+        return modifyAttribute(original, attribute.value(), PE.getStatusEffects());
     }
 
     @ModifyArg(method = "setChildAttribute", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;calculateAttributeBaseValue(DDDDLnet/minecraft/util/math/random/Random;)D"
     ), index = 1)
     private double modifyBaseAttributeParent2(double original,
-                                              @Local(argsOnly = true) EntityAttribute attribute,
+                                              @Local(argsOnly = true) RegistryEntry<EntityAttribute> attribute,
                                               @Local(argsOnly = true)
                                               PassiveEntity other) {
-        return modifyAttribute(original, attribute, other.getStatusEffects());
+        return modifyAttribute(original, attribute.value(), other.getStatusEffects());
     }
 
     @Unique
@@ -117,20 +119,15 @@ public class AbstractHorseEntityMixin {
         if (chosenEffect != null) {
             if (attribute==effectModififers.get(chosenEffect.getEffectType())) {
                 double d = 0;
-                if (attribute.equals(EntityAttributes.GENERIC_MAX_HEALTH)) { d = 1; }
-                if (attribute== EntityAttributes.HORSE_JUMP_STRENGTH) { d = 0.04; }
-                if (attribute.equals(EntityAttributes.GENERIC_MOVEMENT_SPEED)) { d = 0.015; }
+                if (attribute.equals(EntityAttributes.MAX_HEALTH)) { d = 1; }
+                if (attribute== EntityAttributes.JUMP_STRENGTH) { d = 0.04; }
+                if (attribute.equals(EntityAttributes.MOVEMENT_SPEED)) { d = 0.015; }
                 d*=(chosenEffect.getAmplifier()+1);
                 return original + d;
             }
         }
 
         return original;
-    }
-
-    @ModifyExpressionValue(method = "hasArmorInSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"))
-    private EquipmentSlot armorIsFeet(EquipmentSlot original){
-        return EquipmentSlot.FEET;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;canMoveVoluntarily()Z"))
@@ -161,8 +158,18 @@ public class AbstractHorseEntityMixin {
     private void muleArmor2(ItemStack item, CallbackInfoReturnable<Boolean> cir) {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (AHE instanceof MuleEntity) {
-            cir.setReturnValue(item.getItem() instanceof HorseArmorItem);
+            cir.setReturnValue(item.getItem() instanceof AnimalArmorItem);
         }
+    }
+
+    @ModifyExpressionValue(method = "equipHorseArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    private EquipmentSlot armorIsFeet(EquipmentSlot original){
+        return EquipmentSlot.FEET;
+    }
+
+    @ModifyExpressionValue(method = "canDispenserEquipSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    private EquipmentSlot armorIsFeet2(EquipmentSlot original){
+        return EquipmentSlot.FEET;
     }
 
 
@@ -215,11 +222,11 @@ public class AbstractHorseEntityMixin {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         equipArmor(stack);
         if (!AHE.getWorld().isClient) {
-            AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).removeModifier(HORSE_ARMOR_BONUS_ID);
+            AHE.getAttributeInstance(EntityAttributes.ARMOR).removeModifier(HORSE_ARMOR_BONUS_ID);
             if (AHE.isHorseArmor(stack)) {
-                int i = ((HorseArmorItem)stack.getItem()).getBonus();
+                int i = ((AnimalArmorItem)stack.getItem()).getBonus();
                 if (i != 0) {
-                    AHE.getAttributeInstance(EntityAttributes.GENERIC_ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", i, EntityAttributeModifier.Operation.ADDITION));
+                    AHE.getAttributeInstance(EntityAttributes.ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", i, EntityAttributeModifier.Operation.ADDITION));
                 }
             }
         }

@@ -5,6 +5,7 @@
   "mixins": [
     "beacon.BeaconBlockEntityMixin",
     "beacon.BeaconBlockMixin",
+    "beacon.PlayerEntityMixin",
     "beacon.ServerPlayerInteractionManagerMixin",
     "beacon.ServerPlayNetworkHandlerMixin",
     "beacon.StatusEffectInstanceMixin",

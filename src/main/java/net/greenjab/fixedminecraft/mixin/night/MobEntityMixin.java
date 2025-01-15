@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.night;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.EntityData;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.HostileEntity;
@@ -20,12 +22,27 @@ public class MobEntityMixin {
 
     @Inject(method = "initialize", at=@At(value = "HEAD"))
     private void addNightTag(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData,
-                             NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
+                             CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
         if (LE instanceof HostileEntity HE) {
             if (world.getLightLevel(LightType.SKY, HE.getBlockPos())>10 && world.getAmbientDarkness() < 5) {
                 HE.addCommandTag("Night");
             }
         }
+    }
+
+    @ModifyExpressionValue(method = "equipBodyArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    private EquipmentSlot armorIsFeet(EquipmentSlot original){
+        return EquipmentSlot.FEET;
+    }
+
+    @ModifyExpressionValue(method = "isWearingBodyArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    private EquipmentSlot armorIsFeet2(EquipmentSlot original){
+        return EquipmentSlot.FEET;
+    }
+
+    @ModifyExpressionValue(method = "canUseSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    private EquipmentSlot armorIsFeet3(EquipmentSlot original){
+        return EquipmentSlot.FEET;
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
@@ -12,6 +13,7 @@ import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.entity.effect.StatusEffects;
@@ -42,6 +44,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 @Mixin(EnderDragonFight.class)
 public abstract class EnderDragonFightMixin {
@@ -195,14 +198,15 @@ public abstract class EnderDragonFightMixin {
 
             List<EndCrystalEntity> list = this.world.getNonSpectatingEntities(EndCrystalEntity.class, new Box(-50, 50, -50, 50, 120, 50));
             for (EndCrystalEntity endCrystalEntity : list) {
-                endCrystalEntity.kill();
+                endCrystalEntity.kill(this.world);
             }
 
             BlockPos blockPos = this.exitPortalLocation;
             BlockPos b = blockPos.up(1);
             for (Direction d : Direction.values()) {
                 if (d.getAxis().isHorizontal()) {
-                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world.getWorldChunk(b.offset(d, 3)).getWorld());
+                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world.getWorldChunk(b.offset(d, 3)).getWorld(), SpawnReason.CHUNK_GENERATION);
+
                     if (endCrystalEntity != null) {
                         endCrystalEntity.refreshPositionAndAngles(b.offset(d, 3).getX()+0.5, b.getY(), b.offset(d, 3).getZ() + 0.5, 0, 0.0F);
                         endCrystalEntity.setInvulnerable(true);
@@ -227,26 +231,6 @@ public abstract class EnderDragonFightMixin {
         }
     }
 
-    @Inject(method = "createDragon", at= @At(value = "INVOKE",
-                                             target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
-    ))
-    private void summonBackupHitbox(CallbackInfoReturnable<EnderDragonEntity> cir, @Local EnderDragonEntity enderDragonEntity){
-        InteractionEntity IE = EntityType.INTERACTION.create(this.world.getWorldChunk(new BlockPos(0, 0, 0)).getWorld());
-        if (IE != null) {
-            IE.refreshPositionAndAngles(0, 108, 0, 0, 0.0F);
-            IE.addCommandTag("dragon");
-            this.world.spawnEntity(IE);
-        }
-        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
-        if (playerEntity != null) {
-            if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
-                playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
-                enderDragonEntity.addCommandTag("omen");
-                enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getValue()*1.5);
-                enderDragonEntity.setHealth(enderDragonEntity.getMaxHealth());
-            }
-        }
-    }
 
     @Inject(method = "dragonKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;generateEndPortal(Z)V"))
     private void spawnElytraItem(EnderDragonEntity dragon, CallbackInfo ci) {

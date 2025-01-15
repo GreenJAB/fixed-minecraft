@@ -5,13 +5,13 @@ import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
 import net.greenjab.fixedminecraft.registry.item.TotemItem;
-import net.minecraft.item.FoodComponents;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponents;
+import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SaddleItem;
-import net.minecraft.item.StewItem;
-import net.minecraft.item.SuspiciousStewItem;
 import net.minecraft.util.Rarity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,13 +23,13 @@ import org.spongepowered.asm.mixin.injection.Slice;
 public class ItemsMixin {
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=totem_of_undying"},ordinal = 0)),at = @At(
-                    value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+            value = "NEW",target = "(Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item$Settings;", ordinal = 0))
     private static Item useableTotem(Item.Settings settings) {
         return new TotemItem((new Item.Settings()).maxCount(1).rarity(Rarity.UNCOMMON));
     }
-    @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT",args= {
+    /*@Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=phantom_membrane"},ordinal = 0)),at = @At(
-            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+            value = "NEW",target = "(Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item$Settings;", ordinal = 0 ))
     private static Item edibleMembrane(Item.Settings settings) {
         return new PhantomMembraneItem((new Item.Settings()).maxCount(64).food(FoodComponents.CHORUS_FRUIT));
     }
@@ -44,26 +44,26 @@ public class ItemsMixin {
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=rabbit_stew"},ordinal = 0)),at = @At(
                     value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/StewItem;", ordinal = 0 ))
-    private static StewItem stackedRabbitstew(Item.Settings settings) {
-        return new StewItem((new Item.Settings()).maxCount(16).food(FoodComponents.RABBIT_STEW));
+    private static Item stackedRabbitstew(Item.Settings settings) {
+        return new Item((new Item.Settings()).maxCount(16).food(FoodComponents.RABBIT_STEW).useRemainder(Items.BOWL));
     }
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=mushroom_stew"},ordinal = 0)),at = @At(
                     value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/StewItem;", ordinal = 0 ))
-    private static StewItem stackedMushroomstew(Item.Settings settings) {
-        return new StewItem((new Item.Settings()).maxCount(16).food(FoodComponents.MUSHROOM_STEW));
+    private static Item stackedMushroomstew(Item.Settings settings) {
+        return new Item((new Item.Settings()).maxCount(16).food(FoodComponents.MUSHROOM_STEW).useRemainder(Items.BOWL));
     }
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=beetroot_soup"},ordinal = 0)),at = @At(
                     value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/StewItem;", ordinal = 0 ))
-    private static StewItem stackedBeetrootSoup(Item.Settings settings) {
-        return new StewItem((new Item.Settings()).maxCount(16).food(FoodComponents.BEETROOT_SOUP));
+    private static Item stackedBeetrootSoup(Item.Settings settings) {
+        return new Item((new Item.Settings()).maxCount(16).food(FoodComponents.BEETROOT_SOUP).useRemainder(Items.BOWL));
     }
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=suspicious_stew"},ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SuspiciousStewItem;", ordinal = 0 ))
-    private static SuspiciousStewItem stackedSuspiciousSoup(Item.Settings settings) {
-        return new SuspiciousStewItem((new Item.Settings()).maxCount(16).food(FoodComponents.SUSPICIOUS_STEW));
+    private static Item stackedSuspiciousSoup(Item.Settings settings) {
+        return new Item((new Item.Settings()).maxCount(16).food(FoodComponents.SUSPICIOUS_STEW).component(DataComponentTypes.SUSPICIOUS_STEW_EFFECTS, SuspiciousStewEffectsComponent.DEFAULT).useRemainder(Items.BOWL));
     }
 
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
@@ -101,6 +101,10 @@ public class ItemsMixin {
     @ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/HoeItem;<init>(Lnet/minecraft/item/ToolMaterial;IFLnet/minecraft/item/Item$Settings;)V", ordinal = 5), index = 2)
     private static float hoeInditcatorNetherite(float attackSpeed) {
         return -0.5f;
-    }
+    }*/
+
+
+
+    //need to make trident repair with prismarine here
 
 }

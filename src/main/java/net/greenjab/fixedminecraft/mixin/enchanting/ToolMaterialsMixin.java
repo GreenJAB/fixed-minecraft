@@ -2,35 +2,27 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.fabricmc.yarn.constants.MiningLevels;
 import net.minecraft.item.Items;
-import net.minecraft.item.ToolMaterials;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.function.Supplier;
 
-@Mixin(ToolMaterials.class)
+@Mixin(ToolMaterial.class)
 public class ToolMaterialsMixin {
 
     @WrapOperation(
             method = "<clinit>",
-            at = @At(value = "NEW",target = "(Ljava/lang/String;IIIFFILjava/util/function/Supplier;)Lnet/minecraft/item/ToolMaterials;")
+            at = @At(value = "NEW",target = "(Lnet/minecraft/registry/tag/TagKey;IFFILnet/minecraft/registry/tag/TagKey;)Lnet/minecraft/item/ToolMaterial;")
             )
-    private static ToolMaterials modifiedToolMaterial(String name, int i, int miningLevel, int itemDurability,
-                                                      float miningSpeed, float attackDamage, int enchantability, Supplier<Ingredient> repairIngredient,
-                                                      Operation<ToolMaterials> original) {
-        switch (name) {
-            case "GOLD":
-                itemDurability = 59;
-                miningLevel = MiningLevels.IRON;
-                break;
-            case "NETHERITE":
-                repairIngredient = () -> Ingredient.ofItems(Items.NETHERITE_SCRAP);
-                break;
-            default: break;
+    private static ToolMaterial modifiedToolMaterial(TagKey tagKey, int i, float f, float g, int j, TagKey tagKey2,
+                                                     Operation<ToolMaterial> original) {
+        if (i == 32) {
+            return original.call(tagKey, 59, f, g, j, tagKey2);
         }
-        return original.call(name, i, miningLevel, itemDurability, miningSpeed, attackDamage, enchantability, repairIngredient);
+        return original.call(tagKey, i, f, g, j, tagKey2);
     }
 }

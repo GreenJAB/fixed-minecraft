@@ -1,35 +1,35 @@
 package net.greenjab.fixedminecraft.registry
 
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem
 import net.greenjab.fixedminecraft.registry.item.TotemItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.component.type.FoodComponents
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
+import net.minecraft.item.AnimalArmorItem
 import net.minecraft.item.FireworkRocketItem
-import net.minecraft.item.FoodComponents
-import net.minecraft.item.HorseArmorItem
 import net.minecraft.item.Item
+import net.minecraft.item.equipment.ArmorMaterials
 import net.minecraft.potion.Potion
 import net.minecraft.registry.Registries.ITEM
 import net.minecraft.registry.Registries.POTION
+import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Rarity
 
 @Suppress("MemberVisibilityCanBePrivate")
 object ItemRegistry {
     val DRAGON_FIREWORK_ROCKET = item(::FireworkRocketItem)
-    val MAP_BOOK: Item = MapBookItem(FabricItemSettings().maxCount(1))
-    val NETHERITE_HORSE_ARMOR = item({ HorseArmorItem(15, "netherite", it) }) {
+    val MAP_BOOK: Item = MapBookItem(Item.Settings().maxCount(1)) as Item
+    val NETHERITE_HORSE_ARMOR = item({ AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, it) }) {
         maxCount(1)
         rarity(Rarity.RARE)
         fireproof()
     }
 
     val BROKEN_TOTEM = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
-     val ECHO_TOTEM: Item = TotemItem(FabricItemSettings().maxCount(1).rarity(Rarity.UNCOMMON))
+     val ECHO_TOTEM: Item = TotemItem(Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).useCooldown(1.0F))
     //val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
-    val ECHO_FRUIT: Item =  EchoFruitItem(FabricItemSettings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
+    val ECHO_FRUIT: Item =  EchoFruitItem(Item.Settings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 
     val NETHERITE_ANVIL = blockItem(BlockRegistry.NETHERITE_ANVIL, Item.Settings::fireproof)
     val CHIPPED_NETHERITE_ANVIL = blockItem(BlockRegistry.CHIPPED_NETHERITE_ANVIL, Item.Settings::fireproof)

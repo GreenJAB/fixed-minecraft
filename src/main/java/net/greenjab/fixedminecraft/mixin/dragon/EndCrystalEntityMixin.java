@@ -54,7 +54,7 @@ public class EndCrystalEntityMixin {
 
     @Inject(method = "damage", at = @At(
             value = "HEAD"), cancellable = true)
-    private void ignoreExplosions(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void ignoreExplosions(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if(source.getAttacker() instanceof EnderDragonEntity)cir.setReturnValue(false);
     }
 }

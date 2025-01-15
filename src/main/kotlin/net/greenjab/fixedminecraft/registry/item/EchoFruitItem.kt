@@ -28,8 +28,8 @@ class EchoFruitItem(settings: Settings?) : Item(settings) {
 
                 val vec3d = user.getPos()
                 val serverWorld: ServerWorld? = user.server!!.getWorld(user.lastDeathPos.get().dimension)
-                if (user.teleport(serverWorld as ServerWorld, d, e, f, setOf(), user.getYaw(), user.getPitch())) {
-                    while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.topY.toDouble()) {
+                if (user.teleport(serverWorld as ServerWorld, d, e, f, setOf(), user.getYaw(), user.getPitch(), true)) {
+                    while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.topYInclusive.toDouble()) {
                         user.setPosition(user.getX(), user.getY() + 1.0, user.getZ())
                     }
                     world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(user as Entity))
@@ -39,7 +39,6 @@ class EchoFruitItem(settings: Settings?) : Item(settings) {
                     world.playSound(null as PlayerEntity?, vec3d.getX(), vec3d.getY(), vec3d.getZ(), soundEvent, soundCategory)
                     user.onLanding()
 
-                    user.itemCooldownManager[this] = 20
                 }
             }
         }

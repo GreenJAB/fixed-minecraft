@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.dragon;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.pathing.Path;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -97,7 +98,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                         .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                             }
                             BlockPos b = this.dragon.getBodyParts()[5].getBlockPos();
-                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld());
+                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld(), SpawnReason.MOB_SUMMONED);
                             if (endermiteEntity != null) {
                                 endermiteEntity.refreshPositionAndAngles(b.getX()-this.dragon.getVelocity().getX(), b.up().getY(), b.getZ()-this.dragon.getVelocity().getZ(), 0, 0.0F);
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1));
@@ -106,7 +107,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 if (!this.dragon.getCommandTags().contains("omen")) {
                                     endermiteEntity.setHealth(1);
                                 }
-                                endermiteEntity.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(30);
+                                endermiteEntity.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).setBaseValue(30);
                                 this.dragon.getWorld().spawnEntity(endermiteEntity);
 
                                 this.seenTargetTimes = 0;
@@ -139,7 +140,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                     this.dragon.getWorld()
                                             .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                                 }
-                                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, o, p, q);
+                                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
                                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
                                 this.dragon.getWorld().spawnEntity(dragonFireballEntity);
                                 this.seenTargetTimes = 0;

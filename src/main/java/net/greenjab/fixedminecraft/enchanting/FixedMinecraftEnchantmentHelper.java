@@ -1,19 +1,24 @@
 package net.greenjab.fixedminecraft.enchanting;
 
 import com.google.common.collect.Lists;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.EnchantingTableBlock;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.HorseArmorItem;
+import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -27,14 +32,14 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static final int POWER_WHEN_MAX_LEVEL = 12;
 
-    public static int getEnchantmentPower(Enchantment enchantment, int level) {
-        return (int) Math.ceil(enchantment.isCursed() ?
-                Math.min(-1, curseEnchantmentPowerFunction(enchantment, level)) : Math.max(1, enchantmentPowerFunction(enchantment, level)));
+    public static int getEnchantmentPower(RegistryEntry<Enchantment> enchantment, int level) {
+        return (int) Math.ceil(enchantment.isIn(EnchantmentTags.CURSE) ?
+                Math.min(-1, curseEnchantmentPowerFunction(enchantment.value(), level)) : Math.max(1, enchantmentPowerFunction(enchantment, level)));
     }
 
-    private static double enchantmentPowerFunction(Enchantment enchantment, int level) {
+    private static double enchantmentPowerFunction(RegistryEntry<Enchantment> enchantment, int level) {
         // 10 * ()^1.6 oder 20 * ()^2
-        return (enchantment.isTreasure() ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.getMaxLevel()-5) * Math.pow((double) level / enchantment.getMaxLevel(), 2);
+        return (enchantment.isIn(EnchantmentTags.TREASURE) ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.value().getMaxLevel()-5) * Math.pow((double) level / enchantment.value().getMaxLevel(), 2);
     }
 
     private static double curseEnchantmentPowerFunction(Enchantment enchantment, int level) {
@@ -71,9 +76,9 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getOccupiedEnchantmentCapacity(ItemStack itemStack, boolean atLeast1) {
         int power = 0;
-        Map<Enchantment, Integer> enchantmentLevelsMap = EnchantmentHelper.get(itemStack);
-        for (Enchantment enchantment : enchantmentLevelsMap.keySet()) {
-            int add = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, enchantmentLevelsMap.get(enchantment));
+        ItemEnchantmentsComponent enchantmentLevelsMap = EnchantmentHelper.getEnchantments(itemStack);
+        for (RegistryEntry<Enchantment> enchantment : enchantmentLevelsMap.getEnchantments()) {
+            int add = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, enchantmentLevelsMap.getLevel(enchantment));
             power += add;
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
@@ -113,7 +118,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static boolean horseArmorCheck(Enchantment enchantment, Item item){
-        if (item instanceof HorseArmorItem) {
+        if (item instanceof AnimalArmorItem) {
             if (enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING) {
                 return false;
             }
@@ -133,25 +138,40 @@ public class FixedMinecraftEnchantmentHelper {
     public static ItemStack applySuperEnchants(ItemStack IS, Random random) {
         if (!IS.isOf(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultStack();
-            Map<Enchantment, Integer> map = EnchantmentHelper.get(IS);
-            Iterator<Enchantment> iter = map.keySet().iterator();
+            ItemEnchantmentsComponent map = EnchantmentHelper.getEnchantments(IS);
+
             boolean isSuper = false;
-            while (iter.hasNext()) {
-                Enchantment e = iter.next();
-                int i = map.get(e);
+            ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(IS));
+            for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : map.getEnchantmentEntries()) {
+                RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                Enchantment e = registryEntry.value();
+                int i = entry.getIntValue();
                 if (e.getMaxLevel() != 1) {
                     if (random.nextFloat() < 0.05f) {
                         i = e.getMaxLevel() + 1;
                         isSuper = true;
                     }
                 }
-                map.put(e, i);
+                builder.set(registryEntry, i);
+
             }
+
             if (isSuper) {
-                IS2.getOrCreateSubNbt("Super");
-                map.remove(Enchantments.MENDING);
+                //IS2.getOrCreateSubNbt("Super");
+                IS2.set(DataComponentTypes.REPAIR_COST, 1);
+                ItemEnchantmentsComponent outputEnchants = EnchantmentHelper.getEnchantments(IS2);
+                for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : outputEnchants.getEnchantmentEntries()) {
+                    RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                    if (registryEntry.equals(Enchantments.MENDING)) {
+                        builder.set(registryEntry, 0);
+                        //builder.remove(registryEntry);
+                        //builder.remove(Enchantments.MENDING);
+                    }
+                }
+                //map.remove(Enchantments.MENDING);
             }
-            EnchantmentHelper.set(map, IS2);
+                EnchantmentHelper.set(IS2, builder.build());
+            //EnchantmentHelper.set(map, IS2);
             return IS2;
         } else {
             return IS;

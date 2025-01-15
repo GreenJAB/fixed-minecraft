@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +18,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -94,42 +97,42 @@ public abstract class EnderDragonEntityMixin {
     }
     @ModifyArg(method = "tickMovement", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 2), index = 1)
+            target = "Lnet/minecraft/server/world/ServerWorld;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 2), index = 1)
     private Box smallerAttack2(Box box){
         return box.contract(1);
     }
     @ModifyArg(method = "tickMovement", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 3), index = 1)
+            target = "Lnet/minecraft/server/world/ServerWorld;getOtherEntities(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;)Ljava/util/List;", ordinal = 3), index = 1)
     private Box smallerAttack3(Box box){
         return box.contract(1);
     }
 
     @Inject(method = "damageLivingEntities", at = @At(value = "HEAD"), cancellable = true)
-    private void dontHitWhenDead(List<Entity> entities, CallbackInfo ci){
+    private void dontHitWhenDead(ServerWorld world, List<Entity> entities, CallbackInfo ci){
         if (this.phaseManager.getCurrent()==PhaseType.DYING)  ci.cancel();
     }
 
     @Inject(method = "launchLivingEntities", at = @At(value = "HEAD"), cancellable = true)
-    private void dontHitWhenDead2(List<Entity> entities, CallbackInfo ci){
+    private void dontHitWhenDead2(ServerWorld world, List<Entity> entities, CallbackInfo ci){
         if (this.phaseManager.getCurrent()==PhaseType.DYING)  ci.cancel();
     }
 
     @Inject(method = "tickMovement", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;launchLivingEntities(Ljava/util/List;)V", ordinal = 0))
-    private void launchWhileSitting(CallbackInfo ci){
+            target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;launchLivingEntities(Lnet/minecraft/server/world/ServerWorld;Ljava/util/List;)V", ordinal = 0))
+    private void launchWhileSitting(CallbackInfo ci, @Local ServerWorld world){
         if (this.phaseManager.getCurrent().isSittingOrHovering()) {
             EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
             launchLivingEntities2(
-                    EDE.getWorld()
-                            .getOtherEntities(EDE, this.body.getBoundingBox().expand(1.0, 5.0, 1.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR)
+                    world,
+                    world.getOtherEntities(EDE, this.body.getBoundingBox().expand(1.0, 5.0, 1.0).offset(0.0, -2.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR)
             );
         }
     }
 
     @Unique
-    private void launchLivingEntities2(List<Entity> entities) {
+    private void launchLivingEntities2(ServerWorld world, List<Entity> entities) {
         double d = (this.body.getBoundingBox().minX + this.body.getBoundingBox().maxX) / 2.0;
         double e = (this.body.getBoundingBox().minZ + this.body.getBoundingBox().maxZ) / 2.0;
         for (Entity entity : entities) {
@@ -139,8 +142,8 @@ public abstract class EnderDragonEntityMixin {
                 double h = Math.max(f * f + g * g, 0.1);
                 entity.addVelocity(f / h * 4.0, 1.0, g / h * 4.0);
                 EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-                entity.damage(EDE.getDamageSources().mobAttack(EDE), 5.0F);
-                EDE.applyDamageEffects(EDE, entity);
+                entity.damage(world, EDE.getDamageSources().mobAttack(EDE), 5.0F);
+                EnchantmentHelper.onTargetDamaged(world, entity, EDE.getDamageSources().mobAttack(EDE));
             }
         }
     }
@@ -151,50 +154,19 @@ public abstract class EnderDragonEntityMixin {
     private void moreHealth(EntityType<? extends EnderDragonEntity> entityType, World world, CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {150, 200, 300, 400};
-        EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
-    }
-
-    @Inject(method = "tickMovement", at = @At(value = "TAIL"))
-    private void moveBackupHitbox(CallbackInfo ci){
-        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
-        boolean found = false;
-        for (Entity e : entities) {
-            if (e instanceof InteractionEntity interactionEntity) {
-                if (interactionEntity.getCommandTags().contains("dragon")) {
-                    if (!found) {
-                        interactionEntity.teleport(EDE.head.getX(), EDE.head.getY() + 1, EDE.head.getZ());
-                        found = true;
-                    } else {
-                        interactionEntity.kill();
-                    }
-                }
-            }
-        }
-    }
-
-    @Inject(method = "damagePart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;setHealth(F)V"))
-    private void killBackupHitbox(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
-        for (Entity e : entities) {
-            if (e instanceof InteractionEntity interactionEntity) {
-                if (interactionEntity.getCommandTags().contains("dragon")) {
-                    interactionEntity.kill();
-                }
-                break;
-            }
-        }
+        EDE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
     }
 
     @Inject(method = "damagePart", at = @At(
             value = "HEAD"), cancellable = true)
-    private void ignoreExplosions(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void ignoreExplosions(ServerWorld world, EnderDragonPart part, DamageSource source, float amount,
+                                  CallbackInfoReturnable<Boolean> cir) {
         if(source.getAttacker() instanceof EnderDragonEntity)cir.setReturnValue(false);
     }
 
     @Inject(method = "damagePart", at = @At(value = "HEAD"))
-    private void addGlowingEffect(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    private void addGlowingEffect(ServerWorld world, EnderDragonPart part, DamageSource source, float amount,
+                                  CallbackInfoReturnable<Boolean> cir){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         if (source.getSource() instanceof SpectralArrowEntity) {
             EDE.setStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 600), source.getAttacker());
@@ -203,7 +175,7 @@ public abstract class EnderDragonEntityMixin {
 
     @Inject(method = "destroyBlocks", at = @At(
             value = "HEAD"), cancellable = true)
-    private void dontBreakBlocksAfterFirst(Box box, CallbackInfoReturnable<Boolean> cir){
+    private void dontBreakBlocksAfterFirst(ServerWorld world, Box box, CallbackInfoReturnable<Boolean> cir){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         if (this.fight.hasPreviouslyKilled() && !EDE.getCommandTags().contains("omen")) {
             cir.setReturnValue(false);

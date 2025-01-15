@@ -34,7 +34,8 @@ public abstract class ServerPlayerEntityMixin extends Entity
     @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.1f))
     public float armorDrainsStamina(float constant) {
         int weight = 0;
-        Iterator<ItemStack> e = this.getArmorItems().iterator();
+        ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
+        Iterator<ItemStack> e = player.getArmorItems().iterator();
         for (int i = 0;i<4;i++) {
             String s = e.next().getName().toString();
             if (s.contains("iron")||s.contains("gold")) weight+=1;
@@ -52,7 +53,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
             return 0;
         }
         int weight = 0;
-        Iterator<ItemStack> e = this.getArmorItems().iterator();
+        Iterator<ItemStack> e = player.getArmorItems().iterator();
         for (int i = 0;i<4;i++) {
             String s = e.next().getName().toString();
             if (s.contains("iron")||s.contains("gold")) weight+=1;

@@ -11,10 +11,12 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -66,7 +68,7 @@ public class BeaconBlockEntityMixin {
     }
 
     @Unique
-    private static Map<BlockState, StatusEffect> vanillaEffects = Map.of(
+    private static Map<BlockState, RegistryEntry<StatusEffect>> vanillaEffects = Map.of(
             Blocks.GOLD_BLOCK.getDefaultState(), StatusEffects.HASTE,
             Blocks.EMERALD_BLOCK.getDefaultState(), StatusEffects.JUMP_BOOST,
             Blocks.IRON_BLOCK.getDefaultState(), StatusEffects.STRENGTH,
@@ -76,15 +78,15 @@ public class BeaconBlockEntityMixin {
             Blocks.WAXED_COPPER_BLOCK.getDefaultState(), StatusEffects.SPEED);
 
     @Unique
-    private static Map<BlockState, StatusEffect> newEffects = Map.of(
+    private static Map<BlockState, RegistryEntry<StatusEffect>> newEffects = Map.of(
             Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
-            Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
+            //Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
             Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION,
             Blocks.QUARTZ_BLOCK.getDefaultState(), StatusEffects.INVISIBILITY);
 
     @Inject(method = "applyPlayerEffects", at = @At("HEAD"), cancellable = true)
-    private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, StatusEffect primaryEffect,
-                                            StatusEffect secondaryEffect, CallbackInfo ci) {
+    private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, @Nullable RegistryEntry<StatusEffect> primaryEffect,
+                                            @Nullable RegistryEntry<StatusEffect> secondaryEffect, CallbackInfo ci) {
 
         primaryEffect = vanillaEffects.get(world.getBlockState(pos.down()));
         if (primaryEffect == null) {

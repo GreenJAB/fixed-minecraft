@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -11,9 +12,11 @@ import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.boss.dragon.phase.SittingFlamingPhase;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.DragonFireballEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -41,25 +44,22 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
     }
 
     @Inject(method = "serverTick", at = @At("HEAD"),cancellable = true)
-    private void redoTick(CallbackInfo ci) {
+    private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
 
         this.ticks++;
 
         TargetPredicate CLOSE_PLAYER_PREDICATE;
         CLOSE_PLAYER_PREDICATE = TargetPredicate.createAttackable()
                 .setBaseMaxDistance(150.0)
-                .setPredicate(/* method_18447 */ player -> Math.abs(player.getY() - this.dragon.getY()) <= 10.0);
+                .setPredicate(/* method_18447 */ (player, world) -> Math.abs(player.getY() - this.dragon.getY()) <= 10.0);
 
-        LivingEntity livingEntity = this.dragon
-                .getWorld()
+        LivingEntity livingEntity = serverWorld
                 .getClosestPlayer(CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
 
         if (this.ticks >= 100) {
             if (this.dragon.getRandom().nextFloat()<((this.timesRun-1)/(this.timesRun+1.0f))) {
 
-                livingEntity = this.dragon
-                        .getWorld()
-                        .getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+                livingEntity = serverWorld.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
                 this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
                 if (livingEntity != null) {
                     if (livingEntity.squaredDistanceTo(this.dragon)>10*10) {
@@ -90,8 +90,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 if (!this.dragon.isSilent()) {
                     this.dragon.getWorld().syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
-
-                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, o, p, q);
+                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
                 this.dragon.getWorld().spawnEntity(dragonFireballEntity);
 

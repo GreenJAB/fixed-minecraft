@@ -20,7 +20,7 @@ public class ServerPlayNetworkHandlerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
-    @ModifyExpressionValue(method = "onPlayerInteractBlock", at = @At(
+    /*@ModifyExpressionValue(method = "onPlayerInteractBlock", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;MAX_BREAK_SQUARED_DISTANCE:D"
     ))
@@ -33,15 +33,6 @@ public class ServerPlayNetworkHandlerMixin {
         return d*d;
     }
 
-    /*@ModifyConstant(method = "onPlayerInteractBlock", constant = @Constant(doubleValue = 64.0))
-    private double largerBlockReach2(double original) {
-        double d =  Math.sqrt(original);
-        if (this.player.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
-            d+=0.5*(1+this.player.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
-        }
-        if (this.player.isCreative())d+=0.5;
-        return d*d;
-    }*/
     @ModifyExpressionValue(method = "onPlayerInteractBlock", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/server/network/ServerPlayerEntity;squaredDistanceTo(DDD)D"
@@ -58,8 +49,8 @@ public class ServerPlayNetworkHandlerMixin {
         } else {
             return 128;
         }
-    }
-    @ModifyExpressionValue(method = "onPlayerInteractEntity", at = @At(
+    }*/
+    /*@ModifyExpressionValue(method = "onPlayerInteractEntity", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/server/network/ServerPlayNetworkHandler;MAX_BREAK_SQUARED_DISTANCE:D"
     ))
@@ -71,5 +62,5 @@ public class ServerPlayNetworkHandlerMixin {
         d+=dd;
         if (this.player.isCreative())d+=3;
         return d*d;
-    }
+    }*/
 }

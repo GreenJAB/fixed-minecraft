@@ -15,12 +15,14 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
+
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin
 {
     @ModifyVariable(method = "addExhaustion", at = @At(value = "HEAD"), argsOnly = true)
     private float exhastionGamerule(float value) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        return value*PE.getWorld().getGameRules().getInt(GameruleRegistry.INSTANCE.getStamina_Drain_Speed()) / 100f;
+        return value* Objects.requireNonNull(Objects.requireNonNull(PE.getServer()).getWorld(PE.getWorld().getRegistryKey())).getGameRules().getInt(GameruleRegistry.INSTANCE.getStamina_Drain_Speed()) / 100f;
     }
 }

@@ -2,11 +2,14 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -14,7 +17,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.screen.Property;
@@ -25,6 +31,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
@@ -39,10 +46,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
@@ -55,7 +59,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     }
 
     @Shadow
-    protected abstract List<EnchantmentLevelEntry> generateEnchantments(ItemStack stack, int slot, int level);
+    protected abstract List<EnchantmentLevelEntry> generateEnchantments(DynamicRegistryManager registryManager, ItemStack stack, int slot, int level);
 
     @Shadow
     @Final
@@ -100,7 +104,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
      * 3. Chooses a random slot and adds the enchantments to the output list only if the slot contains an enchanted book and the enchantment is suitable for the item in the enchanting table
      */
     @Inject(method = "generateEnchantments", at = @At("RETURN"), cancellable = true)
-    private void generateEnchantmentsWithChiseledBookshelves(ItemStack stack, int slot, int xpLevel, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
+    private void generateEnchantmentsWithChiseledBookshelves(DynamicRegistryManager registryManager, ItemStack stack, int slot, int xpLevel,
+                                                             CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
         List<EnchantmentLevelEntry> originalReturnValue = cir.getReturnValue();
 
         if (originalReturnValue == null || originalReturnValue.isEmpty()) {
@@ -146,7 +151,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         });
 
         // take random enchantment out of result
-        Map<Enchantment, Integer> enchantments = new HashMap<>();
+        Map<RegistryEntry<Enchantment>, Integer> enchantments = new HashMap<>();
         EnchantmentLevelEntry randomEntry = originalReturnValue.get(this.random.nextInt(originalReturnValue.size()));
         enchantments.put(randomEntry.enchantment, randomEntry.level);
 
@@ -155,13 +160,37 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(randomEntry.enchantment, randomEntry.level));
 
         for (ItemStack chosenStack : chosenItemStacks) {
-            Map<Enchantment, Integer> bookEnchantments = EnchantmentHelper.get(chosenStack);
-            Map<Enchantment, Integer> enchantments2 = new HashMap<>();
-            bookEnchantments.forEach((enchantment, level) -> {
+            ItemEnchantmentsComponent bookEnchantments = EnchantmentHelper.getEnchantments(chosenStack);
+            //Map<Enchantment, Integer> bookEnchantments = EnchantmentHelper.get(chosenStack);
+            Map<RegistryEntry<Enchantment>, Integer> enchantments2 = new HashMap<>();
 
+            for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : bookEnchantments.getEnchantmentEntries()) {
+                RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                Enchantment enchantment = registryEntry.value();
+                int level = entry.getIntValue();
                 // ensure enchantment fits on item
                 //if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
                 if (!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack.getItem())) {
+                    return;
+                }
+                // ensure highest level found is applied; thanks to the map's behaviour, no enchantment will appear more than once
+                if (enchantments.containsKey(enchantment) && enchantments.get(enchantment) >= level) {
+                    return;
+                }
+                // prevent negative or 0 enchantment power
+                if ((enchPower.get() + FixedMinecraftEnchantmentHelper.getEnchantmentPower(registryEntry, level)) <= 0) {
+                    return;
+                }
+
+                enchantments2.put(registryEntry, level);
+            }
+
+
+            /*bookEnchantments.getEnchantments().forEach((enchantment, level) -> {
+
+                // ensure enchantment fits on item
+                //if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
+                if (!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment.value(), stack.getItem())) {
                     return;
                 }
                 // ensure highest level found is applied; thanks to the map's behaviour, no enchantment will appear more than once
@@ -175,15 +204,16 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
                 enchantments2.put(enchantment, level);
 
-            });
+            });*/
             if (!enchantments2.isEmpty()) {
                 int rand = this.random.nextInt(enchantments2.size());
                 final int[] i = {0};
                 enchantments2.forEach((enchantment, level) -> {
                     if (i[0] == rand) {
                         boolean can = true;
-                        for (Enchantment enchantment3 : enchantments.keySet()) {
-                            if (!enchantment.canCombine(enchantment3)) {
+                        for (RegistryEntry<Enchantment> enchantment3 : enchantments.keySet()) {
+                            //if (!enchantment.canCombine(enchantment3)) {
+                            if (Enchantment.canBeCombined(enchantment, enchantment3)) {
                                 can = false;
                             }
                         }
@@ -203,7 +233,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         // wrap in list and return
         List<EnchantmentLevelEntry> enchantmentsResult = new ArrayList<>();
         enchantments.forEach((enchantment, level) -> {
-            enchantmentsResult.add(new EnchantmentLevelEntry(enchantment, (isGold&&enchantment.getMaxLevel()!=1)?level+1:level));
+            enchantmentsResult.add(new EnchantmentLevelEntry(enchantment, (isGold&&enchantment.value().getMaxLevel()!=1)?level+1:level));
         });
         cir.setReturnValue(enchantmentsResult);
     }
@@ -231,18 +261,21 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             // count nearby bookshelves
             int bookShelfCount = FixedMinecraftEnchantmentHelper.countAccessibleBookshelves(world, blockPos);
             int power = (int)((FixedMinecraftEnchantmentHelper.POWER_WHEN_MAX_LEVEL-1) * bookShelfCount / 15f + 1);
+            IndexedIterable<RegistryEntry<Enchantment>> indexedIterable = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getIndexedEntries();
 
             // generate enchantments for each slot
             for (int slot = 0; slot < 3; slot++) {
                 // System.out.println("power " + power);
 
                 // generate enchantments
-                List<EnchantmentLevelEntry> enchantments = this.generateEnchantments(Items.AIR.getDefaultStack(), slot, power);
-                enchantments = this.generateEnchantments(itemStack, slot, power);
+                List<EnchantmentLevelEntry> enchantments;
+                enchantments = this.generateEnchantments(world.getRegistryManager(), itemStack, slot, power);
                 if (!enchantments.isEmpty()) {
                     // set displayed enchantment
                     EnchantmentLevelEntry displayedEnchantment = enchantments.get(0);
-                    this.enchantmentId[slot] = Registries.ENCHANTMENT.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
+
+                    //this.enchantmentId[slot] = Registries.ENCHANTMENT.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
+                    this.enchantmentId[slot] = indexedIterable.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
                     this.enchantmentLevel[slot] = displayedEnchantment.level; // again, for display purposes only
 
                     // calculate enchantment power
@@ -299,14 +332,17 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             }
 
             boolean isSuper = false;
-            Map<Enchantment, Integer> map = EnchantmentHelper.get(targetItemStack);
-            for (Enchantment enchantment : map.keySet()) {
-                int i = map.get(enchantment);
-                if (i > enchantment.getMaxLevel()) isSuper = true;
+            //Map<Enchantment, Integer> map = EnchantmentHelper.generateEnchantments(targetItemStack);
+            List<EnchantmentLevelEntry> enchantments;
+            enchantments = this.generateEnchantments(world.getRegistryManager(), targetItemStack, slotId,  this.enchantmentPower[slotId]);
+            for (Iterator<EnchantmentLevelEntry> it = enchantments.iterator(); it.hasNext(); ) {
+                EnchantmentLevelEntry enchantment = it.next();
+                int i = enchantment.level;
+                if (i > enchantment.enchantment.value().getMaxLevel()) isSuper = true;
             }
-
-            if (isSuper) targetItemStack.getOrCreateSubNbt("Super");
-            if (player instanceof ServerPlayerEntity SPE && map.size()>1) {
+            //if (isSuper) targetItemStack.getOrCreateSubNbt("Super");
+            if (isSuper) targetItemStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(1));
+            if (player instanceof ServerPlayerEntity SPE && enchantments.size()>1) {
                 Criteria.CONSUME_ITEM.trigger(SPE, Items.CHISELED_BOOKSHELF.getDefaultStack());
             }
 
@@ -336,7 +372,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             // lifecycle stuff
             // entirely reimplemented from vanilla
             this.inventory.markDirty();
-            this.seed.set(player.getEnchantmentTableSeed());
+            this.seed.set(player.getEnchantingTableSeed());
             this.onContentChanged(this.inventory);
             world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
         };

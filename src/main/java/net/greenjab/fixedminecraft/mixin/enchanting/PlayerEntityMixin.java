@@ -2,13 +2,20 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.EntityTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -16,13 +23,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
 
-    @Inject(method = "getXpToDrop", at = @At("HEAD"), cancellable = true)
-    private void removeExclusivity(CallbackInfoReturnable<Integer> cir) {
+    @Inject(method = "getExperienceToDrop", at = @At("HEAD"), cancellable = true)
+    private void removeExclusivity(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
         PlayerEntity player = (PlayerEntity) (Object)this;
-        if (!player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
+        if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
             int i = 0;
             for (int level = 0; level < player.experienceLevel/2;level++) {
                 i +=getNextLevelExperience(level);
@@ -45,16 +55,24 @@ public class PlayerEntityMixin {
     }
     @ModifyExpressionValue(method = "attack", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getAttackDamage(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityGroup;)F",
+            target = "Lnet/minecraft/entity/player/PlayerEntity;getDamageAgainst(Lnet/minecraft/entity/Entity;FLnet/minecraft/entity/damage/DamageSource;)F",
             ordinal = 0
     ))
     private float impalingEffectsWetMobs(float original, @Local(argsOnly = true) Entity entity) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
-        return original + ((((LivingEntity)entity).getGroup() == EntityGroup.AQUATIC || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+        //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
+        ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
+        int i = 0;
+        for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
+            if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                i = enchantments.getLevel(entry);
+            }
+        }
+
+        return original + ((((LivingEntity)entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
     }
 
-    @ModifyExpressionValue(method = "getLuck", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/entity/attribute/EntityAttribute;)D"))
+    @ModifyExpressionValue(method = "getLuck", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"))
     private double useLuckEffect(double original){
         PlayerEntity PE = (PlayerEntity) (Object)this;
         if (PE.hasStatusEffect(StatusEffects.LUCK)) {

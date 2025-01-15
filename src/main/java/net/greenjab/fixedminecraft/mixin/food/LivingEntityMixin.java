@@ -1,9 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,9 +33,9 @@ public abstract class LivingEntityMixin
     @Inject(method = "damage", at = @At(value = "INVOKE",
                                         target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 5
     ))
-    private void eatCancelling(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void eatCancelling(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (this.isUsingItem()) {
-            if (this.getStackInHand(this.getActiveHand()).isFood()) {
+            if (this.getStackInHand(this.getActiveHand()).getComponents().contains(DataComponentTypes.FOOD)) {
                 LivingEntity LE = (LivingEntity)(Object)this;
                 if (LE.getWorld().getDifficulty().getId()>1) {
                     this.stopUsingItem();
@@ -42,7 +44,7 @@ public abstract class LivingEntityMixin
         }
     }
 
-    @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
+    @ModifyConstant(method = "getBlockingItem", constant = @Constant(intValue = 5))
     private int noShieldDelay(int constant){
         return 0;
     }

@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
@@ -7,6 +8,7 @@ import net.minecraft.entity.boss.dragon.phase.AbstractSittingPhase;
 import net.minecraft.entity.boss.dragon.phase.Phase;
 import net.minecraft.entity.boss.dragon.phase.PhaseType;
 import net.minecraft.entity.boss.dragon.phase.SittingScanningPhase;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Final;
@@ -41,11 +43,9 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
     }
 
     @Inject(method = "serverTick", at = @At("HEAD"),cancellable = true)
-    private void redoTick(CallbackInfo ci) {
+    private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
         this.ticks++;
-        LivingEntity livingEntity = this.dragon
-                .getWorld()
-                .getClosestPlayer(this.CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+        LivingEntity livingEntity = serverWorld.getClosestPlayer(this.CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (livingEntity != null) {
             if (this.ticks > 25) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.SITTING_ATTACKING);
@@ -78,9 +78,7 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
 
             }
         } else if (this.ticks >= 100) {
-            livingEntity = this.dragon
-                    .getWorld()
-                    .getClosestPlayer(PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+            livingEntity = serverWorld.getClosestPlayer(PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
             this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
             if (livingEntity != null) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);

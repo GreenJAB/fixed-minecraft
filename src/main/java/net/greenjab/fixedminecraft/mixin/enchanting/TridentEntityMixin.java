@@ -2,16 +2,20 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.passive.PigEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.entity.projectile.TridentEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,12 +45,20 @@ public class TridentEntityMixin {
 
     @ModifyExpressionValue(method = "onEntityHit", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getAttackDamage(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityGroup;)F"
+            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;F)F"
     ))
-    private float impalingEffectsWetMobs(float original, @Local Entity entity) {
-        TridentEntity TE = (TridentEntity) (Object)this;
-        int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, TE.getItemStack());
-        return original + ((((LivingEntity)entity).getGroup() == EntityGroup.AQUATIC || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+    private float impalingEffectsWetMobs(float original, @Local(ordinal = 0) Entity entity) {
+        PlayerEntity PE = (PlayerEntity) (Object)this;
+        //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
+        ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
+        int i = 0;
+        for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
+            if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                i = enchantments.getLevel(entry);
+            }
+        }
+
+        return original + ((((LivingEntity)entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(

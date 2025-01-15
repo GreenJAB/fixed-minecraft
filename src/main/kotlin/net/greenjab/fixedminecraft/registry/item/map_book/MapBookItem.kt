@@ -6,6 +6,7 @@ import net.minecraft.client.item.TooltipContext
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.FilledMapItem
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.item.Items
@@ -29,7 +30,7 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.max
 
-class MapBookItem(settings: Settings?) : NetworkSyncedItem(settings) {
+class MapBookItem(settings: Item.Settings?) : NetworkSyncedItem(settings) {
     private val MAP_BOOK_KEY = "fixedminecraft:map_book"
     private val ADDITIONS_KEY = "fixedminecraft:additions"
 
