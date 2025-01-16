@@ -4,7 +4,10 @@ import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
 import net.greenjab.fixedminecraft.registry.GameruleRegistry;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -20,10 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BedBlockMixin {
 
     @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
-    private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit,
+    private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                           CallbackInfoReturnable<ActionResult> cir){
-        if (world.getGameRules().getBoolean(GameruleRegistry.INSTANCE.getInsomnia_Sleep_Requirement())) {
-            if (!player.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+        if (((ServerWorld)world).getGameRules().getBoolean(GameruleRegistry.INSTANCE.getInsomnia_Sleep_Requirement())) {
+            if (!player.hasStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA())) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);
             }

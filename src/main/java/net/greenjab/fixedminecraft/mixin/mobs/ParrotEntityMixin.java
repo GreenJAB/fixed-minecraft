@@ -22,11 +22,11 @@ public abstract class ParrotEntityMixin {
            if (PE.isInAir() && PE.isTamed() && PE.isOwner(player)) {
                if (!player.getWorld().isClient) {
                    if (PE.mountOnto((ServerPlayerEntity) player)) {
-                       cir.setReturnValue(ActionResult.success(PE.getWorld().isClient));
+                       cir.setReturnValue(ActionResult.SUCCESS);
                        cir.cancel();
                    }
                } else {
-                   cir.setReturnValue(ActionResult.success(PE.getWorld().isClient));
+                   cir.setReturnValue(ActionResult.SUCCESS);
                    cir.cancel();
                }
            }

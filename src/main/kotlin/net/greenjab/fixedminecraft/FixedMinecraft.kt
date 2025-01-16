@@ -6,6 +6,7 @@ import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.greenjab.fixedminecraft.registry.GameruleRegistry
 import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
 import net.greenjab.fixedminecraft.registry.ItemRegistry
+import net.greenjab.fixedminecraft.registry.LoottableRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
@@ -31,6 +32,7 @@ object FixedMinecraft : ModInitializer {
 
         RecipeRegistry.register()
         GameruleRegistry.register()
+        LoottableRegistry.register()
 
         StatusRegistry.register()
     }

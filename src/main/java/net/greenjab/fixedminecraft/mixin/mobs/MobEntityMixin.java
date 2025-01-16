@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -17,11 +18,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.item.DyeItem;
-import net.minecraft.item.DyeableArmorItem;
-import net.minecraft.item.DyeableItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.random.Random;
@@ -34,10 +31,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Objects;
 
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity {
@@ -60,14 +59,14 @@ public abstract class MobEntityMixin extends LivingEntity {
                 if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
 
-                if (equipmentSlot.getType() == EquipmentSlot.Type.ARMOR) {
+                if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                     ItemStack itemStack = this.getEquippedStack(equipmentSlot);
                     if (itemStack.isEmpty()) {
-                        ItemStack item = new ItemStack(MobEntity.getEquipmentForSlot(equipmentSlot, i));
+                        ItemStack item = new ItemStack(Objects.requireNonNull(MobEntity.getEquipmentForSlot(equipmentSlot, i)));
                         if (i==0) {
                             DyeItem dye = DyeItem.byColor(DyeColor.byId(this.getWorld().random.nextInt(16)));
                             List<DyeItem> colour = List.of(dye);
-                            item = DyeableItem.blendAndSetColor(item, colour);
+                            item = DyedColorComponent.setColor(item, colour);
                         }
                         this.equipStack(equipmentSlot, ArmorTrimmer.trimAtChanceIfTrimable(item, this.random, this.getWorld().getRegistryManager()));
                     }
@@ -77,30 +76,22 @@ public abstract class MobEntityMixin extends LivingEntity {
         ci.cancel();
     }
 
-    @ModifyExpressionValue(method = "enchantEquipment", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/enchantment/EnchantmentHelper;enchant(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/item/ItemStack;IZ)Lnet/minecraft/item/ItemStack;"))
-    private ItemStack applySuperEnchantArmor(ItemStack original,
-                                        @Local(argsOnly = true) Random random) {
-        return FixedMinecraftEnchantmentHelper.applySuperEnchants(original, random);
-    }
-
-    @ModifyExpressionValue(method = "enchantMainHandItem", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/enchantment/EnchantmentHelper;enchant(Lnet/minecraft/util/math/random/Random;Lnet/minecraft/item/ItemStack;IZ)Lnet/minecraft/item/ItemStack;"))
-    private ItemStack applySuperEnchantHand(ItemStack original,
-                                        @Local(argsOnly = true) Random random) {
-        return FixedMinecraftEnchantmentHelper.applySuperEnchants(original, random);
+    @ModifyArg(method = "enchantEquipment(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/util/math/random/Random;FLnet/minecraft/world/LocalDifficulty;)V", at = @At(value = "INVOKE",
+                                                                                                                                                                                                                target = "Lnet/minecraft/entity/mob/MobEntity;equipStack(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;)V"), index = 1)
+    private ItemStack applySuperEnchantArmor(
+            ItemStack stack) {
+        return FixedMinecraftEnchantmentHelper.applySuperEnchants(stack, random);
     }
 
     @Inject(method = "initialize", at=@At(value = "HEAD"))
-    private void addStuff(ServerWorldAccess world, LocalDifficulty localDifficulty, SpawnReason spawnReason, EntityData entityData,
-                             NbtCompound entityNbt, CallbackInfoReturnable<EntityData> cir){
+    private void addStuff(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData,
+                          CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
         Random random = LE.getWorld().getRandom();
         int y= LE.getBlockPos().getY();
         if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
-            addEffect(world, localDifficulty, LE, y);
+            addEffect(world, difficulty, LE, y);
             addModifiers(world, random, LE);
-
 
         }
     }
@@ -117,17 +108,17 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Unique
     private static void increaseSpeed(Random random, MobEntity LE, int i) {
-        if (LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED)!=null) {
-            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED).setBaseValue(
-                    LE.getAttributeBaseValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
+        if (LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)!=null) {
+            if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(
+                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
         }
     }
 
     @Unique
     private static void increaseHealth(MobEntity LE, float h) {
-        if (LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH)!=null) {
-            LE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(
-                    LE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH) + h);
+        if (LE.getAttributeInstance(EntityAttributes.MAX_HEALTH)!=null) {
+            LE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(
+                    LE.getAttributeBaseValue(EntityAttributes.MAX_HEALTH) + h);
             LE.setHealth(LE.getHealth() + h);
         }
     }

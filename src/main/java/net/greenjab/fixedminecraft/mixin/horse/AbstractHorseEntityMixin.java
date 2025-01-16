@@ -18,7 +18,6 @@ import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.AnimalArmorItem;
-import net.minecraft.item.HorseArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -44,7 +43,9 @@ public class AbstractHorseEntityMixin {
     private static final Map<Item, Float> rageChance = new Object2FloatArrayMap<>();
 
     @Unique
-    private static final Map<StatusEffect, EntityAttribute> effectModififers = new Object2ObjectArrayMap<>();
+    private static final Map<
+            RegistryEntry<StatusEffect>,
+            RegistryEntry<EntityAttribute>> effectModififers = new Object2ObjectArrayMap<>();
 
     @Shadow
     protected SimpleInventory items;
@@ -146,7 +147,7 @@ public class AbstractHorseEntityMixin {
         AHE.calculateDimensions();
     }
 
-    @Inject(method = "hasArmorSlot", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "hasArmorSlot", at = @At("HEAD"), cancellable = true)
     private void muleArmor(CallbackInfoReturnable<Boolean> cir) {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (AHE instanceof MuleEntity) {
@@ -160,9 +161,9 @@ public class AbstractHorseEntityMixin {
         if (AHE instanceof MuleEntity) {
             cir.setReturnValue(item.getItem() instanceof AnimalArmorItem);
         }
-    }
+    }*/
 
-    @ModifyExpressionValue(method = "equipHorseArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    /*@ModifyExpressionValue(method = "equipHorseArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet(EquipmentSlot original){
         return EquipmentSlot.FEET;
     }
@@ -170,10 +171,10 @@ public class AbstractHorseEntityMixin {
     @ModifyExpressionValue(method = "canDispenserEquipSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet2(EquipmentSlot original){
         return EquipmentSlot.FEET;
-    }
+    }*/
 
 
-    @Inject(method = "updateSaddle", at = @At(value = "TAIL"))
+    /*@Inject(method = "updateSaddle", at = @At(value = "TAIL"))
     private void armorIsFeet3(CallbackInfo ci){
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (AHE instanceof MuleEntity) {
@@ -182,9 +183,9 @@ public class AbstractHorseEntityMixin {
                 AHE.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
             }
         }
-    }
+    }*/
 
-    @Inject(method = "onInventoryChanged", at = @At(value = "HEAD"))
+    /*@Inject(method = "onInventoryChanged", at = @At(value = "HEAD"))
     private void armorIsFeet3(Inventory sender, CallbackInfo ci){
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (AHE instanceof MuleEntity) {
@@ -202,9 +203,9 @@ public class AbstractHorseEntityMixin {
                 AHE.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
             }
         }
-    }
+    }*/
 
-    @Unique
+    /*@Unique
     public ItemStack getArmorType() {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         return AHE.getEquippedStack(EquipmentSlot.FEET);
@@ -231,5 +232,5 @@ public class AbstractHorseEntityMixin {
             }
         }
 
-    }
+    }*/
 }

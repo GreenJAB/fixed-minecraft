@@ -3,11 +3,11 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombieVillagerEntity;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -23,9 +23,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ZombieEntity.class)
 public abstract class ZombieEntityMixin extends HostileEntity {
@@ -40,7 +40,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
             if (ZE.getWorld().random.nextInt(30)==0) {
                 if (!this.getWorld().isClient && this.isAlive()){
                     this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                    this.dropItem(Items.SAND);
+                    this.dropItem((ServerWorld) this.getWorld(), Items.SAND);
                     this.emitGameEvent(GameEvent.ENTITY_PLACE);
                 }
             }
@@ -52,17 +52,18 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         return Difficulty.HARD;
     }
 
-    @Inject(method = "onKilledOther", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieVillagerEntity;setXp(I)V"))
-    private void villagerIntoNitwit(ServerWorld world, LivingEntity other, CallbackInfoReturnable<Boolean> cir, @Local ZombieVillagerEntity zombieVillagerEntity){
-        if (world.getDifficulty() == Difficulty.NORMAL || world.getDifficulty() == Difficulty.HARD) {
-            if (world.getDifficulty() == Difficulty.HARD) {
-                zombieVillagerEntity.setVillagerData(zombieVillagerEntity.getVillagerData().withProfession(VillagerProfession.NITWIT));
+    @ModifyArg(method = "onKilledOther", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;infectVillager(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;)Z"), index = 1)
+    private VillagerEntity villagerIntoNitwit(VillagerEntity villager, @Local(argsOnly = true) ServerWorld serverWorld){
+        if (serverWorld.getDifficulty() == Difficulty.NORMAL || serverWorld.getDifficulty() == Difficulty.HARD) {
+            if (serverWorld.getDifficulty() == Difficulty.HARD) {
+                villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
             } else {
                 if (this.random.nextBoolean()) {
-                    zombieVillagerEntity.setVillagerData(zombieVillagerEntity.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                    villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
                 }
             }
         }
+        return villager;
     }
 
     @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))

@@ -19,10 +19,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(PlayerScreenHandler.class)
 public class PlayerScreenHandlerMixin {
-    @Unique
+    /*@Unique
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES;
 
-    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 2), index = 0)
+    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 0), index = 0)
     private Slot lapiscost(Slot par1, @Local(argsOnly = true) PlayerEntity owner, @Local(argsOnly = true) PlayerInventory inventory, @Local int i, @Local EquipmentSlot equipmentSlot) {
         return new Slot(inventory, 39 - i, 8, 8 + i * 18) {
             @Override
@@ -62,5 +62,5 @@ public class PlayerScreenHandlerMixin {
     }
     static {
         EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{PlayerScreenHandler.EMPTY_BOOTS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_LEGGINGS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_CHESTPLATE_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_HELMET_SLOT_TEXTURE};
-    }
+    }*/
 }

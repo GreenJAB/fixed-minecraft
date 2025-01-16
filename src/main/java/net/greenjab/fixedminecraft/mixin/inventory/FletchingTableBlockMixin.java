@@ -29,7 +29,7 @@ public class FletchingTableBlockMixin {
     }
 
    @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
-    private void fletchingScreen(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit,
+    private void fletchingScreen(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                  CallbackInfoReturnable<ActionResult> cir) {
        if (world.isClient) {
            cir.setReturnValue(ActionResult.SUCCESS);

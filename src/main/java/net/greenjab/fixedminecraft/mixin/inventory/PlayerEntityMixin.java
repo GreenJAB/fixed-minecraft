@@ -34,13 +34,15 @@ public class PlayerEntityMixin {
         NbtList items = nbt.getList("CraftingItems", NbtElement.COMPOUND_TYPE);
         if (items == null) return;
         stacks.clear();
-        for (int i = 0; i < items.size(); ++i) {
+        PlayerEntity PE = (PlayerEntity)(Object)this;
+        for (int i = 0; i < items.size(); i++) {
             NbtCompound nbtCompound = items.getCompound(i);
             int slot = nbtCompound.getByte("Slot") & 255;
-            if (slot >= craftingGrid.size()) continue;
-            ItemStack itemStack = ItemStack.fromNbt(nbtCompound);
+            ItemStack itemStack = (ItemStack)ItemStack.fromNbt(PE.getRegistryManager(), nbtCompound).orElse(ItemStack.EMPTY);
             stacks.set(slot, itemStack);
         }
+
+
         /** Gave errors even with access widener */
         /*NbtCompound nbtCompound = nbt.getCompound("CraftingResult");
         if (nbtCompound != null && !nbtCompound.isEmpty()) {
@@ -52,25 +54,23 @@ public class PlayerEntityMixin {
     @Inject(method = "writeCustomDataToNbt", at = @At("RETURN"))
     private void writeCraftingGrid(NbtCompound nbt, CallbackInfo ci) {
         RecipeInputInventory craftingGrid = playerScreenHandler.getCraftingInput();
+
+        PlayerEntity PE = (PlayerEntity)(Object)this;
         NbtList items = new NbtList();
-        for (int i = 0; i < craftingGrid.size(); ++i) {
-            ItemStack itemStack = craftingGrid.getStack(i);
-            if (itemStack.isEmpty()) continue;
-            NbtCompound stack = new NbtCompound();
-            stack.putByte("Slot", (byte) i);
-            itemStack.writeNbt(stack);
-            items.add(stack);
+        for (int i = 0; i < craftingGrid.size(); i++) {
+            if (!craftingGrid.getStack(i).isEmpty()) {
+                NbtCompound nbtCompound = new NbtCompound();
+                nbtCompound.putByte("Slot", (byte)i);
+                items.add(craftingGrid.getStack(i).toNbt(PE.getRegistryManager(), nbtCompound));
+            }
         }
+
+
         nbt.put("CraftingItems", items);
         /*ItemStack itemStack  = playerScreenHandler.craftingResult.getStack(0);
         if (itemStack!=null) {
             nbt.put("CraftingResult", playerScreenHandler.craftingResult.getStack(0).writeNbt(new NbtCompound()));
         }*/
     }
-    @Inject(method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setVelocity(DDD)V", ordinal = 0))
-    private void onGroundForLonger(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir, @Local ItemEntity itemEntity) {
-        int diff = itemEntity.getWorld().getDifficulty().getId();
-        if (diff == 2) itemEntity.setCovetedItem();
-        if (diff < 2) itemEntity.setNeverDespawn();
-    }
+
 }

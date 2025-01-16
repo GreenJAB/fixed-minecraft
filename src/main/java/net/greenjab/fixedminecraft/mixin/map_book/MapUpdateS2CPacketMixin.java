@@ -16,7 +16,7 @@ public class MapUpdateS2CPacketMixin implements MapPacketAccessor {
     @Unique
     private int z;
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readByte()B", ordinal = 0), method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V")
+    /*@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/network/PacketByteBuf;readByte()B", ordinal = 0), method = "<init>(Lnet/minecraft/network/PacketByteBuf;)V")
     private void read(PacketByteBuf buf, CallbackInfo ci) {
         x = buf.readInt();
         z = buf.readInt();
@@ -26,7 +26,7 @@ public class MapUpdateS2CPacketMixin implements MapPacketAccessor {
     private void write(PacketByteBuf buf, CallbackInfo ci) {
         buf.writeInt(x);
         buf.writeInt(z);
-    }
+    }*/
 
     @Override
     public void fixedminecraft$setX(int x) {

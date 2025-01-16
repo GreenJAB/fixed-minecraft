@@ -22,7 +22,7 @@ public abstract class EntityMixin {
         Entity E = (Entity)(Object)this;
         if (E instanceof AbstractHorseEntity) {
             if (E.hasVehicle()) {
-                return new EntityDimensions(original.width*0.9f, original.height, original.fixed);
+                return EntityDimensions.fixed(original.width() * 0.9f, original.height());
             }
         }
 

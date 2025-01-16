@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public class HorseEntityMixin {
 
 
-    @ModifyExpressionValue(method = "getArmorType", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"))
+    /*@ModifyExpressionValue(method = "getArmorType", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet1(EquipmentSlot original){
         return EquipmentSlot.FEET;
     }
@@ -23,5 +23,5 @@ public class HorseEntityMixin {
     @ModifyExpressionValue(method = "updateSaddle", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;CHEST:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet3(EquipmentSlot original){
         return EquipmentSlot.FEET;
-    }
+    }*/
 }

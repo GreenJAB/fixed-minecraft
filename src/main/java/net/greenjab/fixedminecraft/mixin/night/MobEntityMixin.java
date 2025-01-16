@@ -31,7 +31,7 @@ public class MobEntityMixin {
         }
     }
 
-    @ModifyExpressionValue(method = "equipBodyArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
+    /*@ModifyExpressionValue(method = "equipBodyArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet(EquipmentSlot original){
         return EquipmentSlot.FEET;
     }
@@ -44,5 +44,5 @@ public class MobEntityMixin {
     @ModifyExpressionValue(method = "canUseSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
     private EquipmentSlot armorIsFeet3(EquipmentSlot original){
         return EquipmentSlot.FEET;
-    }
+    }*/
 }

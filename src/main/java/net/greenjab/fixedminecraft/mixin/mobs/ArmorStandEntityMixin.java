@@ -9,6 +9,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
@@ -62,12 +63,12 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
             if (itemStack.isOf(Items.SHEARS)) {
                 if (this.shouldShowArms()) {
                     this.setShowArms(false);
-                    if (!player.getAbilities().creativeMode) this.dropItem(Items.STICK);
-                    if (!player.getAbilities().creativeMode) itemStack.damage(1, player.getWorld().random, (ServerPlayerEntity) player);
+                    if (!player.getAbilities().creativeMode) this.dropItem((ServerWorld) player.getWorld(), Items.STICK);
+                    if (!player.getAbilities().creativeMode) itemStack.damage(1, player);
                     Iterable<ItemStack> hands = this.getHandItems();
                     hands.forEach((stack) -> {
                         if (!stack.isEmpty()) {
-                            this.dropStack(stack);
+                            this.dropStack((ServerWorld) player.getWorld(), stack);
                         }
                     });
                     this.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());

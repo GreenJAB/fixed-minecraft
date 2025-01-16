@@ -12,14 +12,14 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin
 {
-    @ModifyConstant(method = "addSoulSpeedBoostIfNeeded", constant = @Constant(floatValue = 0.03f))
+    /*@ModifyConstant(method = "addSoulSpeedBoostIfNeeded", constant = @Constant(floatValue = 0.03f))
     private float fasterHorseSoulSpeed(float constant) {
         LivingEntity LE = (LivingEntity) (Object)this;
         if (LE instanceof AbstractHorseEntity) {
             return constant*3;
         }
         return constant;
-    }
+    }*/
 
     @ModifyConstant(method = "getAttackDistanceScalingFactor",constant = @Constant(doubleValue = 0.8))
     private double moreSneaky(double constant){

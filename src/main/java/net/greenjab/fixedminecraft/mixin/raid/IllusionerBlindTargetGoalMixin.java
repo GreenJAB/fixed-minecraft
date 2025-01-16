@@ -13,7 +13,7 @@ class IllusionerBlindTargetGoalMixin {
 
     @ModifyArgs(method = "castSpell", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/effect/StatusEffectInstance;<init>(Lnet/minecraft/entity/effect/StatusEffect;I)V"
+            target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"
     ))
     private void nauseaSpell(Args args) {
         args.set(0, StatusEffects.NAUSEA);

@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -40,12 +42,12 @@ public class HorseScreenHandlerMixin {
         return new Slot(inventory, 1, 8, 36) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return entity.isHorseArmor(stack);
+                return entity.canEquip(stack, EquipmentSlot.BODY);
             }
 
             @Override
             public boolean isEnabled() {
-                return entity.hasArmorSlot();
+                return entity.canUseSlot(EquipmentSlot.BODY);
             }
 
             @Override
@@ -56,7 +58,9 @@ public class HorseScreenHandlerMixin {
             @Override
             public boolean canTakeItems(PlayerEntity playerEntity) {
                 ItemStack itemStack = this.getStack();
-                return (itemStack.isEmpty() || playerEntity.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
+                return (itemStack.isEmpty()
+                        || playerEntity.isCreative()
+                        || !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) && super.canTakeItems(playerEntity);
             }
         };
     }

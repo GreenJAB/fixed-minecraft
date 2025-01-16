@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.advancement.Advancement;
 import net.minecraft.advancement.AdvancementRewards;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -19,12 +20,12 @@ public abstract class AdvancementMixin {
     public abstract AdvancementRewards rewards();
 
     @Inject(method = "write", at = @At(value = "INVOKE", target = "Lnet/minecraft/advancement/AdvancementRequirements;writeRequirements(Lnet/minecraft/network/PacketByteBuf;)V"))
-    private void injected(PacketByteBuf buf, CallbackInfo ci) {
-        buf.writeText(Text.of(String.valueOf(this.rewards().experience())));
+    private void injected(RegistryByteBuf buf, CallbackInfo ci) {
+        buf.writeString(String.valueOf(this.rewards().experience()));
     }
 
     @ModifyExpressionValue(method = "read", at = @At(value = "FIELD", target = "Lnet/minecraft/advancement/AdvancementRewards;NONE:Lnet/minecraft/advancement/AdvancementRewards;"))
-    private static AdvancementRewards injected(AdvancementRewards original, @Local(argsOnly = true) PacketByteBuf buf) {
-        return new AdvancementRewards.Builder().setExperience(Integer.parseInt(buf.readText().getLiteralString())).build();
+    private static AdvancementRewards injected(AdvancementRewards original, @Local(argsOnly = true) RegistryByteBuf buf) {
+        return new AdvancementRewards.Builder().setExperience(Integer.parseInt(buf.readString())).build();
     }
 }
