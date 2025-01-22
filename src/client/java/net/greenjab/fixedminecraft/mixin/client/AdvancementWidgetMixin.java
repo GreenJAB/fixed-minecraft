@@ -9,6 +9,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.advancement.AdvancementObtainedStatus;
 import net.minecraft.client.gui.screen.advancement.AdvancementTab;
 import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
@@ -99,7 +100,7 @@ public class AdvancementWidgetMixin {
             }
 
             if (thisGot || parentGot) {
-                context.drawGuiTexture(advancementObtainedStatus.getFrameTexture(this.display.getFrame()),
+                context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getFrameTexture(this.display.getFrame()),
                         x + this.x + 3, y + this.y, 26, 26);
                 context.drawItemWithoutEntity(this.display.getIcon(), x + this.x + 8, y + this.y + 5);
             }
@@ -164,7 +165,7 @@ public class AdvancementWidgetMixin {
 
 
     @Unique
-    private static final Identifier TITLE_BOX_TEXTURE = new Identifier("advancements/title_box");
+    private static final Identifier TITLE_BOX_TEXTURE = Identifier.of("advancements/title_box");
 
     @Unique
     public void drawTooltip2(DrawContext context, int originX, int originY, int x) {
@@ -209,15 +210,15 @@ public class AdvancementWidgetMixin {
 
         int n = 32 + this.description.size() * 9;
         if (!this.description.isEmpty()) {
-            context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l + 26 - n, this.width, n);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, m, l + 26 - n, this.width, n);
         }
         if (this.advancement.getAdvancement().rewards().experience()!=0) {
-            context.drawGuiTexture(TITLE_BOX_TEXTURE, m, l, this.width, 32+9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, m, l, this.width, 32+9);
         }
 
-        context.drawGuiTexture(advancementObtainedStatus.getBoxTexture(), 200, 26, 0, 0, m, l, j, 26);
-        context.drawGuiTexture(advancementObtainedStatus2.getBoxTexture(), 200, 26, 200 - k, 0, m + j, l, k, 26);
-        context.drawGuiTexture(advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, 26, 0, 0, m, l, j, 26);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, 26, 200 - k, 0, m + j, l, k, 26);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26);
         if (bl) {
             context.drawTextWithShadow(this.client.textRenderer, this.title, m + 5, originY + this.y + 9, -1);
             if (text != null) {

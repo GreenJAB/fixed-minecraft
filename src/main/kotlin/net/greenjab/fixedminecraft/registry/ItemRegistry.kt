@@ -2,7 +2,9 @@ package net.greenjab.fixedminecraft.registry
 
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem
 import net.greenjab.fixedminecraft.registry.item.TotemItem
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
+import net.minecraft.component.ComponentType
 import net.minecraft.component.type.FoodComponents
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -11,15 +13,30 @@ import net.minecraft.item.FireworkRocketItem
 import net.minecraft.item.Item
 import net.minecraft.item.equipment.ArmorMaterials
 import net.minecraft.potion.Potion
+import net.minecraft.registry.Registries
 import net.minecraft.registry.Registries.ITEM
 import net.minecraft.registry.Registries.POTION
+import net.minecraft.registry.Registry
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.Rarity
+import java.util.function.UnaryOperator
+
 
 @Suppress("MemberVisibilityCanBePrivate")
 object ItemRegistry {
     val DRAGON_FIREWORK_ROCKET = item(::FireworkRocketItem)
     val MAP_BOOK: Item = MapBookItem(Item.Settings().maxCount(1)) as Item
+    val MAP_BOOK_ADDITIONS: ComponentType<MapBookAdditionsComponent> = registerComponent("melody_map_book_additions") { builder ->
+        builder.codec(
+            MapBookAdditionsComponent.CODEC
+        ).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache()
+    }
+
+    private fun <T> registerComponent(id: String, builderOperator: UnaryOperator<ComponentType.Builder<T>>): ComponentType<T> {
+        return Registry.register(Registries.DATA_COMPONENT_TYPE, id, builderOperator.apply(ComponentType.builder<T>()).build())
+    }
+
+
     val NETHERITE_HORSE_ARMOR = item({ AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, it) }) {
         maxCount(1)
         rarity(Rarity.RARE)
@@ -28,7 +45,7 @@ object ItemRegistry {
 
     val BROKEN_TOTEM = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
      val ECHO_TOTEM: Item = TotemItem(Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).useCooldown(1.0F))
-    //val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
+    // val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
     val ECHO_FRUIT: Item =  EchoFruitItem(Item.Settings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 
     val NETHERITE_ANVIL = blockItem(BlockRegistry.NETHERITE_ANVIL, Item.Settings::fireproof)

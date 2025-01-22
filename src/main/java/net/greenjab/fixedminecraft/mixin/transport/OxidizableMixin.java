@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Oxidizable.class)
 public interface OxidizableMixin {
-    @ModifyExpressionValue(
+    /*@ModifyExpressionValue(
             method = "method_34740", at = @At(
             value = "INVOKE",
             target = "Lcom/google/common/collect/ImmutableBiMap;builder()Lcom/google/common/collect/ImmutableBiMap$Builder;",
@@ -22,5 +22,5 @@ public interface OxidizableMixin {
                 .put(BlockRegistry.COPPER_RAIL, BlockRegistry.EXPOSED_COPPER_RAIL)
                 .put(BlockRegistry.EXPOSED_COPPER_RAIL, BlockRegistry.WEATHERED_COPPER_RAIL)
                 .put(BlockRegistry.WEATHERED_COPPER_RAIL, BlockRegistry.OXIDIZED_COPPER_RAIL);
-    }
+    }*/
 }

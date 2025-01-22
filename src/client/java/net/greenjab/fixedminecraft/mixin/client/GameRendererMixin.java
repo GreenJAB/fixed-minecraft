@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.profiler.Profilers;
 import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,15 +33,17 @@ public class GameRendererMixin {
 
     @Shadow
     @Final
-    MinecraftClient client;
+    private MinecraftClient client;
 
 
-    @Inject(method = "updateTargetedEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;getReachDistance()F"), cancellable = true)
+    @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getBlockInteractionRange()D"), cancellable = true)
     private void getEntityThroughGrass(float tickDelta, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
-        double d = client.interactionManager.getReachDistance();
+        //double d2 = this.client.player.getBlockInteractionRange();
+        double d = this.client.player.getEntityInteractionRange();
+        //double d = client.interactionManager.getReachDistance();
         client.crosshairTarget = entity.raycast(d, tickDelta, false);
         Vec3d vec3d = entity.getCameraPosVec(tickDelta);
-        boolean bl = client.interactionManager.hasExtendedReach();
+        boolean bl = client.interactionManager.getCurrentGameMode().isCreative();
         d = bl ? 6.0 : d;
         boolean bl2 = !bl;
         double e = client.crosshairTarget != null ? client.crosshairTarget.getPos().squaredDistanceTo(vec3d) : d * d;
@@ -80,7 +83,7 @@ public class GameRendererMixin {
             }
         }
 
-        client.getProfiler().pop();
+        Profilers.get().pop();
         ci.cancel();
     }
 

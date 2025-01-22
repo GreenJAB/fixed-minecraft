@@ -24,7 +24,7 @@ public class ClientPlayerInteractionManagerMixin {
     @Final
     private MinecraftClient client;
 
-    @Redirect(method = "getReachDistance", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getReachDistance(Z)F"))
+    /*@Redirect(method = "getReachDistance", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getReachDistance(Z)F"))
     private float hasLongerReach(boolean creative) {
         if (this.client.player.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
             int i = this.client.player.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier();
@@ -37,7 +37,7 @@ public class ClientPlayerInteractionManagerMixin {
     @Inject(method = "hasExtendedReach", at = @At(value = "HEAD"), cancellable = true)
     private void overrideExtendedReachCheck(CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(false);
-    }
+    }*/
 
     @ModifyArg(method = "attackEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
     private Entity check(Entity target) {

@@ -6,6 +6,8 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -22,7 +24,7 @@ public class HeldItemRendererMixin {
     @Shadow @Final private MinecraftClient client;
 
     @Unique
-    private MapStateData nearestMap;
+    private MapIdComponent nearestMap;
 
     @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"), method = "renderFirstPersonItem")
     private boolean passMapCheck(ItemStack instance, Item item, Operation<Boolean> original) {
@@ -39,15 +41,19 @@ public class HeldItemRendererMixin {
         //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
         if (!(original.getItem() instanceof MapBookItem) || nearestMap == null) return original;
         ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
-        map.getOrCreateNbt().putInt("map", nearestMap.getId());
+
+        //MapIdComponent mapIdComponent = allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
+        //map.set(DataComponentTypes.MAP_ID, mapIdComponent);
+        map.set(DataComponentTypes.MAP_ID, nearestMap);
+        //map.getOrCreateNbt().putInt("map", nearestMap.getId());
         return map;
     }
 
     @ModifyArg(method = "renderFirstPersonMap",
                at = @At(value = "INVOKE",
-              target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/map/MapState;ZI)V"
-    ), index = 4)
-    private boolean showIconsOnItemFrameMap(boolean hidePlayerIcons){
+              target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/render/MapRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ZI)V"
+    ), index = 3)
+    private boolean showIconsOnItemFrameMap(boolean bl){
         return false;
     }
 }

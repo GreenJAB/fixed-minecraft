@@ -1,6 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.MobEntity;
@@ -12,7 +15,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.DyeableArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
@@ -36,6 +38,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 @Mixin(MerchantScreenHandler.class)
 public abstract class MerchantScreenHandlerMixin extends ScreenHandler implements InventoryChangedListener {
@@ -54,7 +57,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
     @Inject(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/village/Merchant;)V", at = @At("TAIL"))
     private void armorSlots(int syncId, PlayerInventory playerInventory, Merchant merchant, CallbackInfo ci){
         double d = 10f;
-        Vec3d vec3d = merchant.getCustomer().getClientCameraPosVec(1.0f);
+        Vec3d vec3d = Objects.requireNonNull(merchant.getCustomer()).getClientCameraPosVec(1.0f);
         double e = d*d;
 
         Vec3d vec3d2 = merchant.getCustomer().getRotationVec(1.0F);
@@ -91,8 +94,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                                     stack.getItem() == Items.PLAYER_HEAD ||
                                     stack.isIn(ItemTags.BANNERS);
                                 }
-                                EquipmentSlot slot = MobEntity.getPreferredEquipmentSlot(stack);
-                                return equipmentSlot == slot && stack.getItem() instanceof DyeableArmorItem;
+                                EquipmentSlot slot = getPreferredEquipmentSlot(stack);
+                                return equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE);
                             }
                             return false;
                         }
@@ -101,17 +104,22 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                             ItemStack itemStack = this.getStack();
                             if (itemStack == null) return false;
                             return (itemStack.isEmpty() || playerEntity.isCreative() ||
-                                    !EnchantmentHelper.hasBindingCurse(itemStack)) && super.canTakeItems(playerEntity);
+                                    !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) && super.canTakeItems(playerEntity);
                         }
 
-                        public Pair<Identifier, Identifier> getBackgroundSprite() {
+                        /*public Pair<Identifier, Identifier> getBackgroundSprite() {
                             return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_ARMOR_SLOT_TEXTURES[equipmentSlot.getEntitySlotId()]);
-                        }
+                        }*/
                     });
                 }
             }
         }
 
+    }
+
+    public final EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
+        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
+        return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
     }
 
     static {
@@ -153,7 +161,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                     return;
                 }
             } else {
-                if (itemStack2.getItem() instanceof DyeableArmorItem) {
+                if (itemStack2.isIn(ItemTags.DYEABLE)) {
                     if (this.slots.size()>38) {
                         if (!this.insertItem(itemStack2, 39, this.slots.size(), false)) {
                             cir.setReturnValue(ItemStack.EMPTY);

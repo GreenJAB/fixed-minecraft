@@ -2,62 +2,69 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
+import net.minecraft.component.DataComponentTypes
 import net.minecraft.inventory.RecipeInputInventory
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
+import net.minecraft.recipe.input.CraftingRecipeInput
 import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
 class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : SpecialCraftingRecipe(craftingRecipeCategory) {
 
-    override fun matches(recipeInputInventory: RecipeInputInventory, world: World): Boolean {
-        return getResult(recipeInputInventory) != null
+    override fun matches(craftingRecipeInput: CraftingRecipeInput, world: World): Boolean {
+        return this.getResult(craftingRecipeInput, world) != null
     }
 
-    override fun craft(recipeInputInventory: RecipeInputInventory, dynamicRegistryManager: DynamicRegistryManager): ItemStack {
-        val itemStack = getResult(recipeInputInventory)
+    override fun craft(craftingRecipeInput: CraftingRecipeInput, wrapperLookup: RegistryWrapper.WrapperLookup?): ItemStack {
+        val itemStack = getResult(craftingRecipeInput, null)
         if (itemStack == null || itemStack.isEmpty) {
             return ItemStack.EMPTY
         }
         return itemStack.copy()
     }
 
-    private fun getResult(recipeInputInventory: RecipeInputInventory) : ItemStack? {
-        var filledMap: ItemStack? = null
-        var emptyMap = false
 
-        for (itemStack in recipeInputInventory.heldStacks) {
+
+    private fun getResult(craftingRecipeInput: CraftingRecipeInput, world: World?): ItemStack? {
+        var mapBook: ItemStack? = null
+        val maps = ArrayList<Int>()
+
+        for (itemStack in craftingRecipeInput.stacks) {
             if (itemStack.isEmpty) continue
-            if (!itemStack.isOf(ItemRegistry.MAP_BOOK)) return null
 
-            val isEmpty = (itemStack.item as MapBookItem).getMapBookId(itemStack) == null
-            if (isEmpty) {
-                if (emptyMap) {
+            // due to applying the additions it gets confused when theres more than one item in the grid and ends up duplicating things
+            if (itemStack.count > 1) return null
+
+            if (!itemStack.isOf(ItemRegistry.MAP_BOOK)) {
+                if (!itemStack.isOf(Items.FILLED_MAP)) {
                     return null
-                } else {
-                    emptyMap = true
                 }
+
+                val mapId = itemStack.get(DataComponentTypes.MAP_ID) ?: return null
+                maps.add(mapId.id())
             } else {
-                if (filledMap != null) {
+                if (mapBook != null) {
                     return null
-                } else {
-                    filledMap = itemStack
                 }
+
+                mapBook = itemStack
             }
         }
-
-        if (!emptyMap) {
+        if (mapBook == null || maps.isEmpty()) {
             return null
         }
 
-        return filledMap
+        return mapBook
     }
 
-    override fun getRemainder(inventory: RecipeInputInventory?): DefaultedList<ItemStack> {
+    /*override fun getRemainder(inventory: RecipeInputInventory?): DefaultedList<ItemStack> {
         val result: DefaultedList<ItemStack> = DefaultedList.ofSize(inventory!!.size(), ItemStack.EMPTY)
 
         for (i in result.indices) {
@@ -75,13 +82,11 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
         }
 
         return result
-    }
+    }*/
 
-    override fun fits(width: Int, height: Int): Boolean {
-        return width * height >= 2
-    }
 
-    override fun getSerializer(): RecipeSerializer<*> {
+
+    override fun getSerializer(): RecipeSerializer<MapBookCloningRecipe> {
         return RecipeRegistry.MAP_BOOK_CLONING_SERIALIZER
     }
 }

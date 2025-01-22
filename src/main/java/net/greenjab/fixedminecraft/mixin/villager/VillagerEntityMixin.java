@@ -8,8 +8,11 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.greenjab.fixedminecraft.data.ModTags;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityInteraction;
@@ -22,11 +25,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.EnchantmentTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
+import net.minecraft.village.TradedItem;
 import net.minecraft.village.VillagerData;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
@@ -227,7 +237,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                             new TradeOffers.SellItemFactory(Items.COMPASS, 4, 1, 15)})
 
                     .put(4, new TradeOffers.Factory[]{
-                            new TradeOffers.EnchantBookFactory(10),
+                            anyBook(),
                             new TradeOffers.BuyItemFactory(Items.WRITABLE_BOOK, 2, 12, 30)})
 
                     .put(5, new TradeOffers.Factory[]{
@@ -238,24 +248,83 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     }
 
     @Unique
-    private TradeOffers.EnchantBookFactory biomeBook(boolean master, VillagerData villagerData) {
-        Random rn = this.getWorld().random;
-        Object2ObjectMap<VillagerType, Enchantment[]> biomeEnchants =  new Object2ObjectOpenHashMap(ImmutableMap.builder()
-                .put(VillagerType.DESERT, new Enchantment[]{Enchantments.FIRE_PROTECTION, Enchantments.IMPALING, Enchantments.THORNS, Enchantments.EFFICIENCY, Enchantments.INFINITY})
-                .put(VillagerType.JUNGLE, new Enchantment[]{Enchantments.FEATHER_FALLING, Enchantments.SWEEPING, Enchantments.POWER, Enchantments.UNBREAKING, Enchantments.CHANNELING})
-                .put(VillagerType.PLAINS, new Enchantment[]{Enchantments.PROTECTION, Enchantments.SMITE, Enchantments.PUNCH, Enchantments.FIRE_ASPECT, Enchantments.MULTISHOT})
-                .put(VillagerType.SAVANNA, new Enchantment[]{Enchantments.KNOCKBACK, Enchantments.SHARPNESS, Enchantments.DEPTH_STRIDER, Enchantments.BINDING_CURSE, Enchantments.LOYALTY})
-                .put(VillagerType.SNOW, new Enchantment[]{Enchantments.AQUA_AFFINITY, Enchantments.QUICK_CHARGE, Enchantments.FROST_WALKER, Enchantments.LOOTING, Enchantments.SILK_TOUCH})
-                .put(VillagerType.SWAMP, new Enchantment[]{Enchantments.PROJECTILE_PROTECTION, Enchantments.PIERCING, Enchantments.RESPIRATION, Enchantments.VANISHING_CURSE, Enchantments.MENDING})
-                .put(VillagerType.TAIGA, new Enchantment[]{Enchantments.BLAST_PROTECTION, Enchantments.BANE_OF_ARTHROPODS, Enchantments.RIPTIDE, Enchantments.FORTUNE, Enchantments.FLAME})
+    private EnchantedBookFactory biomeBook(boolean master, VillagerData villagerData) {
+        Object2ObjectMap<VillagerType,
+                TagKey<Enchantment>> biomeEnchants =  new Object2ObjectOpenHashMap(ImmutableMap.builder()
+                .put(VillagerType.DESERT, ModTags.INSTANCE.getDESERT_TRADES())
+                .put(VillagerType.JUNGLE, ModTags.INSTANCE.getJUNGLE_TRADES())
+                .put(VillagerType.PLAINS, ModTags.INSTANCE.getPLAINS_TRADES())
+                .put(VillagerType.SAVANNA, ModTags.INSTANCE.getSAVANNA_TRADES())
+                .put(VillagerType.SNOW, ModTags.INSTANCE.getSNOW_TRADES())
+                .put(VillagerType.SWAMP, ModTags.INSTANCE.getSWAMP_TRADES())
+                .put(VillagerType.TAIGA, ModTags.INSTANCE.getTAIGA_TRADES())
                 .build());
 
-        Enchantment[] enchants = biomeEnchants.get(villagerData.getType());
-        boolean includeSpecial = master || enchants[enchants.length-1].getMaxLevel()!=1;
-        Enchantment enchant = enchants[rn.nextInt(enchants.length+(includeSpecial?0:-1))];
-        int maxLevel = enchant.getMaxLevel();
-        int midLevel = (int)Math.ceil(maxLevel/2.0);
-        int level = maxLevel==1?1:((master?midLevel+rn.nextInt(maxLevel-midLevel):rn.nextInt(midLevel))+1);
-        return new TradeOffers.EnchantBookFactory(master?30:10, level, level, enchant);
+
+        Random rn = this.getWorld().random;
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
+                .getRegistryManager()
+                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+        int l;
+        ItemStack itemStack;
+        if (!optional.isEmpty()) {
+            RegistryEntry<Enchantment> registryEntry = (RegistryEntry<Enchantment>)optional.get();
+            Enchantment enchantment = registryEntry.value();
+            int maxLevel = enchantment.getMaxLevel();
+            int midLevel = (int)Math.ceil(maxLevel/2.0);
+            int level = maxLevel==1?1:((master?midLevel+rn.nextInt(maxLevel-midLevel):rn.nextInt(midLevel))+1);
+            itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
+            l = 2 + random.nextInt(5 + level * 10) + 3 * level;
+            if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
+                l *= 2;
+            }
+
+            if (l > 64) {
+                l = 64;
+            }
+        } else {
+            l = 1;
+            itemStack = new ItemStack(Items.BOOK);
+        }
+
+        return new EnchantedBookFactory(itemStack, l, master?30:10);
+        //return new TradeOffer(new TradedItem(Items.EMERALD, l), Optional.of(new TradedItem(Items.BOOK)), itemStack, 12, master?30:10, 0.2F);
     }
+
+
+    @Unique
+    private EnchantedBookFactory anyBook() {
+
+        Random rn = this.getWorld().random;
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
+                .getRegistryManager()
+                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .getRandomEntry(ModTags.INSTANCE.getANY_TRADES(), random);
+        int l;
+        ItemStack itemStack;
+        if (!optional.isEmpty()) {
+            RegistryEntry<Enchantment> registryEntry = (RegistryEntry<Enchantment>)optional.get();
+            Enchantment enchantment = registryEntry.value();
+            int maxLevel = enchantment.getMaxLevel();
+            int level = maxLevel==1?1:(rn.nextInt(maxLevel)+1);
+            itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
+            l = 2 + random.nextInt(5 + level * 10) + 3 * level;
+            if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
+                l *= 2;
+            }
+
+            if (l > 64) {
+                l = 64;
+            }
+        } else {
+            l = 1;
+            itemStack = new ItemStack(Items.BOOK);
+        }
+
+        return new EnchantedBookFactory(itemStack, l, 10);
+        }
+
 }

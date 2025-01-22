@@ -34,6 +34,7 @@
         "enchanting.DamageUtilMixin",
         "enchanting.DepthStriderEnchantmentMixin",
         "enchanting.EnchantmentHelperMixin",
+        "enchanting.EnchantmentMixin",
         "enchanting.EnchantmentScreenHandlerMixin",
         "enchanting.EnchantRandomlyLootFunctionMixin",
         "enchanting.EnchantWithLevelsLootFunctionMixin",
@@ -139,9 +140,9 @@
         "structure.OceanMonumentGeneratorCoreRoomMixin",
         "structure.OreFeatureMixin",
         "structure.StrongholdGeneratorMixin",
-        "transport.AbstractMinecartEntityMixin",
         "transport.AreaEffectCloudEntityMixin",
         "transport.BrewingRecipeRegistryMixin",
+        "transport.DefaultMinecartControllerMixin",
         "transport.FireworkRocketItemMixin",
         "transport.FormCaravanGoalMixin",
         "transport.FurnaceMinecartEntityMixin",
@@ -155,7 +156,7 @@
         "transport.TridentItemMixin",
         "transport.WorldMixin",
         "util.MinecraftServerMixin",
-        "villager.ArmorItemMixin",
+        "villager.EquippableDispenserBehaviorMixin",
         "villager.GolemLastSeenSensorMixin",
         "villager.MerchantScreenHandlerMixin",
         "villager.TradeOfferMixin",
@@ -166,8 +167,8 @@
         "villager.WanderingTraderEntityMixin",
         "villager.WanderingTraderManagerMixin",
         "wolves.AttackWithOwnerGoalMixin",
-        "wolves.FollowOwnerGoalMixin",
-        "wolves.GoatHornItemMixin"
+        "wolves.GoatHornItemMixin",
+        "wolves.TameableEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

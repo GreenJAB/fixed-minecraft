@@ -5,17 +5,19 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity
 import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.particle.ItemStackParticleEffect
 import net.minecraft.particle.ParticleTypes
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.world.World
 
 class BrickEntity : ThrownItemEntity {
 
-    constructor(world: World?, owner: LivingEntity?) : super(EntityType.SNOWBALL, owner, world)
-    constructor(world: World, x: Double, y: Double, z: Double) : super(EntityType.SNOWBALL,x, y, z, world)
+    constructor(world: World?, owner: LivingEntity?) : super(EntityType.SNOWBALL,  world)
+    constructor(world: World, x: Double, y: Double, z: Double, stack: ItemStack) : super(EntityType.SNOWBALL,x, y, z, world, stack)
 
     override fun handleStatus(status: Byte) {
         if (status == EntityStatuses.PLAY_DEATH_SOUND_OR_ADD_PROJECTILE_HIT_PARTICLES) {
@@ -37,7 +39,7 @@ class BrickEntity : ThrownItemEntity {
 
     override fun onEntityHit(entityHitResult: EntityHitResult) {
         super.onEntityHit(entityHitResult)
-        entityHitResult.entity.damage(this.damageSources.thrown(this, this.owner), 1.5f)
+        entityHitResult.entity.damage(this.owner?.world as ServerWorld?, this.damageSources.thrown(this, this.owner), 1.5f)
     }
 
     override fun onCollision(hitResult: HitResult) {

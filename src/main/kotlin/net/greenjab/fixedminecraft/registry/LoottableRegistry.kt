@@ -8,10 +8,10 @@ import net.minecraft.registry.RegistryKey
 import net.minecraft.world.GameRules
 
 object LoottableRegistry {
-    var FISHING_FISH: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/fish")
+    /*var FISHING_FISH: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/fish")
     var FISHING_JUNK: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/junk")
     var FISHING_MID: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/mid")
-    var FISHING_TREASURE: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/treasure")
+    var FISHING_TREASURE: RegistryKey<LootTable> = LootTables.register("gameplay/fixed_fishing/treasure")*/
 
     fun register() {
     }

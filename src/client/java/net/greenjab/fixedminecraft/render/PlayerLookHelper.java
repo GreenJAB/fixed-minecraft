@@ -6,6 +6,7 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.ItemStack;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 public abstract class PlayerLookHelper {
     /**
@@ -44,14 +46,15 @@ public abstract class PlayerLookHelper {
         // Get hit position on the block and the slot
         Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
-        int slot = ChiseledBookshelfBlockInvoker.getSlotForHitPos(hitPos.get());
-        return blockEntity.getStack(slot);
+        //int slot = ChiseledBookshelfBlockInvoker.getSlotForHitPos(hitPos.get());
+        OptionalInt slot = ChiseledBookshelfBlockInvoker.getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
+        return blockEntity.getStack(slot.getAsInt());
     }
 
     public static List<Text> getBookText(ItemStack book) {
         List<Text> displayText = new ArrayList<>();
         displayText.add(book.getItem().getName());
-        if (book.hasCustomName()||book.isOf(Items.WRITTEN_BOOK)) {
+        if (book.contains(DataComponentTypes.CUSTOM_NAME) || book.isOf(Items.WRITTEN_BOOK)) {
             Style s = book.getName().getStyle().withItalic(true);
             //s.withItalic(true);
             displayText.add(book.getName().getWithStyle(s).get(0));

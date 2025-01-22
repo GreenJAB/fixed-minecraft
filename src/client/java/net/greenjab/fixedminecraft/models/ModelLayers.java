@@ -19,7 +19,7 @@ public class ModelLayers {
     }
 
     private static EntityModelLayer register(String layer) {
-        return new EntityModelLayer(new Identifier("fixedminecraft", "villager"), layer);
+        return new EntityModelLayer(Identifier.of("fixedminecraft", "villager"), layer);
     }
 
     public static void onRegisterLayers() {

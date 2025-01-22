@@ -16,6 +16,7 @@ import net.minecraft.state.property.BooleanProperty
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 import net.minecraft.world.World
+import net.minecraft.world.block.WireOrientation
 import net.minecraft.world.event.GameEvent
 import net.minecraft.world.event.Vibrations
 
@@ -28,19 +29,27 @@ class NewAmethystBlock(settings: Settings?) : AmethystBlock(settings) {
         return defaultState.with(LIT, ctx.world.isReceivingRedstonePower(ctx.blockPos)) as BlockState
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun neighborUpdate(state: BlockState, world: World, pos: BlockPos, sourceBlock: Block, sourcePos: BlockPos, notify: Boolean) {
-        if (!world.isClient) {
-            val bl = state.get(LIT) as Boolean
-            if (bl != world.isReceivingRedstonePower(pos)) {
-                if (bl) {
-                    world.scheduleBlockTick(pos, this, 4)
-                } else {
-                    world.setBlockState(pos, state.cycle(LIT) as BlockState, NOTIFY_LISTENERS)
-                   val frequency = world.getReceivedRedstonePower(pos)
-                    world.emitGameEvent(Vibrations.getResonation(frequency), pos, GameEvent.Emitter.of(null, state))
-                    val f = RESONATION_NOTE_PITCHES[frequency]
-                    world.playSound(null as PlayerEntity?,pos,SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE,SoundCategory.BLOCKS,1.0f,f)
+    override fun neighborUpdate(
+        state: BlockState?,
+        world: World?,
+        pos: BlockPos?,
+        sourceBlock: Block?,
+        wireOrientation: WireOrientation?,
+        notify: Boolean
+    ) {
+        if (world != null) {
+            if (!world.isClient) {
+                val bl = state?.get(LIT) as Boolean
+                if (bl != world.isReceivingRedstonePower(pos)) {
+                    if (bl) {
+                        world.scheduleBlockTick(pos, this, 4)
+                    } else {
+                        world.setBlockState(pos, state.cycle(LIT) as BlockState, NOTIFY_LISTENERS)
+                        val frequency = world.getReceivedRedstonePower(pos)
+                        world.emitGameEvent(Vibrations.getResonation(frequency), pos, GameEvent.Emitter.of(null, state))
+                        val f = RESONATION_NOTE_PITCHES[frequency]
+                        world.playSound(null as PlayerEntity?,pos,SoundEvents.BLOCK_AMETHYST_BLOCK_RESONATE,SoundCategory.BLOCKS,1.0f,f)
+                    }
                 }
             }
         }

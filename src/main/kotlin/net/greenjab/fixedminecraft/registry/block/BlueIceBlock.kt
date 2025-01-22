@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.tag.EnchantmentTags
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
@@ -28,7 +29,7 @@ class BlueIceBlock (settings: Settings) : TranslucentBlock(settings) {
 
     override fun afterBreak(world:World, player: PlayerEntity, pos:BlockPos, state:BlockState, blockEntity: BlockEntity?, tool: ItemStack) {
         super.afterBreak(world, player, pos, state, blockEntity, tool)
-		if (EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, tool) == 0) {
+        if (!EnchantmentHelper.hasAnyEnchantmentsIn(tool, EnchantmentTags.PREVENTS_ICE_MELTING)) {
 			if (world.dimension.ultrawarm()) {
 				world.removeBlock(pos, false)
 				return
@@ -49,6 +50,6 @@ class BlueIceBlock (settings: Settings) : TranslucentBlock(settings) {
 
 	private fun melt(world:World, pos:BlockPos) {
         world.setBlockState(pos, getMeltedState())
-        world.updateNeighbor(pos, getMeltedState().block, pos)
+        world.updateNeighbor(pos, getMeltedState().block, null)
 	}
 }

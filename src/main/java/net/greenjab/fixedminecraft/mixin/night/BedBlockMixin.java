@@ -26,7 +26,7 @@ public class BedBlockMixin {
     private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                           CallbackInfoReturnable<ActionResult> cir){
         if (((ServerWorld)world).getGameRules().getBoolean(GameruleRegistry.INSTANCE.getInsomnia_Sleep_Requirement())) {
-            if (!player.hasStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA())) {
+            if (!player.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);
             }

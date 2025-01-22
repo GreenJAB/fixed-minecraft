@@ -1,10 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.google.common.collect.ImmutableMap;
+import net.greenjab.fixedminecraft.data.ModTags;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
@@ -53,8 +56,8 @@ public class TradeOffersMixin {
 
     @Unique
     private static TradeOffers.EnchantBookFactory FishingBook() {
-        Enchantment enchant = Math.random()<0.5?Enchantments.LUCK_OF_THE_SEA:Enchantments.LURE;
-        return new TradeOffers.EnchantBookFactory(30, 1, enchant.getMaxLevel(), enchant);
+        RegistryKey<Enchantment> enchant = Math.random() < 0.5?Enchantments.LUCK_OF_THE_SEA:Enchantments.LURE;
+        return new TradeOffers.EnchantBookFactory(30, 1, 3, ModTags.INSTANCE.getFISHING_TRADES());
     }
 
 }

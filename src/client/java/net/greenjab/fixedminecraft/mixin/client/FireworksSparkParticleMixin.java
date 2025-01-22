@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
 
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.particle.FireworksSparkParticle;
 import net.minecraft.client.particle.NoRenderParticle;
 import net.minecraft.client.world.ClientWorld;
@@ -13,16 +14,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FireworksSparkParticle.FireworkParticle.class)
 public abstract class FireworksSparkParticleMixin extends NoRenderParticle {
+
     @Shadow
     protected abstract void addExplosionParticle(double x, double y, double z, double velocityX, double velocityY, double velocityZ,
-                                                 int[] colors, int[] fadeColors, boolean trail, boolean flicker);
+                                                 IntList colors, IntList targetColors, boolean trail, boolean flicker);
 
     protected FireworksSparkParticleMixin(ClientWorld clientWorld, double d, double e, double f) {
         super(clientWorld, d, e, f);
     }
 
     @Inject(method = "explodeBurst", at=@At("HEAD"), cancellable = true)
-    private void cube(int[] colors, int[] fadeColors, boolean trail, boolean flicker, CallbackInfo ci) {
+    private void cube(IntList colors, IntList targetColors, boolean trail, boolean flicker, CallbackInfo ci) {
         double d = this.x;
         double e = this.y;
         double f = this.z;
@@ -47,7 +49,7 @@ public abstract class FireworksSparkParticleMixin extends NoRenderParticle {
                     double gg = g;
                     g = g*ax+l*az;
                     l = l*ax-gg*az;
-                    this.addExplosionParticle(d, e, f, g,h,l, colors, fadeColors, trail, flicker);
+                    this.addExplosionParticle(d, e, f, g,h,l, colors, targetColors, trail, flicker);
                     if (i != -amount && i != amount && j != -amount && j != amount) {
                         k += amount * 2 - 1;
                     }

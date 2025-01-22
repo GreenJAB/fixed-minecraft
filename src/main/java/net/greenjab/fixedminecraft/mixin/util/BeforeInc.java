@@ -20,12 +20,12 @@ public class BeforeInc extends InjectionPoint {
     private final int ordinal;
     private final Integer intValue;
 
-    public BeforeInc(IMixinContext context, AnnotationNode node, String returnType) {
+    /*public BeforeInc(IMixinContext context, AnnotationNode node, String returnType) {
         super(Annotations.getValue(node, "slice", ""), Selector.DEFAULT, null);
 
         this.ordinal = Annotations.<Integer>getValue(node, "ordinal", -1);
         this.intValue = Annotations.<Integer>getValue(node, "intValue", (Integer) null);
-    }
+    }*/
 
     public BeforeInc(InjectionPointData data) {
         super(data);

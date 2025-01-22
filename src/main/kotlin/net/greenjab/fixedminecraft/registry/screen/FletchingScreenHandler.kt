@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.registry.screen
 
 import net.minecraft.block.Blocks
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.PotionContentsComponent
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.CraftingInventory
@@ -10,12 +12,12 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket
-import net.minecraft.potion.PotionUtil
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -31,7 +33,12 @@ class FletchingScreenHandler @JvmOverloads constructor(
     private val player: PlayerEntity = playerInventory.player
     fun Inv(): Inventory {
         val items = SimpleInventory(1)
-        items.heldStacks[0] = ItemStack(Items.BLACK_STAINED_GLASS_PANE, 1).setCustomName(Text.of("."))
+
+        val itemStack2 =  ItemStack(Items.BLACK_STAINED_GLASS_PANE, 1)
+        itemStack2.set<MutableText>(DataComponentTypes.CUSTOM_NAME, Text.of(".") as MutableText?
+        )
+        items.heldStacks[0] = itemStack2;
+
         return items
     }
     init {
@@ -199,8 +206,10 @@ class FletchingScreenHandler @JvmOverloads constructor(
                     else if (extra.isOf(Items.GLOWSTONE)) itemStack = ItemStack(Items.SPECTRAL_ARROW, 8)
                     else {
                         val tippedArrow = ItemStack(Items.TIPPED_ARROW, 8)
-                        PotionUtil.setPotion(tippedArrow, PotionUtil.getPotion(extra))
-                        PotionUtil.setCustomPotionEffects(tippedArrow, PotionUtil.getCustomPotionEffects(extra))
+                        tippedArrow.set<PotionContentsComponent>(
+                            DataComponentTypes.POTION_CONTENTS,
+                            itemStack.get(DataComponentTypes.POTION_CONTENTS)
+                        )
                         itemStack = tippedArrow
                     }
                 }

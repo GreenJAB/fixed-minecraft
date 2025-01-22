@@ -19,7 +19,7 @@ public interface ChiseledBookshelfBlockInvoker {
     }
 
     @Invoker("getSlotForHitPos")
-    default OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
+    static OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
         throw new AssertionError();
     }
 }

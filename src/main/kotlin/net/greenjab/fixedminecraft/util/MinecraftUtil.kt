@@ -15,7 +15,7 @@ fun identifierOf(identifier: String): Identifier {
         identifierOf(path = identifier)
 }
 
-fun identifierOf(namespace: String = FixedMinecraftConstants.NAMESPACE, path: String): Identifier = Identifier(namespace, path)
+fun identifierOf(namespace: String = FixedMinecraftConstants.NAMESPACE, path: String): Identifier = Identifier.of(namespace, path)
 
 operator fun TagKey<Block>.contains(state: BlockState): Boolean {
     return state.isIn(this)

@@ -35,7 +35,7 @@ public class EnchantmentHelperMixin {
         List<EnchantmentLevelEntry> list = Lists.<EnchantmentLevelEntry>newArrayList();
         boolean bl = stack.isOf(Items.BOOK);
         //possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
-        possibleEnchantments.filter(/* method_60143 */ enchantment -> horseArmorCheck(stack.getItem(), enchantment.value()) || bl)
+        possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
                 .forEach(/* method_60106 */ enchantmentx -> {
                     Enchantment enchantment = (Enchantment)enchantmentx.value();
 
@@ -62,10 +62,10 @@ public class EnchantmentHelperMixin {
         return enchPower;
     }
 
-    @Unique
+    /*@Unique
     private static boolean horseArmorCheck (Item item, Enchantment enchantment) {
         return FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, item);
-    }
+    }*/
 
 
     /*@Redirect(method = "getPossibleEntries", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getMinPower(I)I"))

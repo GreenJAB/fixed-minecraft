@@ -63,26 +63,14 @@ object BlockRegistry {
         BLOCK.register("waxed_weathered_copper_rail", WAXED_WEATHERED_COPPER_RAIL)
         BLOCK.register("waxed_oxidized_copper_rail", WAXED_OXIDIZED_COPPER_RAIL)
 
-        DispenserBlock.registerBehavior(Items.BRICK, object : ProjectileDispenserBehavior() {
-            override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
-                return Util.make(
-                    BrickEntity(world, position.x, position.y, position.z)
-                ) { entity: BrickEntity ->
-                    entity.setItem(stack)
-                } as ProjectileEntity
-            }
-        })
-        DispenserBlock.registerBehavior(Items.NETHER_BRICK, object : ProjectileDispenserBehavior() {
-            override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
-                return Util.make(
-                    BrickEntity(world, position.x, position.y, position.z)
-                ) { entity: BrickEntity ->
-                    entity.setItem(stack)
-                } as ProjectileEntity
-            }
-        })
+        DispenserBlock.registerProjectileBehavior(Items.BRICK)
+        DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK)
+        DispenserBlock.registerProjectileBehavior(Items.TRIDENT)
+
+
+
         /** Had issues with pickup and loyalty */
-        DispenserBlock.registerBehavior(Items.TRIDENT, object : ProjectileDispenserBehavior() {
+        /*DispenserBlock.registerBehavior(Items.TRIDENT, object : ProjectileDispenserBehavior() {
             override fun createProjectile(world: World, position: Position, stack: ItemStack): ProjectileEntity {
                 val temp = PigEntity(EntityType.PIG, world)
                 val v = Vec3d(position.x, position.y, position.z)
@@ -91,6 +79,6 @@ object BlockRegistry {
                 temp.discard()
                 return Util.make(T) {} as ProjectileEntity
             }
-        })
+        })*/
     }
 }

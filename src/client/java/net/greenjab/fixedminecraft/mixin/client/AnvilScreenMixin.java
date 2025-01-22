@@ -118,7 +118,7 @@ public class AnvilScreenMixin {
     @Unique
     private int barPos(int x, int isc) {return 60 + Math.min((int) ((168 - 60) * (x / (isc + 0.0f))), 168 - 60);}
 
-    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
+    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
     private int higherTEXT_FIELD_TEXTURE(int x) {
         return x-2;
     }

@@ -16,7 +16,7 @@ class MapBookPlayer {
         this.x = player.x
         this.z = player.z
         this.yaw = player.yaw
-        this.dimension = player.world.dimensionKey.toString()
+        this.dimension = player.world.dimension.toString()
     }
 
     fun toPacket(buf: PacketByteBuf) {

@@ -3,6 +3,7 @@
   "package": "net.greenjab.fixedminecraft.mixin.client",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "AbstractDonkeyEntityRendererMixin",
     "AdvancementsScreenMixin",
     "AdvancementTabMixin",
     "AdvancementWidgetMixin",
@@ -11,11 +12,10 @@
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",
     "ClientPlayNetworkHandlerMixin",
-    "DonkeyEntityRendererMixin",
     "DrawContextMixin",
     "ElderGuardianAppearanceParticleMixin",
     "EnchantmentScreenMixin",
-    "EnderDragonEntityRendererMixin",
+    "DragonEntityModelMixin",
     "FireworksSparkParticleMixin",
     "GameRendererMixin",
     "InGameHudMixin",
@@ -30,5 +30,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "glint.EquipmentRendererMixin"
+  ]
 }

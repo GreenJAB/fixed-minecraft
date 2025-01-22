@@ -19,7 +19,7 @@ import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
 import net.minecraft.stat.Stats
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.DirectionProperty
+import net.minecraft.state.property.EnumProperty
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.BlockRotation
@@ -48,22 +48,14 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         return defaultState.with(FACING, ctx.horizontalPlayerFacing.rotateYClockwise()) as BlockState
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onUse(
-        state: BlockState,
-        world: World,
-        pos: BlockPos,
-        player: PlayerEntity,
-        hand: Hand,
-        hit: BlockHitResult
-    ): ActionResult {
-        if (world.isClient) {
-            return ActionResult.SUCCESS
+    override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hit: BlockHitResult?): ActionResult {
+        if (!world.isClient) {
+            player.addCommandTag("netherite_anvil")
+            player.openHandledScreen(state.createScreenHandlerFactory(world, pos))
+            player.incrementStat(Stats.INTERACT_WITH_ANVIL)
         }
-        player.addCommandTag("netherite_anvil")
-        player.openHandledScreen(state.createScreenHandlerFactory(world, pos))
-        player.incrementStat(Stats.INTERACT_WITH_ANVIL)
-        return ActionResult.CONSUME
+
+        return ActionResult.SUCCESS
     }
 
     @Deprecated("Deprecated in Java")
@@ -127,8 +119,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
         builder.add(FACING)
     }
 
-    @Deprecated("Deprecated in Java", ReplaceWith("false"))
-    override fun canPathfindThrough(state: BlockState, world: BlockView, pos: BlockPos, type: NavigationType): Boolean {
+    override fun canPathfindThrough(state: BlockState?, type: NavigationType?): Boolean {
         return false
     }
 
@@ -139,7 +130,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
     companion object {
         val CODEC: MapCodec<NetheriteAnvilBlock> = createCodec { settings: Settings -> NetheriteAnvilBlock(settings) }
 
-        val FACING: DirectionProperty = HorizontalFacingBlock.FACING
+        val FACING: EnumProperty<Direction> = HorizontalFacingBlock.FACING
         private val BASE_SHAPE: VoxelShape = createCuboidShape(2.0, 0.0, 2.0, 14.0, 4.0, 14.0)
         private val X_STEP_SHAPE: VoxelShape = createCuboidShape(3.0, 4.0, 4.0, 13.0, 5.0, 12.0)
         private val X_STEM_SHAPE: VoxelShape = createCuboidShape(4.0, 5.0, 6.0, 12.0, 10.0, 10.0)

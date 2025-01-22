@@ -2,21 +2,29 @@ package net.greenjab.fixedminecraft.enchanting;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.EnchantingTableBlock;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.enchantment.effect.EnchantmentValueEffect;
 import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.ItemTags;
@@ -24,9 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.math.random.Random;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class FixedMinecraftEnchantmentHelper {
 
@@ -48,7 +55,11 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         if (itemStack.isOf(Items.ENCHANTED_BOOK)||itemStack.isOf(Items.BOOK)) return 50;
-        List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack);
+
+
+        //DynamicRegistryManager dynamicRegistryManager = itemStack.getWorld().getRegistryManager();
+
+        List<EnchantmentLevelEntry> list = getPossibleEntries(100, itemStack);
         int power = 0;
         for (EnchantmentLevelEntry enchantmentLevelEntry : list) {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
@@ -57,7 +68,7 @@ public class FixedMinecraftEnchantmentHelper {
         return Math.min((int)Math.ceil(power*(isGold?0.75f:0.43f)), 50);
     }
 
-    public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
+    /*public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
         Item item = stack.getItem();
         Iterator<Enchantment> var6 = Registries.ENCHANTMENT.iterator();
@@ -72,6 +83,31 @@ public class FixedMinecraftEnchantmentHelper {
                 } while(!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, item));
                 if (!enchantment.isCursed()) list.add(new EnchantmentLevelEntry(enchantment, enchantment.getMaxLevel()));
             }
+    }*/
+
+    public static List<EnchantmentLevelEntry> getPossibleEntries(int level, ItemStack stack) {
+        List<EnchantmentLevelEntry> list = Lists.<EnchantmentLevelEntry>newArrayList();
+        boolean bl = stack.isOf(Items.BOOK);
+
+        World world =  Objects.requireNonNull(FixedMinecraft.INSTANCE.getSERVER()).getOverworld();
+
+        Registry<Enchantment> optional = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
+        Stream<RegistryEntry<Enchantment>> possibleEnchantments = ((RegistryEntryList.Named)optional).stream();
+
+
+        possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
+        //possibleEnchantments.filter(/* method_60143 */ enchantment -> FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack) || bl)
+                .forEach(/* method_60106 */ enchantmentx -> {
+                    Enchantment enchantment = (Enchantment)enchantmentx.value();
+
+                    for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+                        if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
+                            list.add(new EnchantmentLevelEntry(enchantmentx, j));
+                            break;
+                        }
+                    }
+                });
+        return list;
     }
 
     public static int getOccupiedEnchantmentCapacity(ItemStack itemStack, boolean atLeast1) {
@@ -117,23 +153,6 @@ public class FixedMinecraftEnchantmentHelper {
                        .isIn(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
     }
 
-    public static boolean horseArmorCheck(Enchantment enchantment, Item item){
-        if (item instanceof AnimalArmorItem) {
-            if (enchantment == Enchantments.UNBREAKING || enchantment == Enchantments.MENDING) {
-                return false;
-            }
-            if (enchantment == Enchantments.THORNS) {
-                return true;
-            }
-            return enchantment.target.isAcceptableItem(Items.DIAMOND_BOOTS);
-        }
-        if (item instanceof MapBookItem) {
-            if (enchantment == Enchantments.VANISHING_CURSE) {
-                return true;
-            }
-        }
-        return enchantment.target.isAcceptableItem(item);
-    }
 
     public static ItemStack applySuperEnchants(ItemStack IS, Random random) {
         if (!IS.isOf(Items.ENCHANTED_BOOK)) {
@@ -176,5 +195,27 @@ public class FixedMinecraftEnchantmentHelper {
         } else {
             return IS;
         }
+    }
+
+    public static int enchantLevel(ItemStack stack, ComponentType<EnchantmentValueEffect> enchanteffect) {
+        int level = 0;
+        ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        for (RegistryEntry<Enchantment> e : stack.getEnchantments().getEnchantments()) {
+            if (e.value().effects().contains(enchanteffect)) {
+                level += itemEnchantmentsComponent.getLevel(e);
+            }
+        }
+        return level;
+    }
+
+    public static int enchantLevel(ItemStack stack, String name) {
+        int level = 0;
+        ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+        for (RegistryEntry<Enchantment> e : stack.getEnchantments().getEnchantments()) {
+            if (e.getIdAsString().toLowerCase().contains(name)) {
+                level += itemEnchantmentsComponent.getLevel(e);
+            }
+        }
+        return level;
     }
 }

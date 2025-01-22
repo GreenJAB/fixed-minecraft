@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.screen.advancement.AdvancementsScreen;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -38,4 +40,7 @@ public class AdvancementsScreenMixin {
     private int largerScreenX4(int constant) {return newWINDOW_WIDTH;}
     @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 140))
     private int largerScreenY4(int constant) {return newWINDOW_HEIGHT;}
+
+    @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 256))
+    private int largerScreen(int constant) {return 512;}
 }

@@ -28,7 +28,7 @@ public class EnchantmentScreenMixin {
 
     @Redirect(method = "drawBackground", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/ingame/EnchantmentScreen;LEVEL_TEXTURES:[Lnet/minecraft/util/Identifier;"))
     private Identifier[] iconTextures(@Local(ordinal = 8) int power) {
-        Identifier[] TEXTURES = new Identifier[]{new Identifier("container/enchanting_table/level_1"), new Identifier("container/enchanting_table/level_2"), new Identifier("container/enchanting_table/level_3")};
+        Identifier[] TEXTURES = new Identifier[]{Identifier.of("container/enchanting_table/level_1"), Identifier.of("container/enchanting_table/level_2"), Identifier.of("container/enchanting_table/level_3")};
         EnchantmentScreen ES = (EnchantmentScreen)(Object)this;
         ItemStack Item = ES.getScreenHandler().slots.get(0).getStack();
         int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(Item);
@@ -41,7 +41,7 @@ public class EnchantmentScreenMixin {
 
     @Redirect(method = "drawBackground", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screen/ingame/EnchantmentScreen;LEVEL_DISABLED_TEXTURES:[Lnet/minecraft/util/Identifier;"))
     private Identifier[] iconTexturesDisabled(@Local(ordinal = 8) int power) {
-        Identifier[] TEXTURES = new Identifier[]{new Identifier("container/enchanting_table/level_1_disabled"), new Identifier("container/enchanting_table/level_2_disabled"), new Identifier("container/enchanting_table/level_3_disabled")};
+        Identifier[] TEXTURES = new Identifier[]{Identifier.of("container/enchanting_table/level_1_disabled"), Identifier.of("container/enchanting_table/level_2_disabled"), Identifier.of("container/enchanting_table/level_3_disabled")};
         EnchantmentScreen ES = (EnchantmentScreen)(Object)this;
         ItemStack Item = ES.getScreenHandler().slots.get(0).getStack();
         int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(Item);

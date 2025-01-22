@@ -18,24 +18,23 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ElderGuardianAppearanceParticle.class)
 public class ElderGuardianAppearanceParticleMixin {
-    @Redirect(method = "buildGeometry", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void phantom(Model instance, MatrixStack matrixStack, VertexConsumer vertexConsumer, int light, int uv, float r, float g, float b,
-                         float g2) {
+    @Redirect(method = "renderCustom", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/Model;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V"))
+    private void phantom(Model instance, MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
         ElderGuardianAppearanceParticle particle = (ElderGuardianAppearanceParticle)(Object)this;
         if (particle.y<-500) {
-            RenderLayer layer = RenderLayer.getEntityTranslucent(new Identifier("textures/entity/phantom.png"));
+            RenderLayer layer = RenderLayer.getEntityTranslucent(Identifier.of("textures/entity/phantom.png"));
             VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             VertexConsumer vertexConsumer2 = immediate.getBuffer(layer);
-            Model model = new PhantomEntityModel<>(MinecraftClient.getInstance()
-                    .getEntityModelLoader()
+            Model model = new PhantomEntityModel(MinecraftClient.getInstance()
+                    .getLoadedEntityModels()
                     .getModelPart(EntityModelLayers.PHANTOM));
-            model.render(matrixStack, vertexConsumer2, light, uv, r, g, b, g2);
+            model.render(matrices, vertexConsumer2, light, overlay, color);
         } else {
-            instance.render(matrixStack, vertexConsumer, light, uv, r, g, b, g2);
+            instance.render(matrices, vertices, light, overlay, color);
         }
     }
 
-    @ModifyArg(method = "buildGeometry", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/RotationAxis;rotationDegrees(F)Lorg/joml/Quaternionf;"), index = 0)
+    @ModifyArg(method = "renderCustom", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/RotationAxis;rotationDegrees(F)Lorg/joml/Quaternionf;"), index = 0)
     private float v(float deg, @Local(ordinal = 1)float f){
         ElderGuardianAppearanceParticle particle = (ElderGuardianAppearanceParticle)(Object)this;
         if (particle.y<-500) {

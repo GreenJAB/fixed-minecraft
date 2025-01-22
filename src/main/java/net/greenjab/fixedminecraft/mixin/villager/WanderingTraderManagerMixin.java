@@ -1,6 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnLocation;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.passive.WanderingTraderEntity;
@@ -62,10 +65,9 @@ public abstract class WanderingTraderManagerMixin {
     @Shadow
     protected abstract void spawnLlama(ServerWorld world, WanderingTraderEntity wanderingTrader, int range);
 
-    @Redirect(method = "getNearbySpawnPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/SpawnHelper;canSpawn(Lnet/minecraft/entity/SpawnRestriction$Location;Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/EntityType;)Z"))
-    private boolean naturalSpawnsWanderingTrader(SpawnRestriction.Location location, WorldView world, BlockPos pos,
-                                                 @Nullable EntityType<?> entityType) {
-        return SpawnHelper.canSpawn(SpawnRestriction.Location.ON_GROUND, world, pos, EntityType.WANDERING_TRADER) && world.getBlockState(pos.down()).isIn(BlockTags.AZALEA_ROOT_REPLACEABLE) ;
+    @ModifyExpressionValue(method = "getNearbySpawnPos", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/SpawnLocation;isSpawnPositionOk(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/EntityType;)Z"))
+    private boolean naturalSpawnsWanderingTrader(boolean original, @Local(argsOnly = true) WorldView world, @Local(argsOnly = true) BlockPos pos) {
+        return original && world.getBlockState(pos.down()).isIn(BlockTags.AZALEA_ROOT_REPLACEABLE);
     }
 
     @Inject(method = "trySpawn", at = @At("HEAD"), cancellable = true)

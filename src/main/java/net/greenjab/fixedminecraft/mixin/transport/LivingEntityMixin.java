@@ -5,9 +5,14 @@ import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -20,6 +25,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -31,12 +37,12 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected int riptideTicks;
 
-    @Shadow
-    public abstract boolean hasStatusEffect(StatusEffect effect);
 
     @Shadow
-    @Nullable
-    public abstract StatusEffectInstance getStatusEffect(StatusEffect effect);
+    public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
+
+    @Shadow
+    public abstract @Nullable StatusEffectInstance getStatusEffect(RegistryEntry<StatusEffect> effect);
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -46,10 +52,9 @@ public abstract class LivingEntityMixin extends Entity {
      * Reduces water drag when using riptide.
      */
     @ModifyExpressionValue(
-            method = "travel", at = @At(
+            method = "travelInFluid", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z",
-            ordinal = 1
+            target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
     )
     )
     private boolean boostWhenRiptide(boolean original) {
@@ -79,14 +84,14 @@ public abstract class LivingEntityMixin extends Entity {
         addVelocity(h, k, l);
     }
 
-    @Redirect(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/entity/effect/StatusEffect;)Z"))
-    private boolean cancelElytraInLiquid(LivingEntity instance, StatusEffect effect) {
+    @Redirect(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
+    private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
         return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
                  CustomData.getData(instance, "airTime") > 15);
     }
 
-    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.2F))
-    private float speedJump(float constant) {
+    @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
+    private double speedJump(double constant) {
         float i = 0;
         if (this.hasStatusEffect(StatusEffects.SPEED)) {
             i += 1+ this.getStatusEffect(StatusEffects.SPEED).getAmplifier();
@@ -95,5 +100,13 @@ public abstract class LivingEntityMixin extends Entity {
             i +=0.5f*( 1+ this.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier());
         }
         return constant+0.05F*i;
+    }
+
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"))
+    private void cancelElytraOnHit(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            PlayerEntity PE = (PlayerEntity)(Object)this;
+            CustomData.setData(PE, "airTime", -25);
+        }
     }
 }

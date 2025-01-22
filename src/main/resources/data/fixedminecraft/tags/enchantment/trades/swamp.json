@@ -1,0 +1,9 @@
+{
+    "values": [
+        "minecraft:projectile_protection",
+        "minecraft:piercing",
+        "minecraft:respiration",
+        "minecraft:vanishing_curse",
+        "minecraft:mending"
+    ]
+}

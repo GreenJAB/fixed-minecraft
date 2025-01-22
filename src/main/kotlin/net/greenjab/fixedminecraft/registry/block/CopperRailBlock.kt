@@ -47,8 +47,8 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
     override fun getShapeProperty() = SHAPE
     override fun getCodec(): MapCodec<out CopperRailBlock> = CODEC
 
-    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = Blocks.POWERED_RAIL.rotate(state, rotation)
-    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = Blocks.POWERED_RAIL.mirror(state, mirror)
+    //override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = Blocks.POWERED_RAIL.rotate(state, rotation)
+    //override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = Blocks.POWERED_RAIL.mirror(state, mirror)
 
     companion object {
         @JvmField

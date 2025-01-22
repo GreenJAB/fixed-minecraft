@@ -40,9 +40,9 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "wakeUp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setPose(Lnet/minecraft/entity/EntityPose;)V", shift = At.Shift.AFTER))
     private void turnInsomniaIntoHealthBoost(CallbackInfo ci) {
-        if (!this.hasStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA())) return;
-        int i = this.getStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
-        this.removeStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA());
+        if (!this.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) return;
+        int i = this.getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
+        this.removeStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA());
         this.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, (i+1)*5*60*20, i, true, false, true));
         if ((LivingEntity)(Object)this instanceof ServerPlayerEntity SPE && i == 4) {
             Criteria.CONSUME_ITEM.trigger(SPE, Items.RED_BED.getDefaultStack());
@@ -55,11 +55,11 @@ public abstract class LivingEntityMixin {
         if (LE instanceof PhantomEntity) {
             if (entity != null) {
                 if (entity.isPlayer()) {
-                    if (((ServerPlayerEntity) entity).hasStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA())) {
-                        int i = ((ServerPlayerEntity) entity).getStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
+                    if (((ServerPlayerEntity) entity).hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+                        int i = ((ServerPlayerEntity) entity).getStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA()).getAmplifier();
                         if (i < 4) {
                             if (Math.random() < 1 / (5 * Math.pow(i + 1, 2))) {
-                                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getINSOMNIA(), -1, ++i, true, false, true));
+                                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSTANCE.getINSOMNIA(), -1, ++i, true, false, true));
                                 ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
                             }
                         }

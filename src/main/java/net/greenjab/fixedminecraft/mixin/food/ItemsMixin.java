@@ -106,5 +106,6 @@ public class ItemsMixin {
 
 
     //need to make trident repair with prismarine here
+    //make nether/brick have cooldown
 
 }

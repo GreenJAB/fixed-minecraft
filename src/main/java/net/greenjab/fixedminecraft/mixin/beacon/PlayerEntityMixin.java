@@ -17,8 +17,8 @@ public class PlayerEntityMixin {
     private void longerBlockReach(CallbackInfoReturnable<Double> cir) {
         double d =  cir.getReturnValueD();
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        if (PE.hasStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getREACH())) {
-            d+=0.5*(1+PE.getStatusEffect((RegistryEntry<StatusEffect>) StatusRegistry.INSTANCE.getREACH()).getAmplifier());
+        if (PE.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
+            d+=0.5*(1+PE.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
         }
         cir.setReturnValue(d);
     }

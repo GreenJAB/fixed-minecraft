@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(ItemFrameEntityRenderer.class)
 public class ItemFrameEntityRendererMixin {
-    @ModifyArg(method = "render(Lnet/minecraft/entity/decoration/ItemFrameEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    @ModifyArg(method = "render(Lnet/minecraft/client/render/entity/state/ItemFrameEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
                at = @At(value = "INVOKE",
-                        target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/item/map/MapState;ZI)V"
-               ), index = 4)
+                        target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/render/MapRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ZI)V"
+               ), index = 3)
     private boolean showIconsOnItemFrameMap(boolean hidePlayerIcons){
         return false;
     }

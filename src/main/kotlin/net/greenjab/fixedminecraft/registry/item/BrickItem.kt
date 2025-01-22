@@ -8,14 +8,15 @@ import net.minecraft.item.ItemStack
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
-import net.minecraft.util.Hand
+ import net.minecraft.util.ActionResult
+ import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
 
 // unused for now, want toggle for it
 class BrickItem(settings: Settings) : Item(settings) {
 
-    override fun use(world: World?, user: PlayerEntity, hand: Hand?): TypedActionResult<ItemStack> {
+    override fun use(world: World?, user: PlayerEntity, hand: Hand?): ActionResult {
         val itemStack = user.getStackInHand(hand)
         world!!.playSound(
             null as PlayerEntity?,
@@ -27,7 +28,6 @@ class BrickItem(settings: Settings) : Item(settings) {
             0.5f,
             0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f)
         )
-        user.itemCooldownManager[this] = 20
         if (!world.isClient) {
             val brickEntity = BrickEntity(world, user)
             brickEntity.setItem(itemStack)
@@ -40,6 +40,6 @@ class BrickItem(settings: Settings) : Item(settings) {
             itemStack.decrement(1)
         }
 
-        return TypedActionResult.success(itemStack, world.isClient())
+        return ActionResult.SUCCESS
     }
 }

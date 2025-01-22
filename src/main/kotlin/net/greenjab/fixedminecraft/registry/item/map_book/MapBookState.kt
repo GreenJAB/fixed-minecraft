@@ -1,56 +1,32 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.network.SyncHandler
-import net.greenjab.fixedminecraft.registry.ItemRegistry
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.server.MinecraftServer
+import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import net.minecraft.world.PersistentState
+import java.util.Arrays
+
 
 class MapBookState() : PersistentState() {
-    var mapIDs: ArrayList<Int> = ArrayList()
-    var players: ArrayList<MapBookPlayer> = ArrayList()
+    val mapIDs: java.util.ArrayList<Int> = java.util.ArrayList()
 
-    fun addPlayer(player: PlayerEntity) {
-        val p = MapBookPlayer()
-        p.setPlayer(player)
-        players.add(p)
-    }
-
-    constructor(ids: IntArray) : this() {
+    constructor(ids: IntArray?) : this() {
         mapIDs.clear()
-        mapIDs.addAll(ids.toList())
+        mapIDs.addAll(Arrays.stream(ids).boxed().toList())
         this.markDirty()
     }
 
-    fun sendData(server: MinecraftServer, id:Int) {
-        for (player in players) {
-            val SPE = server.playerManager.getPlayer(player.name)
-            if (SPE != null) {
-                var hold = false
-                for (item in SPE.handItems) {
-                    if (item.isOf(ItemRegistry.MAP_BOOK)) {
-                        hold = true
-                    }
-                }
-                if (hold) {
-                    SyncHandler.mapBookSync(SPE, id)
-                }
-            }
+    override fun writeNbt(nbt: NbtCompound, lookup: WrapperLookup): NbtCompound {
+        if (!mapIDs.isEmpty()) {
+            nbt.putIntArray("mapIDs", this.mapIDs)
         }
-        MapBookStateManager.getMapBookState(server, id)?.players=ArrayList()
-    }
 
-    override fun writeNbt(nbt: NbtCompound): NbtCompound {
-        if (mapIDs.isNotEmpty()) {
-            nbt.putIntArray("mapIDs", mapIDs)
-        }
         return nbt
     }
 
     fun fromNbt(nbt: NbtCompound): MapBookState {
         mapIDs.clear()
-        mapIDs.addAll(nbt.getIntArray("mapIDs").toList())
+        val ids = nbt.getIntArray("mapIDs")
+        mapIDs.addAll(Arrays.stream(ids).boxed().toList())
         return this
     }
 
@@ -58,6 +34,8 @@ class MapBookState() : PersistentState() {
         mapIDs.add(id)
         this.markDirty()
     }
+
+
     fun update() {
         val temp: ArrayList<Int> = ArrayList()
         for (i in mapIDs) {
@@ -72,4 +50,5 @@ class MapBookState() : PersistentState() {
 
         this.markDirty()
     }
+
 }

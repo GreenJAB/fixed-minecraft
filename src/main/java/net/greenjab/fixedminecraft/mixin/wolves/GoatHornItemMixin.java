@@ -9,8 +9,8 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.GoatHornItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(GoatHornItem.class)
 public class GoatHornItemMixin {
     @Inject(method = "use", at = @At("RETURN"))
-    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
+    public void use(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
         if (!world.isClient()) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)user;
 
