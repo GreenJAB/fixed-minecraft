@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.registry
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup
-import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings
 import net.greenjab.fixedminecraft.util.identifierOf
 import net.minecraft.block.AbstractBlock
 import net.minecraft.block.Block
@@ -19,10 +18,10 @@ internal inline fun blockItem(block: Block, settings: Item.Settings.() -> Unit =
 
 internal inline fun <T : Block> block(
     source: AbstractBlock? = null,
-    constructor: (FabricBlockSettings) -> T,
-    settings: FabricBlockSettings.() -> Unit = {}
+    constructor: (AbstractBlock.Settings) -> T,
+    settings: AbstractBlock.Settings.() -> Unit = {}
 ): T =
-    constructor((if (source == null) FabricBlockSettings.create() else FabricBlockSettings.copyOf(source)).apply(settings))
+    constructor((if (source == null) AbstractBlock.Settings.create() else AbstractBlock.Settings.copy(source)).apply(settings))
 
 internal fun <T> Registry<T>.register(id: String, value: T) =
     Registry.register(this, identifierOf(id), value)

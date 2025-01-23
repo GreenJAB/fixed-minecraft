@@ -7,7 +7,7 @@ import net.minecraft.network.codec.PacketCodec
 
 
 @JvmRecord
-data class MapBookAdditionsComponent(val additions: List<Int?>) {
+data class MapBookAdditionsComponent(val additions: List<Int>) {
     companion object {
         val DEFAULT: MapBookAdditionsComponent = MapBookAdditionsComponent(ArrayList())
 

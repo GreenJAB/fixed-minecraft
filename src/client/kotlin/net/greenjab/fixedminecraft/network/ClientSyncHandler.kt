@@ -6,64 +6,43 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.fabricmc.fabric.api.networking.v1.PacketSender
 import net.greenjab.fixedminecraft.enchanting.Networking.BOOKSHELF_SYNC
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
-import net.greenjab.fixedminecraft.network.SyncHandler.EXHAUSTION_SYNC
-import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_OPEN
-import net.greenjab.fixedminecraft.network.SyncHandler.MAP_BOOK_SYNC
-import net.greenjab.fixedminecraft.network.SyncHandler.SATURATION_SYNC
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
+import net.greenjab.fixedminecraft.mixin.map_book.MapStateAccessor
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+import net.greenjab.fixedminecraft.util.ExhaustionHelper
 import net.minecraft.block.Block
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayNetworkHandler
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
+
 
 object ClientSyncHandler {
     @Environment(EnvType.CLIENT)
     fun init() {
-        ClientPlayNetworking.registerGlobalReceiver(EXHAUSTION_SYNC) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val exhaustion = buf.readFloat()
-            client.execute {
-                client.player?.hungerManager?.exhaustion = exhaustion
+        ClientPlayNetworking.registerGlobalReceiver(
+            ExhaustionSyncPayload.ID
+        ) { payload: ExhaustionSyncPayload, context: ClientPlayNetworking.Context ->
+            context.client().execute {
+                ExhaustionHelper.setExhaustion(context.client().player as PlayerEntity, payload.exhaustion)
             }
         }
-        ClientPlayNetworking.registerGlobalReceiver(SATURATION_SYNC) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val saturation = buf.readFloat()
-            client.execute {
-                client.player?.hungerManager?.saturationLevel = saturation
-            }
-        }
-
-        ClientPlayNetworking.registerGlobalReceiver(MAP_BOOK_OPEN) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val itemStack = buf.readItemStack()
-
-            client.execute {
-                client.setScreen(MapBookScreen(itemStack))
+        ClientPlayNetworking.registerGlobalReceiver(
+            SaturationSyncPayload.ID
+        ) { payload: SaturationSyncPayload, context: ClientPlayNetworking.Context ->
+            context.client().execute {
+                context.client().player!!.hungerManager.saturationLevel = payload.saturation
             }
         }
 
-        ClientPlayNetworking.registerGlobalReceiver(MAP_BOOK_SYNC) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val bookID = buf.readVarInt()
-            if (bookID != -1) {
-                val ids = buf.readIntArray()
+        ClientPlayNetworking.registerGlobalReceiver(MapBookOpenPayload.PACKET_ID, ClientSyncHandler::mapBookOpen);
+        ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
+        //ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
 
-                if (ids.isNotEmpty()) {
-                    client.execute {
-                        MapBookStateManager.putClientMapBookState(bookID, MapBookState(ids))
-                    }
-                }
-                val ps = buf.readVarInt()
-                var i = 0
-                MapBookStateManager.getClientMapBookState(bookID)?.players = ArrayList()
-                while (i < ps) {
-                    var p = MapBookPlayer()
-                    p=p.fromPacket(buf)
-                    MapBookStateManager.getClientMapBookState(bookID)?.players?.add(p)
-                    i++
-                }
-            }
-        }
-        ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
+//TODO
+        //ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
+
+        /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
         ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
             val pos = buf.readBlockPos()
             client.execute {
@@ -76,5 +55,70 @@ object ClientSyncHandler {
                 )
             }
         }
+
+        ClientPlayNetworking.registerGlobalReceiver(
+            BookShelfSyncPayload.ID
+        ) { payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context ->
+            context.client().execute {
+                context.client().world!!.updateListeners(
+                    pos,
+                    context.client().world!!.getBlockState(pos),
+                    context.client().world!!.getBlockState(pos),
+                    Block.NOTIFY_LISTENERS
+                )
+            }
+        }*/
+
+        /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
+        ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
+            val pos = buf.readBlockPos()
+            client.execute {
+                assert(client.world != null)
+                client.world!!.updateListeners(
+                    pos,
+                    client.world!!.getBlockState(pos),
+                    client.world!!.getBlockState(pos),
+                    Block.NOTIFY_LISTENERS
+                )
+            }
+        }*/
+
     }
+    private fun mapBookOpen(payload: MapBookOpenPayload, context: ClientPlayNetworking.Context) {
+        context.client().execute { context.client().setScreen(MapBookScreen(payload.itemStack)) }
+    }
+
+    private fun mapBookSync(payload: MapBookSyncPayload, context: ClientPlayNetworking.Context) {
+        if (payload.mapIDs.size > 0) {
+            context.client().execute {
+                MapBookStateManager.INSTANCE.putClientMapBookState(
+                    payload.bookID,
+                    MapBookState(payload.mapIDs)
+                )
+            }
+        }
+    }
+
+    /*private fun mapPosition(payload: MapPositionPayload, context: ClientPlayNetworking.Context) {
+        context.client().execute {
+            val world = context.client().world
+            if (world != null) {
+                val mapstate = world.getMapState(payload.mapIdComponent)
+                if (mapstate != null) {
+                    (mapstate as MapStateAccessor).setPosition(payload.centerX, payload.centerZ)
+                }
+            }
+        }
+    }*/
+
+    /*private fun bookShelfsyncSync(payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context) {
+        if (payload.mapIDs.size > 0) {
+            context.client().execute {
+                MapBookStateManager.INSTANCE.putClientMapBookState(
+                    payload.bookID,
+                    MapBookState(payload.mapIDs)
+                )
+            }
+        }
+    }*/
 }

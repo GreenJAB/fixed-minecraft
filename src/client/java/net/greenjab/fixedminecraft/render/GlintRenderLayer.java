@@ -8,35 +8,37 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TriState;
 
 @Environment(EnvType.CLIENT)
 public class GlintRenderLayer extends RenderLayer{
 
     public static RenderLayer glintColor = buildGlintRenderLayer();
     public static RenderLayer entityGlintColor = buildEntityGlintRenderLayer();
-    public static RenderLayer glintDirectColor = buildGlintDirectRenderLayer();
-    public static RenderLayer entityGlintDirectColor = buildEntityGlintDirectRenderLayer();
+   // public static RenderLayer glintDirectColor = buildGlintDirectRenderLayer();
+    //public static RenderLayer entityGlintDirectColor = buildEntityGlintDirectRenderLayer();
 
-    public static RenderLayer armorGlintColor = buildArmorGlintRenderLayer();
+    //public static RenderLayer armorGlintColor = buildArmorGlintRenderLayer();
     public static RenderLayer armorEntityGlintColor = buildArmorEntityGlintRenderLayer();
 
     public static RenderLayer translucentGlintColor = buildTranslucentGlint();
 
 
-    public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferBuilder> map) {
+    public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map) {
         addGlintTypes(map, glintColor);
         addGlintTypes(map, entityGlintColor);
-        addGlintTypes(map, glintDirectColor);
-        addGlintTypes(map, entityGlintDirectColor);
-        addGlintTypes(map, armorGlintColor);
+        //addGlintTypes(map, glintDirectColor);
+        //addGlintTypes(map, entityGlintDirectColor);
+        //addGlintTypes(map, armorGlintColor);
         addGlintTypes(map, armorEntityGlintColor);
         addGlintTypes(map, translucentGlintColor);
     }
 
-    public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferBuilder> map, RenderLayer renderType) {
+    public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map, RenderLayer renderType) {
             if (!map.containsKey(renderType))
-                map.put(renderType, new BufferBuilder(renderType.getExpectedBufferSize()));
+                map.put(renderType, new BufferAllocator(renderType.getExpectedBufferSize()));
     }
 
 
@@ -47,11 +49,11 @@ public class GlintRenderLayer extends RenderLayer{
 
 
     private static RenderLayer buildGlintRenderLayer() {
-        final Identifier res = new Identifier("textures/misc/super_enchanted_glint_item.png");
+        final Identifier res = Identifier.of("textures/misc/super_enchanted_glint_item.png");
 
         return RenderLayer.of("glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -61,11 +63,11 @@ public class GlintRenderLayer extends RenderLayer{
     }
 
     private static RenderLayer buildEntityGlintRenderLayer() {
-        final Identifier res = new Identifier( "textures/misc/super_enchanted_glint_entity.png");
+        final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
         return RenderLayer.of("entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -76,12 +78,12 @@ public class GlintRenderLayer extends RenderLayer{
     }
 
 
-    private static RenderLayer buildGlintDirectRenderLayer() {
-        final Identifier res = new Identifier("textures/misc/super_enchanted_glint_item.png");
+    /*private static RenderLayer buildGlintDirectRenderLayer() {
+        final Identifier res = Identifier.of("textures/misc/super_enchanted_glint_item.png");
 
         return RenderLayer.of("glint_direct", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.DIRECT_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -92,11 +94,11 @@ public class GlintRenderLayer extends RenderLayer{
 
 
     private static RenderLayer buildEntityGlintDirectRenderLayer() {
-        final Identifier res = new Identifier( "textures/misc/super_enchanted_glint_entity.png");
+        final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
         return RenderLayer.of("entity_glint_direct", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.DIRECT_ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -106,11 +108,11 @@ public class GlintRenderLayer extends RenderLayer{
     }
 
     private static RenderLayer buildArmorGlintRenderLayer() {
-        final Identifier res = new Identifier( "textures/misc/super_enchanted_glint_entity.png");
+        final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
         return RenderLayer.of("armor_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.ARMOR_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -118,14 +120,14 @@ public class GlintRenderLayer extends RenderLayer{
                 .texturing(GLINT_TEXTURING)
                 .layering(VIEW_OFFSET_Z_LAYERING)
                 .build(false));
-    }
+    }*/
 
     private static RenderLayer buildArmorEntityGlintRenderLayer() {
-        final Identifier res = new Identifier( "textures/misc/super_enchanted_glint_entity.png");
+        final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
         return RenderLayer.of("armor_entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.ARMOR_ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -136,11 +138,11 @@ public class GlintRenderLayer extends RenderLayer{
     }
 
     private static RenderLayer buildTranslucentGlint() {
-        final Identifier res = new Identifier( "textures/misc/super_enchanted_glint_item.png");
+        final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_item.png");
 
         return RenderLayer.of("glint_translucent", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, RenderLayer.MultiPhaseParameters.builder()
                 .program(TRANSLUCENT_GLINT_PROGRAM)
-                .texture(new Texture(res, true, false))
+                .texture(new Texture(res, TriState.FALSE, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)

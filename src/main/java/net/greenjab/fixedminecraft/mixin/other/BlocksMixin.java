@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.Slice;
 @Mixin(Blocks.class)
 public class BlocksMixin {
 
-
-    @Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args= {
+    //TODO
+    /*@Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT", args= {
             "stringValue=ice"}, ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/IceBlock;", ordinal = 0 ))
     private static IceBlock Ice(AbstractBlock.Settings settings) {
@@ -51,5 +51,5 @@ public class BlocksMixin {
             value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/DaylightDetectorBlock;", ordinal = 0 ))
     private static DaylightDetectorBlock compOutputDaylightDetector(AbstractBlock.Settings settings) {
         return new NewDaylightDetectorBlock(settings);
-    }
+    }*/
 }

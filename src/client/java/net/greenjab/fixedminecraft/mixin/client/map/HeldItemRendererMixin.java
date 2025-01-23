@@ -32,7 +32,7 @@ public class HeldItemRendererMixin {
         if (client.player == null || client.world == null) return false;
 
         if (!(instance.getItem() instanceof MapBookItem mapBookItem)) return false;
-        nearestMap = mapBookItem.getNearestMap(instance, client.world, client.player.getPos());
+        nearestMap = mapBookItem.getNearestMap(instance, client.world, client.player.getPos()).component1();
         return nearestMap != null;
     }
 

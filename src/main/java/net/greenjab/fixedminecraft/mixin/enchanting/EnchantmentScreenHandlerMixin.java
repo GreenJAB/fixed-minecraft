@@ -170,7 +170,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 int level = entry.getIntValue();
                 // ensure enchantment fits on item
                 //if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
-                if (!FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack.getItem())) {
+                if (!(registryEntry.value()).isPrimaryItem(stack)) {
                     return;
                 }
                 // ensure highest level found is applied; thanks to the map's behaviour, no enchantment will appear more than once

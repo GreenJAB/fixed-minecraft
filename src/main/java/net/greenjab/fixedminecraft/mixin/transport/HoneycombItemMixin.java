@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(HoneycombItem.class)
 public class HoneycombItemMixin {
+    //TODO
     /*@ModifyExpressionValue(method = "method_34723", at = @At(
             value = "INVOKE",
             target = "Lcom/google/common/collect/ImmutableBiMap;builder()Lcom/google/common/collect/ImmutableBiMap$Builder;"

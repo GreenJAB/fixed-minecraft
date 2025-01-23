@@ -6,18 +6,23 @@ import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.entity.model.CompositeEntityModel;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.ModelWithHat;
 import net.minecraft.client.render.entity.model.VillagerResemblingModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
+import net.minecraft.client.render.entity.state.ArmorStandEntityRenderState;
+import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
-public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
+//public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
+public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithHat {
     protected final ModelPart root;
     protected final ModelPart head;
     protected final ModelPart body;
@@ -26,6 +31,7 @@ public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntit
     protected final ModelPart rightLeg;
 
     public VillagerArmorModel(ModelPart root) {
+        super(root);
         this.root = root;
         this.head = root.getChild("head");
         this.body = root.getChild("body");
@@ -64,6 +70,11 @@ public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntit
     public void setHatVisible(boolean visible) {
     }
 
+    @Override
+    public void rotateArms(MatrixStack stack) {
+
+    }
+
     public void setBodyVisible(boolean visible) {
         this.body.visible = visible;
     }
@@ -84,7 +95,7 @@ public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntit
         this.setLegsVisible(visible);
     }
 
-    public <E extends Entity> void propertiesCopyFrom(EntityModel<E> model) {
+    /*public <E extends Entity> void propertiesCopyFrom(EntityModel<E> model) {
         this.handSwingProgress = model.handSwingProgress;
         this.riding = model.riding;
         this.child = model.child;
@@ -122,5 +133,5 @@ public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntit
     @Override @NotNull
     public Iterable<ModelPart> getParts() {
         return ImmutableList.of(this.head, this.body, this.leftLeg, this.rightLeg, this.arms);
-    }
+    }*/
 }

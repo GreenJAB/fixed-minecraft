@@ -212,7 +212,7 @@ public class FixedMinecraftEnchantmentHelper {
         int level = 0;
         ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
         for (RegistryEntry<Enchantment> e : stack.getEnchantments().getEnchantments()) {
-            if (e.getIdAsString().toLowerCase().contains(name)) {
+            if (e.value().description().copy().getLiteralString().toLowerCase().contains(name.toLowerCase())) {
                 level += itemEnchantmentsComponent.getLevel(e);
             }
         }

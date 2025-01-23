@@ -7,6 +7,7 @@ import java.util.Arrays
 
 
 class MapBookState() : PersistentState() {
+    var players: ArrayList<MapBookPlayer> = ArrayList()
     val mapIDs: java.util.ArrayList<Int> = java.util.ArrayList()
 
     constructor(ids: IntArray?) : this() {

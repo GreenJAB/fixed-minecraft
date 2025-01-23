@@ -28,10 +28,6 @@ public class ItemRendererMixin {
         EnchantGlint.setTargetStack(stack);
     }
 
-    @Redirect(method = "getArmorGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
-    private static RenderLayer getArmorGlint() {
-        return EnchantGlint.getArmorGlint();
-    }
 
     @Redirect(method = "getArmorGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getArmorEntityGlint() {

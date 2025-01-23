@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
@@ -21,12 +22,14 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Items.class)
 public class ItemsMixin {
-    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+    //TODO
+    /*@Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=totem_of_undying"},ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item$Settings;", ordinal = 0))
     private static Item useableTotem(Item.Settings settings) {
         return new TotemItem((new Item.Settings()).maxCount(1).rarity(Rarity.UNCOMMON));
-    }
+    }*/
+
     /*@Redirect(method = "<clinit>", slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=phantom_membrane"},ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item$Settings;", ordinal = 0 ))

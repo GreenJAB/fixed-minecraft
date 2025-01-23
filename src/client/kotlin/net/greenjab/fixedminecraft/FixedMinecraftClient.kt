@@ -13,8 +13,6 @@ import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.render.InGameHudBookPreview
-import net.minecraft.client.item.ClampedModelPredicateProvider
-import net.minecraft.client.item.ModelPredicateProviderRegistry
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.entity.LivingEntity
@@ -39,23 +37,23 @@ object FixedMinecraftClient : ClientModInitializer {
             BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL,
         )
 
-        HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
+        //HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
 
         ModelLayers.onRegisterLayers()
-
-        ModelPredicateProviderRegistry.register(
+//TODO
+       /* ModelPredicateProviderRegistry.register(
             Items.TOTEM_OF_UNDYING,
-            Identifier("saving"),
+            Identifier.of("saving"),
             ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
 
         ModelPredicateProviderRegistry.register(
             ItemRegistry.ECHO_TOTEM,
-            Identifier("saving"),
+            Identifier.of("saving"),
             ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
-
+*/
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent { modContainer: ModContainer? ->
             ResourceManagerHelper.registerBuiltinResourcePack(
-                Identifier("fixedminecraft", "greentweaks"),
+                Identifier.of("fixedminecraft", "greentweaks"),
                 modContainer,
                 Text.of("Green Tweaks"),
                 ResourcePackActivationType.DEFAULT_ENABLED

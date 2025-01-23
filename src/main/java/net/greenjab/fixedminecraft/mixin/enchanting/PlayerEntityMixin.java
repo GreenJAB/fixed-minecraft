@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -61,13 +62,7 @@ public class PlayerEntityMixin {
     private float impalingEffectsWetMobs(float original, @Local(argsOnly = true) Entity entity) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
         //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
-        ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
-        int i = 0;
-        for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
-            if (entry.getKey().get().equals(Enchantments.IMPALING)) {
-                i = enchantments.getLevel(entry);
-            }
-        }
+        int i = FixedMinecraftEnchantmentHelper.enchantLevel(PE.getMainHandStack(), "impaling");
 
         return original + ((((LivingEntity)entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
     }

@@ -1,10 +1,15 @@
 package net.greenjab.fixedminecraft.mobs;
 
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.trim.ArmorTrim;
-import net.minecraft.item.trim.ArmorTrimMaterial;
-import net.minecraft.item.trim.ArmorTrimPattern;
+import net.minecraft.item.equipment.trim.ArmorTrim;
+import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
+import net.minecraft.item.equipment.trim.ArmorTrimMaterials;
+import net.minecraft.item.equipment.trim.ArmorTrimPattern;
+import net.minecraft.item.equipment.trim.ArmorTrimPatterns;
 import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
@@ -18,15 +23,18 @@ public class ArmorTrimmer {
             return stack;
         }
 
-        Optional<RegistryEntry.Reference<ArmorTrimMaterial>> materialReference = registryManager.get(RegistryKeys.TRIM_MATERIAL).getRandom(random);
-        Optional<RegistryEntry.Reference<ArmorTrimPattern>> patternReference = registryManager.get(RegistryKeys.TRIM_PATTERN).getRandom(random);
+        Optional<Registry<ArmorTrimMaterial>> materialReference = registryManager.getOptional(RegistryKeys.TRIM_MATERIAL);
+        Optional<Registry<ArmorTrimPattern>> patternReference = registryManager.getOptional(RegistryKeys.TRIM_PATTERN);
+
 
         if (materialReference.isEmpty() && patternReference.isEmpty()) {
             return stack;
         }
 
-        ArmorTrim randomTrim = new ArmorTrim(materialReference.get(), patternReference.get());
-        ArmorTrim.apply(registryManager, stack, randomTrim);
+        ArmorTrim randomTrim = new ArmorTrim(materialReference.get().getRandom(random).get(), patternReference.get().getRandom(random).get());
+
+        stack.set(DataComponentTypes.TRIM, randomTrim);
+
 
         return stack;
     }

@@ -18,8 +18,8 @@ public interface ChiseledBookshelfBlockInvoker {
         throw new AssertionError();
     }
 
-    @Invoker("getSlotForHitPos")
-    static OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
+    /*@Invoker("getSlotForHitPos")
+    default OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
         throw new AssertionError();
-    }
+    }*/
 }

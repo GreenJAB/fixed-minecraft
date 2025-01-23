@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.network
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+import net.greenjab.fixedminecraft.util.ExhaustionHelper
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
@@ -11,8 +12,8 @@ import java.util.UUID
 import kotlin.math.abs
 
 object SyncHandler {
-    val EXHAUSTION_SYNC: Identifier = Identifier("fixedminecraft", "exhaustion_sync")
-    val SATURATION_SYNC: Identifier = Identifier("fixedminecraft", "saturation_sync")
+    val EXHAUSTION_SYNC: Identifier = Identifier.of("fixedminecraft", "exhaustion_sync")
+    val SATURATION_SYNC: Identifier = Identifier.of("fixedminecraft", "saturation_sync")
 
     private fun makePacketBuf(value: Float): PacketByteBuf {
         val buf = PacketByteBuf(Unpooled.buffer())
@@ -28,19 +29,18 @@ object SyncHandler {
     private var lastExhaustionLevels: HashMap<UUID, Float> = HashMap()
 
     fun onPlayerUpdate(player: ServerPlayerEntity) {
-
         val lastSaturationLevel = lastSaturationLevels[player.uuid]
         val lastExhaustionLevel = lastExhaustionLevels[player.uuid]
 
-        val saturation: Float = player.hungerManager.saturationLevel
+        val saturation = player.hungerManager.saturationLevel
         if (lastSaturationLevel == null || lastSaturationLevel != saturation) {
-            ServerPlayNetworking.send(player, SATURATION_SYNC, makePacketBuf(saturation))
+            ServerPlayNetworking.send(player, SaturationSyncPayload(saturation))
             lastSaturationLevels[player.uuid] = saturation
         }
 
-        val exhaustionLevel: Float = player.hungerManager.exhaustion
-        if (lastExhaustionLevel == null || abs(lastExhaustionLevel - exhaustionLevel) >= 0.01f) {
-            ServerPlayNetworking.send(player, EXHAUSTION_SYNC, makePacketBuf(exhaustionLevel))
+        val exhaustionLevel: Float = ExhaustionHelper.getExhaustion(player)
+        if (lastExhaustionLevel == null || abs((lastExhaustionLevel - exhaustionLevel).toDouble()) >= 0.01f) {
+            ServerPlayNetworking.send(player, ExhaustionSyncPayload(exhaustionLevel))
             lastExhaustionLevels[player.uuid] = exhaustionLevel
         }
     }
@@ -50,7 +50,7 @@ object SyncHandler {
         lastExhaustionLevels.remove(player.uuid)
     }
 
-    private fun makeItemStackBuf(item: ItemStack): PacketByteBuf {
+    /*private fun makeItemStackBuf(item: ItemStack): PacketByteBuf {
         val buf = PacketByteBuf(Unpooled.buffer())
         buf.writeItemStack(item)
         return buf
@@ -83,6 +83,6 @@ object SyncHandler {
 
     fun mapBookSync(player: ServerPlayerEntity, id: Int) {
         ServerPlayNetworking.send(player, MAP_BOOK_SYNC, makeMapBookSyncBuf(player, id))
-    }
+    }*/
 
 }

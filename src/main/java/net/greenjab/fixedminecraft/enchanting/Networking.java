@@ -17,7 +17,8 @@ public class Networking {
             buf.writeBlockPos(pos);
 
             for(ServerPlayerEntity player: FixedMinecraft.INSTANCE.getSERVER().getPlayerManager().getPlayerList()) {
-                ServerPlayNetworking.send(player, BOOKSHELF_SYNC, buf);
+               // ServerPlayNetworking.send(player, BOOKSHELF_SYNC, buf);
+                //TODO
             }
     }
 }

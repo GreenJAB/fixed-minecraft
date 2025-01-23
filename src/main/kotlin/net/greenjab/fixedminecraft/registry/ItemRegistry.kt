@@ -5,6 +5,10 @@ import net.greenjab.fixedminecraft.registry.item.TotemItem
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
 import net.minecraft.component.ComponentType
+import net.minecraft.component.DataComponentTypes
+import net.minecraft.component.type.DeathProtectionComponent
+import net.minecraft.component.type.FireworkExplosionComponent
+import net.minecraft.component.type.FireworksComponent
 import net.minecraft.component.type.FoodComponents
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
@@ -24,7 +28,7 @@ import java.util.function.UnaryOperator
 
 @Suppress("MemberVisibilityCanBePrivate")
 object ItemRegistry {
-    val DRAGON_FIREWORK_ROCKET = item(::FireworkRocketItem)
+   val DRAGON_FIREWORK_ROCKET = FireworkRocketItem(Item.Settings().component(DataComponentTypes.FIREWORKS, FireworksComponent(1, listOf<FireworkExplosionComponent?>())))
     val MAP_BOOK: Item = MapBookItem(Item.Settings().maxCount(1)) as Item
     val MAP_BOOK_ADDITIONS: ComponentType<MapBookAdditionsComponent> = registerComponent("melody_map_book_additions") { builder ->
         builder.codec(
@@ -44,7 +48,7 @@ object ItemRegistry {
     }
 
     val BROKEN_TOTEM = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
-     val ECHO_TOTEM: Item = TotemItem(Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).useCooldown(1.0F))
+     val ECHO_TOTEM: Item = TotemItem(Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).useCooldown(1.0F).component(DataComponentTypes.DEATH_PROTECTION, DeathProtectionComponent.TOTEM_OF_UNDYING))
     // val ECHO_TOTEM: Item = item(::Item) {maxCount(1).rarity(Rarity.UNCOMMON)}
     val ECHO_FRUIT: Item =  EchoFruitItem(Item.Settings().maxCount(64).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT))
 

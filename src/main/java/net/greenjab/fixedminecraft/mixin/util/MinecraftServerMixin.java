@@ -16,16 +16,17 @@ import java.util.ArrayList;
 public abstract class MinecraftServerMixin {
     @Inject(method = "tick", at = @At("RETURN"))
     private void loadWorld(CallbackInfo ci) {
+        MinecraftServer SW = (MinecraftServer)(Object) this;
         synchronized (Networking.SERVER_LOCK) {
-            FixedMinecraft.INSTANCE.setSERVER((MinecraftServer) (Object) this);
+            FixedMinecraft.INSTANCE.setSERVER(SW);
             Networking.SERVER_LOCK.notifyAll();
         }
-        MinecraftServer SW = (MinecraftServer)(Object) this;
-        for (int id : MapBookStateManager.INSTANCE.getCurrentBooks()) {
+        //TODO
+       /* for (int id : MapBookStateManager.INSTANCE.getCurrentBooks()) {
             MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(SW, id);
             assert state != null;
             state.sendData(SW, id);
         }
-        MapBookStateManager.INSTANCE.setCurrentBooks(new ArrayList<>());
+        MapBookStateManager.INSTANCE.setCurrentBooks(new ArrayList<>());*/
     }
 }

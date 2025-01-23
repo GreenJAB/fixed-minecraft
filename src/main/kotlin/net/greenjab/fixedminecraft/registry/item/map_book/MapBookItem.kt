@@ -277,7 +277,7 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         }
     }
 
-    fun setAdditions(stack: ItemStack, additions: List<Int?>) {
+    fun setAdditions(stack: ItemStack, additions: List<Int>) {
         stack.set<MapBookAdditionsComponent>(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent(additions))
     }
 

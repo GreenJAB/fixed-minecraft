@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin {
-
-    @Inject(method = "getLooting", at = @At(value = "HEAD"), cancellable = true)
+    //TODO
+    /*@Inject(method = "getLooting", at = @At(value = "HEAD"), cancellable = true)
     private static void moonLooting(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
         int i = EnchantmentHelper.getEquipmentLevel(Enchantments.LOOTING, entity);
         World world = entity.getWorld();
@@ -24,5 +24,5 @@ public class EnchantmentHelperMixin {
             }
         }
         cir.setReturnValue(i);
-    }
+    }*/
 }

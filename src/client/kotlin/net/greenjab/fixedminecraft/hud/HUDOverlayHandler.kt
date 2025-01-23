@@ -1,10 +1,14 @@
 package net.greenjab.fixedminecraft.hud
 
+import net.greenjab.fixedminecraft.util.ExhaustionHelper
 import net.greenjab.fixedminecraft.util.IntPoint
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.render.RenderLayer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.ColorHelper
+import java.awt.Color
 import java.util.Random
 import java.util.Vector
 import kotlin.math.ceil
@@ -26,7 +30,8 @@ object HUDOverlayHandler {
         requireNotNull(player)
         val right = mc.window.scaledWidth / 2 + 91
         val top = mc.window.scaledHeight - foodIconsOffset
-        val exhaustion = player.hungerManager.exhaustion
+        val exhaustion = ExhaustionHelper.getExhaustion(player);
+//player.hungerManager.exhaustion
         val renderEvent = HUDOverlayEvent.Exhaustion(exhaustion, right, top, context)
 
         if (!renderEvent.isCanceled) {
@@ -69,18 +74,18 @@ object HUDOverlayHandler {
             val x = right + offset.x
             val y = top + offset.y
 
-            val v = 0
-            var u = 0
+            val v = 0f
+            var u = 0f
 
             val effectiveSaturationOfBar = (modifiedSaturation / 2.0F) - i
 
             if (effectiveSaturationOfBar > .75)
-                u = 3 * iconSize
+                u = 3f * iconSize
             else if (effectiveSaturationOfBar > .50)
-                u = 2 * iconSize
+                u = 2f * iconSize
             else if (effectiveSaturationOfBar > .25)
-                u = 1 * iconSize
-            context.drawTexture(Identifier("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize)
+                u = 1f * iconSize
+            context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F))
         }
 
     }
@@ -92,7 +97,9 @@ object HUDOverlayHandler {
         val width = (ratio * 81).toInt()
         val height = 9
 
-        context.drawTexture(Identifier("fixedminecraft", "textures/icons.png"), right - width, top, 81 - width, 18, width, height)
+
+        context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), right - width, top, 81f - width, 18f, width, height, 128, 16,
+            ColorHelper.getWhite(1F))
     }
 
 
