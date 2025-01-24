@@ -258,7 +258,7 @@ class MapBookItem(settings: Settings?) : Item(settings) {
     override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
         if (stack != null) {
             var mapsCount =
-                stack.getOrDefault<MapBookAdditionsComponent>(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent.DEFAULT).additions.size
+                stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent2.DEFAULT).additions.size
             val id = this.getMapBookId(stack)
             if (id != null) {
                 // append tooltip is client-based, so its safe to get the client MapBookState
@@ -278,11 +278,11 @@ class MapBookItem(settings: Settings?) : Item(settings) {
     }
 
     fun setAdditions(stack: ItemStack, additions: List<Int>) {
-        stack.set<MapBookAdditionsComponent>(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent(additions))
+        stack.set<MapBookAdditionsComponent2>(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent2(additions))
     }
 
     private fun applyAdditions(stack: ItemStack, world: ServerWorld) {
-        val additionsComponent = stack.getOrDefault<MapBookAdditionsComponent>(ItemRegistry.MAP_BOOK_ADDITIONS, null) ?: return
+        val additionsComponent = stack.getOrDefault<MapBookAdditionsComponent2>(ItemRegistry.MAP_BOOK_ADDITIONS, null) ?: return
         stack.remove<Any>(ItemRegistry.MAP_BOOK_ADDITIONS)
 
         val additions = additionsComponent.additions

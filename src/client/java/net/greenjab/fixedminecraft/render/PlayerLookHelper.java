@@ -4,20 +4,16 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.mixin.enchanting.ChiseledBookshelfBlockInvoker;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ChiseledBookshelfBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
@@ -29,7 +25,6 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
 
@@ -110,9 +105,9 @@ public abstract class PlayerLookHelper {
             //s.withItalic(true);
             displayText.add(book.getName().getWithStyle(s).get(0));
         }
-        if (book.isOf(ItemRegistry.INSTANCE.getMAP_BOOK())) {
-            if (book.getComponents().contains(ItemRegistry.INSTANCE.getMAP_BOOK_ADDITIONS())) {
-                int n = book.getComponents().get(ItemRegistry.INSTANCE.getMAP_BOOK_ADDITIONS()).additions().size();
+        if (book.isOf(ItemRegistry.MAP_BOOK)) {
+            if (book.getComponents().contains(ItemRegistry.MAP_BOOK_ADDITIONS)) {
+                int n = book.getComponents().get(ItemRegistry.MAP_BOOK_ADDITIONS).additions().size();
                 Text t = Text.of("ID: " + (n+1));
                 displayText.add(t);
             }

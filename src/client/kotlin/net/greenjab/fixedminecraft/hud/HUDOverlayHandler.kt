@@ -8,7 +8,6 @@ import net.minecraft.client.render.RenderLayer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.ColorHelper
-import java.awt.Color
 import java.util.Random
 import java.util.Vector
 import kotlin.math.ceil

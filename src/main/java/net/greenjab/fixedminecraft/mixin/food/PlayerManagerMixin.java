@@ -18,7 +18,7 @@ public class PlayerManagerMixin
     @Inject(at = @At("TAIL"), method = "onPlayerConnect")
     private void onPlayerConnect(ClientConnection conn, ServerPlayerEntity player, ConnectedClientData clientData, CallbackInfo info)
     {
-        SyncHandler.INSTANCE.onPlayerLoggedIn(player);
+        SyncHandler.onPlayerLoggedIn(player);
     }
     @Redirect(method = "respawnPlayer", at = @At(value = "INVOKE",
                                                  target = "Lnet/minecraft/server/network/ServerPlayerEntity;getHealth()F"

@@ -3,18 +3,11 @@ package net.greenjab.fixedminecraft.network
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
-import net.fabricmc.fabric.api.networking.v1.PacketSender
-import net.greenjab.fixedminecraft.enchanting.Networking.BOOKSHELF_SYNC
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
-import net.greenjab.fixedminecraft.mixin.map_book.MapStateAccessor
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.util.ExhaustionHelper
-import net.minecraft.block.Block
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.network.ClientPlayNetworkHandler
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.network.PacketByteBuf
 
 
 object ClientSyncHandler {

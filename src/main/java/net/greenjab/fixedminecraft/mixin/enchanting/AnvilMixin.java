@@ -7,7 +7,6 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -27,13 +26,13 @@ public class AnvilMixin  {
     @Inject(method = "getLandingState", at = @At("HEAD"), cancellable = true)
     private static void damageNetheriteAnvil(BlockState fallingState, CallbackInfoReturnable<BlockState> cir) {
 
-        if (fallingState.isOf(BlockRegistry.INSTANCE.getNETHERITE_ANVIL())) {
-            cir.setReturnValue(BlockRegistry.INSTANCE.getCHIPPED_NETHERITE_ANVIL()
+        if (fallingState.isOf(BlockRegistry.NETHERITE_ANVIL)) {
+            cir.setReturnValue(BlockRegistry.CHIPPED_NETHERITE_ANVIL
                     .getDefaultState()
                     .with(FACING, fallingState.get(FACING)));
         }
-        if (fallingState.isOf(BlockRegistry.INSTANCE.getCHIPPED_NETHERITE_ANVIL())) {
-            cir.setReturnValue(BlockRegistry.INSTANCE.getDAMAGED_NETHERITE_ANVIL()
+        if (fallingState.isOf(BlockRegistry.CHIPPED_NETHERITE_ANVIL)) {
+            cir.setReturnValue(BlockRegistry.DAMAGED_NETHERITE_ANVIL
                     .getDefaultState()
                     .with(FACING, fallingState.get(FACING)));
         }

@@ -14,7 +14,6 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.widget.ButtonWidget
 import net.minecraft.client.render.LightmapTextureManager
 import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.render.VertexConsumer
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.MapIdComponent
 import net.minecraft.item.ItemStack
@@ -26,7 +25,6 @@ import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import org.joml.Matrix4f
 import java.util.Objects
 import java.util.Optional
 import kotlin.math.abs

@@ -38,7 +38,7 @@ public class PlayerEntityMixin {
         for (int i = 0; i < items.size(); i++) {
             NbtCompound nbtCompound = items.getCompound(i);
             int slot = nbtCompound.getByte("Slot") & 255;
-            ItemStack itemStack = (ItemStack)ItemStack.fromNbt(PE.getRegistryManager(), nbtCompound).orElse(ItemStack.EMPTY);
+            ItemStack itemStack = ItemStack.fromNbt(PE.getRegistryManager(), nbtCompound).orElse(ItemStack.EMPTY);
             stacks.set(slot, itemStack);
         }
 

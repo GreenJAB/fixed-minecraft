@@ -111,7 +111,7 @@ public abstract class LivingEntityMixin {
             } else {
                 float i = EnchantmentHelper.getProtectionAmount(world, entity, source);
                 if (i > 0) {
-                    amount = DamageUtil.getInflictedDamage(amount, (float)i);
+                    amount = DamageUtil.getInflictedDamage(amount, i);
                 }
 
                 return amount;

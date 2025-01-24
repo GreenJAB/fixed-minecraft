@@ -15,9 +15,13 @@ import net.minecraft.entity.projectile.SpectralArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -54,6 +58,7 @@ public class WitherEntityMixin {
                 );
                 for (int i = 0;i<3;i++) {
                     WitherSkeletonEntity WSE = EntityType.WITHER_SKELETON.create(WE.getWorld().getWorldChunk(WE.getBlockPos()).getWorld(), SpawnReason.MOB_SUMMONED);
+                    assert WSE != null;
                     WSE.refreshPositionAndAngles(WE.getX(), WE.getY(), WE.getZ(), 0.0F, 0.0F);
                     WSE.setVelocity(Math.cos(i*120*Math.PI/180.0), 0, Math.sin(i*120*Math.PI/180.0));
                     WSE.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
@@ -69,7 +74,11 @@ public class WitherEntityMixin {
     @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/WitherEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"), index = 0)
     private Vec3d floatUpInBlocks(Vec3d vec3d) {
         WitherEntity WE = (WitherEntity) (Object)this;
-        if (WE.getWorld().getBlockState(WE.getBlockPos()).isSolid() && !WE.getWorld().getBlockState(WE.getBlockPos().up()).isOf(Blocks.BEDROCK)) {
+        World world = WE.getWorld();
+        BlockPos blockpos = WE.getBlockPos();
+        ChunkPos chunk = world.getWorldChunk(blockpos).getPos();
+        BlockView blockView = world.getChunkAsView(chunk.x, chunk.z);
+        if (world.getBlockState(blockpos).isSolidBlock(blockView, blockpos) && !world.getBlockState(blockpos.up()).isOf(Blocks.BEDROCK)) {
             return vec3d.add(0, 0.05 - vec3d.y * 0.6F, 0);
         } else {
             return vec3d;

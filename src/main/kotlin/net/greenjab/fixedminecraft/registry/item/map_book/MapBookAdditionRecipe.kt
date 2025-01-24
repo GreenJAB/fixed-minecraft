@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.component.DataComponentTypes

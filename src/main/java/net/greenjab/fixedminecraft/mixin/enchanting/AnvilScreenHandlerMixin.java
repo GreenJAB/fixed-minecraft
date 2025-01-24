@@ -28,8 +28,6 @@ import net.minecraft.screen.slot.ForgingSlotsManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -40,9 +38,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Iterator;
-import java.util.Map;
 
 
 @Mixin(AnvilScreenHandler.class)
@@ -359,7 +354,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 if (netherite) {
                     boolean isSuper = stack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
                     if (isSuper) {
-                        Criteria.CONSUME_ITEM.trigger(SPE, ItemRegistry.INSTANCE.getNETHERITE_ANVIL().getDefaultStack());
+                        Criteria.CONSUME_ITEM.trigger(SPE, ItemRegistry.NETHERITE_ANVIL.getDefaultStack());
                     }
                 }
             }

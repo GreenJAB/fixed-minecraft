@@ -1,28 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.entity.passive.PassiveEntity;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
@@ -54,7 +47,7 @@ public class AbstractHorseEntityMixin {
     private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 
     static {
-        rageChance.put(ItemRegistry.INSTANCE.getNETHERITE_HORSE_ARMOR(), 1F);
+        rageChance.put(ItemRegistry.NETHERITE_HORSE_ARMOR, 1F);
         rageChance.put(Items.DIAMOND_HORSE_ARMOR, 0.9F);
         rageChance.put(Items.IRON_HORSE_ARMOR, 0.75F);
         rageChance.put(Items.GOLDEN_HORSE_ARMOR, 0.6F);

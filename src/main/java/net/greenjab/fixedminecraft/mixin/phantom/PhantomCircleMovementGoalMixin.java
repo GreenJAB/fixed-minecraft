@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 
 import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,7 +25,11 @@ class PhantomCircleMovementGoalMixin {
     private boolean dive(World instance, BlockPos blockPos){
         PhantomEntity PE = this.field_7325;
         if (PE.noClip) {
-            if (PE.getWorld().getBlockState(blockPos.up(4)).isSolid()) {
+            World world = PE.getWorld();
+            BlockPos blockpos = PE.getBlockPos();
+            ChunkPos chunk = world.getWorldChunk(blockpos).getPos();
+            BlockView blockView = world.getChunkAsView(chunk.x, chunk.z);
+            if (PE.getWorld().getBlockState(blockPos.up(4)).isSolidBlock(blockView, blockPos)) {
                 PE.discard();
             }
             return true;

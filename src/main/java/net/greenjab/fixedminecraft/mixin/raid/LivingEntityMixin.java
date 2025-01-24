@@ -10,7 +10,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -25,8 +24,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import java.util.Optional;
-import java.util.Set;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin  {
@@ -46,7 +43,7 @@ public class LivingEntityMixin  {
 
     @Inject(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;decrement(I)V", shift = At.Shift.AFTER))
     private void brokenTotem(DamageSource source, CallbackInfoReturnable<Boolean> cir, @Local Hand hand) {
-        ItemStack broken = new ItemStack(ItemRegistry.INSTANCE.getBROKEN_TOTEM());
+        ItemStack broken = new ItemStack(ItemRegistry.BROKEN_TOTEM);
         if ((LivingEntity)(Object)this instanceof PlayerEntity) {
             PlayerEntity user = (PlayerEntity) (Object) this;
             ItemStack i = user.getStackInHand(hand);
@@ -64,7 +61,7 @@ public class LivingEntityMixin  {
     private void echoTeleport(DamageSource source, CallbackInfoReturnable<Boolean> cir, @Local ItemStack itemStack) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof ServerPlayerEntity SPE) {
-            if (itemStack.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM())) {
+            if (itemStack.isOf(ItemRegistry.ECHO_TOTEM)) {
                 goToSpawn(SPE);
             }
         }

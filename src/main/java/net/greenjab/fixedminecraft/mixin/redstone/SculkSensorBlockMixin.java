@@ -52,7 +52,7 @@ public abstract class SculkSensorBlockMixin {
     private void dontResontateAfter(Entity sourceEntity, World world, BlockPos pos, BlockState state, int power, int frequency,
                                  CallbackInfo ci){
         world.emitGameEvent(sourceEntity, GameEvent.SCULK_SENSOR_TENDRILS_CLICKING, pos);
-        if (!(Boolean)state.get(WATERLOGGED)) {
+        if (!state.get(WATERLOGGED)) {
             world.playSound(null, (double)pos.getX() + 0.5, (double)pos.getY() + 0.5, (double)pos.getZ() + 0.5, SoundEvents.BLOCK_SCULK_SENSOR_CLICKING, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.2F + 0.8F);
         }
         ci.cancel();

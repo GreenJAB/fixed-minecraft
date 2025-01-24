@@ -1,12 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
-import com.google.common.collect.ImmutableBiMap;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.greenjab.fixedminecraft.registry.BlockRegistry;
-import net.minecraft.block.Block;
 import net.minecraft.item.HoneycombItem;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(HoneycombItem.class)
 public class HoneycombItemMixin {

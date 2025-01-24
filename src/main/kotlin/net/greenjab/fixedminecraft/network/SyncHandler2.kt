@@ -2,17 +2,15 @@ package net.greenjab.fixedminecraft.network
 
 import io.netty.buffer.Unpooled
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.util.ExhaustionHelper
-import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import java.util.UUID
 import kotlin.math.abs
 
-object SyncHandler {
-    val EXHAUSTION_SYNC: Identifier = Identifier.of("fixedminecraft", "exhaustion_sync")
+object SyncHandler2 {
+    /*val EXHAUSTION_SYNC: Identifier = Identifier.of("fixedminecraft", "exhaustion_sync")
     val SATURATION_SYNC: Identifier = Identifier.of("fixedminecraft", "saturation_sync")
 
     private fun makePacketBuf(value: Float): PacketByteBuf {
@@ -83,6 +81,6 @@ object SyncHandler {
 
     fun mapBookSync(player: ServerPlayerEntity, id: Int) {
         ServerPlayNetworking.send(player, MAP_BOOK_SYNC, makeMapBookSyncBuf(player, id))
-    }*/
+    }*/*/
 
 }

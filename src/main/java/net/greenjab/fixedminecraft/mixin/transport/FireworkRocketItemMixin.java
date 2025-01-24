@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.transport;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FireworkExplosionComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
@@ -31,7 +30,7 @@ public class FireworkRocketItemMixin {
             }
         }
         if (user.isGliding()) {
-            if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) {
+            if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.DRAGON_FIREWORK_ROCKET)) {
                 Criteria.CONSUME_ITEM.trigger(SPE, itemStack);
             }
         }
@@ -39,6 +38,6 @@ public class FireworkRocketItemMixin {
 
     @Inject(method = "useOnBlock", at = @At("HEAD"),cancellable = true)
     private void injected(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir) {
-        if (context.getStack().getItem().equals(ItemRegistry.INSTANCE.getDRAGON_FIREWORK_ROCKET())) cir.setReturnValue(ActionResult.PASS);
+        if (context.getStack().getItem().equals(ItemRegistry.DRAGON_FIREWORK_ROCKET)) cir.setReturnValue(ActionResult.PASS);
     }
 }

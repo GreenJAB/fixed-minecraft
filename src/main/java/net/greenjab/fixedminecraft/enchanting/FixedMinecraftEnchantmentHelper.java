@@ -95,10 +95,10 @@ public class FixedMinecraftEnchantmentHelper {
         Stream<RegistryEntry<Enchantment>> possibleEnchantments = ((RegistryEntryList.Named)optional).stream();
 
 
-        possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
+        possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
         //possibleEnchantments.filter(/* method_60143 */ enchantment -> FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack) || bl)
                 .forEach(/* method_60106 */ enchantmentx -> {
-                    Enchantment enchantment = (Enchantment)enchantmentx.value();
+                    Enchantment enchantment = enchantmentx.value();
 
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                         if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {

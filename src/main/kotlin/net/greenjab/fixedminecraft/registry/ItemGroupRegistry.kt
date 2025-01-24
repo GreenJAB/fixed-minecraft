@@ -18,18 +18,18 @@ object ItemGroupRegistry {
             entries.add(ItemRegistry.ECHO_TOTEM)
             entries.add(ItemRegistry.ECHO_FRUIT)
 
-            entries.add(BlockRegistry.NETHERITE_ANVIL)
-            entries.add(BlockRegistry.CHIPPED_NETHERITE_ANVIL)
-            entries.add(BlockRegistry.DAMAGED_NETHERITE_ANVIL)
+            entries.add(ItemRegistry.NETHERITE_ANVIL)
+            entries.add(ItemRegistry.CHIPPED_NETHERITE_ANVIL)
+            entries.add(ItemRegistry.DAMAGED_NETHERITE_ANVIL)
 
-            entries.add(BlockRegistry.COPPER_RAIL)
-            entries.add(BlockRegistry.EXPOSED_COPPER_RAIL)
-            entries.add(BlockRegistry.WEATHERED_COPPER_RAIL)
-            entries.add(BlockRegistry.OXIDIZED_COPPER_RAIL)
-            entries.add(BlockRegistry.WAXED_COPPER_RAIL)
-            entries.add(BlockRegistry.WAXED_EXPOSED_COPPER_RAIL)
-            entries.add(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL)
-            entries.add(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL)
+            entries.add(ItemRegistry.COPPER_RAIL)
+            entries.add(ItemRegistry.EXPOSED_COPPER_RAIL)
+            entries.add(ItemRegistry.WEATHERED_COPPER_RAIL)
+            entries.add(ItemRegistry.OXIDIZED_COPPER_RAIL)
+            entries.add(ItemRegistry.WAXED_COPPER_RAIL)
+            entries.add(ItemRegistry.WAXED_EXPOSED_COPPER_RAIL)
+            entries.add(ItemRegistry.WAXED_WEATHERED_COPPER_RAIL)
+            entries.add(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL)
         }
     }
 

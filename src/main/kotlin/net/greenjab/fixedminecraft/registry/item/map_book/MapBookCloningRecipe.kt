@@ -3,17 +3,13 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.component.DataComponentTypes
-import net.minecraft.inventory.RecipeInputInventory
-import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
 import net.minecraft.recipe.SpecialCraftingRecipe
 import net.minecraft.recipe.book.CraftingRecipeCategory
 import net.minecraft.recipe.input.CraftingRecipeInput
-import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.registry.RegistryWrapper
-import net.minecraft.util.collection.DefaultedList
 import net.minecraft.world.World
 
 class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : SpecialCraftingRecipe(craftingRecipeCategory) {

@@ -15,12 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BrewingRecipeRegistry.class)
 public abstract class BrewingRecipeRegistryMixin {
-    @Shadow
-    public static void registerPotionRecipe(RegistryEntry<Potion> input, Item item, RegistryEntry<Potion> output) {
-    }
 
     @Inject(method = "registerDefaults", at = @At("TAIL"))
-    private static void registerPotion(CallbackInfo ci){
-        registerPotionRecipe(Potions.AWKWARD, Items.SHULKER_SHELL, (RegistryEntry<Potion>) ItemRegistry.INSTANCE.getLEVITATION());
+    private static void registerPotion(BrewingRecipeRegistry.Builder builder, CallbackInfo ci){
+        builder.registerPotionRecipe(Potions.AWKWARD, Items.SHULKER_SHELL, ItemRegistry.LEVITATION);
     }
 }

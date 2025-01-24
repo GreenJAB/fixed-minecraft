@@ -37,7 +37,7 @@ public class EnchantmentHelperMixin {
         //possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
         possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
                 .forEach(/* method_60106 */ enchantmentx -> {
-                    Enchantment enchantment = (Enchantment)enchantmentx.value();
+                    Enchantment enchantment = enchantmentx.value();
 
                     //for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                     for (int j = level; j >= checkEnchantmentCapacity(enchantmentx, level, stack); j--) {

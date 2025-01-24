@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 public record ExhaustionSyncPayload(float exhaustion) implements CustomPayload
 {
     public static final PacketCodec<PacketByteBuf, ExhaustionSyncPayload> CODEC = CustomPayload.codecOf(ExhaustionSyncPayload::write, ExhaustionSyncPayload::new);
-    public static final CustomPayload.Id<ExhaustionSyncPayload> ID = new Id<>(Identifier.of("appleskin", "exhaustion"));
+    public static final CustomPayload.Id<ExhaustionSyncPayload> ID = new Id<>(Identifier.of("fixedminecraft", "exhaustion"));
 
     public ExhaustionSyncPayload(PacketByteBuf buf)
     {

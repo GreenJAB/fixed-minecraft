@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public record BookShelfSyncPayload(int bookID, int[] mapIDs) implements CustomPayload {
-    public static final Id<BookShelfSyncPayload> PACKET_ID = new Id<>(Identifier.of("fixedminecraft", "map_book_sync"));
+    public static final Id<BookShelfSyncPayload> PACKET_ID = new Id<>(Identifier.of("fixedminecraft", "book_shelf_sync"));
 
     public static final PacketCodec<RegistryByteBuf, BookShelfSyncPayload> PACKET_CODEC = PacketCodec.tuple(
             PacketCodecs.VAR_INT,

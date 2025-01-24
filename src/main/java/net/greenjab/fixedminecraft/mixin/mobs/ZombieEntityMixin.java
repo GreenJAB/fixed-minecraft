@@ -93,6 +93,8 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                     return Items.IRON_SWORD;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_SWORD;
+                } else {
+                    return Items.WOODEN_SWORD;
                 }
             case 1:
                 if (equipmentLevel == 0) {
@@ -103,6 +105,8 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                     return Items.IRON_AXE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_AXE;
+                } else {
+                    return Items.WOODEN_AXE;
                 }
             case 2:
                 if (equipmentLevel == 0) {
@@ -113,6 +117,8 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                     return Items.IRON_SHOVEL;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_SHOVEL;
+                } else {
+                    return Items.WOODEN_SHOVEL;
                 }
             case 3:
                 if (equipmentLevel == 0) {
@@ -123,6 +129,8 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                     return Items.IRON_PICKAXE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_PICKAXE;
+                } else {
+                    return Items.WOODEN_PICKAXE;
                 }
             case 4:
                 if (equipmentLevel == 0) {
@@ -133,6 +141,8 @@ public abstract class ZombieEntityMixin extends HostileEntity {
                     return Items.IRON_HOE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_HOE;
+                } else {
+                    return Items.WOODEN_HOE;
                 }
             default:
                 return Items.AIR;

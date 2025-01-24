@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
@@ -11,13 +10,7 @@ import net.greenjab.fixedminecraft.models.ModelLayers
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
 
 import net.greenjab.fixedminecraft.registry.BlockRegistry
-import net.greenjab.fixedminecraft.registry.ItemRegistry
-import net.greenjab.fixedminecraft.render.InGameHudBookPreview
 import net.minecraft.client.render.RenderLayer
-import net.minecraft.client.world.ClientWorld
-import net.minecraft.entity.LivingEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
