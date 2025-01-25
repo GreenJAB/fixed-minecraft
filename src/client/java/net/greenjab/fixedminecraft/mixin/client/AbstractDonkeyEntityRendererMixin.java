@@ -18,7 +18,7 @@ public class AbstractDonkeyEntityRendererMixin {
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void addMuleArmorLayer(EntityRendererFactory.Context context, EntityModelLayer layer, EntityModelLayer babyLayer, boolean mule,
                                   CallbackInfo ci) {
-        if (mule) {
+        if (false) {
             AbstractDonkeyEntityRenderer current = ((AbstractDonkeyEntityRenderer)(Object)this);
             current.addFeature(new MuleArmorFeatureRenderer(current, context.getEntityModels(), context.getEquipmentRenderer()));
         }

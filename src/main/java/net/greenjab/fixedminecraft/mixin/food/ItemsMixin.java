@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
@@ -61,7 +62,7 @@ public class ItemsMixin {
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;ENDER_EYE:Lnet/minecraft/item/Item;")))
     private static Item edibleGoldMelon(String id) {
-        return register("glistering_melon_slice", GlisteringMelonSliceItem::new, new Item.Settings().maxCount(64).food(FoodComponents.GLOW_BERRIES).useCooldown(1.0F));
+        return register("glistering_melon_slice", GlisteringMelonSliceItem::new, new Item.Settings().maxCount(64).food(FoodComponents.GLOW_BERRIES, ItemRegistry.GLOW_BERRIES).useCooldown(1.0F));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

@@ -17,11 +17,11 @@ public class VillagerEntityRendererMixin {
     @Inject(method = "<init>", at = @At(value = "RETURN"))
     public void addVillagerArmorLayer(EntityRendererFactory.Context context, CallbackInfo ci) {
         VillagerEntityRenderer current = ((VillagerEntityRenderer)(Object)this);
-        current.addFeature(new HumanArmorFeatureRenderer(
+        /*current.addFeature(new HumanArmorFeatureRenderer(
                 current,
                 new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_INNER_ARMOR)),
                 new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_OUTER_ARMOR)),
                 context.getEquipmentRenderer()
-        ));
+        ));*/
     }
 }

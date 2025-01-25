@@ -21,8 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin  {
 
-
-
     @Inject(method = "tickMovement", at = @At("HEAD"))
     private void railAdvancement(CallbackInfo ci){
         PlayerEntity PE = (PlayerEntity)(Object)this;
@@ -37,4 +35,6 @@ public class PlayerEntityMixin  {
             }
         }
     }
+
+
 }

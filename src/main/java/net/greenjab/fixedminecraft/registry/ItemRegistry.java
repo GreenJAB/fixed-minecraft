@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry;
 
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent2;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem;
@@ -8,6 +9,7 @@ import net.greenjab.fixedminecraft.registry.item.TotemItem;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.component.type.FoodComponents;
@@ -17,6 +19,8 @@ import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
+import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.equipment.ArmorMaterials;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
@@ -68,7 +72,12 @@ public class ItemRegistry {
 
 
 
-
+    public static final ConsumableComponent GLOW_BERRIES = food()
+            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 10, 0), 1F))
+            .build();
+    public static ConsumableComponent.Builder food() {
+        return ConsumableComponent.builder().consumeSeconds(1.6F).useAction(UseAction.EAT).sound(SoundEvents.ENTITY_GENERIC_EAT).consumeParticles(true);
+    }
 
     public static final RegistryEntry<Potion> BLINDNESS = register("blindness", new Potion("blindness", new StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
     public static final RegistryEntry<Potion> LEVITATION = register("levitation", new Potion("levitation", new StatusEffectInstance(StatusEffects.LEVITATION, 1200)));
@@ -78,7 +87,7 @@ public class ItemRegistry {
         return register(keyOf(id), factory, settings);
     }
     private static RegistryKey<Item> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.ITEM, Identifier.ofVanilla(id));
+        return RegistryKey.of(RegistryKeys.ITEM, FixedMinecraft.INSTANCE.id(id));
     }
     public static Item register(RegistryKey<Item> key, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = (Item)factory.apply(settings.registryKey(key));
@@ -113,6 +122,6 @@ public class ItemRegistry {
     }
 
     private static RegistryEntry<Potion> register(String name, Potion potion) {
-        return Registry.registerReference(Registries.POTION, Identifier.ofVanilla(name), potion);
+        return Registry.registerReference(Registries.POTION, FixedMinecraft.INSTANCE.id(name), potion);
     }
 }

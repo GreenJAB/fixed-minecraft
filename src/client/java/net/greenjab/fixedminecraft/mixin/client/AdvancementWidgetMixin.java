@@ -5,6 +5,7 @@ import net.minecraft.advancement.AdvancementDisplay;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlacedAdvancement;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.advancement.AdvancementObtainedStatus;
 import net.minecraft.client.gui.screen.advancement.AdvancementTab;
@@ -31,19 +32,8 @@ import java.util.List;
 
 
 @Mixin(AdvancementWidget.class)
-public class AdvancementWidgetMixin {
+public abstract class AdvancementWidgetMixin {
 
-    @Shadow
-    @Final
-    private List<AdvancementWidget> children;
-
-    @Shadow
-    @Final
-    private int x;
-
-    @Shadow
-    @Final
-    private int y;
 
     @Shadow
     @Final
@@ -55,6 +45,18 @@ public class AdvancementWidgetMixin {
 
     @Shadow
     private @Nullable AdvancementWidget parent;
+
+    @Shadow
+    @Final
+    private int x;
+
+    @Shadow
+    @Final
+    private int y;
+
+    @Shadow
+    @Final
+    private List<AdvancementWidget> children;
 
     @Shadow
     @Final
@@ -74,11 +76,14 @@ public class AdvancementWidgetMixin {
 
     @Shadow
     @Final
-    private OrderedText title;
+    private PlacedAdvancement advancement;
 
     @Shadow
     @Final
-    private PlacedAdvancement advancement;
+    private List<OrderedText> title;
+
+    @Shadow
+    protected abstract void drawText(DrawContext context, List<OrderedText> text, int x, int y, int color);
 
     @Unique
     public void renderWidgets2(DrawContext context, int x, int y) {
@@ -169,7 +174,111 @@ public class AdvancementWidgetMixin {
 
     @Unique
     public void drawTooltip2(DrawContext context, int originX, int originY, int x) {
+        TextRenderer textRenderer = this.client.textRenderer;
+        int i = 9 * this.title.size() + 9 + 8;
+        int j = originY + this.y + (26 - i) / 2;
+        int k = j + i;
+        int l = this.description.size() * 9;
+        int m = 6 + l;
         boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
+        Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
+        int n = text == null ? 0 : textRenderer.getWidth(text);
+        boolean bl2 = k + m >= 113;
+        float f = this.progress == null ? 0.0F : this.progress.getProgressBarPercentage();
+        int o = MathHelper.floor(f * (float)this.width);
+        AdvancementObtainedStatus advancementObtainedStatus;
+        AdvancementObtainedStatus advancementObtainedStatus2;
+        AdvancementObtainedStatus advancementObtainedStatus3;
+        if (f >= 1.0F) {
+            o = this.width / 2;
+            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
+            advancementObtainedStatus2 = AdvancementObtainedStatus.OBTAINED;
+            advancementObtainedStatus3 = AdvancementObtainedStatus.OBTAINED;
+        } else if (o < 2) {
+            o = this.width / 2;
+            advancementObtainedStatus = AdvancementObtainedStatus.UNOBTAINED;
+            advancementObtainedStatus2 = AdvancementObtainedStatus.UNOBTAINED;
+            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
+        } else if (o > this.width - 2) {
+            o = this.width / 2;
+            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
+            advancementObtainedStatus2 = AdvancementObtainedStatus.OBTAINED;
+            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
+        } else {
+            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
+            advancementObtainedStatus2 = AdvancementObtainedStatus.UNOBTAINED;
+            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
+        }
+
+        int p = this.width - o;
+        int q;
+        if (bl) {
+            q = originX + this.x - this.width + 26 + 6;
+        } else {
+            q = originX + this.x;
+        }
+
+        int r = i + m;
+        /*if (!this.description.isEmpty()) {
+            if (bl2) {
+                context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
+            } else {
+                context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, r);
+            }
+        }*/
+
+        if (!this.description.isEmpty()) {
+            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
+        }
+        if (this.advancement.getAdvancement().rewards().experience()!=0) {
+            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, 32+9);
+        }
+
+        //if (advancementObtainedStatus != advancementObtainedStatus2) {
+            context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
+        //} else {
+        //    context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), q, j, this.width, i);
+       // }
+
+        context.drawGuiTexture(
+                RenderLayer::getGuiTextured, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
+        );
+        int s = q + 5;
+        if (bl) {
+            this.drawText(context, this.title, s, j + 9, -1);
+            if (text != null) {
+                context.drawTextWithShadow(textRenderer, text, originX + this.x - n, j + 9, Colors.WHITE);
+            }
+        } else {
+            this.drawText(context, this.title, originX + this.x + 32, j + 9, -1);
+            if (text != null) {
+                context.drawTextWithShadow(textRenderer, text, originX + this.x + this.width - n - 5, j + 9, Colors.WHITE);
+            }
+        }
+
+        //if (bl2) {
+            this.drawText(context, this.description, s, j - l + 1, -16711936);
+        //} else {
+            //this.drawText(context, this.description, s, k, -16711936);
+        //}
+
+        if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
+            OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
+            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
+            context.drawText(this.client.textRenderer, reward, s, k, colour, false);
+        }
+
+        context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
+
+
+
+
+
+
+
+
+        /*boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
         Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
         int i = text == null ? 0 : this.client.textRenderer.getWidth(text);
         float f = this.progress == null ? 0.0F : this.progress.getProgressBarPercentage();
@@ -241,7 +350,7 @@ public class AdvancementWidgetMixin {
             context.drawText(this.client.textRenderer, reward, m + 5, originY + this.y + 9 + 17, colour, false);
         }
 
-        context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
+        context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);*/
     }
 
 

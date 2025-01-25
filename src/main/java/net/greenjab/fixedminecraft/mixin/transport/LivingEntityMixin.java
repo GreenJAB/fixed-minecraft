@@ -86,8 +86,12 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Redirect(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
     private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
-        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
-                 CustomData.getData(instance, "airTime") > 15);
+        if (instance instanceof PlayerEntity) {
+            return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
+                     CustomData.getData(instance, "airTime") > 15);
+        } else {
+            return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());
+        }
     }
 
     @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
@@ -104,9 +108,11 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"))
     private void cancelElytraOnHit(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
-        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            PlayerEntity PE = (PlayerEntity)(Object)this;
-            CustomData.setData(PE, "airTime", -25);
+        LivingEntity LE = (LivingEntity)(Object)this;
+        if (LE instanceof PlayerEntity) {
+            if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+                CustomData.setData(LE, "airTime", -25);
+            }
         }
     }
 }

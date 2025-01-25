@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
@@ -74,7 +75,7 @@ public class BlockRegistry {
         return register(keyOf(id), factory, settings);
     }
     private static RegistryKey<Block> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.BLOCK, Identifier.ofVanilla(id));
+        return RegistryKey.of(RegistryKeys.BLOCK, FixedMinecraft.INSTANCE.id(id));
     }
     public static Block register(RegistryKey<Block> key, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         Block block = (Block)factory.apply(settings.registryKey(key));

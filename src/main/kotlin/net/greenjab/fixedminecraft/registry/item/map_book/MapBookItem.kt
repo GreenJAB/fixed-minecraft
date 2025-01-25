@@ -53,7 +53,7 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         }
     }
 
-    override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
+    /*override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
         if (world != null && !world.isClient()) {
             val player = user as ServerPlayerEntity
             val item = user.getStackInHand(hand)
@@ -84,6 +84,93 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         }
 
         return super.use(world, user, hand)
+    }*/
+
+    override fun use(world: World?, user: PlayerEntity?, hand: Hand?): ActionResult {
+        if (world != null && !world.isClient()) {
+            val player = user as ServerPlayerEntity
+            val item = user.getStackInHand(hand)
+            val otherHand = if (hand == Hand.MAIN_HAND) player.offHandStack else player.mainHandStack
+
+            var openMap = true
+            if (getNearestMap(item, world as ServerWorld, player.pos)==null) {
+                if (addNewMapAtPos(item, world, player.pos,0)) {
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
+                    openMap = false
+                }
+            } else if (otherHand.isOf(Items.PAPER)) {
+                if (addNewMapAtPos(item, world, player.pos, 0)) {
+                    if (!player.abilities.creativeMode) {
+                        otherHand.decrement(1)
+                    }
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
+                    openMap = false
+                }
+            } else if (otherHand.isOf(Items.FILLED_MAP)) {
+                if (addNewMapID(item, otherHand, world)) {
+                    if (!player.abilities.creativeMode) {
+                        otherHand.decrement(1)
+                    }
+                    player.world.playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                        player.soundCategory,
+                        1.0f,
+                        1.0f
+                    )
+                    openMap = false
+                }
+            } else {
+                val hasPaper = getPaper(user)
+                if (hasPaper.isOf(Items.PAPER)) {
+                    if (addNewMapAtPos(item, world, player.pos, 0)) {
+                        if (!player.abilities.creativeMode) {
+                            hasPaper.decrement(1)
+                        }
+                        player.world.playSoundFromEntity(
+                            null,
+                            player,
+                            SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                            player.soundCategory,
+                            1.0f,
+                            1.0f
+                        )
+                        openMap = false
+                    }
+                }
+            }
+
+            this.sendMapUpdates(player, item)
+            mapBookSync(player, item)
+            if (openMap && this.hasMapBookId(item)) {
+                mapBookOpen(player, item)
+            }
+        }
+        return ActionResult.SUCCESS
+        //return super.use(world, user, hand)
+    }
+
+    private fun getPaper(playerEntity: PlayerEntity): ItemStack {
+        for (i in 0 until playerEntity.inventory.size()) {
+            val item = playerEntity.inventory.getStack(i)
+            if (item.isOf(Items.PAPER)) return item
+        }
+        return ItemStack.EMPTY
     }
 
     fun sendMapUpdates(player: ServerPlayerEntity, item: ItemStack) {
@@ -241,6 +328,37 @@ class MapBookItem(settings: Settings?) : Item(settings) {
             Objects.requireNonNull(newMap.get(DataComponentTypes.MAP_ID))?.let { state!!.addMapID(it.id) }
             return true
         }
+    }
+
+    private fun addNewMapID(item: ItemStack, filledmap: ItemStack, world: ServerWorld): Boolean {
+        val mapId = filledmap.get(DataComponentTypes.MAP_ID) ?: return false
+        val state = this.getOrCreateMapBookState(item, world.server)
+        if (state != null) {
+            if (!state.mapIDs.contains(mapId.id)) {
+                Objects.requireNonNull(filledmap.get(DataComponentTypes.MAP_ID))?.let { state!!.addMapID(it.id) }
+                return true
+            }
+        }
+        return false
+
+        /*val mapId = filledmap.get(DataComponentTypes.MAP_ID) ?: return false
+        val maps = ArrayList<Int>()
+        maps.add(mapId.id())
+        if ((item.item as MapBookItem).hasInvalidAdditions(item, world, maps)) {
+            var result = MapBookAdditionRecipe.AdditionResult(item, maps)
+            val item2 = result.mapBook.copyWithCount(1)
+            (item2.item as MapBookItem).setAdditions(item2, result.maps)
+            return true
+        }
+        return false*/
+
+        /*val state = getOrCreateMapBookState(item, world.server)
+        val id = FilledMapItem.getMapId(filledmap)
+        if (!state.mapIDs.contains(id)) {
+            state.addMapID(id!!)
+            return true
+        }
+        return false*/
     }
 
     override fun getName(stack: ItemStack?): Text {

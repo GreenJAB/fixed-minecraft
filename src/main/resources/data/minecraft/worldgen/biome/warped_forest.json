@@ -1,7 +1,5 @@
 {
-  "carvers": {
-    "air": "minecraft:nether_cave"
-  },
+  "carvers": "minecraft:nether_cave",
   "downfall": 0.0,
   "effects": {
     "additions_sound": {
@@ -16,12 +14,18 @@
       "sound": "minecraft:ambient.warped_forest.mood",
       "tick_delay": 6000
     },
-    "music": {
-      "max_delay": 24000,
-      "min_delay": 12000,
-      "replace_current_music": false,
-      "sound": "minecraft:music.nether.warped_forest"
-    },
+    "music": [
+      {
+        "data": {
+          "max_delay": 24000,
+          "min_delay": 12000,
+          "replace_current_music": false,
+          "sound": "minecraft:music.nether.warped_forest"
+        },
+        "weight": 1
+      }
+    ],
+    "music_volume": 1.0,
     "particle": {
       "options": {
         "type": "minecraft:warped_spore"
@@ -54,7 +58,7 @@
       "minecraft:ore_quartz_nether",
       "minecraft:ore_ancient_debris_large",
       "minecraft:ore_debris_small",
-      "fixedminecraft:ore_ancient_debris_lava"
+        "fixedminecraft:ore_ancient_debris_lava"
     ],
     [],
     [

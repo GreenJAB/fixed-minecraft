@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
+import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.util.ExhaustionHelper
@@ -30,10 +31,10 @@ object ClientSyncHandler {
 
         ClientPlayNetworking.registerGlobalReceiver(MapBookOpenPayload.PACKET_ID, ClientSyncHandler::mapBookOpen);
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
-        //ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
+         ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
 
-//TODO
-        //ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
+// TODO
+        // ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
 
         /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
         ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
@@ -92,17 +93,17 @@ object ClientSyncHandler {
         }
     }
 
-    /*private fun mapPosition(payload: MapPositionPayload, context: ClientPlayNetworking.Context) {
+    private fun mapPosition(payload: MapPositionPayload, context: ClientPlayNetworking.Context) {
         context.client().execute {
             val world = context.client().world
             if (world != null) {
                 val mapstate = world.getMapState(payload.mapIdComponent)
                 if (mapstate != null) {
-                    (mapstate as MapStateAccessor).setPosition(payload.centerX, payload.centerZ)
+                    (mapstate as MapStateAccessor).`fixed$setPosition`(payload.centerX, payload.centerZ)
                 }
             }
         }
-    }*/
+    }
 
     /*private fun bookShelfsyncSync(payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context) {
         if (payload.mapIDs.size > 0) {

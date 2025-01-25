@@ -6,6 +6,7 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.HeldItemRenderer;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.Item;
@@ -21,18 +22,19 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin {
-    @Shadow @Final private MinecraftClient client;
+    @Shadow
+    @Final
+    private MinecraftClient client;
 
     @Unique
-    private MapIdComponent nearestMap;
+    private MapStateData nearestMap;
 
-    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"), method = "renderFirstPersonItem")
-    private boolean passMapCheck(ItemStack instance, Item item, Operation<Boolean> original) {
-        if (original.call(instance, item)) return true;
+    @WrapOperation(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;contains(Lnet/minecraft/component/ComponentType;)Z"), method = "renderFirstPersonItem")
+    private boolean passMapCheck(ItemStack instance, ComponentType<MapIdComponent> componentType, Operation<Boolean> original) {
+        if (!(instance.getItem() instanceof MapBookItem mapBookItem)) return original.call(instance, componentType);
+
         if (client.player == null || client.world == null) return false;
-
-        if (!(instance.getItem() instanceof MapBookItem mapBookItem)) return false;
-        nearestMap = mapBookItem.getNearestMap(instance, client.world, client.player.getPos()).component1();
+        nearestMap = mapBookItem.getNearestMap(instance, client.world, client.player.getPos());
         return nearestMap != null;
     }
 
@@ -41,11 +43,7 @@ public class HeldItemRendererMixin {
         //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
         if (!(original.getItem() instanceof MapBookItem) || nearestMap == null) return original;
         ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
-
-        //MapIdComponent mapIdComponent = allocateMapId(world, x, z, scale, showIcons, unlimitedTracking, world.getRegistryKey());
-        //map.set(DataComponentTypes.MAP_ID, mapIdComponent);
-        map.set(DataComponentTypes.MAP_ID, nearestMap);
-        //map.getOrCreateNbt().putInt("map", nearestMap.getId());
+        map.set(DataComponentTypes.MAP_ID, nearestMap.id());
         return map;
     }
 

@@ -1,14 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
 import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapDecorationType;
 import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
@@ -17,6 +15,7 @@ import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,11 +28,23 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(MapState.class)
-public class MapStateMixin {
+public class MapStateMixin implements MapStateAccessor {
 
     @Shadow
     @Final
     private Map<String, MapBannerMarker> banners;
+
+    @Final @Shadow @Mutable
+    public int centerX;
+
+    @Final @Shadow @Mutable
+    public int centerZ;
+
+    @Override
+    public void fixed$setPosition(int centerX, int centerZ) {
+        this.centerX = centerX;
+        this.centerZ = centerZ;
+    }
 
     @Inject(method = "addDecoration", at = @At(value = "TAIL"))
     private void addDecoToBanners(RegistryEntry<MapDecorationType> type, @Nullable WorldAccess world, String key, double x, double z,

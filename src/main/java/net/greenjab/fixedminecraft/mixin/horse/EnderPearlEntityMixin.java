@@ -16,7 +16,6 @@ import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -70,21 +69,25 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
     }
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
+     *
+     * @return
      */
-    @Inject(
+    @Redirect(
             method = "onCollision", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/server/network/ServerPlayerEntity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/server/network/ServerPlayerEntity;"
     ))
-    private void teleportWithVehicle(HitResult hitResult, CallbackInfo ci, @Local ServerPlayerEntity player,
-                                     @Share("passed")
+    private ServerPlayerEntity teleportWithVehicle(ServerPlayerEntity serverPlayerEntity, TeleportTarget teleportTarget,
+                                                   @Share("passed")
                                      LocalBooleanRef ref) {
-        Criteria.CONSUME_ITEM.trigger(player, Items.ENDER_PEARL.getDefaultStack());
-        if (player.hasVehicle()) {
-            vehicle.teleportTo(
-                    new TeleportTarget((ServerWorld) this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
-            );
-               // vehicle.requestTeleport(x, y, z);
+        Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.ENDER_PEARL.getDefaultStack());
+        if (serverPlayerEntity.hasVehicle() ) {
+            LivingEntity currentVehicle = rootVehicle(serverPlayerEntity);
+            if (currentVehicle != null && currentVehicle.equals(vehicle)) {
+                vehicle.teleportTo(
+                        new TeleportTarget((ServerWorld) this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+                );
+                // vehicle.requestTeleport(x, y, z);
                 vehicle.addCommandTag("tp");
 
                 if (vehicle instanceof PathAwareEntity pathAwareEntity)
@@ -96,7 +99,14 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                     vehicle.damage((ServerWorld) this.getWorld(), this.getDamageSources().fall(), 5.0F);
                 }
                 ref.set(true);
+            }
         }
+
+        ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
+                new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+        );
+        serverPlayerEntity2.startRiding(vehicle);
+        return serverPlayerEntity2;
     }
 
     /**

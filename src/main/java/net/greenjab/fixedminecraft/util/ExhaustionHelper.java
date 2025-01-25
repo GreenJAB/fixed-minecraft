@@ -13,11 +13,12 @@ public class ExhaustionHelper
 
     public static float getExhaustion(PlayerEntity player)
     {
-        return ((ExhaustionManipulator) player.getHungerManager()).getExhaustion();
+        return 0;
+        //return ((ExhaustionManipulator) player.getHungerManager()).getExhaustion();
     }
 
     public static void setExhaustion(PlayerEntity player, float exhaustion)
     {
-        ((ExhaustionManipulator) player.getHungerManager()).setExhaustion(exhaustion);
+        //((ExhaustionManipulator) player.getHungerManager()).setExhaustion(exhaustion);
     }
 }

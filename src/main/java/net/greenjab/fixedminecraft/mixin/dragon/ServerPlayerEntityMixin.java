@@ -15,7 +15,7 @@ import java.util.UUID;
 @Mixin(ServerPlayerEntity.class)
 public class ServerPlayerEntityMixin {
 
-    @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
+    /*@ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
     private Entity hitFakehitbox(Entity target) {
         if (target instanceof InteractionEntity IE) {
             if (IE.getCommandTags().contains("dragon")) {
@@ -32,5 +32,5 @@ public class ServerPlayerEntityMixin {
             }
         }
         return target;
-    }
+    }*/
 }

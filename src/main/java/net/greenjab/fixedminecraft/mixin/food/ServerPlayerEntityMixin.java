@@ -31,6 +31,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         SyncHandler.onPlayerUpdate(player);
     }
+    
     @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.1f))
     public float armorDrainsStamina(float constant) {
         int weight = 0;

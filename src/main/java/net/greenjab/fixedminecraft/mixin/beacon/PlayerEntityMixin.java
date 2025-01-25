@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerEntityMixin {
 
 
-    @Inject(method = "getBlockInteractionRange", at = @At(value = "RETURN"))
+    @Inject(method = "getBlockInteractionRange", at = @At(value = "RETURN"), cancellable = true)
     private void longerBlockReach(CallbackInfoReturnable<Double> cir) {
         double d =  cir.getReturnValueD();
         PlayerEntity PE = (PlayerEntity)(Object)this;

@@ -39,7 +39,6 @@ object FixedMinecraft : ModInitializer {
 
         StatusRegistry.register()
 
-        println("BBBBBBBBBBBBBBBBBBBBBBBBBBB")
         DispenserBlock.registerProjectileBehavior(Items.BRICK)
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK)
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT)

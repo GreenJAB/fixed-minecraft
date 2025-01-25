@@ -71,5 +71,5 @@ class MapBookAdditionRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : S
     }
 
     @JvmRecord
-    private data class AdditionResult(val mapBook: ItemStack, val maps: ArrayList<Int>)
+    data class AdditionResult(val mapBook: ItemStack, val maps: ArrayList<Int>)
 }

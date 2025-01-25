@@ -80,7 +80,7 @@ public class BeaconBlockEntityMixin {
     @Unique
     private static Map<BlockState, RegistryEntry<StatusEffect>> newEffects = Map.of(
             Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
-            //Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
+            Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.INSTANCE.getREACH(),
             Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION,
             Blocks.QUARTZ_BLOCK.getDefaultState(), StatusEffects.INVISIBILITY);
 

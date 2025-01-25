@@ -92,12 +92,22 @@ public class FixedMinecraftEnchantmentHelper {
         World world =  Objects.requireNonNull(FixedMinecraft.INSTANCE.getSERVER()).getOverworld();
 
         Registry<Enchantment> optional = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
-        Stream<RegistryEntry<Enchantment>> possibleEnchantments = ((RegistryEntryList.Named)optional).stream();
+        //Stream<RegistryEntry<Enchantment>> possibleEnchantments = (optional).stream();
+        Iterator<Enchantment> e = optional.stream().iterator();
+        while (e.hasNext()) {
+            Enchantment enchantment = e.next();
+            for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+                if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
+                    list.add(new EnchantmentLevelEntry(optional.getEntry(enchantment), j));
+                    break;
+                }
+            }
+        }
 
 
-        possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
-        //possibleEnchantments.filter(/* method_60143 */ enchantment -> FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack) || bl)
-                .forEach(/* method_60106 */ enchantmentx -> {
+        /*possibleEnchantments.filter( enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
+        //possibleEnchantments.filter( enchantment -> FixedMinecraftEnchantmentHelper.horseArmorCheck(enchantment, stack) || bl)
+                .forEach( enchantmentx -> {
                     Enchantment enchantment = enchantmentx.value();
 
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
@@ -106,7 +116,7 @@ public class FixedMinecraftEnchantmentHelper {
                             break;
                         }
                     }
-                });
+                });*/
         return list;
     }
 

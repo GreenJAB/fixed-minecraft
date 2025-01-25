@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Optional;
+
 @Mixin(MapBannerMarker.class)
 public class MapBannerMarkerMixin {
 
@@ -16,7 +18,7 @@ public class MapBannerMarkerMixin {
     private static void fakeBanner(BlockView blockView, BlockPos blockPos, CallbackInfoReturnable<MapBannerMarker> cir){
         if (blockPos.getY()<=-1000 && blockPos.getY() > -2000) {
             DyeColor[] dye = {DyeColor.PURPLE, DyeColor.PINK, DyeColor.LIGHT_BLUE, DyeColor.RED, DyeColor.CYAN};
-            cir.setReturnValue(new MapBannerMarker(blockPos, dye[Math.abs(blockPos.getY())-1000], null));
+            cir.setReturnValue(new MapBannerMarker(blockPos, dye[Math.abs(blockPos.getY())-1000], Optional.empty()));
         }
     }
 }

@@ -248,17 +248,22 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
         for (mapStateData in getMapStates(stack!!, client?.world as World)) {
 
-            val var11: Iterator<*> = mapStateData.mapState.banners.iterator()
+            val var11: Iterator<*> = mapStateData.mapState.decorations.iterator()
             while (var11.hasNext()) {
 
                 val mapIcon: MapDecoration = var11.next() as MapDecoration
-                if (mapIcon.type.idAsString !="player" && mapIcon.type.idAsString !="player_off_map" && mapIcon.type.idAsString !="player_off_limits") {
+                if (mapIcon.type.idAsString !="minecraft:player" && mapIcon.type.idAsString !="minecraft:player_off_map" && mapIcon.type.idAsString !="minecraft:player_off_limits") {
 
                     context.matrices.push()
                     context.matrices.translate(this.x, this.y, 0.0)
                     context.matrices.scale(this.scale, this.scale, 1.0f)
-                    context.matrices.translate(mapIcon.x + width.toDouble() / 2.0, mapIcon.z.toDouble() + height.toDouble() / 2.0, 0.0)
-                    context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
+                    val mapScale = (1 shl mapStateData.mapState.scale.toInt()).toFloat()
+                    val offset = 64f * mapScale
+                    val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128) * mapScale/2
+                    val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128) * mapScale/2
+                    context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
+                    //context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
+                    context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
                     context.matrices.scale(8.0f, 8.0f, -3.0f)
                     context.matrices.translate(-0.125f, 0.125f, -10.0f)
                     context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
@@ -284,7 +289,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     context.matrices.pop()
 
 
-                    if (mapIcon.name != null) {
+                    if (mapIcon.name.isPresent) {
                         val textRenderer = MinecraftClient.getInstance().textRenderer
                         val text = mapIcon.name.get()
                         val o = textRenderer.getWidth(text).toFloat()
@@ -293,11 +298,14 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
                         context.matrices.translate(this.x, this.y, 11.0)
                         context.matrices.scale(this.scale, this.scale, 1.0f)
-                        context.matrices.translate(
+                        val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128) * mapScale/2
+                        val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128) * mapScale/2
+                        context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
+                        /*context.matrices.translate(
                             mapStateData.mapState.centerX.toDouble() + mapIcon.x * this.scale / 2.0 + this.width / 2.0,
                             mapStateData.mapState.centerZ.toDouble() + (mapIcon.z + 1) * this.scale / 2.0 + this.height / 2.0,
                             0.0
-                        )
+                        )*/
                         context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
                         context.matrices.translate(-o / 2f, 8.0f, 0.1f)
 

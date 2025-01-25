@@ -39,7 +39,7 @@ public class ClientPlayerInteractionManagerMixin {
         cir.setReturnValue(false);
     }*/
 
-    @ModifyArg(method = "attackEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
+    /*@ModifyArg(method = "attackEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;attack(Lnet/minecraft/entity/Entity;)V"), index = 0)
     private Entity check(Entity target) {
         if (target instanceof InteractionEntity IE) {
             if (IE.getCommandTags().contains("dragon")) {
@@ -54,6 +54,6 @@ public class ClientPlayerInteractionManagerMixin {
             }
         }
         return target;
-    }
+    }*/
 
 }
