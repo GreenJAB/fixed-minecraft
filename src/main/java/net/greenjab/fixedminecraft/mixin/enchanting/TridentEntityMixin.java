@@ -25,11 +25,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TridentEntity.class)
-public class TridentEntityMixin {
+public abstract class TridentEntityMixin {
 
     @Shadow
     @Final
     private static TrackedData<Boolean> ENCHANTED;
+
+    @Shadow
+    public abstract ItemStack getWeaponStack();
 
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At(
             value = "INVOKE",
@@ -48,17 +51,19 @@ public class TridentEntityMixin {
             target = "Lnet/minecraft/enchantment/EnchantmentHelper;getDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;F)F"
     ))
     private float impalingEffectsWetMobs(float original, @Local(ordinal = 0) Entity entity) {
-        PlayerEntity PE = (PlayerEntity) (Object)this;
-        //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
-        ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
-        int i = 0;
-        for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
-            if (entry.getKey().get().equals(Enchantments.IMPALING)) {
-                i = enchantments.getLevel(entry);
+        if (entity instanceof LivingEntity) {
+            //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
+            ItemEnchantmentsComponent enchantments = this.getWeaponStack().getEnchantments();
+            int i = 0;
+            for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
+                if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                    i = enchantments.getLevel(entry);
+                }
             }
+            return original +
+                   ((( entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
         }
-
-        return original + ((((LivingEntity)entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+        return original;
     }
 
     @ModifyExpressionValue(method = "tick", at = @At(

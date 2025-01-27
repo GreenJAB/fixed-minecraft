@@ -177,10 +177,10 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         context.matrices.push()
         context.matrices.translate(this.x, this.y, 0.0)
         context.matrices.scale(this.scale, this.scale, 1.0f)
-        context.matrices.translate(x.toDouble() + width.toDouble() / 2.0, z.toDouble() + height.toDouble() / 2.0, 0.0)
+        context.matrices.translate(x + width/ 2.0, z + height / 2.0, 0.0)
         context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation))
         context.matrices.scale(8.0f, 8.0f, -3.0f)
-        context.matrices.translate(-0.125f, 0.125f, -10.0f)
+        context.matrices.translate(0f, 0f, -10.0f)
         context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
         val sprite = client!!.mapDecorationsAtlasManager.getSprite(
             MapDecoration(
@@ -259,13 +259,14 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     context.matrices.scale(this.scale, this.scale, 1.0f)
                     val mapScale = (1 shl mapStateData.mapState.scale.toInt()).toFloat()
                     val offset = 64f * mapScale
-                    val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128) * mapScale/2
-                    val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128) * mapScale/2
+                    val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
+                    val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
                     context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
                     //context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
                     context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
                     context.matrices.scale(8.0f, 8.0f, -3.0f)
-                    context.matrices.translate(-0.125f, 0.125f, -10.0f)
+                    //context.matrices.translate(-0.125f, 0.125f, -10.0f)
+                    context.matrices.translate(0f, 0f, -10.0f)
                     context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
                     val sprite = client!!.mapDecorationsAtlasManager.getSprite(
                         MapDecoration(
@@ -298,8 +299,8 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
                         context.matrices.translate(this.x, this.y, 11.0)
                         context.matrices.scale(this.scale, this.scale, 1.0f)
-                        val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128) * mapScale/2
-                        val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128) * mapScale/2
+                        val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
+                        val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
                         context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
                         /*context.matrices.translate(
                             mapStateData.mapState.centerX.toDouble() + mapIcon.x * this.scale / 2.0 + this.width / 2.0,
@@ -387,7 +388,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         val absScroll = abs(scroll)
         val speed = 5.0f
         var newZoom = if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
-        newZoom = Math.min(Math.max(newZoom, 0.01f), 10f)
+        newZoom = Math.min(Math.max(newZoom, 0.005f), 10f)
         return newZoom
     }
 }

@@ -32,14 +32,17 @@ public abstract class AbstractBlockMixin {
                 boolean bl = explosion.getCausingEntity() instanceof PlayerEntity;
                 if (block.shouldDropItemsOnExplosion(explosion)) {
                     BlockEntity blockEntity = state.hasBlockEntity() ? serverWorld.getBlockEntity(pos) : null;
-                    LootWorldContext.Builder builder = (new LootWorldContext.Builder(serverWorld)).add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos)).add(LootContextParameters.TOOL, ItemStack.EMPTY).addOptional(LootContextParameters.BLOCK_ENTITY, blockEntity).addOptional(LootContextParameters.THIS_ENTITY, explosion.getEntity());
+                    LootWorldContext.Builder builder = new LootWorldContext.Builder(serverWorld)
+                            .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(pos))
+                            .add(LootContextParameters.TOOL, ItemStack.EMPTY)
+                            .addOptional(LootContextParameters.BLOCK_ENTITY, blockEntity)
+                            .addOptional(LootContextParameters.THIS_ENTITY, explosion.getEntity());
                     if (explosion.getDestructionType() == Explosion.DestructionType.DESTROY_WITH_DECAY) {
                         builder.add(LootContextParameters.EXPLOSION_RADIUS, explosion.getPower());
                     }
+
                     state.onStacksDropped(serverWorld, pos, ItemStack.EMPTY, bl);
-                    state.getDroppedStacks(builder).forEach((stack) -> {
-                        stackMerger.accept(stack, pos);
-                    });
+                    state.getDroppedStacks(builder).forEach(/* method_55224 */ stack -> stackMerger.accept(stack, pos));
                 }
             }
         }

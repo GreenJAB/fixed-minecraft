@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.registry;
 
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent2;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem;
 import net.greenjab.fixedminecraft.registry.item.TotemItem;
@@ -29,7 +29,6 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 import java.util.List;
@@ -43,7 +42,7 @@ public class ItemRegistry {
             "dragon_firework_rocket", FireworkRocketItem::new, new Item.Settings().component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of()))
     );
     public static final Item MAP_BOOK = register("map_book", MapBookItem::new, new Item.Settings().maxCount(1));
-    public static final ComponentType<MapBookAdditionsComponent2> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent2.CODEC).packetCodec(MapBookAdditionsComponent2.PACKET_CODEC).cache());
+    public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache());
 
     public static final Item NETHERITE_HORSE_ARMOR = register(
             "netherite_horse_armor",
@@ -72,7 +71,7 @@ public class ItemRegistry {
 
 
 
-    public static final ConsumableComponent GLOW_BERRIES = food()
+    public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
             .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 10, 0), 1F))
             .build();
     public static ConsumableComponent.Builder food() {

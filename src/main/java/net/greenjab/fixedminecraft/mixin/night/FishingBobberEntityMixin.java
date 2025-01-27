@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.night;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.LoottableRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -77,7 +78,7 @@ public class FishingBobberEntityMixin {
 
         String[] tables = {"fish", "junk", "mid", "treasure"};
 
-        Identifier lootTableId = Identifier.of("fixed", "gameplay/fixed_fishing/" + tables[lootPool]);
+        Identifier lootTableId = FixedMinecraft.INSTANCE.id("gameplay/fixed_fishing/" + tables[lootPool]);
         LootTable lootTable = FBE.getWorld().getServer()
                 .getReloadableRegistries()
                 .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
@@ -97,10 +98,12 @@ public class FishingBobberEntityMixin {
         LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
         ObjectArrayList<ItemStack> loots = lootTable.generateLoot(lootContextParameterSet);
+        if (loots.isEmpty()) return Items.DIRT.getDefaultStack();
         loot = loots.get(0);
 
         if (!playerEntity.getAbilities().creativeMode) bait.decrement(1);
         return loot;
+
     }
 
     @Unique

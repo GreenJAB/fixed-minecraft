@@ -6,11 +6,13 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType
 import net.fabricmc.loader.api.FabricLoader
 import net.fabricmc.loader.api.ModContainer
+import net.greenjab.fixedminecraft.map_book.MapBookFilledProperty
 import net.greenjab.fixedminecraft.models.ModelLayers
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
 
 import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.minecraft.client.render.RenderLayer
+import net.minecraft.client.render.item.property.bool.BooleanProperties
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
@@ -31,7 +33,7 @@ object FixedMinecraftClient : ClientModInitializer {
         )
 
         //HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
-
+        BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers()
 //TODO
        /* ModelPredicateProviderRegistry.register(

@@ -60,11 +60,19 @@ public class PlayerEntityMixin {
             ordinal = 0
     ))
     private float impalingEffectsWetMobs(float original, @Local(argsOnly = true) Entity entity) {
-        PlayerEntity PE = (PlayerEntity) (Object)this;
-        //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
-        int i = FixedMinecraftEnchantmentHelper.enchantLevel(PE.getMainHandStack(), "impaling");
+        if (entity instanceof LivingEntity) {
+            PlayerEntity PE = (PlayerEntity) (Object) this;
+            ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
+            int i = 0;
+            for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
+                if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                    i = enchantments.getLevel(entry);
+                }
+            }
 
-        return original + ((((LivingEntity)entity).getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+            return original + ((entity.getType().isIn(EntityTypeTags.AQUATIC) || entity.isTouchingWaterOrRain()) ? i * 1.5F : 0.0F);
+        }
+        return original;
     }
 
     @ModifyExpressionValue(method = "getLuck", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getAttributeValue(Lnet/minecraft/registry/entry/RegistryEntry;)D"))

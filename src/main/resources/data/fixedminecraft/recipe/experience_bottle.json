@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "SSS",
+        "SBS",
+        "SSS"
+    ],
+    "key": {
+        "S": "minecraft:sculk",
+        "B": "minecraft:glass_bottle"
+    },
+    "result": {
+        "id": "minecraft:experience_bottle",
+        "count": 1
+    }
+}

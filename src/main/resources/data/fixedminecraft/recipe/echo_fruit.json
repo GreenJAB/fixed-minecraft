@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "EEE",
+        "ECE",
+        "EEE"
+    ],
+    "key": {
+        "E": "minecraft:echo_shard",
+        "C": "minecraft:chorus_fruit"
+    },
+    "result": {
+        "id": "fixedminecraft:echo_fruit",
+        "count": 1
+    }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "minecraft:netherite_block",
+  "base": "minecraft:anvil",
+  "result": {
+      "count": 1,
+    "id": "fixedminecraft:netherite_anvil"
+  },
+  "template": "minecraft:netherite_upgrade_smithing_template"
+}

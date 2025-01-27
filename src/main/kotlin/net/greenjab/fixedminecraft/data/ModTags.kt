@@ -24,7 +24,7 @@ object ModTags {
     val FISHING_TRADES: TagKey<Enchantment> = enchant_of("trades/fishing")
 
     private fun enchant_of(id: String): TagKey<Enchantment> {
-        return TagKey.of(RegistryKeys.ENCHANTMENT, Identifier.ofVanilla(id))
+        return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id))
     }
 
 }

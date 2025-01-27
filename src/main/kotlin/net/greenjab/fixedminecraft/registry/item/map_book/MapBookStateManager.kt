@@ -40,7 +40,7 @@ class MapBookStateManager private constructor() {
     }
 
     fun getMapBookName(mapId: Int): String {
-        return "melody_map_book_$mapId"
+        return "fixedminecraft_map_book_$mapId"
     }
 
     companion object {
