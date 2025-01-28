@@ -1,0 +1,44 @@
+{
+    "parent": "minecraft:husbandry/obtain_netherite_hoe",
+    "criteria": {
+        "netherite_anvil": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "fixedminecraft:netherite_anvil"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.nether.repair_super_gear.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "components": {
+                "minecraft:enchantments": {
+                    "levels": {
+                        "minecraft:mending": 1
+                    }
+                }
+            },
+            "count": 1,
+            "id": "fixedminecraft:netherite_anvil"
+        },
+        "title": {
+            "translate": "advancements.nether.repair_super_gear.title"
+        }
+    },
+    "requirements": [
+        [
+            "netherite_anvil"
+        ]
+    ],
+    "rewards": {
+        "experience": 3000
+    },
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,33 @@
+{
+    "parent": "minecraft:end/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "fired_from_weapon": {
+                    "items": "minecraft:crossbow"
+                },
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_arrow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.allay_deliver_item_to_player.description"
+        },
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "minecraft:cookie"
+        },
+        "title": {
+            "translate": "advancements.husbandry.allay_deliver_item_to_player.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

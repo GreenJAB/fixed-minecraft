@@ -206,10 +206,11 @@ class FletchingScreenHandler @JvmOverloads constructor(
                     else if (extra.isOf(Items.GLOWSTONE)) itemStack = ItemStack(Items.SPECTRAL_ARROW, 8)
                     else {
                         val tippedArrow = ItemStack(Items.TIPPED_ARROW, 8)
-                        tippedArrow.set<PotionContentsComponent>(
+                        /*tippedArrow.set<PotionContentsComponent>(
                             DataComponentTypes.POTION_CONTENTS,
                             itemStack.get(DataComponentTypes.POTION_CONTENTS)
-                        )
+                        )*/
+                        tippedArrow.set(DataComponentTypes.POTION_CONTENTS, extra.get(DataComponentTypes.POTION_CONTENTS))
                         itemStack = tippedArrow
                     }
                 }

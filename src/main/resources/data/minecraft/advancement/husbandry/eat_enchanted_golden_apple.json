@@ -1,0 +1,37 @@
+{
+    "parent": "minecraft:husbandry/allay_deliver_cake_to_note_block",
+    "criteria": {
+        "enchanted_golden_apple": {
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:enchanted_golden_apple"
+                    ]
+                }
+            },
+            "trigger": "minecraft:consume_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.eat_enchanted_golden_apple.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "minecraft:enchanted_golden_apple"
+        },
+        "title": {
+            "translate": "advancements.husbandry.eat_enchanted_golden_apple.title"
+        }
+    },
+    "requirements": [
+        [
+            "enchanted_golden_apple"
+        ]
+    ],
+    "rewards": {
+        "experience": 750
+    },
+    "sends_telemetry_event": true
+}

@@ -94,6 +94,8 @@
       "minecraft:patch_pumpkin",
       "minecraft:vines",
         "fixedminecraft:vines_underground_extra",
+        "fixedminecraft:vines_underground_extra2",
+        "fixedminecraft:vines_underground_extra3",
       "minecraft:patch_melon"
     ],
     [

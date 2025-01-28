@@ -231,7 +231,7 @@ public abstract class AdvancementWidgetMixin {
             context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
         }
         if (this.advancement.getAdvancement().rewards().experience()!=0) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, 32+9);
+            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
         }
 
         //if (advancementObtainedStatus != advancementObtainedStatus2) {

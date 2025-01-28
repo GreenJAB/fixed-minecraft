@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:story/iron_tools",
+    "criteria": {
+        "anvil": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:anvil"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.repair_gear.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:anvil"
+        },
+        "title": {
+            "translate": "advancements.story.repair_gear.title"
+        }
+    },
+    "requirements": [
+        [
+            "anvil"
+        ]
+    ],
+    "rewards": {
+        "experience": 200
+    },
+    "sends_telemetry_event": true
+}

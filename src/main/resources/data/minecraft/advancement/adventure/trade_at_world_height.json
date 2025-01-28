@@ -1,0 +1,47 @@
+{
+    "parent": "minecraft:adventure/hero_of_the_village",
+    "criteria": {
+        "trade_at_world_height": {
+            "conditions": {
+                "player": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "location": {
+                                "position": {
+                                    "y": {
+                                        "min": 319.0
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "trigger": "minecraft:villager_trade"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.trade_at_world_height.description"
+        },
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "minecraft:emerald"
+        },
+        "title": {
+            "translate": "advancements.adventure.trade_at_world_height.title"
+        }
+    },
+    "requirements": [
+        [
+            "trade_at_world_height"
+        ]
+    ],
+    "rewards": {
+        "experience": 250
+    },
+    "sends_telemetry_event": true
+}

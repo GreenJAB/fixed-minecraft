@@ -98,7 +98,9 @@
       "minecraft:patch_sugar_cane_swamp",
       "minecraft:patch_pumpkin",
       "minecraft:seagrass_swamp",
-        "fixedminecraft:vines_underground_extra"
+        "fixedminecraft:vines_underground_extra",
+        "fixedminecraft:vines_underground_extra2",
+        "fixedminecraft:vines_underground_extra3"
     ],
     [
       "minecraft:freeze_top_layer"

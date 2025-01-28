@@ -1,0 +1,38 @@
+{
+    "parent": "minecraft:husbandry/bake_bread",
+    "criteria": {
+        "cake": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:cake"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.bake_cake.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:cake"
+        },
+        "title": {
+            "translate": "advancements.husbandry.bake_cake.title"
+        }
+    },
+    "requirements": [
+        [
+            "cake"
+        ]
+    ],
+    "rewards": {
+        "experience": 250
+    },
+    "sends_telemetry_event": true
+}

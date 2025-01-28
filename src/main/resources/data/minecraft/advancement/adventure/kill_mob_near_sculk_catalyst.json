@@ -1,0 +1,30 @@
+{
+    "parent": "minecraft:adventure/avoid_vibration",
+    "criteria": {
+        "kill_mob_near_sculk_catalyst": {
+            "trigger": "minecraft:kill_mob_near_sculk_catalyst"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.kill_mob_near_sculk_catalyst.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "minecraft:sculk_catalyst"
+        },
+        "title": {
+            "translate": "advancements.adventure.kill_mob_near_sculk_catalyst.title"
+        }
+    },
+    "requirements": [
+        [
+            "kill_mob_near_sculk_catalyst"
+        ]
+    ],
+    "rewards": {
+        "experience": 1000
+    },
+    "sends_telemetry_event": true
+}

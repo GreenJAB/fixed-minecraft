@@ -1,0 +1,36 @@
+{
+    "parent": "minecraft:adventure/on_a_rail",
+    "criteria": {
+        "pig": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:saddle"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.when_pigs_fly.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:saddle"
+        },
+        "title": {
+            "translate": "advancements.story.when_pigs_fly.title"
+        }
+    },
+    "requirements": [
+        [
+            "pig"
+        ]
+    ],
+    "rewards": {
+        "experience": 300
+    },
+    "sends_telemetry_event": true
+}

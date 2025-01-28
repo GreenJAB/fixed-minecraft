@@ -2,8 +2,8 @@
   "feature": "minecraft:patch_red_mushroom",
   "placement": [
     {
-      "type": "minecraft:count_on_every_layer",
-      "count": 4
+      "type": "minecraft:count",
+      "count": 100
     },
     {
       "type": "minecraft:in_square"

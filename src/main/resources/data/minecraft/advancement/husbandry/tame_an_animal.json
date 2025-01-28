@@ -1,0 +1,29 @@
+{
+    "parent": "minecraft:husbandry/plant_seed",
+    "criteria": {
+        "tamed_animal": {
+            "trigger": "minecraft:tame_animal"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.tame_an_animal.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:lead"
+        },
+        "title": {
+            "translate": "advancements.husbandry.tame_an_animal.title"
+        }
+    },
+    "requirements": [
+        [
+            "tamed_animal"
+        ]
+    ],
+    "rewards": {
+        "experience": 150
+    },
+    "sends_telemetry_event": true
+}

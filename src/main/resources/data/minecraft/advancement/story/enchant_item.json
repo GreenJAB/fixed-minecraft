@@ -1,0 +1,29 @@
+{
+    "parent": "minecraft:story/shiny_gear",
+    "criteria": {
+        "enchanted_item": {
+            "trigger": "minecraft:enchanted_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.enchant_item.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:enchanted_book"
+        },
+        "title": {
+            "translate": "advancements.story.enchant_item.title"
+        }
+    },
+    "requirements": [
+        [
+            "enchanted_item"
+        ]
+    ],
+    "rewards": {
+        "experience": 300
+    },
+    "sends_telemetry_event": true
+}

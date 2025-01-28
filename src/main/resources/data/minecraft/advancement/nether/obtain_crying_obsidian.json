@@ -1,0 +1,38 @@
+{
+    "parent": "minecraft:nether/distract_piglin",
+    "criteria": {
+        "crying_obsidian": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:crying_obsidian"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.nether.obtain_crying_obsidian.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:crying_obsidian"
+        },
+        "title": {
+            "translate": "advancements.nether.obtain_crying_obsidian.title"
+        }
+    },
+    "requirements": [
+        [
+            "crying_obsidian"
+        ]
+    ],
+    "rewards": {
+        "experience": 300
+    },
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,37 @@
+{
+    "parent": "minecraft:end/elytra",
+    "criteria": {
+        "dragon_fireworks": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "fixedminecraft:dragon_firework_rocket"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.end.dragon_fireworks.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "fixedminecraft:dragon_firework_rocket"
+        },
+        "title": {
+            "translate": "advancements.end.dragon_fireworks.title"
+        }
+    },
+    "requirements": [
+        [
+            "dragon_fireworks"
+        ]
+    ],
+    "rewards": {
+        "experience": 1000
+    },
+    "sends_telemetry_event": true
+}

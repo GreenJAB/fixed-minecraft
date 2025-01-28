@@ -92,6 +92,7 @@ public abstract class LivingEntityMixin extends Entity {
         } else {
             return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());
         }
+        //return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());
     }
 
     @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
@@ -115,4 +116,5 @@ public abstract class LivingEntityMixin extends Entity {
             }
         }
     }
+
 }

@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
+import net.minecraft.world.biome.Biome
 
 object ModTags {
 
@@ -22,6 +23,8 @@ object ModTags {
     val TAIGA_TRADES: TagKey<Enchantment> = enchant_of("trades/taiga")
     val ANY_TRADES: TagKey<Enchantment> = enchant_of("trades/any")
     val FISHING_TRADES: TagKey<Enchantment> = enchant_of("trades/fishing")
+
+    val IS_PALE_GARDEN: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, FixedMinecraft.id("is_pale_garden"))
 
     private fun enchant_of(id: String): TagKey<Enchantment> {
         return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id))

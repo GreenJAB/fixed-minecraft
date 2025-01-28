@@ -1,0 +1,38 @@
+{
+    "parent": "minecraft:story/diamond_tools",
+    "criteria": {
+        "lava_bucket": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:lava_bucket"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.story.lava_bucket.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:lava_bucket"
+        },
+        "title": {
+            "translate": "advancements.story.lava_bucket.title"
+        }
+    },
+    "requirements": [
+        [
+            "lava_bucket"
+        ]
+    ],
+    "rewards": {
+        "experience": 200
+    },
+    "sends_telemetry_event": true
+}

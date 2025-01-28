@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:story/smelt_iron",
+  "criteria": {
+    "crafter_crafted_crafter": {
+      "conditions": {
+        "recipe_id": "minecraft:crafter"
+      },
+      "trigger": "minecraft:crafter_recipe_crafted"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.adventure.crafters_crafting_crafters.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:crafter"
+    },
+    "title": {
+      "translate": "advancements.adventure.crafters_crafting_crafters.title"
+    }
+  },
+  "requirements": [
+    [
+      "crafter_crafted_crafter"
+    ]
+  ],
+    "rewards": {
+        "experience": 200
+    },
+  "sends_telemetry_event": true
+}

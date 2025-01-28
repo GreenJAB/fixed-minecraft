@@ -1,0 +1,42 @@
+{
+    "parent": "minecraft:adventure/kill_all_mobs",
+    "criteria": {
+        "warden": {
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "type": "minecraft:warden"
+                        }
+                    }
+                ]
+            },
+            "trigger": "minecraft:player_killed_entity"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.kill_the_warden.description"
+        },
+        "frame": "challenge",
+        "hidden": true,
+        "icon": {
+            "count": 1,
+            "id": "minecraft:echo_shard"
+        },
+        "title": {
+            "translate": "advancements.adventure.kill_the_warden.title"
+        }
+    },
+    "requirements": [
+        [
+            "warden"
+        ]
+    ],
+    "rewards": {
+        "experience": 3000
+    },
+    "sends_telemetry_event": true
+}

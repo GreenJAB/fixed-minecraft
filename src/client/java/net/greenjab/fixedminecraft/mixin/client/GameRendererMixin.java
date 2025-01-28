@@ -36,11 +36,11 @@ public class GameRendererMixin {
     private MinecraftClient client;
 
 
-    @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getBlockInteractionRange()D"), cancellable = true)
-    private void getEntityThroughGrass(float tickDelta, CallbackInfo ci, @Local(ordinal = 0) Entity entity) {
+    @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
+    private void getEntityThroughGrass(float tickDelta, CallbackInfo ci) {
+        Entity entity = this.client.getCameraEntity();
         //double d2 = this.client.player.getBlockInteractionRange();
-        double d = this.client.player.getEntityInteractionRange();
-        //double d = client.interactionManager.getReachDistance();
+        double d = client.player.getBlockInteractionRange();
         client.crosshairTarget = entity.raycast(d, tickDelta, false);
         Vec3d vec3d = entity.getCameraPosVec(tickDelta);
         boolean bl = client.interactionManager.getCurrentGameMode().isCreative();
@@ -83,8 +83,6 @@ public class GameRendererMixin {
             }
         }
 
-        Profilers.get().pop();
-        ci.cancel();
     }
 
     @Unique

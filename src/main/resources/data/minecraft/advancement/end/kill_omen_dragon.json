@@ -1,0 +1,44 @@
+{
+    "parent": "minecraft:end/dragon_breath",
+    "criteria": {
+        "killed_dragon": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:dragon_egg"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.end.kill_omen_dragon.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "components": {
+                "minecraft:enchantments": {
+                    "levels": {
+                        "minecraft:mending": 1
+                    }
+                }
+            },
+            "count": 1,
+            "id": "minecraft:dragon_egg"
+        },
+        "title": {
+            "translate": "advancements.end.kill_omen_dragon.title"
+        }
+    },
+    "requirements": [
+        [
+            "killed_dragon"
+        ]
+    ],
+    "rewards": {
+        "experience": 5000
+    },
+    "sends_telemetry_event": true
+}

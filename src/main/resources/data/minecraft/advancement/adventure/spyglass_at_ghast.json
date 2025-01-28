@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:end/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "fired_from_weapon": {
+                    "items": "minecraft:crossbow"
+                },
+                "unique_entity_types": 50
+            },
+            "trigger": "minecraft:killed_by_arrow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.spyglass_at_ghast.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:spyglass"
+        },
+        "title": {
+            "translate": "advancements.adventure.spyglass_at_ghast.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

@@ -17,7 +17,9 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 object FixedMinecraftClient : ClientModInitializer {
+    var paleGardenFog = 0f
     override fun onInitializeClient() {
+
         ClientSyncHandler.init()
 
         BlockRenderLayerMap.INSTANCE.putBlocks(

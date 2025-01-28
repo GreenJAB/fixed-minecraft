@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:end/root",
+    "criteria": {
+        "arbalistic": {
+            "conditions": {
+                "fired_from_weapon": {
+                    "items": "minecraft:crossbow"
+                },
+                "unique_entity_types": 5
+            },
+            "trigger": "minecraft:killed_by_arrow"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.nether.ride_strider_in_overworld_lava.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:warped_fungus_on_a_stick"
+        },
+        "title": {
+            "translate": "advancements.nether.ride_strider_in_overworld_lava.title"
+        }
+    },
+    "requirements": [
+        [
+            "arbalistic"
+        ]
+    ],
+    "sends_telemetry_event": true
+}

@@ -1,0 +1,51 @@
+{
+  "parent": "minecraft:adventure/brush_armadillo",
+  "criteria": {
+    "repair_wolf_armor": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:wolf",
+              "equipment": {
+                "body": {
+                  "components": {
+                    "minecraft:damage": 0
+                  },
+                  "items": "minecraft:wolf_armor"
+                }
+              }
+            }
+          }
+        ],
+        "item": {
+          "items": "minecraft:armadillo_scute"
+        }
+      },
+      "trigger": "minecraft:player_interacted_with_entity"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.husbandry.repair_wolf_armor.description"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:wolf_armor"
+    },
+    "title": {
+      "translate": "advancements.husbandry.repair_wolf_armor.title"
+    }
+  },
+  "requirements": [
+    [
+      "repair_wolf_armor"
+    ]
+  ],
+    "rewards": {
+        "experience": 200
+    },
+  "sends_telemetry_event": true
+}

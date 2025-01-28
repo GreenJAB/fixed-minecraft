@@ -1,15 +1,10 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
-import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.MinecartEntity;
 import net.minecraft.item.Items;
-import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -36,5 +31,14 @@ public class PlayerEntityMixin  {
         }
     }
 
+    //@Redirect(method = "checkGliding", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;startGliding()V"))
+    //private void cancelElytraInLiquid(PlayerEntity instance) {
+        //System.out.println("WWWWWWWWWWW");
+    //}
+
+    @Inject(method = "stopGliding", at = @At(value = "HEAD"))
+    private void a(CallbackInfo ci) {
+        //System.out.println("aawwdawdaw");
+    }
 
 }

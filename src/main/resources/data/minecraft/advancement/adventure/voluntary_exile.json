@@ -1,0 +1,87 @@
+{
+    "parent": "minecraft:adventure/whos_the_pillager_now",
+    "criteria": {
+        "voluntary_exile": {
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "type": "#minecraft:raiders",
+                            "equipment": {
+                                "head": {
+                                    "items": [
+                                        "minecraft:white_banner"
+                                    ],
+                                    "nbt": "{BlockEntityTag:{Patterns:[{Color:9,Pattern:\"mr\"},{Color:8,Pattern:\"bs\"},{Color:7,Pattern:\"cs\"},{Color:8,Pattern:\"bo\"},{Color:15,Pattern:\"ms\"},{Color:8,Pattern:\"hh\"},{Color:8,Pattern:\"mc\"},{Color:15,Pattern:\"bo\"}],id:\"minecraft:banner\"},HideFlags:32,display:{Name:'{\"translate\":\"block.minecraft.ominous_banner\",\"color\":\"gold\"}'}}"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "trigger": "minecraft:player_killed_entity"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.voluntary_exile.description"
+        },
+        "icon": {
+            "components": {
+                "minecraft:banner_patterns": [
+                    {
+                        "color": "cyan",
+                        "pattern": "minecraft:rhombus"
+                    },
+                    {
+                        "color": "light_gray",
+                        "pattern": "minecraft:stripe_bottom"
+                    },
+                    {
+                        "color": "gray",
+                        "pattern": "minecraft:stripe_center"
+                    },
+                    {
+                        "color": "light_gray",
+                        "pattern": "minecraft:border"
+                    },
+                    {
+                        "color": "black",
+                        "pattern": "minecraft:stripe_middle"
+                    },
+                    {
+                        "color": "light_gray",
+                        "pattern": "minecraft:half_horizontal"
+                    },
+                    {
+                        "color": "light_gray",
+                        "pattern": "minecraft:circle"
+                    },
+                    {
+                        "color": "black",
+                        "pattern": "minecraft:border"
+                    }
+                ],
+                "minecraft:hide_additional_tooltip": {},
+                "minecraft:item_name": "{\"translate\":\"block.minecraft.ominous_banner\"}",
+                "minecraft:rarity": "uncommon"
+            },
+            "count": 1,
+            "id": "minecraft:white_banner"
+            },
+        "title": {
+            "translate": "advancements.adventure.voluntary_exile.title"
+        }
+    },
+    "requirements": [
+        [
+            "voluntary_exile"
+        ]
+    ],
+    "rewards": {
+        "experience": 250
+    },
+    "sends_telemetry_event": true
+}

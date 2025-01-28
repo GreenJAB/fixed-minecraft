@@ -1,0 +1,37 @@
+{
+    "parent": "minecraft:story/enter_the_end",
+    "criteria": {
+        "killed_dragon": {
+            "trigger": "minecraft:consume_item",
+            "conditions": {
+                "item": {
+                    "items": [
+                        "minecraft:dragon_head"
+                    ]
+                }
+            }
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.end.kill_dragon.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "minecraft:dragon_head"
+        },
+        "title": {
+            "translate": "advancements.end.kill_dragon.title"
+        }
+    },
+    "requirements": [
+        [
+            "killed_dragon"
+        ]
+    ],
+    "rewards": {
+        "experience": 3000
+    },
+    "sends_telemetry_event": true
+}

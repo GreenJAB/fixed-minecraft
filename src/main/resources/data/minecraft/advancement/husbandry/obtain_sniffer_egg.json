@@ -1,0 +1,38 @@
+{
+    "parent": "minecraft:adventure/craft_decorated_pot_using_only_sherds",
+    "criteria": {
+        "obtain_sniffer_egg": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "minecraft:sniffer_egg"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.obtain_sniffer_egg.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:sniffer_egg"
+        },
+        "title": {
+            "translate": "advancements.husbandry.obtain_sniffer_egg.title"
+        }
+    },
+    "requirements": [
+        [
+            "obtain_sniffer_egg"
+        ]
+    ],
+    "rewards": {
+        "experience": 200
+    },
+    "sends_telemetry_event": true
+}

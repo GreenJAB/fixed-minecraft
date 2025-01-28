@@ -2,7 +2,10 @@ package net.greenjab.fixedminecraft.mixin.transport;
 
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.component.Component;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FireworkExplosionComponent;
+import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.ItemStack;
@@ -17,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Iterator;
+
 @Mixin(FireworkRocketItem.class)
 public class FireworkRocketItemMixin {
 
@@ -25,9 +30,20 @@ public class FireworkRocketItemMixin {
                                                CallbackInfoReturnable<ActionResult> cir) {
         ItemStack itemStack = user.getStackInHand(hand);
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
-            if (!itemStack.getComponents().contains(DataComponentTypes.FIREWORK_EXPLOSION)) {
+            FireworksComponent fireworkComponent = itemStack.get(DataComponentTypes.FIREWORKS);
+            if (fireworkComponent == null) cir.setReturnValue(ActionResult.PASS);
+            if (fireworkComponent.explosions().isEmpty()) {
                 cir.setReturnValue(ActionResult.PASS);
             }
+
+            /*for (Component<?> ii : itemStack.getComponents()) {
+                System.out.println(ii.toString());
+            }
+            //System.out.println(world.isClient + ", " + fireworkExplosionComponent + ", " + itemStack.getComponents().iterator().hasNext());
+            //if (!itemStack.getComponents().contains(DataComponentTypes.FIREWORK_EXPLOSION)) {
+            if (fireworkExplosionComponent == null) {
+                cir.setReturnValue(ActionResult.PASS);
+            }*/
         }
         if (user.isGliding()) {
             if (user instanceof ServerPlayerEntity SPE && itemStack.getItem().equals(ItemRegistry.DRAGON_FIREWORK_ROCKET)) {
