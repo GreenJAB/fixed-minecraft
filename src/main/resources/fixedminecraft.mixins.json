@@ -74,6 +74,7 @@
     "mobs.ArmorStandEntityMixin",
     "mobs.BeeEntityMixin",
     "mobs.BiomeSourceMixin",
+    "mobs.CreakingEntityMixin",
     "mobs.CreakingHeartBlockMixin",
     "mobs.CreeperEntityMixin",
     "mobs.GameRulesMixin",
