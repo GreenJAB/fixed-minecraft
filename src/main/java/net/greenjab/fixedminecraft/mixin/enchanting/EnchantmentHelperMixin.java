@@ -34,14 +34,19 @@ public class EnchantmentHelperMixin {
                                                   CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
         List<EnchantmentLevelEntry> list = Lists.<EnchantmentLevelEntry>newArrayList();
         boolean bl = stack.isOf(Items.BOOK);
-        //possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
-        possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
+        //int capacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(stack);
+        possibleEnchantments.filter(/* method_60143 */ enchantment -> ((Enchantment)enchantment.value()).isPrimaryItem(stack) || bl)
                 .forEach(/* method_60106 */ enchantmentx -> {
                     Enchantment enchantment = enchantmentx.value();
 
-                    //for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
-                    for (int j = level; j >= checkEnchantmentCapacity(enchantmentx, level, stack); j--) {
-                        if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
+                    for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+                    //for (int j = level; j >= checkEnchantmentCapacity(enchantmentx, level, stack); j--) {
+                        int enchPower = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentx, j);
+                        //System.out.println(stack + ", " + capacity + ", " + level + ", " + enchantment.getIdAsString() + ", " + enchPower);
+                        //if (capacity < enchPower) {
+                        if (level >= enchPower) {
+
+                        //if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
                             list.add(new EnchantmentLevelEntry(enchantmentx, j));
                             break;
                         }
@@ -55,7 +60,7 @@ public class EnchantmentHelperMixin {
     private static int checkEnchantmentCapacity(RegistryEntry<Enchantment> enchantment, int level, ItemStack itemStack) {
         int capacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(itemStack);
         int enchPower = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level);
-
+        System.out.println(itemStack + ", " + capacity + ", " + level + ", " + enchantment.getIdAsString() + ", " + enchPower);
         if (capacity < enchPower) {
             return Integer.MAX_VALUE;
         }

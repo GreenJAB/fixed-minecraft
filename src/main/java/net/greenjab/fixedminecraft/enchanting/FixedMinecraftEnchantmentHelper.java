@@ -22,6 +22,7 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
@@ -46,6 +47,7 @@ public class FixedMinecraftEnchantmentHelper {
 
     private static double enchantmentPowerFunction(RegistryEntry<Enchantment> enchantment, int level) {
         // 10 * ()^1.6 oder 20 * ()^2
+
         return (enchantment.isIn(EnchantmentTags.TREASURE) ? 1.5 : 1) * (POWER_WHEN_MAX_LEVEL+enchantment.value().getMaxLevel()-5) * Math.pow((double) level / enchantment.value().getMaxLevel(), 2);
     }
 
@@ -96,12 +98,17 @@ public class FixedMinecraftEnchantmentHelper {
         Iterator<Enchantment> e = optional.stream().iterator();
         while (e.hasNext()) {
             Enchantment enchantment = e.next();
-            for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+            RegistryEntry<Enchantment> ench = optional.getEntry(enchantment);
+            //System.out.println(ench.getIdAsString());
+            if (!ench.isIn(EnchantmentTags.CURSE) && enchantment.isAcceptableItem(stack)) list.add(new EnchantmentLevelEntry(optional.getEntry(enchantment), enchantment.getMaxLevel()));
+
+            /*for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
+                System.out.println(enchantment.description() + ", " + enchantment.getMinPower(j) + ", " + enchantment.getMaxPower(j) + ", " + level);
                 if (level >= enchantment.getMinPower(j) && level <= enchantment.getMaxPower(j)) {
                     list.add(new EnchantmentLevelEntry(optional.getEntry(enchantment), j));
                     break;
                 }
-            }
+            }*/
         }
 
 

@@ -55,4 +55,9 @@ public class EnchantmentMixin {
         }
     }
 
+    @Inject(method = "canBeCombined", at = @At("HEAD"))
+    private static void test(RegistryEntry<Enchantment> first, RegistryEntry<Enchantment> second, CallbackInfoReturnable<Boolean> cir) {
+        System.out.println(first.getIdAsString() + ", " + second.getIdAsString() + ", " + !first.equals(second) + ", " + !first.value().exclusiveSet().contains(second)  + ", " +  !second.value().exclusiveSet().contains(first));
+    }
+
 }
