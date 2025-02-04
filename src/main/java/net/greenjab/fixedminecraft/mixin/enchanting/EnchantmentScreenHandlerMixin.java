@@ -150,7 +150,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 chosenItemStacks.add(itemStackAtRandomSlot);
             }
         });
-        System.out.println("extra: " + chosenItemStacks.size());
+        //System.out.println("extra: " + chosenItemStacks.size());
 
         // take random enchantment out of result
         Map<RegistryEntry<Enchantment>, Integer> enchantments = new HashMap<>();
@@ -170,14 +170,14 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : bookEnchantments.getEnchantmentEntries()) {
                 RegistryEntry<Enchantment> registryEntry = entry.getKey();
                 Enchantment enchantment = registryEntry.value();
-                System.out.println("add?: " + registryEntry.getIdAsString());
+                //System.out.println("add?: " + registryEntry.getIdAsString());
                 int level = entry.getIntValue();
                 // ensure enchantment fits on item
                 //if (!enchantment.isAcceptableItem(stack.getItem() instanceof HorseArmorItem ?Items.DIAMOND_BOOTS.getDefaultStack():stack)) {
                 if (!(registryEntry.value()).isAcceptableItem(stack)) {
                     continue;
                 }
-                System.out.print("1");
+                //System.out.print("1");
                 // ensure highest level found is applied; thanks to the map's behaviour, no enchantment will appear more than once
                 if (enchantments.containsKey(enchantment)) {
                     if (enchantments.get(enchantment) > level) {
@@ -188,12 +188,12 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                     }
                     continue;
                 }
-                System.out.print("2");
+                //System.out.print("2");
                 // prevent negative or 0 enchantment power
                 if ((enchPower.get() + FixedMinecraftEnchantmentHelper.getEnchantmentPower(registryEntry, level)) <= 0) {
                     continue;
                 }
-                System.out.print("3");
+               // System.out.print("3");
 
                 enchantments2.put(registryEntry, level);
             }
@@ -223,7 +223,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 int rand = this.random.nextInt(enchantments2.size());
                 final int[] i = {0};
                 enchantments2.forEach((enchantment, level) -> {
-                    System.out.println("add2?: " + enchantment.getIdAsString());
+                    //System.out.println("add2?: " + enchantment.getIdAsString());
                     if (i[0] == rand) {
                         boolean can = true;
                         for (RegistryEntry<Enchantment> enchantment3 : enchantments.keySet()) {

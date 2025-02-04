@@ -1,38 +1,39 @@
 {
-    "required": true,
-    "package": "net.greenjab.fixedminecraft.mixin.client",
-    "compatibilityLevel": "JAVA_17",
-    "mixins": [
-        "AbstractDonkeyEntityRendererMixin",
-        "AdvancementsScreenMixin",
-        "AdvancementTabMixin",
-        "AdvancementWidgetMixin",
-        "AnvilScreenMixin",
-        "BackgroundRendererMixin",
-        "ClientPlayerEntityMixin",
-        "ClientPlayerInteractionManagerMixin",
-        "ClientPlayNetworkHandlerMixin",
-        "DragonEntityModelMixin",
-        "ElderGuardianAppearanceParticleMixin",
-        "EnchantmentScreenMixin",
-        "FireworksSparkParticleMixin",
-        "GameRendererMixin",
-        "InGameHudMixin",
-        "MerchantScreenMixin",
-        "VillagerEntityRendererMixin",
-        "glint.ArmorFeatureRendererMixin",
-        "glint.BufferBuilderStorageMixin",
-        "glint.ElytraFeatureRendererMixin",
-        "glint.ItemRendererMixin",
-        "map.HeldItemRendererMixin",
-        "map.ItemFrameEntityRendererMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "client": [
-        "glint.EquipmentRendererMixin",
-        "map.DrawContextAccessor",
-        "map.MapPositionRequestMixin"
+  "required": true,
+  "package": "net.greenjab.fixedminecraft.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AbstractDonkeyEntityRendererMixin",
+    "AdvancementsScreenMixin",
+    "AdvancementTabMixin",
+    "AdvancementWidgetMixin",
+    "AnvilScreenMixin",
+    "BackgroundRendererMixin",
+    "ClientPlayerEntityMixin",
+    "ClientPlayerInteractionManagerMixin",
+    "ClientPlayNetworkHandlerMixin",
+    "DragonEntityModelMixin",
+    "ElderGuardianAppearanceParticleMixin",
+    "EnchantmentScreenMixin",
+    "FireworksSparkParticleMixin",
+    "GameRendererMixin",
+    "InGameHudMixin",
+    "MerchantScreenMixin",
+    "VillagerEntityRendererMixin",
+    "glint.ArmorFeatureRendererMixin",
+    "glint.BufferBuilderStorageMixin",
+    "glint.ElytraFeatureRendererMixin",
+    "glint.ItemRendererMixin",
+    "map.HeldItemRendererMixin",
+    "map.ItemFrameEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "glint.EquipmentRendererMixin",
+    "glint.ItemModelManagerMixin",
+    "map.DrawContextAccessor",
+    "map.MapPositionRequestMixin"
   ]
 }

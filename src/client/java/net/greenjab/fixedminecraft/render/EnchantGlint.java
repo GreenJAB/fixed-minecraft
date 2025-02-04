@@ -3,8 +3,14 @@ package net.greenjab.fixedminecraft.render;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.component.Component;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.RepairableComponent;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Iterator;
 
 public class EnchantGlint {
 
@@ -17,9 +23,11 @@ public class EnchantGlint {
     public static boolean isSuper() {
         ItemStack target = targetStack.get();
 
-        if (target == null || target.isEmpty()) return false;
-        //return target.getNbt().contains("Super");
-        return target.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
+        if (target == null || target.isEmpty())  return false;
+        if (target.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
+             return target.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+        }
+        return false;
     }
 
     @Environment(EnvType.CLIENT)

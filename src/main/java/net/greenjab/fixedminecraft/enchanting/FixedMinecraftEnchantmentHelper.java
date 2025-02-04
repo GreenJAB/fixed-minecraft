@@ -193,6 +193,7 @@ public class FixedMinecraftEnchantmentHelper {
             }
 
             if (isSuper) {
+               // System.out.println("super");
                 //IS2.getOrCreateSubNbt("Super");
                 IS2.set(DataComponentTypes.REPAIR_COST, 1);
                 ItemEnchantmentsComponent outputEnchants = EnchantmentHelper.getEnchantments(IS2);

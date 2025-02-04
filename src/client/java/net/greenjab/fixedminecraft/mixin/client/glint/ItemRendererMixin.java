@@ -9,6 +9,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ModelTransformationMode;
 import net.minecraft.world.World;
@@ -21,11 +22,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemRenderer.class)
 @Environment(EnvType.CLIENT)
 public class ItemRendererMixin {
-    @Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ModelTransformationMode;IILnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/world/World;I)V", at = @At("HEAD"))
-    private void setEnchantTheRainbowItemStack(ItemStack stack, ModelTransformationMode transformationMode, int light, int overlay,
-                                               MatrixStack matrices, VertexConsumerProvider vertexConsumers, World world, int seed,
-                                               CallbackInfo ci) {
-        EnchantGlint.setTargetStack(stack);
+    @Inject(method = "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/world/World;III)V", at = @At("HEAD"))
+    private void setEnchantTheRainbowItemStack(LivingEntity entity, ItemStack stack, ModelTransformationMode transformationMode,
+                                               boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
+                                               World world, int light, int overlay, int seed, CallbackInfo ci) {
+       // EnchantGlint.setTargetStack(stack);
     }
 
 

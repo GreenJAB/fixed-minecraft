@@ -282,7 +282,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             if (!this.player.getAbilities().creativeMode) {
                 int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
 
-                boolean isSuper = firstInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
+                boolean isSuper = false;
+                if (outputItemStack.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
+                    isSuper = outputItemStack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+                }
+
+                //firstInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
                 //boolean isSuper = firstInputStack.getNbt().contains("Super");
                 if (outputItemStack.isIn(ItemTags.PIGLIN_LOVED)) {
                     isSuper = false;
@@ -352,7 +357,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             if (player instanceof ServerPlayerEntity SPE) {
                 Criteria.CONSUME_ITEM.trigger(SPE, Items.ANVIL.getDefaultStack());
                 if (netherite) {
-                    boolean isSuper = stack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
+                    boolean isSuper = false;
+                    if (stack.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
+                        isSuper = stack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+                    }
                     if (isSuper) {
                         Criteria.CONSUME_ITEM.trigger(SPE, ItemRegistry.NETHERITE_ANVIL.getDefaultStack());
                     }
