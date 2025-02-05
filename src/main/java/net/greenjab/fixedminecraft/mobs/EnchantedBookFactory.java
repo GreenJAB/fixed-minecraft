@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.villager;
+package net.greenjab.fixedminecraft.mobs;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
