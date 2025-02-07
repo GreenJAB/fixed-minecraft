@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potions;
 import net.minecraft.util.hit.HitResult;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,12 +42,11 @@ public class PotionEntityMixin {
         if (entity instanceof LivingEntity) {
             areaEffectCloudEntity.setOwner((LivingEntity)entity);
         }
-
+        areaEffectCloudEntity.setParticleType(ParticleTypes.SPLASH);
         areaEffectCloudEntity.setRadius(3.0F);
         areaEffectCloudEntity.setWaitTime(10);
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setPotionContents(potion);
-        areaEffectCloudEntity.addCommandTag("water");
 
         PE.getWorld().spawnEntity(areaEffectCloudEntity);
     }

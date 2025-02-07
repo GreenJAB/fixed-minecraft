@@ -6,6 +6,8 @@ import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
@@ -42,8 +44,7 @@ public class EntityMixin {
         Entity E = (Entity) (Object) this;
         if (E instanceof PlayerEntity PE) {
             for (AreaEffectCloudEntity effectCloud : PE.getWorld().getNonSpectatingEntities(AreaEffectCloudEntity.class, PE.getBoundingBox())) {
-                //if (effectCloud.getColor() == 3694022) {
-                if (false) {
+                if (effectCloud.getParticleType().getType() == ParticleTypes.SPLASH) {
                     cir.setReturnValue(true);
                 }
             }

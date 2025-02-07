@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(InfestedBlock.class)
 public abstract class InfestedBlockMixin{
-    @Redirect(method = "onStacksDropped", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;hasAnyEnchantmentsIn(Lnet/minecraft/item/ItemStack;Lnet/minecraft/registry/tag/TagKey;)Z"))
+    /*@Redirect(method = "onStacksDropped", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;hasAnyEnchantmentsIn(Lnet/minecraft/item/ItemStack;Lnet/minecraft/registry/tag/TagKey;)Z"))
     public boolean silkDropsSilverfish(ItemStack stack, TagKey<Enchantment> tag) {
         return false;
-    }
+    }*/
 }
