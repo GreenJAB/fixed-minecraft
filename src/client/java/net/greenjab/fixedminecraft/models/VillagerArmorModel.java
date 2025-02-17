@@ -7,7 +7,10 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelPartNames;
+import net.minecraft.client.render.entity.model.ModelWithArms;
 import net.minecraft.client.render.entity.model.ModelWithHat;
+import net.minecraft.client.render.entity.model.ModelWithHead;
 import net.minecraft.client.render.entity.model.VillagerResemblingModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
@@ -18,15 +21,18 @@ import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.util.Arm;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
 //public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
-public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithHat {
+public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithArms, ModelWithHead {// implements ModelWithHat {
     protected final ModelPart root;
+    protected final ModelPart hat;
     protected final ModelPart head;
     protected final ModelPart body;
-    protected final ModelPart arms;
+    protected final ModelPart left_arm;
+    protected final ModelPart right_arm;
     protected final ModelPart leftLeg;
     protected final ModelPart rightLeg;
 
@@ -34,8 +40,10 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
         super(root);
         this.root = root;
         this.head = root.getChild("head");
+        this.hat = this.head.getChild("hat");
         this.body = root.getChild("body");
-        this.arms = root.getChild("arms");
+        this.left_arm = root.getChild("left_arm");
+        this.right_arm = root.getChild("right_arm");
         this.rightLeg = root.getChild("right_leg");
         this.leftLeg = root.getChild("left_leg");
     }
@@ -43,17 +51,31 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
     public static TexturedModelData createBodyLayer(Dilation cubeDeformation, float y, float legsExtend) {
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
-        modelPartData.addChild("head",
+        ModelPartData modelPartData2 = modelPartData.addChild("head",
                 ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
                 ModelTransform.pivot(0.0F, 0.0F + y, 0.0F));
+        modelPartData2.addChild(
+                "hat", ModelPartBuilder.create().uv(32, 0).cuboid(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation.add(0.5F)), ModelTransform.NONE
+        );
         modelPartData.addChild("body",
                 ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.add(0.25F, 1.0F, 1.0F)),
                 ModelTransform.pivot(0.0F, 0.0F + y, 0.0F));
-        modelPartData.addChild("arms",
+        /*modelPartData.addChild("arms",
                 ModelPartBuilder.create()
                         .uv(40, 16).cuboid(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F))
                         .uv(40, 16).mirrored().cuboid(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F)),
-                ModelTransform.pivot(0.0F, 2.0F + y, 0.0F));
+                ModelTransform.pivot(0.0F, 2.0F + y, 0.0F));*/
+        modelPartData.addChild(
+                "right_arm",
+                ModelPartBuilder.create().
+                        uv(40, 16).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation),
+                ModelTransform.pivot(-5.0F, 2.0F + y, 0.0F)
+        );
+        modelPartData.addChild(
+                "left_arm",
+                ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation),
+                ModelTransform.pivot(5.0F, 2.0F + y, 0.0F)
+        );
         modelPartData.addChild("right_leg",
                 ModelPartBuilder.create().uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(legsExtend)),
                 ModelTransform.pivot(-2.0F, 12.0F + y, 0.0F));
@@ -70,17 +92,17 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
     public void setHatVisible(boolean visible) {
     }
 
-    @Override
+    /*@Override
     public void rotateArms(MatrixStack stack) {
 
-    }
+    }*/
 
     public void setBodyVisible(boolean visible) {
         this.body.visible = visible;
     }
 
     public void setArmsVisible(boolean visible) {
-        this.arms.visible = visible;
+        //this.arms.visible = visible;
     }
 
     public void setLegsVisible(boolean visible) {
@@ -93,6 +115,11 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
         this.setBodyVisible(visible);
         this.setArmsVisible(visible);
         this.setLegsVisible(visible);
+    }
+
+    @Override
+    public void setArmAngle(Arm arm, MatrixStack matrices) {
+
     }
 
     /*public <E extends Entity> void propertiesCopyFrom(EntityModel<E> model) {

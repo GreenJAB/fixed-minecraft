@@ -35,8 +35,7 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
 
     @ModifyArg(method = "followPath", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;<init>(DDD)V"), index = 1)
     private double lessYRange(double x, @Local Vec3i vec3i){
-        Random random = new Random();
-        return vec3i.getY() + ((random.nextGaussian()/4.0)+0.5)*20;
+        return vec3i.getY() + ((this.dragon.getRandom().nextGaussian()/4.0)+0.5)*20;
     }
 
     @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
@@ -44,7 +43,7 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
         if (player.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))>150*150) {
             ci.cancel();
         } else {
-            if (this.dragon.getRandom().nextInt(3) == 0 || player.checkGliding()) {
+            if (this.dragon.getRandom().nextInt(3) == 0 || player.isGliding()) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
                 this.dragon.getPhaseManager()
                         .create(PhaseType.CHARGING_PLAYER)

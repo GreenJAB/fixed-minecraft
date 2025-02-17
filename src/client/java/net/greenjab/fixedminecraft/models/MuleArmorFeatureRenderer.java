@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.models;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -35,32 +36,32 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
     private final EquipmentRenderer equipmentRenderer;
 
     public MuleArmorFeatureRenderer(
-            FeatureRendererContext<DonkeyEntityRenderState, DonkeyEntityModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer) {
-            //FeatureRendererContext<MuleEntity, HorseEntityModel<MuleEntity>> context, EntityModelLoader loader) {
+            FeatureRendererContext<DonkeyEntityRenderState, DonkeyEntityModel> context, LoadedEntityModels loader, EquipmentRenderer equipmentRenderer
+    ) {
+
         super(context);
         this.equipmentRenderer = equipmentRenderer;
-        this.model = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.HORSE_ARMOR));
-        this.babyModel = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.HORSE_ARMOR_BABY));
+        this.model = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.MULE));
+        this.babyModel = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.MULE_BABY));
     }
-
-
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, DonkeyEntityRenderState state,
-                       float limbAngle, float limbDistance) {
+    public void render(
+            MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, DonkeyEntityRenderState donkeyEntityRenderState, float f, float g
+    ) {
         ItemStack itemStack = Items.DIAMOND_HORSE_ARMOR.getDefaultStack();// state.;
         EquippableComponent equippableComponent = (EquippableComponent)itemStack.get(DataComponentTypes.EQUIPPABLE);
         if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
-            DonkeyEntityModel donkeyEntityModel = state.baby ? this.babyModel : this.model;
-            donkeyEntityModel.setAngles(state);
+            DonkeyEntityModel donkeyEntityModel = donkeyEntityRenderState.baby ? this.babyModel : this.model;
+            donkeyEntityModel.setAngles(donkeyEntityRenderState);
             this.equipmentRenderer
                     .render(
                             EquipmentModel.LayerType.HORSE_BODY,
                             (RegistryKey<EquipmentAsset>)equippableComponent.assetId().get(),
                             donkeyEntityModel,
                             itemStack,
-                            matrices,
-                            vertexConsumers,
-                            light
+                            matrixStack,
+                            vertexConsumerProvider,
+                            i
                     );
         }
     }

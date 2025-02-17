@@ -31,6 +31,8 @@
     "defaultRequire": 1
   },
   "client": [
+    "LivingEntityRendererMixin",
+    "WorldRendererMixin",
     "glint.EquipmentRendererMixin",
     "glint.ItemModelManagerMixin",
     "map.DrawContextAccessor",

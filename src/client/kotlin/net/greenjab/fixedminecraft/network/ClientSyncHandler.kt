@@ -4,10 +4,11 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
 import net.greenjab.fixedminecraft.map_book.MapBookScreen
-import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor
 import net.greenjab.fixedminecraft.util.ExhaustionHelper
+import net.minecraft.block.Block
 import net.minecraft.entity.player.PlayerEntity
 
 
@@ -34,7 +35,7 @@ object ClientSyncHandler {
          ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
 
 // TODO
-        // ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
+         ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
 
         /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
         ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
@@ -105,14 +106,17 @@ object ClientSyncHandler {
         }
     }
 
-    /*private fun bookShelfsyncSync(payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context) {
-        if (payload.mapIDs.size > 0) {
-            context.client().execute {
-                MapBookStateManager.INSTANCE.putClientMapBookState(
-                    payload.bookID,
-                    MapBookState(payload.mapIDs)
-                )
-            }
+    private fun bookShelfSync(payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context) {
+
+        val pos = payload.pos
+        context.client().execute {
+            assert(context.client().world != null)
+            context.client().world!!.updateListeners(
+                pos,
+                context.client().world!!.getBlockState(pos),
+                context.client().world!!.getBlockState(pos),
+                Block.NOTIFY_LISTENERS
+            )
         }
-    }*/
+    }
 }

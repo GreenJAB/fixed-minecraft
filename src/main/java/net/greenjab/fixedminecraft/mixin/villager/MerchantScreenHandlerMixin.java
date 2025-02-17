@@ -87,15 +87,16 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
                         public boolean canInsert(ItemStack stack) {
                             if (stack != null) {
+                                boolean extra = false;
                                 if (equipmentSlot == EquipmentSlot.HEAD) {
-                                    return
+                                    extra =
                                     stack.getItem() == Items.CARVED_PUMPKIN ||
                                     stack.getItem() == Items.DRAGON_HEAD ||
                                     stack.getItem() == Items.PLAYER_HEAD ||
                                     stack.isIn(ItemTags.BANNERS);
                                 }
                                 EquipmentSlot slot = getPreferredEquipmentSlot(stack);
-                                return equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE);
+                                return (equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE)) || extra;
                             }
                             return false;
                         }

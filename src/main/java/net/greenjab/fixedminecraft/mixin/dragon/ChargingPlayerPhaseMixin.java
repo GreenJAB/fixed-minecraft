@@ -44,10 +44,11 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
         PlayerEntity playerEntity = world.getClosestPlayer(TargetPredicate.createAttackable().ignoreVisibility(), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (playerEntity != null) {
             if (playerEntity.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))<200*200) {
-                if (playerEntity.checkGliding()) {
+                if (playerEntity.isGliding()) {
                     this.pathTarget = playerEntity.getPos().add(playerEntity.getVelocity().multiply(5)).add(new Vec3d(0, -3, 0));
                     this.chargingTicks = 0;
                     ischasing = true;
+                    //System.out.println("chase");
                 }
             } else {
 

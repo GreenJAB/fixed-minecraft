@@ -9,12 +9,16 @@ import net.greenjab.fixedminecraft.registry.item.TotemItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
@@ -106,6 +110,26 @@ public class ItemsMixin {
                                    target = "Lnet/minecraft/item/Items;DISC_FRAGMENT_5:Lnet/minecraft/item/Item;")))
     private static Item repairableTrident(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
         return register("trident", TridentItem::new, new Item.Settings().rarity(Rarity.RARE).maxDamage(250).attributeModifiers(TridentItem.createAttributeModifiers()).component(DataComponentTypes.TOOL, TridentItem.createToolComponent()).enchantable(1).repairable(Items.PRISMARINE_SHARD));
+    }
+
+   /* @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                    target = "Lnet/minecraft/item/Items;APPLE:Lnet/minecraft/item/Item;")))
+    private static Item repairableBow(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register("bow", BowItem::new, new Item.Settings().maxDamage(384).enchantable(1).repairable(Items.STRING));
+    }*/
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                   target = "Lnet/minecraft/item/Items;HEART_OF_THE_SEA:Lnet/minecraft/item/Item;")))
+    private static Item repairableCrossBow(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register("crossbow",
+                CrossbowItem::new,
+                new Item.Settings().maxCount(1).maxDamage(465).component(DataComponentTypes.CHARGED_PROJECTILES, ChargedProjectilesComponent.DEFAULT).enchantable(1).repairable(Items.STRING));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                 target = "Lnet/minecraft/item/Items;BLACK_BUNDLE:Lnet/minecraft/item/Item;")))
+    private static Item repairableFishingRod(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register("fishing_rod", FishingRodItem::new, new Item.Settings().maxDamage(64).enchantable(1).repairable(Items.STRING));
     }
 
     /*@ModifyArg(method = "<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/HoeItem;<init>(Lnet/minecraft/item/ToolMaterial;IFLnet/minecraft/item/Item$Settings;)V", ordinal = 4), index = 2)

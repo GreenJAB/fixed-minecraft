@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.LightType;
@@ -45,4 +46,13 @@ public class MobEntityMixin {
     private EquipmentSlot armorIsFeet3(EquipmentSlot original){
         return EquipmentSlot.FEET;
     }*/
+
+    @Inject(method = "canUseSlot", at = @At(value = "HEAD"), cancellable = true)
+    private void muleArmourslot(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir){
+        MobEntity LE = (MobEntity) (Object)this;
+        if (LE instanceof MuleEntity) {
+            cir.setReturnValue(true);
+            cir.cancel();
+        }
+    }
 }

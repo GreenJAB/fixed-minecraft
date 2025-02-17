@@ -19,7 +19,7 @@ public class SyncHandler
         MapBookSyncPayload.register();
         MapPositionPayload.register();
         MapPositionRequestPayload.register();
-        //BookShelfSyncPayload.register();
+        BookShelfSyncPayload.register();
     }
 
     /*
