@@ -1,8 +1,10 @@
 package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
+import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.block.FallingBlock
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.ShapeContext
@@ -13,10 +15,14 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.screen.AnvilScreenHandler
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandlerContext
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory
+import net.minecraft.sound.SoundCategory
+import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
@@ -32,6 +38,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldEvents
+import net.minecraft.world.event.GameEvent
 
 class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
     public override fun getCodec() = CODEC
@@ -49,6 +56,26 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
     }
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hit: BlockHitResult?): ActionResult {
+
+        for (itemStack: ItemStack in player.getHandItems()) {
+            if (itemStack.isOf(Items.NETHERITE_INGOT)) {
+                if (state.isOf(BlockRegistry.CHIPPED_NETHERITE_ANVIL)) {
+                    world.setBlockState(pos, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW);
+                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state)));
+                    itemStack.decrementUnlessCreative(1, player);
+                    return ActionResult.SUCCESS
+                }
+                if (state.isOf(BlockRegistry.DAMAGED_NETHERITE_ANVIL)) {
+                    world.setBlockState(pos, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW);
+                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state)));
+                    itemStack.decrementUnlessCreative(1, player);
+                    return ActionResult.SUCCESS
+                }
+            }
+        }
+
         if (!world.isClient) {
             player.addCommandTag("netherite_anvil")
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos))

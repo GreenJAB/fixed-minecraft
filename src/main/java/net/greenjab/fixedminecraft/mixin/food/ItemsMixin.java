@@ -37,7 +37,6 @@ import static net.minecraft.item.Items.register;
 
 @Mixin(Items.class)
 public class ItemsMixin {
-    //TODO done
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice( from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))
@@ -112,6 +111,7 @@ public class ItemsMixin {
         return register("trident", TridentItem::new, new Item.Settings().rarity(Rarity.RARE).maxDamage(250).attributeModifiers(TridentItem.createAttributeModifiers()).component(DataComponentTypes.TOOL, TridentItem.createToolComponent()).enchantable(1).repairable(Items.PRISMARINE_SHARD));
     }
 
+    //TODO
    /* @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                     target = "Lnet/minecraft/item/Items;APPLE:Lnet/minecraft/item/Item;")))
     private static Item repairableBow(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {

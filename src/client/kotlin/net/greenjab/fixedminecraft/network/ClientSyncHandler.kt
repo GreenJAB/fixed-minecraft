@@ -34,49 +34,7 @@ object ClientSyncHandler {
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
          ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
 
-// TODO
          ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
-
-        /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
-        ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val pos = buf.readBlockPos()
-            client.execute {
-                assert(client.world != null)
-                client.world!!.updateListeners(
-                    pos,
-                    client.world!!.getBlockState(pos),
-                    client.world!!.getBlockState(pos),
-                    Block.NOTIFY_LISTENERS
-                )
-            }
-        }
-
-        ClientPlayNetworking.registerGlobalReceiver(
-            BookShelfSyncPayload.ID
-        ) { payload: BookShelfSyncPayload, context: ClientPlayNetworking.Context ->
-            context.client().execute {
-                context.client().world!!.updateListeners(
-                    pos,
-                    context.client().world!!.getBlockState(pos),
-                    context.client().world!!.getBlockState(pos),
-                    Block.NOTIFY_LISTENERS
-                )
-            }
-        }*/
-
-        /*ClientPlayNetworking.registerGlobalReceiver(BOOKSHELF_SYNC
-        ) { client: MinecraftClient, handler: ClientPlayNetworkHandler?, buf: PacketByteBuf, responseSender: PacketSender? ->
-            val pos = buf.readBlockPos()
-            client.execute {
-                assert(client.world != null)
-                client.world!!.updateListeners(
-                    pos,
-                    client.world!!.getBlockState(pos),
-                    client.world!!.getBlockState(pos),
-                    Block.NOTIFY_LISTENERS
-                )
-            }
-        }*/
 
     }
     private fun mapBookOpen(payload: MapBookOpenPayload, context: ClientPlayNetworking.Context) {

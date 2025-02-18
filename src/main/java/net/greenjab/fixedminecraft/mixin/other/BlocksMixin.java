@@ -35,7 +35,6 @@ import java.util.function.Function;
 @Mixin(Blocks.class)
 public class BlocksMixin {
 
-    //TODO done
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from = @At( value = "FIELD",
                             target = "Lnet/minecraft/block/Blocks;SNOW:Lnet/minecraft/block/Block;")))
     private static Block ice(String id,  Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {

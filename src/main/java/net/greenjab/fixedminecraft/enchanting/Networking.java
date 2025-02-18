@@ -19,11 +19,7 @@ public class Networking {
 
             for(ServerPlayerEntity player: FixedMinecraft.INSTANCE.getSERVER().getPlayerManager().getPlayerList()) {
                 BookShelfSyncPayload payload = BookShelfSyncPayload.of(player, pos);
-                if (payload != null) {
-                    ServerPlayNetworking.send(player, payload);
-                }
-                //ServerPlayNetworking.send(player, BOOKSHELF_SYNC, buf);
-                //TODO
+                ServerPlayNetworking.send(player, payload);
             }
     }
 }

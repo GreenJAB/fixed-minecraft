@@ -13,7 +13,6 @@ import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -28,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Mixin(WorldRenderer.class)
@@ -71,7 +69,6 @@ public abstract class WorldRendererMixin{
             armorStandEntity.prevBodyYaw = ((VillagerEntity) entity).prevBodyYaw;
             armorStandEntity.prevHeadYaw = ((VillagerEntity) entity).prevHeadYaw;
             armorStandEntity.setHeadRotation(new EulerAngle(((VillagerEntity) entity).getPitch(), ((VillagerEntity) entity).headYaw-((VillagerEntity) entity).bodyYaw, 0));//((VillagerEntity) entity).getLookControl().getLookY());
-            //armorStandEntity.setLeftLegRotation(((VillagerEntity) entity).limbAnimator..);
 
             armorStandEntity.setLeftArmRotation(new EulerAngle(-40.0F, 0.0F, 0.0F));
             armorStandEntity.setRightArmRotation(new EulerAngle(-40.0F, 0.0F, 0.0F));
@@ -83,20 +80,13 @@ public abstract class WorldRendererMixin{
                 EquipmentSlot ES = getPreferredEquipmentSlot(ii);
                 armorStandEntity.equipStack(ES, ii);
             }
+            armorStandEntity.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());
 
-            armorStandEntity.getDataTracker().set(ArmorStandEntity.ARMOR_STAND_FLAGS, this.setBitField(armorStandEntity.getDataTracker().get(ArmorStandEntity.ARMOR_STAND_FLAGS), 16, true));
+
+            armorStandEntity.getDataTracker().set(ArmorStandEntity.ARMOR_STAND_FLAGS, this.setBitField(armorStandEntity.getDataTracker().get(ArmorStandEntity.ARMOR_STAND_FLAGS)));
             armorStandEntity.setInvisible(true);
             armorStandEntity.setHideBasePlate(true);
 
-            /*VertexConsumerProvider vertexConsumerProvider;
-            if (bl && this.client.hasOutline(entity)) {
-                OutlineVertexConsumerProvider outlineVertexConsumerProvider = this.bufferBuilders.getOutlineVertexConsumers();
-                vertexConsumerProvider = outlineVertexConsumerProvider;
-                int i = entity.getTeamColorValue();
-                outlineVertexConsumerProvider.setColor(ColorHelper.getRed(i), ColorHelper.getGreen(i), ColorHelper.getBlue(i), 255);
-            } else {
-                vertexConsumerProvider = immediate;
-            }*/
 
             float g = tickCounter.getTickDelta(!tickManager.shouldSkipTick(armorStandEntity));
             this.renderEntity(armorStandEntity, d, e, f, g, matrices, (VertexConsumerProvider) immediate);
@@ -107,13 +97,9 @@ public abstract class WorldRendererMixin{
         EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
         return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
     }
-    private byte setBitField(byte value, int bitField, boolean set) {
-        if (set) {
-            value = (byte)(value | bitField);
-        } else {
-            value = (byte)(value & ~bitField);
-        }
-
+    @Unique
+    private byte setBitField(byte value) {
+        value = (byte)(value | 16);
         return value;
     }
 }

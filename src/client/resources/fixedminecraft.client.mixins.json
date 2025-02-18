@@ -34,6 +34,7 @@
     "LivingEntityRendererMixin",
     "WorldRendererMixin",
     "glint.EquipmentRendererMixin",
+    "glint.HorseArmorFeatureRendererMixin",
     "glint.ItemModelManagerMixin",
     "map.DrawContextAccessor",
     "map.MapPositionRequestMixin"
