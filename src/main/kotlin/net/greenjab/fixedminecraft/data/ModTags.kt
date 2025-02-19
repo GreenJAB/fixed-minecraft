@@ -4,6 +4,7 @@ import net.greenjab.fixedminecraft.FixedMinecraft
 import net.minecraft.block.Block
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.EntityType
+import net.minecraft.item.Item
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.tag.TagKey
 import net.minecraft.util.Identifier
@@ -25,6 +26,8 @@ object ModTags {
     val FISHING_TRADES: TagKey<Enchantment> = enchant_of("trades/fishing")
 
     val IS_PALE_GARDEN: TagKey<Biome> = TagKey.of(RegistryKeys.BIOME, FixedMinecraft.id("is_pale_garden"))
+
+    val STRINGTAG: TagKey<Item> = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("string"))
 
     private fun enchant_of(id: String): TagKey<Enchantment> {
         return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id))

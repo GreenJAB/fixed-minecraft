@@ -1,28 +1,38 @@
 package net.greenjab.fixedminecraft.mixin.night;
 
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.function.EnchantedCountIncreaseLootFunction;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(EnchantmentHelper.class)
+@Mixin(EnchantedCountIncreaseLootFunction.class)
 public class EnchantmentHelperMixin {
-    //TODO
-    /*@Inject(method = "getLooting", at = @At(value = "HEAD"), cancellable = true)
-    private static void moonLooting(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
-        int i = EnchantmentHelper.getEquipmentLevel(Enchantments.LOOTING, entity);
-        World world = entity.getWorld();
+
+    @ModifyExpressionValue(method = "process", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/enchantment/EnchantmentHelper;getEquipmentLevel(Lnet/minecraft/registry/entry/RegistryEntry;Lnet/minecraft/entity/LivingEntity;)I"
+    ))
+    private int moonLooting(int original, @Local(argsOnly = true) LootContext context) {
+        Entity entity = context.get(LootContextParameters.ATTACKING_ENTITY);
+        ServerWorld world = context.getWorld();
         if (entity instanceof PlayerEntity) {
             if (world.getLightLevel(LightType.SKY, entity.getBlockPos()) > 10) {
-                if (world.isNight() && world.getMoonPhase() == 4) i++;
+                if (world.isNight() && world.getMoonPhase() == 4) {
+                    System.out.println("moonlooting");
+                    return original+1;
+                };
             }
         }
-        cir.setReturnValue(i);
-    }*/
+        System.out.println("no moonlooting");
+        return original;
+    }
 }

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 
+import net.greenjab.fixedminecraft.data.ModTags;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
@@ -24,8 +25,11 @@ import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SaddleItem;
 import net.minecraft.item.TridentItem;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.Rarity;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -38,8 +42,12 @@ import static net.minecraft.item.Items.register;
 @Mixin(Items.class)
 public class ItemsMixin {
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice( from = @At( value = "FIELD",
-                                   target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))
+    @Shadow
+    @Final
+    public static Item STRING;
+
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice( from = @At(value = "FIELD",
+                                                                                                                                                                                                  target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))
     private static Item throwableBrick(String id) {
         return register("brick", BrickItem::new, new Item.Settings().maxCount(16));
     }
@@ -111,12 +119,12 @@ public class ItemsMixin {
         return register("trident", TridentItem::new, new Item.Settings().rarity(Rarity.RARE).maxDamage(250).attributeModifiers(TridentItem.createAttributeModifiers()).component(DataComponentTypes.TOOL, TridentItem.createToolComponent()).enchantable(1).repairable(Items.PRISMARINE_SHARD));
     }
 
-    //TODO
-   /* @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+    //As string is initilized after bow, need to pass itemtag os just string rather than string itself
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                     target = "Lnet/minecraft/item/Items;APPLE:Lnet/minecraft/item/Item;")))
     private static Item repairableBow(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        return register("bow", BowItem::new, new Item.Settings().maxDamage(384).enchantable(1).repairable(Items.STRING));
-    }*/
+        return register("bow", BowItem::new, new Item.Settings().maxDamage(384).enchantable(1).repairable(ModTags.INSTANCE.getSTRINGTAG()));
+    }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;HEART_OF_THE_SEA:Lnet/minecraft/item/Item;")))
