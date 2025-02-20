@@ -79,17 +79,7 @@ object FixedMinecraftClient : ClientModInitializer {
         //HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
         BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers()
-// TODO
-       /* ModelPredicateProviderRegistry.register(
-            Items.TOTEM_OF_UNDYING,
-            Identifier.of("saving"),
-            ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
 
-        ModelPredicateProviderRegistry.register(
-            ItemRegistry.ECHO_TOTEM,
-            Identifier.of("saving"),
-            ClampedModelPredicateProvider { stack: ItemStack, world: ClientWorld?, entity: LivingEntity?, seed: Int -> if (entity != null && entity.isUsingItem && entity.activeItem == stack) 1.0f else 0.0f })
-*/
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent { modContainer: ModContainer? ->
             ResourceManagerHelper.registerBuiltinResourcePack(
                 Identifier.of("fixedminecraft", "greentweaks"),

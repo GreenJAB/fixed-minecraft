@@ -41,7 +41,6 @@
     "food.FoodComponentsMixin",
     "food.HungerManagerMixin",
     "food.ItemMixin",
-    "food.ItemSettingsMixin",
     "food.ItemsMixin",
     "food.LivingEntityMixin",
     "food.PlayerEntityMixin",

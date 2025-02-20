@@ -8,6 +8,9 @@ import net.minecraft.world.PersistentState
 
 
 class MapBookStateManager private constructor() {
+
+    var currentBooks: ArrayList<Int> = ArrayList()
+
     val persistentStateType: PersistentState.Type<MapBookState>
         get() = PersistentState.Type(
             { throw IllegalStateException("Should never create an empty map saved data - but for map books") },

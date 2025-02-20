@@ -1,6 +1,14 @@
 {
-  "model": {
-    "type": "minecraft:model",
-    "model": "minecraft:item/totem_of_undying"
-  }
+    "model": {
+        "type": "minecraft:condition",
+        "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/totem_of_undying"
+        },
+        "on_true": {
+            "type": "minecraft:model",
+            "model": "fixedminecraft:item/using_totem"
+        },
+        "property": "minecraft:using_item"
+    }
 }

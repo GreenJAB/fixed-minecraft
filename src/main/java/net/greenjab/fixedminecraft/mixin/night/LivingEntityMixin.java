@@ -23,7 +23,7 @@ public class LivingEntityMixin {
     @ModifyExpressionValue(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getExperienceToDrop(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)I"))
     private int nightXP(int original){
         LivingEntity LE = (LivingEntity) (Object)this;
-        if (LE.getCommandTags().contains("Night")) {
+        if (LE.getCommandTags().contains("night")) {
             return (int)(Math.ceil(original*1.5f));
         }
         return original;

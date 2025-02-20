@@ -1,9 +1,10 @@
 package net.greenjab.fixedminecraft.map_book
 
 import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor
+import net.greenjab.fixedminecraft.network.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer2
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData

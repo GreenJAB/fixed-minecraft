@@ -21,12 +21,11 @@ public abstract class MinecraftServerMixin {
             FixedMinecraft.INSTANCE.setSERVER(SW);
             Networking.SERVER_LOCK.notifyAll();
         }
-        //TODO
-       /* for (int id : MapBookStateManager.INSTANCE.getCurrentBooks()) {
-            MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(SW, id);
+        for (int id : MapBookStateManager.Companion.getINSTANCE().getCurrentBooks()) {
+            MapBookState state = MapBookStateManager.Companion.getINSTANCE().getMapBookState(SW, id);
             assert state != null;
             state.sendData(SW, id);
         }
-        MapBookStateManager.INSTANCE.setCurrentBooks(new ArrayList<>());*/
+        MapBookStateManager.Companion.getINSTANCE().setCurrentBooks(new ArrayList<>());
     }
 }

@@ -10,7 +10,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-//TODO?
     /*@ModifyExpressionValue(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;of(BZLnet/minecraft/registry/RegistryKey;)Lnet/minecraft/item/map/MapState;"), method = "onMapUpdate")
     private MapState setMapPosition(MapState original, @Local(ordinal = 0, argsOnly = true) MapUpdateS2CPacket packet) {
         MapPacketAccessor i = (MapPacketAccessor)packet;

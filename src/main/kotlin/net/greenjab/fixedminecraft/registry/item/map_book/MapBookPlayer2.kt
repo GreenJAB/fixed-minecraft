@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.network.PacketByteBuf
 
-class MapBookPlayer {
+class MapBookPlayer2 {
     var name: String = ""
     var x: Double = 0.0
     var z: Double = 0.0
@@ -27,8 +27,8 @@ class MapBookPlayer {
         buf.writeString(dimension)
     }
 
-    fun fromPacket(buf: PacketByteBuf): MapBookPlayer {
-        val p = MapBookPlayer()
+    fun fromPacket(buf: PacketByteBuf): MapBookPlayer2 {
+        val p = MapBookPlayer2()
         p.name = buf.readString()
         p.x = buf.readDouble()
         p.z = buf.readDouble()

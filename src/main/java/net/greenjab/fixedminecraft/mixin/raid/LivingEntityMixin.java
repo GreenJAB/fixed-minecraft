@@ -18,12 +18,15 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Set;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin  {
@@ -68,7 +71,23 @@ public class LivingEntityMixin  {
     }
     @Unique
     private void goToSpawn(ServerPlayerEntity player) {
-        ServerWorld world = player.getServerWorld();
+        TeleportTarget teleportTarget = player.getRespawnTarget(true, TeleportTarget.NO_OP);
+        ServerWorld serverWorld = teleportTarget.world();
+        Vec3d pos = teleportTarget.position();
+        //ServerWorld serverWorld = player.server.getWorld(player.lastDeathPos.get().dimension)
+        if (player.teleport(serverWorld, pos.x, pos.y, pos.z, Set.of(), player.getYaw(), player.getPitch(), true)) {
+            /*while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.topYInclusive.toDouble()) {
+                player.setPosition(user.getX(), user.getY() + 1.0, user.getZ())
+            }*/
+            serverWorld.emitGameEvent(GameEvent.TELEPORT, pos, GameEvent.Emitter.of(player));
+            SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
+            SoundCategory soundCategory = SoundCategory.PLAYERS;
+
+            serverWorld.playSound(player, pos.getX(), pos.getY(), pos.getZ(), soundEvent, soundCategory);
+            player.onLanding();
+
+        }
+        /*ServerWorld world = player.getServerWorld();
         LivingEntity LE = (LivingEntity)(Object)this;
         BlockPos blockPos = player.getSpawnPointPosition();
         ServerWorld serverWorld = player.server.getWorld(player.getSpawnPointDimension());
@@ -79,6 +98,6 @@ public class LivingEntityMixin  {
             SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
             SoundCategory soundCategory = SoundCategory.PLAYERS;
             //optional = player.findRespawnPosition(serverWorld, blockPos, player.getYaw(), false, true);
-        }
+        }*/
     }
 }

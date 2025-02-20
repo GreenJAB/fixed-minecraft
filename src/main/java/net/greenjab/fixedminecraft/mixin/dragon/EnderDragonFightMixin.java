@@ -231,6 +231,20 @@ public abstract class EnderDragonFightMixin {
         }
     }
 
+    @Inject(method = "createDragon", at= @At(value = "INVOKE",
+                                             target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
+    ))
+    private void spawnOmenDragon(CallbackInfoReturnable<EnderDragonEntity> cir, @Local EnderDragonEntity enderDragonEntity){
+        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
+        if (playerEntity != null) {
+            if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
+                playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
+                enderDragonEntity.addCommandTag("omen");
+                enderDragonEntity.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.MAX_HEALTH).getValue()*1.5);
+                enderDragonEntity.setHealth(enderDragonEntity.getMaxHealth());
+            }
+        }
+    }
 
     @Inject(method = "dragonKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;generateEndPortal(Z)V"))
     private void spawnElytraItem(EnderDragonEntity dragon, CallbackInfo ci) {

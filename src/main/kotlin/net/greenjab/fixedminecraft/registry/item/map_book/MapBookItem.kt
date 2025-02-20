@@ -33,6 +33,8 @@ import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.max
 
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
+
 class MapBookItem(settings: Settings?) : Item(settings) {
 
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
@@ -158,6 +160,7 @@ class MapBookItem(settings: Settings?) : Item(settings) {
             this.sendMapUpdates(player, item)
             mapBookSync(player, item)
             if (openMap && this.hasMapBookId(item)) {
+                this.getMapBookState(item, world)?.update()
                 mapBookOpen(player, item)
             }
         }
@@ -197,9 +200,15 @@ class MapBookItem(settings: Settings?) : Item(settings) {
                             }
                         }
                     }
-
+                    val id = getMapBookId(stack)
+                    world.server?.let {
+                        if (id != null) {
+                            MapBookStateManager.INSTANCE.getMapBookState(it, id)?.addPlayer(entity)
+                        }
+                    }
+                    if (!MapBookStateManager.INSTANCE.currentBooks.contains(id)) id?.let { MapBookStateManager.INSTANCE.currentBooks.add(it) }
                     this.sendMapUpdates(entity as ServerPlayerEntity, stack)
-                    mapBookSync(entity, stack)
+                    //mapBookSync(entity, stack)
                 }
             }
         }

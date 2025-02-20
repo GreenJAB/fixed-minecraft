@@ -23,7 +23,8 @@
                     "levels": {
                         "minecraft:mending": 1
                     }
-                }
+                },
+                "minecraft:repair_cost": 1
             },
             "count": 1,
             "id": "minecraft:dragon_egg"
