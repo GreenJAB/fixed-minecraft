@@ -28,6 +28,7 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
         super(type, syncId);
     }
 
+    //TODO
     @Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;getOutputStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack injected(GrindstoneScreenHandler instance, ItemStack i1, ItemStack i2) {
         if (i1.isEmpty()||i2.isEmpty()) {

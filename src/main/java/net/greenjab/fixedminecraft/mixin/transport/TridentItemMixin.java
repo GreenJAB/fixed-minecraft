@@ -26,6 +26,6 @@ public class TridentItemMixin {
     @ModifyArg(method = "onStoppedUsing", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;useRiptide(IFLnet/minecraft/item/ItemStack;)V"), index = 0)
     private int modifyRiptideTicks(int riptideTicks, @Local(argsOnly = true) ItemStack stack) {
 
-        return 15 + FixedMinecraftEnchantmentHelper.enchantLevel(stack, EnchantmentEffectComponentTypes.TRIDENT_SPIN_ATTACK_STRENGTH) * 5;
+        return 15 + FixedMinecraftEnchantmentHelper.enchantLevel(stack, "riptide") * 5;
     }
 }

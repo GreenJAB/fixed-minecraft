@@ -60,8 +60,8 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
 
         @JvmStatic
         fun getMaxVelocity(state: BlockState): Double = when((state.block as CopperRailBlock).level) {
-            UNAFFECTED -> 20.0 //15,10,6,3
-            EXPOSED -> 15.0
+            UNAFFECTED -> 40.0 //15,10,6,3
+            EXPOSED -> 20.0
             WEATHERED -> 10.0
             OXIDIZED -> 5.0
         }

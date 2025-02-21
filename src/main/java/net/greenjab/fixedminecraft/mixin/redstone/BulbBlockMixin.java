@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BulbBlock;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -37,6 +38,14 @@ public abstract class BulbBlockMixin extends Block {
     )
     )
     private void undoMojankCringe(BulbBlock instance, BlockState state, ServerWorld world, BlockPos pos, Operation<Void> original) {
-        world.scheduleBlockTick(pos, instance, 1);
+        int delay = 0;
+        if (state.toString().toLowerCase().contains("exposed")) delay = 1;
+        if (state.toString().toLowerCase().contains("weathered")) delay = 2;
+        if (state.toString().toLowerCase().contains("oxidized")) delay = 3;
+        if (delay > 0) {
+            world.scheduleBlockTick(pos, instance, delay);
+        } else {
+            this.update(state, world, pos);
+        }
     }
 }

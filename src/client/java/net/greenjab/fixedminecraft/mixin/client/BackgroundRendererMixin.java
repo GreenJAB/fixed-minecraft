@@ -47,7 +47,7 @@ public class BackgroundRendererMixin {
         //nt i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), (entity.getDamageSources().lava()));
         int i = 0;
         for (ItemStack item : ((PlayerEntity) entity).getArmorItems()) {
-            i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire protection");
+            i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
         }
         return 2.5f + 0.25f*Math.min(2*i,25);
     }

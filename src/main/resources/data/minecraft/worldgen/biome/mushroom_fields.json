@@ -78,7 +78,8 @@
       "minecraft:red_mushroom_taiga",
       "minecraft:patch_sugar_cane",
       "minecraft:patch_pumpkin",
-        "fixedminecraft:mushrooms_extra"
+        "fixedminecraft:mushrooms_extra",
+        "fixedminecraft:mushrooms_extra2"
     ],
     [
       "minecraft:freeze_top_layer"

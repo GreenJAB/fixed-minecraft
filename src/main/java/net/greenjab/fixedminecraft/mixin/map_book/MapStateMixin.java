@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -59,22 +60,36 @@ public class MapStateMixin implements MapStateAccessor {
         }
     }
 
-    @ModifyVariable(method = "addDecoration", at = @At("STORE"), ordinal = 0)
-    private MapDecoration injected(MapDecoration m, @Local(argsOnly = true) RegistryEntry<MapDecorationType> type,
-                                   @Local(ordinal = 0, argsOnly = true) double x, @Local(ordinal = 1, argsOnly = true) double z,
-                                   @Local(ordinal = 2, argsOnly = true) double rotation, @Local(
-            argsOnly = true
-    ) Text text) {
+    @Redirect(method = "addDecoration", at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/registry/entry/RegistryEntry;BBBLjava/util/Optional;)Lnet/minecraft/item/map/MapDecoration;"
+    ))
+    private MapDecoration injected(RegistryEntry<MapDecorationType> registryEntry, byte x, byte z, byte rotation, Optional<Text> optional,
+                                   @Local(argsOnly = true) RegistryEntry<MapDecorationType> type,
+                                   @Local(argsOnly = true) Text text) {
         if (text != null) {
             if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '¶') {
                 String[] s = text.getLiteralString().split("¶");
-                byte b = (byte) Integer.parseInt(s[1]);
-
-                type = MapDecorationTypes.BANNER_BLACK;
-                return new MapDecoration(type, (byte) x, (byte) z, (byte)rotation, null);
+                type = getMapType(s[1]);
+                return new MapDecoration(type, x, z, rotation, Optional.empty());
             }
         }
-        return m;
+        return new MapDecoration(type, x, z, rotation, optional);
+    }
+
+    @Unique
+    private RegistryEntry<MapDecorationType> getMapType(String type) {
+        if (type.contains("woodland_mansion")) return MapDecorationTypes.MANSION;
+        if (type.contains("ocean_monument")) return MapDecorationTypes.MONUMENT;
+        if (type.contains("desert_village")) return MapDecorationTypes.VILLAGE_DESERT;
+        if (type.contains("plains_village")) return MapDecorationTypes.VILLAGE_PLAINS;
+        if (type.contains("savanna_village")) return MapDecorationTypes.VILLAGE_SAVANNA;
+        if (type.contains("snowy_village")) return MapDecorationTypes.VILLAGE_SNOWY;
+        if (type.contains("taiga_village")) return MapDecorationTypes.VILLAGE_TAIGA;
+        if (type.contains("jungle_temple")) return MapDecorationTypes.JUNGLE_TEMPLE;
+        if (type.contains("swamp_hut")) return MapDecorationTypes.SWAMP_HUT;
+        if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
+        return MapDecorationTypes.BANNER_BLACK;
     }
 
     @Redirect(method = "removeBanner", at = @At(value = "INVOKE",
