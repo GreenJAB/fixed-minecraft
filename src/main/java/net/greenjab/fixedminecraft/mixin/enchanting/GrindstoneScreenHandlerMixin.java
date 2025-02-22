@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.*;
@@ -28,7 +29,6 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
         super(type, syncId);
     }
 
-    //TODO
     @Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;getOutputStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack injected(GrindstoneScreenHandler instance, ItemStack i1, ItemStack i2) {
         if (i1.isEmpty()||i2.isEmpty()) {
@@ -38,15 +38,17 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
                 if (i1.getDamage() + max/4> max) {
                     return ItemStack.EMPTY;
                 }
-                i1.damage(max/4,null);
-                return getOutputStack(i1, i2);
+                ItemStack output = i1.copy();
+                output.setDamage(i1.getDamage() + max/4);
+                return getOutputStack(output, i2);
             } else {
                 int max = i2.getMaxDamage();
                 if (i2.getDamage() + max/4> max) {
                     return ItemStack.EMPTY;
                 }
-                i2.damage(max/4,null);
-                return getOutputStack(i1, i2);
+                ItemStack output = i2.copy();
+                output.setDamage(i2.getDamage() + max/4);
+                return getOutputStack(i1, output);
             }
         } else {
             return getOutputStack(i1, i2);

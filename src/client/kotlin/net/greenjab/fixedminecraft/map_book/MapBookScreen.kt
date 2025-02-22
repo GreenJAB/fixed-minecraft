@@ -4,7 +4,6 @@ import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor
 import net.greenjab.fixedminecraft.network.MapBookPlayer
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookPlayer2
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData
@@ -263,10 +262,10 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
                     val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
                     context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
-                    //context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
+                    // context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
                     context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
                     context.matrices.scale(8.0f, 8.0f, -3.0f)
-                    //context.matrices.translate(-0.125f, 0.125f, -10.0f)
+                    // context.matrices.translate(-0.125f, 0.125f, -10.0f)
                     context.matrices.translate(0f, 0f, -10.0f)
                     context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
                     val sprite = client!!.mapDecorationsAtlasManager.getSprite(

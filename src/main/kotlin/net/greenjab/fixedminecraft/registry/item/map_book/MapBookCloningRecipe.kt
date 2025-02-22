@@ -30,21 +30,16 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
 
     private fun getResult(craftingRecipeInput: CraftingRecipeInput, world: World?): ItemStack? {
         var mapBook: ItemStack? = null
-        val maps = ArrayList<Int>()
+        var books = 0
 
         for (itemStack in craftingRecipeInput.stacks) {
             if (itemStack.isEmpty) continue
 
-            // due to applying the additions it gets confused when theres more than one item in the grid and ends up duplicating things
-            if (itemStack.count > 1) return null
-
             if (!itemStack.isOf(ItemRegistry.MAP_BOOK)) {
-                if (!itemStack.isOf(Items.FILLED_MAP)) {
+                if (!itemStack.isOf(Items.BOOK)) {
                     return null
                 }
-
-                val mapId = itemStack.get(DataComponentTypes.MAP_ID) ?: return null
-                maps.add(mapId.id())
+                books++;
             } else {
                 if (mapBook != null) {
                     return null
@@ -53,11 +48,11 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
                 mapBook = itemStack
             }
         }
-        if (mapBook == null || maps.isEmpty()) {
-            return null
+        if (mapBook != null && books >0) {
+            return mapBook.copyWithCount(books+1)
         }
 
-        return mapBook
+        return null
     }
 
     /*override fun getRemainder(inventory: RecipeInputInventory?): DefaultedList<ItemStack> {

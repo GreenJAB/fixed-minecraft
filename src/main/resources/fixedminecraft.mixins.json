@@ -38,6 +38,7 @@
     "enchanting.PlayerEntityMixin",
     "enchanting.ToolMaterialsMixin",
     "enchanting.TridentEntityMixin",
+    "food.ConsumableComponentMixin",
     "food.FoodComponentsMixin",
     "food.HungerManagerMixin",
     "food.ItemMixin",

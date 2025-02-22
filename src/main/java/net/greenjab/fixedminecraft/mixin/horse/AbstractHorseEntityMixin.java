@@ -38,7 +38,7 @@ public class AbstractHorseEntityMixin {
     @Unique
     private static final Map<
             RegistryEntry<StatusEffect>,
-            RegistryEntry<EntityAttribute>> effectModififers = new Object2ObjectArrayMap<>();
+            String> effectModififers = new Object2ObjectArrayMap<>();
 
     @Shadow
     protected SimpleInventory items;
@@ -53,9 +53,9 @@ public class AbstractHorseEntityMixin {
         rageChance.put(Items.GOLDEN_HORSE_ARMOR, 0.6F);
         rageChance.put(Items.LEATHER_HORSE_ARMOR, 0.45F);
 
-        effectModififers.put(StatusEffects.SPEED, EntityAttributes.MOVEMENT_SPEED);
-        effectModififers.put(StatusEffects.JUMP_BOOST, EntityAttributes.JUMP_STRENGTH);
-        effectModififers.put(StatusEffects.REGENERATION, EntityAttributes.MAX_HEALTH);
+        effectModififers.put(StatusEffects.SPEED, "movement_speed");
+        effectModififers.put(StatusEffects.JUMP_BOOST, "jump_strength");
+        effectModififers.put(StatusEffects.REGENERATION, "max_health");
     }
 
     @Inject(method = "updateAnger", at = @At("HEAD"), cancellable = true)
@@ -111,12 +111,13 @@ public class AbstractHorseEntityMixin {
             }
         }
         if (chosenEffect != null) {
-            if (attribute==effectModififers.get(chosenEffect.getEffectType())) {
+            if (attribute.getTranslationKey().contains(effectModififers.get(chosenEffect.getEffectType()))) {
                 double d = 0;
-                if (attribute.equals(EntityAttributes.MAX_HEALTH)) { d = 1; }
-                if (attribute== EntityAttributes.JUMP_STRENGTH) { d = 0.04; }
-                if (attribute.equals(EntityAttributes.MOVEMENT_SPEED)) { d = 0.015; }
+                if (attribute.getTranslationKey().contains("max_health")) { d = 1; }
+                if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.04; }
+                if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.015; }
                 d*=(chosenEffect.getAmplifier()+1);
+                System.out.println(d);
                 return original + d;
             }
         }

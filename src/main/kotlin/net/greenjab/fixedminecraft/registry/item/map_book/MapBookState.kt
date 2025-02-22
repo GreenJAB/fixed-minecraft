@@ -23,9 +23,13 @@ class MapBookState() : PersistentState() {
         players.add(p)
     }
 
-    constructor(ids: IntArray?) : this() {
+    constructor(ids: IntArray?, players: ArrayList<MapBookPlayer>) : this() {
         mapIDs.clear()
         mapIDs.addAll(Arrays.stream(ids).boxed().toList())
+        this.players.clear()
+        for (player in players) {
+            this.players.add(player)
+        }
         this.markDirty()
     }
 

@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.food;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -52,8 +51,8 @@ public abstract class HungerManagerMixin {
 
 
 
-        float h = player.isSneaking() ? 2.0f : 1.0f;
-        if (Math.abs(this.exhaustion - lastExhaustion)<0.001f) {ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+(int)h, 40);
+        if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
+            ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 20);
         } else {
             ticksSinceLastExhaustion = 0;
             lastExhaustion = this.exhaustion;
@@ -62,11 +61,11 @@ public abstract class HungerManagerMixin {
             ticksSinceLastExhaustion = 0;
         }
         if (this.saturationLevel < this.foodLevel) {
-            if (ticksSinceLastExhaustion == 40) {
-                h *=0.015f+this.saturationLevel/200.0f;
+            if (ticksSinceLastExhaustion == 20) {
+                float h =0.03f+this.saturationLevel/100.0f;
                 this.saturationLevel = Math.min(this.saturationLevel+h,this.foodLevel);
-                saturationSinceLastHunger += h  * (player.isSneaking() ? 2.0f : 1.0f);
-                if (saturationSinceLastHunger >= 10) {
+                saturationSinceLastHunger += h;//h  * 2f;//(player.isSneaking() ? 2.0f : 1.0f);
+                if (saturationSinceLastHunger >= 8) {
                     saturationSinceLastHunger = 0.0f;
                     this.foodLevel--;
                 }
@@ -107,15 +106,18 @@ public abstract class HungerManagerMixin {
     private boolean needSaturationToHeal(ServerPlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
-        boolean isMoving = instance.speed>0.001;
-        instance.speed *= 0.5F;
 
-        return instance.canFoodHeal() && HM.getSaturationLevel()>6 &&
-               (HM.getSaturationLevel()>=HM.getFoodLevel() || (instance.isSneaking() && !isMoving));
+        return instance.canFoodHeal() && HM.getSaturationLevel()>3 &&
+               (HM.getSaturationLevel()>=HM.getFoodLevel() || instance.isSneaking());
     }
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
         return 3;
+    }
+    @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V",shift = At.Shift.AFTER))
+    private void longerHealStaminaDelay(ServerPlayerEntity player, CallbackInfo ci) {
+
+        CustomData.setData(player, "ticksSinceLastExhaustion", -10);
     }
 
 }

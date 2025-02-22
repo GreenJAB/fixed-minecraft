@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.yamlang)
 }
 
-version = "1.1.0-1.21.4"
+version = "0.1.0-1.21.4"
 group = "net.green_jab.fixedminecraft"
 
 base {

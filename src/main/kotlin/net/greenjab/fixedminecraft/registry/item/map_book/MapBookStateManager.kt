@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
+import net.greenjab.fixedminecraft.network.MapBookPlayer
 import net.minecraft.datafixer.DataFixTypes
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.RegistryWrapper.WrapperLookup

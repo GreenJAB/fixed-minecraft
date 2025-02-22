@@ -31,7 +31,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
         SyncHandler.onPlayerUpdate(player);
     }
-    
+
     @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.1f))
     public float armorDrainsStamina(float constant) {
         int weight = 0;
@@ -69,5 +69,10 @@ public abstract class ServerPlayerEntityMixin extends Entity
     private void shieldDrainsStamina(CallbackInfo ci) {
         ServerPlayerEntity SPE = (ServerPlayerEntity) (Object)this;
         if (SPE.isBlocking()) SPE.addExhaustion(0.03f);
+    }
+
+    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
+    private float noStaminaNormalJump(float constant) {
+        return 0;
     }
 }

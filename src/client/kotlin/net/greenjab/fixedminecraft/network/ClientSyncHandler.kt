@@ -46,7 +46,7 @@ object ClientSyncHandler {
             context.client().execute {
                 MapBookStateManager.INSTANCE.putClientMapBookState(
                     payload.bookID,
-                    MapBookState(payload.mapIDs)
+                    MapBookState(payload.mapIDs, payload.players)
                 )
             }
         }

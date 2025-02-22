@@ -244,10 +244,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         if (netherite) {
             ItemEnchantmentsComponent outputEnchants = EnchantmentHelper.getEnchantments(outputItemStack);
-            if (outputEnchants.getEnchantments().contains(Enchantments.MENDING)) {
+            //if (outputEnchants.getEnchantments().contains(Enchantments.MENDING)) {
                 for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : outputEnchants.getEnchantmentEntries()) {
                     RegistryEntry<Enchantment> registryEntry = entry.getKey();
-                    if (registryEntry.equals(Enchantments.MENDING)) {
+                    if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
                         builder.set(registryEntry, 0);
                         EnchantmentHelper.set(outputItemStack, builder.build());
                         //builder.remove(registryEntry);
@@ -258,15 +258,18 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 if (secondInputStack.isOf(Items.ENCHANTED_BOOK)) {
                     ItemEnchantmentsComponent bookEnchants = EnchantmentHelper.getEnchantments(secondInputStack);
                     if (bookEnchants.getEnchantments().size() == 1) {
-                        if (bookEnchants.getEnchantments().contains(Enchantments.MENDING)) {
-                            this.output.setStack(0, ItemStack.EMPTY);
-                            this.sendContentUpdates();
-                            ci.cancel();
-                            return;
+                        for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : bookEnchants.getEnchantmentEntries()) {
+                            RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                            if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
+                                this.output.setStack(0, ItemStack.EMPTY);
+                                this.sendContentUpdates();
+                                ci.cancel();
+                                return;
+                            }
                         }
                     }
                 }
-            }
+            //}
         }
 
 
