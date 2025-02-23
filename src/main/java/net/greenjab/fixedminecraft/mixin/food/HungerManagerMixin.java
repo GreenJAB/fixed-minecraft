@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HungerManagerMixin {
 
     @Shadow
-    private float exhaustion;
+    public float exhaustion;
 
     @Shadow
     private float saturationLevel;
@@ -64,7 +64,7 @@ public abstract class HungerManagerMixin {
             if (ticksSinceLastExhaustion == 20) {
                 float h =0.03f+this.saturationLevel/100.0f;
                 this.saturationLevel = Math.min(this.saturationLevel+h,this.foodLevel);
-                saturationSinceLastHunger += h;//h  * 2f;//(player.isSneaking() ? 2.0f : 1.0f);
+                saturationSinceLastHunger += h;
                 if (saturationSinceLastHunger >= 8) {
                     saturationSinceLastHunger = 0.0f;
                     this.foodLevel--;

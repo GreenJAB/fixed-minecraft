@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft
 
-import com.mojang.blaze3d.systems.RenderSystem
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback
@@ -14,21 +13,14 @@ import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.greenjab.fixedminecraft.render.PlayerLookHelper
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gl.ShaderProgramKeys
 import net.minecraft.client.gui.DrawContext
-import net.minecraft.client.render.BufferRenderer
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderTickCounter
-import net.minecraft.client.render.Tessellator
-import net.minecraft.client.render.VertexFormat
-import net.minecraft.client.render.VertexFormats
 import net.minecraft.client.render.item.property.bool.BooleanProperties
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.MathHelper
-
 
 object FixedMinecraftClient : ClientModInitializer {
     var paleGardenFog = 0f
@@ -76,8 +68,7 @@ object FixedMinecraftClient : ClientModInitializer {
             matrices.pop()
         })
 
-        //HudRenderCallback.EVENT.register(InGameHudBookPreview::renderCrosshair)
-        BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
+        BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC)
         ModelLayers.onRegisterLayers()
 
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent { modContainer: ModContainer? ->

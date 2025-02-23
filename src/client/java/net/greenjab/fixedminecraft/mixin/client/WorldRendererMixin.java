@@ -52,6 +52,7 @@ public abstract class WorldRendererMixin{
             double d = vec3d.getX();
             double e = vec3d.getY();
             double f = vec3d.getZ();
+            assert this.client.world != null;
             TickManager tickManager = this.client.world.getTickManager();
 
             if (armorStandEntity.age == 0) {
@@ -60,15 +61,15 @@ public abstract class WorldRendererMixin{
                 armorStandEntity.lastRenderZ = entity.lastRenderZ;
             }
 
-            armorStandEntity.setYaw(((VillagerEntity) entity).getYaw());
-            armorStandEntity.setPitch(((VillagerEntity) entity).getPitch());
+            armorStandEntity.setYaw(( entity).getYaw());
+            armorStandEntity.setPitch(( entity).getPitch());
             armorStandEntity.bodyYaw = ((VillagerEntity) entity).bodyYaw;
             armorStandEntity.headYaw = ((VillagerEntity) entity).headYaw;
-            armorStandEntity.prevYaw = ((VillagerEntity) entity).prevYaw;
-            armorStandEntity.prevPitch = ((VillagerEntity) entity).prevPitch;
+            armorStandEntity.prevYaw = (entity).prevYaw;
+            armorStandEntity.prevPitch = (entity).prevPitch;
             armorStandEntity.prevBodyYaw = ((VillagerEntity) entity).prevBodyYaw;
             armorStandEntity.prevHeadYaw = ((VillagerEntity) entity).prevHeadYaw;
-            armorStandEntity.setHeadRotation(new EulerAngle(((VillagerEntity) entity).getPitch(), ((VillagerEntity) entity).headYaw-((VillagerEntity) entity).bodyYaw, 0));//((VillagerEntity) entity).getLookControl().getLookY());
+            armorStandEntity.setHeadRotation(new EulerAngle(( entity).getPitch(), ((VillagerEntity) entity).headYaw-((VillagerEntity) entity).bodyYaw, 0));//((VillagerEntity) entity).getLookControl().getLookY());
 
             armorStandEntity.setLeftArmRotation(new EulerAngle(-40.0F, 0.0F, 0.0F));
             armorStandEntity.setRightArmRotation(new EulerAngle(-40.0F, 0.0F, 0.0F));
@@ -89,7 +90,7 @@ public abstract class WorldRendererMixin{
 
 
             float g = tickCounter.getTickDelta(!tickManager.shouldSkipTick(armorStandEntity));
-            this.renderEntity(armorStandEntity, d, e, f, g, matrices, (VertexConsumerProvider) immediate);
+            this.renderEntity(armorStandEntity, d, e, f, g, matrices, immediate);
         }
     }
     @Unique

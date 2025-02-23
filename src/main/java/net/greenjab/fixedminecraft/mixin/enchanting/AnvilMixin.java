@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
@@ -49,6 +50,7 @@ public class AnvilMixin  {
     private void setNormalAnvil(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                 CallbackInfoReturnable<ActionResult> cir){
         player.removeCommandTag("netherite_anvil");
+        FixedMinecraft.INSTANCE.setNetheriteAnvil(false);
 
     }
 

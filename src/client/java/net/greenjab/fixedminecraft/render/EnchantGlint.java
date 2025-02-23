@@ -3,14 +3,8 @@ package net.greenjab.fixedminecraft.render;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.component.Component;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.RepairableComponent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Iterator;
 
 public class EnchantGlint {
 
@@ -41,24 +35,6 @@ public class EnchantGlint {
         if (isSuper()) return GlintRenderLayer.entityGlintColor;
         else return RenderLayer.getEntityGlint();
     }
-
-   /* @Environment(EnvType.CLIENT)
-    public static RenderLayer getGlintDirect() {
-        if (isSuper()) return GlintRenderLayer.glintDirectColor;
-        else return RenderLayer.getDirectGlint();
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static RenderLayer getEntityGlintDirect() {
-        if (isSuper()) return GlintRenderLayer.entityGlintDirectColor;
-        else return RenderLayer.getDirectEntityGlint();
-    }*/
-
-    /*@Environment(EnvType.CLIENT)
-    public static RenderLayer getArmorGlint() {
-        if (isSuper()) return GlintRenderLayer.armorGlintColor;
-        else return RenderLayer.getArmorEntityGlint();
-    }*/
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getArmorEntityGlint() {

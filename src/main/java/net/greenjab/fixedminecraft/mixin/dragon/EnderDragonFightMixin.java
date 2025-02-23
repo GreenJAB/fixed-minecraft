@@ -13,9 +13,7 @@ import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
-import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
-import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -44,7 +42,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 @Mixin(EnderDragonFight.class)
 public abstract class EnderDragonFightMixin {
@@ -126,19 +123,6 @@ public abstract class EnderDragonFightMixin {
         }
     }
 
-    /*@Inject(method = "dragonKilled", at = @At(value = "INVOKE",
-                                              target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Z"
-    ))
-    private void expandWorldBorder(CallbackInfo ci) {
-        this.world.getWorldBorder().setSize(60000000);
-        List<ServerPlayerEntity> playerList = world.getPlayers();
-        for (ServerPlayerEntity player : playerList) {
-            if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
-                world.getServer().getPlayerManager().sendWorldInfo(player, world);
-            }
-        }
-    }*/
-
     @Redirect(method = "respawnDragon()V", at = @At(value = "INVOKE",
                                                     target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;generateEndPortal(Z)V"
     ))
@@ -202,6 +186,7 @@ public abstract class EnderDragonFightMixin {
             }
 
             BlockPos blockPos = this.exitPortalLocation;
+            assert blockPos != null;
             BlockPos b = blockPos.up(1);
             for (Direction d : Direction.values()) {
                 if (d.getAxis().isHorizontal()) {

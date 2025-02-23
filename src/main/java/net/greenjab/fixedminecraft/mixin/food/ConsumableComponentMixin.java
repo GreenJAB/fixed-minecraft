@@ -1,11 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ConsumableComponent.class)
 public class ConsumableComponentMixin {
 
-    @Inject(method = "finishConsumption", at = @At("HEAD"), cancellable = true)
-    private void modifyFoodEatTimes(World world, LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "finishConsumption", at = @At("HEAD"))
+    private void eatingPausesStaminaRegen(World world, LivingEntity user, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (user instanceof ServerPlayerEntity serverPlayerEntity) {
             serverPlayerEntity.addExhaustion(0.01F);
         }

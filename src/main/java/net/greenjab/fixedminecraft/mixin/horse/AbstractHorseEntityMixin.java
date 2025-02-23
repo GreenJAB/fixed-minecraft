@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.entity.attribute.EntityAttribute;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -27,8 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.UUID;
-
 
 @Mixin(AbstractHorseEntity.class)
 public class AbstractHorseEntityMixin {
@@ -42,9 +39,6 @@ public class AbstractHorseEntityMixin {
 
     @Shadow
     protected SimpleInventory items;
-
-    @Unique
-    private static final UUID HORSE_ARMOR_BONUS_ID = UUID.fromString("556E1665-8B10-40C8-8F9D-CF9B1667F295");
 
     static {
         rageChance.put(ItemRegistry.NETHERITE_HORSE_ARMOR, 1F);
@@ -140,91 +134,4 @@ public class AbstractHorseEntityMixin {
         }
         AHE.calculateDimensions();
     }
-
-    /*@Inject(method = "hasArmorSlot", at = @At("HEAD"), cancellable = true)
-    private void muleArmor(CallbackInfoReturnable<Boolean> cir) {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (AHE instanceof MuleEntity) {
-            cir.setReturnValue(true);
-        }
-    }
-
-    @Inject(method = "isHorseArmor", at = @At("HEAD"), cancellable = true)
-    private void muleArmor2(ItemStack item, CallbackInfoReturnable<Boolean> cir) {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (AHE instanceof MuleEntity) {
-            cir.setReturnValue(item.getItem() instanceof AnimalArmorItem);
-        }
-    }*/
-
-    /*@ModifyExpressionValue(method = "equipHorseArmor", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
-    private EquipmentSlot armorIsFeet(EquipmentSlot original){
-        return EquipmentSlot.FEET;
-    }
-
-    @ModifyExpressionValue(method = "canDispenserEquipSlot", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/EquipmentSlot;BODY:Lnet/minecraft/entity/EquipmentSlot;"))
-    private EquipmentSlot armorIsFeet2(EquipmentSlot original){
-        return EquipmentSlot.FEET;
-    }*/
-
-
-    /*@Inject(method = "updateSaddle", at = @At(value = "TAIL"))
-    private void armorIsFeet3(CallbackInfo ci){
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (AHE instanceof MuleEntity) {
-            if (!AHE.getWorld().isClient) {
-                setArmorTypeFromStack(this.items.getStack(1));
-                AHE.setEquipmentDropChance(EquipmentSlot.CHEST, 0.0F);
-            }
-        }
-    }*/
-
-    /*@Inject(method = "onInventoryChanged", at = @At(value = "HEAD"))
-    private void armorIsFeet3(Inventory sender, CallbackInfo ci){
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (AHE instanceof MuleEntity) {
-            ItemStack itemStack = getArmorType();
-            //AHE.onInventoryChanged(sender);
-            boolean bl = AHE.isSaddled();
-            if (!AHE.getWorld().isClient) {
-                AHE.setHorseFlag(4, !this.items.getStack(0).isEmpty());
-            }
-            if (AHE.age > 20 && !bl && AHE.isSaddled()) {
-                AHE.playSound(AHE.getSaddleSound(), 0.5F, 1.0F);
-            }
-            ItemStack itemStack2 = this.getArmorType();
-            if (AHE.age > 20 && AHE.isHorseArmor(itemStack2) && itemStack != itemStack2) {
-                AHE.playSound(SoundEvents.ENTITY_HORSE_ARMOR, 0.5F, 1.0F);
-            }
-        }
-    }*/
-
-    /*@Unique
-    public ItemStack getArmorType() {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        return AHE.getEquippedStack(EquipmentSlot.FEET);
-    }
-
-    @Unique
-    private void equipArmor(ItemStack stack) {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        AHE.equipStack(EquipmentSlot.FEET, stack);
-        AHE.setEquipmentDropChance(EquipmentSlot.FEET, 0.0F);
-    }
-
-    @Unique
-    private void setArmorTypeFromStack(ItemStack stack) {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        equipArmor(stack);
-        if (!AHE.getWorld().isClient) {
-            AHE.getAttributeInstance(EntityAttributes.ARMOR).removeModifier(HORSE_ARMOR_BONUS_ID);
-            if (AHE.isHorseArmor(stack)) {
-                int i = ((AnimalArmorItem)stack.getItem()).getBonus();
-                if (i != 0) {
-                    AHE.getAttributeInstance(EntityAttributes.ARMOR).addTemporaryModifier(new EntityAttributeModifier(HORSE_ARMOR_BONUS_ID, "Horse armor bonus", i, EntityAttributeModifier.Operation.ADDITION));
-                }
-            }
-        }
-
-    }*/
 }

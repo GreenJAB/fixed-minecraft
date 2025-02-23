@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.map.MapDecoration
 import net.minecraft.item.map.MapDecorationTypes
 import net.minecraft.screen.ScreenTexts
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.RotationAxis
 import net.minecraft.util.math.Vec3d
@@ -35,7 +34,6 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     var y = 0.0
     var scale = 1.0f
     private var targetScale = 0.5f
-    private val MAP_ICONS_RENDER_LAYER: RenderLayer = RenderLayer.getText(Identifier.of("textures/map/map_icons.png"))
 
     override fun init() {
         scale = 1.0f
@@ -48,7 +46,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         for (mapStateData in (ItemRegistry.MAP_BOOK as MapBookItem).getMapStates(item, client?.world as World)) {
             addDrawable(MapTile(this, mapStateData.id, mapStateData.mapState, client!!))
         }
-        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { button : ButtonWidget -> this.close() }.dimensions(width / 2 - 100, height -40, 200, 20).build())
+        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE) { this.close() }.dimensions(width / 2 - 100, height -40, 200, 20).build())
     }
 
     override fun shouldPause(): Boolean {
@@ -101,18 +99,11 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         }
         if (stack == null) return
 
-
-
-        // val tag: NbtCompound? = stack?.nbt
         var id = -1
-
         if (stack.contains(DataComponentTypes.MAP_ID)) {
             id = stack.get(DataComponentTypes.MAP_ID)?.id ?: -1
         }
 
-        // if (tag != null && tag.contains("fixedminecraft:map_book")) {
-        //    id = tag.getInt("fixedminecraft:map_book")
-        //}
         if (id != -1) {
             val p = MapBookPlayer()
             p.setPlayer(thisPlayer)
@@ -126,7 +117,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                             }
                         }
                     }
-                } catch (e: ConcurrentModificationException) {
+                } catch (_: ConcurrentModificationException) {
                 }
             }
             renderPlayerIcon(context, p)
@@ -159,7 +150,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             0.0f,
             -1,
             false,
-            context.matrices.peek().getPositionMatrix(),
+            context.matrices.peek().positionMatrix,
             (context as DrawContextAccessor).vertexConsumers,
             TextLayerType.NORMAL,
             Int.MIN_VALUE,
@@ -203,8 +194,6 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m).light(15728880)
         context.matrices.pop()
 
-
-
         val textRenderer = MinecraftClient.getInstance().textRenderer
         val text = player.name
         val o = textRenderer.getWidth(text).toFloat()
@@ -225,16 +214,14 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
             0.0f,
             -1,
             false,
-            context.matrices.peek().getPositionMatrix(),
+            context.matrices.peek().positionMatrix,
             context.vertexConsumers,
             TextLayerType.NORMAL,
             Int.MIN_VALUE,
             LightmapTextureManager.MAX_LIGHT_COORDINATE
         )
         context.matrices.pop()
-
     }
-
 
     private fun renderIcons(context: DrawContext) {
         var k = 0
@@ -262,10 +249,8 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                     val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
                     val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
                     context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
-                    // context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(mapIcon.rotation.toFloat()))
                     context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
                     context.matrices.scale(8.0f, 8.0f, -3.0f)
-                    // context.matrices.translate(-0.125f, 0.125f, -10.0f)
                     context.matrices.translate(0f, 0f, -10.0f)
                     context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
                     val sprite = client!!.mapDecorationsAtlasManager.getSprite(
@@ -299,14 +284,9 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
 
                         context.matrices.translate(this.x, this.y, 11.0)
                         context.matrices.scale(this.scale, this.scale, 1.0f)
-                        val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
-                        val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
-                        context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
-                        /*context.matrices.translate(
-                            mapStateData.mapState.centerX.toDouble() + mapIcon.x * this.scale / 2.0 + this.width / 2.0,
-                            mapStateData.mapState.centerZ.toDouble() + (mapIcon.z + 1) * this.scale / 2.0 + this.height / 2.0,
-                            0.0
-                        )*/
+                        val mapx = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
+                        val mapz = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
+                        context.matrices.translate(mapx + width.toDouble() / 2.0, mapz + height.toDouble() / 2.0, 0.0)
                         context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
                         context.matrices.translate(-o / 2f, 8.0f, 0.1f)
 
@@ -316,7 +296,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
                             0.0f,
                             -1,
                             false,
-                            context.matrices.peek().getPositionMatrix(),
+                            context.matrices.peek().positionMatrix,
                             context.vertexConsumers,
                             TextLayerType.NORMAL,
                             Int.MIN_VALUE,
@@ -331,7 +311,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
     }
 
 
-    fun getMapStates(stack: ItemStack, world: World): ArrayList<MapStateData> {
+    private fun getMapStates(stack: ItemStack, world: World): ArrayList<MapStateData> {
         val list = ArrayList<MapStateData>()
         val mapBookState = getMapBookState(stack, world)
 
@@ -357,19 +337,10 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         return null
     }
 
-    fun getMapBookId(stack: ItemStack): Int? {
+    private fun getMapBookId(stack: ItemStack): Int? {
         val mapIdComponent = stack.getOrDefault(DataComponentTypes.MAP_ID, null)
         return mapIdComponent?.id()
     }
-
-    /*private fun getMapBookId(stack: ItemStack?): Int? {
-        val nbtCompound = stack?.nbt
-        return if (nbtCompound != null && nbtCompound.contains(
-                "fixedminecraft:map_book",
-                NbtElement.NUMBER_TYPE.toInt()
-            )
-        ) Integer.valueOf(nbtCompound.getInt("fixedminecraft:map_book")) else null
-    }*/
 
     private fun setScale(newScale: Float, mouseX: Double, mouseY: Double) {
         val offsetX = x-mouseX
@@ -388,7 +359,7 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         val absScroll = abs(scroll)
         val speed = 5.0f
         var newZoom = if (scroll > 0) start - (start / (scroll * speed)) else (start * absScroll * speed) / (absScroll * speed - 1)
-        newZoom = Math.min(Math.max(newZoom, 0.005f), 10f)
+        newZoom = Math.clamp(newZoom, 0.005f, 10f)
         return newZoom
     }
 }

@@ -10,11 +10,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-    /*@ModifyExpressionValue(at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapState;of(BZLnet/minecraft/registry/RegistryKey;)Lnet/minecraft/item/map/MapState;"), method = "onMapUpdate")
-    private MapState setMapPosition(MapState original, @Local(ordinal = 0, argsOnly = true) MapUpdateS2CPacket packet) {
-        MapPacketAccessor i = (MapPacketAccessor)packet;
-        return MapStateAccessor.createMapState(i.fixedminecraft$readX(), i.fixedminecraft$readZ(), original.scale, false, false, original.locked, original.dimension);
-    }*/
     @Redirect(method = "onGameStateChange", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)V"))
     private void phantomParticle(ClientWorld instance, ParticleEffect particle, double x, double y, double z, double velocityX,
                                  double velocityY, double velocityZ,

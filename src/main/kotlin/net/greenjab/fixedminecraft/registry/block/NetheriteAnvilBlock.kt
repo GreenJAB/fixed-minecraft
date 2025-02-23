@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.block
 
 import com.mojang.serialization.MapCodec
+import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
@@ -78,6 +79,7 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
 
         if (!world.isClient) {
             player.addCommandTag("netherite_anvil")
+            FixedMinecraft.netheriteAnvil = true
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos))
             player.incrementStat(Stats.INTERACT_WITH_ANVIL)
         }

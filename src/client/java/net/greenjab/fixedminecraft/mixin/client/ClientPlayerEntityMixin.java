@@ -4,8 +4,6 @@ import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,7 +30,6 @@ public class ClientPlayerEntityMixin {
         cir.setReturnValue(instance.hasVehicle() || instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);
     }
 
-
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;checkGliding()Z"))
     private boolean failRealTest(ClientPlayerEntity instance) {
         return false;
@@ -42,26 +39,13 @@ public class ClientPlayerEntityMixin {
     private void addMyTest(CallbackInfo ci) {
         ClientPlayerEntity CPE = (ClientPlayerEntity)(Object)this;
         if (CPE.input.playerInput.jump()) {
-
             if (!CPE.isClimbing() && !CPE.isOnGround() && !CPE.hasVehicle() && !CPE.hasStatusEffect(StatusEffects.LEVITATION) && !CPE.isWet() && !CPE.isInLava() &&
                 CustomData.getData(CPE, "airTime") > 15) {
                 if (CPE.checkGliding()) {
                     System.out.println(CustomData.getData(CPE, "airTime"));
                     CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                /*for (EquipmentSlot equipmentSlot : EquipmentSlot.VALUES) {
-                    if (LivingEntity.canGlideWith(CPE.getEquippedStack(equipmentSlot), equipmentSlot)) {
-                        CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                        if (!CPE.isGliding() ) {
-                            CPE.startGliding();
-                        }
-                    }
-                }*/
                 }
             }
-            /*ItemStack itemStack = CPE.getEquippedStack(EquipmentSlot.CHEST);
-            if (itemStack.isOf(Items.ELYTRA) && ElytraItem.isUsable(itemStack) && CPE.checkGliding()) {
-                CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-            }*/
         }
     }
     @Inject(method = "canVehicleSprint", at = @At("HEAD"), cancellable = true)

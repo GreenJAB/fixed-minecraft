@@ -22,14 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Enchantment.class)
 public class EnchantmentMixin {
 
-
-    @Inject(method = "isPrimaryItem", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = {"isPrimaryItem", "isAcceptableItem", "isSupportedItem"}, at = @At(value = "HEAD"), cancellable = true)
     private void otherChecks(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         Enchantment enchantment = (Enchantment)(Object)this;
         Item item = stack.getItem();
         if (item instanceof AnimalArmorItem animalArmorItem) {
             if (animalArmorItem.getBreakSound() == SoundEvents.ENTITY_ITEM_BREAK) {
-                cir.setReturnValue(enchantment.isAcceptableItem(Items.DIAMOND_BOOTS.getDefaultStack()) && !enchantment.isAcceptableItem(Items.ELYTRA.getDefaultStack()));
+                cir.setReturnValue(enchantment.isAcceptableItem(Items.DIAMOND_BOOTS.getDefaultStack()) && !enchantment.isAcceptableItem(Items.FLINT_AND_STEEL.getDefaultStack()));
                 cir.cancel();
             }
         }
@@ -41,27 +40,6 @@ public class EnchantmentMixin {
         }
     }
 
-    @Inject(method = "isAcceptableItem", at = @At(value = "HEAD"), cancellable = true)
-    private void otherChecks2(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        Enchantment enchantment = (Enchantment)(Object)this;
-        Item item = stack.getItem();
-        /*if (item instanceof AnimalArmorItem) {
-            cir.setReturnValue( enchantment.isAcceptableItem(Items.DIAMOND_BOOTS.getDefaultStack()) || enchantment.isAcceptableItem(Items.DIAMOND_CHESTPLATE.getDefaultStack()));
-            cir.cancel();
-        }*/
-        if (item instanceof AnimalArmorItem animalArmorItem) {
-            if (animalArmorItem.getBreakSound() == SoundEvents.ENTITY_ITEM_BREAK) {
-                cir.setReturnValue(enchantment.isAcceptableItem(Items.DIAMOND_BOOTS.getDefaultStack()) && !enchantment.isAcceptableItem(Items.ELYTRA.getDefaultStack()));
-                cir.cancel();
-            }
-        }
-        if (item instanceof MapBookItem) {
-            if (enchantment.effects().contains(EnchantmentEffectComponentTypes.PREVENT_EQUIPMENT_DROP)) {
-                cir.setReturnValue(true);
-                cir.cancel();
-            }
-        }
-    }
 
     @ModifyVariable(method = "slotMatches", at = @At(value = "HEAD"), ordinal = 0, argsOnly = true)
     private EquipmentSlot feetEnchantsOnHorse(EquipmentSlot slot){
@@ -70,7 +48,6 @@ public class EnchantmentMixin {
         }
         return slot;
     }
-
 
     @ModifyExpressionValue(method = "getName", at = @At(
             value = "FIELD",

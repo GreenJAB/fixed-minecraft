@@ -4,10 +4,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
@@ -15,27 +11,15 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.DonkeyEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.HorseEntityModel;
 import net.minecraft.client.render.entity.model.LoadedEntityModels;
 import net.minecraft.client.render.entity.state.DonkeyEntityRenderState;
-import net.minecraft.client.render.entity.state.HorseEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.equipment.EquipmentAsset;
-import net.minecraft.registry.RegistryKey;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRenderState, DonkeyEntityModel> {
@@ -58,14 +42,14 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
     ) {
         ItemStack itemStack = getArmorData(donkeyEntityRenderState);// state.;
         EnchantGlint.setTargetStack(itemStack);
-        EquippableComponent equippableComponent = (EquippableComponent)itemStack.get(DataComponentTypes.EQUIPPABLE);
-        if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
+        EquippableComponent equippableComponent = itemStack.get(DataComponentTypes.EQUIPPABLE);
+        if (equippableComponent != null && equippableComponent.assetId().isPresent()) {
             DonkeyEntityModel donkeyEntityModel = donkeyEntityRenderState.baby ? this.babyModel : this.model;
             donkeyEntityModel.setAngles(donkeyEntityRenderState);
             this.equipmentRenderer
                     .render(
                             EquipmentModel.LayerType.HORSE_BODY,
-                            (RegistryKey<EquipmentAsset>)equippableComponent.assetId().get(),
+                            equippableComponent.assetId().get(),
                             donkeyEntityModel,
                             itemStack,
                             matrixStack,

@@ -2,9 +2,6 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.*;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;

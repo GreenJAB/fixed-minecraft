@@ -25,6 +25,7 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
+/** Not cleaning up until I can make it work */
 //public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
 public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithArms, ModelWithHead {// implements ModelWithHat {
     protected final ModelPart root;
@@ -60,11 +61,6 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
         modelPartData.addChild("body",
                 ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.add(0.25F, 1.0F, 1.0F)),
                 ModelTransform.pivot(0.0F, 0.0F + y, 0.0F));
-        /*modelPartData.addChild("arms",
-                ModelPartBuilder.create()
-                        .uv(40, 16).cuboid(-8.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F))
-                        .uv(40, 16).mirrored().cuboid(4.0F, -2.0F, -2.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F)),
-                ModelTransform.pivot(0.0F, 2.0F + y, 0.0F));*/
         modelPartData.addChild(
                 "right_arm",
                 ModelPartBuilder.create().

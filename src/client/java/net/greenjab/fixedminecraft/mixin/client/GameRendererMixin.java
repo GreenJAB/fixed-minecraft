@@ -1,10 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.decoration.ItemFrameEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -16,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.profiler.Profilers;
 import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,10 +36,12 @@ public class GameRendererMixin {
     @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
     private void getEntityThroughGrass(float tickDelta, CallbackInfo ci) {
         Entity entity = this.client.getCameraEntity();
-        //double d2 = this.client.player.getBlockInteractionRange();
+        assert client.player != null;
         double d = client.player.getBlockInteractionRange();
+        assert entity != null;
         client.crosshairTarget = entity.raycast(d, tickDelta, false);
         Vec3d vec3d = entity.getCameraPosVec(tickDelta);
+        assert client.interactionManager != null;
         boolean bl = client.interactionManager.getCurrentGameMode().isCreative();
         d = bl ? 6.0 : d;
         boolean bl2 = !bl;
@@ -67,6 +66,7 @@ public class GameRendererMixin {
         }
 
         if (client.crosshairTarget instanceof BlockHitResult hit && client.targetedEntity == null) {
+            assert client.world != null;
             if (client.world.getBlockState(hit.getBlockPos()).getCollisionShape(client.world, hit.getBlockPos()).isEmpty()) {
                 EntityHitResult entityHitResult2 = ProjectileUtil.getEntityCollision(entity.getWorld(), entity, vec3d, vec3d3, box, predicate, 0.0f);
                 Entity vehicle = null;
@@ -82,19 +82,19 @@ public class GameRendererMixin {
                 }
             }
         }
-
     }
 
     @Unique
     private double dist(){
         double d = 3;
+        assert client.player != null;
         ItemStack weapon = client.player.getMainHandStack();
-        if (weapon.isIn(ItemTags.SWORDS)) d = 3;
         if (weapon.isIn(ItemTags.AXES)) d = 2.5;
-        if (weapon.isOf(Items.TRIDENT)) d = 3.5;
-        if (weapon.isIn(ItemTags.HOES)) d = 3.5;
         if (weapon.isIn(ItemTags.PICKAXES)) d = 2.5;
         if (weapon.isIn(ItemTags.SHOVELS)) d = 2.5;
+        if (weapon.isIn(ItemTags.SWORDS)) d = 3;
+        if (weapon.isOf(Items.TRIDENT)) d = 3.5;
+        if (weapon.isIn(ItemTags.HOES)) d = 3.5;
         if (client.player.isCreative())d+=3;
         return d*d;
     }

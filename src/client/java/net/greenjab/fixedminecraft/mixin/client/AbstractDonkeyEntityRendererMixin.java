@@ -5,17 +5,15 @@ import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.client.render.entity.AbstractDonkeyEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.HorseArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.state.DonkeyEntityRenderState;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
-import net.minecraft.entity.passive.MuleEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,9 +25,8 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
     public void addMuleArmorLayer(EntityRendererFactory.Context context, EntityModelLayer layer, EntityModelLayer babyLayer, boolean mule,
                                   CallbackInfo ci) {
         if (mule) {
-            AbstractDonkeyEntityRenderer current = ((AbstractDonkeyEntityRenderer)(Object)this);
+            AbstractDonkeyEntityRenderer<AbstractDonkeyEntity> current = ((AbstractDonkeyEntityRenderer<AbstractDonkeyEntity>)(Object)this);
             current.addFeature(new MuleArmorFeatureRenderer(current, context.getEntityModels(), context.getEquipmentRenderer()));
-
         }
     }
 
@@ -44,11 +41,13 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
             if (armor.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1) data+=10;
         }
         if (armor.getComponents().contains(DataComponentTypes.DYED_COLOR)) {
-            data+=armor.getComponents().get(DataComponentTypes.DYED_COLOR).rgb()/100000000f;
+            DyedColorComponent colorData = armor.getComponents().get(DataComponentTypes.DYED_COLOR);
+            if (colorData!=null) data+=colorData.rgb()/100000000f;
         }
         donkeyEntityRenderState.headItemAnimationProgress = data;
     }
 
+    @Unique
     float getArmorValue(ItemStack item) {
         if (item.isOf(Items.LEATHER_HORSE_ARMOR)) return 1f;
         if (item.isOf(Items.IRON_HORSE_ARMOR)) return 2f;

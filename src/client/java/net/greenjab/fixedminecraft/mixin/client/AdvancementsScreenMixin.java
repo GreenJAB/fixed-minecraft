@@ -1,8 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.screen.advancement.AdvancementsScreen;
-import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;

@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.advancement.AdvancementDisplay;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlacedAdvancement;
@@ -33,7 +32,6 @@ import java.util.List;
 
 @Mixin(AdvancementWidget.class)
 public abstract class AdvancementWidgetMixin {
-
 
     @Shadow
     @Final
@@ -183,7 +181,6 @@ public abstract class AdvancementWidgetMixin {
         boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
         Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
         int n = text == null ? 0 : textRenderer.getWidth(text);
-        boolean bl2 = k + m >= 113;
         float f = this.progress == null ? 0.0F : this.progress.getProgressBarPercentage();
         int o = MathHelper.floor(f * (float)this.width);
         AdvancementObtainedStatus advancementObtainedStatus;
@@ -219,13 +216,6 @@ public abstract class AdvancementWidgetMixin {
         }
 
         int r = i + m;
-        /*if (!this.description.isEmpty()) {
-            if (bl2) {
-                context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
-            } else {
-                context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, r);
-            }
-        }*/
 
         if (!this.description.isEmpty()) {
             context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
@@ -234,13 +224,8 @@ public abstract class AdvancementWidgetMixin {
             context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
         }
 
-        //if (advancementObtainedStatus != advancementObtainedStatus2) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
-            context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
-        //} else {
-        //    context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), q, j, this.width, i);
-       // }
-
+        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
+        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
         context.drawGuiTexture(
                 RenderLayer::getGuiTextured, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
         );
@@ -257,103 +242,15 @@ public abstract class AdvancementWidgetMixin {
             }
         }
 
-        //if (bl2) {
-            this.drawText(context, this.description, s, j - l + 1, -16711936);
-        //} else {
-            //this.drawText(context, this.description, s, k, -16711936);
-        //}
+        this.drawText(context, this.description, s, j - l + 1, -16711936);
 
         if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
             OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
             int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
             context.drawText(this.client.textRenderer, reward, s, k, colour, false);
         }
-
         context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
-
-
-
-
-
-
-
-
-        /*boolean bl = x + originX + this.x + this.width + 26 >= this.tab.getScreen().width;
-        Text text = this.progress == null ? null : this.progress.getProgressBarFraction();
-        int i = text == null ? 0 : this.client.textRenderer.getWidth(text);
-        float f = this.progress == null ? 0.0F : this.progress.getProgressBarPercentage();
-        int j = MathHelper.floor(f * (float)this.width);
-        AdvancementObtainedStatus advancementObtainedStatus;
-        AdvancementObtainedStatus advancementObtainedStatus2;
-        AdvancementObtainedStatus advancementObtainedStatus3;
-        if (f >= 1.0F) {
-            j = this.width / 2;
-            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
-            advancementObtainedStatus2 = AdvancementObtainedStatus.OBTAINED;
-            advancementObtainedStatus3 = AdvancementObtainedStatus.OBTAINED;
-        } else if (j < 2) {
-            j = this.width / 2;
-            advancementObtainedStatus = AdvancementObtainedStatus.UNOBTAINED;
-            advancementObtainedStatus2 = AdvancementObtainedStatus.UNOBTAINED;
-            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
-        } else if (j > this.width - 2) {
-            j = this.width / 2;
-            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
-            advancementObtainedStatus2 = AdvancementObtainedStatus.OBTAINED;
-            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
-        } else {
-            advancementObtainedStatus = AdvancementObtainedStatus.OBTAINED;
-            advancementObtainedStatus2 = AdvancementObtainedStatus.UNOBTAINED;
-            advancementObtainedStatus3 = AdvancementObtainedStatus.UNOBTAINED;
-        }
-
-        int k = this.width - j;
-        RenderSystem.enableBlend();
-        int l = originY + this.y;
-        int m;
-        if (bl) {
-            m = originX + this.x - this.width + 26 + 6;
-        } else {
-            m = originX + this.x;
-        }
-
-        int n = 32 + this.description.size() * 9;
-        if (!this.description.isEmpty()) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, m, l + 26 - n, this.width, n);
-        }
-        if (this.advancement.getAdvancement().rewards().experience()!=0) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, m, l, this.width, 32+9);
-        }
-
-        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, 26, 0, 0, m, l, j, 26);
-        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, 26, 200 - k, 0, m + j, l, k, 26);
-        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26);
-        if (bl) {
-            context.drawTextWithShadow(this.client.textRenderer, this.title, m + 5, originY + this.y + 9, -1);
-            if (text != null) {
-                context.drawTextWithShadow(this.client.textRenderer, text, originX + this.x - i, originY + this.y + 9, Colors.WHITE);
-            }
-        } else {
-            context.drawTextWithShadow(this.client.textRenderer, this.title, originX + this.x + 32, originY + this.y + 9, -1);
-            if (text != null) {
-                context.drawTextWithShadow(this.client.textRenderer, text, originX + this.x + this.width - i - 5, originY + this.y + 9, Colors.WHITE);
-            }
-        }
-
-
-        for (int o = 0; o < this.description.size(); o++) {
-            context.drawText(this.client.textRenderer, this.description.get(o), m + 5, l + 26 - n + 7 + o * 9, -5592406, false);
-        }
-        if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
-            OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
-            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
-            context.drawText(this.client.textRenderer, reward, m + 5, originY + this.y + 9 + 17, colour, false);
-        }
-
-        context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);*/
     }
-
-
 }
 
 

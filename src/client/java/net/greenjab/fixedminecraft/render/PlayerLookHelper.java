@@ -53,7 +53,6 @@ public abstract class PlayerLookHelper {
         // Get hit position on the block and the slot
         Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
-        //int slot = ChiseledBookshelfBlockInvoker.getSlotForHitPos(hitPos.get());
         OptionalInt slot = getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
         return blockEntity.getStack(slot.getAsInt());
     }
@@ -88,12 +87,9 @@ public abstract class PlayerLookHelper {
     }
 
     private static int getColumn(float x) {
-        float f = 0.0625F;
-        float g = 0.375F;
         if (x < 0.375F) {
             return 0;
         } else {
-            float h = 0.6875F;
             return x < 0.6875F ? 1 : 2;
         }
     }
@@ -117,44 +113,19 @@ public abstract class PlayerLookHelper {
         if (book.isOf(ItemRegistry.MAP_BOOK)) {
             int id = getMapBookId(book);
             if (id!=-1) {
-            //if (book.getComponents().contains(ItemRegistry.MAP_BOOK_ADDITIONS)) {
-                //int n = book.getComponents().get(ItemRegistry.MAP_BOOK_ADDITIONS).additions().size();
                 Text t = Text.of("ID: " + (id+1));
                 displayText.add(t);
             }
 
         }
         if (book.getItem() == Items.ENCHANTED_BOOK) {
-
             if (EnchantmentHelper.hasEnchantments(book)) {
                 ItemEnchantmentsComponent itemEnchantmentsComponent = EnchantmentHelper.getEnchantments(book);
                 for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : itemEnchantmentsComponent.getEnchantmentEntries()) {
                     RegistryEntry<Enchantment> registryEntry = entry.getKey();
                     displayText.add(Enchantment.getName(registryEntry, entry.getIntValue()));
                 }
-
-
-                /*for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : this.enchantments.object2IntEntrySet()) {
-                    RegistryEntry<Enchantment> registryEntry2 = (RegistryEntry<Enchantment>)entry.getKey();
-                    //if (!registryEntryList.contains(registryEntry2)) {
-                        tooltip.accept(Enchantment.getName((RegistryEntry<Enchantment>)entry.getKey(), entry.getIntValue()));
-                    //}
-                }
-
-                Map<Enchantment, Integer> enchantments = EnchantmentHelper.fromNbt(tag.getList("StoredEnchantments", 10));
-                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                    displayText.add(entry.getKey().getName(entry.getValue()));
-                }*/
             }
-
-
-            /*NbtCompound tag = book.getNbt();
-            if (tag != null && tag.contains("StoredEnchantments")) {
-                Map<Enchantment, Integer> enchantments = EnchantmentHelper.fromNbt(tag.getList("StoredEnchantments", 10));
-                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-                    displayText.add(entry.getKey().getName(entry.getValue()));
-                }
-            }*/
         }
         return displayText;
     }

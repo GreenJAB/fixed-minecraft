@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import net.minecraft.block.BlockState;
 import net.minecraft.block.ChiseledBookshelfBlock;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.Direction;
@@ -9,7 +8,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 import java.util.Optional;
-import java.util.OptionalInt;
 
 @Mixin(ChiseledBookshelfBlock.class)
 public interface ChiseledBookshelfBlockInvoker {
@@ -18,8 +16,4 @@ public interface ChiseledBookshelfBlockInvoker {
         throw new AssertionError();
     }
 
-    /*@Invoker("getSlotForHitPos")
-    default OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
-        throw new AssertionError();
-    }*/
 }

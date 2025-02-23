@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import net.minecraft.advancement.criterion.Criteria;
@@ -70,7 +69,6 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
      *
-     * @return
      */
     @Redirect(
             method = "onCollision", at = @At(
@@ -87,7 +85,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                 vehicle.teleportTo(
                         new TeleportTarget((ServerWorld) this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
                 );
-                // vehicle.requestTeleport(x, y, z);
+                assert vehicle != null;
                 vehicle.addCommandTag("tp");
 
                 if (vehicle instanceof PathAwareEntity pathAwareEntity)
@@ -105,6 +103,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
         ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
                 new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
         );
+        assert serverPlayerEntity2 != null;
         serverPlayerEntity2.startRiding(vehicle);
         return serverPlayerEntity2;
     }

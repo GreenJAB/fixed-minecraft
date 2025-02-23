@@ -1,12 +1,10 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.TridentEntity;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.MathHelper;
@@ -26,7 +24,6 @@ public class EntityMixin {
         Entity E = (Entity) (Object)this;
         if (E instanceof TridentEntity TE) {
             if (TE.getY() < (double)(TE.getWorld().getBottomY() - 48)) {
-                //int i = EnchantmentHelper.getLevel(Enchantments.LOYALTY,TE.getItemStack());
                 int i = TE.getWorld() instanceof ServerWorld serverWorld
                         ? (byte) MathHelper.clamp(EnchantmentHelper.getTridentReturnAcceleration(serverWorld, TE.getItemStack(), E), 0, 127)
                         : 0;

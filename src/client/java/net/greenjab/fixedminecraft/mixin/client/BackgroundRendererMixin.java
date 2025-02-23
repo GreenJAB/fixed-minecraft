@@ -23,9 +23,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.BiomeAccess;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -102,13 +99,12 @@ public class BackgroundRendererMixin {
         float t;
 
         float u = 0.25F + 0.75F * (float) 12 / 32.0F;
-        u = 1.0F - (float) Math.pow((double) u, 0.25);
+        u = 1.0F - (float) Math.pow(u, 0.25);
         int v = -4605511;
         float w = ColorHelper.getRedFloat(v);
         float x = ColorHelper.getGreenFloat(v);
         float y = ColorHelper.getBlueFloat(v);
         float z = MathHelper.clamp(MathHelper.cos(0.82667f * (float) (Math.PI * 2)) * 2.0F + 0.5F, 0.0F, 1.0F);
-        BiomeAccess biomeAccess = world.getBiomeAccess();
         Vec3d vec3d = camera.getPos().subtract(2.0, 2.0, 2.0).multiply(0.25);
         Vec3d vec3d2 = CubicSampler.sampleColor(
                 vec3d,
@@ -119,12 +115,6 @@ public class BackgroundRendererMixin {
         r = (float) vec3d2.getX();
         s = (float) vec3d2.getY();
         t = (float) vec3d2.getZ();
-        float f = MathHelper.sin(5.194121f) > 0.0F ? -1.0F : 1.0F;
-        Vector3f vector3f = new Vector3f(f, 0.0F, 0.0F);
-        float h = camera.getHorizontalPlane().dot(vector3f);
-        if (h < 0.0F) {
-            h = 0.0F;
-        }
 
         r += (w - r) * u;
         s += (x - s) * u;

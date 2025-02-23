@@ -18,6 +18,8 @@ object FixedMinecraft : ModInitializer {
     val logger = LoggerFactory.getLogger("FixedMinecraft")
     var SERVER: MinecraftServer? = null
 
+    var netheriteAnvil = false
+
     override fun onInitialize() {
         logger.info("Initializing ${FixedMinecraftConstants.MOD_NAME}")
 

@@ -48,7 +48,6 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
                     this.pathTarget = playerEntity.getPos().add(playerEntity.getVelocity().multiply(5)).add(new Vec3d(0, -3, 0));
                     this.chargingTicks = 0;
                     ischasing = true;
-                    //System.out.println("chase");
                 }
             } else {
 

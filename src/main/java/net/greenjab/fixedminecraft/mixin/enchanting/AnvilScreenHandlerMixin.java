@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
 import net.minecraft.advancement.criterion.Criteria;
@@ -11,7 +12,6 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -61,12 +61,11 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
      */
     @Inject(method = "updateResult", at = @At(value = "HEAD"), cancellable = true)
     private void calculateCost(CallbackInfo ci) {
-        boolean netherite = false;
+        boolean netherite;
         if (!player.getWorld().isClient) {
             netherite = player.getCommandTags().contains("netherite_anvil");
-        }
-        else {
-            netherite = this.levelCost.get() < 0;
+        } else {
+            netherite = FixedMinecraft.INSTANCE.getNetheriteAnvil();
         }
 
         ItemStack firstInputStack = this.input.getStack(0);
@@ -77,7 +76,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         if (firstInputStack.isEmpty()) {
             this.levelCost.set(0);
             this.output.setStack(0, ItemStack.EMPTY);
-            this.sendContentUpdates();
             ci.cancel();
             return;
         }
@@ -90,8 +88,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 newName = true;
                 outputItemStack.set(DataComponentTypes.CUSTOM_NAME, Text.literal(this.newItemName));
             }
-        }
-        else if (firstInputStack.contains(DataComponentTypes.CUSTOM_NAME)) {
+        } else if (firstInputStack.contains(DataComponentTypes.CUSTOM_NAME)) {
             newName = true;
             outputItemStack.remove(DataComponentTypes.CUSTOM_NAME);
         }
@@ -100,11 +97,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             this.levelCost.set(netherite ? -1 : 1);
             if (newName) {
                 this.output.setStack(0, outputItemStack);
-            }
-            else {
+            } else {
                 this.output.setStack(0, ItemStack.EMPTY);
+                this.levelCost.set(0);
             }
-            this.sendContentUpdates();
             ci.cancel();
             return;
         }
@@ -113,20 +109,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         if (!EnchantmentHelper.canHaveEnchantments(firstInputStack)) {
             this.levelCost.set(0);
             this.output.setStack(0, ItemStack.EMPTY);
-            this.sendContentUpdates();
             ci.cancel();
             return;
         }
 
-
-        //this.keepSecondSlot = false;
         this.levelCost.set(1);
-        int cost = 0;
-        //long l = 0L;
-        int renameCost = 0;
         ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(outputItemStack));
-        //l += (long)firstInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue()
-        //     + (long)secondInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue();
         this.repairItemUsage = 0;
         if (!secondInputStack.isEmpty()) {
             boolean book2 = secondInputStack.contains(DataComponentTypes.STORED_ENCHANTMENTS);
@@ -136,7 +124,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 if (k <= 0) {
                     this.output.setStack(0, ItemStack.EMPTY);
                     this.levelCost.set(0);
-                    this.sendContentUpdates();
                     ci.cancel();
                     return;
                 }
@@ -145,7 +132,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 for (m = 0; k > 0 && m < secondInputStack.getCount(); m++) {
                     int n = outputItemStack.getDamage() - k;
                     outputItemStack.setDamage(n);
-                    //cost++;
                     k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 }
 
@@ -156,7 +142,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 if (!book2 && (!outputItemStack.isOf(secondInputStack.getItem()) || !outputItemStack.isDamageable())) {
                     this.output.setStack(0, ItemStack.EMPTY);
                     this.levelCost.set(0);
-                    this.sendContentUpdates();
                     ci.cancel();
                     return;
                 }
@@ -213,7 +198,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                             if (!netherite) {
                                 this.levelCost.set(1);
                                 this.output.setStack(0, ItemStack.EMPTY);
-                                this.sendContentUpdates();
                                 ci.cancel();
                                 return;
                             }
@@ -233,7 +217,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     if (hasBadEnchant && !hasGoodEnchant) {
                         this.output.setStack(0, ItemStack.EMPTY);
                         this.levelCost.set(0);
-                        this.sendContentUpdates();
                         ci.cancel();
                         return;
                     }
@@ -241,45 +224,36 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
         EnchantmentHelper.set(outputItemStack, builder.build());
-
         if (netherite) {
             ItemEnchantmentsComponent outputEnchants = EnchantmentHelper.getEnchantments(outputItemStack);
-            //if (outputEnchants.getEnchantments().contains(Enchantments.MENDING)) {
-                for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : outputEnchants.getEnchantmentEntries()) {
-                    RegistryEntry<Enchantment> registryEntry = entry.getKey();
-                    if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
-                        builder.set(registryEntry, 0);
-                        EnchantmentHelper.set(outputItemStack, builder.build());
-                        //builder.remove(registryEntry);
-                        //builder.remove(Enchantments.MENDING);
-                    }
+            for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : outputEnchants.getEnchantmentEntries()) {
+                RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
+                    builder.set(registryEntry, 0);
+                    EnchantmentHelper.set(outputItemStack, builder.build());
                 }
-                //builder.set(Enchantments.MENDING, 0);
-                if (secondInputStack.isOf(Items.ENCHANTED_BOOK)) {
-                    ItemEnchantmentsComponent bookEnchants = EnchantmentHelper.getEnchantments(secondInputStack);
-                    if (bookEnchants.getEnchantments().size() == 1) {
-                        for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : bookEnchants.getEnchantmentEntries()) {
-                            RegistryEntry<Enchantment> registryEntry = entry.getKey();
-                            if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
-                                this.output.setStack(0, ItemStack.EMPTY);
-                                this.sendContentUpdates();
-                                ci.cancel();
-                                return;
-                            }
+            }
+            if (secondInputStack.isOf(Items.ENCHANTED_BOOK)) {
+                ItemEnchantmentsComponent bookEnchants = EnchantmentHelper.getEnchantments(secondInputStack);
+                if (bookEnchants.getEnchantments().size() == 1) {
+                    for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : bookEnchants.getEnchantmentEntries()) {
+                        RegistryEntry<Enchantment> registryEntry = entry.getKey();
+                        if (registryEntry.getIdAsString().toLowerCase().contains("mending")) {
+                            this.output.setStack(0, ItemStack.EMPTY);
+                            ci.cancel();
+                            return;
                         }
                     }
                 }
-            //}
+            }
         }
-
 
         // calculate enchantmentPower for each enchantment
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
 
         if (netherite) {
             this.levelCost.set(-enchantmentPower);
-        }
-        else {
+        } else {
             this.levelCost.set(enchantmentPower);
             // check if item can hold combined enchantment power
             if (!this.player.getAbilities().creativeMode) {
@@ -290,24 +264,19 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     isSuper = outputItemStack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
                 }
 
-                //firstInputStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(0)).intValue() == 1;
-                //boolean isSuper = firstInputStack.getNbt().contains("Super");
                 if (outputItemStack.isIn(ItemTags.PIGLIN_LOVED)) {
                     isSuper = false;
                 }
 
                 if ((enchantmentPower < 1 || enchantmentCapacity < enchantmentPower) && enchantmentCapacity != 0 || isSuper) {
                     this.output.setStack(0, ItemStack.EMPTY);
-                    this.sendContentUpdates();
                     ci.cancel();
                     return;
                 }
             }
         }
 
-
         this.output.setStack(0, outputItemStack);
-        this.sendContentUpdates();
         ci.cancel();
 
     }
@@ -335,7 +304,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
 
         boolean netherite = this.levelCost.get()<0;
-        int cost = 0;
+        int cost = 12;
         if (netherite) {
             cost = -this.levelCost.get();
             int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(stack);
@@ -344,8 +313,6 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             } else {
                 cost = 0;
             }
-        } else {
-            cost = 12;
         }
         final int finalCost = cost + 5*superEnchants;
 

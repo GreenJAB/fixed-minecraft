@@ -9,15 +9,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Objects;
+
 public class Networking {
     public static final Object SERVER_LOCK = new Object();
-    public static Identifier BOOKSHELF_SYNC= Identifier.of("fixedminecraft", "update_block");
 
     public static void sendUpdatePacket(BlockPos pos) {
-            //PacketByteBuf buf = PacketByteBufs.create();
-            //buf.writeBlockPos(pos);
-
-            for(ServerPlayerEntity player: FixedMinecraft.INSTANCE.getSERVER().getPlayerManager().getPlayerList()) {
+            for(ServerPlayerEntity player: Objects.requireNonNull(FixedMinecraft.INSTANCE.getSERVER()).getPlayerManager().getPlayerList()) {
                 BookShelfSyncPayload payload = BookShelfSyncPayload.of(player, pos);
                 ServerPlayNetworking.send(player, payload);
             }

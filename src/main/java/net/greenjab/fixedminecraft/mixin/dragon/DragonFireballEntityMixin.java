@@ -40,6 +40,7 @@ public class DragonFireballEntityMixin {
                 explosionPower++;
             }
         }
+        assert world != null;
         world.createExplosion(
                 DFE, DFE.getX(), DFE.getY(), DFE.getZ(), explosionPower,World.ExplosionSourceType.NONE
         );

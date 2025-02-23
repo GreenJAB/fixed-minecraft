@@ -51,12 +51,6 @@ public abstract class EnderDragonEntityMixin {
     @Shadow
     private @Nullable EnderDragonFight fight;
 
-    /*@ModifyArg(method = "getNearestPathNodeIndex()I", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/pathing/PathNode;<init>(III)V"), index = 1)
-    private int newMinHeight(int x) {
-        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-        return EDE.getWorld().getSeaLevel() + 5;
-    }*/
-
     @ModifyConstant(method = "getNearestPathNodeIndex()I", constant = @Constant(intValue = 73))
     private int newMinHeight(int constant){
         return 69;
@@ -182,6 +176,7 @@ public abstract class EnderDragonEntityMixin {
             value = "HEAD"), cancellable = true)
     private void dontBreakBlocksAfterFirst(ServerWorld world, Box box, CallbackInfoReturnable<Boolean> cir){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        if (this.fight == null) return;
         if (this.fight.hasPreviouslyKilled() && !EDE.getCommandTags().contains("omen")) {
             cir.setReturnValue(false);
             cir.cancel();

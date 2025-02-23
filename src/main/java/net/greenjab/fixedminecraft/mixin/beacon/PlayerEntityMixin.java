@@ -1,9 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -11,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-
 
     @Inject(method = "getBlockInteractionRange", at = @At(value = "RETURN"), cancellable = true)
     private void longerBlockReach(CallbackInfoReturnable<Double> cir) {
