@@ -27,7 +27,7 @@ object FixedMinecraft : ModInitializer {
     //TODO Minecart overhaul
     //TODO Pale garden ominous biome?
     //TODO Remove Kotlin
-    //TODO LOTS of bugtesting
+    //TODO LOTS of bug testing
 
     override fun onInitialize() {
         logger.info("Initializing ${FixedMinecraftConstants.MOD_NAME}")
