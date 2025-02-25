@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec
 import net.minecraft.block.AbstractRailBlock
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.block.Oxidizable
 import net.minecraft.block.Oxidizable.OxidationLevel.EXPOSED
 import net.minecraft.block.Oxidizable.OxidationLevel.OXIDIZED
@@ -16,10 +15,6 @@ import net.minecraft.registry.Registries
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.BlockMirror
-import net.minecraft.util.BlockRotation
-
-@Suppress("OVERRIDE_DEPRECATION")
 open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, settings) {
     internal val level: Oxidizable.OxidationLevel by lazy {
         if (this is OxidizableRailBlock) this.oxidation
@@ -46,9 +41,6 @@ open class CopperRailBlock(settings: Settings) : AbstractRailBlock(true, setting
 
     override fun getShapeProperty() = SHAPE
     override fun getCodec(): MapCodec<out CopperRailBlock> = CODEC
-
-    //override fun rotate(state: BlockState, rotation: BlockRotation): BlockState = Blocks.POWERED_RAIL.rotate(state, rotation)
-    //override fun mirror(state: BlockState, mirror: BlockMirror): BlockState = Blocks.POWERED_RAIL.mirror(state, mirror)
 
     companion object {
         @JvmField

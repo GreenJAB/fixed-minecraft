@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.network.MapBookPlayer
 import net.minecraft.datafixer.DataFixTypes
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.RegistryWrapper.WrapperLookup
@@ -12,7 +11,7 @@ class MapBookStateManager private constructor() {
 
     var currentBooks: ArrayList<Int> = ArrayList()
 
-    val persistentStateType: PersistentState.Type<MapBookState>
+    private val persistentStateType: PersistentState.Type<MapBookState>
         get() = PersistentState.Type(
             { throw IllegalStateException("Should never create an empty map saved data - but for map books") },
             { nbt: NbtCompound, lookup: WrapperLookup? ->
@@ -23,7 +22,7 @@ class MapBookStateManager private constructor() {
             DataFixTypes.SAVED_DATA_MAP_DATA
         )
 
-    fun createMapBookState(nbt: NbtCompound): MapBookState {
+    private fun createMapBookState(nbt: NbtCompound): MapBookState {
         return MapBookState().fromNbt(nbt)
     }
 
@@ -43,7 +42,7 @@ class MapBookStateManager private constructor() {
         clientMapBooks[getMapBookName(id)] = state
     }
 
-    fun getMapBookName(mapId: Int): String {
+    private fun getMapBookName(mapId: Int): String {
         return "fixedminecraft_map_book_$mapId"
     }
 

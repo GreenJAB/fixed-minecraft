@@ -78,6 +78,7 @@ public class ItemRegistry {
         return ConsumableComponent.builder().consumeSeconds(1.6F).useAction(UseAction.EAT).sound(SoundEvents.ENTITY_GENERIC_EAT).consumeParticles(true);
     }
 
+    /** This is used, IntelliJ just doesn't realise */
     public static final RegistryEntry<Potion> BLINDNESS = register("blindness", new Potion("blindness", new StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
     public static final RegistryEntry<Potion> LEVITATION = register("levitation", new Potion("levitation", new StatusEffectInstance(StatusEffects.LEVITATION, 1200)));
 
@@ -89,7 +90,7 @@ public class ItemRegistry {
         return RegistryKey.of(RegistryKeys.ITEM, FixedMinecraft.INSTANCE.id(id));
     }
     public static Item register(RegistryKey<Item> key, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        Item item = (Item)factory.apply(settings.registryKey(key));
+        Item item = factory.apply(settings.registryKey(key));
         if (item instanceof BlockItem blockItem) {
             blockItem.appendBlocks(Item.BLOCK_ITEMS, item);
         }
@@ -108,7 +109,7 @@ public class ItemRegistry {
     public static Item register(Block block, BiFunction<Block, Item.Settings, Item> factory, Item.Settings settings) {
         return register(
                 keyOf(block.getRegistryEntry().registryKey()),
-                /* method_63751 */ itemSettings -> (Item)factory.apply(block, itemSettings),
+                /* method_63751 */ itemSettings -> factory.apply(block, itemSettings),
                 settings.useBlockPrefixedTranslationKey()
         );
     }

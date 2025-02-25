@@ -6,4 +6,4 @@ import net.minecraft.entity.effect.StatusEffectCategory
 class AwkwardEffect : StatusEffect(
     StatusEffectCategory.NEUTRAL,
     0xA72BEC
-) {}
+)

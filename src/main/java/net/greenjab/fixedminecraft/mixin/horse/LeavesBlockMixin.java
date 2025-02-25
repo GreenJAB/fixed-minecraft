@@ -18,7 +18,6 @@ import org.spongepowered.asm.mixin.Mixin;
  * Makes leaves collision shape work for controlled entities like scaffolding.
  */
 @Mixin(LeavesBlock.class)
-@SuppressWarnings("deprecation")
 public abstract class LeavesBlockMixin extends Block {
     public LeavesBlockMixin(Settings settings) {
         super(settings);

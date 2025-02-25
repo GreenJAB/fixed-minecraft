@@ -1,12 +1,10 @@
 package net.greenjab.fixedminecraft.network;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.encoding.VarInts;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MapBookPlayerNetwork {
     //why does this not exist? surely it exists somewhere
@@ -24,9 +22,7 @@ public class MapBookPlayerNetwork {
             VarInts.write(byteBuf, array.size());
             for (MapBookPlayer i : array) {
                 i.toPacket(byteBuf);
-                //write(byteBuf, i);
             }
         }
     };
-
 }

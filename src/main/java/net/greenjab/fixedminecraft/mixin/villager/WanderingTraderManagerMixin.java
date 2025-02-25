@@ -3,9 +3,7 @@ package net.greenjab.fixedminecraft.mixin.villager;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnLocation;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.tag.BiomeTags;
@@ -16,7 +14,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
-import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.WanderingTraderManager;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.level.ServerWorldProperties;
@@ -28,7 +25,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -79,7 +75,6 @@ public abstract class WanderingTraderManagerMixin {
             cir.setReturnValue(false);
         } else {
             BlockPos blockPos = playerEntity.getBlockPos();
-            int i = 48;
             PointOfInterestStorage pointOfInterestStorage = world.getPointOfInterestStorage();
             Optional<BlockPos> optional = pointOfInterestStorage.getPosition(
                     /* method_44010 */ poiType -> poiType.matchesKey(PointOfInterestTypes.MEETING),
@@ -89,7 +84,7 @@ public abstract class WanderingTraderManagerMixin {
                     PointOfInterestStorage.OccupationStatus.ANY
             );
 
-            BlockPos blockPos2 = (BlockPos)optional.orElse(blockPos);
+            BlockPos blockPos2 = optional.orElse(blockPos);
             BlockPos blockPos3 = this.getNearbySpawnPos(world, blockPos2, 48);
             if (blockPos3 != null && this.doesNotSuffocateAt(world, blockPos3)) {
                 if (world.getBiome(blockPos3).isIn(BiomeTags.WITHOUT_WANDERING_TRADER_SPAWNS)) {

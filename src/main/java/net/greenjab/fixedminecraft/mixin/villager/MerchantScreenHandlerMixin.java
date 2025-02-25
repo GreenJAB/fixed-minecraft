@@ -1,12 +1,10 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,16 +12,13 @@ import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.MerchantScreenHandler;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -46,8 +41,6 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
     @Shadow
     protected abstract void playYesSound();
     @Unique
-    private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES;
-    @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
 
     protected MerchantScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
@@ -63,22 +56,22 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         Vec3d vec3d2 = merchant.getCustomer().getRotationVec(1.0F);
         Vec3d vec3d3 = vec3d.add(vec3d2.x * d, vec3d2.y * d, vec3d2.z * d);
         Box box = merchant.getCustomer().getBoundingBox().stretch(vec3d2.multiply(d)).expand(1.0, 1.0, 1.0);
-        EntityHitResult entityHitResult = ProjectileUtil.raycast(merchant.getCustomer(), vec3d, vec3d3, box, (entityx) -> {
-            return !entityx.isSpectator() && entityx.canHit();
-        }, e);
+        EntityHitResult entityHitResult = ProjectileUtil.raycast(merchant.getCustomer(), vec3d, vec3d3, box, (entityx) -> !entityx.isSpectator() && entityx.canHit(), e);
 
         if (entityHitResult != null) {
             if (entityHitResult.getEntity() instanceof VillagerEntity VE) {
                 Inventory inventory = Inv(VE.getArmorItems());
-                for (int i = 5-VE.getVillagerData().getLevel(); i < 4; i++) {
+                for (int i = 0; i < 4; i++) {
                     final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[i];
                     int finalI = i;
                     this.addSlot(new Slot(inventory, 3 - i, 252, 8 + i * 18) {
-
-                    public void setStack(ItemStack stack, ItemStack previousStack) {
+                        public boolean isEnabled() {
+                            return VE.getVillagerData().getLevel()-1>finalI;
+                        }
+                        public void setStack(ItemStack stack, ItemStack previousStack) {
                             merchant.getCustomer().onEquipStack(equipmentSlot, stack, previousStack);
                             super.setStack(stack, previousStack);
-                            VE.equipStack(equipmentSlot, inventory.getStack(3-finalI));
+                            VE.equipStack(equipmentSlot, inventory.getStack(3 - finalI));
                         }
 
                         public int getMaxItemCount() {
@@ -90,10 +83,10 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                                 boolean extra = false;
                                 if (equipmentSlot == EquipmentSlot.HEAD) {
                                     extra =
-                                    stack.getItem() == Items.CARVED_PUMPKIN ||
-                                    stack.getItem() == Items.DRAGON_HEAD ||
-                                    stack.getItem() == Items.PLAYER_HEAD ||
-                                    stack.isIn(ItemTags.BANNERS);
+                                            stack.getItem() == Items.CARVED_PUMPKIN ||
+                                            stack.getItem() == Items.DRAGON_HEAD ||
+                                            stack.getItem() == Items.PLAYER_HEAD ||
+                                            stack.isIn(ItemTags.BANNERS);
                                 }
                                 EquipmentSlot slot = getPreferredEquipmentSlot(stack);
                                 return (equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE)) || extra;
@@ -105,12 +98,9 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                             ItemStack itemStack = this.getStack();
                             if (itemStack == null) return false;
                             return (itemStack.isEmpty() || playerEntity.isCreative() ||
-                                    !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) && super.canTakeItems(playerEntity);
+                                    !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) &&
+                                   super.canTakeItems(playerEntity);
                         }
-
-                        /*public Pair<Identifier, Identifier> getBackgroundSprite() {
-                            return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_ARMOR_SLOT_TEXTURES[equipmentSlot.getEntitySlotId()]);
-                        }*/
                     });
                 }
             }
@@ -118,14 +108,14 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
     }
 
+    @Unique
     public final EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
         EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
         return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
     }
 
     static {
-        EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{PlayerScreenHandler.EMPTY_BOOTS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_LEGGINGS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_CHESTPLATE_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_HELMET_SLOT_TEXTURE};
-        EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+         EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     }
 
     @Override

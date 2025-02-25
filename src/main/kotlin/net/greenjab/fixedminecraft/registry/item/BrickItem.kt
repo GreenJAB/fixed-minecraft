@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.item
 
- // import net.greenjab.fixedminecraft.BrickEntity
  import net.greenjab.fixedminecraft.registry.entity.BrickEntity
  import net.minecraft.entity.LivingEntity
  import net.minecraft.entity.player.PlayerEntity
@@ -19,9 +18,7 @@ package net.greenjab.fixedminecraft.registry.item
  import net.minecraft.util.math.Position
  import net.minecraft.world.World
 
-// unused for now, want toggle for it
 class BrickItem(settings: Settings) : Item(settings), ProjectileItem {
-    var POWER: Float = 1.5f
     override fun use(world: World?, user: PlayerEntity, hand: Hand?): ActionResult {
         val itemStack = user.getStackInHand(hand)
         world!!.playSound(
@@ -34,20 +31,14 @@ class BrickItem(settings: Settings) : Item(settings), ProjectileItem {
             0.5f,
             0.4f / (world.getRandom().nextFloat() * 0.4f + 0.8f)
         )
-        /*if (!world.isClient) {
-            val brickEntity = BrickEntity(world, user)
-            brickEntity.setItem(itemStack)
-            brickEntity.setVelocity(user, user.pitch, user.yaw, 0.0f, 1.5f, 1.0f)
-            world.spawnEntity(brickEntity)
-        }*/
         if (world is ServerWorld) {
-            ProjectileEntity.spawnWithVelocity({ world: ServerWorld?, owner: LivingEntity?, stack: ItemStack? ->
+            ProjectileEntity.spawnWithVelocity({ serverworld: ServerWorld?, owner: LivingEntity?, stack: ItemStack? ->
                 BrickEntity(
-                    world,
+                    serverworld,
                     owner,
                     stack
                 )
-            }, world, itemStack, user, 0.0f, POWER, 1.0f)
+            }, world, itemStack, user, 0.0f, 1.5f, 1.0f)
         }
 
         user.incrementStat(Stats.USED.getOrCreateStat(this))
@@ -59,6 +50,6 @@ class BrickItem(settings: Settings) : Item(settings), ProjectileItem {
     }
 
     override fun createEntity(world: World?, pos: Position?, stack: ItemStack?, direction: Direction?): ProjectileEntity {
-        return SnowballEntity(world, pos!!.x, pos!!.y, pos!!.z, stack)
+        return SnowballEntity(world, pos!!.x, pos.y, pos.z, stack)
     }
 }

@@ -1,17 +1,17 @@
 package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ModInitializer
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry
 import net.greenjab.fixedminecraft.network.SyncHandler
 import net.greenjab.fixedminecraft.registry.GameruleRegistry
 import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
-import net.greenjab.fixedminecraft.registry.LoottableRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.block.DispenserBlock
+import net.minecraft.item.Item
 import net.minecraft.item.Items
 import net.minecraft.server.MinecraftServer
 import net.minecraft.util.Identifier
 import org.slf4j.LoggerFactory
+import java.util.HashMap
 
 
 object FixedMinecraft : ModInitializer {
@@ -19,27 +19,25 @@ object FixedMinecraft : ModInitializer {
     var SERVER: MinecraftServer? = null
 
     var netheriteAnvil = false
+    var ItemCapacities : HashMap<Item, Int> = hashMapOf()
+
+    //TODO ItemCapacities packet
+    //TODO Rename functions / commenting
+    //TODO Mapbook off-map-player-icon / explorer map name translations / biome colours?
+    //TODO Minecart overhaul
+    //TODO Pale garden ominous biome?
+    //TODO Remove Kotlin
+    //TODO LOTS of bugtesting
 
     override fun onInitialize() {
         logger.info("Initializing ${FixedMinecraftConstants.MOD_NAME}")
 
-         // ClientSyncHandler.init()
-
-        // ModConfig.init();
-        // HUDOverlayHandler.init()
-
-        // BlockRegistry2.register()
-        // ItemRegistry3.register()
-
-        SyncHandler.init();
+        SyncHandler.init()
 
         ItemGroupRegistry.register()
 
         RecipeRegistry.register()
         GameruleRegistry.register()
-        LoottableRegistry.register()
-
-        StatusRegistry.register()
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK)
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK)

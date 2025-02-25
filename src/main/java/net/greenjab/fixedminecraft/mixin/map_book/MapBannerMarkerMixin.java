@@ -17,7 +17,7 @@ public class MapBannerMarkerMixin {
     @Inject(method = "fromWorldBlock", at = @At("HEAD"),cancellable = true)
     private static void fakeBanner(BlockView blockView, BlockPos blockPos, CallbackInfoReturnable<MapBannerMarker> cir){
         if (blockPos.getY()<=-1000 && blockPos.getY() > -2000) {
-            DyeColor[] dye = {DyeColor.PURPLE, DyeColor.PINK, DyeColor.LIGHT_BLUE, DyeColor.RED, DyeColor.CYAN};
+            DyeColor[] dye = {DyeColor.PURPLE, DyeColor.PINK, DyeColor.LIGHT_BLUE, DyeColor.RED, DyeColor.CYAN, DyeColor.LIGHT_GRAY};
             cir.setReturnValue(new MapBannerMarker(blockPos, dye[Math.abs(blockPos.getY())-1000], Optional.empty()));
         }
     }

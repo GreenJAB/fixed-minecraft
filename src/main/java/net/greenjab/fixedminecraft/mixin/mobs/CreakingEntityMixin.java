@@ -1,36 +1,25 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.block.CreakingHeartBlock;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.CreakingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
-
 @Mixin(CreakingEntity.class)
 public abstract class CreakingEntityMixin {
-    @Shadow
-    public abstract void setHomePos(BlockPos pos);
 
     @Shadow
     public abstract boolean damage(ServerWorld world, DamageSource source, float amount);
@@ -79,7 +68,7 @@ public abstract class CreakingEntityMixin {
         cir.setReturnValue(HostileEntity.createHostileAttributes()
                 .add(EntityAttributes.MAX_HEALTH, 1.0)
                 .add(EntityAttributes.MOVEMENT_SPEED, 0.3F)
-                .add(EntityAttributes.ATTACK_DAMAGE, 5.0)
+                .add(EntityAttributes.ATTACK_DAMAGE, 4.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.STEP_HEIGHT, 1.0625));
     }

@@ -9,10 +9,9 @@ import net.minecraft.util.math.random.Random
 import net.minecraft.world.LightType
 
 class NewIceBlock(settings: Settings) : IceBlock(settings) {
-    @Suppress("OVERRIDE_DEPRECATION")
     override fun randomTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (world.gameRules.getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
-            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity() || world.dimension.ultrawarm())
+            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.opacity || world.dimension.ultrawarm())
                 this.melt(state, world, pos)
         }
     }

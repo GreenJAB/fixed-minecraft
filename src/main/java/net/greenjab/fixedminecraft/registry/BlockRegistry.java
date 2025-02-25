@@ -5,22 +5,15 @@ import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
 import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.MapColor;
 import net.minecraft.block.Oxidizable;
-import net.minecraft.block.OxidizableBlock;
-import net.minecraft.block.PoweredRailBlock;
 import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.util.Identifier;
 
 import java.util.function.Function;
 
@@ -78,7 +71,7 @@ public class BlockRegistry {
         return RegistryKey.of(RegistryKeys.BLOCK, FixedMinecraft.INSTANCE.id(id));
     }
     public static Block register(RegistryKey<Block> key, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
-        Block block = (Block)factory.apply(settings.registryKey(key));
+        Block block = factory.apply(settings.registryKey(key));
         return Registry.register(Registries.BLOCK, key, block);
     }
 }

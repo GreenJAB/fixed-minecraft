@@ -8,7 +8,6 @@ import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.random.Random
 
-@Suppress("OVERRIDE_DEPRECATION")
 class OxidizableRailBlock(internal val oxidation: Oxidizable.OxidationLevel, settings: Settings) : CopperRailBlock(settings), Oxidizable {
     override fun getCodec(): MapCodec<OxidizableRailBlock> = CODEC
     override fun hasRandomTicks(state: BlockState) = Oxidizable.getIncreasedOxidationBlock(state.block).isPresent

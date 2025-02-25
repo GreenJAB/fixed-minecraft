@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
 import net.minecraft.component.type.BundleContentsComponent;
-import net.minecraft.item.BundleItem;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

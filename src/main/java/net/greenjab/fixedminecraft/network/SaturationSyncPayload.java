@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 public record SaturationSyncPayload(float saturation) implements CustomPayload
 {
     public static final PacketCodec<PacketByteBuf, SaturationSyncPayload> CODEC = CustomPayload.codecOf(SaturationSyncPayload::write, SaturationSyncPayload::new);
-    public static final CustomPayload.Id<SaturationSyncPayload> ID = new Id<>(Identifier.of("appleskin", "saturation"));
+    public static final CustomPayload.Id<SaturationSyncPayload> ID = new Id<>(Identifier.of("fixedminecraft", "saturation"));
 
     public SaturationSyncPayload(PacketByteBuf buf)
     {

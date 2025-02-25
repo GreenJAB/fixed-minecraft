@@ -4,9 +4,7 @@ import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.ThrowablePotionItem;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 @Mixin(ThrowablePotionItem.class)
 public class ThrowablePotionItemMixin {

@@ -7,7 +7,6 @@ import net.minecraft.block.Blocks
 import net.minecraft.block.TranslucentBlock
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.enchantment.Enchantments
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.tag.EnchantmentTags

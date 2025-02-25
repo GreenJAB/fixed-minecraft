@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
 import net.minecraft.component.type.DyedColorComponent;
@@ -19,7 +17,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;

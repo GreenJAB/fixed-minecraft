@@ -58,7 +58,7 @@ object ClientSyncHandler {
             if (world != null) {
                 val mapstate = world.getMapState(payload.mapIdComponent)
                 if (mapstate != null) {
-                    (mapstate as MapStateAccessor).`fixed$setPosition`(payload.centerX, payload.centerZ)
+                    (mapstate as MapStateAccessor).setPosition(payload.centerX, payload.centerZ)
                 }
             }
         }

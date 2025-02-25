@@ -8,16 +8,12 @@ import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -35,16 +31,8 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
     @Shadow
     public abstract Iterable<ItemStack> getHandItems();
 
-    @Mutable
-    @Shadow
-    @Final
-    private DefaultedList<ItemStack> heldItems;
-
     @Shadow
     public abstract void tick();
-
-    @Shadow
-    protected abstract boolean equip(PlayerEntity player, EquipmentSlot slot, ItemStack stack, Hand hand);
 
     public ArmorStandEntityMixin(EntityType<? extends ArmorStandEntityMixin> entityType, World world) {
         super(entityType, world);

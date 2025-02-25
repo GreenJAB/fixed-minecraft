@@ -6,11 +6,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 
 class NewDaylightDetectorBlock(settings: Settings) : DaylightDetectorBlock(settings) {
-    @Suppress("OVERRIDE_DEPRECATION")
     override fun hasComparatorOutput(state: BlockState): Boolean {
         return true
     }
-    @Suppress("OVERRIDE_DEPRECATION")
     override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
         if (!world.isClient && world.dimension.hasSkyLight()) {
             val bl = state.get(INVERTED) as Boolean

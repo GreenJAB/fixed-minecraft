@@ -55,7 +55,6 @@ class NewAmethystBlock(settings: Settings?) : AmethystBlock(settings) {
         }
     }
 
-    @Deprecated("Deprecated in Java")
     override fun scheduledTick(state: BlockState, world: ServerWorld, pos: BlockPos, random: Random) {
         if (state.get(LIT) as Boolean && !world.isReceivingRedstonePower(pos)) {
             world.setBlockState(pos, state.cycle(LIT) as BlockState, NOTIFY_LISTENERS)
@@ -79,12 +78,12 @@ class NewAmethystBlock(settings: Settings?) : AmethystBlock(settings) {
         val LIT: BooleanProperty = RedstoneTorchBlock.LIT
 
         val RESONATION_NOTE_PITCHES: FloatArray =
-            net.minecraft.util.Util.make(FloatArray(16), java.util.function.Consumer<FloatArray?> { frequency: FloatArray? ->
+            net.minecraft.util.Util.make(FloatArray(16)) { frequency: FloatArray? ->
                 val freq: IntArray = intArrayOf(0, 0, 2, 4, 6, 7, 9, 10, 12, 14, 15, 18, 19, 21, 22, 24)
                 for (i in 0..15) {
                     frequency?.set(i, NoteBlock.getNotePitch(freq[i]))
                 }
-            })
+            }
     }
 
 }

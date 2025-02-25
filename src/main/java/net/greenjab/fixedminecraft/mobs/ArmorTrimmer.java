@@ -1,17 +1,13 @@
 package net.greenjab.fixedminecraft.mobs;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.equipment.trim.ArmorTrim;
 import net.minecraft.item.equipment.trim.ArmorTrimMaterial;
-import net.minecraft.item.equipment.trim.ArmorTrimMaterials;
 import net.minecraft.item.equipment.trim.ArmorTrimPattern;
-import net.minecraft.item.equipment.trim.ArmorTrimPatterns;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.NotNull;
 

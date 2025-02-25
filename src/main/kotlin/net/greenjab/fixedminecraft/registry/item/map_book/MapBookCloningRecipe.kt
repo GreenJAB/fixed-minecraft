@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 
 import net.greenjab.fixedminecraft.registry.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
-import net.minecraft.component.DataComponentTypes
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
 import net.minecraft.recipe.RecipeSerializer
@@ -15,11 +14,11 @@ import net.minecraft.world.World
 class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : SpecialCraftingRecipe(craftingRecipeCategory) {
 
     override fun matches(craftingRecipeInput: CraftingRecipeInput, world: World): Boolean {
-        return this.getResult(craftingRecipeInput, world) != null
+        return this.getResult(craftingRecipeInput) != null
     }
 
     override fun craft(craftingRecipeInput: CraftingRecipeInput, wrapperLookup: RegistryWrapper.WrapperLookup?): ItemStack {
-        val itemStack = getResult(craftingRecipeInput, null)
+        val itemStack = getResult(craftingRecipeInput)
         if (itemStack == null || itemStack.isEmpty) {
             return ItemStack.EMPTY
         }
@@ -28,7 +27,7 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
 
 
 
-    private fun getResult(craftingRecipeInput: CraftingRecipeInput, world: World?): ItemStack? {
+    private fun getResult(craftingRecipeInput: CraftingRecipeInput): ItemStack? {
         var mapBook: ItemStack? = null
         var books = 0
 
@@ -39,7 +38,7 @@ class MapBookCloningRecipe(craftingRecipeCategory: CraftingRecipeCategory?) : Sp
                 if (!itemStack.isOf(Items.BOOK)) {
                     return null
                 }
-                books++;
+                books++
             } else {
                 if (mapBook != null) {
                     return null

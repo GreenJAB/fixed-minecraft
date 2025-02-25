@@ -23,7 +23,8 @@ public abstract class BeeEntityMixin {
             BlockState flower = world.getBlockState(pos);
             if (pos.getY() > -500 && flower.isIn(BlockTags.FLOWERS)) {
                 boolean tall = false;
-                if (!flower.isIn(BlockTags.SMALL_FLOWERS)) {
+                BlockState below = world.getBlockState(pos.down());
+                if (below.isIn(BlockTags.FLOWERS)) {
                     tall = true;
                     if (flower.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER) {
                         pos = pos.down();

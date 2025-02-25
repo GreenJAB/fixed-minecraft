@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
-import com.mojang.authlib.GameProfile;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
@@ -14,9 +13,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -54,7 +50,7 @@ public abstract class WanderingTraderEntityMixin {
     private Iterator<Pair<TradeOffers.Factory[], Integer>> newTrades(Iterator<Pair<TradeOffers.Factory[], Integer>> iter){
         List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
                 Pair.of(new TradeOffers.Factory[]{
-                        new TradeOffers.BuyItemFactory(createPotion(Potions.WATER), 1, 1, 1),
+                        new TradeOffers.BuyItemFactory(createPotion(), 1, 1, 1),
                         new TradeOffers.BuyItemFactory(Items.WATER_BUCKET, 1, 1, 1, 2),
                         new TradeOffers.BuyItemFactory(Items.MILK_BUCKET, 1, 1, 1, 2),
                         new TradeOffers.BuyItemFactory(Items.FERMENTED_SPIDER_EYE, 1, 1, 1, 3),
@@ -81,7 +77,7 @@ public abstract class WanderingTraderEntityMixin {
                         new TradeOffers.SellItemFactory(Blocks.SPRUCE_LOG, 1, 8, 4, 1),
                         new TradeOffers.SellItemFactory(Blocks.CHERRY_LOG, 1, 8, 4, 1),
                         new TradeOffers.SellEnchantedToolFactory(Items.IRON_PICKAXE, 1, 1, 1, 0.2F),
-                        new TradeOffers.SellItemFactory(createPotionStack(Potions.LONG_INVISIBILITY), 5, 1, 1, 1),
+                        new TradeOffers.SellItemFactory(createPotionStack(), 5, 1, 1, 1),
                         new TradeOffers.SellItemFactory(Items.NAUTILUS_SHELL, 5, 1, 5, 1)
                 }, 2+(int)(Math.random()*2)),
                 Pair.of(new TradeOffers.Factory[]{
@@ -162,6 +158,7 @@ public abstract class WanderingTraderEntityMixin {
     @Unique
     private ItemStack createSpecialItem() {
         int i = (int)(Math.random()*5);
+        i = 4;
         return switch (i) {
             case 0 -> createMusicDiscStack();
             case 1 -> createSherdStack();
@@ -172,14 +169,14 @@ public abstract class WanderingTraderEntityMixin {
     }
 
     @Unique
-    private TradedItem createPotion(RegistryEntry<Potion> potion) {
+    private TradedItem createPotion() {
         return new TradedItem(Items.POTION)
-                .withComponents(/* method_57312 */ builder -> builder.add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(potion)));
+                .withComponents(/* method_57312 */ builder -> builder.add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.WATER)));
     }
 
     @Unique
-    private ItemStack createPotionStack(RegistryEntry<Potion> potion) {
-        return PotionContentsComponent.createStack(Items.POTION, potion);
+    private ItemStack createPotionStack() {
+        return PotionContentsComponent.createStack(Items.POTION, Potions.LONG_INVISIBILITY);
     }
 
     @Unique
@@ -220,9 +217,7 @@ public abstract class WanderingTraderEntityMixin {
             WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
             PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
             if (playerEntity != null) {
-                GameProfile gameProfile = playerEntity.getGameProfile();
                 head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
-                //head.getOrCreateNbt().put("SkullOwner", NbtHelper.writeGameProfile(new NbtCompound(), gameProfile));
             }
         }
         return head;
@@ -239,8 +234,8 @@ public abstract class WanderingTraderEntityMixin {
             World world = WTE.getWorld();
             if (world instanceof ServerWorld serverWorld) {
 
-                int map = serverWorld.random.nextInt(5);
-                //map = 3;
+                int map = serverWorld.random.nextInt(6);
+                map = 5;
                 switch (map) {
                     case 0:
                         CustomData.biomeSearch = BiomeKeys.MUSHROOM_FIELDS;
@@ -257,6 +252,9 @@ public abstract class WanderingTraderEntityMixin {
                     case 4:
                         CustomData.biomeSearch = BiomeKeys.WARM_OCEAN;
                         break;
+                    case 5:
+                        CustomData.biomeSearch = BiomeKeys.PALE_GARDEN;
+                        break;
                     default:
                         CustomData.biomeSearch = BiomeKeys.FOREST;
                         break;
@@ -268,20 +266,14 @@ public abstract class WanderingTraderEntityMixin {
                     ItemStack itemStack = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte) 2, true, true);
                     FilledMapItem.fillExplorationMap(serverWorld, itemStack);
 
-                    String[] name = {"Mushroom Fields", "Cherry Grove", "Ice Spikes", "Badlands", "Warm Ocean"};
-                    int[] colour = {7412448, 16751570, 4639231, 16725801, 1938431};
+                    String[] name = {"Mushroom Fields", "Cherry Grove", "Ice Spikes", "Badlands", "Warm Ocean", "Pale Garden"};
+                    int[] colour = {7412448, 16751570, 4639231, 16725801, 1938431, 10856879};
 
-
-                    //itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable(this.nameKey));
                     itemStack.set(DataComponentTypes.ITEM_NAME, Text.of(name[map] + " Explorer Map"));
-                    //itemStack.setCustomName(Text.of(name[map] + " Explorer Map"));
                     MapState m = FilledMapItem.getMapState(itemStack, serverWorld);
                     assert m != null;
                     m.addBanner(serverWorld, new BlockPos(blockPos.getX(), -1000 - map, blockPos.getZ()));
-                    //stack.set(DataComponentTypes.MAP_COLOR, new MapColorComponent(decorationType.value().mapColor()));
                     itemStack.set(DataComponentTypes.MAP_COLOR, new MapColorComponent(colour[map]));
-                    //NbtCompound nbtCompound2 = itemStack.getOrCreateSubNbt("display");
-                    //nbtCompound2.putInt("MapColor", colour[map]);
 
                     return itemStack;
                 }

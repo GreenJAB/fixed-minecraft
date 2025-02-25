@@ -8,6 +8,7 @@ accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingInve
 accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingResultInventory Lnet/minecraft/inventory/CraftingResultInventory;
 accessible field net/minecraft/entity/player/HungerManager exhaustion F
 accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (Lnet/minecraft/util/hit/BlockHitResult;Lnet/minecraft/block/BlockState;)Ljava/util/OptionalInt;
+accessible class net/minecraft/screen/slot/ArmorSlot
 
 ## Classes
 # <access>   class   <className>

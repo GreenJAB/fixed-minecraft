@@ -11,6 +11,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registry;
@@ -43,6 +44,18 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
+        Item item = itemStack.getItem();
+        if (!FixedMinecraft.INSTANCE.getItemCapacities().containsKey(item))
+            if (FixedMinecraft.INSTANCE.getSERVER()!=null) {
+                HashMap<Item, Integer> map = new HashMap<>(Map.of());
+                map.putAll(FixedMinecraft.INSTANCE.getItemCapacities());
+                map.put(item, getNewEnchantmentCapacity(itemStack));
+                FixedMinecraft.INSTANCE.setItemCapacities(map);
+            }
+        return FixedMinecraft.INSTANCE.getItemCapacities().getOrDefault(item, 0);
+    }
+
+    public static int getNewEnchantmentCapacity(ItemStack itemStack) {
         if (itemStack.isOf(Items.ENCHANTED_BOOK)||itemStack.isOf(Items.BOOK)) return 50;
 
         List<EnchantmentLevelEntry> list = getPossibleEntries(itemStack);

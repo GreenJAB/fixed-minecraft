@@ -36,9 +36,7 @@ public class BlockMixin {
                  state == Blocks.COCOA.getDefaultState().with(CocoaBlock.AGE, 2)) {
             if (world.getLightLevel(LightType.SKY, pos) > 10) {
                 if (world.isNight() && world.getMoonPhase() == 2) {
-                    Block.getDroppedStacks(state, (ServerWorld)world, pos, blockEntity, entity, tool).forEach((stack) -> {
-                        Block.dropStack(world, pos, stack);
-                    });
+                    Block.getDroppedStacks(state, (ServerWorld)world, pos, blockEntity, entity, tool).forEach((stack) -> Block.dropStack(world, pos, stack));
                     state.onStacksDropped((ServerWorld)world, pos, tool, true);
                 }
             }

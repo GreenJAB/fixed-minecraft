@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.registry.screen
 
 import net.minecraft.block.Blocks
 import net.minecraft.component.DataComponentTypes
-import net.minecraft.component.type.PotionContentsComponent
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.CraftingInventory
@@ -37,7 +36,7 @@ class FletchingScreenHandler @JvmOverloads constructor(
         val itemStack2 =  ItemStack(Items.BLACK_STAINED_GLASS_PANE, 1)
         itemStack2.set<MutableText>(DataComponentTypes.CUSTOM_NAME, Text.of(".") as MutableText?
         )
-        items.heldStacks[0] = itemStack2;
+        items.heldStacks[0] = itemStack2
 
         return items
     }
@@ -47,8 +46,8 @@ class FletchingScreenHandler @JvmOverloads constructor(
             override fun onTakeItem(player: PlayerEntity?, stack: ItemStack?) {
                 this.onCrafted(stack)
 
-                for (stack in input.heldStacks.indices) {
-                    input.removeStack(stack, 1)
+                for (inputStack in input.heldStacks.indices) {
+                    input.removeStack(inputStack, 1)
                 }
             }
         })

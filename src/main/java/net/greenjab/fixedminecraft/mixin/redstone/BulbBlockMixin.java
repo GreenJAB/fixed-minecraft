@@ -5,7 +5,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BulbBlock;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -16,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 /**
  * Because yes
  */
-@SuppressWarnings("deprecation")
 @Mixin(BulbBlock.class)
 public abstract class BulbBlockMixin extends Block {
     public BulbBlockMixin(Settings settings) {

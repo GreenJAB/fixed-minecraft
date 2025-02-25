@@ -3,14 +3,12 @@ package net.greenjab.fixedminecraft.mixin.night;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.EnchantedCountIncreaseLootFunction;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -29,7 +27,7 @@ public class EnchantmentHelperMixin {
                 if (world.isNight() && world.getMoonPhase() == 4) {
                     System.out.println("moonlooting");
                     return original+1;
-                };
+                }
             }
         }
         System.out.println("no moonlooting");

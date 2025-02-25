@@ -186,7 +186,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Inject(method = "prepareOffersFor", at = @At("TAIL"))
     private void happiness(PlayerEntity player, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        Long time = villagerEntity.getWorld().getTime();
         Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
         int timeSinceSleep = 0;
         if (sleepTime!=null && sleepTime.isPresent()) {
@@ -266,8 +265,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
         int l;
         ItemStack itemStack;
-        if (!optional.isEmpty()) {
-            RegistryEntry<Enchantment> registryEntry = (RegistryEntry<Enchantment>)optional.get();
+        if (optional.isPresent()) {
+            RegistryEntry<Enchantment> registryEntry = optional.get();
             Enchantment enchantment = registryEntry.value();
             int maxLevel = enchantment.getMaxLevel();
             int midLevel = (int)Math.ceil(maxLevel/2.0);
@@ -302,8 +301,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .getRandomEntry(ModTags.INSTANCE.getANY_TRADES(), random);
         int l;
         ItemStack itemStack;
-        if (!optional.isEmpty()) {
-            RegistryEntry<Enchantment> registryEntry = (RegistryEntry<Enchantment>)optional.get();
+        if (optional.isPresent()) {
+            RegistryEntry<Enchantment> registryEntry = optional.get();
             Enchantment enchantment = registryEntry.value();
             int maxLevel = enchantment.getMaxLevel();
             int level = maxLevel==1?1:(rn.nextInt(maxLevel)+1);

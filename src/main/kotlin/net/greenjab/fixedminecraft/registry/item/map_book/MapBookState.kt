@@ -10,7 +10,6 @@ import net.minecraft.registry.RegistryWrapper.WrapperLookup
 import net.minecraft.server.MinecraftServer
 import net.minecraft.world.PersistentState
 import java.util.Arrays
-import java.util.function.ToIntFunction
 
 
 class MapBookState() : PersistentState() {
@@ -44,10 +43,8 @@ class MapBookState() : PersistentState() {
                     }
                 }
                 if (hold) {
-                    // SyncHandler.mapBookSync(SPE, id)
                     ServerPlayNetworking.send(SPE, MapBookSyncPayload(id,
-                        mapIDs.stream().mapToInt(ToIntFunction<Int> { i: Int? -> i!! }).toArray(), players))
-                    // ServerPlayNetworking.send(SPE, MAP_BOOK_SYNC, makeMapBookSyncBuf(player, id))
+                        mapIDs.stream().mapToInt { i: Int? -> i!! }.toArray(), players))
                 }
             }
         }
@@ -55,7 +52,7 @@ class MapBookState() : PersistentState() {
     }
 
     override fun writeNbt(nbt: NbtCompound, lookup: WrapperLookup): NbtCompound {
-        if (!mapIDs.isEmpty()) {
+        if (mapIDs.isNotEmpty()) {
             nbt.putIntArray("mapIDs", this.mapIDs)
         }
 

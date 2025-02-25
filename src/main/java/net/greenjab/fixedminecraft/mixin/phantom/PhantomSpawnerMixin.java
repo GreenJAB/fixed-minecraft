@@ -2,12 +2,10 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.ServerStatHandler;
@@ -30,7 +28,7 @@ import java.util.List;
 public class PhantomSpawnerMixin {
 
     @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/ServerStatHandler;getStat(Lnet/minecraft/stat/Stat;)I"))
-    private int phantomSpawnByEffect(ServerStatHandler instance, Stat stat,
+    private int phantomSpawnByEffect(ServerStatHandler instance, Stat<?> stat,
                                      @Local ServerPlayerEntity serverPlayerEntity) {
         if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) return 0;
         return 720000;

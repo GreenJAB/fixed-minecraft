@@ -1,11 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.AxolotlEntity;
 import net.minecraft.potion.Potions;
 import net.minecraft.server.world.ServerWorld;
@@ -17,7 +15,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 @Mixin(AreaEffectCloudEntity.class)
@@ -30,12 +27,10 @@ public class AreaEffectCloudEntityMixin {
             target = "Ljava/util/Map;entrySet()Ljava/util/Set;"
     ))
     private void waterAreaEffect(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
-        AreaEffectCloudEntity AECE = (AreaEffectCloudEntity) (Object)this;
         PotionContentsComponent potionContentsComponent = this.potionContentsComponent;
         if (potionContentsComponent.matches(Potions.WATER)) {
             this.applyWater(serverWorld);
         }
-
     }
 
 

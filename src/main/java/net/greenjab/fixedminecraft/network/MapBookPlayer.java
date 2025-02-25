@@ -37,8 +37,4 @@ public class MapBookPlayer {
         //System.out.println(p.toString2());
         return p;
     }
-
-    public String toString2(){
-        return this.name + ", " + this.x + ", " + this.z + this.dimension.toString();
-    }
 }

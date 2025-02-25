@@ -5,7 +5,6 @@ import net.greenjab.fixedminecraft.FixedMinecraft
 import net.greenjab.fixedminecraft.registry.BlockRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.block.FallingBlock
 import net.minecraft.block.HorizontalFacingBlock
 import net.minecraft.block.ShapeContext
@@ -30,7 +29,6 @@ import net.minecraft.state.property.EnumProperty
 import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.BlockRotation
-import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -58,20 +56,20 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
 
     override fun onUse(state: BlockState, world: World, pos: BlockPos?, player: PlayerEntity, hit: BlockHitResult?): ActionResult {
 
-        for (itemStack: ItemStack in player.getHandItems()) {
+        for (itemStack: ItemStack in player.handItems) {
             if (itemStack.isOf(Items.NETHERITE_INGOT)) {
                 if (state.isOf(BlockRegistry.CHIPPED_NETHERITE_ANVIL)) {
-                    world.setBlockState(pos, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW);
-                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state)));
-                    itemStack.decrementUnlessCreative(1, player);
+                    world.setBlockState(pos, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW)
+                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state)))
+                    itemStack.decrementUnlessCreative(1, player)
                     return ActionResult.SUCCESS
                 }
                 if (state.isOf(BlockRegistry.DAMAGED_NETHERITE_ANVIL)) {
-                    world.setBlockState(pos, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW);
-                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state)));
-                    itemStack.decrementUnlessCreative(1, player);
+                    world.setBlockState(pos, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW)
+                    world.playSound(player, pos, SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F)
+                    world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(player, BlockRegistry.CHIPPED_NETHERITE_ANVIL.getStateWithProperties(state)))
+                    itemStack.decrementUnlessCreative(1, player)
                     return ActionResult.SUCCESS
                 }
             }

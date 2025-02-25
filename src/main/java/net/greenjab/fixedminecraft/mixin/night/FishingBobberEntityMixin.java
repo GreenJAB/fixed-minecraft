@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.night;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.LoottableRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
@@ -25,8 +24,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-import java.util.Objects;
 
 @Mixin(FishingBobberEntity.class)
 public class FishingBobberEntityMixin {
@@ -82,18 +79,6 @@ public class FishingBobberEntityMixin {
         LootTable lootTable = FBE.getWorld().getServer()
                 .getReloadableRegistries()
                 .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
-
-        /*LootTable lootTable = switch (lootPool) {
-            case 1 ->
-                    //Objects.requireNonNull(playerEntity.getWorld().getServer()).getReloadableRegistries().getLootTable(Identifier.of("gameplay/fixed_fishing/junk"));
-                    Objects.requireNonNull(playerEntity.getWorld().getServer()).getReloadableRegistries().getLootTable(LoottableRegistry.INSTANCE.getFISHING_JUNK());
-            case 2 ->
-                    Objects.requireNonNull(playerEntity.getWorld().getServer()).getReloadableRegistries().getLootTable(LoottableRegistry.INSTANCE.getFISHING_MID());
-            case 3 ->
-                    Objects.requireNonNull(playerEntity.getWorld().getServer()).getReloadableRegistries().getLootTable(LoottableRegistry.INSTANCE.getFISHING_TREASURE());
-            default ->
-                    Objects.requireNonNull(playerEntity.getWorld().getServer()).getReloadableRegistries().getLootTable(LoottableRegistry.INSTANCE.getFISHING_FISH());
-        };*/
 
         LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 

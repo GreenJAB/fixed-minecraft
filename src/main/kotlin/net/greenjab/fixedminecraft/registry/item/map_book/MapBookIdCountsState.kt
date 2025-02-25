@@ -38,13 +38,12 @@ class MapBookIdCountsState : PersistentState() {
             get() = Type({ MapBookIdCountsState() },
                 { nbt: NbtCompound, registryLookup: WrapperLookup? ->
                     fromNbt(
-                        nbt,
-                        registryLookup
+                        nbt
                     )
                 }, DataFixTypes.SAVED_DATA_MAP_INDEX
             )
 
-        fun fromNbt(nbt: NbtCompound, registryLookup: WrapperLookup?): MapBookIdCountsState {
+        private fun fromNbt(nbt: NbtCompound): MapBookIdCountsState {
             val idCountsState = MapBookIdCountsState()
 
             for (string in nbt.keys) {

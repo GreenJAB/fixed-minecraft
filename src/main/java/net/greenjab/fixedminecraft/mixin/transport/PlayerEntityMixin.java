@@ -30,15 +30,4 @@ public class PlayerEntityMixin  {
             }
         }
     }
-
-    //@Redirect(method = "checkGliding", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;startGliding()V"))
-    //private void cancelElytraInLiquid(PlayerEntity instance) {
-        //System.out.println("WWWWWWWWWWW");
-    //}
-
-    @Inject(method = "stopGliding", at = @At(value = "HEAD"))
-    private void a(CallbackInfo ci) {
-        //System.out.println("aawwdawdaw");
-    }
-
 }

@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.GameruleRegistry;
 import net.greenjab.fixedminecraft.registry.ItemRegistry;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +15,6 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.event.GameEvent;
@@ -36,11 +34,9 @@ public class LivingEntityMixin  {
     private ItemStack requireUsingTotem(ItemStack original) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (!((ServerWorld)LE.getWorld()).getGameRules().getBoolean(GameruleRegistry.INSTANCE.getRequire_Totem_Use()) || LE.isUsingItem()) {
-            //return ((itemStack2.isOf(item)||itemStack2.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM())) && ((LivingEntity) (Object) this).isUsingItem());
             return original;
         } else {
             return new ItemStack(Items.AIR);
-            //return itemStack2.isOf(item)||itemStack2.isOf(ItemRegistry.INSTANCE.getECHO_TOTEM());
         }
     }
 
@@ -74,11 +70,7 @@ public class LivingEntityMixin  {
         TeleportTarget teleportTarget = player.getRespawnTarget(true, TeleportTarget.NO_OP);
         ServerWorld serverWorld = teleportTarget.world();
         Vec3d pos = teleportTarget.position();
-        //ServerWorld serverWorld = player.server.getWorld(player.lastDeathPos.get().dimension)
         if (player.teleport(serverWorld, pos.x, pos.y, pos.z, Set.of(), player.getYaw(), player.getPitch(), true)) {
-            /*while (!serverWorld.isSpaceEmpty(user) && user.getY() < serverWorld.topYInclusive.toDouble()) {
-                player.setPosition(user.getX(), user.getY() + 1.0, user.getZ())
-            }*/
             serverWorld.emitGameEvent(GameEvent.TELEPORT, pos, GameEvent.Emitter.of(player));
             SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
             SoundCategory soundCategory = SoundCategory.PLAYERS;
@@ -87,17 +79,5 @@ public class LivingEntityMixin  {
             player.onLanding();
 
         }
-        /*ServerWorld world = player.getServerWorld();
-        LivingEntity LE = (LivingEntity)(Object)this;
-        BlockPos blockPos = player.getSpawnPointPosition();
-        ServerWorld serverWorld = player.server.getWorld(player.getSpawnPointDimension());
-        if (serverWorld != null && blockPos != null) {
-            player.server.getPlayerManager().respawnPlayer(player, true, Entity.RemovalReason.CHANGED_DIMENSION);
-            Vec3d vec3d = player.getPos();
-            world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(player));
-            SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
-            SoundCategory soundCategory = SoundCategory.PLAYERS;
-            //optional = player.findRespawnPosition(serverWorld, blockPos, player.getYaw(), false, true);
-        }*/
     }
 }

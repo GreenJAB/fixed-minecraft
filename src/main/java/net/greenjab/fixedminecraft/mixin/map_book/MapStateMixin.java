@@ -20,7 +20,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -42,7 +41,7 @@ public class MapStateMixin implements MapStateAccessor {
     public int centerZ;
 
     @Override
-    public void fixed$setPosition(int centerX, int centerZ) {
+    public void setPosition(int centerX, int centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
     }

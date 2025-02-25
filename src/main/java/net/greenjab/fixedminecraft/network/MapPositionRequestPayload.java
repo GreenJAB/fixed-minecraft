@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.map.MapState;
 import net.minecraft.network.RegistryByteBuf;
@@ -19,7 +18,6 @@ public record MapPositionRequestPayload(MapIdComponent mapIdComponent) implement
             MapPositionRequestPayload::mapIdComponent,
             MapPositionRequestPayload::new
     );
-
 
     @Override
     public Id<? extends CustomPayload> getId() {
