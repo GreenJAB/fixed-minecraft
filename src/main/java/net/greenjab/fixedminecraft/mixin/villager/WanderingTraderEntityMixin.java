@@ -158,7 +158,6 @@ public abstract class WanderingTraderEntityMixin {
     @Unique
     private ItemStack createSpecialItem() {
         int i = (int)(Math.random()*5);
-        i = 4;
         return switch (i) {
             case 0 -> createMusicDiscStack();
             case 1 -> createSherdStack();
@@ -235,7 +234,6 @@ public abstract class WanderingTraderEntityMixin {
             if (world instanceof ServerWorld serverWorld) {
 
                 int map = serverWorld.random.nextInt(6);
-                map = 5;
                 switch (map) {
                     case 0:
                         CustomData.biomeSearch = BiomeKeys.MUSHROOM_FIELDS;

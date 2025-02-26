@@ -251,15 +251,17 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                     // set displayed enchantment
                     EnchantmentLevelEntry displayedEnchantment = enchantments.getFirst();
 
-                    //this.enchantmentId[slot] = Registries.ENCHANTMENT.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
                     this.enchantmentId[slot] = indexedIterable.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
-                    this.enchantmentLevel[slot] = displayedEnchantment.level; // again, for display purposes only
+
 
                     // calculate enchantment power
                     int enchantmentPower = 0;
                     for (EnchantmentLevelEntry entry : enchantments) {
                         enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment, entry.level);
                     }
+                    int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(itemStack);
+                    int img = (enchantmentPower>cap)?2:((enchantmentPower>cap/2)?1:0);
+                    this.enchantmentLevel[slot] = img; // again, for display purposes only
 
                     boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
                     if (isGold) enchantmentPower /= 2;

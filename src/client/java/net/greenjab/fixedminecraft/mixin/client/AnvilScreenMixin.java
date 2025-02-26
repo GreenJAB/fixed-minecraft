@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.AnvilScreen;
@@ -16,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
-
 @Mixin(AnvilScreen.class)
 public class AnvilScreenMixin {
 
@@ -24,12 +24,12 @@ public class AnvilScreenMixin {
     private int newMax(int i, @Local(argsOnly = true) DrawContext context) {
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        if (ASH.getLevelCost()<0) {
+        if (FixedMinecraft.INSTANCE.getNetheriteAnvil()) {
             return 1000;
         }
-
-        ItemStack IS = AS.getScreenHandler().slots.get(0).getStack();
-        int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(IS);
+        int cap = 0;
+        int levelCost = ASH.getLevelCost();
+        while (levelCost>=500) {levelCost-=500;cap++;}
         if (cap == 0) {
 
             return 1000;
@@ -39,7 +39,11 @@ public class AnvilScreenMixin {
 
     @ModifyVariable(method = "drawForeground", at = @At(value = "STORE"), ordinal = 2)
     private int netheriteCostFixer(int value) {
-        return Math.abs(value);
+        AnvilScreen AS = (AnvilScreen)(Object)this;
+        AnvilScreenHandler ASH = AS.getScreenHandler();
+        int levelCost = ASH.getLevelCost();
+        while (levelCost>=500) levelCost-=500;
+        return levelCost;
     }
 
     @Inject(method = "drawForeground", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getLevelCost()I"))
@@ -56,14 +60,15 @@ public class AnvilScreenMixin {
         }
         int ItemCapacity = 0;
         int InputCost = 0;
-        int OutputCost = ASH.getLevelCost();
-        boolean netherite = false;
-        if (OutputCost < 0) {
-            OutputCost = -OutputCost;
-            netherite = true;
+        int levelCost = ASH.getLevelCost();
+        while (levelCost>=500) {
+            levelCost-=500;
+            ItemCapacity++;
         }
+        int OutputCost = levelCost;
+        boolean netherite = FixedMinecraft.INSTANCE.getNetheriteAnvil();
+
         if (ItemInput1 != ItemStack.EMPTY) {
-            ItemCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(ItemInput1);
             InputCost = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemInput1, false);
             if (!ASH.getSlot(1).hasStack()) {
                 OutputCost = InputCost;
@@ -134,6 +139,8 @@ public class AnvilScreenMixin {
     private boolean canTake(Slot instance, PlayerEntity playerEntity){
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(ASH.getLevelCost())) && Math.abs(ASH.getLevelCost()) > 0;
+        int levelCost = ASH.getLevelCost();
+        while (levelCost>=100000)levelCost-=100000;
+        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost)) && Math.abs(levelCost) > 0;
     }
 }

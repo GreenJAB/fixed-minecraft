@@ -62,6 +62,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     @Inject(method = "updateResult", at = @At(value = "HEAD"), cancellable = true)
     private void calculateCost(CallbackInfo ci) {
         boolean netherite;
+        int capNum = 500;
         if (!player.getWorld().isClient) {
             netherite = player.getCommandTags().contains("netherite_anvil");
         } else {
@@ -71,6 +72,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         ItemStack firstInputStack = this.input.getStack(0);
         ItemStack secondInputStack = this.input.getStack(1);
         ItemStack outputItemStack = firstInputStack.copy();
+
+        int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
 
         //nothing in first slot
         if (firstInputStack.isEmpty()) {
@@ -94,12 +97,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         }
 
         if (secondInputStack.isEmpty()) {
-            this.levelCost.set(netherite ? -1 : 1);
+            this.levelCost.set(1 + capNum*enchantmentCapacity);
             if (newName) {
                 this.output.setStack(0, outputItemStack);
             } else {
                 this.output.setStack(0, ItemStack.EMPTY);
-                this.levelCost.set(0);
+                this.levelCost.set(capNum * enchantmentCapacity);
             }
             ci.cancel();
             return;
@@ -113,7 +116,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             return;
         }
 
-        this.levelCost.set(1);
+        this.levelCost.set(1 + 1000*enchantmentCapacity);
         ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(outputItemStack));
         this.repairItemUsage = 0;
         if (!secondInputStack.isEmpty()) {
@@ -123,7 +126,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 int k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 if (k <= 0) {
                     this.output.setStack(0, ItemStack.EMPTY);
-                    this.levelCost.set(0);
+                    this.levelCost.set(capNum * enchantmentCapacity);
                     ci.cancel();
                     return;
                 }
@@ -141,7 +144,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 //2nd slot isnt usable
                 if (!book2 && (!outputItemStack.isOf(secondInputStack.getItem()) || !outputItemStack.isDamageable())) {
                     this.output.setStack(0, ItemStack.EMPTY);
-                    this.levelCost.set(0);
+                    this.levelCost.set(capNum * enchantmentCapacity);
                     ci.cancel();
                     return;
                 }
@@ -196,7 +199,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
                         if (r > enchantment.getMaxLevel() && !isGold) {
                             if (!netherite) {
-                                this.levelCost.set(1);
+                                this.levelCost.set(1 + capNum*enchantmentCapacity);
                                 this.output.setStack(0, ItemStack.EMPTY);
                                 ci.cancel();
                                 return;
@@ -216,7 +219,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
                     if (hasBadEnchant && !hasGoodEnchant) {
                         this.output.setStack(0, ItemStack.EMPTY);
-                        this.levelCost.set(0);
+                        this.levelCost.set(capNum * enchantmentCapacity);
                         ci.cancel();
                         return;
                     }
@@ -247,18 +250,11 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
             }
         }
-
-        // calculate enchantmentPower for each enchantment
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
+        this.levelCost.set(enchantmentPower + capNum*enchantmentCapacity);
 
-        if (netherite) {
-            this.levelCost.set(-enchantmentPower);
-        } else {
-            this.levelCost.set(enchantmentPower);
-            // check if item can hold combined enchantment power
+        if (!netherite) {
             if (!this.player.getAbilities().creativeMode) {
-                int enchantmentCapacity = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack);
-
                 boolean isSuper = false;
                 if (outputItemStack.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
                     isSuper = outputItemStack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
@@ -275,10 +271,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
             }
         }
-
         this.output.setStack(0, outputItemStack);
         ci.cancel();
-
     }
 
     @Inject(method = "canTakeOutput", at = @At(value = "HEAD"), cancellable = true)
@@ -289,8 +283,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
     @Inject(method = "onTakeOutput", at = @At(value = "HEAD"), cancellable = true)
     private void onTake(PlayerEntity player, ItemStack stack, CallbackInfo ci){
+        int levelCost = this.levelCost.get();
+        while (levelCost>=100000)levelCost-=100000;
         if (!player.getAbilities().creativeMode) {
-            player.addExperienceLevels(-Math.abs(this.levelCost.get()));
+            player.addExperienceLevels(-Math.abs(levelCost));
         }
 
         int superEnchants = 0;
@@ -303,10 +299,10 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
 
-        boolean netherite = this.levelCost.get()<0;
+        boolean netherite = levelCost<0;
         int cost = 12;
         if (netherite) {
-            cost = -this.levelCost.get();
+            cost = levelCost;
             int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(stack);
             if (cost > cap){
                 cost = 5+cost-cap;

@@ -77,9 +77,10 @@ class NetheriteAnvilBlock(settings: Settings) : FallingBlock(settings) {
 
         if (!world.isClient) {
             player.addCommandTag("netherite_anvil")
-            FixedMinecraft.netheriteAnvil = true
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos))
             player.incrementStat(Stats.INTERACT_WITH_ANVIL)
+        } else {
+            FixedMinecraft.netheriteAnvil = true
         }
 
         return ActionResult.SUCCESS

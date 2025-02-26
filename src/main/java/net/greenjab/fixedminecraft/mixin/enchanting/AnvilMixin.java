@@ -47,11 +47,15 @@ public class AnvilMixin  {
     }
 
     @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;createScreenHandlerFactory(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/screen/NamedScreenHandlerFactory;"))
-    private void setNormalAnvil(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
+    private void setNormalAnvilServer(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                 CallbackInfoReturnable<ActionResult> cir){
         player.removeCommandTag("netherite_anvil");
-        FixedMinecraft.INSTANCE.setNetheriteAnvil(false);
+    }
 
+    @Inject(method = "onUse", at = @At(value = "HEAD"))
+    private void setNormalAnvilClient(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
+                                CallbackInfoReturnable<ActionResult> cir){
+        if (world.isClient) FixedMinecraft.INSTANCE.setNetheriteAnvil(false);
     }
 
     @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
