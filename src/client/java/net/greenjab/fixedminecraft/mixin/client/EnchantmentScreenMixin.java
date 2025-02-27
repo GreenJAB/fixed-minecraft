@@ -6,7 +6,12 @@ import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.EnchantmentTags;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.text.Texts;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +30,13 @@ public class EnchantmentScreenMixin {
 
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getName(Lnet/minecraft/registry/entry/RegistryEntry;I)Lnet/minecraft/text/Text;"))
     private Text noEnchantLevelShown1(RegistryEntry<Enchantment> enchantment, int level){
-        return Text.of(enchantment.getIdAsString());
+        MutableText mutableText = enchantment.value().description().copy();
+        if (enchantment.isIn(EnchantmentTags.CURSE)) {
+            Texts.setStyleIfAbsent(mutableText, Style.EMPTY.withColor(Formatting.RED));
+        } else {
+            Texts.setStyleIfAbsent(mutableText, Style.EMPTY.withColor(Formatting.GRAY));
+        }
+        return mutableText;
     }
 
     @ModifyConstant(method = "drawBackground", constant = @Constant(intValue = 1, ordinal = 0))

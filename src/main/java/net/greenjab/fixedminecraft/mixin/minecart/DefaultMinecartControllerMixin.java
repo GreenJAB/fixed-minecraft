@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.minecart;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;

@@ -21,7 +21,6 @@ object FixedMinecraft : ModInitializer {
     var netheriteAnvil = false
     var ItemCapacities : HashMap<Item, Int> = hashMapOf()
 
-    //TODO ItemCapacities packet
     //TODO Rename functions / commenting
     //TODO Mapbook off-map-player-icon / explorer map name translations / biome colours?
     //TODO Minecart overhaul

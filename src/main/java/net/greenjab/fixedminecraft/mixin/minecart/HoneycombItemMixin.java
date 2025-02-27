@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.minecart;
 
 import com.google.common.collect.ImmutableBiMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;

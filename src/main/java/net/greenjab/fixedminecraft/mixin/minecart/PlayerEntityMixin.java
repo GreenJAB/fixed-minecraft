@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.minecart;
 
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.player.PlayerEntity;

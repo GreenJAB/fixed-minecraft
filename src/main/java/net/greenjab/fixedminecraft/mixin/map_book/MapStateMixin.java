@@ -41,7 +41,7 @@ public class MapStateMixin implements MapStateAccessor {
     public int centerZ;
 
     @Override
-    public void setPosition(int centerX, int centerZ) {
+    public void fixedminecraft$setPosition(int centerX, int centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
     }
@@ -63,7 +63,7 @@ public class MapStateMixin implements MapStateAccessor {
             value = "NEW",
             target = "(Lnet/minecraft/registry/entry/RegistryEntry;BBBLjava/util/Optional;)Lnet/minecraft/item/map/MapDecoration;"
     ))
-    private MapDecoration injected(RegistryEntry<MapDecorationType> registryEntry, byte x, byte z, byte rotation, Optional<Text> optional,
+    private MapDecoration mapTypeAsCustomName(RegistryEntry<MapDecorationType> registryEntry, byte x, byte z, byte rotation, Optional<Text> optional,
                                    @Local(argsOnly = true) RegistryEntry<MapDecorationType> type,
                                    @Local(argsOnly = true) Text text) {
         if (text != null) {
