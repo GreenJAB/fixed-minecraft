@@ -34,6 +34,7 @@
     "glint.HorseArmorFeatureRendererMixin",
     "glint.ItemModelManagerMixin",
     "map.DrawContextAccessor",
-    "map.MapPositionRequestMixin"
+    "map.MapPositionRequestMixin",
+    "map.MapRendererMixin"
   ]
 }
