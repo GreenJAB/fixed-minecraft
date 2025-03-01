@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "אל האינסוף, ומעבר לו",
     "advancements.end.dragon_fireworks.description": "השתמש בדרקון טיל זיקוק בזמן טיסה עם אליטרה",
     "advancements.end.kill_omen_dragon.title": "הפנתיאון של מיינקראפט",
-    "advancements.end.kill_omen_dragon.description": "הרגו את הדרקון בהשפעת קללה"
+    "advancements.end.kill_omen_dragon.description": "הרגו את הדרקון בהשפעת קללה",
+    "filled_map.explorer" : "%s מפת חוקר "
 }

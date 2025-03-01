@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "Vers l'infini, et au-delà",
     "advancements.end.dragon_fireworks.description": "Utilisez une fusée de feu d'artifice draconique en volant avec Des élytres.",
     "advancements.end.kill_omen_dragon.title": "Le pantheon de Minecraft",
-    "advancements.end.kill_omen_dragon.description": "Vaincre le dragon sous l'influence du mauvais présage."
+    "advancements.end.kill_omen_dragon.description": "Vaincre le dragon sous l'influence du mauvais présage.",
+    "filled_map.explorer" : "Carte d'exploration des %s"
 }

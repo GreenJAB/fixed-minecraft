@@ -52,7 +52,7 @@ public abstract class HungerManagerMixin {
 
 
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
-            ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 20);
+            ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 30);
         } else {
             ticksSinceLastExhaustion = 0;
             lastExhaustion = this.exhaustion;
@@ -61,7 +61,7 @@ public abstract class HungerManagerMixin {
             ticksSinceLastExhaustion = 0;
         }
         if (this.saturationLevel < this.foodLevel) {
-            if (ticksSinceLastExhaustion == 20) {
+            if (ticksSinceLastExhaustion == 30) {
                 float h =0.03f+this.saturationLevel/100.0f;
                 this.saturationLevel = Math.min(this.saturationLevel+h,this.foodLevel);
                 saturationSinceLastHunger += h;
@@ -113,11 +113,6 @@ public abstract class HungerManagerMixin {
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
         return 3;
-    }
-    @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V",shift = At.Shift.AFTER))
-    private void longerHealStaminaDelay(ServerPlayerEntity player, CallbackInfo ci) {
-
-        CustomData.setData(player, "ticksSinceLastExhaustion", -10);
     }
 
 }

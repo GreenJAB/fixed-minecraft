@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "Til æva og forbi",
     "advancements.end.dragon_fireworks.description": "Bruk eit drakefyrverkeri medan du flyg med ein elytra",
     "advancements.end.kill_omen_dragon.title": "Minecraft sitt panteon",
-    "advancements.end.kill_omen_dragon.description": "Drep dragen medan du er påverka av ill jartegn"
+    "advancements.end.kill_omen_dragon.description": "Drep dragen medan du er påverka av ill jartegn",
+    "filled_map.explorer" : "Oppdagarkart over %s"
 }

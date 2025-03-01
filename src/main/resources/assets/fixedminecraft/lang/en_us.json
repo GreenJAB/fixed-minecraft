@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "To Infinity, And Beyond",
     "advancements.end.dragon_fireworks.description": "Use a Dragon Firework Rocket while flying with an Elytra",
     "advancements.end.kill_omen_dragon.title": "The Pantheon Of Minecraft",
-    "advancements.end.kill_omen_dragon.description": "Slay the Dragon under the influence of Bad Omen"
+    "advancements.end.kill_omen_dragon.description": "Slay the Dragon under the influence of Bad Omen",
+    "filled_map.explorer" : "%s Explorer Map"
 }

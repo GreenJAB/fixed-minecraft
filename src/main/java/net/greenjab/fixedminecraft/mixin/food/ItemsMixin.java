@@ -13,6 +13,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.component.type.DeathProtectionComponent;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.SuspiciousStewEffectsComponent;
@@ -67,7 +68,7 @@ public class ItemsMixin {
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                                                                                                                                                                                    target = "Lnet/minecraft/item/Items;ENDER_EYE:Lnet/minecraft/item/Item;")))
     private static Item edibleGoldMelon(String id) {
-        return register("glistering_melon_slice", GlisteringMelonSliceItem::new, new Item.Settings().food(FoodComponents.GLOW_BERRIES));
+        return register("glistering_melon_slice", GlisteringMelonSliceItem::new, new Item.Settings().food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.8F).build()));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

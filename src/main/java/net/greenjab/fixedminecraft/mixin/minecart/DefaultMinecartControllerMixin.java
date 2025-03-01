@@ -45,7 +45,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
     }
 
     @ModifyVariable(method = "moveOnRail", at = @At("STORE"), ordinal = 3)
-    private double injected(double x) {
+    private double lessSlowDown(double x) {
         if (this.minecart instanceof FurnaceMinecartEntity) {
             return 0;
         }

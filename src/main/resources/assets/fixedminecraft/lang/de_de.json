@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "Bis zur Unendlichkeit und noch viel weiter!",
     "advancements.end.dragon_fireworks.description": "Verwende eine Drachen Rakete, während du mit einer Elytra fliegst.",
     "advancements.end.kill_omen_dragon.title": "Das Pantheon von Minecraft",
-    "advancements.end.kill_omen_dragon.description": "Töte den Enderdrachen unter dem Einfluss von 'Böses Omen'"
+    "advancements.end.kill_omen_dragon.description": "Töte den Enderdrachen unter dem Einfluss von 'Böses Omen'",
+    "filled_map.explorer" : "%s-Entdeckerkartep"
 }

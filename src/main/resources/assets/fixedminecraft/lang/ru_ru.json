@@ -23,6 +23,7 @@
     "block.minecraft.bed.awake": "Вы недостаточно устали, чтобы спать",
     "container.fletching": "Создание стрел",
     "itemgroup.fixed": "Исправленные",
+    "effect.fixedminecraft.awkward": "Без эффектов",
     "effect.fixedminecraft.reach": "Досягаемость",
     "effect.fixedminecraft.insomnia": "Бессонница",
     "gamerule.iceMeltInNether": "Лед теат в аду",
@@ -57,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "Бесконечность не предел",
     "advancements.end.dragon_fireworks.description": "Используйте драконий фейерверк, пока летите на элитрах",
     "advancements.end.kill_omen_dragon.title": "Пантеон Майнкравта",
-    "advancements.end.kill_omen_dragon.description": "Убейте дракона края под эффектом дурного знака"
+    "advancements.end.kill_omen_dragon.description": "Убейте дракона края под эффектом дурного знака",
+    "filled_map.explorer" : "Карта исследователя %s"
 }

@@ -58,5 +58,6 @@
     "advancements.end.dragon_fireworks.title": "Til evigheten og forbi",
     "advancements.end.dragon_fireworks.description": "Bruk en dragefyrverkeri mens du flyr med en elytra",
     "advancements.end.kill_omen_dragon.title": "Minecrafts panteon",
-    "advancements.end.kill_omen_dragon.description": "Drep dragen mens du er påvirket av dårlig gjærtegn"
+    "advancements.end.kill_omen_dragon.description": "Drep dragen mens du er påvirket av dårlig gjærtegn",
+    "filled_map.explorer" : "Oppdagelseskart over %s"
 }

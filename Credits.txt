@@ -25,6 +25,7 @@ Friend and Ideas Discussions: Bricky
 Language:
 Russian: oleniz
 German: dj_creeper_174
-Norwegian (bokmål/nynorsk): .bloodaxe
+Norwegian (bokmål/nynorsk): bloodaxe
 French: divach
 Hebrew: gaming_everyday
+Ukraine: Eevan99

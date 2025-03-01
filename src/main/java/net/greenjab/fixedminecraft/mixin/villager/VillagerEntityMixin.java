@@ -221,21 +221,18 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                             new TradeOffers.BuyItemFactory(Items.BOOK, 4, 12, 2),
                             new TradeOffers.SellItemFactory(Blocks.BOOKSHELF, 9, 1, 12, 1)
                     })
-
                     .put(2, new TradeOffers.Factory[]{
                             biomeBook(false, villagerData),
-                            new TradeOffers.SellItemFactory(Items.LANTERN, 1, 1, 5)})
-
+                            new TradeOffers.SellItemFactory(Blocks.CHISELED_BOOKSHELF, 1, 1, 12, 5)})
                     .put(3, new TradeOffers.Factory[]{
                             new TradeOffers.BuyItemFactory(Items.INK_SAC, 5, 12, 20),
                             new TradeOffers.SellItemFactory(Items.GLASS, 1, 4, 10),
                             new TradeOffers.SellItemFactory(Items.CLOCK, 5, 1, 15),
-                            new TradeOffers.SellItemFactory(Items.COMPASS, 4, 1, 15)})
-
+                            new TradeOffers.SellItemFactory(Items.COMPASS, 4, 1, 15),
+                            new TradeOffers.SellItemFactory(Items.LANTERN, 4, 1, 10)})
                     .put(4, new TradeOffers.Factory[]{
                             anyBook(),
                             new TradeOffers.BuyItemFactory(Items.WRITABLE_BOOK, 2, 12, 30)})
-
                     .put(5, new TradeOffers.Factory[]{
                             biomeBook(true, villagerData),
                             new TradeOffers.SellItemFactory(Items.NAME_TAG, 20, 1, 30)}).build());
@@ -263,6 +260,24 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+        int i = 0;
+        while (i < 10) {
+            i++;
+            if (optional.isPresent()) {
+                RegistryEntry<Enchantment> registryEntry = optional.get();
+                Enchantment enchantment = registryEntry.value();
+                int maxLevel = enchantment.getMaxLevel();
+                if (!(maxLevel == 1 && master)) {
+                    i=10;
+                } else {
+                    optional = villagerEntity.getWorld()
+                            .getRegistryManager()
+                            .getOrThrow(RegistryKeys.ENCHANTMENT)
+                            .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+                }
+            }
+        }
+
         int l;
         ItemStack itemStack;
         if (optional.isPresent()) {
@@ -286,9 +301,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
 
         return new EnchantedBookFactory(itemStack, l, master?30:10);
-        //return new TradeOffer(new TradedItem(Items.EMERALD, l), Optional.of(new TradedItem(Items.BOOK)), itemStack, 12, master?30:10, 0.2F);
     }
-
 
     @Unique
     private EnchantedBookFactory anyBook() {

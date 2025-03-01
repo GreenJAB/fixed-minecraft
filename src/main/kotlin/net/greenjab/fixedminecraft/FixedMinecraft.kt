@@ -22,7 +22,7 @@ object FixedMinecraft : ModInitializer {
     var ItemCapacities : HashMap<Item, Int> = hashMapOf()
 
     //TODO Rename functions / commenting
-    //TODO Mapbook off-map-player-icon / explorer map name translations / biome colours?
+    //TODO biome colours?
     //TODO Minecart overhaul
     //TODO Pale garden ominous biome?
     //TODO Remove Kotlin
