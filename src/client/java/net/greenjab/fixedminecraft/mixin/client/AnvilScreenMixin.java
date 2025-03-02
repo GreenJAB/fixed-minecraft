@@ -10,15 +10,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
 @Mixin(AnvilScreen.class)
 public class AnvilScreenMixin {
+
+    @Shadow
+    @Final
+    private PlayerEntity player;
 
     @ModifyConstant(method = "drawForeground", constant = @Constant(intValue = 40, ordinal = 0))
     private int newMax(int i, @Local(argsOnly = true) DrawContext context) {
@@ -31,7 +37,6 @@ public class AnvilScreenMixin {
         int levelCost = ASH.getLevelCost();
         while (levelCost>=500) {levelCost-=500;cap++;}
         if (cap == 0) {
-
             return 1000;
         }
         return cap+1;
@@ -46,8 +51,8 @@ public class AnvilScreenMixin {
         return levelCost;
     }
 
-    @Inject(method = "drawForeground", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getLevelCost()I"))
-    private void drawBar(DrawContext context, int mouseX, int mouseY, CallbackInfo ci) {
+    @Redirect(method = "drawForeground", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/AnvilScreenHandler;getLevelCost()I"))
+    private int drawBar(AnvilScreenHandler instance, @Local(argsOnly = true) DrawContext context) {
         AnvilScreen AS = (AnvilScreen) (Object) this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
         ItemStack ItemInput1 = ItemStack.EMPTY;
@@ -118,6 +123,7 @@ public class AnvilScreenMixin {
         for (int i = 5; i < ItemCapacity; i+=5) {
             context.fill(barPos(i, ItemCapacity) - 1, 38, barPos(i, ItemCapacity), 40, new Color(255, 255, 255).hashCode());
         }
+        return levelCost;
     }
 
     @Unique
@@ -140,7 +146,7 @@ public class AnvilScreenMixin {
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
         int levelCost = ASH.getLevelCost();
-        while (levelCost>=100000)levelCost-=100000;
+        while (levelCost>=500)levelCost-=500;
         return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost)) && Math.abs(levelCost) > 0;
     }
 }

@@ -9,6 +9,8 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
@@ -19,11 +21,14 @@ import net.minecraft.screen.MerchantScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.Merchant;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -33,13 +38,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 @Mixin(MerchantScreenHandler.class)
 public abstract class MerchantScreenHandlerMixin extends ScreenHandler implements InventoryChangedListener {
 
+    @Unique
+    private static final Identifier EMPTY_HELMET_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/helmet");
+    @Unique
+    private static final Identifier EMPTY_CHESTPLATE_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/chestplate");
+    @Unique
+    private static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/leggings");
+    @Unique
+    private static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/boots");
+    @Unique
+    private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{
+            EMPTY_HELMET_SLOT_TEXTURE,
+            EMPTY_CHESTPLATE_SLOT_TEXTURE,
+            EMPTY_LEGGINGS_SLOT_TEXTURE,
+            EMPTY_BOOTS_SLOT_TEXTURE };
+
     @Shadow
     protected abstract void playYesSound();
+
+    @Shadow
+    @Final
+    private Merchant merchant;
     @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
 
@@ -53,58 +78,99 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         Vec3d vec3d = Objects.requireNonNull(merchant.getCustomer()).getClientCameraPosVec(1.0f);
         double e = d*d;
 
+
+        Inventory inventory = new SimpleInventory(4);
+        ItemStack barrer = Items.BARRIER.getDefaultStack();
+        barrer.set(DataComponentTypes.CUSTOM_NAME, Text.of("Error, Close and Reopen Villager UI"));
+        for (int i = 0;i<4;i++) {inventory.setStack(i, barrer);}
+        int level = 0;
+        VillagerEntity VE = null;
+
+
         Vec3d vec3d2 = merchant.getCustomer().getRotationVec(1.0F);
         Vec3d vec3d3 = vec3d.add(vec3d2.x * d, vec3d2.y * d, vec3d2.z * d);
         Box box = merchant.getCustomer().getBoundingBox().stretch(vec3d2.multiply(d)).expand(1.0, 1.0, 1.0);
         EntityHitResult entityHitResult = ProjectileUtil.raycast(merchant.getCustomer(), vec3d, vec3d3, box, (entityx) -> !entityx.isSpectator() && entityx.canHit(), e);
 
+        //System.out.println("start" + this.merchant.isClient());
         if (entityHitResult != null) {
-            if (entityHitResult.getEntity() instanceof VillagerEntity VE) {
-                Inventory inventory = Inv(VE.getArmorItems());
-                for (int i = 0; i < 4; i++) {
-                    final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[i];
-                    int finalI = i;
-                    this.addSlot(new Slot(inventory, 3 - i, 252, 8 + i * 18) {
-                        public boolean isEnabled() {
-                            return VE.getVillagerData().getLevel()-1>finalI;
-                        }
-                        public void setStack(ItemStack stack, ItemStack previousStack) {
-                            merchant.getCustomer().onEquipStack(equipmentSlot, stack, previousStack);
-                            super.setStack(stack, previousStack);
-                            VE.equipStack(equipmentSlot, inventory.getStack(3 - finalI));
-                        }
-
-                        public int getMaxItemCount() {
-                            return 1;
-                        }
-
-                        public boolean canInsert(ItemStack stack) {
-                            if (stack != null) {
-                                boolean extra = false;
-                                if (equipmentSlot == EquipmentSlot.HEAD) {
-                                    extra =
-                                            stack.getItem() == Items.CARVED_PUMPKIN ||
-                                            stack.getItem() == Items.DRAGON_HEAD ||
-                                            stack.getItem() == Items.PLAYER_HEAD ||
-                                            stack.isIn(ItemTags.BANNERS);
-                                }
-                                EquipmentSlot slot = getPreferredEquipmentSlot(stack);
-                                return (equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE)) || extra;
-                            }
-                            return false;
-                        }
-
-                        public boolean canTakeItems(PlayerEntity playerEntity) {
-                            ItemStack itemStack = this.getStack();
-                            if (itemStack == null) return false;
-                            return (itemStack.isEmpty() || playerEntity.isCreative() ||
-                                    !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) &&
-                                   super.canTakeItems(playerEntity);
-                        }
-                    });
-                }
+            if (entityHitResult.getEntity() instanceof VillagerEntity villager) {
+                VE = villager;
+                inventory = Inv(villager.getArmorItems());
+                level = villager.getVillagerData().getLevel();
+                //System.out.println("found:" + level + inventory.getStack(0));
             }
+        }//*/
+
+        /*List<VillagerEntity> list = merchant.getCustomer().getWorld().getEntitiesByClass(
+                VillagerEntity.class,
+                merchant.getCustomer().getBoundingBox().expand(5.0),
+                Objects::nonNull
+        );
+
+        System.out.println("this: " + this.merchant.isClient() + ", " +playerInventory.player.explodedBy.getUuidAsString());
+        for (VillagerEntity villager : list) {
+            System.out.println("villager: " + villager.getUuidAsString());
+            if (villager.getUuidAsString() == playerInventory.player.explodedBy.getUuidAsString() ) {
+                VE = villager;
+                inventory = Inv(villager.getArmorItems());
+                level = villager.getVillagerData().getLevel();
+                break;
+            }
+        }*/
+
+        for (int i = 0; i < 4; i++) {
+            final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[i];
+            int finalI = i;
+            int finalLevel = level;
+            VillagerEntity finalVE = VE;
+            this.addSlot(new Slot(inventory, 3 - finalI, 252, 8 + finalI * 18) {
+                public boolean isEnabled() {
+                    return finalLevel - 1 > 3- finalI;
+                }
+
+                public void setStack(ItemStack stack, ItemStack previousStack) {
+                    merchant.getCustomer().onEquipStack(equipmentSlot, stack, previousStack);
+                    super.setStack(stack, previousStack);
+                    if (finalVE != null) finalVE.equipStack(equipmentSlot, inventory.getStack(3 - finalI));
+                }
+
+                public int getMaxItemCount() {
+                    return 1;
+                }
+
+                public boolean canInsert(ItemStack stack) {
+                    if (stack != null) {
+                        boolean extra = false;
+                        if (equipmentSlot == EquipmentSlot.HEAD) {
+                            extra =
+                                    stack.getItem() == Items.CARVED_PUMPKIN ||
+                                    stack.getItem() == Items.DRAGON_HEAD ||
+                                    stack.getItem() == Items.PLAYER_HEAD ||
+                                    stack.isIn(ItemTags.BANNERS);
+                        }
+                        EquipmentSlot slot = getPreferredEquipmentSlot(stack);
+                        return (equipmentSlot == slot && stack.isIn(ItemTags.DYEABLE)) || extra;
+                    }
+                    return false;
+                }
+
+                public boolean canTakeItems(PlayerEntity playerEntity) {
+                    ItemStack itemStack = this.getStack();
+                    if (itemStack == null) return false;
+                    if (itemStack.getItem() == Items.BARRIER) return false;
+                    return (itemStack.isEmpty() || playerEntity.isCreative() ||
+                            !EnchantmentHelper.hasAnyEnchantmentsWith(itemStack, EnchantmentEffectComponentTypes.PREVENT_ARMOR_CHANGE)) &&
+                           super.canTakeItems(playerEntity);
+                }
+
+
+                public Identifier getBackgroundSprite() {
+                    return EMPTY_ARMOR_SLOT_TEXTURES[finalI];
+                }
+            });
         }
+
 
     }
 

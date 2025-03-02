@@ -74,6 +74,7 @@
         "minecart.AbstractMinecartEntityMixin",
         "minecart.DefaultMinecartControllerMixin",
         "minecart.EntityTypeMixin",
+        "minecart.ExperimentalMinecartControllerMixin",
         "minecart.GameRulesMixin",
         "minecart.HoneycombItemMixin",
         "minecart.OxidizableMixin",

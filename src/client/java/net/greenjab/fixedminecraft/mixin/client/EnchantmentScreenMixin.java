@@ -49,7 +49,7 @@ public class EnchantmentScreenMixin {
         Identifier[] TEXTURES = new Identifier[]{Identifier.of("container/enchanting_table/level_1"), Identifier.of("container/enchanting_table/level_2"), Identifier.of("container/enchanting_table/level_3")};
         EnchantmentScreen ES = (EnchantmentScreen)(Object)this;
         int img = ES.getScreenHandler().enchantmentLevel[l];
-
+        img = Math.clamp(img, 0, 2);
         Identifier[] TEXTURES_REORDERED = new Identifier[3];
         for (int i = 0;i<3;i++) TEXTURES_REORDERED[i] = TEXTURES[img];
         return TEXTURES_REORDERED;

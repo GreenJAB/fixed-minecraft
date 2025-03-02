@@ -63,12 +63,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
 
     @Override
-    protected double getMaxSpeed(ServerWorld world) {
-        return 40;
-        //return this.isTouchingWater() ? super.getMaxSpeed(world) * 0.75 : super.getMaxSpeed(world) * 0.5;
-    }
-
-    @Override
     protected Vec3d applySlowdown(Vec3d velocity) {
         //double d = this.pushVec.getX() * this.pushVec.getX() + this.pushVec.getZ() * this.pushVec.getZ();
         Vec3d vec3d;

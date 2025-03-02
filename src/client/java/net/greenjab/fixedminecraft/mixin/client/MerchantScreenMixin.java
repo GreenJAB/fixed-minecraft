@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-
 @Mixin(MerchantScreen.class)
 public class MerchantScreenMixin {
     @Unique
     private static final Identifier CHEST_SLOTS_TEXTURE = Identifier.of("container/horse/chest_slots");
+
     @Inject(method = "drawBackground", at = @At(value = "TAIL"))
     private void armorSlotBackground(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo ci, @Local(ordinal = 2) int i, @Local(ordinal = 3) int j) {
         MerchantScreen MS = (MerchantScreen) (Object)this;

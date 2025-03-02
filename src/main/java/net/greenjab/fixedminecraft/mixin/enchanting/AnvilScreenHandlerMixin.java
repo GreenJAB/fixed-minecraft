@@ -116,7 +116,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             return;
         }
 
-        this.levelCost.set(1 + 1000*enchantmentCapacity);
+        this.levelCost.set(1 + capNum*enchantmentCapacity);
         ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(outputItemStack));
         this.repairItemUsage = 0;
         if (!secondInputStack.isEmpty()) {
@@ -277,14 +277,15 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
     @Inject(method = "canTakeOutput", at = @At(value = "HEAD"), cancellable = true)
     private void canTake(PlayerEntity playerEntity, boolean present, CallbackInfoReturnable<Boolean> cir){
-        AnvilScreenHandler ASH = (AnvilScreenHandler)(Object)this;
-        cir.setReturnValue (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(ASH.getLevelCost()) && Math.abs(ASH.getLevelCost()) > 0);
+        int levelCost = this.levelCost.get();
+        while (levelCost>=500)levelCost-=500;
+        cir.setReturnValue (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost) && Math.abs(levelCost) > 0);
     }
 
     @Inject(method = "onTakeOutput", at = @At(value = "HEAD"), cancellable = true)
     private void onTake(PlayerEntity player, ItemStack stack, CallbackInfo ci){
         int levelCost = this.levelCost.get();
-        while (levelCost>=100000)levelCost-=100000;
+        while (levelCost>=500)levelCost-=500;
         if (!player.getAbilities().creativeMode) {
             player.addExperienceLevels(-Math.abs(levelCost));
         }

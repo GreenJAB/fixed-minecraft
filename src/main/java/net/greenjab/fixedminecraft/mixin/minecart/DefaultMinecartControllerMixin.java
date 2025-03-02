@@ -23,7 +23,7 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
         super(minecart);
     }
 
-    @Redirect(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
+    /*@Redirect(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;move(Lnet/minecraft/entity/MovementType;Lnet/minecraft/util/math/Vec3d;)V"))
     private void modifyMaxVelocity(AbstractMinecartEntity instance, MovementType movementType, Vec3d vec3d, @Local BlockState state) {
         double t = this.minecart.hasPassengers() ? 0.75 : 1.0;
         Vec3d vec3d2 = this.getVelocity();
@@ -50,5 +50,5 @@ public abstract class DefaultMinecartControllerMixin extends MinecartController 
             return 0;
         }
         return x;
-    }
+    }*/
 }

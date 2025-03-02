@@ -58,8 +58,8 @@ public class GameRendererMixin {
             double g = vec3d.squaredDistanceTo(vec3d4);
             if (bl2 && g > dist()) {
                 client.crosshairTarget = BlockHitResult.createMissed(vec3d4, Direction.getFacing(vec3d2.x, vec3d2.y, vec3d2.z), BlockPos.ofFloored(vec3d4));
-            }
-            else if (g < e || client.crosshairTarget == null) {
+                client.targetedEntity = null;
+            } else if (g < e || client.crosshairTarget == null) {
                 client.crosshairTarget = entityHitResult;
                 client.targetedEntity = entityHitResult.getEntity();
             }
@@ -75,9 +75,16 @@ public class GameRendererMixin {
                 }
                 if (entityHitResult2 != null && entityHitResult2.getEntity() != vehicle) {
                     HitResult hitResult = client.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
-                    if (entityHitResult2.getPos().squaredDistanceTo(vec3d) < hitResult.getPos().squaredDistanceTo(vec3d)) {
-                        client.crosshairTarget = entityHitResult2;
-                        client.targetedEntity = entityHitResult2.getEntity();
+                    if (bl2 && vec3d.squaredDistanceTo(entityHitResult2.getPos()) < dist()) {
+                        if (entityHitResult2.getPos().squaredDistanceTo(vec3d) < hitResult.getPos().squaredDistanceTo(vec3d)) {
+                            client.crosshairTarget = entityHitResult2;
+                            client.targetedEntity = entityHitResult2.getEntity();
+                        }
+                    } else if (bl) {
+                        if (entityHitResult2.getPos().squaredDistanceTo(vec3d) < hitResult.getPos().squaredDistanceTo(vec3d)) {
+                            client.crosshairTarget = entityHitResult2;
+                            client.targetedEntity = entityHitResult2.getEntity();
+                        }
                     }
                 }
             }
