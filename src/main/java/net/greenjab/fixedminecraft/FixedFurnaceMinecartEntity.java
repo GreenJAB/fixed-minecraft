@@ -4,11 +4,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FurnaceBlock;
 import net.minecraft.entity.AreaEffectCloudEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,8 +30,6 @@ import java.util.List;
 import java.util.Objects;
 
 public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
-    private int fuel;
-    public Vec3d pushVec = Vec3d.ZERO;
     private ArrayList<AbstractMinecartEntity> train = new ArrayList<>(7);
 
     public FixedFurnaceMinecartEntity(EntityType<? extends FurnaceMinecartEntity> entityType, World world) {
@@ -46,17 +46,56 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
             List<AbstractMinecartEntity> list = this.getWorld().getEntitiesByClass(
                     AbstractMinecartEntity.class,
                     this.getBoundingBox().expand(2.0),
-                    entity -> entity != null && !(entity instanceof FurnaceMinecartEntity)
+                    entity -> entity != null && !(entity instanceof FurnaceMinecartEntity) && !train.contains(entity)
             );
             if (!list.isEmpty()) {
                 if (train.get(0)==null) {
                     train.set(0, list.get(0));
+                } else {
+                    if (train.get(1)==null) {
+                        train.set(1, list.get(0));
+                    }
                 }
             }
-            if (train.get(0)!=null) {
-                System.out.println(train.get(0));
+            if (train.get(0)!=null && this.isOnRail()) {
+                //System.out.println(train.get(0));
                 if (train.get(0).isRemoved()) {
                     train.set(0, null);
+                } else {
+                    AbstractMinecartEntity minecart = train.get(0);
+
+                    AbstractMinecartEntity fakeMinecart = new ChestMinecartEntity(EntityType.CHEST_MINECART, this.getWorld());
+                    fakeMinecart.noClip = true;
+                    fakeMinecart.setPosition(this.getPos());
+                    fakeMinecart.setVelocity(new Vec3d(-1, 0, 0).rotateY(this.getYaw()).multiply(1.5f));
+                    fakeMinecart.getController().moveOnRail((ServerWorld) minecart.getWorld());
+
+                    minecart.setPosition(fakeMinecart.getPos());
+                    //minecart.setVelocity(0, 0, 0);
+                    minecart.setVelocity(this.getVelocity());
+                    fakeMinecart.remove(Entity.RemovalReason.DISCARDED);
+                    //minecart.setPosition(this.getPos().add(3, 0, 0));
+
+                    if (train.get(1)!=null && this.isOnRail()) {
+                        //System.out.println(train.get(0));
+                        if (train.get(1).isRemoved()) {
+                            train.set(1, null);
+                        } else {
+                            AbstractMinecartEntity minecart2 = train.get(1);
+
+                            AbstractMinecartEntity fakeMinecart2 = new ChestMinecartEntity(EntityType.CHEST_MINECART, this.getWorld());
+                            fakeMinecart2.noClip = true;
+                            fakeMinecart2.setPosition(this.getPos());
+                            fakeMinecart2.setVelocity(new Vec3d(-1, 0, 0).rotateY(this.getYaw()).multiply(1.5f).multiply(1.8f));
+                            fakeMinecart2.getController().moveOnRail((ServerWorld) minecart2.getWorld());
+
+                            minecart2.setPosition(fakeMinecart2.getPos());
+                            //minecart.setVelocity(0, 0, 0);
+                            minecart2.setVelocity(this.getVelocity());
+                            fakeMinecart2.remove(Entity.RemovalReason.DISCARDED);
+                            //minecart.setPosition(this.getPos().add(3, 0, 0));
+                        }
+                    }
                 }
             }
         }
@@ -70,7 +109,8 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         if (this.pushVec.lengthSquared() > 1.0E-7) {
             //d = Math.sqrt(d);
             //this.pushVec.multiply(1/d);
-            this.pushVec.normalize();
+            //this.pushVec.normalize();
+            this.pushVec = this.method_64276(velocity);
             //float f = (float) (1.0f/(1.0f+(1.0f*this.getVelocity().horizontalLength())));
             //this.pushVec.multiply(f);
             vec3d = this.getVelocity().add(this.pushVec.getX()/80.0f, 0.0, this.pushVec.getZ()/80.0f);
@@ -110,21 +150,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         return this.pushVec.horizontalLengthSquared() > 1.0E-4 && velocity.horizontalLengthSquared() > 0.001
                 ? this.pushVec.projectOnto(velocity).normalize().multiply(this.pushVec.length())
                 : this.pushVec;
-    }
-
-    @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
-        ItemStack itemStack = player.getStackInHand(hand);
-        if (itemStack.isIn(ItemTags.FURNACE_MINECART_FUEL) && this.fuel + 3600 <= 32000) {
-            itemStack.decrementUnlessCreative(1, player);
-            this.fuel += 3600;
-        }
-
-        if (this.fuel > 0) {
-            this.pushVec = this.getPos().subtract(player.getPos()).getHorizontal();
-        }
-
-        return ActionResult.SUCCESS;
     }
 
     @Override

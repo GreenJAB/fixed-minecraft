@@ -143,6 +143,9 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 if (itemStackAtRandomSlot == null || itemStackAtRandomSlot.isEmpty() || !itemStackAtRandomSlot.isOf(Items.ENCHANTED_BOOK)) {
                     continue;
                 }
+                if (itemStackAtRandomSlot.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==2) {
+                    continue;
+                }
 
                 chosenItemStacks.add(itemStackAtRandomSlot);
             }
@@ -348,6 +351,23 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             this.seed.set(player.getEnchantingTableSeed());
             this.onContentChanged(this.inventory);
             world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
+
+            for(BlockPos offset : EnchantingTableBlock.POWER_PROVIDER_OFFSETS) {
+                ChiseledBookshelfBlockEntity chiseledBookShelfEntity = (ChiseledBookshelfBlockEntity) world.getBlockEntity(blockPos.add(offset));
+
+                if (chiseledBookShelfEntity == null) {
+                    continue;
+                }
+                if (chiseledBookShelfEntity.isEmpty()) {
+                    continue;
+                }
+                for (int slot = 0;slot<6;slot++) {
+                    ItemStack book = chiseledBookShelfEntity.getStack(slot);
+                    if (book.isOf(Items.ENCHANTED_BOOK)) {
+                        book.remove(DataComponentTypes.REPAIR_COST);
+                    }
+                }
+            }
         };
     }
 

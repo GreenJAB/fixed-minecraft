@@ -29,7 +29,6 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     ), cancellable = true
     )
     private void noAirDragInitially(ServerWorld world, CallbackInfo ci) {
-        System.out.println(this.getVelocity().horizontalLength());
         if (this.getVelocity().getY()>-0.7) {
             this.setVelocity(this.getVelocity().multiply(1, 0.95, 1));
             ci.cancel();

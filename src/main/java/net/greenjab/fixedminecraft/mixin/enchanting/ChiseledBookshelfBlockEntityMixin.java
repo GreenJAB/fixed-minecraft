@@ -5,8 +5,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
@@ -19,6 +21,10 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ChiseledBookshelfBlockEntity.class)
 public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
@@ -43,5 +49,17 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
         nbt.putInt("last_interacted_slot", lastInteractedSlot);
         Networking.sendUpdatePacket(pos);
         return nbt;
+    }
+
+    @Inject(method = "removeStack(II)Lnet/minecraft/item/ItemStack;", at = @At(
+            value = "RETURN"
+    ), cancellable = true
+    )
+    private void addNoEnchantTag(int slot, int amount, CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack book = cir.getReturnValue();
+        if (book.isOf(Items.ENCHANTED_BOOK)) {
+            book.set(DataComponentTypes.REPAIR_COST, 2);
+        }
+        cir.setReturnValue(book);
     }
 }
