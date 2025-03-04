@@ -271,6 +271,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
             }
         }
+        if (!newName && outputItemStack.isOf(Items.ENCHANTED_BOOK)) {
+            outputItemStack.remove(DataComponentTypes.REPAIR_COST);
+        }
         this.output.setStack(0, outputItemStack);
         ci.cancel();
     }

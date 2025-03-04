@@ -1,13 +1,29 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedFurnaceMinecartEntity;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.ExperimentalMinecartController;
+import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -33,5 +49,70 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             this.setVelocity(this.getVelocity().multiply(1, 0.95, 1));
             ci.cancel();
         }
+    }
+
+    @Redirect(method = "pushAwayFromMinecart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;addVelocity(DDD)V"))
+    private void furnaceMinecartsCantBePushed(AbstractMinecartEntity instance, double x, double y, double z){
+        if (!(instance instanceof FurnaceMinecartEntity)) {
+            instance.addVelocity(x, y, z);
+        }
+    }
+    @Redirect(method = "pushAwayFromMinecart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"))
+    private void furnaceMinecartsCantBePushed2(AbstractMinecartEntity instance, Vec3d vec3d){
+        if (!(instance instanceof FurnaceMinecartEntity)) {
+            instance.addVelocity(vec3d);
+        }
+    }
+    @Redirect(method = "create", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/vehicle/ExperimentalMinecartController;adjustToRail(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Z)V"
+    ))
+    private static <T extends AbstractMinecartEntity> void setSpawnRotation(ExperimentalMinecartController controller, BlockPos blockPos,
+                                                                            BlockState blockState, boolean ignoreWeight,
+                                                                            @Local T abstractMinecartEntity, @Local(argsOnly = true) PlayerEntity player) {
+        controller.adjustToRail(blockPos, blockState, true);
+        if (player != null && abstractMinecartEntity instanceof FurnaceMinecartEntity) {
+            float rot = (-player.headYaw -90+720)%360;
+            if (Math.cos((rot-abstractMinecartEntity.getYaw())*Math.PI/180f)<0) {
+                abstractMinecartEntity.setYaw((abstractMinecartEntity.getYaw()+180)%360);
+                abstractMinecartEntity.setVelocity(0, 0.001f, 0);
+                abstractMinecartEntity.setYawFlipped(true);
+            }
+        }
+    }
+
+    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+    private void removeTrainTag(NbtCompound nbt, CallbackInfo ci) {
+        this.removeCommandTag("train");
+        this.removeCommandTag("trainMove");
+    }
+
+    @Inject(method = "collidesWith", at = @At(value = "RETURN"), cancellable = true)
+    private void removeTrainCollisions(Entity otherEntity, CallbackInfoReturnable<Boolean> cir) {
+        if (cir.getReturnValue()) {
+            if (otherEntity instanceof AbstractMinecartEntity) {
+                cir.setReturnValue(noInternalTrainCollisions(this, otherEntity));
+            }
+        }
+    }
+
+    @Unique
+    private boolean noInternalTrainCollisions(Entity thisEntity, Entity otherEntity) {
+        if (thisEntity instanceof FixedFurnaceMinecartEntity fixedFurnaceMinecartEntity) {
+            if (fixedFurnaceMinecartEntity.getTrain().contains(otherEntity)) {
+                return false;
+            }
+        }
+        if (thisEntity.getCommandTags().contains("train")) {
+            if (otherEntity.getCommandTags().contains("train")) {
+                return false;
+            }
+            if (otherEntity instanceof FixedFurnaceMinecartEntity fixedFurnaceMinecartEntity) {
+                if (fixedFurnaceMinecartEntity.getTrain().contains(thisEntity)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
