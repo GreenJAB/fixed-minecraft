@@ -5,21 +5,18 @@ import net.greenjab.fixedminecraft.FixedFurnaceMinecartEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.ExperimentalMinecartController;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +26,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AbstractMinecartEntity.class)
 public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
+    @Shadow
+    public abstract boolean isOnRail();
+
     public AbstractMinecartEntityMixin(EntityType<?> entityType, World world) {
         super(entityType, world);
     }
@@ -63,6 +63,12 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             instance.addVelocity(vec3d);
         }
     }
+    @Redirect(method = "pushAwayFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;addVelocity(DDD)V"))
+    private void trainMinecartsCantBePushed(AbstractMinecartEntity instance, double x, double y, double z){
+        if (!(instance.getCommandTags().contains("train"))) {
+            instance.addVelocity(x, y, z);
+        }
+    }
     @Redirect(method = "create", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/vehicle/ExperimentalMinecartController;adjustToRail(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Z)V"
@@ -85,6 +91,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     private void removeTrainTag(NbtCompound nbt, CallbackInfo ci) {
         this.removeCommandTag("train");
         this.removeCommandTag("trainMove");
+        this.removeCommandTag("trainDisconnect");
     }
 
     @Inject(method = "collidesWith", at = @At(value = "RETURN"), cancellable = true)
@@ -104,6 +111,9 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             }
         }
         if (thisEntity.getCommandTags().contains("train")) {
+            if (thisEntity.isOnRail()) {
+                return false;
+            }
             if (otherEntity.getCommandTags().contains("train")) {
                 return false;
             }

@@ -39,12 +39,10 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
         }
         if (this.minecart.isTouchingWater()) u /= 2.0;
         u /= 20.0;
-        double u2 = u;
         u = Math.max(u, velocity.horizontalLength()*.9);
         if (state.getBlock() instanceof PoweredRailBlock) {
             u = 8.0/20.0;
         }
-        //System.out.println("max: " + u2 + ", "  + u + ", " + this.minecart.getVelocity());
         cir.setReturnValue(u);
         cir.cancel();
     }
@@ -66,7 +64,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 
     @ModifyExpressionValue(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/ExperimentalMinecartController;calcNewHorizontalVelocity(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/vehicle/ExperimentalMinecartController$MoveIteration;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/enums/RailShape;)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d skipPowerRailSlowdown(Vec3d original) {
-        if (this.minecart.noClip) {
+        if (this.minecart.noClip || this.minecart.getCommandTags().contains("train")) {
             return this.getVelocity().getHorizontal();
         }
         return original;
