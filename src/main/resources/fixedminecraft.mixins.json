@@ -80,6 +80,7 @@
         "minecart.HoneycombItemMixin",
         "minecart.OxidizableMixin",
         "minecart.PlayerEntityMixin",
+        "minecart.ServerPlayerEntityMixin",
         "mobs.ArmorStandEntityMixin",
         "mobs.BeeEntityMixin",
         "mobs.BiomeSourceMixin",

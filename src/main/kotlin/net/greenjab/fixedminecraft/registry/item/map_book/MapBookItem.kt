@@ -53,39 +53,6 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         }
     }
 
-    /*override fun use(world: World, user: PlayerEntity, hand: Hand): ActionResult {
-        if (world != null && !world.isClient()) {
-            val player = user as ServerPlayerEntity
-            val item = user.getStackInHand(hand)
-            val otherHand = if (hand == Hand.MAIN_HAND) player.offHandStack else player.mainHandStack
-            var openMap = true
-            if (otherHand.isOf(Items.PAPER)) {
-                if (this.addNewMapAtPos(item, world as ServerWorld, player.pos, 0)) {
-                    if (!player.abilities.creativeMode) {
-                        otherHand.decrement(1)
-                    }
-
-                    player.world.playSoundFromEntity(
-                        null,
-                        player,
-                        SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                        player.soundCategory,
-                        1.0f,
-                        1.0f
-                    )
-                    openMap = false
-                }
-            }
-            this.sendMapUpdates(player, item)
-            mapBookSync(player, item)
-            if (openMap && this.hasMapBookId(item)) {
-                mapBookOpen(player, item)
-            }
-        }
-
-        return super.use(world, user, hand)
-    }*/
-
     override fun use(world: World?, user: PlayerEntity?, hand: Hand?): ActionResult {
         if (world != null && !world.isClient()) {
             val player = user as ServerPlayerEntity
@@ -188,8 +155,6 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         if (world != null && !world.isClient()) {
             if (stack != null && entity is PlayerEntity) {
                 if (selected || entity.offHandStack == stack) {
-                    // this.applyAdditions(stack, (ServerWorld)world);
-
                     for (mapStateData in this.getMapStates(stack, entity.getWorld())) {
                         mapStateData.mapState.update(entity as PlayerEntity?, stack)
                         if (!mapStateData.mapState.locked) {
@@ -220,7 +185,9 @@ class MapBookItem(settings: Settings?) : Item(settings) {
             for (i in mapBookState.mapIDs) {
                 val mapState = world.getMapState(MapIdComponent(i))
                 if (mapState != null) {
-                    list.add(MapStateData(MapIdComponent(i), mapState))
+                    if (world.dimensionEntry.idAsString.toString() == mapState.dimension.value.toString()) {
+                        list.add(MapStateData(MapIdComponent(i), mapState))
+                    }
                 }
             }
         }
@@ -242,7 +209,6 @@ class MapBookItem(settings: Settings?) : Item(settings) {
         var nearestDistance = Double.MAX_VALUE
         var nearestScale: Byte = 127
         var nearestMap: MapStateData? = null
-
         val mapStates: Iterator<MapStateData> = getMapStates(stack, world).iterator()
 
         while (true) {

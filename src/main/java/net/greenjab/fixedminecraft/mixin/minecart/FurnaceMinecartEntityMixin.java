@@ -1,27 +1,23 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
-import net.minecraft.util.math.Vec3d;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FurnaceMinecartEntity.class)
 public class FurnaceMinecartEntityMixin {
 
-    /*@Redirect(method = "interact", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/util/math/Vec3d;getHorizontal()Lnet/minecraft/util/math/Vec3d;"
-    ))
-    private Vec3d set(Vec3d instance) {
-        FurnaceMinecartEntity FME = (FurnaceMinecartEntity)(Object)this;
-        return new Vec3d(1, 0, 0).rotateY(FME.getYaw());
-    }*/
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isClient()Z"), cancellable = true)
+    private void cancelTick(CallbackInfo ci) { ci.cancel(); }
+    @Inject(method = "writeCustomDataToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;putDouble(Ljava/lang/String;D)V"), cancellable = true)
+    private void cancelWrite(CallbackInfo ci) { ci.cancel(); }
+    @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getDouble(Ljava/lang/String;)D"), cancellable = true)
+    private void cancelRead(CallbackInfo ci) { ci.cancel(); }
 
     @ModifyConstant(method = "getMaxSpeed", constant = @Constant(doubleValue = 0.5))
-    private double notReducedSpeed(double constant) {
-        return 1;
-    }
+    private double notReducedSpeed(double constant) { return 1;}
 }

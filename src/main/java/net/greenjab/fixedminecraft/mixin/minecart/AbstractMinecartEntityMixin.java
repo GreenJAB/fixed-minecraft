@@ -42,13 +42,19 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     @Inject(method = "moveOffRail", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", ordinal = 1
-    ), cancellable = true
-    )
+    ), cancellable = true)
     private void noAirDragInitially(ServerWorld world, CallbackInfo ci) {
         if (this.getVelocity().getY()>-0.7) {
             this.setVelocity(this.getVelocity().multiply(1, 0.95, 1));
             ci.cancel();
         }
+    }
+
+    @Redirect(method = "moveOffRail", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", ordinal = 0))
+    private void groundFriction(AbstractMinecartEntity instance, Vec3d vec3d) {
+        instance.setVelocity(instance.getVelocity().multiply(this.getWorld().getBlockState(this.getVelocityAffectingPos()).getBlock().getSlipperiness()));
     }
 
     @Redirect(method = "pushAwayFromMinecart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;addVelocity(DDD)V"))
@@ -89,9 +95,11 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void removeTrainTag(NbtCompound nbt, CallbackInfo ci) {
-        this.removeCommandTag("train");
-        this.removeCommandTag("trainMove");
-        this.removeCommandTag("trainDisconnect");
+        this.age=0;
+        this.removeCommandTag("trainNoEngine");
+        if (this.getCommandTags().contains("train")) {
+            this.addCommandTag("trainMove");
+        }
     }
 
     @Inject(method = "collidesWith", at = @At(value = "RETURN"), cancellable = true)

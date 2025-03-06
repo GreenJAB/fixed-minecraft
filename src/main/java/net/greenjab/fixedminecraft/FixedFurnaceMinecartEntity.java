@@ -1,53 +1,112 @@
 package net.greenjab.fixedminecraft;
 
+import net.minecraft.block.AbstractRailBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.ChestMinecartEntity;
-import net.minecraft.entity.vehicle.ExperimentalMinecartController;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
+import net.minecraft.entity.vehicle.HopperMinecartEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     private final ArrayList<AbstractMinecartEntity> train = new ArrayList<>();
+    private final ArrayList<UUID> uuids = new ArrayList<>();
+    private int fuel;
+    public int powerRailSetLit = 0;
 
-    public FixedFurnaceMinecartEntity(EntityType<? extends FurnaceMinecartEntity> entityType, World world) {
-        super(entityType, world);
-    }
+    public FixedFurnaceMinecartEntity(EntityType<? extends FurnaceMinecartEntity> entityType, World world) { super(entityType, world);}
 
-    public ArrayList<AbstractMinecartEntity> getTrain() {
-        return train;
-    }
+    public ArrayList<AbstractMinecartEntity> getTrain() { return train; }
 
     @Override
     public void tick() {
+        if (!this.getWorld().isClient()) {
+            if (!uuids.isEmpty()) {
+                ServerWorld world = (ServerWorld) this.getWorld();
+                AbstractMinecartEntity fakeMinecart = new ChestMinecartEntity(EntityType.CHEST_MINECART, world);
+                fakeMinecart.noClip = true;
+                fakeMinecart.addCommandTag("train");
+
+                train.clear();
+                train.add(this);
+                for (UUID uuid : uuids) {
+                    Entity entity = ((ServerWorld) this.getWorld()).getEntity(uuid);
+                    if (entity instanceof AbstractMinecartEntity minecart) {
+                        moveFakeMinecart(world, fakeMinecart, train.getLast(), false);
+
+                        BlockPos var5 = minecart.getRailOrMinecartPos();
+                        BlockState blockState = this.getWorld().getBlockState(var5);
+                        if (AbstractRailBlock.isRail(blockState)) minecart.setOnRail(true);
+
+                        minecart.addCommandTag("train");
+                        minecart.addCommandTag("trainMove");
+                        minecart.setVelocity(train.getLast().getVelocity());
+                        minecart.setPosition(fakeMinecart.getPos());
+                        minecart.setPitch(fakeMinecart.getPitch());
+                        minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
+                        train.add(minecart);
+                    }
+                }
+                uuids.clear();
+            }
+        }
         super.tick();
         if (!this.getWorld().isClient()) {
-            System.out.println("train " + train.size());
             ServerWorld world = (ServerWorld) this.getWorld();
-            if (train.isEmpty()) train.add(this);
             AbstractMinecartEntity fakeMinecart = new ChestMinecartEntity(EntityType.CHEST_MINECART, world);
             fakeMinecart.noClip = true;
             fakeMinecart.addCommandTag("train");
+            if (train.isEmpty()) train.add(this);
+
+            if (train.size()>1 && fuel<100) {
+                DefaultedList<ItemStack> inv = null;
+                if (train.get(1) instanceof ChestMinecartEntity chestMinecartEntity) inv = chestMinecartEntity.getInventory();
+                else if (train.get(1) instanceof HopperMinecartEntity hopperMinecartEntity) inv = hopperMinecartEntity.getInventory();
+                if (inv != null) {
+                    for (ItemStack itemStack : inv) {
+                        if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
+                            int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
+                            itemStack.decrement(1);
+                            fuel += itemFuel;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (powerRailSetLit!=0) {
+                if (fuel > 0) this.setLit(powerRailSetLit==1);
+                powerRailSetLit=0;
+            }
+            if (fuel > 0 && this.isLit()) fuel--;
+            if (fuel <= 0)  this.setLit(false);
 
             disconnectBadMinecarts(world);
-            addGoodMinecarts(world, fakeMinecart);
+            if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
 
             for (int i = 1; i< train.size(); i++) {
                 AbstractMinecartEntity minecart = train.get(i);
                 AbstractMinecartEntity prevMinecart = train.get(i-1);
                 minecart.removeCommandTag("trainMove");
+                minecart.removeCommandTag("trainNoEngine");
                 if (prevMinecart.isOnRail() && minecart.isOnRail()) {
 
                     moveFakeMinecart(world, fakeMinecart, minecart, true);
@@ -57,20 +116,21 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                     if (fakeMinecart.isOnRail()) {
                         if (fakeMinecart.getPos().squaredDistanceTo(pos)>4) {
                             //disconnect cause too far away, prevents teleporting minecarts
-                            if (minecart.getCommandTags().contains("trainDisconnect")) {
+                            minecart.age++;
+                            if (minecart.age>5) {
                                 minecart.removeCommandTag("train");
-                            } else {
-                                minecart.addCommandTag("trainDisconnect");
                             }
                         } else {
                             //move minecart in train
-                            minecart.removeCommandTag("trainDisconnect");
+                            minecart.age=0;
+                            pos = minecart.getPos();
+                            minecart.getController().moveOnRail(world);
+
                             minecart.addCommandTag("trainMove");
-                            minecart.setVelocity(fakeMinecart.getPos().subtract(minecart.getPos()));
+                            minecart.setVelocity(fakeMinecart.getPos().subtract(pos));
                             minecart.setPosition(fakeMinecart.getPos());
                             minecart.setPitch(fakeMinecart.getPitch());
-                            minecart.setYaw((fakeMinecart.getYaw()+360)%360);
-                            ((ExperimentalMinecartController)minecart.getController()).pickUpEntities(minecart.getBoundingBox().expand(0.2, 0.0, 0.2));
+                            minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
                         }
                     }
                 } else {
@@ -80,6 +140,9 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 }
             }
             fakeMinecart.remove(Entity.RemovalReason.DISCARDED);
+        }
+        if (this.isLit() && this.random.nextInt(4) == 0) {
+            this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
         }
     }
 
@@ -111,31 +174,31 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                                   !entity.getCommandTags().contains("train")
                 );
                 if (!list.isEmpty()) {
-                    AbstractMinecartEntity minecart = list.getFirst();
-                    if (minecart.isOnRail()) {
-                        minecart.addCommandTag("train");
-                        minecart.addCommandTag("trainMove");
-                        minecart.setVelocity(lastMinecart.getVelocity());
-                        minecart.setPosition(fakeMinecart.getPos());
-                        minecart.setPitch(fakeMinecart.getPitch());
-                        minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
-                        train.add(minecart);
-                        world.playSound(minecart, minecart.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-                    }
+                    tryAddMinecart(list.getFirst(), fakeMinecart);
                 }
             } else {
-                AbstractMinecartEntity minecart = list.getFirst();
-                if (minecart.isOnRail()) {
-                    minecart.addCommandTag("train");
-                    minecart.addCommandTag("trainMove");
-                    minecart.setVelocity(lastMinecart.getVelocity());
-                    minecart.setPosition(lastMinecart.getPos());
-                    minecart.setPitch(lastMinecart.getPitch());
-                    minecart.setYaw((lastMinecart.getYaw() + 360) % 360);
-                    train.add(minecart);
-                    world.playSound(minecart, minecart.getBlockPos(), SoundEvents.BLOCK_IRON_TRAPDOOR_CLOSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                for (AbstractMinecartEntity minecart : list) {
+                    if (train.size()<8) {
+                        tryAddMinecart(minecart, lastMinecart);
+                    }
                 }
             }
+        }
+    }
+
+    private void tryAddMinecart(AbstractMinecartEntity minecart, AbstractMinecartEntity minecart2){
+        BlockPos var5 = minecart.getRailOrMinecartPos();
+        BlockState blockState = this.getWorld().getBlockState(var5);
+        if (AbstractRailBlock.isRail(blockState)) {
+            minecart.setOnRail(true);
+            minecart.addCommandTag("train");
+            minecart.addCommandTag("trainMove");
+            minecart.setVelocity(train.getLast().getVelocity());
+            minecart.setPosition(minecart2.getPos());
+            minecart.setPitch(minecart2.getPitch());
+            minecart.setYaw((minecart2.getYaw() + 360) % 360);
+            train.add(minecart);
+            minecart.getWorld().playSound(minecart, minecart.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.BLOCKS, 1.0F, 1.0F);
         }
     }
 
@@ -145,9 +208,10 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 while (train.size()>i) {
                     train.get(i).removeCommandTag("train");
                     train.get(i).removeCommandTag("trainMove");
+                    train.get(i).removeCommandTag("trainNoEngine");
+                    train.get(i).age=0;
                     world.playSound(train.get(i), train.get(i).getBlockPos(), SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     train.remove(i);
-
                 }
             }
         }
@@ -156,10 +220,9 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     @Override
     protected Vec3d applySlowdown(Vec3d velocity) {
         Vec3d vec3d;
-        if (this.pushVec.lengthSquared() > 1.0E-7) {
-
-            this.pushVec = new Vec3d(1, 0, 0).rotateY((float) (((this.getYaw()+360)%360)*Math.PI/180f));
-            vec3d = this.getVelocity().add(this.pushVec.getX()/40.0f, 0.0, this.pushVec.getZ()/40.0f);
+        if (this.isLit()) {
+            Vec3d push = new Vec3d(1, 0, 0).rotateY((float) (((this.getYaw()+360)%360)*Math.PI/180f));
+            vec3d = this.getVelocity().add(push.getX()/40.0f, 0.0, push.getZ()/40.0f);
             if (this.isTouchingWater()) {
                 vec3d = vec3d.multiply(0.1);
             }
@@ -172,26 +235,40 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     @Override
     protected void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
-        /*nbt.putShort("TrainLength", (short)this.train.size());
-        for (int i = 0; i< this.train.size(); i++) {
-            nbt.putUuid("Train" + i, this.train.get(i).getUuid());
-        }*/
+        nbt.putShort("Fuel", (short)fuel);
+        nbt.putBoolean("Lit", this.isLit());
+        nbt.putShort("TrainLength", (short)train.size());
+        for (int i = 1;i<train.size();i++) {
+            nbt.putUuid("Train"+i, train.get(i).getUuid());
+        }
     }
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        /*int len = nbt.getShort("TrainLength");
-        this.train.clear();
-        for (int i = 0; i< len; i++) {
+        fuel = nbt.getShort("Fuel");
+        this.setLit(nbt.getBoolean("Lit"));
+        int len = nbt.getShort("TrainLength");
+        for (int i = 1;i<len;i++) {
             UUID uuid = nbt.getUuid("Train" + i);
-            if (uuid != null) {
-                Entity minecart = ((ServerWorld)this.getWorld()).getEntity(uuid);
-                if (minecart!=null) {
-                    this.train.add((AbstractMinecartEntity) minecart);
-                }
+            uuids.add(uuid);
+        }
+    }
+
+    @Override
+    public ActionResult interact(PlayerEntity player, Hand hand) {
+        ItemStack itemStack = player.getStackInHand(hand);
+        if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
+            int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
+            if (fuel + itemFuel <= 32000) {
+                itemStack.decrementUnlessCreative(1, player);
+                fuel += itemFuel;
             }
-        }*/
+        }
+        if (fuel>0) {
+            this.setLit(true);
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Override
@@ -204,18 +281,15 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         }
         super.remove(reason);
     }
-
     @Override
     public Entity teleportTo(TeleportTarget teleportTarget) {
-        System.out.println("teleport");
         for (AbstractMinecartEntity minecart : train) {
             if (minecart!=null) {
-                System.out.println("minecart1: " + minecart.getCommandTags().contains("train"));
                 minecart.removeCommandTag("train");
                 minecart.removeCommandTag("trainMove");
-                System.out.println("minecart2: " + minecart.getCommandTags().contains("train"));
             }
         }
+        train.clear();
         return super.teleportTo(teleportTarget);
     }
 

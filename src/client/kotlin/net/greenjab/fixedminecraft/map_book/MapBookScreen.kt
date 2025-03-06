@@ -234,77 +234,81 @@ class MapBookScreen(var item: ItemStack) : Screen(item.name) {
         }
 
         for (mapStateData in getMapStates(stack!!, client?.world as World)) {
-
+            var render = 0.0
+            if (client?.world!!.dimensionEntry.idAsString.toString() == mapStateData.mapState.dimension.value.toString())
+                render = 1.0
+            if (client?.world!!.dimensionEntry.idAsString.toString().contains("the_nether") && mapStateData.mapState.dimension.value.toString().contains("overworld"))
+                render = 1/8.0
+            if (render>0) {
             val var11: Iterator<*> = mapStateData.mapState.decorations.iterator()
-            while (var11.hasNext()) {
-
-                val mapIcon: MapDecoration = var11.next() as MapDecoration
-                if (mapIcon.type.idAsString !="minecraft:player" && mapIcon.type.idAsString !="minecraft:player_off_map" && mapIcon.type.idAsString !="minecraft:player_off_limits") {
-
-                    context.matrices.push()
-                    context.matrices.translate(this.x, this.y, 0.0)
-                    context.matrices.scale(this.scale, this.scale, 1.0f)
-                    val mapScale = (1 shl mapStateData.mapState.scale.toInt()).toFloat()
-                    val offset = 64f * mapScale
-                    val x = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
-                    val z = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
-                    context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
-                    context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
-                    context.matrices.scale(8.0f, 8.0f, -3.0f)
-                    context.matrices.translate(0f, 0f, -10.0f)
-                    context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
-                    val sprite = client!!.mapDecorationsAtlasManager.getSprite(
-                        MapDecoration(
-                            mapIcon.type,
-                            0.toByte(),
-                            0.toByte(),
-                            0.toByte(),
-                            Optional.empty()
-                        )
-                    )
-                    val g = sprite.minU
-                    val h = sprite.minV
-                    val l = sprite.maxU
-                    val m = sprite.maxV
-                    val matrix4f2 = context.matrices.peek().positionMatrix
-                    val vertexConsumer2 = (context as DrawContextAccessor).vertexConsumers.getBuffer(RenderLayer.getText(sprite.atlasId))
-                    vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(g, h).light(15728880)
-                    vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(l, h).light(15728880)
-                    vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(l, m).light(15728880)
-                    vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m).light(15728880)
-                    context.matrices.pop()
-
-
-                    if (mapIcon.name.isPresent) {
-                        val textRenderer = MinecraftClient.getInstance().textRenderer
-                        val text = mapIcon.name.get()
-                        val o = textRenderer.getWidth(text).toFloat()
-                        Objects.requireNonNull(textRenderer)
+                while (var11.hasNext()) {
+                    val mapIcon: MapDecoration = var11.next() as MapDecoration
+                    if (mapIcon.type.idAsString != "minecraft:player" && mapIcon.type.idAsString != "minecraft:player_off_map" && mapIcon.type.idAsString != "minecraft:player_off_limits") {
                         context.matrices.push()
-
-                        context.matrices.translate(this.x, this.y, 11.0)
+                        context.matrices.translate(this.x, this.y, 0.0)
                         context.matrices.scale(this.scale, this.scale, 1.0f)
-                        val mapx = mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x+128+1) * mapScale/2
-                        val mapz = mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z+128+1) * mapScale/2
-                        context.matrices.translate(mapx + width.toDouble() / 2.0, mapz + height.toDouble() / 2.0, 0.0)
-                        context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
-                        context.matrices.translate(-o / 2f, 8.0f, 0.1f)
-
-                        textRenderer.draw(
-                            text,
-                            0.0f,
-                            0.0f,
-                            -1,
-                            false,
-                            context.matrices.peek().positionMatrix,
-                            context.vertexConsumers,
-                            TextLayerType.NORMAL,
-                            Int.MIN_VALUE,
-                            light
+                        val mapScale = (1 shl mapStateData.mapState.scale.toInt()).toFloat()
+                        val offset = 64f * mapScale
+                        val x = (mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x + 128 + 1) * mapScale / 2) * render
+                        val z = (mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z + 128 + 1) * mapScale / 2) * render
+                        context.matrices.translate(x + width.toDouble() / 2.0, z + height.toDouble() / 2.0, 0.0)
+                        context.matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F))
+                        context.matrices.scale(8.0f, 8.0f, -3.0f)
+                        context.matrices.translate(0f, 0f, -10.0f)
+                        context.matrices.scale(1f / this.scale, 1f / this.scale, 1.0f)
+                        val sprite = client!!.mapDecorationsAtlasManager.getSprite(
+                            MapDecoration(
+                                mapIcon.type,
+                                0.toByte(),
+                                0.toByte(),
+                                0.toByte(),
+                                Optional.empty()
+                            )
                         )
+                        val g = sprite.minU
+                        val h = sprite.minV
+                        val l = sprite.maxU
+                        val m = sprite.maxV
+                        val matrix4f2 = context.matrices.peek().positionMatrix
+                        val vertexConsumer2 =
+                            (context as DrawContextAccessor).vertexConsumers.getBuffer(RenderLayer.getText(sprite.atlasId))
+                        vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(g, h).light(15728880)
+                        vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(l, h).light(15728880)
+                        vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(l, m).light(15728880)
+                        vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m).light(15728880)
                         context.matrices.pop()
+
+
+                        if (mapIcon.name.isPresent) {
+                            val textRenderer = MinecraftClient.getInstance().textRenderer
+                            val text = mapIcon.name.get()
+                            val o = textRenderer.getWidth(text).toFloat()
+                            Objects.requireNonNull(textRenderer)
+                            context.matrices.push()
+                            context.matrices.translate(this.x, this.y, 11.0)
+                            context.matrices.scale(this.scale, this.scale, 1.0f)
+                            val mapx = (mapStateData.mapState.centerX.toDouble() - offset.toDouble() + (mapIcon.x + 128 + 1) * mapScale / 2) * render
+                            val mapz = (mapStateData.mapState.centerZ.toDouble() - offset.toDouble() + (mapIcon.z + 128 + 1) * mapScale / 2) * render
+                            context.matrices.translate(mapx + width.toDouble() / 2.0, mapz + height.toDouble() / 2.0, 0.0)
+                            context.matrices.scale(1 / this.scale, 1 / this.scale, 1.0f)
+                            context.matrices.translate(-o / 2f, 8.0f, 0.1f)
+
+                            textRenderer.draw(
+                                text,
+                                0.0f,
+                                0.0f,
+                                -1,
+                                false,
+                                context.matrices.peek().positionMatrix,
+                                context.vertexConsumers,
+                                TextLayerType.NORMAL,
+                                Int.MIN_VALUE,
+                                light
+                            )
+                            context.matrices.pop()
+                        }
+                        ++k
                     }
-                    ++k
                 }
             }
         }
