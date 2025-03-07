@@ -49,6 +49,12 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             ci.cancel();
         }
     }
+    @Redirect(method = "moveOffRail", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;getMaxSpeed(Lnet/minecraft/server/world/ServerWorld;)D"))
+    private double clampTo40(AbstractMinecartEntity instance, ServerWorld world) {
+        return 40;
+    }
 
     @Redirect(method = "moveOffRail", at = @At(
             value = "INVOKE",

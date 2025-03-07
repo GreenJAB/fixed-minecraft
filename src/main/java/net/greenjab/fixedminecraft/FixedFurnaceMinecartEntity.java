@@ -33,6 +33,8 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     private int fuel;
     public int powerRailSetLit = 0;
 
+    private final float dist = 1.5f;
+
     public FixedFurnaceMinecartEntity(EntityType<? extends FurnaceMinecartEntity> entityType, World world) { super(entityType, world);}
 
     public ArrayList<AbstractMinecartEntity> getTrain() { return train; }
@@ -41,28 +43,18 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     public void tick() {
         if (!this.getWorld().isClient()) {
             if (!uuids.isEmpty()) {
-                ServerWorld world = (ServerWorld) this.getWorld();
-                AbstractMinecartEntity fakeMinecart = new ChestMinecartEntity(EntityType.CHEST_MINECART, world);
-                fakeMinecart.noClip = true;
-                fakeMinecart.addCommandTag("train");
-
                 train.clear();
                 train.add(this);
                 for (UUID uuid : uuids) {
                     Entity entity = ((ServerWorld) this.getWorld()).getEntity(uuid);
                     if (entity instanceof AbstractMinecartEntity minecart) {
-                        moveFakeMinecart(world, fakeMinecart, train.getLast(), false);
-
-                        BlockPos var5 = minecart.getRailOrMinecartPos();
-                        BlockState blockState = this.getWorld().getBlockState(var5);
-                        if (AbstractRailBlock.isRail(blockState)) minecart.setOnRail(true);
-
+                        BlockPos var11 = minecart.getRailOrMinecartPos();
+                        BlockState blockState = this.getWorld().getBlockState(var11);
+                        boolean bl = AbstractRailBlock.isRail(blockState);
+                        minecart.setOnRail(bl);
                         minecart.addCommandTag("train");
                         minecart.addCommandTag("trainMove");
-                        minecart.setVelocity(train.getLast().getVelocity());
-                        minecart.setPosition(fakeMinecart.getPos());
-                        minecart.setPitch(fakeMinecart.getPitch());
-                        minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
+                        minecart.age=0;
                         train.add(minecart);
                     }
                 }
@@ -102,41 +94,56 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
             disconnectBadMinecarts(world);
             if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
 
+            setFakeMinecart(fakeMinecart, this);
+            fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
+            boolean rail = true;
+            boolean cont = true;
             for (int i = 1; i< train.size(); i++) {
                 AbstractMinecartEntity minecart = train.get(i);
                 AbstractMinecartEntity prevMinecart = train.get(i-1);
                 minecart.removeCommandTag("trainMove");
-                minecart.removeCommandTag("trainNoEngine");
-                if (prevMinecart.isOnRail() && minecart.isOnRail()) {
+                if (cont) {
+                    BlockPos var11 = minecart.getRailOrMinecartPos();
+                    BlockState blockState = this.getWorld().getBlockState(var11);
+                    boolean bl = AbstractRailBlock.isRail(blockState);
+                    minecart.setOnRail(bl);
+                    if (!bl) rail = false;
+                    int age = minecart.age;
+                    minecart.age = 0;
+                    if (rail) {
+                        minecart.addCommandTag("trainMove");
+                        minecart.getController().moveOnRail(world);
+                        if (this.isOnRail()) {
+                            fakeMinecart.getController().moveOnRail(world);
+                            if (minecart.getPos().squaredDistanceTo(fakeMinecart.getPos()) < 4) {
 
-                    moveFakeMinecart(world, fakeMinecart, minecart, true);
-                    Vec3d pos = fakeMinecart.getPos();
-                    moveFakeMinecart(world, fakeMinecart, prevMinecart, false);
-
-                    if (fakeMinecart.isOnRail()) {
-                        if (fakeMinecart.getPos().squaredDistanceTo(pos)>4) {
-                            //disconnect cause too far away, prevents teleporting minecarts
-                            minecart.age++;
-                            if (minecart.age>5) {
-                                minecart.removeCommandTag("train");
+                                minecart.setPosition(fakeMinecart.getPos());
+                                minecart.setPitch(fakeMinecart.getPitch());
+                                minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
+                                Vec3d vel = fakeMinecart.getVelocity()
+                                        .getHorizontal()
+                                        .normalize()
+                                        .multiply(-this.getVelocity().horizontalLength());
+                                minecart.setVelocity(vel.x, minecart.getVelocity().y, vel.z);
+                            } else {
+                                cont = false;
+                                minecart.age=age+10;
                             }
                         } else {
-                            //move minecart in train
-                            minecart.age=0;
-                            pos = minecart.getPos();
-                            minecart.getController().moveOnRail(world);
-
-                            minecart.addCommandTag("trainMove");
-                            minecart.setVelocity(fakeMinecart.getPos().subtract(pos));
-                            minecart.setPosition(fakeMinecart.getPos());
-                            minecart.setPitch(fakeMinecart.getPitch());
-                            minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
+                            Vec3d vel = new Vec3d(1, 0, 0).rotateY((float) (minecart.getYaw() * Math.PI / 180f))
+                                    .getHorizontal().normalize().multiply(this.getVelocity().horizontalLength());
+                            minecart.setVelocity(vel.x, minecart.getVelocity().y, vel.z);
                         }
+                    }else {
+                        minecart.tick();
+                        Vec3d vel = new Vec3d(1, 0, 0).rotateY((float) (minecart.getYaw() * Math.PI / 180f))
+                                .getHorizontal().normalize().multiply(this.getVelocity().horizontalLength());
+                        minecart.setVelocity(vel.x, minecart.getVelocity().y, vel.z);
+                        minecart.addCommandTag("trainMove");
                     }
-                } else {
-                    //flying through the air
-                    Vec3d pv = prevMinecart.getVelocity();
-                    minecart.setVelocity(pv.x, minecart.getVelocity().y, pv.z);
+                }
+                if (minecart.getPos().squaredDistanceTo(prevMinecart.getPos())>9) {
+                    minecart.age+=10;
                 }
             }
             fakeMinecart.remove(Entity.RemovalReason.DISCARDED);
@@ -146,70 +153,80 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         }
     }
 
-    private void moveFakeMinecart(ServerWorld world, AbstractMinecartEntity fakeMinecart, AbstractMinecartEntity minecart, boolean forward) {
+    private void setFakeMinecart(AbstractMinecartEntity fakeMinecart, AbstractMinecartEntity minecart) {
         fakeMinecart.setPosition(minecart.getPos());
         fakeMinecart.setOnRail(true);
         fakeMinecart.setPitch(minecart.getPitch());
-        float yaw = (minecart.getYaw()+360)%360;
-        fakeMinecart.setYaw(yaw);
-        Vec3d velocity = forward?minecart.getVelocity():new Vec3d(-1.5, 0, 0).rotateY((float) (yaw*Math.PI/180f));
-        fakeMinecart.setVelocity(velocity);
-        fakeMinecart.getController().moveOnRail(world);
+        fakeMinecart.setYaw((minecart.getYaw()+360)%360);
+        fakeMinecart.setVelocity(minecart.getVelocity());
     }
 
     private void addGoodMinecarts(ServerWorld world, AbstractMinecartEntity fakeMinecart) {
-        AbstractMinecartEntity lastMinecart = train.getLast();
-        if (train.size()<8 &&  lastMinecart.isOnRail()) {
-            List<AbstractMinecartEntity> list = world.getEntitiesByClass(
-                    AbstractMinecartEntity.class,
-                    lastMinecart.getBoundingBox().contract(0.2),
-                    entity -> entity != null && !(entity instanceof FurnaceMinecartEntity) && !entity.getCommandTags().contains("train")
-            );
-            if (list.isEmpty()) {
-                moveFakeMinecart(world, fakeMinecart, lastMinecart, false);
-                list = world.getEntitiesByClass(
+        fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
+        int i = train.size()-1;
+        while (i< train.size()&& train.size()<8) {
+            AbstractMinecartEntity lastMinecart = train.get(i);
+            if (lastMinecart.isOnRail()) {
+                List<AbstractMinecartEntity> list = world.getEntitiesByClass(
                         AbstractMinecartEntity.class,
-                        fakeMinecart.getBoundingBox().contract(0.2),
-                        entity -> entity != null && !(entity instanceof FurnaceMinecartEntity) &&
-                                  !entity.getCommandTags().contains("train")
+                        lastMinecart.getBoundingBox().contract(0.2),
+                        entity -> entity != null && !(entity instanceof FurnaceMinecartEntity) && !entity.getCommandTags().contains("train")
                 );
-                if (!list.isEmpty()) {
-                    tryAddMinecart(list.getFirst(), fakeMinecart);
-                }
-            } else {
-                for (AbstractMinecartEntity minecart : list) {
-                    if (train.size()<8) {
-                        tryAddMinecart(minecart, lastMinecart);
+                if (list.isEmpty()) {
+                    setFakeMinecart(fakeMinecart, lastMinecart);
+                    fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
+                    fakeMinecart.getController().moveOnRail(world);
+
+                    list = world.getEntitiesByClass(
+                            AbstractMinecartEntity.class,
+                            fakeMinecart.getBoundingBox().contract(0.2),
+                            entity -> entity != null && !(entity instanceof FurnaceMinecartEntity) &&
+                                      !entity.getCommandTags().contains("train")
+                    );
+                    if (!list.isEmpty()) {
+                        BlockPos var5 = list.getFirst().getRailOrMinecartPos();
+                        BlockState blockState = this.getWorld().getBlockState(var5);
+                        if (AbstractRailBlock.isRail(blockState)) {
+                            addMinecart(list.getFirst(), fakeMinecart);
+                        }
+                    }
+                } else {
+                    for (AbstractMinecartEntity minecart : list) {
+                        if (train.size()<8) {
+                            BlockPos var5 = minecart.getRailOrMinecartPos();
+                            BlockState blockState = this.getWorld().getBlockState(var5);
+                            if (AbstractRailBlock.isRail(blockState)) {
+                                addMinecart(minecart, lastMinecart);
+                            }
+                        }
                     }
                 }
             }
+            i++;
         }
     }
 
-    private void tryAddMinecart(AbstractMinecartEntity minecart, AbstractMinecartEntity minecart2){
-        BlockPos var5 = minecart.getRailOrMinecartPos();
-        BlockState blockState = this.getWorld().getBlockState(var5);
-        if (AbstractRailBlock.isRail(blockState)) {
-            minecart.setOnRail(true);
-            minecart.addCommandTag("train");
-            minecart.addCommandTag("trainMove");
-            minecart.setVelocity(train.getLast().getVelocity());
-            minecart.setPosition(minecart2.getPos());
-            minecart.setPitch(minecart2.getPitch());
-            minecart.setYaw((minecart2.getYaw() + 360) % 360);
-            train.add(minecart);
-            minecart.getWorld().playSound(minecart, minecart.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.BLOCKS, 1.0F, 1.0F);
-        }
+    private void addMinecart(AbstractMinecartEntity minecart, AbstractMinecartEntity minecart2) {
+        minecart.setOnRail(true);
+        minecart.addCommandTag("train");
+        minecart.addCommandTag("trainMove");
+        minecart.setVelocity(train.getLast().getVelocity().add(0, 0.1, 0));
+        minecart.setPosition(minecart2.getPos());
+        minecart.setPitch(minecart2.getPitch());
+        minecart.setYaw((minecart2.getYaw() + 360) % 360);
+        minecart.age = 0;
+        train.add(minecart);
+        minecart.getWorld()
+                .playSound(minecart, minecart.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
     private void disconnectBadMinecarts(ServerWorld world) {
         for (int i = 1; i< train.size(); i++) {
-            if (train.get(i) == null || train.get(i).isRemoved() || train.get(i).getWorld().getDimensionEntry() != world.getDimensionEntry() || train.get(i).isOnGround() || !train.get(i).getCommandTags().contains("train")) {
+            if (train.get(i) == null || train.get(i).isRemoved()  || (train.get(i).isOnGround()&&train.get(i).getVelocity().horizontalLength()<0.01) || !train.get(i).getCommandTags().contains("train")) {
                 while (train.size()>i) {
                     train.get(i).removeCommandTag("train");
                     train.get(i).removeCommandTag("trainMove");
-                    train.get(i).removeCommandTag("trainNoEngine");
-                    train.get(i).age=0;
+                    train.get(i).age=-50;
                     world.playSound(train.get(i), train.get(i).getBlockPos(), SoundEvents.BLOCK_BAMBOO_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
                     train.remove(i);
                 }

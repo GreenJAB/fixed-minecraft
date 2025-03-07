@@ -23,7 +23,6 @@ object FixedMinecraft : ModInitializer {
 
     //TODO Rename functions / commenting
     //TODO biome colours?
-    //TODO Minecart overhaul
     //TODO Pale garden ominous biome?
     //TODO Remove Kotlin
     //TODO LOTS of bug testing
