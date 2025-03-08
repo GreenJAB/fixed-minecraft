@@ -12,6 +12,7 @@ import net.minecraft.entity.vehicle.HopperMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -19,6 +20,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
@@ -92,7 +94,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
             if (fuel <= 0)  this.setLit(false);
 
             disconnectBadMinecarts(world);
-            if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
+            //if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
 
             setFakeMinecart(fakeMinecart, this);
             fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
@@ -146,7 +148,9 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                     minecart.age+=10;
                 }
             }
+            if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
             fakeMinecart.remove(Entity.RemovalReason.DISCARDED);
+
         }
         if (this.isLit() && this.random.nextInt(4) == 0) {
             this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
@@ -162,7 +166,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
 
     private void addGoodMinecarts(ServerWorld world, AbstractMinecartEntity fakeMinecart) {
-        fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
         int i = train.size()-1;
         while (i< train.size()&& train.size()<8) {
             AbstractMinecartEntity lastMinecart = train.get(i);
@@ -240,9 +243,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         if (this.isLit()) {
             Vec3d push = new Vec3d(1, 0, 0).rotateY((float) (((this.getYaw()+360)%360)*Math.PI/180f));
             vec3d = this.getVelocity().add(push.getX()/40.0f, 0.0, push.getZ()/40.0f);
-            if (this.isTouchingWater()) {
-                vec3d = vec3d.multiply(0.1);
-            }
         } else {
             vec3d = velocity.multiply(0.75, 0.0, 0.75);
         }
@@ -300,10 +300,15 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
     @Override
     public Entity teleportTo(TeleportTarget teleportTarget) {
+        if (this.getWorld() instanceof ServerWorld serverWorld) {
+            serverWorld.resetIdleTimeout();
+            serverWorld.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), 3, this.getBlockPos());
+        }
         for (AbstractMinecartEntity minecart : train) {
             if (minecart!=null) {
                 minecart.removeCommandTag("train");
                 minecart.removeCommandTag("trainMove");
+                minecart.addCommandTag("trainTP");
             }
         }
         train.clear();

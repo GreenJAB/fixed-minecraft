@@ -124,11 +124,11 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
                 return false;
             }
         }
-        if (thisEntity.getCommandTags().contains("train")) {
+        if (thisEntity.getCommandTags().contains("train")||thisEntity.getCommandTags().contains("trainTP")) {
             if (thisEntity.isOnRail()) {
                 return false;
             }
-            if (otherEntity.getCommandTags().contains("train")) {
+            if (otherEntity.getCommandTags().contains("train")||otherEntity.getCommandTags().contains("trainTP")) {
                 return false;
             }
             if (otherEntity instanceof FixedFurnaceMinecartEntity fixedFurnaceMinecartEntity) {

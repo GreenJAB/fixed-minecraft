@@ -65,11 +65,10 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
             entity.fallDistance = 0;
             this.minecart.fallDistance = 0;
         }
-        if (this.minecart.getCommandTags().contains("train")) {
-            if (this.minecart.age>60) {
-                this.minecart.removeCommandTag("train");
-                this.minecart.removeCommandTag("trainMove");
-            }
+        if (this.minecart.age>60) {
+            this.minecart.removeCommandTag("train");
+            this.minecart.removeCommandTag("trainMove");
+            this.minecart.removeCommandTag("trainTP");
         }
         if (this.minecart.getCommandTags().contains("trainMove")) {
             ci.cancel();
@@ -78,7 +77,7 @@ public abstract class ExperimentalMinecartControllerMixin extends MinecartContro
 
     @ModifyExpressionValue(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/ExperimentalMinecartController;calcNewHorizontalVelocity(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/entity/vehicle/ExperimentalMinecartController$MoveIteration;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/enums/RailShape;)Lnet/minecraft/util/math/Vec3d;"))
     private Vec3d skipPowerRailSlowdown(Vec3d original) {
-        if (this.minecart.noClip || this.minecart.getCommandTags().contains("train") || this.minecart.age<0) {
+        if (this.minecart.noClip || this.minecart.getCommandTags().contains("train")) {
             return this.getVelocity().getHorizontal();
         }
         return original;
