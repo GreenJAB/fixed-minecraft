@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:crafting_table"
+        },
+        "title": {
+            "text": "Better Recipes",
+            "type": "text",
+            "color": "gold",
+            "bold": true
+        },
+        "description": "https://better_recipes.net",
+        "background": "minecraft:textures/block/crafting_table_top.png",
+        "announce_to_chat": false,
+        "frame": "challenge",
+        "show_toast": false
+    },
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

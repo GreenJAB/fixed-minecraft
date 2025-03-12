@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:crying_obsidian"
+        },
+        "title": {
+            "text": "Craftable Crying Obsidian"
+        },
+        "description": "Craft Crying Obsidian with ghast tears and obsidian",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/uncraftables",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

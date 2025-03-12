@@ -78,6 +78,7 @@
         "minecart.FurnaceMinecartEntityMixin",
         "minecart.GameRulesMixin",
         "minecart.HoneycombItemMixin",
+        "minecart.MinecartDispenserBehaviorMixin",
         "minecart.OxidizableMixin",
         "minecart.PlayerEntityMixin",
         "minecart.ServerPlayerEntityMixin",

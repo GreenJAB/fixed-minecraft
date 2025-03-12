@@ -1,0 +1,16 @@
+{
+    "criteria": {
+      "tick": {
+        "trigger": "minecraft:tick"
+      }
+    },
+    "requirements": [
+      [
+        "tick"
+      ]
+    ],
+    "rewards": {
+      "function": "betterr:config/enable_trigger"
+    }
+  }
+  

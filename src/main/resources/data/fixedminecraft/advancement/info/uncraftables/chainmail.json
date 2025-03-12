@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:chainmail_chestplate"
+        },
+        "title": {
+            "text": "Craftable Chainmail Armor"
+        },
+        "description": "Craft chainmail armor with chains and iron nuggets",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/uncraftables",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

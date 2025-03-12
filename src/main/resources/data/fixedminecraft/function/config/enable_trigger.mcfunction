@@ -1,0 +1,1 @@
+scoreboard players enable @s betterr.config

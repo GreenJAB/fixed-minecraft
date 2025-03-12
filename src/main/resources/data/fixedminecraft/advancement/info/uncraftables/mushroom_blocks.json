@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:mushroom_stem"
+        },
+        "title": {
+            "text": "Craftable Mushroom Blocks"
+        },
+        "description": "Craft the various mushroom blocks from their respective mushrooms",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/uncraftables",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

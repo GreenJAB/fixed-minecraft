@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:trident"
+        },
+        "title": {
+            "text": "Uncraftables"
+        },
+        "description": "",
+        "announce_to_chat": false,
+        "frame": "challenge",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/root",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

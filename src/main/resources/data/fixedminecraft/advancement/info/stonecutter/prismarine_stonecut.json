@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:prismarine_bricks"
+        },
+        "title": {
+            "text": "Stonecut Prismarine Bricks"
+        },
+        "description": "Allows primsmarine bricks to be obtained from a stonecutter",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/stonecutter",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

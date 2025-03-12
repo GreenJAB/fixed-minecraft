@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:cyan_dye"
+        },
+        "title": {
+            "text": "Cyan Dye from Warped Foilage"
+        },
+        "description": "Craft cyan dye from the various warped foilage",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/dyes",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:oak_stairs"
+        },
+        "title": {
+            "text": "Stonecut Wood"
+        },
+        "description": "Allows you to put wood in a stonecutter, and cut it into its cooresponding blocks",
+        "announce_to_chat": false,
+        "frame": "task",
+        "hidden": true,
+        "show_toast": false
+    },
+    "parent": "betterr:info/stonecutter",
+    "criteria": {
+        "impossible": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}
