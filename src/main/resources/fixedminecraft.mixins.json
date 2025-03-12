@@ -127,6 +127,7 @@
         "redstone.AbstractBlockMixin",
         "redstone.BulbBlockMixin",
         "redstone.DaylightDetectorBlockMixin",
+        "redstone.NoteBlockMixin",
         "redstone.SculkSensorBlockMixin",
         "structure.BlockAgeStructureProcessorMixin",
         "structure.HugeMushroomFeatureMixin",

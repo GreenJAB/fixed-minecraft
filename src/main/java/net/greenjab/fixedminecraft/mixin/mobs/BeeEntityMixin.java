@@ -10,24 +10,27 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BeeEntity.class)
 public abstract class BeeEntityMixin {
 
-    @Redirect(method = "setHasNectar", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/BeeEntity;resetPollinationTicks()V"))
-    private void spreadFlowers(BeeEntity instance){
-        World world = instance.getWorld();
-        BlockPos pos = instance.getFlowerPos();
+    @Inject(method = "setHasNectar", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/BeeEntity;resetPollinationTicks()V"))
+    private void spreadFlowers(boolean hasNectar, CallbackInfo ci){
+        BeeEntity bee = (BeeEntity)(Object)this;
+        World world = bee.getWorld();
+        BlockPos pos = bee.getFlowerPos();
         if (pos != null) {
             BlockState flower = world.getBlockState(pos);
-            if (pos.getY() > -500 && flower.isIn(BlockTags.FLOWERS)) {
+            if (pos.getY() > -500 && (flower.isIn(BlockTags.SMALL_FLOWERS) || (flower.isIn(BlockTags.FLOWERS) && flower.getProperties().contains(TallPlantBlock.HALF)))) {
                 boolean tall = false;
-                BlockState below = world.getBlockState(pos.down());
-                if (below.isIn(BlockTags.FLOWERS)) {
-                    tall = true;
-                    if (flower.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER) {
+                if (flower.isIn(BlockTags.FLOWERS) && flower.getProperties().contains(TallPlantBlock.HALF)) {
+                    BlockState below = world.getBlockState(pos.down());
+                    if (flower.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER && (below.isIn(BlockTags.FLOWERS) && below.getProperties().contains(TallPlantBlock.HALF))) {
                         pos = pos.down();
+                        tall = true;
                     }
                 }
                 int count = 0;
@@ -64,6 +67,6 @@ public abstract class BeeEntityMixin {
                 }
             }
         }
-        instance.setFlowerPos(new BlockPos(0, -1000, 0));
+        bee.setFlowerPos(new BlockPos(0, -1000, 0));
     }
 }
