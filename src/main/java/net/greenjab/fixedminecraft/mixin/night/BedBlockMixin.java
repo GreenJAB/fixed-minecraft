@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.night;
 
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
-import net.greenjab.fixedminecraft.registry.GameruleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,8 +22,8 @@ public class BedBlockMixin {
     @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
     private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                           CallbackInfoReturnable<ActionResult> cir){
-        if (((ServerWorld)world).getGameRules().getBoolean(GameruleRegistry.INSTANCE.getInsomnia_Sleep_Requirement())) {
-            if (!player.hasStatusEffect(StatusRegistry.INSTANCE.getINSOMNIA())) {
+        if (((ServerWorld)world).getGameRules().getBoolean(GameruleRegistry.Insomnia_Sleep_Requirement)) {
+            if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);
             }

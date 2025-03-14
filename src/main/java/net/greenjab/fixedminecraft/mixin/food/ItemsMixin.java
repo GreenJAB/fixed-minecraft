@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 
 import net.greenjab.fixedminecraft.data.ModTags;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
@@ -53,6 +53,12 @@ public class ItemsMixin {
         return register("nether_brick", BrickItem::new, new Item.Settings().maxCount(16));
     }
 
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
+                                  target = "Lnet/minecraft/item/Items;NETHER_BRICK:Lnet/minecraft/item/Item;")))
+    private static Item throwableResinBrick(String id) {
+        return register("resin_brick", BrickItem::new, new Item.Settings().maxCount(16));
+    }
+
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;SHIELD:Lnet/minecraft/item/Item;")))
     private static Item useableTotem(String id, Item.Settings settings) {
@@ -75,7 +81,7 @@ public class ItemsMixin {
                                                                                                                                                                                                    target = "Lnet/minecraft/item/Items;SWEET_BERRIES:Lnet/minecraft/item/Item;")))
     private static Item glowingGlowBerries(String id, Function<Item.Settings, Item> factory,
                                            Item.Settings settings) {
-        return register("glow_berries", createBlockItemWithUniqueName(Blocks.CAVE_VINES), new Item.Settings().food(FoodComponents.GLOW_BERRIES, ItemRegistry.GLOW_BERRIES_EFFECT));
+        return register("glow_berries", createBlockItemWithUniqueName(Blocks.CAVE_VINES), new Item.Settings().food(FoodComponents.HONEY_BOTTLE, ItemRegistry.GLOW_BERRIES_EFFECT));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

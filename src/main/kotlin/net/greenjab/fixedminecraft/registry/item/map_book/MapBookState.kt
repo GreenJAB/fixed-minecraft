@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.registry.item.map_book
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.greenjab.fixedminecraft.network.MapBookPlayer
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload
-import net.greenjab.fixedminecraft.registry.ItemRegistry
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.registry.RegistryWrapper.WrapperLookup

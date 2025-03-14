@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.render;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.mixin.enchanting.ChiseledBookshelfBlockInvoker;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntityType;
@@ -18,8 +18,6 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

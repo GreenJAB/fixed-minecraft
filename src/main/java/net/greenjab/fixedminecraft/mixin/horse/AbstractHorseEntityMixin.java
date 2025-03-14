@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;

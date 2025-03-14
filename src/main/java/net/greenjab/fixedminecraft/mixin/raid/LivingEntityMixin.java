@@ -2,8 +2,8 @@ package net.greenjab.fixedminecraft.mixin.raid;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.GameruleRegistry;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,7 +33,7 @@ public class LivingEntityMixin  {
     @ModifyExpressionValue(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack requireUsingTotem(ItemStack original) {
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (!((ServerWorld)LE.getWorld()).getGameRules().getBoolean(GameruleRegistry.INSTANCE.getRequire_Totem_Use()) || LE.isUsingItem()) {
+        if (!((ServerWorld)LE.getWorld()).getGameRules().getBoolean(GameruleRegistry.Require_Totem_Use) || LE.isUsingItem()) {
             return original;
         } else {
             return new ItemStack(Items.AIR);

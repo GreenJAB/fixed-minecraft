@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FireworksComponent;

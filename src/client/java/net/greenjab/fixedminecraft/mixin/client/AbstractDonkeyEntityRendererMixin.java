@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 
 import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.client.render.entity.AbstractDonkeyEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;

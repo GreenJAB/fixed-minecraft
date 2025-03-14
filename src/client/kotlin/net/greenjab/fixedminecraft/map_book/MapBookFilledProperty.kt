@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.map_book
 import com.mojang.serialization.MapCodec
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.greenjab.fixedminecraft.registry.ItemRegistry
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry
 import net.minecraft.client.render.item.property.bool.BooleanProperty
 import net.minecraft.client.world.ClientWorld
 import net.minecraft.component.DataComponentTypes

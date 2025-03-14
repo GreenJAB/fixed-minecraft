@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.registry.ItemRegistry
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
@@ -348,7 +348,8 @@ class MapBookItem(settings: Settings?) : Item(settings) {
     }
 
     fun setAdditions(stack: ItemStack, additions: List<Int>) {
-        stack.set<MapBookAdditionsComponent>(ItemRegistry.MAP_BOOK_ADDITIONS,
+        stack.set<MapBookAdditionsComponent>(
+            ItemRegistry.MAP_BOOK_ADDITIONS,
             MapBookAdditionsComponent(additions)
         )
     }

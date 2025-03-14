@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
@@ -20,7 +20,7 @@ public abstract class PotionsMixin {
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/potion/Potions;register(Ljava/lang/String;Lnet/minecraft/potion/Potion;)Lnet/minecraft/registry/entry/RegistryEntry;", ordinal = 0 ), slice = @Slice( from = @At( value = "FIELD",
             target = "Lnet/minecraft/potion/Potions;THICK:Lnet/minecraft/registry/entry/RegistryEntry;")))
     private static RegistryEntry<Potion> purpleAwkward(String name, Potion potion) {
-        return register(new Potion("awkward", new StatusEffectInstance(StatusRegistry.INSTANCE.getAWKWARD(), 0)));
+        return register(new Potion("awkward", new StatusEffectInstance(StatusRegistry.AWKWARD, 0)));
     }
 
     @Unique

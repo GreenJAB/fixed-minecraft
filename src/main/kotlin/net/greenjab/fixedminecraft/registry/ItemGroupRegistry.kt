@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry
 
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.registry.Registries

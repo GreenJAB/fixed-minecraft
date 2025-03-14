@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.BlockRegistry;
+import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -52,15 +52,10 @@ public class AnvilMixin  {
         player.removeCommandTag("netherite_anvil");
     }
 
-    @Inject(method = "onUse", at = @At(value = "HEAD"))
-    private void setNormalAnvilClient(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
-                                CallbackInfoReturnable<ActionResult> cir){
-        if (world.isClient) FixedMinecraft.INSTANCE.setNetheriteAnvil(false);
-    }
-
     @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
     private void repairAnvil(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                 CallbackInfoReturnable<ActionResult> cir){
+        if (world.isClient) FixedMinecraft.INSTANCE.setNetheriteAnvil(false);
         for (ItemStack itemStack: player.getHandItems()) {
             if (itemStack.isOf(Items.IRON_BLOCK)) {
                 if (state.isOf(Blocks.CHIPPED_ANVIL)) {

@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
-import net.greenjab.fixedminecraft.registry.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;

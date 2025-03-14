@@ -2,9 +2,9 @@ package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ModInitializer
 import net.greenjab.fixedminecraft.network.SyncHandler
-import net.greenjab.fixedminecraft.registry.GameruleRegistry
 import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
+import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry
 import net.minecraft.block.DispenserBlock
 import net.minecraft.item.Item
 import net.minecraft.item.Items
@@ -39,6 +39,7 @@ object FixedMinecraft : ModInitializer {
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK)
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK)
+        DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK)
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT)
     }
 

@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.beacon;
 
-import net.greenjab.fixedminecraft.StatusEffects.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +14,8 @@ public class PlayerEntityMixin {
     private void longerBlockReach(CallbackInfoReturnable<Double> cir) {
         double d =  cir.getReturnValueD();
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        if (PE.hasStatusEffect(StatusRegistry.INSTANCE.getREACH())) {
-            d+=0.5*(1+PE.getStatusEffect(StatusRegistry.INSTANCE.getREACH()).getAmplifier());
+        if (PE.hasStatusEffect(StatusRegistry.REACH)) {
+            d+=0.5*(1+PE.getStatusEffect(StatusRegistry.REACH).getAmplifier());
         }
         cir.setReturnValue(d);
     }

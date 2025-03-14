@@ -10,7 +10,7 @@ import net.fabricmc.loader.api.ModContainer
 import net.greenjab.fixedminecraft.map_book.MapBookFilledProperty
 import net.greenjab.fixedminecraft.models.ModelLayers
 import net.greenjab.fixedminecraft.network.ClientSyncHandler
-import net.greenjab.fixedminecraft.registry.BlockRegistry
+import net.greenjab.fixedminecraft.registry.registries.BlockRegistry
 import net.greenjab.fixedminecraft.render.PlayerLookHelper
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext

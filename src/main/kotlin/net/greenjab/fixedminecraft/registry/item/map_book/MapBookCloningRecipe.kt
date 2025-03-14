@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.registry.item.map_book
 
-import net.greenjab.fixedminecraft.registry.ItemRegistry
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry
 import net.greenjab.fixedminecraft.registry.RecipeRegistry
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
