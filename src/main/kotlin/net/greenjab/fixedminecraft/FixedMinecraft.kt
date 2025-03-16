@@ -2,9 +2,9 @@ package net.greenjab.fixedminecraft
 
 import net.fabricmc.api.ModInitializer
 import net.greenjab.fixedminecraft.network.SyncHandler
-import net.greenjab.fixedminecraft.registry.ItemGroupRegistry
-import net.greenjab.fixedminecraft.registry.RecipeRegistry
+import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry
+import net.greenjab.fixedminecraft.registry.registries.RecipeRegistry
 import net.minecraft.block.DispenserBlock
 import net.minecraft.item.Item
 import net.minecraft.item.Items

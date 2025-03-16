@@ -91,6 +91,12 @@ public class ItemsMixin {
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                                                                                                                                                                                                                     target = "Lnet/minecraft/item/Items;BEETROOT_SEEDS:Lnet/minecraft/item/Item;")))
+    private static Item stackedBeetrootSoup(String id, Item.Settings settings) {
+        return register("beetroot_soup", new Item.Settings().maxCount(16).food(FoodComponents.BEETROOT_SOUP).useRemainder(Items.BOWL));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;STICK:Lnet/minecraft/item/Item;")))
     private static Item stackedMushroomstew(String id, Item.Settings settings) {
         return register("mushroom_stew", new Item.Settings().maxCount(16).food(FoodComponents.MUSHROOM_STEW).useRemainder(Items.BOWL));

@@ -13,9 +13,11 @@ import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry
 import net.greenjab.fixedminecraft.render.PlayerLookHelper
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.data.EquipmentAssetProvider
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderTickCounter
+import net.minecraft.client.render.entity.equipment.EquipmentModel
 import net.minecraft.client.render.item.property.bool.BooleanProperties
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
@@ -24,6 +26,7 @@ import net.minecraft.util.Identifier
 
 object FixedMinecraftClient : ClientModInitializer {
     var paleGardenFog = 0f
+    val netheriteModel = createHumanoidAndHorseModel("netherite")
     override fun onInitializeClient() {
 
         ClientSyncHandler.init()
@@ -79,5 +82,11 @@ object FixedMinecraftClient : ClientModInitializer {
                 ResourcePackActivationType.DEFAULT_ENABLED
             )
         }
+    }
+    private fun createHumanoidAndHorseModel(id: String): EquipmentModel {
+        return EquipmentModel.builder()
+            .addHumanoidLayers(Identifier.ofVanilla(id))
+            .addLayers(EquipmentModel.LayerType.HORSE_BODY, EquipmentModel.Layer.createWithLeatherColor(Identifier.ofVanilla(id), false))
+            .build()
     }
 }

@@ -34,7 +34,6 @@ public class MapBookPlayer {
         p.z = buf.readDouble();
         p.yaw = buf.readFloat();
         p.dimension = buf.readString();
-        //System.out.println(p.toString2());
         return p;
     }
 }

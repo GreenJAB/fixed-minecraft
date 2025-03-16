@@ -52,6 +52,7 @@
         "horse.AbstractDonkeyEntityMixin",
         "horse.AbstractHorseEntityMixin",
         "horse.AnimalArmorItemMixin",
+        "horse.AnimalArmorItemTypeMixin",
         "horse.EnderPearlEntityMixin",
         "horse.EntityMixin",
         "horse.HorseScreenHandlerMixin",

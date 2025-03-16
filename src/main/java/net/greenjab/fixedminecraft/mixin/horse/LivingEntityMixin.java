@@ -31,13 +31,4 @@ public abstract class LivingEntityMixin
         if (vehicle instanceof ZombieHorseEntity) return 0.5;
         return 1.0;
     }
-
-    @ModifyExpressionValue(method = "canEquip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/type/EquippableComponent;allows(Lnet/minecraft/entity/EntityType;)Z"))
-    private boolean muleArmourEquipable(boolean original, @Local EquippableComponent equippableComponent){
-        LivingEntity LE = (LivingEntity) (Object)this;
-        if (LE instanceof MuleEntity) {
-            if (equippableComponent.allows(EntityType.HORSE)) return true;
-        }
-        return original;
-    }
 }

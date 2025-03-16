@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
-import net.greenjab.fixedminecraft.registry.screen.FletchingScreenHandler;
+import net.greenjab.fixedminecraft.registry.other.FletchingScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FletchingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;

@@ -23,8 +23,9 @@ public abstract class MinecraftServerMixin {
         }
         for (int id : MapBookStateManager.Companion.getINSTANCE().getCurrentBooks()) {
             MapBookState state = MapBookStateManager.Companion.getINSTANCE().getMapBookState(SW, id);
-            assert state != null;
-            state.sendData(SW, id);
+            if (state != null) {
+                state.sendData(SW, id);
+            }
         }
         MapBookStateManager.Companion.getINSTANCE().setCurrentBooks(new ArrayList<>());
     }

@@ -46,7 +46,7 @@ public class ItemRegistry {
 
     public static final Item NETHERITE_HORSE_ARMOR = register(
             "netherite_horse_armor",
-            /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),
+                /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),
             new Item.Settings().maxCount(1).fireproof().rarity(Rarity.RARE));
 
     public static final Item BROKEN_TOTEM = register("broken_totem", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
