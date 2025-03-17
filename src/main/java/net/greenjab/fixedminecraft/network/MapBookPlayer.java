@@ -5,9 +5,9 @@ import net.minecraft.network.PacketByteBuf;
 
 public class MapBookPlayer {
     public String name = "";
-    public Double x = 0.0;
-    public Double z = 0.0;
-    public Float yaw = 0.0f;
+    public double x = 0.0;
+    public double z = 0.0;
+    public float yaw = 0.0f;
     public String dimension = "";
 
 

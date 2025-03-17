@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
@@ -130,7 +130,7 @@ public class ItemsMixin {
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                     target = "Lnet/minecraft/item/Items;APPLE:Lnet/minecraft/item/Item;")))
     private static Item repairableBow(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        return register("bow", BowItem::new, new Item.Settings().maxDamage(384).enchantable(1).repairable(ModTags.INSTANCE.getSTRINGTAG()));
+        return register("bow", BowItem::new, new Item.Settings().maxDamage(384).enchantable(1).repairable(ModTags.STRINGTAG));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

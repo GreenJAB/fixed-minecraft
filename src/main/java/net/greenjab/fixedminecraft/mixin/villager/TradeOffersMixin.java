@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.google.common.collect.ImmutableMap;
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.village.TradeOffers;
@@ -52,7 +52,7 @@ public class TradeOffersMixin {
 
     @Unique
     private static TradeOffers.EnchantBookFactory FishingBook() {
-        return new TradeOffers.EnchantBookFactory(30, 1, 3, ModTags.INSTANCE.getFISHING_TRADES());
+        return new TradeOffers.EnchantBookFactory(30, 1, 3, ModTags.FISHING_TRADES);
     }
 
 }

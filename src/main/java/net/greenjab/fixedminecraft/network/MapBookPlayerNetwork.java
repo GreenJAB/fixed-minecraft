@@ -19,9 +19,10 @@ public class MapBookPlayerNetwork {
         }
 
         public void encode(PacketByteBuf byteBuf, ArrayList<MapBookPlayer> array) {
+            ArrayList<MapBookPlayer> array2 = (ArrayList<MapBookPlayer>) array.clone();
             VarInts.write(byteBuf, array.size());
-            for (MapBookPlayer i : array) {
-                i.toPacket(byteBuf);
+            for (int i = 0; i < array.size();i++) {
+                array2.get(i).toPacket(byteBuf);
             }
         }
     };

@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -64,7 +64,7 @@ public abstract class LivingEntityMixin {
         if (vehicle == null) return;
         EntityType<?> vehicleType = vehicle.getType();
 
-        if (vehicleType.isIn(ModTags.INSTANCE.getVEHICLES())) entity.stopRiding();
+        if (vehicleType.isIn(ModTags.VEHICLES)) entity.stopRiding();
     }
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"),

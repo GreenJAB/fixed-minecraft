@@ -42,7 +42,7 @@ public class HeldItemRendererMixin {
         //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
         if (!(original.getItem() instanceof MapBookItem) || nearestMap == null) return original;
         ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
-        map.set(DataComponentTypes.MAP_ID, nearestMap.id());
+        map.set(DataComponentTypes.MAP_ID, nearestMap.id);
         return map;
     }
 

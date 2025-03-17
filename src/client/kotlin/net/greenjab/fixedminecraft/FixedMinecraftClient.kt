@@ -13,7 +13,6 @@ import net.greenjab.fixedminecraft.network.ClientSyncHandler
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry
 import net.greenjab.fixedminecraft.render.PlayerLookHelper
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.data.EquipmentAssetProvider
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.render.RenderLayer
 import net.minecraft.client.render.RenderTickCounter

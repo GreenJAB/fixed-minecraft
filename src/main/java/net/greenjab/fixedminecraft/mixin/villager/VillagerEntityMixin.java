@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.mobs.EnchantedBookFactory;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -244,13 +244,13 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private EnchantedBookFactory biomeBook(boolean master, VillagerData villagerData) {
         Object2ObjectMap<VillagerType,
                 TagKey<Enchantment>> biomeEnchants =  new Object2ObjectOpenHashMap(ImmutableMap.builder()
-                .put(VillagerType.DESERT, ModTags.INSTANCE.getDESERT_TRADES())
-                .put(VillagerType.JUNGLE, ModTags.INSTANCE.getJUNGLE_TRADES())
-                .put(VillagerType.PLAINS, ModTags.INSTANCE.getPLAINS_TRADES())
-                .put(VillagerType.SAVANNA, ModTags.INSTANCE.getSAVANNA_TRADES())
-                .put(VillagerType.SNOW, ModTags.INSTANCE.getSNOW_TRADES())
-                .put(VillagerType.SWAMP, ModTags.INSTANCE.getSWAMP_TRADES())
-                .put(VillagerType.TAIGA, ModTags.INSTANCE.getTAIGA_TRADES())
+                .put(VillagerType.DESERT, ModTags.DESERT_TRADES)
+                .put(VillagerType.JUNGLE, ModTags.JUNGLE_TRADES)
+                .put(VillagerType.PLAINS, ModTags.PLAINS_TRADES)
+                .put(VillagerType.SAVANNA, ModTags.SAVANNA_TRADES)
+                .put(VillagerType.SNOW, ModTags.SNOW_TRADES)
+                .put(VillagerType.SWAMP, ModTags.SWAMP_TRADES)
+                .put(VillagerType.TAIGA, ModTags.TAIGA_TRADES)
                 .build());
 
 
@@ -311,7 +311,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
-                .getRandomEntry(ModTags.INSTANCE.getANY_TRADES(), random);
+                .getRandomEntry(ModTags.ANY_TRADES, random);
         int l;
         ItemStack itemStack;
         if (optional.isPresent()) {

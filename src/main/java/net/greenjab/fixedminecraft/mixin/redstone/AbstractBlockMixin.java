@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.redstone;
 
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -25,7 +25,7 @@ public abstract class AbstractBlockMixin {
     @Inject(method = "onExploded", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;I)Z"))
     private void oreDrops(BlockState state, ServerWorld serverWorld, BlockPos pos, Explosion explosion,
                           BiConsumer<ItemStack, BlockPos> stackMerger, CallbackInfo ci){
-        if (state.isIn(ModTags.INSTANCE.getORES())){
+        if (state.isIn(ModTags.ORES)){
             if (serverWorld.random.nextBoolean()) {
                 Block block = state.getBlock();
                 boolean bl = explosion.getCausingEntity() instanceof PlayerEntity;

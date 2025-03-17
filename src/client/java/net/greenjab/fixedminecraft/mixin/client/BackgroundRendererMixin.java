@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
-import net.greenjab.fixedminecraft.data.ModTags;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.render.BackgroundRenderer;
@@ -75,7 +75,7 @@ public class BackgroundRendererMixin {
             float a3 = (1-caveGradiant) * k + caveGradiant * c.w;
 
             Fog fog = new Fog( 3+(f-3) *(1-palefog2)/(75*palefog2+1), 16 + (g - 16) * (1-palefog2)/(25*palefog2+1), FogShape.SPHERE, r3, g3, b3, a3);
-            if (world.getBiome(camera.getBlockPos()).isIn(ModTags.INSTANCE.getIS_PALE_GARDEN()) ) {
+            if (world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN) ) {
                 FixedMinecraftClient.INSTANCE.setPaleGardenFog(Math.min(palefog+0.003f, 1));
                 return fog;
             } else {
