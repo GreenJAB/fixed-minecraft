@@ -1,11 +1,11 @@
-rootProject.name = "fixedminecraft"
-
 pluginManagement {
     repositories {
-        maven("https://maven.fabricmc.net/") {
+        maven {
             name = "Fabric"
+            url = "https://maven.fabricmc.net/"
         }
         mavenCentral()
         gradlePluginPortal()
     }
 }
+rootProject.name = "fixedminecraft"

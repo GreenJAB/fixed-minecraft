@@ -111,7 +111,6 @@ public class AbstractHorseEntityMixin {
                 if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.04; }
                 if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.015; }
                 d*=(chosenEffect.getAmplifier()+1);
-                System.out.println(d);
                 return original + d;
             }
         }

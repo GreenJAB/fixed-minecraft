@@ -17,6 +17,7 @@ import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.event.GameEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -70,6 +71,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         float diff = 0.01f;
         if (this.getWorld().getDifficulty() == Difficulty.HARD) diff = 0.1f;
         if (this.getWorld().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
+        if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) diff*=2;
         if (random.nextFloat() < diff) {
             int i = random.nextInt(5);
             int j = random.nextInt(2);

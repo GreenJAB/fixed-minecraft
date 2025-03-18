@@ -1,0 +1,104 @@
+import org.gradle.jvm.tasks.Jar
+
+plugins {
+    alias(libs.plugins.fabric.loom)
+    alias(libs.plugins.yamlang)
+}
+
+version = "0.3.1-1.21.4"
+group = "net.green_jab.fixedminecraft"
+
+
+base {
+    archivesName = project.name
+}
+
+
+loom {
+    splitEnvironmentSourceSets()
+    accessWidenerPath = file("src/main/resources/fixedminecraft.accesswidener")
+    mods {
+        register("fixedminecraft") {
+            sourceSet(sourceSets["main"])
+            sourceSet(sourceSets["client"])
+        }
+    }
+    decompilers {
+        vineflower {
+            options.put("mark-corresponding-synthetics", "1")
+        }
+    }
+}
+
+
+repositories {
+    maven {
+        url "https://maven.solo-studios.ca/releases/"
+    }
+    maven {
+        url "https://maven.fabricmc.net/"
+    }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft(libs.minecraft)
+    mappings(variantOf(libs.yarn.mappings) { classifier("v2") })
+    modImplementation(libs.fabric.loader)
+    modImplementation(libs.fabric.api)
+    vineflowerDecompilerClasspath(libs.vineflower)
+}
+
+
+fabricApi {
+    configureDataGeneration()
+}
+
+
+tasks.processResources {
+    filesMatching("fabric.mod.json") {
+        expand(
+            "version" : project.version,
+            "fabric_api" : libs.versions.fabric.api.get(),
+            "minecraft" : libs.versions.minecraft.get(),
+        )
+    }
+}
+
+
+yamlang {
+    targetSourceSets = [sourceSets.main]
+    inputDir.set("assets/fixedminecraft/lang")
+}
+
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 17
+}
+
+java {
+    withSourcesJar()
+}
+
+afterEvaluate {
+    // must be done in after evaluate, otherwise (iirc) dependencies can't be properly resolved yet
+    loom {
+        runs {
+            configureEach {
+                vmArgs("-Xmx2G")
+
+                property("fabric.development", "true")
+                property("mixin.debug", "true")
+                property("mixin.debug.export.decompile", "false")
+                property("mixin.debug.verbose", "true")
+                property("mixin.dumpTargetOnFailure", "true")
+                // makes silent failures into hard-failures
+                // property("mixin.checks", "true")
+                property("mixin.hotSwap", "true")
+
+
+                ideConfigGenerated(true)
+            }
+        }
+    }
+}

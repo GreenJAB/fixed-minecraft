@@ -66,7 +66,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         if (!player.getWorld().isClient) {
             netherite = player.getCommandTags().contains("netherite_anvil");
         } else {
-            netherite = FixedMinecraft.INSTANCE.getNetheriteAnvil();
+            netherite = FixedMinecraft.netheriteAnvil;
         }
 
         ItemStack firstInputStack = this.input.getStack(0);

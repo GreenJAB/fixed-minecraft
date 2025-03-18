@@ -14,16 +14,10 @@
     "environment": "*",
     "entrypoints": {
         "client": [
-            {
-                "adapter": "kotlin",
-                "value": "net.greenjab.fixedminecraft.FixedMinecraftClient"
-            }
+            "net.greenjab.fixedminecraft.FixedMinecraftClient"
         ],
         "main": [
-            {
-                "adapter": "kotlin",
-                "value": "net.greenjab.fixedminecraft.FixedMinecraft"
-            }
+            "net.greenjab.fixedminecraft.FixedMinecraft"
         ],
         "fabric-datagen": [
             "net.greenjab.fixedminecraft.FixedMinecraftDataGenerator"
@@ -39,7 +33,6 @@
     "depends": {
         "java": ">=17",
         "minecraft": "~${minecraft}",
-        "fabric-api": ">=${fabric_api}",
-        "fabric-language-kotlin": ">=1.10"
+        "fabric-api": ">=${fabric_api}"
     }
 }

@@ -379,7 +379,7 @@ public class MapBookScreen extends Screen {
         float absScroll = Math.abs(scroll);
         float speed = 5.0f;
         float newZoom =  scroll > 0 ? start - (start / (scroll * speed)) : (start * absScroll * speed) / (absScroll * speed - 1);
-        newZoom = Math.clamp(newZoom, 0.005f, 10f);
+        newZoom = Math.min(Math.max(newZoom, 0.005f), 10f);
         return newZoom;
     }
 }

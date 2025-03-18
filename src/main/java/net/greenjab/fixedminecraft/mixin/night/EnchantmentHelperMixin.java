@@ -25,12 +25,10 @@ public class EnchantmentHelperMixin {
         if (entity instanceof PlayerEntity) {
             if (world.getLightLevel(LightType.SKY, entity.getBlockPos()) > 10) {
                 if (world.isNight() && world.getMoonPhase() == 4) {
-                    System.out.println("moonlooting");
                     return original+1;
                 }
             }
         }
-        System.out.println("no moonlooting");
         return original;
     }
 }

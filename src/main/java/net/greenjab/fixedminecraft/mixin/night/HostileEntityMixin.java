@@ -19,7 +19,7 @@ public class HostileEntityMixin {
     private static void zombieVillagerOnSurface(EntityType<? extends HostileEntity> type, ServerWorldAccess world, SpawnReason spawnReason,
                                      BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir) {
         if (type == EntityType.ZOMBIE_VILLAGER ) {
-            cir.setReturnValue(cir.getReturnValue() && (SpawnReason.isAnySpawner(spawnReason) || world.getLightLevel(LightType.SKY, pos)>10));
+            cir.setReturnValue(cir.getReturnValue() && (SpawnReason.isAnySpawner(spawnReason) || world.getLightLevel(LightType.SKY, pos)>5));
         }
         if (type == EntityType.CAVE_SPIDER) {
             if (spawnReason==SpawnReason.NATURAL) {

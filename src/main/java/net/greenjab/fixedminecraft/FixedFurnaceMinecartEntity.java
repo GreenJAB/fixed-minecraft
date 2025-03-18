@@ -187,10 +187,10 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                                       !entity.getCommandTags().contains("train")
                     );
                     if (!list.isEmpty()) {
-                        BlockPos var5 = list.getFirst().getRailOrMinecartPos();
+                        BlockPos var5 = list.get(0).getRailOrMinecartPos();
                         BlockState blockState = this.getWorld().getBlockState(var5);
                         if (AbstractRailBlock.isRail(blockState)) {
-                            addMinecart(list.getFirst(), fakeMinecart);
+                            addMinecart(list.get(0), fakeMinecart);
                         }
                     }
                 } else {
@@ -213,7 +213,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         minecart.setOnRail(true);
         minecart.addCommandTag("train");
         minecart.addCommandTag("trainMove");
-        minecart.setVelocity(train.getLast().getVelocity().add(0, 0.1, 0));
+        minecart.setVelocity(train.get(train.size()-1).getVelocity().add(0, 0.1, 0));
         minecart.setPosition(minecart2.getPos());
         minecart.setPitch(minecart2.getPitch());
         minecart.setYaw((minecart2.getYaw() + 360) % 360);

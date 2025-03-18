@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.screen.AnvilScreenHandler;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -30,7 +29,7 @@ public class AnvilScreenMixin {
     private int newMax(int i, @Local(argsOnly = true) DrawContext context) {
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        if (FixedMinecraft.INSTANCE.getNetheriteAnvil()) {
+        if (FixedMinecraft.netheriteAnvil) {
             return 1000;
         }
         int cap = 0;
@@ -71,7 +70,7 @@ public class AnvilScreenMixin {
             ItemCapacity++;
         }
         int OutputCost = levelCost;
-        boolean netherite = FixedMinecraft.INSTANCE.getNetheriteAnvil();
+        boolean netherite = FixedMinecraft.netheriteAnvil;
 
         if (ItemInput1 != ItemStack.EMPTY) {
             InputCost = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemInput1, false);

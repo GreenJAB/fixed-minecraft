@@ -75,7 +75,7 @@ public class FishingBobberEntityMixin {
 
         String[] tables = {"fish", "junk", "mid", "treasure"};
 
-        Identifier lootTableId = FixedMinecraft.INSTANCE.id("gameplay/fixed_fishing/" + tables[lootPool]);
+        Identifier lootTableId = FixedMinecraft.id("gameplay/fixed_fishing/" + tables[lootPool]);
         LootTable lootTable = FBE.getWorld().getServer()
                 .getReloadableRegistries()
                 .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));

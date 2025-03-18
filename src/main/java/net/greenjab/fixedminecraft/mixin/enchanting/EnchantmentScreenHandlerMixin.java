@@ -252,7 +252,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 enchantments = this.generateEnchantments(world.getRegistryManager(), itemStack, slot, power);
                 if (!enchantments.isEmpty()) {
                     // set displayed enchantment
-                    EnchantmentLevelEntry displayedEnchantment = enchantments.getFirst();
+                    EnchantmentLevelEntry displayedEnchantment = enchantments.get(0);
 
                     this.enchantmentId[slot] = indexedIterable.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
 

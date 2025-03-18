@@ -18,7 +18,7 @@ public abstract class MinecraftServerMixin {
     private void loadWorld(CallbackInfo ci) {
         MinecraftServer SW = (MinecraftServer)(Object) this;
         synchronized (Networking.SERVER_LOCK) {
-            FixedMinecraft.INSTANCE.setSERVER(SW);
+            FixedMinecraft.SERVER = SW;
             Networking.SERVER_LOCK.notifyAll();
         }
         for (int id : MapBookStateManager.INSTANCE.currentBooks) {

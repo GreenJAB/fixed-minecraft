@@ -15,7 +15,11 @@ import java.util.Optional;
 
 public class ArmorTrimmer {
     public static ItemStack trimAtChanceIfTrimable(ItemStack stack, @NotNull Random random, @NotNull DynamicRegistryManager registryManager) {
-        if (random.nextInt(10) > 1) {
+        return trimAtChanceIfTrimable(stack, random, registryManager, false);
+    }
+
+    public static ItemStack trimAtChanceIfTrimable(ItemStack stack, @NotNull Random random, @NotNull DynamicRegistryManager registryManager, boolean pale) {
+        if (random.nextInt(10) > (pale?2:1)) {
             return stack;
         }
 

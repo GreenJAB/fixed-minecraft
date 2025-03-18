@@ -87,7 +87,7 @@ public class ItemRegistry {
         return register(keyOf(id), factory, settings);
     }
     private static RegistryKey<Item> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.ITEM, FixedMinecraft.INSTANCE.id(id));
+        return RegistryKey.of(RegistryKeys.ITEM, FixedMinecraft.id(id));
     }
     public static Item register(RegistryKey<Item> key, Function<Item.Settings, Item> factory, Item.Settings settings) {
         Item item = factory.apply(settings.registryKey(key));
@@ -122,6 +122,6 @@ public class ItemRegistry {
     }
 
     private static RegistryEntry<Potion> register(String name, Potion potion) {
-        return Registry.registerReference(Registries.POTION, FixedMinecraft.INSTANCE.id(name), potion);
+        return Registry.registerReference(Registries.POTION, FixedMinecraft.id(name), potion);
     }
 }

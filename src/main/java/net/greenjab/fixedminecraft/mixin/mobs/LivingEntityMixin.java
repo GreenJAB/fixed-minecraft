@@ -72,7 +72,6 @@ public abstract class LivingEntityMixin {
     )
     private void cancel0Damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (modifyAppliedDamage(world, source, amount)<0.05 && !this.blockedByShield(source)) {
-            System.out.println("cancel");
             cir.setReturnValue(false);
         }
     }

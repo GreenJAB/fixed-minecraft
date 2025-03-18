@@ -51,7 +51,7 @@ public class NetheriteAnvilBlock extends AnvilBlock {
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             player.incrementStat(Stats.INTERACT_WITH_ANVIL);
         } else {
-            FixedMinecraft.INSTANCE.setNetheriteAnvil(true);
+            FixedMinecraft.netheriteAnvil = true;
         }
 
         return ActionResult.SUCCESS;

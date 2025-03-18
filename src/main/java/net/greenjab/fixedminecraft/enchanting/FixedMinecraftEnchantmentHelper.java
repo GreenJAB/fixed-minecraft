@@ -45,14 +45,14 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        if (!FixedMinecraft.INSTANCE.getItemCapacities().containsKey(item))
-            if (FixedMinecraft.INSTANCE.getSERVER()!=null) {
+        if (!FixedMinecraft.ItemCapacities.containsKey(item))
+            if (FixedMinecraft.SERVER!=null) {
                 HashMap<Item, Integer> map = new HashMap<>(Map.of());
-                map.putAll(FixedMinecraft.INSTANCE.getItemCapacities());
+                map.putAll(FixedMinecraft.ItemCapacities);
                 map.put(item, getNewEnchantmentCapacity(itemStack));
-                FixedMinecraft.INSTANCE.setItemCapacities(map);
+                FixedMinecraft.ItemCapacities = map;
             }
-        return FixedMinecraft.INSTANCE.getItemCapacities().getOrDefault(item, 0);
+        return FixedMinecraft.ItemCapacities.getOrDefault(item, 0);
     }
 
     public static int getNewEnchantmentCapacity(ItemStack itemStack) {
@@ -69,7 +69,7 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
-        World world =  Objects.requireNonNull(FixedMinecraft.INSTANCE.getSERVER()).getOverworld();
+        World world =  Objects.requireNonNull(FixedMinecraft.SERVER).getOverworld();
         Registry<Enchantment> optional = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
         Iterator<Enchantment> e = optional.stream().iterator();
         while (e.hasNext()) {
@@ -124,8 +124,11 @@ public class FixedMinecraftEnchantmentHelper {
                        .isIn(BlockTags.ENCHANTMENT_POWER_TRANSMITTER);
     }
 
-
     public static ItemStack applySuperEnchants(ItemStack IS, Random random) {
+        return applySuperEnchants(IS, random, false);
+    }
+
+    public static ItemStack applySuperEnchants(ItemStack IS, Random random, boolean pale) {
         if (!IS.isOf(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultStack();
             ItemEnchantmentsComponent map = EnchantmentHelper.getEnchantments(IS);
@@ -137,7 +140,7 @@ public class FixedMinecraftEnchantmentHelper {
                 Enchantment e = registryEntry.value();
                 int i = entry.getIntValue();
                 if (e.getMaxLevel() != 1) {
-                    if (random.nextFloat() < 0.05f) {
+                    if (random.nextFloat() < (pale?0.15f:0.05f)) {
                         i = e.getMaxLevel() + 1;
                         isSuper = true;
                     }

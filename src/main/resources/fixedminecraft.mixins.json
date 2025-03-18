@@ -34,6 +34,7 @@
         "enchanting.EnchantWithLevelsLootFunctionMixin",
         "enchanting.EntityMixin",
         "enchanting.GrindstoneScreenHandlerMixin",
+        "enchanting.ItemStackMixin",
         "enchanting.PlayerEntityMixin",
         "enchanting.ToolMaterialsMixin",
         "enchanting.TridentEntityMixin",

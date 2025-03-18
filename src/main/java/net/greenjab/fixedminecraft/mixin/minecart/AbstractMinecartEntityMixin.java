@@ -72,7 +72,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
     @Redirect(method = "pushAwayFromMinecart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"))
     private void furnaceMinecartsCantBePushed2(AbstractMinecartEntity instance, Vec3d vec3d){
         if (!(instance instanceof FurnaceMinecartEntity)) {
-            instance.addVelocity(vec3d);
+            instance.setVelocity(vec3d);
         }
     }
     @Redirect(method = "pushAwayFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;addVelocity(DDD)V"))

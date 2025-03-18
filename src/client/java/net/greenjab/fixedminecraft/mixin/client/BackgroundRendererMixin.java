@@ -62,11 +62,11 @@ public class BackgroundRendererMixin {
     private static Fog paleFog(float f, float g, FogShape fogShape, float r1, float g1, float b1, float k,
                                @Local(argsOnly = true)Camera camera, @Local(ordinal = 0, argsOnly = true) float viewDistance, @Local(argsOnly = true)BackgroundRenderer.FogType fogType) {
         if (fogType == BackgroundRenderer.FogType.FOG_TERRAIN) {
-            float palefog = FixedMinecraftClient.INSTANCE.getPaleGardenFog();
+            float palefog = FixedMinecraftClient.paleGardenFog;
             float palefog2 = palefog*palefog;
             World world = camera.getFocusedEntity().getWorld();
             int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
-            float caveGradiant = Math.clamp(0.85f-light/7f,0.15f,1);
+            float caveGradiant = Math.min(Math.max(0.85f-light/7f, 0.15f), 1);
 
             Vector4f c = getFogColor(camera, camera.getLastTickDelta(), (ClientWorld) world);
             float r3 = (1-caveGradiant) * r1 + caveGradiant * c.x;
@@ -76,10 +76,10 @@ public class BackgroundRendererMixin {
 
             Fog fog = new Fog( 3+(f-3) *(1-palefog2)/(75*palefog2+1), 16 + (g - 16) * (1-palefog2)/(25*palefog2+1), FogShape.SPHERE, r3, g3, b3, a3);
             if (world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN) ) {
-                FixedMinecraftClient.INSTANCE.setPaleGardenFog(Math.min(palefog+0.003f, 1));
+                FixedMinecraftClient.paleGardenFog = Math.min(palefog + 0.003f, 1);
                 return fog;
             } else {
-                FixedMinecraftClient.INSTANCE.setPaleGardenFog(Math.max(palefog-0.005f, 0));
+                FixedMinecraftClient.paleGardenFog = Math.max(palefog - 0.005f, 0);
 
                 if (palefog > 0) {
                     return fog;

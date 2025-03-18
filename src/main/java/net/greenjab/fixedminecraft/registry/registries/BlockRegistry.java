@@ -77,7 +77,7 @@ public class BlockRegistry {
         return register(keyOf(id), factory, settings);
     }
     private static RegistryKey<Block> keyOf(String id) {
-        return RegistryKey.of(RegistryKeys.BLOCK, FixedMinecraft.INSTANCE.id(id));
+        return RegistryKey.of(RegistryKeys.BLOCK, FixedMinecraft.id(id));
     }
     public static Block register(RegistryKey<Block> key, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         Block block = factory.apply(settings.registryKey(key));

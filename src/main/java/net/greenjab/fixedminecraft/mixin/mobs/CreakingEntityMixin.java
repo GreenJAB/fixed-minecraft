@@ -1,5 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CreakingHeartBlock;
+import net.minecraft.block.entity.CreakingHeartBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -10,6 +14,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.CreakingEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,32 +39,33 @@ public abstract class CreakingEntityMixin {
     @Inject(method = "tickMovement", at = @At(value = "TAIL"))
     private void modifyDespawnData(CallbackInfo ci){
         CreakingEntity CE = (CreakingEntity)(Object)this;
-        if (!CE.hasCustomName()) {
-            boolean root = CE.shouldBeUnrooted();
-            LivingEntity target = CE.getTarget();
-            if (root && target != null) {
-                float dist = CE.distanceTo(target);
-                if (dist > 10) {
-                    int timer = CE.getDataTracker().get(DespawnTimer) + 1;
-                    CE.getDataTracker().set(DespawnTimer, timer);
-                    if (timer > 200) {
-                        CE.killFromHeart(CE.getDamageSources().cramming());
-                        CE.setCrumbling();
-                        CE.setHealth(0.0F);
+        BlockPos home = CE.getHomePos();
+        if (home!=null) {
+            if (CE.getWorld().getBlockEntity(home) instanceof CreakingHeartBlockEntity creakingHeartBlockEntity) {
+                if (!CE.hasCustomName()) {
+                    boolean root = CE.shouldBeUnrooted();
+                    LivingEntity target = CE.getTarget();
+                    if (root && target != null) {
+                        float dist = CE.distanceTo(target);
+                        if (dist > 10) {
+                            int timer = CE.getDataTracker().get(DespawnTimer) + 1;
+                            CE.getDataTracker().set(DespawnTimer, timer);
+                            if (timer > 200) {
+                                creakingHeartBlockEntity.killPuppet(CE.getDamageSources().cramming());
+                            }
+                            return;
+                        }
                     }
-                    return;
+                    if (target == null) {
+                        if (CE.getWorld().getTime() % 100 == 0) {
+                            if (CE.getWorld().random.nextInt(33) == 0) {
+                                creakingHeartBlockEntity.killPuppet(CE.getDamageSources().cramming());
+                            }
+                        }
+                    }
+                    CE.getDataTracker().set(DespawnTimer, 0);
                 }
             }
-            if (target == null) {
-                if (CE.getWorld().getTime()%100==0) {
-                    if (CE.getWorld().random.nextInt(33)==0) {
-                        CE.killFromHeart(CE.getDamageSources().cramming());
-                        CE.setCrumbling();
-                        CE.setHealth(0.0F);
-                    }
-                }
-            }
-            CE.getDataTracker().set(DespawnTimer, 0);
         }
     }
 
