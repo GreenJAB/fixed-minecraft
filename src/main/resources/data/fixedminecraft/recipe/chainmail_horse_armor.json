@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": "minecraft:chain",
+    "L": "minecraft:leather"
+  },
+  "pattern": [
+    "X X",
+    "XLX",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fixedminecraft:chainmail_horse_armor"
+  }
+}

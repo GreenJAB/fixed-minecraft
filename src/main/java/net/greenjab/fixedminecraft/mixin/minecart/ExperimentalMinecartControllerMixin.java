@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.minecart;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.FixedFurnaceMinecartEntity;
+import net.greenjab.fixedminecraft.registry.other.FixedFurnaceMinecartEntity;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;

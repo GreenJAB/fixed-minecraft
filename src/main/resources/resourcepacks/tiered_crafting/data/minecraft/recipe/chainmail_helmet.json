@@ -1,0 +1,16 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "pattern": [
+        "CCC",
+        "IPI"
+    ],
+    "key": {
+        "C": "minecraft:chain",
+        "I": "minecraft:iron_nugget",
+        "P": "minecraft:leather_helmet"
+    },
+    "result": {
+        "id": "minecraft:chainmail_helmet"
+    }
+}

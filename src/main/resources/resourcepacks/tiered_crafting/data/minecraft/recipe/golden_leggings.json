@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": "minecraft:gold_ingot",
+    "P": "minecraft:iron_leggings"
+  },
+  "pattern": [
+    "XXX",
+    "XPX",
+    "X X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:golden_leggings"
+  }
+}

@@ -27,6 +27,7 @@ import java.util.List;
 public class FixedMinecraftClient implements ClientModInitializer {
     public static float paleGardenFog = 0f;
     public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
+    public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
 
     @Override
     public void onInitializeClient() {
@@ -46,33 +47,6 @@ public class FixedMinecraftClient implements ClientModInitializer {
                 );
 
         HudRenderCallback.EVENT.register(this::renderCrosshair);
-
-        /*HudRenderCallback.EVENT.register(HudRenderCallback -> { DrawContext drawContext, tickDeltaManager ->
-                MatrixStack matrices = drawContext.getMatrices();
-            matrices.push();
-
-
-            MinecraftClient client = MinecraftClient.getInstance();
-
-            ItemStack book = PlayerLookHelper.getLookingAtBook(null);
-            if (book != ItemStack.EMPTY) {
-
-                List<Text> display = PlayerLookHelper.getBookText(book);
-                for (int i = 0;i< display.size();i++) {
-                    Text text = display.get(i);
-                    drawContext.drawText(
-                            client.textRenderer,
-                            text,
-                            (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2),
-                            (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)),
-                   (book.isOf(Items.ENCHANTED_BOOK) && i == 0) ? 16777045 : 16777215,
-                            true
-                );
-                }
-            }
-
-            matrices.pop();
-        });*/
 
         BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers();

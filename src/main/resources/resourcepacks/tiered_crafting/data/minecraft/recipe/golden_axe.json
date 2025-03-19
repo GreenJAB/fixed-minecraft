@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:stick",
+    "X": "#minecraft:gold_tool_materials",
+      "P": "minecraft:iron_axe"
+  },
+  "pattern": [
+    "XX",
+    "X#",
+    "P#"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:golden_axe"
+  }
+}

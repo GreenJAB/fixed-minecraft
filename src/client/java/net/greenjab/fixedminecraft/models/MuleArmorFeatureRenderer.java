@@ -76,10 +76,11 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
 
     Item getArmorValue(int i) {
         if (i==1) return Items.LEATHER_HORSE_ARMOR;
-        if (i==2) return Items.IRON_HORSE_ARMOR;
-        if (i==3) return Items.GOLDEN_HORSE_ARMOR;
-        if (i==4) return Items.DIAMOND_HORSE_ARMOR;
-        if (i==5) return ItemRegistry.NETHERITE_HORSE_ARMOR;
+        if (i==2) return ItemRegistry.CHAINMAIL_HORSE_ARMOR;
+        if (i==3) return Items.IRON_HORSE_ARMOR;
+        if (i==4) return Items.GOLDEN_HORSE_ARMOR;
+        if (i==5) return Items.DIAMOND_HORSE_ARMOR;
+        if (i==6) return ItemRegistry.NETHERITE_HORSE_ARMOR;
         return Items.AIR;
     }
 }

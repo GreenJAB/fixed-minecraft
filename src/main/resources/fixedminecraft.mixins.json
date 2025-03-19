@@ -13,6 +13,7 @@
         "dragon.EnderDragonEntityMixin",
         "dragon.EnderDragonFightMixin",
         "dragon.EndSpikeFeatureMixin",
+        "dragon.EyeOfEnderEntityMixin",
         "dragon.GlassBottleItemMixin",
         "dragon.HoldingPatternPhaseMixin",
         "dragon.ItemEntityMixin",

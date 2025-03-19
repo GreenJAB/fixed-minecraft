@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "equipment",
+    "pattern": [
+        "III",
+        "CPC",
+        "C C"
+    ],
+    "key": {
+        "C": "minecraft:chain",
+        "I": "minecraft:iron_nugget",
+        "P": "minecraft:leather_leggings"
+    },
+    "result": {
+        "id": "minecraft:chainmail_leggings"
+    }
+}

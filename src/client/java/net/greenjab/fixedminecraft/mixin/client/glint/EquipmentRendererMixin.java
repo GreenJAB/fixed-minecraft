@@ -21,9 +21,8 @@ public class EquipmentRendererMixin {
             target = "Lnet/minecraft/client/render/entity/equipment/EquipmentModelLoader;get(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/client/render/entity/equipment/EquipmentModel;"
     ))
     private EquipmentModel useNetheriteArmorModel(EquipmentModel original, @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetKey) {
-        if (assetKey.getValue().toString().toLowerCase().contains("netherite")) {
-            return FixedMinecraftClient.netheriteModel;
-        }
+        if (assetKey.getValue().toString().toLowerCase().contains("netherite")) return FixedMinecraftClient.netheriteModel;
+        if (assetKey.getValue().toString().toLowerCase().contains("chainmail")) return FixedMinecraftClient.chainmailModel;
         return original;
     }
 }

@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft;
+package net.greenjab.fixedminecraft.registry.other;
 
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;

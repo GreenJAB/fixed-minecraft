@@ -44,6 +44,12 @@ public class ItemRegistry {
     public static final Item MAP_BOOK = register("map_book", MapBookItem::new, new Item.Settings().maxCount(1));
     public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache());
 
+    public static final Item CHAINMAIL_HORSE_ARMOR = register(
+            "chainmail_horse_armor",
+            /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.CHAIN, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),
+            new Item.Settings().maxCount(1));
+
+
     public static final Item NETHERITE_HORSE_ARMOR = register(
             "netherite_horse_armor",
                 /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),

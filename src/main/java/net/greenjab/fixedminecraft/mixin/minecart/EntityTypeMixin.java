@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
-import net.greenjab.fixedminecraft.FixedFurnaceMinecartEntity;
+import net.greenjab.fixedminecraft.registry.other.FixedFurnaceMinecartEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;

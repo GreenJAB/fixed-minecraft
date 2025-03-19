@@ -45,6 +45,7 @@ public class AbstractHorseEntityMixin {
         rageChance.put(Items.DIAMOND_HORSE_ARMOR, 0.9F);
         rageChance.put(Items.IRON_HORSE_ARMOR, 0.75F);
         rageChance.put(Items.GOLDEN_HORSE_ARMOR, 0.6F);
+        rageChance.put(ItemRegistry.CHAINMAIL_HORSE_ARMOR, 0.5F);
         rageChance.put(Items.LEATHER_HORSE_ARMOR, 0.45F);
 
         effectModififers.put(StatusEffects.SPEED, "movement_speed");
