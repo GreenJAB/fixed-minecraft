@@ -6,6 +6,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 
+/** Credit: Pepperoni-Jabroni */
 public class EnchantGlint {
 
     private static final ThreadLocal<ItemStack> targetStack = new ThreadLocal<>();

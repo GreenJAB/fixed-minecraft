@@ -32,7 +32,6 @@ public class GameRendererMixin {
     @Final
     private MinecraftClient client;
 
-
     @Inject(method = "updateCrosshairTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
     private void getEntityThroughGrass(float tickDelta, CallbackInfo ci) {
         Entity entity = this.client.getCameraEntity();

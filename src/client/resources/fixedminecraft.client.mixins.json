@@ -2,7 +2,10 @@
     "required": true,
     "package": "net.greenjab.fixedminecraft.mixin.client",
     "compatibilityLevel": "JAVA_17",
-    "mixins": [
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [
         "AbstractDonkeyEntityRendererMixin",
         "AdvancementsScreenMixin",
         "AdvancementTabMixin",
@@ -18,24 +21,19 @@
         "GameRendererMixin",
         "InGameHudMixin",
         "MerchantScreenMixin",
+        "RecipeBookWidgetMixin",
         "VillagerEntityRendererMixin",
+        "WorldRendererMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
-        "glint.ItemRendererMixin",
-        "map.HeldItemRendererMixin",
-        "map.ItemFrameEntityRendererMixin"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    },
-    "client": [
-        "RecipeBookWidgetMixin",
-        "WorldRendererMixin",
         "glint.EquipmentRendererMixin",
         "glint.HorseArmorFeatureRendererMixin",
         "glint.ItemModelManagerMixin",
+        "glint.ItemRendererMixin",
         "map.DrawContextAccessor",
+        "map.HeldItemRendererMixin",
+        "map.ItemFrameEntityRendererMixin",
         "map.MapPositionRequestMixin",
         "map.MapRendererMixin"
     ]

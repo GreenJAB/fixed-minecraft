@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.map_book;
 
 import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
-import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
@@ -39,6 +38,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
 
+/** Credit: Nettakrim */
 public class MapBookScreen extends Screen {
     ItemStack item;
     public double x = 0.0;
@@ -107,7 +107,7 @@ public class MapBookScreen extends Screen {
 
         super.render(context, mouseX, mouseY, delta);
 
-        PlayerEntity thisPlayer = client.player;// ?: return
+        PlayerEntity thisPlayer = client.player;
         if (thisPlayer==null)return;
 
         var stack = thisPlayer.getMainHandStack();
@@ -351,7 +351,7 @@ public class MapBookScreen extends Screen {
     }
 
     private MapBookState getMapBookState(ItemStack stack, World world) {
-        int id = getMapBookId(stack) ;//?: return null;
+        int id = getMapBookId(stack) ;
         if (id == -1) return null;
         return MapBookStateManager.INSTANCE.getClientMapBookState(id);
     }

@@ -1,40 +1,34 @@
 package net.greenjab.fixedminecraft.hud;
 
-import net.greenjab.fixedminecraft.util.ExhaustionHelper;
 import net.greenjab.fixedminecraft.util.IntPoint;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
-import net.minecraft.world.Difficulty;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.Vector;
 
+/** Credit: Squeek502 */
 public class HUDOverlayHandler
 {
-    private static int foodIconsOffset = 0;
 
     private static final int FOOD_BAR_HEIGHT = 39;
 
-    private static Vector<IntPoint> foodBarOffsets = new Vector<>();
+    private static final Vector<IntPoint> foodBarOffsets = new Vector<>();
 
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
 
     public static void onRender(DrawContext context) {
-        foodIconsOffset = FOOD_BAR_HEIGHT;
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity player = mc.player;
         HungerManager stats = player.getHungerManager();
 
-        int top = mc.getWindow().getScaledHeight() - foodIconsOffset;
+        int top = mc.getWindow().getScaledHeight() - FOOD_BAR_HEIGHT;
         int left = mc.getWindow().getScaledWidth() / 2 - 91;
         int right = mc.getWindow().getScaledWidth() / 2 + 91;
 
@@ -79,23 +73,9 @@ public class HUDOverlayHandler
 
     }
 
-    private static void drawExhaustionOverlay(DrawContext context, float exhaustion, MinecraftClient mc, int right, int top) {
-        float maxExhaustion = 1.0f;
-        // clamp between 0 and 1
-        float ratio = Math.min(Math.max(exhaustion / maxExhaustion, 0), 1);
-        int width = (int) (ratio * 81);
-        int height = 9;
-
-
-        context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), right - width, top, 81f - width, 18f, width, height, 128, 16,
-                ColorHelper.getWhite(1F));
-    }
-
-
     private static void drawSaturationOverlay(HUDOverlayEvent.Saturation event, MinecraftClient mc) {
         drawSaturationOverlay(event.context, event.saturationLevel, mc, event.x, event.y);
     }
-
 
     private static void generateBarOffsets(int top, int left, int right, int ticks, PlayerEntity player) {
         int preferFoodBars = 10;

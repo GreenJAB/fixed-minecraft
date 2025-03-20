@@ -52,6 +52,7 @@ public abstract class HungerManagerMixin {
 
 
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
+            if (saturationLevel != 0 || player.getWorld().getTime()%3==0)
             ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 30);
         } else {
             ticksSinceLastExhaustion = 0;
@@ -86,7 +87,11 @@ public abstract class HungerManagerMixin {
 
     @ModifyConstant(method = "update", constant = @Constant(floatValue = 4.0f))
     private float lessExhastion(float value) {
-        return 1.0f;
+        return 0.5f;
+    }
+    @ModifyConstant(method = "update", constant = @Constant(floatValue = 1.0f, ordinal = 0))
+    private float lessStaminaCost(float value) {
+        return 0.5f;
     }
     @ModifyConstant(method = "update", constant = @Constant(intValue = 20))
     private int noQuickHeal(int value) {

@@ -10,12 +10,10 @@ import net.greenjab.fixedminecraft.network.SaturationSyncPayload;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
-import net.greenjab.fixedminecraft.util.ExhaustionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.map.MapState;
 import net.minecraft.util.math.BlockPos;
-
 
 public class ClientSyncHandler {
     public static void init() {

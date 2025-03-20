@@ -12,6 +12,7 @@ import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
+/** Credit: Pepperoni-Jabroni */
 @Mixin(EquipmentRenderer.class)
 @Environment(EnvType.CLIENT)
 public class EquipmentRendererMixin {

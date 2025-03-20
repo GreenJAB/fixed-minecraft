@@ -25,6 +25,7 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 
+/** Credit: Viola-Siemens */
 /** Not cleaning up until I can make it work */
 //public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
 public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithArms, ModelWithHead {// implements ModelWithHat {

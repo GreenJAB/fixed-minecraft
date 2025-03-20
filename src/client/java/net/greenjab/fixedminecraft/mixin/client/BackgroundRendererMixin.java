@@ -28,10 +28,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
@@ -41,7 +39,6 @@ public class BackgroundRendererMixin {
 
     @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 1.0f))
     private static float lessLavaFog(float constant, @Local Entity entity) {
-        //nt i = EnchantmentHelper.getProtectionAmount(entity.getArmorItems(), (entity.getDamageSources().lava()));
         int i = 0;
         for (ItemStack item : ((PlayerEntity) entity).getArmorItems()) {
             i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
@@ -51,12 +48,6 @@ public class BackgroundRendererMixin {
 
     @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 4.0f))
     private static float moreSkyFog(float constant, @Local(ordinal = 0, argsOnly = true) float viewDistance) { return Math.min(64f, viewDistance/2);}
-
-    @Inject(method = "getFogColor", at = @At("HEAD"))
-    private static void i(Camera camera, float tickDelta, ClientWorld world, int clampedViewDistance, float skyDarkness,
-                          CallbackInfoReturnable<Vector4f> cir) {
-        //System.out.println("b: " + world.getSkyColor(camera.getPos(), tickDelta) + ", c: " + world.getSkyAngleRadians(tickDelta) + ", d: " + clampedViewDistance + ", e: " + world.getSkyAngle(tickDelta));
-    }
 
     @Redirect(method = "applyFog", at = @At(value = "NEW", target = "(FFLnet/minecraft/client/render/FogShape;FFFF)Lnet/minecraft/client/render/Fog;"))
     private static Fog paleFog(float f, float g, FogShape fogShape, float r1, float g1, float b1, float k,

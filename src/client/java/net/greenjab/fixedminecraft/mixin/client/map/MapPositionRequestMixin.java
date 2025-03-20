@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/** Credit: Nettakrim */
 @Mixin(ClientPlayNetworkHandler.class)
 public class MapPositionRequestMixin {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;putClientsideMapState(Lnet/minecraft/component/type/MapIdComponent;Lnet/minecraft/item/map/MapState;)V"), method = "onMapUpdate")

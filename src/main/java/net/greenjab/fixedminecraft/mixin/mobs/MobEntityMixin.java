@@ -14,10 +14,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.SpiderEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Difficulty;
@@ -158,11 +158,11 @@ public abstract class MobEntityMixin extends LivingEntity {
 
     @Unique
     public StatusEffectInstance getEffect(Random random, LivingEntity LE) {
+        int l = 6;
+        if (LE instanceof CreeperEntity) l+=5 ;
+        if (LE instanceof SkeletonEntity) l+=3;
+        int i = random.nextInt(l);
 
-        int i = random.nextInt(6);
-        if (LE instanceof CreeperEntity) {
-            if (random.nextFloat()<0.5f) i+=5;
-        }
         if (i == 0) {
             return new StatusEffectInstance(StatusEffects.SPEED, -1, 0);
         } else if (i == 1) {
@@ -174,16 +174,19 @@ public abstract class MobEntityMixin extends LivingEntity {
         } else if (i == 4) {
             return new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, -1, 0);
         } else if (i == 5) {
-            return new StatusEffectInstance(StatusEffects.LUCK, -1, 0);
-        } else if (i == 6) {
-            return new StatusEffectInstance(StatusEffects.MINING_FATIGUE, -1, 0);
-        } else if (i == 7) {
-            return new StatusEffectInstance(StatusEffects.BLINDNESS, -1, 0);
-        } else if (i == 8) {
-            return new StatusEffectInstance(StatusEffects.REGENERATION, -1, 0);
-        } else {
             return new StatusEffectInstance(StatusEffects.ABSORPTION, -1, 0);
+        } else if (i == 6) {
+            return new StatusEffectInstance(StatusEffects.NAUSEA, -1, 0);
+        } else if (i == 7) {
+            return new StatusEffectInstance(StatusEffects.MINING_FATIGUE, -1, 0);
+        } else if (i == 8) {
+            return new StatusEffectInstance(StatusEffects.WEAKNESS, -1, 0);
+        } else if (i == 9) {
+            return new StatusEffectInstance(StatusEffects.REGENERATION, -1, 0);
+        } else if (i == 10) {
+            return new StatusEffectInstance(StatusEffects.LUCK, -1, 0);
         }
+        return new StatusEffectInstance(StatusEffects.ABSORPTION, -1, 0);
     }
 
 

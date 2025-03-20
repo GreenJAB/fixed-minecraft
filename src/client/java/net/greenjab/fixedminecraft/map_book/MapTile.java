@@ -10,13 +10,14 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.map.MapState;
 
+/** Credit: Nettakrim */
 public class MapTile implements Drawable {
-    private MapBookScreen screen;
+    private final MapBookScreen screen;
     MapIdComponent id;
-    private MapState mapState;
-    private MinecraftClient client;
+    private final MapState mapState;
+    private final MinecraftClient client;
 
-    private MapRenderState mapRenderState = new MapRenderState();
+    private final MapRenderState mapRenderState = new MapRenderState();
 
     public MapTile(MapBookScreen screen, MapIdComponent id, MapState mapState, MinecraftClient client) {
         this.screen = screen;

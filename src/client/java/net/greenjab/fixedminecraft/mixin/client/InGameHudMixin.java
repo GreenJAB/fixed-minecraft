@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-
 import net.greenjab.fixedminecraft.hud.HUDOverlayHandler;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -10,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+/** Credit: Squeek502 */
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
      @Inject(

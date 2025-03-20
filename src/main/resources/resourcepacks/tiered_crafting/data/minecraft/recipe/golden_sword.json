@@ -4,7 +4,7 @@
   "key": {
     "#": "minecraft:stick",
     "X": "#minecraft:gold_tool_materials",
-    "P": "minecraft:iron_sword"
+    "P": "minecraft:stone_sword"
   },
   "pattern": [
     "X ",

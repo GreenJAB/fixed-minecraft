@@ -11,6 +11,7 @@ import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
 
+/** Credit: Pepperoni-Jabroni */
 @Environment(EnvType.CLIENT)
 public class GlintRenderLayer extends RenderLayer{
 

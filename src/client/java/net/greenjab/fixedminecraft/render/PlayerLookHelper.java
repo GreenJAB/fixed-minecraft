@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+/** Credit: Bawnorton */
 public abstract class PlayerLookHelper {
     /**
      * Gets the book and itemstack that the player is looking at using {@link net.minecraft.block.ChiseledBookshelfBlock#getHitPos(BlockHitResult, Direction) ChiseledBookshelfBlock#getHitPos(BlockHitResult, Direction)} and {@link net.minecraft.block.ChiseledBookshelfBlock#getSlotForHitPos(Vec2f) ChiseledBookshelfBlock#getSlotForHitPos(Vec2f)}

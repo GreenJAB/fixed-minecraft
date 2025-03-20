@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+/** Credit: Pepperoni-Jabroni */
 @Mixin(ItemRenderer.class)
 @Environment(EnvType.CLIENT)
 public class ItemRendererMixin {

@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "X": "minecraft:gold_ingot",
-    "P": "minecraft:iron_chestplate"
+    "P": "minecraft:chainmail_chestplate"
   },
   "pattern": [
     "XPX",
