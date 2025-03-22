@@ -1,17 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.conversion.EntityConversionContext;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.VexEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AllayEntity;
@@ -141,6 +145,29 @@ public abstract class LivingEntityMixin {
                     }
                     AE.discard();
                     ci.cancel();
+                }
+            }
+        }
+    }
+
+    @ModifyExpressionValue(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getExperienceToDrop(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)I"))
+    private int bonusXP(int original){
+        LivingEntity LE = (LivingEntity) (Object)this;
+        float mul = 1;
+        if (LE.getCommandTags().contains("night")) mul*=1.5f;
+        if (LE.getCommandTags().contains("pale")) mul*=1.5f;
+        return (int)(Math.ceil(original*mul));
+    }
+
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateKilledAdvancementCriterion(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V"))
+    private void tntAdvancement(DamageSource damageSource, CallbackInfo ci) {
+        if (damageSource.getSource() instanceof TntEntity) {
+            if ((LivingEntity)(Object)this instanceof HostileEntity) {
+                Entity player = damageSource.getAttacker();
+                if (player != null) {
+                    if (player instanceof ServerPlayerEntity SPE) {
+                        Criteria.CONSUME_ITEM.trigger(SPE, Items.TNT.getDefaultStack());
+                    }
                 }
             }
         }

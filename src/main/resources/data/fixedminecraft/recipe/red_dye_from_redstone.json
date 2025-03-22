@@ -6,5 +6,7 @@
     "result": {
         "count": 1,
         "id": "minecraft:red_dye"
-    }
+    },
+    "category": "misc",
+    "group": "red_dye"
 }

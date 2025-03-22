@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_warped_planks": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "warped_planks"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "fixedminecraft:warped_trapdoor"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
+    },
+    "requirements": [
+        [
+            "has_the_recipe",
+            "has_warped_planks"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "fixedminecraft:warped_trapdoor"
+        ]
+    }
+}

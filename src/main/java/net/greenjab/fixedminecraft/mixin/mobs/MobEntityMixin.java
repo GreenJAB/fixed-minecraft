@@ -52,6 +52,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.25F : 0.15F;
         if (pale) {
             f*=2.5f;
+            this.addCommandTag("pale");
         }
         if (y < this.getWorld().getSeaLevel()) f += (this.getWorld().getSeaLevel() - y) / (128 * 10f);
         EquipmentSlot[] var6 = EquipmentSlot.values();

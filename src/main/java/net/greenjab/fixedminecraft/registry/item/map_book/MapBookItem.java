@@ -33,7 +33,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 
 public class MapBookItem extends Item {
     public MapBookItem(Settings settings) {
@@ -132,12 +131,11 @@ public class MapBookItem extends Item {
             this.sendMapUpdates(player, item);
             mapBookSync(player, item);
             if (openMap && this.hasMapBookId(item)) {
-                this.getMapBookState(item, world).update();
+                getMapBookState(item, world).update();
                 mapBookOpen(player, item);
             }
         }
         return ActionResult.SUCCESS;
-        //return super.use(world, user, hand)
     }
 
     private ItemStack getPaper(PlayerEntity playerEntity) {
@@ -149,7 +147,7 @@ public class MapBookItem extends Item {
     }
 
     private void sendMapUpdates(ServerPlayerEntity player, ItemStack item) {
-        for (MapStateData mapStateData : this.getMapStates(item, player.getWorld())) {
+        for (MapStateData mapStateData : getMapStates(item, player.getWorld())) {
             mapStateData.mapState.getPlayerSyncData(player);
             Packet<?> packet  = mapStateData.mapState.getPlayerMarkerPacket(mapStateData.id, player);
             if (packet != null) {
@@ -162,22 +160,25 @@ public class MapBookItem extends Item {
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
         if (world != null && !world.isClient()) {
             if (stack != null && entity instanceof ServerPlayerEntity player) {
+                int id = getMapBookId(stack);
+                if (id != -1) {
+                    MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);
+                    if (mapBookState!=null) {
+                        mapBookState.addPlayer(player);
+                    }
+                }
+
+                if (!MapBookStateManager.INSTANCE.currentBooks.contains(id)) {
+                    MapBookStateManager.INSTANCE.currentBooks.add(id);
+                }
                 if (selected || ((PlayerEntity) entity).getOffHandStack() == stack) {
-                    for (MapStateData mapStateData : this.getMapStates(stack, entity.getWorld())) {
+                    for (MapStateData mapStateData : getMapStates(stack, entity.getWorld())) {
                         mapStateData.mapState.update(player, stack);
                         if (!mapStateData.mapState.locked) {
                             if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.getPos()) < 128.0) {
                                 ((FilledMapItem)Items.FILLED_MAP ).updateColors(world, entity, mapStateData.mapState);
                             }
                         }
-                    }
-                    int id = getMapBookId(stack);
-                    if (id != -1) {
-                        MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id).addPlayer(player);
-                    }
-
-                    if (!MapBookStateManager.INSTANCE.currentBooks.contains(id)) {
-                        MapBookStateManager.INSTANCE.currentBooks.add(id);
                     }
                     this.sendMapUpdates(player, stack);
                 }
@@ -265,7 +266,7 @@ public class MapBookItem extends Item {
                 MapBookIdCountsState.persistentStateType,
                 MapBookIdCountsState.IDCOUNTS_KEY
         );
-        int i = counts.nextMapBookId;
+        int i = counts.get();
         MapBookStateManager.INSTANCE.putMapBookState(server, i, new MapBookState());
         return i;
     }
@@ -281,7 +282,7 @@ public class MapBookItem extends Item {
     }
 
     private MapBookState getOrCreateMapBookState(ItemStack stack, MinecraftServer server) {
-        int id = this.getMapBookId(stack);
+        int id = getMapBookId(stack);
         MapBookState state = id == -1 ? null : MapBookStateManager.INSTANCE.getMapBookState(server, id);
         if (state != null) {
             return state;
@@ -294,18 +295,14 @@ public class MapBookItem extends Item {
     private boolean addNewMapAtPos(ItemStack item, ServerWorld world, Vec3d pos, int scale) {
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         MapStateData nearestState = this.getNearestMap(item, world, pos);
-        if (nearestState != null && nearestState.mapState.scale <= scale && !(this.getDistanceToEdgeOfMap(
-                nearestState.mapState,
-                pos
-        ) > 0.0)
-        ) {
+        if (nearestState != null && nearestState.mapState.scale <= scale
+            && !(this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0)) {
             return false;
         } else {
             ItemStack newMap = FilledMapItem.createMap(
                     world,
                     (int)Math.floor(pos.x), (int)Math.floor(pos.z), (byte)scale, true, false
             );
-            //Objects.requireNonNull(newMap.get(DataComponentTypes.MAP_ID))?.let { state!!.addMapID(it.id) }
             state.addMapID(newMap.get(DataComponentTypes.MAP_ID).id());
             return true;
         }
@@ -316,7 +313,6 @@ public class MapBookItem extends Item {
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         if (state != null) {
             if (!state.mapIDs.contains(mapId.id())) {
-                //Objects.requireNonNull(filledmap.get(DataComponentTypes.MAP_ID))?.let { state.addMapID(it.id) }
                 state.addMapID(mapId.id());
                 return true;
             }
@@ -341,7 +337,7 @@ public class MapBookItem extends Item {
     public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
         var mapsCount =
                 stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent.DEFAULT).additions().size();
-        int id = this.getMapBookId(stack);
+        int id = getMapBookId(stack);
         if (id != -1) {
             // append tooltip is client-based, so its safe to get the client MapBookState
             MapBookState mapBookState = MapBookStateManager.INSTANCE.getClientMapBookState(id);

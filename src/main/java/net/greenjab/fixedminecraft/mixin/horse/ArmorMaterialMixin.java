@@ -17,7 +17,11 @@ import java.util.Map;
 public class ArmorMaterialMixin {
 
     @Unique
-    private static Map<RegistryKey<EquipmentAsset>, Integer> values = Map.of(EquipmentAssetKeys.CHAINMAIL, 5, EquipmentAssetKeys.GOLD, 7, EquipmentAssetKeys.IRON, 9, EquipmentAssetKeys.NETHERITE, 15);
+    private static Map<RegistryKey<EquipmentAsset>, Integer> values = Map.of(
+            EquipmentAssetKeys.CHAINMAIL, 5,
+            EquipmentAssetKeys.GOLD, 7,
+            EquipmentAssetKeys.IRON, 9,
+            EquipmentAssetKeys.NETHERITE, 15);
 
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static Map<EquipmentType, Integer> adjustedHorseDefence(Map<EquipmentType, Integer> map,

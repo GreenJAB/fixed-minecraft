@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": "minecraft:jungle_planks",
+    "result": {
+        "id": "minecraft:jungle_fence_gate",
+        "count": 1
+    }
+}

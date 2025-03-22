@@ -128,16 +128,16 @@ public class MapBookScreen extends Screen {
             if (m != null) {
                 try {
                     for (MapBookPlayer player : m) {
-                        if (player.dimension == p.dimension) {
-                            if (player.name != p.name) {
-                                renderPlayerIcon(context, player);
+                        if (player.dimension.contains(p.dimension)) {
+                            if (!player.name.contains(p.name) ) {
+                                renderPlayerIcon(context, player, false);
                             }
                         }
                     }
-                } catch (ConcurrentModificationException e) {
+                } catch (ConcurrentModificationException ignored) {
                 }
             }
-            renderPlayerIcon(context, p);
+            renderPlayerIcon(context, p, true);
             renderIcons(context);
             renderPosition(context, mouseX, mouseY);
         }
@@ -178,7 +178,7 @@ public class MapBookScreen extends Screen {
 
     }
 
-    private void renderPlayerIcon(DrawContext context, MapBookPlayer player) {
+    private void renderPlayerIcon(DrawContext context, MapBookPlayer player, boolean thisPlayer) {
         float x = (float) player.x;
         float z = (float) player.z;
         float rotation = player.yaw;
@@ -190,7 +190,7 @@ public class MapBookScreen extends Screen {
         matrix.translate(x + width/ 2.0, z + height / 2.0, 0.0);
         matrix.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
         matrix.scale(8.0f, 8.0f, -3.0f);
-        matrix.translate(0f, 0f, -10.0f);
+        matrix.translate(0f, 0f, thisPlayer?-12.0f:-11.0f);
         matrix.scale(1f / this.scale, 1f / this.scale, 1.0f);
         Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
                 new MapDecoration(
@@ -225,7 +225,7 @@ public class MapBookScreen extends Screen {
         matrix.translate(x + width / 2.0, z + height / 2.0, 0.0);
 
         matrix.scale(1 / this.scale, 1 / this.scale, 1.0f);
-        matrix.translate(-o / 2f, 8.0f, 0.1f);
+        matrix.translate(-o / 2f, 8.0f, thisPlayer?12.0f:11.0f);
 
         textRenderer.draw(
                 text,

@@ -10,5 +10,7 @@
     "result": {
         "count": 1,
         "id": "minecraft:brown_mushroom_block"
-    }
+    },
+    "category": "building",
+    "group": "mushroom_blocks"
 }

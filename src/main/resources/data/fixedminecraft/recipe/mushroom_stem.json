@@ -11,5 +11,7 @@
     "result": {
         "count": 1,
         "id": "minecraft:mushroom_stem"
-    }
+    },
+    "category": "building",
+    "group": "mushroom_blocks"
 }

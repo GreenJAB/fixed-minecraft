@@ -40,8 +40,8 @@ public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPla
 
     @Nullable
     public static MapBookSyncPayload of(ServerPlayerEntity player, ItemStack itemStack) {
-        Integer bookId = ((MapBookItem)itemStack.getItem()).getMapBookId(itemStack);
-        if (bookId == null) return null;
+        int bookId = MapBookItem.getMapBookId(itemStack);
+        if (bookId == -1) return null;
 
         MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(player.server, bookId);
         if (mapBookState != null) {

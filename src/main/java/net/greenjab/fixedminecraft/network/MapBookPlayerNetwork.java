@@ -7,7 +7,6 @@ import net.minecraft.network.encoding.VarInts;
 import java.util.ArrayList;
 
 public class MapBookPlayerNetwork {
-    //why does this not exist? surely it exists somewhere
     public static final PacketCodec<PacketByteBuf, ArrayList<MapBookPlayer>> ARRAY_CODEC = new PacketCodec<>() {
         public ArrayList<MapBookPlayer> decode(PacketByteBuf byteBuf) {
             int length = VarInts.read(byteBuf);

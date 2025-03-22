@@ -1,12 +1,9 @@
 package net.greenjab.fixedminecraft.registry.item.map_book;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.greenjab.fixedminecraft.network.IntArray;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
-import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.server.MinecraftServer;
@@ -35,6 +32,7 @@ public class MapBookState extends PersistentState {
         mapIDs.addAll(Arrays.stream(ids).boxed().toList());
         this.players.clear();
         this.players.addAll(players);
+
         this.markDirty();
     }
 
@@ -42,17 +40,9 @@ public class MapBookState extends PersistentState {
         for (MapBookPlayer player : players) {
             ServerPlayerEntity SPE = server.getPlayerManager().getPlayer(player.name);
             if (SPE != null) {
-                boolean hold = false;
-                for (ItemStack item : SPE.getHandItems()) {
-                    if (item.isOf(ItemRegistry.MAP_BOOK)) {
-                        hold = true;
-                        break;
-                    }
-                }
-                if (hold) {
-                    ServerPlayNetworking.send(SPE, new MapBookSyncPayload(id,
-                            mapIDs.stream().mapToInt(i -> i).toArray(), players));
-                }
+                MapBookSyncPayload payload = new MapBookSyncPayload(id,
+                        mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone());
+                ServerPlayNetworking.send(SPE, payload);
             }
         }
         MapBookStateManager.INSTANCE.getMapBookState(server, id).players.clear();

@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
@@ -75,6 +76,7 @@ public class MapStateMixin implements MapStateAccessor {
             if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '¶') {
                 String[] s = text.getLiteralString().split("¶");
                 type = getMapType(s[1]);
+                //return new MapDecoration(type, x, z, rotation, optional);
                 return new MapDecoration(type, x, z, rotation, Optional.empty());
             }
         }
@@ -93,6 +95,23 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("jungle_temple")) return MapDecorationTypes.JUNGLE_TEMPLE;
         if (type.contains("swamp_hut")) return MapDecorationTypes.SWAMP_HUT;
         if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
+        if (type.contains("red_x")) return MapDecorationTypes.RED_X;
+
+        if (type.contains("white_banner")) return MapDecorationTypes.BANNER_WHITE;
+        if (type.contains("orange_banner")) return MapDecorationTypes.BANNER_ORANGE;
+        if (type.contains("magenta_banner")) return MapDecorationTypes.BANNER_MAGENTA;
+        if (type.contains("light_blue_banner")) return MapDecorationTypes.BANNER_LIGHT_BLUE;
+        if (type.contains("yellow_banner")) return MapDecorationTypes.BANNER_YELLOW;
+        if (type.contains("lime_banner")) return MapDecorationTypes.BANNER_LIME;
+        if (type.contains("pink_banner")) return MapDecorationTypes.BANNER_PINK;
+        if (type.contains("gray_banner")) return MapDecorationTypes.BANNER_GRAY;
+        if (type.contains("light_gray_banner")) return MapDecorationTypes.BANNER_LIGHT_GRAY;
+        if (type.contains("cyan_banner")) return MapDecorationTypes.BANNER_CYAN;
+        if (type.contains("purple_banner")) return MapDecorationTypes.BANNER_PURPLE;
+        if (type.contains("blue_banner")) return MapDecorationTypes.BANNER_BLUE;
+        if (type.contains("brown_banner")) return MapDecorationTypes.BANNER_BROWN;
+        if (type.contains("green_banner")) return MapDecorationTypes.BANNER_GREEN;
+        if (type.contains("red_banner")) return MapDecorationTypes.BANNER_RED;
         return MapDecorationTypes.BANNER_BLACK;
     }
 
@@ -135,5 +154,29 @@ public class MapStateMixin implements MapStateAccessor {
     @Unique
     private static boolean isInBounds(float dx, float dz) {
         return dx >= -63.0F && dz >= -63.0F && dx <= 63.0F && dz <= 63.0F;
+    }
+
+    @Unique
+    private static final String[] updateNames = {"player", "frame", "red_marker", "blue_marker", "target_x", "target_point",
+            "player_off_map", "player_off_limits", "woodland_mansion", "ocean_monument", "white_banner", "orange_banner", "magenta_banner",
+            "light_blue_banner", "light_blue_banner", "lime_banner", "pink_banner", "gray_banner", "light_gray_banner",
+            "cyan_banner", "purple_banner", "blue_banner", "brown_banner", "green_banner", "red_banner", "black_banner",
+            "red_x", "desert_village", "plains_village", "savanna_village", "snowy_village", "taiga_village", "jungle_temple",
+            "swamp_hut", "trial_chambers"};
+
+    @ModifyExpressionValue(method = "fromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapBannerMarker;name()Ljava/util/Optional;"))
+    private static Optional<Text> updateName(Optional<Text> original) {
+        if (original.isPresent()) {
+            String name = original.get().getString();
+            if (name.contains("¶")) {
+                try {
+                    int i = Integer.parseInt(name.substring(1));
+                    return Optional.of(Text.of("¶"+updateNames[i]));
+                } catch (NumberFormatException ignored) {
+
+                }
+            }
+        }
+        return original;
     }
 }

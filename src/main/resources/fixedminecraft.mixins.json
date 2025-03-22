@@ -108,7 +108,6 @@
         "night.EnchantmentHelperMixin",
         "night.FishingBobberEntityMixin",
         "night.HostileEntityMixin",
-        "night.LivingEntityMixin",
         "night.LocalDifficultyMixin",
         "night.MobEntityMixin",
         "other.AdvancementMixin",
