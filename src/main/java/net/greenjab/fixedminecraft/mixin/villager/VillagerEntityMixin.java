@@ -17,11 +17,14 @@ import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityInteraction;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -47,6 +50,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -334,6 +338,23 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
 
         return new EnchantedBookFactory(itemStack, l, 10);
-        }
+    }
 
+    @Unique
+    EquipmentSlot[] EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+
+
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/MerchantEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V"))
+    private void dropArmor(DamageSource damageSource, CallbackInfo ci) {
+        VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
+        if (villagerEntity.getWorld() instanceof ServerWorld serverWorld) {
+            for (ItemStack itemStack : villagerEntity.getArmorItems()) {
+                villagerEntity.dropStack(serverWorld, itemStack);
+            }
+            for (int i = 0; i < 4; i++) {
+                villagerEntity.equipStack(EQUIPMENT_SLOT_ORDER[i], ItemStack.EMPTY);
+                i++;
+            }
+        }
+    }
 }

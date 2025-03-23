@@ -30,7 +30,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -157,6 +159,13 @@ public abstract class LivingEntityMixin {
         if (LE.getCommandTags().contains("night")) mul*=1.5f;
         if (LE.getCommandTags().contains("pale")) mul*=1.5f;
         return (int)(Math.ceil(original*mul));
+    }
+
+    @ModifyConstant(method = "getAttackDistanceScalingFactor", constant = @Constant(doubleValue = 0.8))
+    private double moreSneaky(double constant){
+        LivingEntity LE = (LivingEntity) (Object)this;
+        if (LE instanceof HostileEntity) return 0.3;
+        return constant;
     }
 
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateKilledAdvancementCriterion(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V"))

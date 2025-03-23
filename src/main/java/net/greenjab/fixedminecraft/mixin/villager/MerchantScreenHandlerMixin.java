@@ -45,26 +45,15 @@ import java.util.Objects;
 public abstract class MerchantScreenHandlerMixin extends ScreenHandler implements InventoryChangedListener {
 
     @Unique
-    private static final Identifier EMPTY_HELMET_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/helmet");
-    @Unique
-    private static final Identifier EMPTY_CHESTPLATE_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/chestplate");
-    @Unique
-    private static final Identifier EMPTY_LEGGINGS_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/leggings");
-    @Unique
-    private static final Identifier EMPTY_BOOTS_SLOT_TEXTURE = Identifier.ofVanilla("container/slot/boots");
-    @Unique
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{
-            EMPTY_HELMET_SLOT_TEXTURE,
-            EMPTY_CHESTPLATE_SLOT_TEXTURE,
-            EMPTY_LEGGINGS_SLOT_TEXTURE,
-            EMPTY_BOOTS_SLOT_TEXTURE };
+            Identifier.ofVanilla("container/slot/helmet"),
+            Identifier.ofVanilla("container/slot/chestplate"),
+            Identifier.ofVanilla("container/slot/leggings"),
+            Identifier.ofVanilla("container/slot/boots") };
 
     @Shadow
     protected abstract void playYesSound();
 
-    @Shadow
-    @Final
-    private Merchant merchant;
     @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
 
@@ -92,32 +81,13 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         Box box = merchant.getCustomer().getBoundingBox().stretch(vec3d2.multiply(d)).expand(1.0, 1.0, 1.0);
         EntityHitResult entityHitResult = ProjectileUtil.raycast(merchant.getCustomer(), vec3d, vec3d3, box, (entityx) -> !entityx.isSpectator() && entityx.canHit(), e);
 
-        //System.out.println("start" + this.merchant.isClient());
         if (entityHitResult != null) {
             if (entityHitResult.getEntity() instanceof VillagerEntity villager) {
                 VE = villager;
                 inventory = Inv(villager.getArmorItems());
                 level = villager.getVillagerData().getLevel();
-                //System.out.println("found:" + level + inventory.getStack(0));
             }
-        }//*/
-
-        /*List<VillagerEntity> list = merchant.getCustomer().getWorld().getEntitiesByClass(
-                VillagerEntity.class,
-                merchant.getCustomer().getBoundingBox().expand(5.0),
-                Objects::nonNull
-        );
-
-        System.out.println("this: " + this.merchant.isClient() + ", " +playerInventory.player.explodedBy.getUuidAsString());
-        for (VillagerEntity villager : list) {
-            System.out.println("villager: " + villager.getUuidAsString());
-            if (villager.getUuidAsString() == playerInventory.player.explodedBy.getUuidAsString() ) {
-                VE = villager;
-                inventory = Inv(villager.getArmorItems());
-                level = villager.getVillagerData().getLevel();
-                break;
-            }
-        }*/
+        }
 
         for (int i = 0; i < 4; i++) {
             final EquipmentSlot equipmentSlot = EQUIPMENT_SLOT_ORDER[i];

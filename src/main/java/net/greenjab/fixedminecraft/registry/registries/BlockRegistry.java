@@ -65,11 +65,11 @@ public class BlockRegistry {
 
     public static final Block WAXED_COPPER_RAIL = register("waxed_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.UNAFFECTED, settings),
             AbstractBlock.Settings.copy(Blocks.POWERED_RAIL));
-    public static final Block WAXED_EXPOSED_COPPER_RAIL = register("waxed_exposed_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.UNAFFECTED, settings),
+    public static final Block WAXED_EXPOSED_COPPER_RAIL = register("waxed_exposed_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.EXPOSED, settings),
             AbstractBlock.Settings.copy(Blocks.POWERED_RAIL));
-    public static final Block WAXED_WEATHERED_COPPER_RAIL = register("waxed_weathered_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.UNAFFECTED, settings),
+    public static final Block WAXED_WEATHERED_COPPER_RAIL = register("waxed_weathered_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.WEATHERED, settings),
             AbstractBlock.Settings.copy(Blocks.POWERED_RAIL));
-    public static final Block WAXED_OXIDIZED_COPPER_RAIL = register("waxed_oxidized_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.UNAFFECTED, settings),
+    public static final Block WAXED_OXIDIZED_COPPER_RAIL = register("waxed_oxidized_copper_rail", settings -> new CopperRailBlock(Oxidizable.OxidationLevel.OXIDIZED, settings),
             AbstractBlock.Settings.copy(Blocks.POWERED_RAIL));
 
 

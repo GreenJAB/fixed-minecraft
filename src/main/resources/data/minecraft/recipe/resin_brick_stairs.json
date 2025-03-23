@@ -1,15 +1,16 @@
 {
     "type": "minecraft:crafting_shaped",
     "category": "building",
+    "key": {
+        "#": "minecraft:resin_bricks"
+    },
     "pattern": [
         "# ",
         "##"
     ],
-    "key": {
-        "#": "minecraft:polished_andesite"
-    },
     "result": {
         "count": 4,
-        "id": "minecraft:polished_andesite_stairs"
-    }
+        "id": "minecraft:resin_brick_stairs"
+    },
+    "show_notification": true
 }
