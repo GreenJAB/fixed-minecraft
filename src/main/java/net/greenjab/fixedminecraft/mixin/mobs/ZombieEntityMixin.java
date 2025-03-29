@@ -10,6 +10,7 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.random.Random;
@@ -56,10 +57,10 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private VillagerEntity villagerIntoNitwit(VillagerEntity villager, @Local(argsOnly = true) ServerWorld serverWorld){
         if (serverWorld.getDifficulty() == Difficulty.NORMAL || serverWorld.getDifficulty() == Difficulty.HARD) {
             if (serverWorld.getDifficulty() == Difficulty.HARD) {
-                villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                villager.setVillagerData(villager.getVillagerData().withProfession(Registries.VILLAGER_PROFESSION.getOrThrow(VillagerProfession.NITWIT)));
             } else {
                 if (this.random.nextBoolean()) {
-                    villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                    villager.setVillagerData(villager.getVillagerData().withProfession(Registries.VILLAGER_PROFESSION.getOrThrow(VillagerProfession.NITWIT)));
                 }
             }
         }

@@ -6,6 +6,7 @@ import net.minecraft.block.EntityShapeContext;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCollisionHandler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -46,8 +47,9 @@ public abstract class LeavesBlockMixin extends Block {
     }
 
     // Slow down the vehicle when moving though leaves
+
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
         if (entity.hasControllingPassenger()) entity.slowMovement(state, new Vec3d(0.85, 1, 0.85));
     }
 }

@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+//TODO test
 @Mixin(CreakingEntity.class)
 public abstract class CreakingEntityMixin {
 
@@ -77,11 +78,6 @@ public abstract class CreakingEntityMixin {
                 .add(EntityAttributes.ATTACK_DAMAGE, 4.0)
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.STEP_HEIGHT, 1.0625));
-    }
-
-    @Inject(method = "canBeNameTagged", at = @At("HEAD"), cancellable = true)
-    private void nameTag(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
     }
 
 }

@@ -24,6 +24,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -50,6 +51,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -116,7 +118,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         return false;
     }
 
-    @Inject(method = "onInteractionWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/VillagerGossips;startGossip(Ljava/util/UUID;Lnet/minecraft/village/VillageGossipType;I)V", ordinal = 2))
+    @Inject(method = "onInteractionWith", at = @At(value = "INVOKE", target = "Lnet/minecraft/village/VillagerGossips;startGossip(Ljava/util/UUID;Lnet/minecraft/village/VillagerGossipType;I)V", ordinal = 2))
     private void rideCamel(EntityInteraction interaction, Entity entity, CallbackInfo ci){
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         if (villagerEntity.hasVehicle()) {
@@ -218,7 +220,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     @ModifyVariable(method = "fillRecipes", at = @At("STORE"), ordinal = 0)
     private Int2ObjectMap<TradeOffers.Factory[]> newTrades(Int2ObjectMap<TradeOffers.Factory[]> iter, @Local VillagerData villagerData){
-        if (villagerData.getProfession() == VillagerProfession.LIBRARIAN) {
+        if (villagerData.profession() == VillagerProfession.LIBRARIAN) {
             return new Int2ObjectOpenHashMap(ImmutableMap.builder()
                     .put(1,new TradeOffers.Factory[]{
                             new TradeOffers.BuyItemFactory(Items.PAPER, 24, 16, 2),
@@ -263,7 +265,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
-                .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+                .getRandomEntry(biomeEnchants.get(villagerData.type()), random);
         int i = 0;
         while (i < 10) {
             i++;
@@ -277,7 +279,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                     optional = villagerEntity.getWorld()
                             .getRegistryManager()
                             .getOrThrow(RegistryKeys.ENCHANTMENT)
-                            .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+                            .getRandomEntry(biomeEnchants.get(villagerData.type()), random);
                 }
             }
         }
@@ -348,7 +350,12 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private void dropArmor(DamageSource damageSource, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
         if (villagerEntity.getWorld() instanceof ServerWorld serverWorld) {
-            for (ItemStack itemStack : villagerEntity.getArmorItems()) {
+            ArrayList<ItemStack> armor = new ArrayList<>();
+            for (int j = 0; j <4; j++) {
+                ItemStack item = villagerEntity.getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
+                armor.add(item);
+            }
+            for (ItemStack itemStack : armor) {
                 villagerEntity.dropStack(serverWorld, itemStack);
             }
             for (int i = 0; i < 4; i++) {

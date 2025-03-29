@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.greenjab.fixedminecraft.util.ExhaustionHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.HashMap;

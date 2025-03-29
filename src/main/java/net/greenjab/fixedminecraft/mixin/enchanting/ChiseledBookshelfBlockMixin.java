@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ChiseledBookshelfBlock.class)
 public class ChiseledBookshelfBlockMixin {
 
-    @ModifyExpressionValue(method = "onStateReplaced", at = @At(
+    //TODO test
+    /*@ModifyExpressionValue(method = "onStateReplaced", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/block/entity/ChiseledBookshelfBlockEntity;getStack(I)Lnet/minecraft/item/ItemStack;"
     ))
@@ -20,5 +21,5 @@ public class ChiseledBookshelfBlockMixin {
             book.set(DataComponentTypes.REPAIR_COST, 2);
         }
         return book;
-    }
+    }*/
 }

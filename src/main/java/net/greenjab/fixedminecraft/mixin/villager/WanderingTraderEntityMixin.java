@@ -41,12 +41,9 @@ import java.util.function.Predicate;
 
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderingTraderEntityMixin {
-    @Redirect(method = "fillRecipes", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/featuretoggle/FeatureSet;contains(Lnet/minecraft/resource/featuretoggle/FeatureFlag;)Z"))
-    private boolean rebalancedWanderingTrader(FeatureSet instance, FeatureFlag feature) {
-        return true;
-    }
 
-    @ModifyVariable(method = "fillRebalancedRecipes", at = @At("STORE"), ordinal = 0)
+//TODO remove
+   /* @ModifyVariable(method = "fillRebalancedRecipes", at = @At("STORE"), ordinal = 0)
     private Iterator<Pair<TradeOffers.Factory[], Integer>> newTrades(Iterator<Pair<TradeOffers.Factory[], Integer>> iter){
         List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
                 Pair.of(new TradeOffers.Factory[]{
@@ -170,7 +167,7 @@ public abstract class WanderingTraderEntityMixin {
     @Unique
     private TradedItem createPotion() {
         return new TradedItem(Items.POTION)
-                .withComponents(/* method_57312 */ builder -> builder.add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.WATER)));
+                .withComponents( builder -> builder.add(DataComponentTypes.POTION_CONTENTS, new PotionContentsComponent(Potions.WATER)));
     }
 
     @Unique
@@ -279,5 +276,5 @@ public abstract class WanderingTraderEntityMixin {
                 }
             }
         return Items.MAP.getDefaultStack();
-    }
+    }*/
 }

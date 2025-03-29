@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -19,12 +20,12 @@ public class HorseScreenHandlerMixin {
         return new Slot(inventory, 0, 8, 18) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.isOf(Items.SADDLE) && !this.hasStack() && entity.canBeSaddled();
+                return stack.isOf(Items.SADDLE) && !this.hasStack() && entity.canUseSlot(EquipmentSlot.SADDLE);
             }
 
             @Override
             public boolean isEnabled() {
-                return entity.canBeSaddled();
+                return entity.canUseSlot(EquipmentSlot.SADDLE);
             }
 
             @Override

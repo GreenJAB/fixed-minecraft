@@ -3,6 +3,8 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
@@ -36,9 +38,12 @@ public abstract class ServerPlayerEntityMixin extends Entity
     public float armorDrainsStamina(float constant) {
         int weight = 0;
         ServerPlayerEntity player = (ServerPlayerEntity) (Object) this;
-        Iterator<ItemStack> e = player.getArmorItems().iterator();
-        for (int i = 0;i<4;i++) {
-            String s = e.next().getName().toString();
+        for (int j = 0; j <4; j++) {
+            ItemStack item = player.getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
+        //Iterator<ItemStack> e = player.getArmorItems().iterator();
+        //for (int i = 0;i<4;i++) {
+            //String s = e.next().getName().toString();
+            String s = item.getItemName().toString();
             if (s.contains("iron")||s.contains("gold")) weight+=1;
             if (s.contains("diamond")||s.contains("netherite")) weight+=2;
         }
@@ -54,9 +59,9 @@ public abstract class ServerPlayerEntityMixin extends Entity
             return 0;
         }
         int weight = 0;
-        Iterator<ItemStack> e = player.getArmorItems().iterator();
-        for (int i = 0;i<4;i++) {
-            String s = e.next().getName().toString();
+        for (int j = 0; j <4; j++) {
+            ItemStack item = player.getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
+            String s = item.getItemName().toString();
             if (s.contains("iron")||s.contains("gold")) weight+=1;
             if (s.contains("diamond")||s.contains("netherite")) weight+=2;
         }

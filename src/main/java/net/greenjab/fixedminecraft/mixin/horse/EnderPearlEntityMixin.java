@@ -53,8 +53,8 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
             }
         }
     }
-
-    @Redirect(  method = "onCollision", at = @At(
+//TODO fix
+    /*@Redirect(  method = "onCollision", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/Entity;detach()V"))
     private void teleportWithVehicle(Entity instance,
@@ -65,7 +65,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
             instance.detach();
             ref.set(false);
         }
-    }
+    }*/
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
      *

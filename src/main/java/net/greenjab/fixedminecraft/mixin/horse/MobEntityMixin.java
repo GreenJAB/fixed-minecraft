@@ -11,12 +11,5 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(MobEntity.class)
 public class MobEntityMixin {
 
-    @Inject(method = "canUseSlot", at = @At(value = "HEAD"), cancellable = true)
-    private void muleArmourslot(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir){
-        MobEntity LE = (MobEntity) (Object)this;
-        if (LE instanceof MuleEntity) {
-            cir.setReturnValue(true);
-            cir.cancel();
-        }
-    }
+    //TODO remove
 }

@@ -14,6 +14,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.math.EulerAngle;
@@ -66,10 +68,10 @@ public abstract class WorldRendererMixin{
             armorStandEntity.setPitch(( entity).getPitch());
             armorStandEntity.bodyYaw = ((VillagerEntity) entity).bodyYaw;
             armorStandEntity.headYaw = ((VillagerEntity) entity).headYaw;
-            armorStandEntity.prevYaw = (entity).prevYaw;
-            armorStandEntity.prevPitch = (entity).prevPitch;
-            armorStandEntity.prevBodyYaw = ((VillagerEntity) entity).prevBodyYaw;
-            armorStandEntity.prevHeadYaw = ((VillagerEntity) entity).prevHeadYaw;
+            armorStandEntity.lastYaw = (entity).lastYaw;
+            armorStandEntity.lastPitch = (entity).lastPitch;
+            armorStandEntity.lastBodyYaw = ((VillagerEntity) entity).lastBodyYaw;
+            armorStandEntity.lastHeadYaw = ((VillagerEntity) entity).lastHeadYaw;
             armorStandEntity.setHeadRotation(new EulerAngle(( entity).getPitch(), ((VillagerEntity) entity).headYaw-((VillagerEntity) entity).bodyYaw, 0));//((VillagerEntity) entity).getLookControl().getLookY());
 
             armorStandEntity.setLeftArmRotation(new EulerAngle(-40.0F, 0.0F, 0.0F));
@@ -77,8 +79,11 @@ public abstract class WorldRendererMixin{
             armorStandEntity.setLeftLegRotation(new EulerAngle(0.0F, 0.0F, 0.0F));
             armorStandEntity.setRightLegRotation(new EulerAngle(0.0F, 0.0F, 0.0F));
 
-            Iterable<ItemStack> armor = ((VillagerEntity) entity).getArmorItems();
-            for (ItemStack ii : armor) {
+            //Iterable<ItemStack> armor = ((VillagerEntity) entity).getArmorItems();
+            //for (ItemStack ii : armor) {
+            for (int j = 0; j <4; j++) {
+                ItemStack ii = ((VillagerEntity) entity).getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
+
                 EquipmentSlot ES = getPreferredEquipmentSlot(ii);
                 armorStandEntity.equipStack(ES, ii);
             }
@@ -90,7 +95,7 @@ public abstract class WorldRendererMixin{
             armorStandEntity.setHideBasePlate(true);
 
 
-            float g = tickCounter.getTickDelta(!tickManager.shouldSkipTick(armorStandEntity));
+            float g = tickCounter.getTickProgress(!tickManager.shouldSkipTick(armorStandEntity));
             this.renderEntity(armorStandEntity, d, e, f, g, matrices, immediate);
         }
     }

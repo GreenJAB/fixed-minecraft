@@ -93,7 +93,8 @@ public class FishingBobberEntityMixin {
 
     @Unique
     private ItemStack getBait(PlayerEntity playerEntity) {
-        for (ItemStack item : playerEntity.getHandItems()) {
+        ItemStack[] items = {playerEntity.getMainHandStack(), playerEntity.getOffHandStack()};
+        for (ItemStack item : items) {
             if (item.isOf(Items.SPIDER_EYE) || item.isOf(Items.FERMENTED_SPIDER_EYE)) return item;
         }
         for(int i = 0; i < playerEntity.getInventory().size(); ++i) {

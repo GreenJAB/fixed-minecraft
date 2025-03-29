@@ -31,7 +31,7 @@ public abstract class SculkSensorBlockMixin {
 
     @Inject(method = "tryResonate", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
+            target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"
     ))
     private static void setAmethystBlockAlreadyResonated(Entity sourceEntity, World world, BlockPos pos, int frequency, CallbackInfo ci, @Local(ordinal = 1) BlockPos pos2){
         world.setBlockState(pos2, world.getBlockState(pos2).with(RedstoneTorchBlock.LIT, true));

@@ -7,6 +7,7 @@ import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
@@ -27,8 +28,8 @@ import java.util.Optional;
 public abstract class ItemStackMixin {
 
     @Inject(method = "inventoryTick", at = @At("HEAD"))
-    private void addGreenGlintUpdate(World world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
-        if (selected) {
+    private void addGreenGlintUpdate(World world, Entity entity, EquipmentSlot slot, CallbackInfo ci) {
+        if (slot == EquipmentSlot.MAINHAND) {
             if (world.getTime() % 20 == 0) {
                 ItemStack stack = (ItemStack)(Object)this;
                 if (stack.hasEnchantments()) {

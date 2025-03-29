@@ -1,9 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
+import net.minecraft.entity.passive.MuleEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
@@ -13,6 +16,7 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin
@@ -37,6 +41,15 @@ public abstract class LivingEntityMixin
                     LE.setVelocity(LE.getVelocity().add(0.0, 0.04F, 0.0));
                 }
             }
+        }
+    }
+
+    @Inject(method = "canUseSlot", at = @At(value = "HEAD"), cancellable = true)
+    private void muleArmourslot(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir){
+        MobEntity LE = (MobEntity) (Object)this;
+        if (LE instanceof MuleEntity) {
+            cir.setReturnValue(true);
+            cir.cancel();
         }
     }
 }

@@ -3,6 +3,8 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.BlocksAttacksComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -19,6 +21,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.VexEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -43,13 +46,13 @@ public abstract class LivingEntityMixin {
     protected boolean dead;
 
     @Shadow
-    public abstract boolean blockedByShield(DamageSource source);
-
-    @Shadow
     private BlockPos lastBlockPos;
 
     @Shadow
     protected abstract void drop(ServerWorld world, DamageSource damageSource);
+
+    @Shadow
+    public abstract ItemStack getActiveItem();
 
     @Inject(method = "damage", at = @At(
             value = "HEAD"), cancellable = true)
@@ -73,12 +76,16 @@ public abstract class LivingEntityMixin {
         if (vehicleType.isIn(ModTags.VEHICLES)) entity.stopRiding();
     }
 
+    //TODO test
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"),
             cancellable = true
     )
     private void cancel0Damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (modifyAppliedDamage(world, source, amount)<0.05 && !this.blockedByShield(source)) {
-            cir.setReturnValue(false);
+        BlocksAttacksComponent blocksAttacksComponent = this.getActiveItem().get(DataComponentTypes.BLOCKS_ATTACKS);
+        if (blocksAttacksComponent != null && !(Boolean)blocksAttacksComponent.bypassedBy().map(source::isIn).orElse(false)) {
+            if (modifyAppliedDamage(world, source, amount)<0.05) {
+                cir.setReturnValue(false);
+            }
         }
     }
 

@@ -15,7 +15,7 @@ public class MapRendererMixin {
 
     @Inject(method = "draw",
             at = @At(value = "INVOKE",
-              target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionf;)V"
+              target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionfc;)V"
     ))
     private void scalePlayerMarkerWithDistance(MapRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
                                                boolean bl, int light, CallbackInfo ci,

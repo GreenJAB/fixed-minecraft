@@ -69,7 +69,7 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
             armor.set(DataComponentTypes.REPAIR_COST, 1);
         }
         if (data-(int)data!=0) {
-            armor.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent((int)((data - (int)data) * 100000000), true) );
+            armor.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent((int)((data - (int)data) * 100000000)) );
         }
         return armor;
     }

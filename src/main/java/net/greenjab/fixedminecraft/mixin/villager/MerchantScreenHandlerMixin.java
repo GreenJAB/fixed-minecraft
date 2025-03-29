@@ -37,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -84,8 +85,14 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         if (entityHitResult != null) {
             if (entityHitResult.getEntity() instanceof VillagerEntity villager) {
                 VE = villager;
-                inventory = Inv(villager.getArmorItems());
-                level = villager.getVillagerData().getLevel();
+                ArrayList<ItemStack> armor = new ArrayList<>();
+                for (int j = 0; j <4; j++) {
+                    ItemStack item = ((VillagerEntity) villager).getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
+                    armor.add(item);
+                }
+                    //inventory = Inv(villager.getArmorItems());
+                    inventory = Inv(armor);
+                level = villager.getVillagerData().level();
             }
         }
 

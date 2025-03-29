@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
 
-    @Shadow
-    public abstract void stopRiding();
 
     @Inject(method = "onDisconnect", at = @At("HEAD"))
     private void dismountTrain(CallbackInfo ci){
@@ -21,7 +19,7 @@ public abstract class ServerPlayerEntityMixin {
         Entity vehicle = SPE.getVehicle();
         if (vehicle instanceof AbstractMinecartEntity minecart) {
             if (minecart.getCommandTags().contains("train"))  {
-                this.stopRiding();
+                SPE.stopRiding();
             }
         }
     }

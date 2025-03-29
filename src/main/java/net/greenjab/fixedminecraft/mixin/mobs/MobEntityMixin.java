@@ -69,7 +69,7 @@ public abstract class MobEntityMixin extends LivingEntity {
                     if (itemStack.isEmpty()) {
                         ItemStack item = new ItemStack(Objects.requireNonNull(MobEntity.getEquipmentForSlot(equipmentSlot, i)));
                         if (i==0) {
-                            DyeItem dye = DyeItem.byColor(DyeColor.byId(this.getWorld().random.nextInt(16)));
+                            DyeItem dye = DyeItem.byColor(DyeColor.byIndex(this.getWorld().random.nextInt(16)));
                             List<DyeItem> colour = List.of(dye);
                             item = DyedColorComponent.setColor(item, colour);
                         }

@@ -39,7 +39,7 @@ public class ClientPlayerEntityMixin {
     private void addMyTest(CallbackInfo ci) {
         ClientPlayerEntity CPE = (ClientPlayerEntity)(Object)this;
         if (CPE.input.playerInput.jump()) {
-            if (!CPE.isClimbing() && !CPE.isOnGround() && !CPE.hasVehicle() && !CPE.hasStatusEffect(StatusEffects.LEVITATION) && !CPE.isWet() && !CPE.isInLava() &&
+            if (!CPE.isClimbing() && !CPE.isOnGround() && !CPE.hasVehicle() && !CPE.hasStatusEffect(StatusEffects.LEVITATION) && !CPE.isTouchingWaterOrRain() && !CPE.isInLava() &&
                 CustomData.getData(CPE, "airTime") > 15) {
                 if (CPE.checkGliding()) {
                     CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));

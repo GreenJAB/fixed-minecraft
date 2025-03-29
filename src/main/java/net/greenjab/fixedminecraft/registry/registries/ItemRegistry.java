@@ -15,7 +15,6 @@ import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.Item;
@@ -45,15 +44,11 @@ public class ItemRegistry {
     public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache());
 
     public static final Item CHAINMAIL_HORSE_ARMOR = register(
-            "chainmail_horse_armor",
-            /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.CHAIN, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),
-            new Item.Settings().maxCount(1));
+            "chainmail_horse_armor", new Item.Settings().horseArmor(ArmorMaterials.CHAIN));
 
 
     public static final Item NETHERITE_HORSE_ARMOR = register(
-            "netherite_horse_armor",
-                /* method_63974 */ settings -> new AnimalArmorItem(ArmorMaterials.NETHERITE, AnimalArmorItem.Type.EQUESTRIAN, SoundEvents.ENTITY_HORSE_ARMOR, false, settings),
-            new Item.Settings().maxCount(1).fireproof().rarity(Rarity.RARE));
+            "netherite_horse_armor",new Item.Settings().horseArmor(ArmorMaterials.CHAIN).fireproof().rarity(Rarity.RARE));
 
     public static final Item BROKEN_TOTEM = register("broken_totem", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
     public static final Item ECHO_TOTEM = register(
@@ -88,7 +83,9 @@ public class ItemRegistry {
     public static final RegistryEntry<Potion> BLINDNESS = register("blindness", new Potion("blindness", new StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
     public static final RegistryEntry<Potion> LEVITATION = register("levitation", new Potion("levitation", new StatusEffectInstance(StatusEffects.LEVITATION, 1200)));
 
-
+    public static Item register(String id, Item.Settings settings) {
+        return register(keyOf(id), Item::new, settings);
+    }
     public static Item register(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
         return register(keyOf(id), factory, settings);
     }

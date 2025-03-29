@@ -159,7 +159,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
 
         }
         if (this.isLit() && this.random.nextInt(4) == 0) {
-            this.getWorld().addParticle(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
+            this.getWorld().addParticleClient(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
         }
     }
 
@@ -262,18 +262,18 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         nbt.putBoolean("Lit", this.isLit());
         nbt.putShort("TrainLength", (short)train.size());
         for (int i = 1;i<train.size();i++) {
-            nbt.putUuid("Train"+i, train.get(i).getUuid());
+            nbt.putString("Train"+i, String.valueOf(train.get(i).getUuid()));
         }
     }
 
     @Override
     protected void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        fuel = nbt.getShort("Fuel");
-        this.setLit(nbt.getBoolean("Lit"));
-        int len = nbt.getShort("TrainLength");
+        fuel = nbt.getShort("Fuel", (short)0);
+        this.setLit(nbt.getBoolean("Lit", false));
+        int len = nbt.getShort("TrainLength", (short)0);
         for (int i = 1;i<len;i++) {
-            UUID uuid = nbt.getUuid("Train" + i);
+            UUID uuid = UUID.fromString(String.valueOf(nbt.getString("Train" + i)));
             uuids.add(uuid);
         }
     }
@@ -314,7 +314,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     public Entity teleportTo(TeleportTarget teleportTarget) {
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             serverWorld.resetIdleTimeout();
-            serverWorld.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), 3, this.getBlockPos());
+            serverWorld.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), 3);
         }
         for (AbstractMinecartEntity minecart : train) {
             if (minecart!=null) {
