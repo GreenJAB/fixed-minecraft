@@ -1,18 +1,14 @@
-import org.gradle.jvm.tasks.Jar
-
 plugins {
     alias(libs.plugins.fabric.loom)
     alias(libs.plugins.yamlang)
 }
 
-version = "0.4.1-1.21.4"
+version = "0.4.2-1.21.4"
 group = "net.green_jab.fixedminecraft"
-
 
 base {
     archivesName = project.name
 }
-
 
 loom {
     splitEnvironmentSourceSets()
@@ -29,7 +25,6 @@ loom {
         }
     }
 }
-
 
 repositories {
     maven {
@@ -49,11 +44,9 @@ dependencies {
     vineflowerDecompilerClasspath(libs.vineflower)
 }
 
-
 fabricApi {
     configureDataGeneration()
 }
-
 
 tasks.processResources {
     filesMatching("fabric.mod.json") {
@@ -65,12 +58,10 @@ tasks.processResources {
     }
 }
 
-
 yamlang {
     targetSourceSets = [sourceSets.main]
     inputDir.set("assets/fixedminecraft/lang")
 }
-
 
 tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
@@ -81,7 +72,6 @@ java {
 }
 
 afterEvaluate {
-    // must be done in after evaluate, otherwise (iirc) dependencies can't be properly resolved yet
     loom {
         runs {
             configureEach {
@@ -92,10 +82,7 @@ afterEvaluate {
                 property("mixin.debug.export.decompile", "false")
                 property("mixin.debug.verbose", "true")
                 property("mixin.dumpTargetOnFailure", "true")
-                // makes silent failures into hard-failures
-                // property("mixin.checks", "true")
                 property("mixin.hotSwap", "true")
-
 
                 ideConfigGenerated(true)
             }

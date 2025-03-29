@@ -143,8 +143,9 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 if (itemStackAtRandomSlot == null || itemStackAtRandomSlot.isEmpty() || !itemStackAtRandomSlot.isOf(Items.ENCHANTED_BOOK)) {
                     continue;
                 }
-                if (itemStackAtRandomSlot.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==2) {
-                    continue;
+
+                if (itemStackAtRandomSlot.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
+                    if (itemStackAtRandomSlot.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==2) continue;
                 }
 
                 chosenItemStacks.add(itemStackAtRandomSlot);

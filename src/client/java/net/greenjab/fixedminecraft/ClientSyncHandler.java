@@ -15,6 +15,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.map.MapState;
 import net.minecraft.util.math.BlockPos;
 
+/** Credit: Nettakrim, Squeek502, Bawnorton */
 public class ClientSyncHandler {
     public static void init() {
         ClientPlayNetworking.registerGlobalReceiver(SaturationSyncPayload.ID, (payload, context) -> {

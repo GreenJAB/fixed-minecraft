@@ -10,6 +10,8 @@ import net.minecraft.entity.vehicle.ChestMinecartEntity;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.HopperMinecartEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsage;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ChunkTicketType;
@@ -76,10 +78,15 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 if (train.get(1) instanceof ChestMinecartEntity chestMinecartEntity) inv = chestMinecartEntity.getInventory();
                 else if (train.get(1) instanceof HopperMinecartEntity hopperMinecartEntity) inv = hopperMinecartEntity.getInventory();
                 if (inv != null) {
-                    for (ItemStack itemStack : inv) {
+                    for (int i = 0; i < inv.size();i++) {
+                        ItemStack itemStack = inv.get(i);
                         if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
                             int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
-                            itemStack.decrement(1);
+                            if (itemStack.isOf(Items.LAVA_BUCKET)) {
+                                inv.set(i, Items.BUCKET.getDefaultStack());
+                            } else {
+                                itemStack.decrement(1);
+                            }
                             fuel += itemFuel;
                             break;
                         }
@@ -94,7 +101,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
             if (fuel <= 0)  this.setLit(false);
 
             disconnectBadMinecarts(world);
-            //if (this.getPortalCooldown()<6) addGoodMinecarts(world, fakeMinecart);
 
             setFakeMinecart(fakeMinecart, this);
             fakeMinecart.setVelocity(new Vec3d(-dist, 0, 0).rotateY((float) (fakeMinecart.getYaw()*Math.PI/180f)));
@@ -275,15 +281,21 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
+        if (fuel>0) this.setLit(true);
         if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
             int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
             if (fuel + itemFuel <= 32000) {
-                itemStack.decrementUnlessCreative(1, player);
                 fuel += itemFuel;
+                this.setLit(true);
+                if (itemStack.isOf(Items.LAVA_BUCKET)) {
+                    if (!player.isInCreativeMode()) {
+                        ItemStack itemStack2 = ItemUsage.exchangeStack(itemStack, player, Items.BUCKET.getDefaultStack());
+                        player.setStackInHand(hand, itemStack2);
+                    }
+                } else {
+                    itemStack.decrementUnlessCreative(1, player);
+                }
             }
-        }
-        if (fuel>0) {
-            this.setLit(true);
         }
         return ActionResult.SUCCESS;
     }

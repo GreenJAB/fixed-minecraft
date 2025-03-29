@@ -1,24 +1,48 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.MergedComponentMap;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
+
+    @Inject(method = "inventoryTick", at = @At("HEAD"))
+    private void addGreenGlintUpdate(World world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
+        if (selected) {
+            if (world.getTime() % 20 == 0) {
+                ItemStack stack = (ItemStack)(Object)this;
+                if (stack.hasEnchantments()) {
+                    ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+                    stack.remove(DataComponentTypes.REPAIR_COST);
+                    for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
+                        if (itemEnchantmentsComponent.getLevel(enchantment) > enchantment.value().getMaxLevel()) {
+                            stack.set(DataComponentTypes.REPAIR_COST, 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     @Inject(method = "fromNbt", at = @At("RETURN"), cancellable = true)
     private static void addGreenGlintUpdate(RegistryWrapper.WrapperLookup registries, NbtElement nbt,

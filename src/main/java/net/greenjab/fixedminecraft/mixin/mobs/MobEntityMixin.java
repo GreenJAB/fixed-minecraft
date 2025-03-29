@@ -117,7 +117,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
         if (world.getDifficulty() == Difficulty.HARD) i = 2;
         if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) i = 3;
-        float h = i*3*gaussian(random);
+        float h = i*3*gaussian();
         increaseHealth(LE, h);
         increaseSpeed(random, LE, i);
     }
@@ -126,7 +126,7 @@ public abstract class MobEntityMixin extends LivingEntity {
     private static void increaseSpeed(Random random, MobEntity LE, int i) {
         if (LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)!=null) {
             if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(
-                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
+                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian())));
         }
     }
 
@@ -153,8 +153,9 @@ public abstract class MobEntityMixin extends LivingEntity {
 
 
     @Unique
-    private static float gaussian(Random random){
-        return (float)(random.nextGaussian()/4.0f)+0.5f;
+
+    private static float gaussian(){
+        return (float)(Math.tan(0.87433408*Math.PI*(Math.random()-0.5f))/10.0f)+0.5f;
     }
 
     @Unique
