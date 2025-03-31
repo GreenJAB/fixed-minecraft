@@ -48,7 +48,7 @@ public class ItemRegistry {
 
 
     public static final Item NETHERITE_HORSE_ARMOR = register(
-            "netherite_horse_armor",new Item.Settings().horseArmor(ArmorMaterials.CHAIN).fireproof().rarity(Rarity.RARE));
+            "netherite_horse_armor",new Item.Settings().horseArmor(ArmorMaterials.NETHERITE).fireproof().rarity(Rarity.RARE));
 
     public static final Item BROKEN_TOTEM = register("broken_totem", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
     public static final Item ECHO_TOTEM = register(
@@ -112,7 +112,7 @@ public class ItemRegistry {
     public static Item register(Block block, BiFunction<Block, Item.Settings, Item> factory, Item.Settings settings) {
         return register(
                 keyOf(block.getRegistryEntry().registryKey()),
-                /* method_63751 */ itemSettings -> factory.apply(block, itemSettings),
+                itemSettings -> factory.apply(block, itemSettings),
                 settings.useBlockPrefixedTranslationKey()
         );
     }

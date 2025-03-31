@@ -64,9 +64,9 @@
                         "pattern": "minecraft:border"
                     }
                 ],
-                "minecraft:hide_additional_tooltip": {},
-                "minecraft:item_name": "{\"translate\":\"block.minecraft.ominous_banner\"}",
-                "minecraft:rarity": "uncommon"
+                "minecraft:item_name": {
+                    "translate": "block.minecraft.ominous_banner"
+                }
             },
             "count": 1,
             "id": "minecraft:white_banner"

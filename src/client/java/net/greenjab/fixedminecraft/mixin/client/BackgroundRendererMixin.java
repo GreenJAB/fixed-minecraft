@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
@@ -13,6 +14,7 @@ import net.minecraft.client.render.FogShape;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -42,10 +44,7 @@ public class BackgroundRendererMixin {
     @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 1.0f))
     private static float lessLavaFog(float constant, @Local Entity entity) {
         int i = 0;
-        //TODO test
-        for (int j = 0; j <4; j++) {
-            ItemStack item = ((PlayerEntity) entity).getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
-        //for (ItemStack item : ((PlayerEntity) entity).getInventory().get) {
+        for (ItemStack item : FixedMinecraft.getArmor((PlayerEntity) entity)) {
             i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
         }
         return 2.5f + 0.25f*Math.min(2*i,25);

@@ -76,13 +76,18 @@ public abstract class LivingEntityMixin {
         if (vehicleType.isIn(ModTags.VEHICLES)) entity.stopRiding();
     }
 
-    //TODO test
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"),
             cancellable = true
     )
     private void cancel0Damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         BlocksAttacksComponent blocksAttacksComponent = this.getActiveItem().get(DataComponentTypes.BLOCKS_ATTACKS);
-        if (blocksAttacksComponent != null && !(Boolean)blocksAttacksComponent.bypassedBy().map(source::isIn).orElse(false)) {
+        if (blocksAttacksComponent != null) {
+            if ( blocksAttacksComponent.bypassedBy().map(source::isIn).orElse(false)) {
+                if (modifyAppliedDamage(world, source, amount)<0.05) {
+                    cir.setReturnValue(false);
+                }
+            }
+        } else {
             if (modifyAppliedDamage(world, source, amount)<0.05) {
                 cir.setReturnValue(false);
             }

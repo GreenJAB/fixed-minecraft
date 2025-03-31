@@ -20,9 +20,7 @@
         "icon": {
             "components": {
                 "minecraft:enchantments": {
-                    "levels": {
-                        "minecraft:mending": 1
-                    }
+                    "minecraft:mending": 1
                 },
                 "minecraft:repair_cost": 1
             },

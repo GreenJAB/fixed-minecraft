@@ -1,8 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CreakingHeartBlock;
 import net.minecraft.block.entity.CreakingHeartBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -23,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-//TODO test
 @Mixin(CreakingEntity.class)
 public abstract class CreakingEntityMixin {
 
@@ -79,5 +75,4 @@ public abstract class CreakingEntityMixin {
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.STEP_HEIGHT, 1.0625));
     }
-
 }

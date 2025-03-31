@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
@@ -16,8 +17,6 @@ import net.minecraft.item.map.MapState;
 import net.minecraft.potion.Potions;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.resource.featuretoggle.FeatureFlag;
-import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -30,10 +29,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -42,10 +38,16 @@ import java.util.function.Predicate;
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderingTraderEntityMixin {
 
-//TODO remove
-   /* @ModifyVariable(method = "fillRebalancedRecipes", at = @At("STORE"), ordinal = 0)
-    private Iterator<Pair<TradeOffers.Factory[], Integer>> newTrades(Iterator<Pair<TradeOffers.Factory[], Integer>> iter){
-        List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
+    @ModifyExpressionValue(method = "fillRecipes", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/village/TradeOffers;WANDERING_TRADER_TRADES:Ljava/util/List;"
+    ))
+    private List<Pair<TradeOffers.Factory[], Integer>> newTrades(List<Pair<TradeOffers.Factory[], Integer>> original){
+        return list;
+    }
+
+    @Unique
+    private final List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.BuyItemFactory(createPotion(), 1, 1, 1),
                         new TradeOffers.BuyItemFactory(Items.WATER_BUCKET, 1, 1, 1, 2),
@@ -149,8 +151,8 @@ public abstract class WanderingTraderEntityMixin {
                 }, 1)
 
         );
-        return list.iterator();
-    }
+        //return list.iterator();
+    //}
 
     @Unique
     private ItemStack createSpecialItem() {
@@ -276,5 +278,5 @@ public abstract class WanderingTraderEntityMixin {
                 }
             }
         return Items.MAP.getDefaultStack();
-    }*/
+    }
 }

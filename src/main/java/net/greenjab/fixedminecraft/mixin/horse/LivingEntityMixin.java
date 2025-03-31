@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.MuleEntity;
@@ -46,7 +45,7 @@ public abstract class LivingEntityMixin
 
     @Inject(method = "canUseSlot", at = @At(value = "HEAD"), cancellable = true)
     private void muleArmourslot(EquipmentSlot slot, CallbackInfoReturnable<Boolean> cir){
-        MobEntity LE = (MobEntity) (Object)this;
+        LivingEntity LE = (LivingEntity) (Object)this;
         if (LE instanceof MuleEntity) {
             cir.setReturnValue(true);
             cir.cancel();

@@ -28,7 +28,6 @@
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
         "glint.EquipmentRendererMixin",
-        "glint.HorseArmorFeatureRendererMixin",
         "glint.ItemModelManagerMixin",
         "glint.ItemRendererMixin",
         "map.DrawContextAccessor",

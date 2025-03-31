@@ -48,24 +48,12 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At("TAIL"))
     private void saveVehicle(World world, LivingEntity owner, ItemStack stack, CallbackInfo ci) {
         if (owner.hasVehicle()) {
-            if (owner == rootVehicle(owner).getControllingPassenger()) {
-                vehicle = rootVehicle(owner);
+            LivingEntity root = rootVehicle(owner);
+            if (root != null && owner == root.getControllingPassenger()) {
+                vehicle = root;
             }
         }
     }
-//TODO fix
-    /*@Redirect(  method = "onCollision", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;detach()V"))
-    private void teleportWithVehicle(Entity instance,
-                                     @Share("passed")
-                                     LocalBooleanRef ref) {
-        LivingEntity currentVehicle = rootVehicle(instance);
-        if (currentVehicle == null || !currentVehicle.equals(vehicle)) {
-            instance.detach();
-            ref.set(false);
-        }
-    }*/
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
      *

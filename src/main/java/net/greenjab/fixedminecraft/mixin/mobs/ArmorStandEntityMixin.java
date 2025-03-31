@@ -58,7 +58,6 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
                             this.dropStack((ServerWorld) player.getWorld(), stack);
                         }
                     }
-                    //TODO test
                     this.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());
                     this.equipStack(EquipmentSlot.OFFHAND, Items.AIR.getDefaultStack());
                 }

@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.mobs.EnchantedBookFactory;
 import net.minecraft.block.Blocks;
@@ -24,8 +25,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.predicate.entity.EntityPredicates;
@@ -50,9 +49,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -350,12 +346,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private void dropArmor(DamageSource damageSource, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
         if (villagerEntity.getWorld() instanceof ServerWorld serverWorld) {
-            ArrayList<ItemStack> armor = new ArrayList<>();
-            for (int j = 0; j <4; j++) {
-                ItemStack item = villagerEntity.getEquippedStack(PlayerInventory.EQUIPMENT_SLOTS.get(j));
-                armor.add(item);
-            }
-            for (ItemStack itemStack : armor) {
+            for (ItemStack itemStack : FixedMinecraft.getArmor(villagerEntity)) {
                 villagerEntity.dropStack(serverWorld, itemStack);
             }
             for (int i = 0; i < 4; i++) {

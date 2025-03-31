@@ -165,6 +165,7 @@ public class MapBookItem extends Item {
     public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         if (world != null && !world.isClient()) {
             if (stack != null && entity instanceof ServerPlayerEntity player) {
+                stack.set(DataComponentTypes.REPAIR_COST, 3);
                 int id = getMapBookId(stack);
                 if (id != -1) {
                     MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);

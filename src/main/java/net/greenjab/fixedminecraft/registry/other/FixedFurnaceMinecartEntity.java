@@ -273,8 +273,12 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         this.setLit(nbt.getBoolean("Lit", false));
         int len = nbt.getShort("TrainLength", (short)0);
         for (int i = 1;i<len;i++) {
-            UUID uuid = UUID.fromString(String.valueOf(nbt.getString("Train" + i)));
-            uuids.add(uuid);
+            String uu = nbt.getString("Train" + i, "");
+            if (!uu.isEmpty()) {
+                UUID uuid = UUID.fromString(uu);
+                uuids.add(uuid);
+            }
+
         }
     }
 
