@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PotionEntityMixin {
     @Inject(method = "onCollision", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/thrown/PotionEntity;applyWater(Lnet/minecraft/server/world/ServerWorld;)V"
+            target = "Lnet/minecraft/entity/projectile/thrown/PotionEntity;explodeWaterPotion(Lnet/minecraft/server/world/ServerWorld;)V"
     ))
     private void waterAreaEffect(HitResult hitResult, CallbackInfo ci, @Local PotionContentsComponent potion) {
         PotionEntity PE = (PotionEntity) (Object)this;
@@ -44,10 +44,5 @@ public class PotionEntityMixin {
         areaEffectCloudEntity.setPotionContents(potion);
 
         PE.getWorld().spawnEntity(areaEffectCloudEntity);
-    }
-
-    @ModifyArg(method = "applyLingeringPotion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;setRadiusOnUse(F)V"))
-    private float noShrinkOnUse(float radiusOnUse){
-        return 0;
     }
 }

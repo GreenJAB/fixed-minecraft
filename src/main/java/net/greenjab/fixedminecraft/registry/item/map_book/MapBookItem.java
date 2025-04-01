@@ -8,7 +8,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
+import net.minecraft.component.type.TooltipDisplayComponent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
@@ -28,11 +30,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.village.raid.RaidManager;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class MapBookItem extends Item {
     public MapBookItem(Settings settings) {
@@ -157,9 +162,10 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
         if (world != null && !world.isClient()) {
             if (stack != null && entity instanceof ServerPlayerEntity player) {
+                stack.set(DataComponentTypes.REPAIR_COST, 3);
                 int id = getMapBookId(stack);
                 if (id != -1) {
                     MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);
@@ -171,7 +177,7 @@ public class MapBookItem extends Item {
                 if (!MapBookStateManager.INSTANCE.currentBooks.contains(id)) {
                     MapBookStateManager.INSTANCE.currentBooks.add(id);
                 }
-                if (selected || ((PlayerEntity) entity).getOffHandStack() == stack) {
+                if ((slot==EquipmentSlot.MAINHAND||slot==EquipmentSlot.OFFHAND) || ((PlayerEntity) entity).getOffHandStack() == stack) {
                     for (MapStateData mapStateData : getMapStates(stack, entity.getWorld())) {
                         mapStateData.mapState.update(player, stack);
                         if (!mapStateData.mapState.locked) {
@@ -262,9 +268,9 @@ public class MapBookItem extends Item {
     }
 
     private int allocateMapBookId(MinecraftServer server) {
+
         MapBookIdCountsState counts = server.getOverworld().getPersistentStateManager().getOrCreate(
-                MapBookIdCountsState.persistentStateType,
-                MapBookIdCountsState.IDCOUNTS_KEY
+                MapBookIdCountsState.persistentStateType
         );
         int i = counts.get();
         MapBookStateManager.INSTANCE.putMapBookState(server, i, new MapBookState());
@@ -334,7 +340,7 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, TooltipContext context, List<Text> tooltip, TooltipType type) {
+    public void appendTooltip(ItemStack stack, Item.TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
         var mapsCount =
                 stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent.DEFAULT).additions().size();
         int id = getMapBookId(stack);
@@ -346,11 +352,11 @@ public class MapBookItem extends Item {
                 mapsCount += mapBookState.mapIDs.size();
             }
 
-            tooltip.add(Text.translatable("item.fixedminecraft.map_book_id", (id + 1)).formatted(Formatting.GRAY));
+            textConsumer.accept(Text.translatable("item.fixedminecraft.map_book_id", (id + 1)).formatted(Formatting.GRAY));
         }
 
         if (mapsCount > 0) {
-            tooltip.add(Text.translatable("item.fixedminecraft.map_book_maps", mapsCount).formatted(Formatting.GRAY));
+            textConsumer.accept(Text.translatable("item.fixedminecraft.map_book_maps", mapsCount).formatted(Formatting.GRAY));
         }
     }
 
@@ -418,11 +424,9 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public void onCraftByPlayer(ItemStack stack, World world, PlayerEntity player) {
-        super.onCraftByPlayer(stack, world, player);
-        if (!world.isClient) {
-            mapBookSync((ServerPlayerEntity)player, stack);
-        }
+    public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
+        super.onCraftByPlayer(stack, player);
+        mapBookSync((ServerPlayerEntity)player, stack);
     }
 
     @Override

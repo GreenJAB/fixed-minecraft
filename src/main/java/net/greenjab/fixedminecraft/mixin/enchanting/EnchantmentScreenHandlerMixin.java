@@ -155,11 +155,11 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         // take random enchantment out of result
         Map<RegistryEntry<Enchantment>, Integer> enchantments = new HashMap<>();
         EnchantmentLevelEntry randomEntry = originalReturnValue.get(this.random.nextInt(originalReturnValue.size()));
-        enchantments.put(randomEntry.enchantment, randomEntry.level);
+        enchantments.put(randomEntry.enchantment(), randomEntry.level());
 
         // apply enchantments
         AtomicInteger enchPower = new AtomicInteger();
-        enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(randomEntry.enchantment, randomEntry.level));
+        enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(randomEntry.enchantment(), randomEntry.level()));
 
         for (ItemStack chosenStack : chosenItemStacks) {
             ItemEnchantmentsComponent bookEnchantments = EnchantmentHelper.getEnchantments(chosenStack);
@@ -255,13 +255,13 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                     // set displayed enchantment
                     EnchantmentLevelEntry displayedEnchantment = enchantments.get(0);
 
-                    this.enchantmentId[slot] = indexedIterable.getRawId(displayedEnchantment.enchantment); // the one that's being displayed
+                    this.enchantmentId[slot] = indexedIterable.getRawId(displayedEnchantment.enchantment()); // the one that's being displayed
 
 
                     // calculate enchantment power
                     int enchantmentPower = 0;
                     for (EnchantmentLevelEntry entry : enchantments) {
-                        enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment, entry.level);
+                        enchantmentPower += FixedMinecraftEnchantmentHelper.getEnchantmentPower(entry.enchantment(), entry.level());
                     }
                     int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(itemStack);
                     int img = (enchantmentPower>cap)?2:((enchantmentPower>cap/2)?1:0);
@@ -305,7 +305,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             ItemStack lapislazuliStack = this.inventory.getStack(1);
 
             // determine strategy to apply enchantments
-            BiConsumer<ItemStack, EnchantmentLevelEntry> applyEnchantmentsStrategy = (itemStack, enchantmentLevelEntry) -> itemStack.addEnchantment(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
+            BiConsumer<ItemStack, EnchantmentLevelEntry> applyEnchantmentsStrategy = (itemStack, enchantmentLevelEntry) -> itemStack.addEnchantment(enchantmentLevelEntry.enchantment(), enchantmentLevelEntry.level());
             // apply enchantments
             for (EnchantmentLevelEntry entry : this.fixed_minecraft__enchantments[slotId]) {
                 applyEnchantmentsStrategy.accept(targetItemStack, entry);
@@ -315,8 +315,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             List<EnchantmentLevelEntry> enchantments;
             enchantments = this.generateEnchantments(world.getRegistryManager(), targetItemStack, slotId,  this.enchantmentPower[slotId]);
             for (EnchantmentLevelEntry enchantment : enchantments) {
-                int i = enchantment.level;
-                if (i > enchantment.enchantment.value().getMaxLevel()) isSuper = true;
+                int i = enchantment.level();
+                if (i > enchantment.enchantment().value().getMaxLevel()) isSuper = true;
             }
             if (isSuper) targetItemStack.getOrDefault(DataComponentTypes.REPAIR_COST, Integer.valueOf(1));
             if (player instanceof ServerPlayerEntity SPE && enchantments.size()>1) {

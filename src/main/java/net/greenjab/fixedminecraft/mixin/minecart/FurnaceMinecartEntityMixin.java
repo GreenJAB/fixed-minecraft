@@ -15,7 +15,7 @@ public class FurnaceMinecartEntityMixin {
     private void cancelTick(CallbackInfo ci) { ci.cancel(); }
     @Inject(method = "writeCustomDataToNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;putDouble(Ljava/lang/String;D)V"), cancellable = true)
     private void cancelWrite(CallbackInfo ci) { ci.cancel(); }
-    @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getDouble(Ljava/lang/String;)D"), cancellable = true)
+    @Inject(method = "readCustomDataFromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NbtCompound;getDouble(Ljava/lang/String;D)D"), cancellable = true)
     private void cancelRead(CallbackInfo ci) { ci.cancel(); }
 
     @ModifyConstant(method = "getMaxSpeed", constant = @Constant(doubleValue = 0.5))

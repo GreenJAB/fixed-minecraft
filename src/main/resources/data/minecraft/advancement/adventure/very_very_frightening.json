@@ -25,9 +25,7 @@
         "icon": {
             "components": {
                 "minecraft:enchantments": {
-                    "levels": {
-                        "minecraft:mending": 1
-                    }
+                    "minecraft:mending": 1
                 }
             },
             "count": 1,

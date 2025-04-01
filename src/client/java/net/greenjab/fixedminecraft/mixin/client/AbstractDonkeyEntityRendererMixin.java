@@ -22,9 +22,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> {
 
     @Inject(method = "<init>", at = @At(value = "RETURN"))
-    public void addMuleArmorLayer(EntityRendererFactory.Context context, EntityModelLayer layer, EntityModelLayer babyLayer, boolean mule,
-                                  CallbackInfo ci) {
-        if (mule) {
+    public void addMuleArmorLayer(EntityRendererFactory.Context context, AbstractDonkeyEntityRenderer.Type type, CallbackInfo ci) {
+        if (type == AbstractDonkeyEntityRenderer.Type.MULE) {
             AbstractDonkeyEntityRenderer<AbstractDonkeyEntity> current = ((AbstractDonkeyEntityRenderer<AbstractDonkeyEntity>)(Object)this);
             current.addFeature(new MuleArmorFeatureRenderer(current, context.getEntityModels(), context.getEquipmentRenderer()));
         }

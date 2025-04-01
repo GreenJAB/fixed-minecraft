@@ -55,30 +55,30 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
         ModelPartData modelPartData = modelData.getRoot();
         ModelPartData modelPartData2 = modelPartData.addChild("head",
                 ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -10.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
-                ModelTransform.pivot(0.0F, 0.0F + y, 0.0F));
+                ModelTransform.origin(0.0F, 0.0F + y, 0.0F));
         modelPartData2.addChild(
                 "hat", ModelPartBuilder.create().uv(32, 0).cuboid(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation.add(0.5F)), ModelTransform.NONE
         );
         modelPartData.addChild("body",
                 ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.add(0.25F, 1.0F, 1.0F)),
-                ModelTransform.pivot(0.0F, 0.0F + y, 0.0F));
+                ModelTransform.origin(0.0F, 0.0F + y, 0.0F));
         modelPartData.addChild(
                 "right_arm",
                 ModelPartBuilder.create().
                         uv(40, 16).cuboid(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation),
-                ModelTransform.pivot(-5.0F, 2.0F + y, 0.0F)
+                ModelTransform.origin(-5.0F, 2.0F + y, 0.0F)
         );
         modelPartData.addChild(
                 "left_arm",
                 ModelPartBuilder.create().uv(40, 16).mirrored().cuboid(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation),
-                ModelTransform.pivot(5.0F, 2.0F + y, 0.0F)
+                ModelTransform.origin(5.0F, 2.0F + y, 0.0F)
         );
         modelPartData.addChild("right_leg",
                 ModelPartBuilder.create().uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(legsExtend)),
-                ModelTransform.pivot(-2.0F, 12.0F + y, 0.0F));
+                ModelTransform.origin(-2.0F, 12.0F + y, 0.0F));
         modelPartData.addChild("left_leg",
                 ModelPartBuilder.create().uv(0, 16).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(legsExtend)),
-                ModelTransform.pivot(2.0F, 12.0F + y, 0.0F));
+                ModelTransform.origin(2.0F, 12.0F + y, 0.0F));
         return TexturedModelData.of(modelData, 64, 32);
     }
 

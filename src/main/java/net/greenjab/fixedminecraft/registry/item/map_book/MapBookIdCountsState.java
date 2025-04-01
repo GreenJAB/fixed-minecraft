@@ -1,54 +1,36 @@
 package net.greenjab.fixedminecraft.registry.item.map_book;
 
-import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.datafixer.DataFixTypes;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.world.PersistentState;
+import net.minecraft.world.PersistentStateType;
 
 public class MapBookIdCountsState extends PersistentState {
-    private final Object2IntMap<String> idCounts = new Object2IntOpenHashMap<>();
-    public static String IDCOUNTS_KEY = "fixedminecraft_idcounts";
-
-
-    public MapBookIdCountsState() {
-        idCounts.defaultReturnValue(-1);
-    }
-
-    @Override
-    public NbtCompound writeNbt(NbtCompound nbt, WrapperLookup wrapperLookup) {
-        for ( Object2IntMap.Entry<String> entry : idCounts.object2IntEntrySet()) {
-            nbt.putInt(entry.getKey(), entry.getIntValue());
-        }
-
-        return nbt;
-    }
-
-    int nextMapBookId;
-    public int get() {
-        int i = idCounts.getOrDefault("fixedminecraft:map_book", 0) + 1;
-        idCounts.put("fixedminecraft:map_book", i);
-        this.markDirty();
-        return i;
-    }
-
-    public static final PersistentState.Type<MapBookIdCountsState> persistentStateType = new PersistentState.Type<>(
-            MapBookIdCountsState::new,
-            (nbt, registryLookup) -> fromNbt(nbt),
-            DataFixTypes.SAVED_DATA_MAP_INDEX
+    public static final Codec<MapBookIdCountsState> CODEC = RecordCodecBuilder.create(
+             instance -> instance.group(
+                     Codec.INT.optionalFieldOf("fixedminecraft:map_book", -1).forGetter( state -> state.nextMapBookId))
+                    .apply(instance, MapBookIdCountsState::new)
     );
 
-    private static MapBookIdCountsState fromNbt(NbtCompound nbt) {
-        MapBookIdCountsState idCountsState = new MapBookIdCountsState();
+    public static String IDCOUNTS_KEY = "fixedminecraft_idcounts";
 
-        for (String string : nbt.getKeys()) {
-            if (nbt.contains(string, 99)) {
-                idCountsState.idCounts.put(string, nbt.getInt(string));
-            }
-        }
-
-        return idCountsState;
+    int nextMapBookId;
+    public MapBookIdCountsState() {
+        nextMapBookId = -1;
     }
+
+    public MapBookIdCountsState(int nextMapBookId) {
+        this.nextMapBookId = nextMapBookId;
+    }
+
+    public int get() {
+        nextMapBookId++;
+        this.markDirty();
+        return nextMapBookId;
+    }
+    public static final PersistentStateType<MapBookIdCountsState> persistentStateType = new PersistentStateType<>(
+            IDCOUNTS_KEY, MapBookIdCountsState::new, CODEC, DataFixTypes.SAVED_DATA_MAP_INDEX
+    );
 
 }

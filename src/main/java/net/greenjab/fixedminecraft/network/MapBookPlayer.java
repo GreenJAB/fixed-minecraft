@@ -1,7 +1,13 @@
 package net.greenjab.fixedminecraft.network;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.TextCodecs;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.BlockPos;
 
 public class MapBookPlayer {
     public String name = "";
@@ -10,6 +16,27 @@ public class MapBookPlayer {
     public float yaw = 0.0f;
     public String dimension = "";
 
+    public static final Codec<MapBookPlayer> CODEC = RecordCodecBuilder.create(
+            /* method_56812 */ instance -> instance.group(
+                            Codec.STRING.fieldOf("name").forGetter(mapPlayer -> mapPlayer.name),
+                            Codec.DOUBLE.fieldOf("x").forGetter(mapPlayer -> mapPlayer.x),
+                            Codec.DOUBLE.fieldOf("z").forGetter(mapPlayer -> mapPlayer.z),
+                            Codec.FLOAT.fieldOf("yaw").forGetter(mapPlayer -> mapPlayer.yaw),
+                            Codec.STRING.fieldOf("dimension").forGetter(mapPlayer -> mapPlayer.dimension)
+                    )
+                    .apply(instance, MapBookPlayer::new)
+    );
+
+    public MapBookPlayer(){
+    }
+
+    public MapBookPlayer(String name, double x, double z, float yaw, String dimension){
+        this.name = name;
+        this.x = x;
+        this.z = z;
+        this.yaw = yaw;
+        this.dimension = dimension;
+    }
 
     public void setPlayer(PlayerEntity player) {
         this.name = player.getName().getLiteralString();

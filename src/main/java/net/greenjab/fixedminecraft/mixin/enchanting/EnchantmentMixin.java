@@ -3,10 +3,11 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,13 +22,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Enchantment.class)
 public class EnchantmentMixin {
-
     @Inject(method = {"isPrimaryItem", "isAcceptableItem", "isSupportedItem"}, at = @At(value = "HEAD"), cancellable = true)
     private void otherChecks(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
         Enchantment enchantment = (Enchantment)(Object)this;
         Item item = stack.getItem();
-        if (item instanceof AnimalArmorItem animalArmorItem) {
-            if (animalArmorItem.getBreakSound() == SoundEvents.ENTITY_ITEM_BREAK) {
+        if (stack.getComponents().contains(DataComponentTypes.EQUIPPABLE)) {
+            if (stack.getComponents().get(DataComponentTypes.EQUIPPABLE).equipSound() == SoundEvents.ENTITY_HORSE_ARMOR) {
                 cir.setReturnValue(enchantment.isAcceptableItem(Items.DIAMOND_BOOTS.getDefaultStack()) && !enchantment.isAcceptableItem(Items.FLINT_AND_STEEL.getDefaultStack()));
                 cir.cancel();
             }

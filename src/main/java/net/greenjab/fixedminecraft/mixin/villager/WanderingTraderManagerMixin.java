@@ -24,7 +24,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
@@ -110,38 +112,8 @@ public abstract class WanderingTraderManagerMixin {
         }
     }
 
-    @Inject(method = "spawn", at = @At("HEAD"), cancellable = true)
-    private void temp(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfoReturnable<Integer> cir){
-
-
-        if (!world.getGameRules().getBoolean(GameRules.DO_TRADER_SPAWNING)) {
-            cir.setReturnValue(0);
-        } else if (--this.spawnTimer > 0) {
-            cir.setReturnValue(0);
-        } else {
-            this.spawnTimer = 1200;
-            this.spawnDelay -= 1200;
-            this.properties.setWanderingTraderSpawnDelay(this.spawnDelay);
-            if (this.spawnDelay > 0) {
-                cir.setReturnValue(0);
-            } else {
-                this.spawnDelay = 24000;
-                if (!world.getGameRules().getBoolean(GameRules.DO_MOB_SPAWNING)) {
-                    cir.setReturnValue(0);
-                } else {
-                    int i = this.spawnChance;
-                    this.spawnChance = MathHelper.clamp(this.spawnChance + 25, 25, 100);
-                    this.properties.setWanderingTraderSpawnChance(this.spawnChance);
-                    if (this.random.nextInt(100) > i) {
-                        cir.setReturnValue(0);
-                    } else if (this.trySpawn(world)) {
-                        this.spawnChance = 25;
-                        cir.setReturnValue(1);
-                    } else {
-                        cir.setReturnValue(0);
-                    }
-                }
-            }
-        }
+    @ModifyConstant(method = "spawn",constant = @Constant(intValue = 75))
+    private int temp(int constant){
+        return 100;
     }
 }

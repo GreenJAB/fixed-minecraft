@@ -1,15 +1,22 @@
 package net.greenjab.fixedminecraft.render;
 
+import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.Framebuffer;
+import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.render.BuiltBuffer;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
-import net.minecraft.client.render.VertexFormat;
-import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TriState;
+import net.minecraft.util.Util;
+import org.joml.Matrix4f;
 
 /** Credit: Pepperoni-Jabroni */
 @Environment(EnvType.CLIENT)
@@ -32,69 +39,84 @@ public class GlintRenderLayer extends RenderLayer{
                 map.put(renderType, new BufferAllocator(renderType.getExpectedBufferSize()));
     }
 
-
-    public GlintRenderLayer(String name, VertexFormat vertexFormat, VertexFormat.DrawMode drawMode, int expectedBufferSize,
-                            boolean hasCrumbling, boolean translucent, Runnable startAction, Runnable endAction) {
-        super(name, vertexFormat, drawMode, expectedBufferSize, hasCrumbling, translucent, startAction, endAction);
+    public GlintRenderLayer(String name, int size, boolean hasCrumbling, boolean translucent, Runnable begin, Runnable end) {
+        super(name, size, hasCrumbling, translucent, begin, end);
     }
-
 
     private static RenderLayer buildGlintRenderLayer() {
         final Identifier res = Identifier.of("textures/misc/super_enchanted_glint_item.png");
 
-        return RenderLayer.of("glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
-                .program(RenderPhase.GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
-                .writeMaskState(COLOR_MASK)
-                .cull(DISABLE_CULLING)
-                .depthTest(EQUAL_DEPTH_TEST)
-                .transparency(GLINT_TRANSPARENCY)
-                .texturing(GLINT_TEXTURING)
-                .build(false));
+        return RenderLayer.of(
+                "glint",
+                1536,
+                RenderPipelines.GLINT,
+                RenderLayer.MultiPhaseParameters.builder()
+                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texturing(GLINT_TEXTURING)
+                        .build(false)
+        );
     }
 
     private static RenderLayer buildEntityGlintRenderLayer() {
         final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
-        return RenderLayer.of("entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
-                .program(RenderPhase.ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
-                .writeMaskState(COLOR_MASK)
-                .cull(DISABLE_CULLING)
-                .depthTest(EQUAL_DEPTH_TEST)
-                .transparency(GLINT_TRANSPARENCY)
-                .target(ITEM_ENTITY_TARGET)
-                .texturing(ENTITY_GLINT_TEXTURING)
-                .build(false));
+        return RenderLayer.of(
+                "entity_glint",
+                1536,
+                RenderPipelines.GLINT,
+                RenderLayer.MultiPhaseParameters.builder()
+                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texturing(ENTITY_GLINT_TEXTURING)
+                        .build(false)
+        );
     }
 
     private static RenderLayer buildArmorEntityGlintRenderLayer() {
         final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_entity.png");
 
-        return RenderLayer.of("armor_entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
-                .program(RenderPhase.ARMOR_ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
-                .writeMaskState(COLOR_MASK)
-                .cull(DISABLE_CULLING)
-                .depthTest(EQUAL_DEPTH_TEST)
-                .transparency(GLINT_TRANSPARENCY)
-                .texturing(ENTITY_GLINT_TEXTURING)
-                .layering(VIEW_OFFSET_Z_LAYERING)
-                .build(false));
+        return RenderLayer.of(
+                "armor_entity_glint",
+                1536,
+                RenderPipelines.GLINT,
+                RenderLayer.MultiPhaseParameters.builder()
+                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texturing(ARMOR_ENTITY_GLINT_TEXTURING)
+                        .layering(VIEW_OFFSET_Z_LAYERING)
+                        .build(false));
     }
 
     private static RenderLayer buildTranslucentGlint() {
         final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_item.png");
 
-        return RenderLayer.of("glint_translucent", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, RenderLayer.MultiPhaseParameters.builder()
-                .program(TRANSLUCENT_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
-                .writeMaskState(COLOR_MASK)
-                .cull(DISABLE_CULLING)
-                .depthTest(EQUAL_DEPTH_TEST)
-                .transparency(GLINT_TRANSPARENCY)
+        return RenderLayer.of("glint_translucent", 1536, RenderPipelines.GLINT,RenderLayer.MultiPhaseParameters.builder()
+                .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
                 .texturing(GLINT_TEXTURING)
                 .target(ITEM_ENTITY_TARGET)
                 .build(false));
+    }
+
+    @Override
+    public void draw(BuiltBuffer buffer) {
+
+    }
+
+    @Override
+    public Framebuffer getTarget() {
+        return null;
+    }
+
+    @Override
+    public RenderPipeline getPipeline() {
+        return null;
+    }
+
+    @Override
+    public VertexFormat getVertexFormat() {
+        return null;
+    }
+
+    @Override
+    public VertexFormat.DrawMode getDrawMode() {
+        return null;
     }
 }

@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
@@ -25,6 +24,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -164,19 +166,26 @@ public class MapStateMixin implements MapStateAccessor {
             "red_x", "desert_village", "plains_village", "savanna_village", "snowy_village", "taiga_village", "jungle_temple",
             "swamp_hut", "trial_chambers"};
 
-    @ModifyExpressionValue(method = "fromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapBannerMarker;name()Ljava/util/Optional;"))
-    private static Optional<Text> updateName(Optional<Text> original) {
-        if (original.isPresent()) {
-            String name = original.get().getString();
-            if (name.contains("¶")) {
-                try {
-                    int i = Integer.parseInt(name.substring(1));
-                    return Optional.of(Text.of("¶"+updateNames[i]));
-                } catch (NumberFormatException ignored) {
-
+    @Inject(method = "getBanners", at = @At(value = "RETURN"), cancellable = true)
+    private void updateName(CallbackInfoReturnable<Collection<MapBannerMarker>> cir) {
+        Collection<MapBannerMarker> banners = cir.getReturnValue();
+        ArrayList<MapBannerMarker> newBanners = new ArrayList<MapBannerMarker>();
+        for (MapBannerMarker banner : banners) {
+            Optional<Text> original = banner.name();
+            if (original.isPresent()) {
+                String name = original.get().getString();
+                if (name.contains("¶")) {
+                    try {
+                        int i = Integer.parseInt(name.substring(1));
+                        newBanners.add(new MapBannerMarker(banner.pos(), banner.color(), Optional.of(Text.of("¶"+updateNames[i]))));
+                        //TODO test?
+                        //return Optional.of(Text.of("¶"+updateNames[i]));
+                    } catch (NumberFormatException e) {
+                        newBanners.add(banner);
+                    }
                 }
             }
         }
-        return original;
+        cir.setReturnValue(newBanners);
     }
 }

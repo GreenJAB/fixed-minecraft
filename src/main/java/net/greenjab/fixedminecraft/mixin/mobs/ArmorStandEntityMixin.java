@@ -20,6 +20,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Arrays;
+
 @Mixin(ArmorStandEntity.class)
 public abstract class ArmorStandEntityMixin extends LivingEntity {
     @Shadow
@@ -27,9 +29,6 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
 
     @Shadow
     public abstract boolean shouldShowArms();
-
-    @Shadow
-    public abstract Iterable<ItemStack> getHandItems();
 
     @Shadow
     public abstract void tick();
@@ -53,12 +52,12 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
                     this.setShowArms(false);
                     if (!player.getAbilities().creativeMode) this.dropItem((ServerWorld) player.getWorld(), Items.STICK);
                     if (!player.getAbilities().creativeMode) itemStack.damage(1, player);
-                    Iterable<ItemStack> hands = this.getHandItems();
-                    hands.forEach((stack) -> {
+                    ItemStack[] items = {this.getMainHandStack(), this.getOffHandStack()};
+                    for (ItemStack stack : items) {
                         if (!stack.isEmpty()) {
                             this.dropStack((ServerWorld) player.getWorld(), stack);
                         }
-                    });
+                    }
                     this.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());
                     this.equipStack(EquipmentSlot.OFFHAND, Items.AIR.getDefaultStack());
                 }

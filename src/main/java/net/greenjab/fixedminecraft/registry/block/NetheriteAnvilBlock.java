@@ -27,7 +27,8 @@ public class NetheriteAnvilBlock extends AnvilBlock {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        for (ItemStack itemStack : player.getHandItems()) {
+        ItemStack[] items = {player.getMainHandStack(), player.getOffHandStack()};
+        for (ItemStack itemStack : items) {
             if (itemStack.isOf(Items.NETHERITE_INGOT)) {
                 if (state.isOf(BlockRegistry.CHIPPED_NETHERITE_ANVIL)) {
                     world.setBlockState(pos, BlockRegistry.NETHERITE_ANVIL.getStateWithProperties(state), Block.NOTIFY_ALL_AND_REDRAW);

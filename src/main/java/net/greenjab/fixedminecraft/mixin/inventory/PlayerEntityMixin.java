@@ -4,7 +4,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.collection.DefaultedList;
@@ -28,17 +27,16 @@ public class PlayerEntityMixin {
     private void readCraftingGrid(NbtCompound nbt, CallbackInfo ci) {
         RecipeInputInventory craftingGrid = playerScreenHandler.getCraftingInput();
         DefaultedList<ItemStack> stacks = ((CraftingInventoryAccessor) craftingGrid).getStacks();
-        NbtList items = nbt.getList("CraftingItems", NbtElement.COMPOUND_TYPE);
+        NbtList items = nbt.getListOrEmpty("CraftingItems");
         if (items == null) return;
         stacks.clear();
         PlayerEntity PE = (PlayerEntity)(Object)this;
         for (int i = 0; i < items.size(); i++) {
-            NbtCompound nbtCompound = items.getCompound(i);
-            int slot = nbtCompound.getByte("Slot") & 255;
+            NbtCompound nbtCompound = items.getCompoundOrEmpty(i);
+            int slot = nbtCompound.getByte("Slot", (byte)0) & 255;
             ItemStack itemStack = ItemStack.fromNbt(PE.getRegistryManager(), nbtCompound).orElse(ItemStack.EMPTY);
             stacks.set(slot, itemStack);
         }
-
 
         /** Gave errors even with access widener */
         /*NbtCompound nbtCompound = nbt.getCompound("CraftingResult");

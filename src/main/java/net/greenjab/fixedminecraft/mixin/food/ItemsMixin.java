@@ -13,6 +13,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.component.type.DeathProtectionComponent;
+import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -24,8 +25,8 @@ import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
-import net.minecraft.item.SaddleItem;
 import net.minecraft.item.TridentItem;
+import net.minecraft.item.equipment.trim.ArmorTrimMaterials;
 import net.minecraft.util.Rarity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -53,10 +54,10 @@ public class ItemsMixin {
         return register("nether_brick", BrickItem::new, new Item.Settings().maxCount(16));
     }
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
                                   target = "Lnet/minecraft/item/Items;NETHER_BRICK:Lnet/minecraft/item/Item;")))
-    private static Item throwableResinBrick(String id) {
-        return register("resin_brick", BrickItem::new, new Item.Settings().maxCount(16));
+    private static Item throwableResinBrick(String id, Item.Settings settings) {
+        return register("resin_brick", BrickItem::new, new Item.Settings().maxCount(16).trimMaterial(ArmorTrimMaterials.RESIN));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
@@ -114,10 +115,10 @@ public class ItemsMixin {
         return register("potion",PotionItem::new,new Item.Settings().maxCount(16).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).component(DataComponentTypes.CONSUMABLE, ConsumableComponents.DRINK).useRemainder(Items.GLASS_BOTTLE));
     }
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
                                    target = "Lnet/minecraft/item/Items;ACTIVATOR_RAIL:Lnet/minecraft/item/Item;")))
-    private static Item stackedSaddles(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        return register("saddle", SaddleItem::new, new Item.Settings().maxCount(16));
+    private static Item stackedSaddles(String id, Item.Settings settings) {
+        return register("saddle", new Item.Settings().maxCount(16).component(DataComponentTypes.EQUIPPABLE, EquippableComponent.ofSaddle()));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

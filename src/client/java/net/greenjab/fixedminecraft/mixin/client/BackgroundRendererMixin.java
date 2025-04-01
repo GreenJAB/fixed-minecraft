@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
@@ -13,9 +14,12 @@ import net.minecraft.client.render.FogShape;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.CubicSampler;
 import net.minecraft.util.math.ColorHelper;
@@ -40,7 +44,7 @@ public class BackgroundRendererMixin {
     @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 1.0f))
     private static float lessLavaFog(float constant, @Local Entity entity) {
         int i = 0;
-        for (ItemStack item : ((PlayerEntity) entity).getArmorItems()) {
+        for (ItemStack item : FixedMinecraft.getArmor((PlayerEntity) entity)) {
             i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
         }
         return 2.5f + 0.25f*Math.min(2*i,25);
@@ -59,7 +63,7 @@ public class BackgroundRendererMixin {
             int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
             float caveGradiant = Math.min(Math.max(0.85f-light/7f, 0.15f), 1);
 
-            Vector4f c = getFogColor(camera, camera.getLastTickDelta(), (ClientWorld) world);
+            Vector4f c = getFogColor(camera, camera.getLastTickProgress(), (ClientWorld) world);
             float r3 = (1-caveGradiant) * r1 + caveGradiant * c.x;
             float g3 = (1-caveGradiant) * g1 + caveGradiant * c.y;
             float b3 = (1-caveGradiant) * b1 + caveGradiant * c.z;

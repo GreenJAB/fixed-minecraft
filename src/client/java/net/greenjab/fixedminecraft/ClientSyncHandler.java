@@ -15,6 +15,9 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.item.map.MapState;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /** Credit: Nettakrim, Squeek502, Bawnorton */
 public class ClientSyncHandler {
     public static void init() {
@@ -38,9 +41,14 @@ public class ClientSyncHandler {
     private static void mapBookSync(MapBookSyncPayload payload, ClientPlayNetworking.Context context) {
         if (payload.mapIDs().length > 0) {
             context.client().execute(() -> {
+                ArrayList<Integer> ints = new ArrayList<>();
+                for (int i = 0; i < payload.mapIDs().length;i++) {
+                    ints.add(payload.mapIDs()[i]);
+                }
                 MapBookStateManager.INSTANCE.putClientMapBookState(
                         payload.bookID(),
-                        new MapBookState(payload.mapIDs(), payload.players())
+
+                        new MapBookState(ints, payload.players())
                 );
             });
         }

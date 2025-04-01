@@ -1,8 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.CreakingHeartBlock;
 import net.minecraft.block.entity.CreakingHeartBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -78,10 +75,4 @@ public abstract class CreakingEntityMixin {
                 .add(EntityAttributes.FOLLOW_RANGE, 32.0)
                 .add(EntityAttributes.STEP_HEIGHT, 1.0625));
     }
-
-    @Inject(method = "canBeNameTagged", at = @At("HEAD"), cancellable = true)
-    private void nameTag(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
-    }
-
 }

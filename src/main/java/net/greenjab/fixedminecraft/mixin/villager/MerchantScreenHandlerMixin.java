@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
@@ -9,8 +10,6 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.entity.vehicle.AbstractMinecartEntity;
-import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
@@ -28,7 +27,6 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.village.Merchant;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,9 +34,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 
 @Mixin(MerchantScreenHandler.class)
@@ -84,8 +80,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
         if (entityHitResult != null) {
             if (entityHitResult.getEntity() instanceof VillagerEntity villager) {
                 VE = villager;
-                inventory = Inv(villager.getArmorItems());
-                level = villager.getVillagerData().getLevel();
+                inventory = Inv(FixedMinecraft.getArmor(villager));
+                level = villager.getVillagerData().level();
             }
         }
 

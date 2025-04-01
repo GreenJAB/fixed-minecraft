@@ -1,11 +1,11 @@
 [versions]
-loom = "1.9-SNAPSHOT"
-yamlang = "1.4.0"
-minecraft = "1.21.4"
-vineflower = "1.10.1"
+loom = "1.10-SNAPSHOT"
+yamlang = "1.4.1"
+minecraft = "1.21.5"
+vineflower = "1.11.1"
 fabric-loader = "0.16.10"
-fabric-api = "0.114.2+1.21.4"
-fabric-yarn = "1.21.4+build.8"
+fabric-api = "0.119.6+1.21.5"
+fabric-yarn = "1.21.5+build.1"
 
 [plugins]
 fabric-loom = { id = "fabric-loom", version.ref = "loom" }

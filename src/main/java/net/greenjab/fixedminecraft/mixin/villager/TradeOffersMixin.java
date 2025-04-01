@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
@@ -12,6 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import static net.minecraft.village.TradeOffers.PROFESSION_TO_LEVELED_TRADE;
 import static net.minecraft.village.TradeOffers.REBALANCED_PROFESSION_TO_LEVELED_TRADE;
 
@@ -34,7 +36,7 @@ public class TradeOffersMixin {
                         1,
                         12,
                         30,
-                        ImmutableMap.<VillagerType, Item>builder()
+                        ImmutableMap.<RegistryKey<VillagerType>, Item>builder()
                                 .put(VillagerType.PLAINS, Items.OAK_BOAT)
                                 .put(VillagerType.TAIGA, Items.SPRUCE_BOAT)
                                 .put(VillagerType.SNOW, Items.SPRUCE_BOAT)
@@ -54,5 +56,4 @@ public class TradeOffersMixin {
     private static TradeOffers.EnchantBookFactory FishingBook() {
         return new TradeOffers.EnchantBookFactory(30, 1, 3, ModTags.FISHING_TRADES);
     }
-
 }
