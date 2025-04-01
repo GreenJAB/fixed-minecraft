@@ -112,6 +112,7 @@
         "night.MobEntityMixin",
         "other.AdvancementMixin",
         "other.BlocksMixin",
+        "other.FlowerPotBlockMixin",
         "other.LootPoolMixin",
         "other.PlayerScreenHandlerMixin",
         "other.VineMixin",
