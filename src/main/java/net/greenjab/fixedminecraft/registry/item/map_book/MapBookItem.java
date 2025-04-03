@@ -426,7 +426,8 @@ public class MapBookItem extends Item {
     @Override
     public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
         super.onCraftByPlayer(stack, player);
-        mapBookSync((ServerPlayerEntity)player, stack);
+        if (player instanceof ServerPlayerEntity serverPlayerEntity)
+            mapBookSync(serverPlayerEntity, stack);
     }
 
     @Override
