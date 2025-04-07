@@ -49,8 +49,7 @@ public class TradeOffersMixin {
                 FishingBook()});
 
         PROFESSION_TO_LEVELED_TRADE.replace(VillagerProfession.ARMORER, REBALANCED_PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.ARMORER));
-        PROFESSION_TO_LEVELED_TRADE.replace(VillagerProfession.CARTOGRAPHER, REBALANCED_PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.CARTOGRAPHER));
-    }
+        }
 
     @Unique
     private static TradeOffers.EnchantBookFactory FishingBook() {
