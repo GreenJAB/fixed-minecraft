@@ -71,7 +71,7 @@
       "minecraft:disk_sand",
       "minecraft:disk_clay",
       "minecraft:disk_gravel",
-        "minecraft:ore_emerald"
+        "fixedminecraft:ore_emerald"
     ],
     [
       "minecraft:sculk_vein",

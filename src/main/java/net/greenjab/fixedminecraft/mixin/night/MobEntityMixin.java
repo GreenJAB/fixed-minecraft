@@ -20,7 +20,7 @@ public class MobEntityMixin {
                              CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
         if (LE instanceof HostileEntity HE) {
-            if (world.getLightLevel(LightType.SKY, HE.getBlockPos())>10 && world.getAmbientDarkness() < 5) {
+            if (world.getLightLevel(LightType.SKY, HE.getBlockPos())>10 && world.getAmbientDarkness() >= 5) {
                 HE.addCommandTag("night");
             }
         }
