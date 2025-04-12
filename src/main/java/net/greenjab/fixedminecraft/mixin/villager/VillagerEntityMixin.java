@@ -77,6 +77,11 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 MemoryModuleType.ROAR_TARGET, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
     }
 
+    @ModifyExpressionValue(method = "canSummonGolem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/VillagerEntity;hasRecentlySlept(J)Z"))
+    private boolean dontNeedSleep(boolean original) {
+        return true;
+    }
+
     @Redirect(method = "summonGolem", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I"))
     private int summon1GolemPerHostileMob(List<VillagerEntity> instance, @Local(argsOnly = true) int requiredCount) {
         if (instance.size()>=requiredCount) {
