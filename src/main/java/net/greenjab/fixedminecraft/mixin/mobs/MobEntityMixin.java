@@ -9,6 +9,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.conversion.EntityConversionContext;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
@@ -16,6 +17,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.SpiderEntity;
+import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
@@ -39,7 +41,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Mixin(MobEntity.class)
-public abstract class MobEntityMixin extends LivingEntity {
+public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity {
 
     protected MobEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -151,9 +153,7 @@ public abstract class MobEntityMixin extends LivingEntity {
         }
     }
 
-
     @Unique
-
     private static float gaussian(){
         return (float)(Math.tan(0.87433408*Math.PI*(Math.random()-0.5f))/10.0f)+0.5f;
     }
@@ -192,4 +192,13 @@ public abstract class MobEntityMixin extends LivingEntity {
     }
 
 
+    @Inject(method = "convertTo(Lnet/minecraft/entity/EntityType;Lnet/minecraft/entity/conversion/EntityConversionContext;Lnet/minecraft/entity/SpawnReason;Lnet/minecraft/entity/conversion/EntityConversionContext$Finalizer;)Lnet/minecraft/entity/mob/MobEntity;", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/entity/conversion/EntityConversionType;setUpNewEntity(Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/mob/MobEntity;Lnet/minecraft/entity/conversion/EntityConversionContext;)V"
+    ))
+    private void removeIronGolemTagOnConversion(EntityType<T> entityType, EntityConversionContext context, SpawnReason reason,
+                                                EntityConversionContext.Finalizer<T> finalizer, CallbackInfoReturnable<T> cir){
+        MobEntity ME = (MobEntity)(Object)this;
+        ME.removeCommandTag("iron_golem");
+    }
 }
