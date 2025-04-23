@@ -11,6 +11,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.mobs.EnchantedBookFactory;
 import net.minecraft.block.Blocks;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
@@ -21,6 +23,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.passive.MerchantEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +37,7 @@ import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -50,9 +54,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -269,6 +276,53 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
+
+        if (master) {
+            Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getWorld()
+                    .getRegistryManager()
+                    .getOrThrow(RegistryKeys.ENCHANTMENT)
+                    .iterateEntries(biomeEnchants.get(villagerData.getType()));
+            HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
+            optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
+            List<VillagerEntity> list = villagerEntity.getEntityWorld().getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(32), EntityPredicates.VALID_LIVING_ENTITY);
+            for (VillagerEntity villager2 : list) {
+                if (villager2 != villagerEntity) {
+                    if (villager2.getVillagerData().getProfession() == VillagerProfession.LIBRARIAN) {
+                        ItemStack eBook = Items.AIR.getDefaultStack();
+                        if (villager2.getOffers().size() >= 10) {
+                            if (villager2.getOffers().get(8).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                                eBook = villager2.getOffers().get(8).getSellItem();
+                            }
+                            else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                                eBook = villager2.getOffers().get(9).getSellItem();
+                            }
+                        }
+                        if (eBook.isOf(Items.ENCHANTED_BOOK)) {
+                            for (RegistryEntry<Enchantment> e : EnchantmentHelper.getEnchantments(eBook).getEnchantments()) {
+                                if (possibleEnchantCount.containsKey(e)) {
+                                    possibleEnchantCount.put(e, possibleEnchantCount.get(e) + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            possibleEnchantCount.replaceAll((e, v) -> 1 / v);
+            float max = 0;
+            for (float f : possibleEnchantCount.values()) max+=f;
+            float rand = villagerEntity.getWorld().random.nextFloat()*max;
+
+            if (max != 0) {
+                for (RegistryEntry<Enchantment> ee : possibleEnchantCount.keySet()) {
+                    rand -= possibleEnchantCount.get(ee);
+                    if (rand <= 0) {
+                        optional = Optional.ofNullable(ee);
+                        break;
+                    }
+                }
+            }
+        }
+
         int i = 0;
         while (i < 10) {
             i++;

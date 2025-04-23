@@ -1,6 +1,6 @@
 {
     "type": "minecraft:stonecutting",
-    "ingredient": "minecraft:birch_planks",
+    "ingredient": "minecraft:bamboo_planks",
     "result": {
         "id": "minecraft:bamboo_trapdoor",
         "count": 1
