@@ -45,19 +45,19 @@ public class ItemsMixin {
     @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice( from = @At(value = "FIELD",
                                                                                                                                                                                                   target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))
     private static Item throwableBrick(String id) {
-        return register("brick", BrickItem::new, new Item.Settings().maxCount(16));
+        return register("brick", BrickItem::new, new Item.Settings());
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                   target = "Lnet/minecraft/item/Items;ENCHANTED_BOOK:Lnet/minecraft/item/Item;")))
     private static Item throwableNetherBrick(String id) {
-        return register("nether_brick", BrickItem::new, new Item.Settings().maxCount(16));
+        return register("nether_brick", BrickItem::new, new Item.Settings());
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
                                   target = "Lnet/minecraft/item/Items;NETHER_BRICK:Lnet/minecraft/item/Item;")))
     private static Item throwableResinBrick(String id, Item.Settings settings) {
-        return register("resin_brick", BrickItem::new, new Item.Settings().maxCount(16).trimMaterial(ArmorTrimMaterials.RESIN));
+        return register("resin_brick", BrickItem::new, new Item.Settings().trimMaterial(ArmorTrimMaterials.RESIN));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

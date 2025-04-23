@@ -14,6 +14,7 @@
         "BackgroundRendererMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
+        "CreateWorldScreenMixin",
         "DragonEntityModelMixin",
         "ElderGuardianAppearanceParticleMixin",
         "EnchantmentScreenMixin",

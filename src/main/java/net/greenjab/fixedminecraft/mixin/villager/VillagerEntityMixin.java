@@ -49,6 +49,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -219,9 +221,52 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
     }
 
+    //@ModifyExpressionValue(method = "fillRecipes", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/featuretoggle/FeatureSet;contains(Lnet/minecraft/resource/featuretoggle/FeatureFlag;)Z"))
+    //private boolean ignoreFeatureFlag(boolean bool) { return false;}
+
+    /*@ModifyExpressionValue(method = "fillRecipes", at = @At(
+            value = "INVOKE",
+            target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"
+    ))
+    private Object newTrades(Object original,
+                             @Local VillagerData villagerData){
+        System.out.println("test1");
+        if (villagerData.profession() == VillagerProfession.LIBRARIAN) {
+            System.out.println("test2");
+            switch (villagerData.level()) {
+                case 1: System.out.println("test3");
+                    return new TradeOffers.Factory[]{
+                            new TradeOffers.BuyItemFactory(Items.PAPER, 24, 16, 2),
+                            new TradeOffers.BuyItemFactory(Items.BOOK, 4, 12, 2),
+                            new TradeOffers.SellItemFactory(Blocks.BOOKSHELF, 9, 1, 12, 1)
+                    };
+                case 2: return new TradeOffers.Factory[]{
+                        biomeBook(false, villagerData),
+                        new TradeOffers.SellItemFactory(Blocks.CHISELED_BOOKSHELF, 1, 1, 12, 5)
+                };
+                case 3: return new TradeOffers.Factory[]{
+                        new TradeOffers.BuyItemFactory(Items.INK_SAC, 5, 12, 20),
+                        new TradeOffers.SellItemFactory(Items.GLASS, 1, 4, 10),
+                        new TradeOffers.SellItemFactory(Items.CLOCK, 5, 1, 15),
+                        new TradeOffers.SellItemFactory(Items.COMPASS, 4, 1, 15),
+                        new TradeOffers.SellItemFactory(Items.LANTERN, 4, 1, 10)
+                };
+                case 4: return new TradeOffers.Factory[]{
+                        anyBook(),
+                        new TradeOffers.BuyItemFactory(Items.WRITABLE_BOOK, 2, 12, 30)
+                };
+                case 5: return new TradeOffers.Factory[]{
+                        biomeBook(true, villagerData),
+                        new TradeOffers.SellItemFactory(Items.NAME_TAG, 20, 1, 30)
+                };
+            }
+        }
+        return original;
+    }*/
+
     @ModifyVariable(method = "fillRecipes", at = @At("STORE"), ordinal = 0)
     private Int2ObjectMap<TradeOffers.Factory[]> newTrades(Int2ObjectMap<TradeOffers.Factory[]> iter, @Local VillagerData villagerData){
-        if (villagerData.profession() == VillagerProfession.LIBRARIAN) {
+        if (villagerData.profession().getIdAsString().contains(VillagerProfession.LIBRARIAN.getValue().toString())) {
             return new Int2ObjectOpenHashMap(ImmutableMap.builder()
                     .put(1,new TradeOffers.Factory[]{
                             new TradeOffers.BuyItemFactory(Items.PAPER, 24, 16, 2),
@@ -249,15 +294,15 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     @Unique
     private EnchantedBookFactory biomeBook(boolean master, VillagerData villagerData) {
-        Object2ObjectMap<VillagerType,
+        Object2ObjectMap<String,
                 TagKey<Enchantment>> biomeEnchants =  new Object2ObjectOpenHashMap(ImmutableMap.builder()
-                .put(VillagerType.DESERT, ModTags.DESERT_TRADES)
-                .put(VillagerType.JUNGLE, ModTags.JUNGLE_TRADES)
-                .put(VillagerType.PLAINS, ModTags.PLAINS_TRADES)
-                .put(VillagerType.SAVANNA, ModTags.SAVANNA_TRADES)
-                .put(VillagerType.SNOW, ModTags.SNOW_TRADES)
-                .put(VillagerType.SWAMP, ModTags.SWAMP_TRADES)
-                .put(VillagerType.TAIGA, ModTags.TAIGA_TRADES)
+                .put(VillagerType.DESERT.getValue().toString(), ModTags.DESERT_TRADES)
+                .put(VillagerType.JUNGLE.getValue().toString(), ModTags.JUNGLE_TRADES)
+                .put(VillagerType.PLAINS.getValue().toString(), ModTags.PLAINS_TRADES)
+                .put(VillagerType.SAVANNA.getValue().toString(), ModTags.SAVANNA_TRADES)
+                .put(VillagerType.SNOW.getValue().toString(), ModTags.SNOW_TRADES)
+                .put(VillagerType.SWAMP.getValue().toString(), ModTags.SWAMP_TRADES)
+                .put(VillagerType.TAIGA.getValue().toString(), ModTags.TAIGA_TRADES)
                 .build());
 
 
@@ -266,7 +311,54 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
-                .getRandomEntry(biomeEnchants.get(villagerData.type()), random);
+                .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
+
+        if (master) {
+            Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getWorld()
+                    .getRegistryManager()
+                    .getOrThrow(RegistryKeys.ENCHANTMENT)
+                    .iterateEntries(biomeEnchants.get(villagerData.type().getIdAsString()));
+            HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
+            optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
+            List<VillagerEntity> list = villagerEntity.getEntityWorld().getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(32), EntityPredicates.VALID_LIVING_ENTITY);
+            for (VillagerEntity villager2 : list) {
+                if (villager2 != villagerEntity) {
+                    if (villager2.getVillagerData().profession().getIdAsString().contains(VillagerProfession.LIBRARIAN.getValue().toString())) {
+                        ItemStack eBook = Items.AIR.getDefaultStack();
+                        if (villager2.getOffers().size() >= 10) {
+                            if (villager2.getOffers().get(8).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                                eBook = villager2.getOffers().get(8).getSellItem();
+                            }
+                            else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                                eBook = villager2.getOffers().get(9).getSellItem();
+                            }
+                        }
+                        if (eBook.isOf(Items.ENCHANTED_BOOK)) {
+                            for (RegistryEntry<Enchantment> e : EnchantmentHelper.getEnchantments(eBook).getEnchantments()) {
+                                if (possibleEnchantCount.containsKey(e)) {
+                                    possibleEnchantCount.put(e, possibleEnchantCount.get(e) + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            possibleEnchantCount.replaceAll((e, v) -> 1 / v);
+            float max = 0;
+            for (float f : possibleEnchantCount.values()) max+=f;
+            float rand = villagerEntity.getWorld().random.nextFloat()*max;
+
+            if (max != 0) {
+                for (RegistryEntry<Enchantment> ee : possibleEnchantCount.keySet()) {
+                    rand -= possibleEnchantCount.get(ee);
+                    if (rand <= 0) {
+                        optional = Optional.ofNullable(ee);
+                        break;
+                    }
+                }
+            }
+        }
+
         int i = 0;
         while (i < 10) {
             i++;
