@@ -9,6 +9,7 @@ import net.minecraft.client.render.MapRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.map.MapState;
+import org.joml.Matrix3x2fStack;
 
 /** Credit: Nettakrim */
 public class MapTile implements Drawable {
@@ -31,7 +32,7 @@ public class MapTile implements Drawable {
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         float mapScale = (float) Math.pow(2, mapState.scale);
         float offset = 64f * mapScale;
-        MatrixStack matrix = context.getMatrices();
+        /*MatrixStack matrix = context.getMatrices();
         context.getMatrices().push();
         matrix.translate(screen.x, screen.y, 1.0 / (mapState.scale + 1.0) + 1.0);
         matrix.scale(screen.scale, screen.scale, -1.0f);
@@ -41,6 +42,19 @@ public class MapTile implements Drawable {
         );
         matrix.scale(mapScale, mapScale, 1.0f);
         client.getMapRenderer().draw(mapRenderState, matrix, ((DrawContextAccessor)context).getVertexConsumers(), true, 15728880);
-        matrix.pop();
+        matrix.pop();*/
+
+        Matrix3x2fStack matrix = context.getMatrices();
+
+        context.getMatrices().pushMatrix();
+        matrix.translate((float) screen.x, (float) screen.y);
+        matrix.scale(screen.scale, screen.scale);
+        matrix.translate(
+                (float) (mapState.centerX - offset + screen.width / 2.0),
+                (float) (mapState.centerZ - offset + screen.height / 2.0));
+        matrix.scale(mapScale, mapScale);
+        context.drawMap(mapRenderState);
+        //client.getMapRenderer().draw(mapRenderState, matrix, ((DrawContextAccessor)context).getVertexConsumers(), true, 15728880);
+        matrix.popMatrix();
     }
 }

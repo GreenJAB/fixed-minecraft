@@ -9,17 +9,13 @@ import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.Fog;
 import net.minecraft.client.render.FogShape;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.CubicSampler;
 import net.minecraft.util.math.ColorHelper;
@@ -32,17 +28,19 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
 
-    @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 5.0f))
-    private static float lessLavaFogFireRes(float constant) { return 9f;}
+    @ModifyConstant(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", constant = @Constant(floatValue = 5.0f))
+    private float lessLavaFogFireRes(float constant) { return 9f;}
 
-    @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 1.0f))
-    private static float lessLavaFog(float constant, @Local Entity entity) {
+    @ModifyConstant(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", constant = @Constant(floatValue = 1.0f))
+    private float lessLavaFog(float constant,
+                              @Local Entity entity) {
         int i = 0;
         for (ItemStack item : FixedMinecraft.getArmor((PlayerEntity) entity)) {
             i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
@@ -50,13 +48,17 @@ public class BackgroundRendererMixin {
         return 2.5f + 0.25f*Math.min(2*i,25);
     }
 
-    @ModifyConstant(method = "applyFog", constant = @Constant(floatValue = 4.0f))
-    private static float moreSkyFog(float constant, @Local(ordinal = 0, argsOnly = true) float viewDistance) { return Math.min(64f, viewDistance/2);}
+    @ModifyConstant(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", constant = @Constant(floatValue = 4.0f))
+    private float moreSkyFog(float constant,
+                             @Local(ordinal = 0, argsOnly = true) float viewDistance) { return Math.min(64f, viewDistance / 2);}
 
-    @Redirect(method = "applyFog", at = @At(value = "NEW", target = "(FFLnet/minecraft/client/render/FogShape;FFFF)Lnet/minecraft/client/render/Fog;"))
-    private static Fog paleFog(float f, float g, FogShape fogShape, float r1, float g1, float b1, float k,
-                               @Local(argsOnly = true)Camera camera, @Local(ordinal = 0, argsOnly = true) float viewDistance, @Local(argsOnly = true)BackgroundRenderer.FogType fogType) {
-        if (fogType == BackgroundRenderer.FogType.FOG_TERRAIN) {
+    /*@Redirect(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/BackgroundRenderer;applyFog(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;Lnet/minecraft/client/render/FogShape;FFFF)V"))
+    private void paleFog(
+            BackgroundRenderer instance, ByteBuffer buffer, int i, Vector4f fogColor, FogShape fogShape, float fogStart, float fogEnd,
+            float skyEnd, float cloudEnd,
+            @Local(argsOnly = true) Camera camera,
+            @Local(ordinal = 0, argsOnly = true) float viewDistance,
+            @Local BackgroundRenderer.FogData fogType) {
             float palefog = FixedMinecraftClient.paleGardenFog;
             float palefog2 = palefog*palefog;
             World world = camera.getFocusedEntity().getWorld();
@@ -64,12 +66,13 @@ public class BackgroundRendererMixin {
             float caveGradiant = Math.min(Math.max(0.85f-light/7f, 0.15f), 1);
 
             Vector4f c = getFogColor(camera, camera.getLastTickProgress(), (ClientWorld) world);
-            float r3 = (1-caveGradiant) * r1 + caveGradiant * c.x;
-            float g3 = (1-caveGradiant) * g1 + caveGradiant * c.y;
-            float b3 = (1-caveGradiant) * b1 + caveGradiant * c.z;
-            float a3 = (1-caveGradiant) * k + caveGradiant * c.w;
+            float r3 = (1-caveGradiant) * fogColor.x + caveGradiant * c.x;
+            float g3 = (1-caveGradiant) * fogColor.y + caveGradiant * c.y;
+            float b3 = (1-caveGradiant) * fogColor.z + caveGradiant * c.z;
+            float a3 = (1-caveGradiant) * fogColor.w + caveGradiant * c.w;
 
-            Fog fog = new Fog( 3+(f-3) *(1-palefog2)/(75*palefog2+1), 16 + (g - 16) * (1-palefog2)/(25*palefog2+1), FogShape.SPHERE, r3, g3, b3, a3);
+
+        BackgroundRenderer.FogData fog = new BackgroundRenderer.FogData( 3+(f-3) *(1-palefog2)/(75*palefog2+1), 16 + (g - 16) * (1-palefog2)/(25*palefog2+1), FogShape.SPHERE, r3, g3, b3, a3);
             if (world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN) ) {
                 FixedMinecraftClient.paleGardenFog = Math.min(palefog + 0.003f, 1);
                 return fog;
@@ -80,10 +83,116 @@ public class BackgroundRendererMixin {
                     return fog;
                 }
             }
+
+            BackgroundRenderer backgroundRenderer = (BackgroundRenderer)(Object)this;
+
+        backgroundRenderer.applyFog(mappedView.data(), 0, fogColor, fogData.fogShape, fogData.fogStart, fogData.fogEnd, fogData.skyEnd, fogData.cloudEnd);
+
+    }*/
+
+    /*//TODO test
+    @ModifyVariable(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/BackgroundRenderer;applyFog(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;Lnet/minecraft/client/render/FogShape;FFFF)V"
+    ))
+    private BackgroundRenderer.FogData i(BackgroundRenderer.FogData fog, @Local(argsOnly = true) Camera camera,
+                                         @Local(argsOnly = true) Vector4f fogColor) {
+            float palefog = FixedMinecraftClient.paleGardenFog;
+            float palefog2 = palefog*palefog;
+            World world = camera.getFocusedEntity().getWorld();
+
+            if (world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN) ) {
+                FixedMinecraftClient.paleGardenFog = Math.min(palefog + 0.003f, 1);
+
+                fog.fogStart = 3+(fog.fogStart-3) *(1-palefog2)/(75*palefog2+1);
+                fog.fogEnd = 16 + (fog.fogEnd - 16) * (1-palefog2)/(25*palefog2+1);
+                fog.fogShape = FogShape.SPHERE;
+
+            } else {
+                FixedMinecraftClient.paleGardenFog = Math.max(palefog - 0.005f, 0);
+
+                if (palefog > 0) {
+                    fog.fogStart = 3+(fog.fogStart-3) *(1-palefog2)/(75*palefog2+1);
+                    fog.fogEnd = 16 + (fog.fogEnd - 16) * (1-palefog2)/(25*palefog2+1);
+                    fog.fogShape = FogShape.SPHERE;
+                }
+            }
+
+            return fog;
+    }
+
+    @ModifyVariable(
+            method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/BackgroundRenderer;applyFog(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;Lnet/minecraft/client/render/FogShape;FFFF)V"
+    ), argsOnly = true
+    )
+    private Vector4f fogColor(Vector4f fogColor, @Local(argsOnly = true) Camera camera) {
+
+        float palefog = FixedMinecraftClient.paleGardenFog;
+        World world = camera.getFocusedEntity().getWorld();
+        int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
+        float caveGradiant = Math.min(Math.max(0.85f-light/7f, 0.15f), 1);
+        Vector4f c = getFogColor(camera, camera.getLastTickProgress(), (ClientWorld) world);
+        float r3 = (1-caveGradiant) * fogColor.x + caveGradiant * c.x;
+        float g3 = (1-caveGradiant) * fogColor.y + caveGradiant * c.y;
+        float b3 = (1-caveGradiant) * fogColor.z + caveGradiant * c.z;
+        float a3 = (1-caveGradiant) * fogColor.w + caveGradiant * c.w;
+
+        if (world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN) ) {
+            FixedMinecraftClient.paleGardenFog = Math.min(palefog + 0.003f, 1);
+
+            return new Vector4f(r3, g3, b3, a3);
+
+        } else {
+            FixedMinecraftClient.paleGardenFog = Math.max(palefog - 0.005f, 0);
+
+            if (palefog > 0) {
+                return new Vector4f(r3, g3, b3, a3);
+            }
         }
 
-        return  new Fog(f, g, fogShape, r1, g1, b1, k);
+        return fogColor;
+    }*/
+
+    @ModifyArgs(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/client/render/BackgroundRenderer;applyFog(Ljava/nio/ByteBuffer;ILorg/joml/Vector4f;Lnet/minecraft/client/render/FogShape;FFFF)V"
+    ))
+    private void i(Args args,
+                   @Local(argsOnly = true) Camera camera,
+                   @Local(argsOnly = true) Vector4f fogColor) {
+        float palefog = FixedMinecraftClient.paleGardenFog;
+        World world = camera.getFocusedEntity().getWorld();
+
+        //0 ByteBuffer buffer, 1 int i, 2 Vector4f fogColor, 3 FogShape fogShape, 4 float fogStart, 5 float fogEnd, 6 float skyEnd, 7 float cloudEnd
+        boolean inPale = world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN);
+        if (inPale) {
+            FixedMinecraftClient.paleGardenFog = Math.min(palefog + 0.003f, 1);
+        } else {
+            FixedMinecraftClient.paleGardenFog = Math.max(palefog - 0.005f, 0);
+        }
+        if (inPale || palefog > 0) {
+            float palefog2 = palefog*palefog;
+            int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
+            float caveGradiant = Math.min(Math.max(0.85f-light/7f, 0.15f), 1);
+            Vector4f c = getFogColor(camera, camera.getLastTickProgress(), (ClientWorld) world);
+            float r3 = (1-caveGradiant) * fogColor.x + caveGradiant * c.x;
+            float g3 = (1-caveGradiant) * fogColor.y + caveGradiant * c.y;
+            float b3 = (1-caveGradiant) * fogColor.z + caveGradiant * c.z;
+            float a3 = (1-caveGradiant) * fogColor.w + caveGradiant * c.w;
+
+            float fogStart = args.get(4);
+            float fogEnd = args.get(5);
+
+            args.set(2, new Vector4f(r3, g3, b3, a3));
+            args.set(3, FogShape.SPHERE);
+            args.set(4, 3+(fogStart-3) *(1-palefog2)/(75*palefog2+1));
+            args.set(5, 16 + (fogEnd - 16) * (1-palefog2)/(25*palefog2+1));
+
+        }
     }
+
 
     @Unique
     private static Vector4f getFogColor(Camera camera, float tickDelta, ClientWorld world) {

@@ -51,7 +51,7 @@ public class GlintRenderLayer extends RenderLayer{
                 1536,
                 RenderPipelines.GLINT,
                 RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texture(new RenderPhase.Texture(res, false))
                         .texturing(GLINT_TEXTURING)
                         .build(false)
         );
@@ -65,7 +65,7 @@ public class GlintRenderLayer extends RenderLayer{
                 1536,
                 RenderPipelines.GLINT,
                 RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texture(new RenderPhase.Texture(res, false))
                         .texturing(ENTITY_GLINT_TEXTURING)
                         .build(false)
         );
@@ -79,7 +79,7 @@ public class GlintRenderLayer extends RenderLayer{
                 1536,
                 RenderPipelines.GLINT,
                 RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                        .texture(new RenderPhase.Texture(res, false))
                         .texturing(ARMOR_ENTITY_GLINT_TEXTURING)
                         .layering(VIEW_OFFSET_Z_LAYERING)
                         .build(false));
@@ -89,7 +89,7 @@ public class GlintRenderLayer extends RenderLayer{
         final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_item.png");
 
         return RenderLayer.of("glint_translucent", 1536, RenderPipelines.GLINT,RenderLayer.MultiPhaseParameters.builder()
-                .texture(new RenderPhase.Texture(res, TriState.DEFAULT, false))
+                .texture(new RenderPhase.Texture(res, false))
                 .texturing(GLINT_TEXTURING)
                 .target(ITEM_ENTITY_TARGET)
                 .build(false));

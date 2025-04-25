@@ -30,8 +30,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.joml.Matrix3x2fStack;
 import org.joml.Matrix4f;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -155,31 +157,16 @@ public class MapBookScreen extends Screen {
         String text = (int)pos.getX() + ", " + (int)pos.getY();
         float o = textRenderer.getWidth(text);
         Objects.requireNonNull(textRenderer);
-        MatrixStack matrix = context.getMatrices();
-        matrix.push();
-
-        matrix.translate(width / 2.0, height -60.0, 20.0);
-
-        matrix.translate(-o / 2f, 8.0f, 0.1f);
-
-        textRenderer.draw(
-                text,
-                0.0f,
-                0.0f,
-                -1,
-                false,
-                matrix.peek().getPositionMatrix(),
-                ((DrawContextAccessor)context).getVertexConsumers(),
-                TextLayerType.NORMAL,
-                Integer.MIN_VALUE,
-                LightmapTextureManager.MAX_LIGHT_COORDINATE
-        );
-        matrix.pop();
+        Matrix3x2fStack matrix = context.getMatrices();
+        matrix.pushMatrix();
+        context.goTopLayer();
+        context.drawText(textRenderer, text, (int)((width / 2.0f) -o / 2f), (int)(height -60.0f + 8f), 16777215, true);
+        matrix.popMatrix();
 
     }
 
     private void renderPlayerIcon(DrawContext context, MapBookPlayer player, boolean thisPlayer) {
-        float x = (float) player.x;
+        /*float x = (float) player.x;
         float z = (float) player.z;
         float rotation = player.yaw;
         MatrixStack matrix = context.getMatrices();
@@ -239,7 +226,7 @@ public class MapBookScreen extends Screen {
                 Integer.MIN_VALUE,
                 LightmapTextureManager.MAX_LIGHT_COORDINATE
         );
-        matrix.pop();
+        matrix.pop();*/
     }
 
     private void renderIcons(DrawContext context) {
@@ -252,7 +239,7 @@ public class MapBookScreen extends Screen {
             if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
         }
 
-        for (MapStateData mapStateData : getMapStates(stack, client.world)) {
+        /*for (MapStateData mapStateData : getMapStates(stack, client.world)) {
             double render = 0.0;
             if (client.world.getDimensionEntry().getIdAsString().contains(mapStateData.mapState.dimension.getValue().toString()))
                 render = 1.0;
@@ -331,7 +318,7 @@ public class MapBookScreen extends Screen {
                     }
                 }
             }
-        }
+        }*/
     }
 
 

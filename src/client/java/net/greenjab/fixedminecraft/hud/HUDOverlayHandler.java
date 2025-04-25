@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.hud;
 
 import net.greenjab.fixedminecraft.util.IntPoint;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.HungerManager;
@@ -68,7 +69,7 @@ public class HUDOverlayHandler
                 u = 2f * iconSize;
             else if (effectiveSaturationOfBar > .25)
                 u = 1f * iconSize;
-            context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
         }
 
     }

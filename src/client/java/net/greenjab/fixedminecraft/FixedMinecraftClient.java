@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.joml.Matrix3x2fStack;
 
 import java.util.List;
 
@@ -60,11 +61,10 @@ public class FixedMinecraftClient implements ClientModInitializer {
             );
         });
     }
-
     public void renderCrosshair(DrawContext context,
                                 @SuppressWarnings("unused") RenderTickCounter tickDelta) {
-        MatrixStack matrices = context.getMatrices();
-        matrices.push();
+        Matrix3x2fStack matrices = context.getMatrices();
+        matrices.pushMatrix();
             MinecraftClient client = MinecraftClient.getInstance();
 
             ItemStack book = PlayerLookHelper.getLookingAtBook(null);
@@ -75,7 +75,7 @@ public class FixedMinecraftClient implements ClientModInitializer {
                 Text text = display.get(i);
                 context.drawText(client.textRenderer, text, (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2), (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)), book.getItem() == Items.ENCHANTED_BOOK ? 16777045 : 16777215, true);
             }
-        matrices.pop();
+        matrices.popMatrix();
     }
     private static EquipmentModel createHumanoidAndHorseModel(String id) {
         return EquipmentModel.builder()
