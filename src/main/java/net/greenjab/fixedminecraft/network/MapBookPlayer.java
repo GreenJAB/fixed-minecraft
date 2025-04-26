@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 public class MapBookPlayer {
     public String name = "";
     public double x = 0.0;
+    public double y = 0.0;
     public double z = 0.0;
     public float yaw = 0.0f;
     public String dimension = "";
@@ -20,6 +21,7 @@ public class MapBookPlayer {
             /* method_56812 */ instance -> instance.group(
                             Codec.STRING.fieldOf("name").forGetter(mapPlayer -> mapPlayer.name),
                             Codec.DOUBLE.fieldOf("x").forGetter(mapPlayer -> mapPlayer.x),
+                            Codec.DOUBLE.fieldOf("y").forGetter(mapPlayer -> mapPlayer.y),
                             Codec.DOUBLE.fieldOf("z").forGetter(mapPlayer -> mapPlayer.z),
                             Codec.FLOAT.fieldOf("yaw").forGetter(mapPlayer -> mapPlayer.yaw),
                             Codec.STRING.fieldOf("dimension").forGetter(mapPlayer -> mapPlayer.dimension)
@@ -30,9 +32,10 @@ public class MapBookPlayer {
     public MapBookPlayer(){
     }
 
-    public MapBookPlayer(String name, double x, double z, float yaw, String dimension){
+    public MapBookPlayer(String name, double x, double y, double z, float yaw, String dimension){
         this.name = name;
         this.x = x;
+        this.y = y;
         this.z = z;
         this.yaw = yaw;
         this.dimension = dimension;
@@ -41,6 +44,7 @@ public class MapBookPlayer {
     public void setPlayer(PlayerEntity player) {
         this.name = player.getName().getLiteralString();
         this.x = player.getX();
+        this.y = player.getY();
         this.z = player.getZ();
         this.yaw = player.getYaw();
         this.dimension = player.getWorld().getDimension().toString();
@@ -49,6 +53,7 @@ public class MapBookPlayer {
     void toPacket(PacketByteBuf buf) {
         buf.writeString(name);
         buf.writeDouble(x);
+        buf.writeDouble(y);
         buf.writeDouble(z);
         buf.writeFloat(yaw);
         buf.writeString(dimension);
@@ -58,6 +63,7 @@ public class MapBookPlayer {
         MapBookPlayer p = new MapBookPlayer();
         p.name = buf.readString();
         p.x = buf.readDouble();
+        p.y = buf.readDouble();
         p.z = buf.readDouble();
         p.yaw = buf.readFloat();
         p.dimension = buf.readString();

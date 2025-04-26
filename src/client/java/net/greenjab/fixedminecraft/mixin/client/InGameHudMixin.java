@@ -20,4 +20,6 @@ public class InGameHudMixin {
      private void renderFoodPost(DrawContext context, CallbackInfo info) {
          HUDOverlayHandler.onRender(context);
      }
+
+
 }

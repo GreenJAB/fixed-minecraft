@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.map_book;
 
+import com.mojang.blaze3d.textures.GpuTexture;
 import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
@@ -7,15 +8,20 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.BakedGlyph;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.font.TextRenderer.TextLayerType;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.render.state.TextRenderState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.LightmapTextureManager;
+import net.minecraft.client.render.MapRenderState;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
@@ -25,7 +31,11 @@ import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
 import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
@@ -43,8 +53,8 @@ import java.util.Optional;
 /** Credit: Nettakrim */
 public class MapBookScreen extends Screen {
     ItemStack item;
-    public double x = 0.0;
-    public double y = 0.0;
+    public float x = 0.0f;
+    public float y = 0.0f;
     public float scale = 1.0f;
     private float targetScale = 0.5f;
 
@@ -55,12 +65,15 @@ public class MapBookScreen extends Screen {
 
     @Override public void init() {
         if (client != null && client.player != null) {
-            x = -client.player.getX();
-            y = -client.player.getZ();
+            x = (float) -client.player.getX();
+            y = (float) -client.player.getZ();
         }
-        setScale(targetScale, width/2.0, height/2.0);
-        for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
-            addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
+        setScale(targetScale, width/2.0f, height/2.0f);
+
+        for (int i = 0; i < 5;i++) {
+            for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
+                if (mapStateData.mapState.scale == i) addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
+            }
         }
 
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> { this.close();})
@@ -124,6 +137,7 @@ public class MapBookScreen extends Screen {
         }
 
         if (id != -1) {
+            renderIcons(context);
             MapBookPlayer p = new MapBookPlayer();
             p.setPlayer(thisPlayer);
             ArrayList<MapBookPlayer> m = MapBookStateManager.INSTANCE.getClientMapBookState(id).players;
@@ -131,16 +145,15 @@ public class MapBookScreen extends Screen {
                 try {
                     for (MapBookPlayer player : m) {
                         if (player.dimension.contains(p.dimension)) {
-                            if (!player.name.contains(p.name) ) {
-                                renderPlayerIcon(context, player, false);
+                            if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
+                                renderPlayerIcon(context, player);
                             }
                         }
                     }
                 } catch (ConcurrentModificationException ignored) {
                 }
             }
-            renderPlayerIcon(context, p, true);
-            renderIcons(context);
+            renderPlayerIcon(context, p);
             renderPosition(context, mouseX, mouseY);
         }
     }
@@ -155,170 +168,134 @@ public class MapBookScreen extends Screen {
 
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         String text = (int)pos.getX() + ", " + (int)pos.getY();
-        float o = textRenderer.getWidth(text);
+        int o = textRenderer.getWidth(text);
         Objects.requireNonNull(textRenderer);
         Matrix3x2fStack matrix = context.getMatrices();
         matrix.pushMatrix();
+        matrix.translate((int)((width / 2.0f) -o / 2f), (int)(height -60.0f + 8f));
         context.goTopLayer();
-        context.drawText(textRenderer, text, (int)((width / 2.0f) -o / 2f), (int)(height -60.0f + 8f), 16777215, true);
+        context.popLayer();
+        context.fill(- 1, - 1, o, 9 , (new Color(50, 50, 50, 150)).hashCode());
+        context.goUpLayer();
+        context.drawText(textRenderer, text, 0, 0, 16777215, true);
         matrix.popMatrix();
 
     }
 
-    private void renderPlayerIcon(DrawContext context, MapBookPlayer player, boolean thisPlayer) {
-        /*float x = (float) player.x;
+    private void renderPlayerIcon(DrawContext context, MapBookPlayer player) {
+
+        MinecraftClient minecraftClient = MinecraftClient.getInstance();
+        float x = (float) player.x;
         float z = (float) player.z;
         float rotation = player.yaw;
-        MatrixStack matrix = context.getMatrices();
+        Matrix3x2fStack matrix = context.getMatrices();
 
-        matrix.push();
-        matrix.translate(this.x, this.y, 0.0);
-        matrix.scale(this.scale, this.scale, 1.0f);
-        matrix.translate(x + width/ 2.0, z + height / 2.0, 0.0);
-        matrix.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rotation));
-        matrix.scale(8.0f, 8.0f, -3.0f);
-        matrix.translate(0f, 0f, thisPlayer?-12.0f:-11.0f);
-        matrix.scale(1f / this.scale, 1f / this.scale, 1.0f);
+        matrix.pushMatrix();
+        matrix.translate(this.x, this.y);
+        matrix.scale(this.scale, this.scale);
+        matrix.translate(x + width/ 2.0f, z + height / 2.0f);
+        matrix.rotate((float) (rotation * Math.PI/180.0f));
+        matrix.scale(8.0f, 8.0f);
+        matrix.translate(0f, 0f);
+        matrix.scale(1f / this.scale, 1f / this.scale);
         Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
                 new MapDecoration(
                         MapDecorationTypes.PLAYER,
-                        (byte) 0,
-                        (byte) 0,
-                        (byte) 0,
-                        Optional.empty()
+                        (byte) 0, (byte) 0, (byte) 0,Optional.empty()
                 )
         );
-        float g = sprite.getMinU();
-        float h = sprite.getMinV();
-        float l = sprite.getMaxU();
-        float m = sprite.getMaxV();
-        Matrix4f matrix4f2 = matrix.peek().getPositionMatrix();
-        VertexConsumer vertexConsumer2 = ((DrawContextAccessor)context).getVertexConsumers().getBuffer(RenderLayer.getText(sprite.getAtlasId()));
-        vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(g, h).light(15728880);
-        vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(l, h).light(15728880);
-        vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(l, m).light(15728880);
-        vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m).light(15728880);
-        matrix.pop();
 
-        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        context.goUpLayer();
+        context.goUpLayer();
+        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+        matrix.popMatrix();
+
+        TextRenderer textRenderer = minecraftClient.textRenderer;
         String text = player.name;
-        float o = textRenderer.getWidth(text);
-        Objects.requireNonNull(textRenderer);
-        matrix.push();
+        int o = textRenderer.getWidth(text);
+        matrix.pushMatrix();
 
-        matrix.translate(this.x, this.y, 15.0);
-        matrix.scale(this.scale, this.scale, 1.0f);
+        matrix.translate(this.x, this.y);
+        matrix.scale(this.scale, this.scale);
+        matrix.translate(x + width / 2.0f, z + height / 2.0f);
+        matrix.scale(1 / this.scale, 1 / this.scale);
+        matrix.translate(-o / 2f, 8.0f);
 
-        matrix.translate(x + width / 2.0, z + height / 2.0, 0.0);
+        context.goUpLayer();
+        context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
+        context.goUpLayer();
+        context.drawText(textRenderer, text, 0, 0, -1, true);
+        matrix.popMatrix();
 
-        matrix.scale(1 / this.scale, 1 / this.scale, 1.0f);
-        matrix.translate(-o / 2f, 8.0f, thisPlayer?12.0f:11.0f);
-
-        textRenderer.draw(
-                text,
-                0.0f,
-                0.0f,
-                -1,
-                false,
-                matrix.peek().getPositionMatrix(),
-                ((DrawContextAccessor) context).getVertexConsumers(),
-                TextLayerType.NORMAL,
-                Integer.MIN_VALUE,
-                LightmapTextureManager.MAX_LIGHT_COORDINATE
-        );
-        matrix.pop();*/
     }
 
     private void renderIcons(DrawContext context) {
-        int k = 0;
-
-        int light = LightmapTextureManager.MAX_LIGHT_COORDINATE;
 
         ItemStack stack = client.player.getMainHandStack();
         if (stack != null) {
             if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
         }
 
-        /*for (MapStateData mapStateData : getMapStates(stack, client.world)) {
-            double render = 0.0;
+        for (MapStateData mapStateData : getMapStates(stack, client.world)) {
+            float render = 0.0f;
             if (client.world.getDimensionEntry().getIdAsString().contains(mapStateData.mapState.dimension.getValue().toString()))
-                render = 1.0;
+                render = 1.0f;
             if (client.world.getDimensionEntry().getIdAsString().contains("the_nether") && mapStateData.mapState.dimension.getValue().toString().contains("overworld"))
-                render = 1/8.0;
+                render = 1/8.0f;
             if (render>0) {
                 Iterator<MapDecoration>  var11 = mapStateData.mapState.getDecorations().iterator();
-                MatrixStack matrix = context.getMatrices();
+                Matrix3x2fStack matrix = context.getMatrices();
                 while (var11.hasNext()) {
                     MapDecoration mapIcon = var11.next();
                     if (!mapIcon.type().getIdAsString().contains("player")) {
-                        matrix.push();
-                        matrix.translate(this.x, this.y, 0.0);
-                        matrix.scale(this.scale, this.scale, 1.0f);
+                        matrix.pushMatrix();
+                        matrix.translate(this.x, this.y);
+                        matrix.scale(this.scale, this.scale);
                         float mapScale = (float) Math.pow(2, mapStateData.mapState.scale);
                         float offset = 64f * mapScale;
-                        double x = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
-                        double z = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
-                        matrix.translate(x + width / 2.0, z + height / 2.0, 0.0);
-                        matrix.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(180F));
-                        matrix.scale(8.0f, 8.0f, -3.0f);
-                        matrix.translate(0f, 0f, -10.0f);
-                        matrix.scale(1f / this.scale, 1f / this.scale, 1.0f);
+                        float x = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
+                        float z = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
+                        matrix.translate(x + width / 2.0f, z + height / 2.0f);
+                        matrix.rotate((float) Math.PI);
+                        matrix.scale(8.0f, 8.0f);
+                        matrix.translate(0f, 0f);
+                        matrix.scale(1f / this.scale, 1f / this.scale);
                         Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
                                 new MapDecoration(
                                         mapIcon.type(),
-                                        (byte) 0,
-                                        (byte) 0,
-                                        (byte) 0,
-                                        Optional.empty()
+                                        (byte) 0,(byte) 0,(byte) 0,Optional.empty()
                                 )
                         );
-                        float g = sprite.getMinU();
-                        float h = sprite.getMinV();
-                        float l = sprite.getMaxU();
-                        float m = sprite.getMaxV();
-                        Matrix4f matrix4f2 = matrix.peek().getPositionMatrix();
-                        VertexConsumer vertexConsumer2 =
-                                ((DrawContextAccessor)context).getVertexConsumers().getBuffer(RenderLayer.getText(sprite.getAtlasId()));
-                        vertexConsumer2.vertex(matrix4f2, -1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(g, h).light(15728880);
-                        vertexConsumer2.vertex(matrix4f2, 1.0f, 1.0f, -0.1f).color(255, 255, 255, 255).texture(l, h).light(15728880);
-                        vertexConsumer2.vertex(matrix4f2, 1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(l, m).light(15728880);
-                        vertexConsumer2.vertex(matrix4f2, -1.0f, -1.0f, -0.1f).color(255, 255, 255, 255).texture(g, m).light(15728880);
-                        matrix.pop();
-
+                        context.goUpLayer();
+                        context.goUpLayer();
+                        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+                        matrix.popMatrix();
 
                         if (mapIcon.name().isPresent()) {
+
                             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                             Text text = mapIcon.name().get();
-                            float o = textRenderer.getWidth(text);
-                            Objects.requireNonNull(textRenderer);
-                            matrix.push();
-                            matrix.translate(this.x, this.y, 11.0);
-                            matrix.scale(this.scale, this.scale, 1.0f);
-                            double mapx = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
-                            double mapz = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
-                            matrix.translate(mapx + width / 2.0, mapz + height / 2.0, 0.0);
-                            matrix.scale(1 / this.scale, 1 / this.scale, 1.0f);
-                            matrix.translate(-o / 2f, 8.0f, 0.1f);
+                            int o = textRenderer.getWidth(text);
+                            matrix.pushMatrix();
 
-                            textRenderer.draw(
-                                    text,
-                                    0.0f,
-                                    0.0f,
-                                    -1,
-                                    false,
-                                    matrix.peek().getPositionMatrix(),
-                                    ((DrawContextAccessor) context).getVertexConsumers(),
-                                    TextLayerType.NORMAL,
-                                    Integer.MIN_VALUE,
-                                    light
-                            );
-                            matrix.pop();
+                            matrix.translate(this.x, this.y);
+                            matrix.scale(this.scale, this.scale);
+                            float mapx = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
+                            float mapz = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
+                            matrix.translate(mapx + width / 2.0f, mapz + height / 2.0f);
+                            matrix.scale(1 / this.scale, 1 / this.scale);
+                            matrix.translate(-o / 2f, 8.0f);
+
+                            context.goUpLayer();
+                            context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
+                            context.goUpLayer();
+                            context.drawText(textRenderer, text, 0, 0, -1, true);
+                            matrix.popMatrix();
                         }
-                        ++k;
                     }
                 }
             }
-        }*/
+        }
     }
 
 
@@ -349,11 +326,11 @@ public class MapBookScreen extends Screen {
         return -1;
     }
 
-    private void setScale(float newScale, double mouseX, double mouseY) {
-        double offsetX = x-mouseX;
-        double offsetY = y-mouseY;
+    private void setScale(float newScale, float mouseX, float mouseY) {
+        float offsetX = x-mouseX;
+        float offsetY = y-mouseY;
 
-        double scaleChange = newScale/scale;
+        float scaleChange = newScale/scale;
 
         x = (scaleChange * offsetX)+mouseX;
         y = (scaleChange * offsetY)+mouseY;
