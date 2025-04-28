@@ -16,6 +16,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.render.state.TextRenderState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.LightmapTextureManager;
 import net.minecraft.client.render.MapRenderState;
 import net.minecraft.client.render.RenderLayer;
@@ -30,10 +31,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -70,10 +73,8 @@ public class MapBookScreen extends Screen {
         }
         setScale(targetScale, width/2.0f, height/2.0f);
 
-        for (int i = 0; i < 5;i++) {
-            for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
-                if (mapStateData.mapState.scale == i) addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
-            }
+        for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
+                addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
         }
 
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> { this.close();})
@@ -146,14 +147,14 @@ public class MapBookScreen extends Screen {
                     for (MapBookPlayer player : m) {
                         if (player.dimension.contains(p.dimension)) {
                             if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
-                                renderPlayerIcon(context, player);
+                                renderPlayerIcon(context, player, false);
                             }
                         }
                     }
                 } catch (ConcurrentModificationException ignored) {
                 }
             }
-            renderPlayerIcon(context, p);
+            renderPlayerIcon(context, p, true);
             renderPosition(context, mouseX, mouseY);
         }
     }
@@ -182,7 +183,7 @@ public class MapBookScreen extends Screen {
 
     }
 
-    private void renderPlayerIcon(DrawContext context, MapBookPlayer player) {
+    private void renderPlayerIcon(DrawContext context, MapBookPlayer player, boolean thisPlayer) {
 
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         float x = (float) player.x;
@@ -207,7 +208,24 @@ public class MapBookScreen extends Screen {
 
         context.goUpLayer();
         context.goUpLayer();
-        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+
+        if (thisPlayer) {
+            context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+        } else {
+            int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
+            for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
+                if (Objects.equals(playerListEntry.getProfile().getName(), player.name)) {
+                    Team team = playerListEntry.getScoreboardTeam();
+                    if (team != null) {
+                        Formatting formatting = team.getColor();
+                        if (formatting.isColor()) {
+                            color = (new Color(formatting.getColorValue().intValue()).hashCode());
+                        }
+                    }
+                }
+            }
+            context.drawTexturedQuad(RenderPipelines.GUI_TEXTURED, sprite.getAtlasId(), -1, 1, -1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV(), color);
+        }
         matrix.popMatrix();
 
         TextRenderer textRenderer = minecraftClient.textRenderer;

@@ -40,7 +40,7 @@ public class ItemRegistry {
     public static final Item DRAGON_FIREWORK_ROCKET = register(
             "dragon_firework_rocket", FireworkRocketItem::new, new Item.Settings().component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of()))
     );
-    public static final Item MAP_BOOK = register("map_book", MapBookItem::new, new Item.Settings().maxCount(1));
+    public static final Item MAP_BOOK = register("map_book", MapBookItem::new, new Item.Settings().maxCount(16));
     public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache());
 
     public static final Item CHAINMAIL_HORSE_ARMOR = register(

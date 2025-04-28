@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "harness",
+  "key": {
+    "#": "minecraft:red_wool",
+    "G": "minecraft:glass",
+    "L": "minecraft:leather",
+    "S": "minecraft:saddle",
+    "W": "minecraft:nether_wart"
+  },
+  "pattern": [
+    "LSL",
+    "G#G",
+    " W "
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:red_harness"
+  }
+}

@@ -5,6 +5,8 @@ import net.greenjab.fixedminecraft.hud.HUDOverlayHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,11 +19,11 @@ public class InGameHudMixin {
              target = "Lnet/minecraft/client/world/ClientWaypointHandler;hasWaypoint()Z"
      ))
      private boolean renderFoodPost(boolean original) {
-         MinecraftClient client = MinecraftClient.getInstance();
-         ItemStack stack = client.player.getMainHandStack();
-         if (stack != null) {
-             if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
-         }
-         return original || stack.getItem() instanceof MapBookItem;
+         ClientPlayerEntity player = MinecraftClient.getInstance().player;
+         return original ||
+                player.getMainHandStack().getItem() instanceof MapBookItem ||
+                player.getOffHandStack().getItem() instanceof MapBookItem ||
+                player.getMainHandStack().getItem() instanceof FilledMapItem ||
+                player.getOffHandStack().getItem() instanceof FilledMapItem;
      }
 }

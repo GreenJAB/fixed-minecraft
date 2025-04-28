@@ -11,6 +11,8 @@ accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (L
 accessible class net/minecraft/screen/slot/ArmorSlot
 accessible class net/minecraft/client/render/BackgroundRenderer$FogData
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
+accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIIIFFFFI)V
+
 
 
 ## Classes

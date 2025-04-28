@@ -12,14 +12,18 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.bar.LocatorBar;
+import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.Window;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapState;
+import net.minecraft.scoreboard.Team;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -35,6 +39,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Map;
+import java.util.Objects;
+
+import static net.minecraft.item.FilledMapItem.getMapState;
 
 @Mixin(LocatorBar.class)
 public class LocatorBarMixin {
@@ -53,10 +60,40 @@ public class LocatorBarMixin {
         int i = getCenterY(client.getWindow());
 
         ItemStack stack = client.player.getMainHandStack();
-        if (stack != null) {
-            if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
+        if (stack == null) return;
+        if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
+        if (!(stack.getItem() instanceof MapBookItem)) {
+            stack = client.player.getMainHandStack();
+            if (!(stack.getItem() instanceof FilledMapItem)) stack = client.player.getOffHandStack();
+            if (!(stack.getItem() instanceof FilledMapItem)) return;
+
+            MapState mapState = getMapState(stack, client.world);
+            if (mapState!=null) {
+                for (MapDecoration mapIcon : mapState.getDecorations()) {
+                    if (!mapIcon.type().getIdAsString().contains("player")) {
+                        Vec3d c = client.gameRenderer.getCamera().getPos();
+                        float mapScale = (float) Math.pow(2, mapState.scale);
+                        float offset = 64f * mapScale;
+                        float x = (mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2);
+                        float z = (mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2);
+
+                        double a = getAngle(c, x, z, client);
+                        if (!(a <= -61.0) && !(a > 60.0)) {
+                            int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
+                            int m = (int) (a * 173.0 / 2.0 / 60.0);
+                            double d = Math.sqrt((x-c.x)*(x-c.x)+(z-c.z)*(z-c.z));
+                            if (d > 0.5 && d < 10000) {
+                                int dd = (int) (255 * (1 - (d / 10000)));
+                                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                                                "hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
+                                        k + m, i - 2, 9, 9, (new Color(255, 255, 255, dd)).hashCode());
+
+                            }}
+                    }
+                }
+            }
+            return;
         }
-        if (!(stack.getItem() instanceof MapBookItem)) return;
 
         for (MapStateData mapStateData : getMapStates(stack, client.world)) {
             float render = 0.0f;
@@ -79,8 +116,12 @@ public class LocatorBarMixin {
                             int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
                             int m = (int) (a * 173.0 / 2.0 / 60.0);
                             double d = Math.sqrt((x-c.x)*(x-c.x)+(z-c.z)*(z-c.z));
-                            int dd = (int) (255*(1-(d/10000)));
-                            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()), k + m, i - 2, 9, 9, (new Color(255, 255, 255, dd)).hashCode());
+                            if (d > 0.5 && d < 10000) {
+                                int dd = (int) (255 * (1 - (d / 10000)));
+                                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                                                "hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
+                                        k + m, i - 2, 9, 9, (new Color(255, 255, 255, dd)).hashCode());
+                            }
                         }
                     }
                 }
@@ -101,19 +142,32 @@ public class LocatorBarMixin {
                 try {
                     for (MapBookPlayer player : mp) {
                         if (player.dimension.contains(p.dimension)) {
-                            if (!(player.name.contains(p.name) && p.name.contains(player.name)) || true) {
+                            if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
                                 Vec3d c = client.gameRenderer.getCamera().getPos();
 
                                 double x = player.x;
-                                double y = player.y+10;
-                                double z = player.z+10;
+                                double y = player.y;
+                                double z = player.z;
 
                                 double a = getAngle(c, x, z, client);
                                 if (!(a <= -61.0) && !(a > 60.0)) {
                                     int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
                                     int m = (int) (a * 173.0 / 2.0 / 60.0);
 
-                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/default_0"), k + m, i - 2, 9, 9, ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F));
+                                    int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
+                                    for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
+                                        if (Objects.equals(playerListEntry.getProfile().getName(), player.name)) {
+                                            Team team = playerListEntry.getScoreboardTeam();
+                                            if (team != null) {
+                                                Formatting formatting = team.getColor();
+                                                if (formatting.isColor()) {
+                                                    color = (new Color(formatting.getColorValue().intValue()).hashCode());
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/default_0"), k + m, i - 2, 9, 9, color);
                                     int n = aboveOrBelow(c, x, y, z, client);
                                     if (n != 0) {
                                         int o = n < 0 ? 9 : -5;
