@@ -44,11 +44,10 @@ public class HUDOverlayHandler
     }
 
     private static void drawSaturationOverlay(DrawContext context, Float saturationLevel, MinecraftClient mc, int right, int top) {
-
         float modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f));
         int endSaturationBar = (int) Math.ceil(modifiedSaturation / 2);
         int iconSize = 9;
-
+        context.goUpLayer();
         for (int i = 0; i < endSaturationBar; i++) {
             // gets the offset that needs to be render of icon
             IntPoint offset = foodBarOffsets.get(i);
@@ -71,7 +70,6 @@ public class HUDOverlayHandler
                 u = 1f * iconSize;
             context.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
         }
-
     }
 
     private static void drawSaturationOverlay(HUDOverlayEvent.Saturation event, MinecraftClient mc) {

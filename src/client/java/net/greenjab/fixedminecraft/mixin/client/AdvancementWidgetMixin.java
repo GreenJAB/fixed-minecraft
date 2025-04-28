@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.advancement.AdvancementDisplay;
 import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlacedAdvancement;
@@ -215,7 +216,7 @@ public abstract class AdvancementWidgetMixin {
         } else {
             q = originX + this.x;
         }
-
+        context.pushCheckpoint();
         int r = i + m;
 
         if (!this.description.isEmpty()) {
@@ -224,13 +225,17 @@ public abstract class AdvancementWidgetMixin {
         if (this.advancement.getAdvancement().rewards().experience()!=0) {
             context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
         }
+        context.goUpLayer();
 
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
+
+        context.goUpLayer();
         context.drawGuiTexture(
                 RenderPipelines.GUI_TEXTURED, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
         );
         int s = q + 5;
+        context.goUpLayer();
         if (bl) {
             this.drawText(context, this.title, s, j + 9, -1);
             if (text != null) {
@@ -250,7 +255,9 @@ public abstract class AdvancementWidgetMixin {
             int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
             context.drawText(this.client.textRenderer, reward, s, k, colour, false);
         }
+        context.goUpLayer();
         context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
+        context.popCheckpoint();
     }
 }
 

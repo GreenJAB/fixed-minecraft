@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:nether/use_lodestone",
+    "parent": "minecraft:nether/obtain_ancient_debris",
     "criteria": {
         "netherite_armor": {
             "conditions": {
