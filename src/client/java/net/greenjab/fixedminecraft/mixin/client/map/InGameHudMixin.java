@@ -1,14 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.greenjab.fixedminecraft.hud.HUDOverlayHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 

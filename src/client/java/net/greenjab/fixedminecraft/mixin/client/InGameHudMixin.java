@@ -12,17 +12,13 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.profiler.Profilers;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -36,6 +32,11 @@ import java.util.ArrayList;
 
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
+
+    @Unique
+    String[] names = {"full_moon", "waning_gibbous", "third_quarter", "waning_crescent", "new_moon", "waxing_crescent", "first_quarter", "waxing_gibbous"};
+
+
      @Inject(
              slice = @Slice(from = @At(value = "CONSTANT", args = "stringValue=food")),
              at = @At(value = "net.greenjab.fixedminecraft.mixin.util.BeforeInc", args = "intValue=-10", ordinal = 0),
@@ -98,23 +99,29 @@ public class InGameHudMixin {
 
          MinecraftClient client = MinecraftClient.getInstance();
          ClientPlayerEntity player = client.player;
-         boolean clock = player.getMainHandStack().isOf(Items.CLOCK) ||
-                         player.getOffHandStack().isOf(Items.CLOCK);
-         boolean compass = player.getMainHandStack().isOf(Items.COMPASS) ||
-                         player.getOffHandStack().isOf(Items.COMPASS);
+
+
+         boolean clock = player.getMainHandStack().isOf(Items.CLOCK);
+         boolean compass = player.getMainHandStack().isOf(Items.COMPASS);
+         if (!clock && !compass) {
+             clock = player.getOffHandStack().isOf(Items.CLOCK);
+             compass = player.getOffHandStack().isOf(Items.COMPASS);
+         }
 
          if (clock||compass) {
-             String s = "";
+             String string = "";
              if (clock) {
-                 int t = (int) (player.clientWorld.getTimeOfDay()%24000);
-                 int h = (t/1000) + 6;
-                 int m = ((t%1000)*60)/1000;
-                 s+= (h<10?"0":"") + h + ":" + (m<10?"0":"") + m;
-                 if (compass) s += " | ";
+                 int time = (int) (player.clientWorld.getTimeOfDay()%24000);
+                 int hour = (time/1000) + 6;
+                 int min = ((time%1000)*60)/1000;
+
+                 int moon = player.clientWorld.getMoonPhase();
+                 Text moonPhase = Text.translatable("world.moon." + names[moon]);
+
+                 string+= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
+             } else {
+                 string = player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
              }
-             if (compass) s += player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
-
-
 
              int m = context.getScaledWindowWidth() / 2 + 91;
              int r = context.getScaledWindowHeight() - 39 - 10;
@@ -139,10 +146,10 @@ public class InGameHudMixin {
                      top+=8;
                  }
                  left = context.getScaledWindowWidth() / 2 - 91;
-                 if (health == 0) left +=91- (client.textRenderer.getWidth(s))/2;
+                 if (health == 0) left +=91- (client.textRenderer.getWidth(string))/2;
              }
 
-             context.drawText(client.textRenderer, s, left, top, /*8453920*/-1, true);
+             context.drawText(client.textRenderer, string, left, top, /*8453920*/-1, true);
 
 
          }

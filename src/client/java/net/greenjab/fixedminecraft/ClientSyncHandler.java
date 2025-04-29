@@ -16,16 +16,13 @@ import net.minecraft.item.map.MapState;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /** Credit: Nettakrim, Squeek502, Bawnorton */
 public class ClientSyncHandler {
     public static void init() {
-        ClientPlayNetworking.registerGlobalReceiver(SaturationSyncPayload.ID, (payload, context) -> {
-            context.client().execute(() -> {
-                context.client().player.getHungerManager().setSaturationLevel(payload.getSaturation());
-            });
-        });
+        ClientPlayNetworking.registerGlobalReceiver(SaturationSyncPayload.ID, (payload, context) ->
+                context.client().execute(() ->
+                        context.client().player.getHungerManager().setSaturationLevel(payload.getSaturation())));
 
         ClientPlayNetworking.registerGlobalReceiver(MapBookOpenPayload.PACKET_ID, ClientSyncHandler::mapBookOpen);
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
@@ -35,7 +32,7 @@ public class ClientSyncHandler {
 
     }
     private static void mapBookOpen(MapBookOpenPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> { context.client().setScreen(new MapBookScreen(payload.itemStack())); });
+        context.client().execute(() -> context.client().setScreen(new MapBookScreen(payload.itemStack())));
     }
 
     private static void mapBookSync(MapBookSyncPayload payload, ClientPlayNetworking.Context context) {

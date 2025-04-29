@@ -60,5 +60,14 @@
     "advancements.end.kill_omen_dragon.title": "Міцний горішок",
     "advancements.end.kill_omen_dragon.description": "Вбийте Дракона краю під еффектом Поганої прикмети",
     "effect.fixedminecraft.awkward": "Немає ефектів",
-    "filled_map.explorer": "Мапа дослідника %s"
+    "filled_map.explorer": "Мапа дослідника %s",
+    "options.newArmorHud" : "Показати броню в HUD",
+    "world.moon.full_moon": "повний місяць",
+    "world.moon.waning_gibbous": "Згасаючий Гіббус",
+    "world.moon.third_quarter": "Третя чверть",
+    "world.moon.waning_crescent": "Згасаючий півмісяць",
+    "world.moon.new_moon": "Молодик",
+    "world.moon.waxing_crescent": "Зростаючий півмісяць",
+    "world.moon.first_quarter": "Перша чверть",
+    "world.moon.waxing_gibbous": "Восковий Гіббус"
 }

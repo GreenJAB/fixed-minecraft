@@ -1,12 +1,10 @@
 package net.greenjab.fixedminecraft.render;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.BuiltBuffer;
@@ -14,9 +12,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TriState;
-import net.minecraft.util.Util;
-import org.joml.Matrix4f;
 
 /** Credit: Pepperoni-Jabroni */
 @Environment(EnvType.CLIENT)

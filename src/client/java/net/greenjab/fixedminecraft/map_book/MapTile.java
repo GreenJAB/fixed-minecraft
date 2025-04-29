@@ -1,12 +1,9 @@
 package net.greenjab.fixedminecraft.map_book;
 
-
-import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.render.MapRenderState;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.map.MapState;
 import org.joml.Matrix3x2fStack;
@@ -16,7 +13,6 @@ public class MapTile implements Drawable {
     private final MapBookScreen screen;
     MapIdComponent id;
     private final MapState mapState;
-    private final MinecraftClient client;
 
     private final MapRenderState mapRenderState = new MapRenderState();
 
@@ -24,7 +20,6 @@ public class MapTile implements Drawable {
         this.screen = screen;
         this.id = id;
         this.mapState = mapState;
-        this.client = client;
         client.getMapRenderer().update(id, mapState, mapRenderState);
     }
 

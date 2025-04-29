@@ -57,7 +57,7 @@ public abstract class PlayerLookHelper {
     }
 
     private static OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
-        return (OptionalInt)getHitPos(hit, state.get(HorizontalFacingBlock.FACING)).map(/* method_55772 */ hitPos -> {
+        return getHitPos(hit, state.get(HorizontalFacingBlock.FACING)).map(/* method_55772 */ hitPos -> {
             int i = hitPos.y >= 0.5F ? 0 : 1;
             int j = getColumn(hitPos.x);
             return OptionalInt.of(j + i * 3);
@@ -70,7 +70,7 @@ public abstract class PlayerLookHelper {
             return Optional.empty();
         } else {
             BlockPos blockPos = hit.getBlockPos().offset(direction);
-            Vec3d vec3d = hit.getPos().subtract((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ());
+            Vec3d vec3d = hit.getPos().subtract(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             double d = vec3d.getX();
             double e = vec3d.getY();
             double f = vec3d.getZ();
