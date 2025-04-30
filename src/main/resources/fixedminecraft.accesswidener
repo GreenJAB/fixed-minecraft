@@ -13,6 +13,7 @@ accessible class net/minecraft/client/render/BackgroundRenderer$FogData
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIIIFFFFI)V
 accessible class net/minecraft/client/option/GameOptions$OptionVisitor
+accessible field net/minecraft/entity/LivingEntity equipment Lnet/minecraft/entity/EntityEquipment;
 
 
 ## Classes

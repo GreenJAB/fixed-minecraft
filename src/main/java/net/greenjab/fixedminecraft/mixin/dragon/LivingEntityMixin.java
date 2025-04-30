@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -8,6 +10,7 @@ import net.minecraft.entity.damage.DamageType;
 import net.minecraft.entity.mob.EndermanEntity;
 import net.minecraft.entity.mob.EndermiteEntity;
 import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,4 +47,18 @@ public abstract class LivingEntityMixin {
             }
         }
     }
+
+    @Inject(method = "getEquippedStack", at = @At("RETURN"), cancellable = true)
+    private void noNetherite(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
+        ItemStack itemStack = cir.getReturnValue();
+        if (itemStack.isIn(ModTags.UNBREAKABLE)) {
+            cir.setReturnValue(ItemStack.EMPTY);
+        }
+    }
+
+    @Redirect(method = "swapHandStacks", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/entity/LivingEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
+    ))
+    private ItemStack noNetheriteFix1(LivingEntity instance, EquipmentSlot slot) {
+    return instance.equipment.get(slot); }
 }

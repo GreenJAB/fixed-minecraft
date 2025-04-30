@@ -69,4 +69,13 @@ public class FixedMinecraft implements ModInitializer {
         armor.add(entity.getEquippedStack(EquipmentSlot.HEAD));
         return armor;
     }
+
+    public static ArrayList<ItemStack> getArmorBypass(LivingEntity entity) {
+        ArrayList<ItemStack> armor = new ArrayList<>();
+        armor.add(entity.equipment.get(EquipmentSlot.FEET));
+        armor.add(entity.equipment.get(EquipmentSlot.LEGS));
+        armor.add(entity.equipment.get(EquipmentSlot.CHEST));
+        armor.add(entity.equipment.get(EquipmentSlot.HEAD));
+        return armor;
+    }
 }

@@ -26,6 +26,7 @@ public class ModTags {
     public static final TagKey<Biome> IS_PALE_GARDEN = TagKey.of(RegistryKeys.BIOME, FixedMinecraft.id("is_pale_garden"));
 
     public static final TagKey<Item> STRINGTAG = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("string"));
+    public static final TagKey<Item> UNBREAKABLE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("unbreakable"));
 
     private static TagKey<Enchantment> enchant_of(String id)  {
         return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id));

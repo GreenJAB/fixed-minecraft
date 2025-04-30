@@ -1,12 +1,17 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.PropertyMap;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.SkullBlockEntity;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
@@ -15,8 +20,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.potion.Potions;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -29,25 +36,27 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderingTraderEntityMixin {
+
 
     @ModifyExpressionValue(method = "fillRecipes", at = @At(
             value = "FIELD",
             target = "Lnet/minecraft/village/TradeOffers;WANDERING_TRADER_TRADES:Ljava/util/List;"
     ))
     private List<Pair<TradeOffers.Factory[], Integer>> newTrades(List<Pair<TradeOffers.Factory[], Integer>> original){
-        return list;
-    }
-
-    @Unique
-    private final List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
+        return List.of(
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.BuyItemFactory(createPotion(), 1, 1, 1),
                         new TradeOffers.BuyItemFactory(Items.WATER_BUCKET, 1, 1, 1, 2),
@@ -151,8 +160,8 @@ public abstract class WanderingTraderEntityMixin {
                 }, 1)
 
         );
-        //return list.iterator();
-    //}
+    }
+
 
     @Unique
     private ItemStack createSpecialItem() {
@@ -213,11 +222,24 @@ public abstract class WanderingTraderEntityMixin {
         Item[] heads = {Items.ZOMBIE_HEAD, Items.SKELETON_SKULL, Items.CREEPER_HEAD, Items.WITHER_SKELETON_SKULL, Items.PIGLIN_HEAD, Items.PLAYER_HEAD};
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
-            WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
-            PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
-            if (playerEntity != null) {
-                head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
+
+            int who = (int)(Math.random()*3);
+            switch (who) {
+                case 0:
+                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of("green_jab"), Optional.empty(), new PropertyMap()));
+                    break;
+                case 1:
+                    String[] names = {"green_jab"};
+                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of(names[(int)(Math.random()*names.length)]), Optional.empty(), new PropertyMap()));
+                    break;
+                default:
+                    WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
+                    PlayerEntity playerEntity = WTE.getWorld().getClosestPlayer(WTE, 100);
+                    if (playerEntity != null) {
+                        head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
+                    }
             }
+
         }
         return head;
     }
@@ -279,4 +301,5 @@ public abstract class WanderingTraderEntityMixin {
             }
         return Items.MAP.getDefaultStack();
     }
+
 }

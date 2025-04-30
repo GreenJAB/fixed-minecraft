@@ -11,6 +11,7 @@ import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
@@ -54,7 +55,7 @@ public class InGameHudMixin {
     private void renderArmorItems(DrawContext context, PlayerEntity player, int i, int j, int k, int x){
          if (FixedMinecraftClient.newArmorHud.getValue()) {
             MinecraftClient client = MinecraftClient.getInstance();
-         ArrayList<ItemStack> armor = FixedMinecraft.getArmor(client.player);
+         ArrayList<ItemStack> armor = FixedMinecraft.getArmorBypass(client.player);
 
          int m = i - (j - 1) * k - 10-6;
 
@@ -199,4 +200,10 @@ public class InGameHudMixin {
     private int getHeartRows(int heartCount) {
         return (int)Math.ceil(heartCount / 10.0);
     }
+
+    @Redirect(method = "renderHotbar", at = @At(value = "INVOKE",
+                                                  target = "Lnet/minecraft/entity/player/PlayerEntity;getOffHandStack()Lnet/minecraft/item/ItemStack;"
+    ))
+    private ItemStack noNetheriteFix(PlayerEntity instance) {return instance.equipment.get(EquipmentSlot.OFFHAND); }
+
 }
