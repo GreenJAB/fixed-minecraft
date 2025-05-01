@@ -223,16 +223,19 @@ public abstract class WanderingTraderEntityMixin {
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
 
-            int who = (int)(Math.random()*3);
+            int who = (int)(Math.random()*2);
             switch (who) {
                 case 0:
+                    //mod maker
                     head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of("green_jab"), Optional.empty(), new PropertyMap()));
                     break;
                 case 1:
+                    //patreon
                     String[] names = {"green_jab"};
                     head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of(names[(int)(Math.random()*names.length)]), Optional.empty(), new PropertyMap()));
                     break;
                 default:
+                    //discontinued
                     WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
                     PlayerEntity playerEntity = WTE.getWorld().getClosestPlayer(WTE, 100);
                     if (playerEntity != null) {
