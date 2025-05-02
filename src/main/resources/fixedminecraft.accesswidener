@@ -10,6 +10,8 @@ accessible field net/minecraft/entity/player/HungerManager exhaustion F
 accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (Lnet/minecraft/util/hit/BlockHitResult;Lnet/minecraft/block/BlockState;)Ljava/util/OptionalInt;
 accessible class net/minecraft/screen/slot/ArmorSlot
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
+accessible class net/minecraft/client/option/GameOptions$OptionVisitor
+#accessible field net/minecraft/entity/LivingEntity equipment Lnet/minecraft/entity/EntityEquipment;
 
 ## Classes
 # <access>   class   <className>

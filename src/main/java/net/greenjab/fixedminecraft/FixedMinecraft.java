@@ -58,43 +58,9 @@ public class FixedMinecraft implements ModInitializer {
                             ResourcePackActivationType.NORMAL
             );
         });
-
-
-        /*FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {
-            ResourceManagerHelper.registerBuiltinResourcePack(
-                    Identifier.of("fixedminecraft", "greentweaks"),
-                    modContainer,
-                    Text.of("Green Tweaks"),
-                    ResourcePackActivationType.DEFAULT_ENABLED
-            );
-
-
-            ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(new SimpleSynchronousResourceReloadListener() {
-                @Override
-                public Identifier getFabricId() {
-                    return Identifier.of("fixedminecraft", "greentweaks");
-                }
-
-                @Override
-                public void reload(ResourceManager manager) {
-                    // Clear Caches Here
-
-                    for(Map.Entry<Identifier, Resource> resourceEntry : manager.findResources("resources/datapacks", path -> path.toString().endsWith(".json")).entrySet()) {
-                        try(InputStream stream = manager.getResource(resourceEntry.getKey()).get().getInputStream()) {
-                            // Consume the stream however you want, medium, rare, or well done.
-                        } catch(Exception e) {
-                            logger.error("Error occurred while loading resource json" + resourceEntry.toString(), e);
-                        }
-                    }
-                }
-            });
-
-        });*/
     }
 
     public static Identifier id(String path) {
         return Identifier.of(NAMESPACE, path);
     }
-
-
 }

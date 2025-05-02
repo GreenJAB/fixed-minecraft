@@ -23,7 +23,9 @@ import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
+import net.minecraft.item.SplashPotionItem;
 import net.minecraft.item.SaddleItem;
 import net.minecraft.item.TridentItem;
 import net.minecraft.util.Rarity;
@@ -44,19 +46,19 @@ public class ItemsMixin {
     @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice( from = @At(value = "FIELD",
                                                                                                                                                                                                   target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))
     private static Item throwableBrick(String id) {
-        return register("brick", BrickItem::new, new Item.Settings());
+        return register("brick", BrickItem::new, new Item.Settings().useCooldown(1));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
                                   target = "Lnet/minecraft/item/Items;ENCHANTED_BOOK:Lnet/minecraft/item/Item;")))
     private static Item throwableNetherBrick(String id) {
-        return register("nether_brick", BrickItem::new, new Item.Settings());
+        return register("nether_brick", BrickItem::new, new Item.Settings().useCooldown(1));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
                                   target = "Lnet/minecraft/item/Items;NETHER_BRICK:Lnet/minecraft/item/Item;")))
     private static Item throwableResinBrick(String id) {
-        return register("resin_brick", BrickItem::new, new Item.Settings());
+        return register("resin_brick", BrickItem::new, new Item.Settings().useCooldown(1));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
@@ -112,6 +114,23 @@ public class ItemsMixin {
                                    target = "Lnet/minecraft/item/Items;GLASS_BOTTLE:Lnet/minecraft/item/Item;")))
     private static Item stackedPotions(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
         return register("potion",PotionItem::new,new Item.Settings().maxCount(16).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT).component(DataComponentTypes.CONSUMABLE, ConsumableComponents.DRINK).useRemainder(Items.GLASS_BOTTLE));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                                                                                                                                                                                                                                                  target = "Lnet/minecraft/item/Items;DRAGON_BREATH:Lnet/minecraft/item/Item;")))
+    private static Item stackedSplashPotions(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register("splash_potion", SplashPotionItem::new, new Item.Settings().maxCount(16).useCooldown(3.0F).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
+                                                                                                                                                                                                                                                                  target = "Lnet/minecraft/item/Items;TIPPED_ARROW:Lnet/minecraft/item/Item;")))
+    private static Item stackedLingeringPotions(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register("lingering_potion",
+                LingeringPotionItem::new,
+                new Item.Settings()
+                        .maxCount(16)
+                        .useCooldown(3.0F)
+                        .component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",

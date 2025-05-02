@@ -60,5 +60,14 @@
     "advancements.end.dragon_fireworks.description": "Use a Dragon Firework Rocket while flying with an Elytra",
     "advancements.end.kill_omen_dragon.title": "The Pantheon Of Minecraft",
     "advancements.end.kill_omen_dragon.description": "Slay the Dragon under the influence of Bad Omen",
-    "filled_map.explorer" : "%s Explorer Map"
+    "filled_map.explorer" : "%s Explorer Map",
+    "options.newArmorHud" : "Show Armour in HUD",
+    "world.moon.full_moon": "Full Moon",
+    "world.moon.waning_gibbous": "Waning Gibbous",
+    "world.moon.third_quarter": "Third Quarter",
+    "world.moon.waning_crescent": "Waning Crescent",
+    "world.moon.new_moon": "New Moon",
+    "world.moon.waxing_crescent": "Waxing Crescent",
+    "world.moon.first_quarter": "First Quarter",
+    "world.moon.waxing_gibbous": "Waxing Gibbous"
 }
