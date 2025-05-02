@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.mojang.authlib.properties.PropertyMap;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
@@ -32,6 +33,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -43,11 +45,7 @@ public abstract class WanderingTraderEntityMixin {
             target = "Lnet/minecraft/village/TradeOffers;WANDERING_TRADER_TRADES:Ljava/util/List;"
     ))
     private List<Pair<TradeOffers.Factory[], Integer>> newTrades(List<Pair<TradeOffers.Factory[], Integer>> original){
-        return list;
-    }
-
-    @Unique
-    private final List<Pair<TradeOffers.Factory[], Integer>> list = List.of(
+        return List.of(
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.BuyItemFactory(createPotion(), 1, 1, 1),
                         new TradeOffers.BuyItemFactory(Items.WATER_BUCKET, 1, 1, 1, 2),
@@ -151,8 +149,7 @@ public abstract class WanderingTraderEntityMixin {
                 }, 1)
 
         );
-        //return list.iterator();
-    //}
+    }
 
     @Unique
     private ItemStack createSpecialItem() {
@@ -213,11 +210,27 @@ public abstract class WanderingTraderEntityMixin {
         Item[] heads = {Items.ZOMBIE_HEAD, Items.SKELETON_SKULL, Items.CREEPER_HEAD, Items.WITHER_SKELETON_SKULL, Items.PIGLIN_HEAD, Items.PLAYER_HEAD};
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
-            WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
-            PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
-            if (playerEntity != null) {
-                head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
+
+            int who = (int)(Math.random()*2);
+            switch (who) {
+                case 0:
+                    //mod maker
+                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of("green_jab"), Optional.empty(), new PropertyMap()));
+                    break;
+                case 1:
+                    //patreon
+                    String[] names = {"green_jab"};
+                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of(names[(int)(Math.random()*names.length)]), Optional.empty(), new PropertyMap()));
+                    break;
+                default:
+                    //discontinued
+                    WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
+                    PlayerEntity playerEntity = WTE.getWorld().getClosestPlayer(WTE, 100);
+                    if (playerEntity != null) {
+                        head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
+                    }
             }
+
         }
         return head;
     }

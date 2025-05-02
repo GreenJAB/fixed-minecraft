@@ -1,11 +1,11 @@
 {
     "parent": "minecraft:recipes/root",
     "criteria": {
-        "has_nether_wart_block": {
+        "has_ingot": {
             "conditions": {
                 "items": [
                     {
-                        "items": "nether_wart_block"
+                        "items": "netherite_ingot"
                     }
                 ]
             },
@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:nether_wart"
+                "recipe": "fixedminecraft:netherite_scrap"
             },
             "trigger": "minecraft:recipe_unlocked"
         }
@@ -21,12 +21,12 @@
     "requirements": [
         [
             "has_the_recipe",
-            "has_nether_wart_block"
+            "has_ingot"
         ]
     ],
     "rewards": {
         "recipes": [
-            "fixedminecraft:nether_wart"
+            "fixedminecraft:netherite_scrap"
         ]
     }
 }

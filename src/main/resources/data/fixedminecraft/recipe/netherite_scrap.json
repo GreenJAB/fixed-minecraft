@@ -1,11 +1,11 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        "minecraft:nether_wart_block"
+        "minecraft:netherite_ingot"
     ],
     "result": {
-        "count": 9,
-        "id": "minecraft:nether_wart"
+        "count": 4,
+        "id": "minecraft:netherite_scrap"
     },
     "category": "misc"
 }

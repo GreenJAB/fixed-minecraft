@@ -27,28 +27,6 @@ public abstract class LivingEntityMixin {
     @Shadow
     public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
 
-    @Shadow
-    @Nullable
-    public abstract StatusEffectInstance getStatusEffect(RegistryEntry<StatusEffect> effect);
-
-    @Shadow
-    public abstract boolean removeStatusEffect(RegistryEntry<StatusEffect> type);
-
-    @Shadow
-    public abstract boolean addStatusEffect(StatusEffectInstance effect);
-
-
-    @Inject(method = "wakeUp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;setPose(Lnet/minecraft/entity/EntityPose;)V", shift = At.Shift.AFTER))
-    private void turnInsomniaIntoHealthBoost(CallbackInfo ci) {
-        if (!this.hasStatusEffect(StatusRegistry.INSOMNIA)) return;
-        int i = this.getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier();
-        this.removeStatusEffect(StatusRegistry.INSOMNIA);
-        this.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, (i+1)*5*60*20, i, true, false, true));
-        if ((LivingEntity)(Object)this instanceof ServerPlayerEntity SPE && i == 4) {
-            Criteria.CONSUME_ITEM.trigger(SPE, Items.RED_BED.getDefaultStack());
-        }
-    }
-
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;emitGameEvent(Lnet/minecraft/registry/entry/RegistryEntry;)V"))
     private void increaseInsomnia(DamageSource damageSource, CallbackInfo ci, @Local Entity entity) {
         LivingEntity LE = (LivingEntity)(Object)this;

@@ -60,5 +60,14 @@
     "advancements.end.dragon_fireworks.description": "Utilisez une fusée de feu d'artifice draconique en volant avec Des élytres.",
     "advancements.end.kill_omen_dragon.title": "Le pantheon de Minecraft",
     "advancements.end.kill_omen_dragon.description": "Vaincre le dragon sous l'influence du mauvais présage.",
-    "filled_map.explorer" : "Carte d'exploration des %s"
+    "filled_map.explorer" : "Carte d'exploration des %s",
+    "options.newArmorHud" : "Afficher l'armure dans le HUD",
+    "world.moon.full_moon": "Pleine lune",
+    "world.moon.waning_gibbous": "Gibbeuse décroissante",
+    "world.moon.third_quarter": "Troisième trimestre",
+    "world.moon.waning_crescent": "Croissant décroissant",
+    "world.moon.new_moon": "Nouvelle lune",
+    "world.moon.waxing_crescent": "Croissant de cire",
+    "world.moon.first_quarter": "Premier trimestre",
+    "world.moon.waxing_gibbous": "Gibbeuse croissante"
 }

@@ -60,5 +60,13 @@
     "advancements.end.dragon_fireworks.description": "Bruk eit drakefyrverkeri medan du flyg med ein elytra",
     "advancements.end.kill_omen_dragon.title": "Minecraft sitt panteon",
     "advancements.end.kill_omen_dragon.description": "Drep dragen medan du er påverka av ill jartegn",
-    "filled_map.explorer" : "Oppdagarkart over %s"
+    "filled_map.explorer" : "Oppdagarkart over %s",
+    "world.moon.full_moon": "Fullmåne",
+    "world.moon.waning_gibbous": "Avtagende Gibbous",
+    "world.moon.third_quarter": "Tredje kvartal",
+    "world.moon.waning_crescent": "Avtagende halvmåne",
+    "world.moon.new_moon": "Nymåne",
+    "world.moon.waxing_crescent": "Voksende halvmåne",
+    "world.moon.first_quarter": "Første kvartal",
+    "world.moon.waxing_gibbous": "Voksende Gibbous"
 }
