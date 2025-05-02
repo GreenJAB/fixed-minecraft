@@ -112,14 +112,14 @@ public class InGameHudMixin {
          if (clock||compass) {
              String string = "";
              if (clock) {
-                 int time = (int) (player.clientWorld.getTimeOfDay()%24000);
-                 int hour = (time/1000) + 6;
+                 int time = (int) ((player.clientWorld.getTimeOfDay()+6000)%24000);
+                 int hour = time/1000;
                  int min = ((time%1000)*60)/1000;
 
                  int moon = player.clientWorld.getMoonPhase();
                  Text moonPhase = Text.translatable("world.moon." + names[moon]);
 
-                 string+= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
+                 string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
              } else {
                  string = player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
              }
