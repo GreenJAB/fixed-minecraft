@@ -34,5 +34,6 @@
         "java": ">=17",
         "minecraft": "~${minecraft}",
         "fabric-api": ">=${fabric_api}"
-    }
+    },
+    "accessWidener" : "fixedminecraft.accesswidener"
 }

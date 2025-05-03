@@ -69,6 +69,7 @@
         "horse.ZombieSiegeManagerMixin",
         "inventory.BundleContentsComponentMixin",
         "inventory.CraftingInventoryAccessor",
+        "inventory.CraftingResultSlotMixin",
         "inventory.FletchingTableBlockMixin",
         "inventory.PlayerEntityMixin",
         "inventory.PlayerScreenHandlerMixin",
