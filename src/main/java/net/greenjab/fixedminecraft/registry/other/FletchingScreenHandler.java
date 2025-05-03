@@ -45,9 +45,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.FLINT);
-            }
-            @Override public int getMaxItemCount() {return 1;}
-        });
+            }});
         this.addSlot(new Slot(Inv(), 0, x + 18, y){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
         this.addSlot(new Slot(Inv(), 0, x + 2*18, y){
@@ -57,8 +55,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.STICK);
-            }
-            @Override public int getMaxItemCount() {return 1;}});
+            }});
         this.addSlot(new Slot(Inv(), 0, x + 18, y + 18){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
 
@@ -66,14 +63,12 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.POTION) || stack.isOf(Items.GLOWSTONE);
-            }
-            @Override public int getMaxItemCount() {return 1;}});
+            }});
         this.addSlot(new Slot(this.craftingInventory, 6, x, y + 2*18){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.FEATHER);
-            }
-            @Override public int getMaxItemCount() { return 1;}});
+            }});
 
         this.addSlot(new Slot(Inv(), 0, x + 18, y + 2*18){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
