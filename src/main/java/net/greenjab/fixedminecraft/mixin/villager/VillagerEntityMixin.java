@@ -221,49 +221,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
     }
 
-    //@ModifyExpressionValue(method = "fillRecipes", at = @At(value = "INVOKE", target = "Lnet/minecraft/resource/featuretoggle/FeatureSet;contains(Lnet/minecraft/resource/featuretoggle/FeatureFlag;)Z"))
-    //private boolean ignoreFeatureFlag(boolean bool) { return false;}
-
-    /*@ModifyExpressionValue(method = "fillRecipes", at = @At(
-            value = "INVOKE",
-            target = "Lit/unimi/dsi/fastutil/ints/Int2ObjectMap;get(I)Ljava/lang/Object;"
-    ))
-    private Object newTrades(Object original,
-                             @Local VillagerData villagerData){
-        System.out.println("test1");
-        if (villagerData.profession() == VillagerProfession.LIBRARIAN) {
-            System.out.println("test2");
-            switch (villagerData.level()) {
-                case 1: System.out.println("test3");
-                    return new TradeOffers.Factory[]{
-                            new TradeOffers.BuyItemFactory(Items.PAPER, 24, 16, 2),
-                            new TradeOffers.BuyItemFactory(Items.BOOK, 4, 12, 2),
-                            new TradeOffers.SellItemFactory(Blocks.BOOKSHELF, 9, 1, 12, 1)
-                    };
-                case 2: return new TradeOffers.Factory[]{
-                        biomeBook(false, villagerData),
-                        new TradeOffers.SellItemFactory(Blocks.CHISELED_BOOKSHELF, 1, 1, 12, 5)
-                };
-                case 3: return new TradeOffers.Factory[]{
-                        new TradeOffers.BuyItemFactory(Items.INK_SAC, 5, 12, 20),
-                        new TradeOffers.SellItemFactory(Items.GLASS, 1, 4, 10),
-                        new TradeOffers.SellItemFactory(Items.CLOCK, 5, 1, 15),
-                        new TradeOffers.SellItemFactory(Items.COMPASS, 4, 1, 15),
-                        new TradeOffers.SellItemFactory(Items.LANTERN, 4, 1, 10)
-                };
-                case 4: return new TradeOffers.Factory[]{
-                        anyBook(),
-                        new TradeOffers.BuyItemFactory(Items.WRITABLE_BOOK, 2, 12, 30)
-                };
-                case 5: return new TradeOffers.Factory[]{
-                        biomeBook(true, villagerData),
-                        new TradeOffers.SellItemFactory(Items.NAME_TAG, 20, 1, 30)
-                };
-            }
-        }
-        return original;
-    }*/
-
     @ModifyVariable(method = "fillRecipes", at = @At("STORE"), ordinal = 0)
     private Int2ObjectMap<TradeOffers.Factory[]> newTrades(Int2ObjectMap<TradeOffers.Factory[]> iter, @Local VillagerData villagerData){
         if (villagerData.profession().getIdAsString().contains(VillagerProfession.LIBRARIAN.getValue().toString())) {

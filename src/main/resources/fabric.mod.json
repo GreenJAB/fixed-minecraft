@@ -34,5 +34,6 @@
         "java": ">=17",
         "minecraft": "1.21.6-alpha.25.17.a",
         "fabric-api": ">=${fabric_api}"
-    }
+    },
+    "accessWidener" : "fixedminecraft.accesswidener"
 }

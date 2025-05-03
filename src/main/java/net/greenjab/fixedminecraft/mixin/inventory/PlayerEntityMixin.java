@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.PlayerScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -66,6 +67,14 @@ public class PlayerEntityMixin {
         if (itemStack!=null) {
             nbt.put("CraftingResult", playerScreenHandler.craftingResult.getStack(0).writeNbt(new NbtCompound()));
         }*/
+    }
+
+    @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;dropAll()V"))
+    private void dropCraftingGridItems(ServerWorld world, CallbackInfo ci) {
+        PlayerEntity PE = (PlayerEntity)(Object)this;
+        for (ItemStack itemStack : PE.playerScreenHandler.craftingInventory.getHeldStacks()) {
+            PE.dropItem(itemStack, false);
+        }
     }
 
 }
