@@ -74,6 +74,7 @@
         "inventory.PlayerEntityMixin",
         "inventory.PlayerScreenHandlerMixin",
         "inventory.ServerPlayerEntityMixin",
+        "map_book.CartographyTableScreenHandlerMixin",
         "map_book.MapBannerMarkerMixin",
         "map_book.MapDecorationMixin",
         "map_book.MapStateMixin",
