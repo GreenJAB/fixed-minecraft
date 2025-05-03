@@ -56,7 +56,6 @@
         "horse.ArmorMaterialMixin",
         "horse.EnderPearlEntityMixin",
         "horse.EntityMixin",
-        "horse.HorseScreenHandlerMixin",
         "horse.ItemSettingsMixin",
         "horse.LeavesBlockMixin",
         "horse.LivingEntityMixin",
