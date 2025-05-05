@@ -25,4 +25,13 @@ public class MapBookPlayerNetwork {
             }
         }
     };
+    public static final PacketCodec<PacketByteBuf, MapBookPlayer> SINGLE = new PacketCodec<>() {
+        public MapBookPlayer decode(PacketByteBuf byteBuf) {
+            return MapBookPlayer.fromPacket(byteBuf);
+        }
+
+        public void encode(PacketByteBuf byteBuf, MapBookPlayer mapBookPlayer) {
+            mapBookPlayer.toPacket(byteBuf);
+        }
+    };
 }

@@ -6,6 +6,7 @@ import net.minecraft.block.EntityShapeContext;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
@@ -30,7 +31,7 @@ public abstract class LeavesBlockMixin extends Block {
             // If completely above the leaf block, treat as solid to allow standing on
             if (context.isAbove(VoxelShapes.fullCube(), pos, true) && !context.isDescending()) return super.getCollisionShape(state, world, pos, context);
                 // If not, treat as empty
-            else if (entityContext.getEntity() != null && entityContext.getEntity().hasControllingPassenger()) return VoxelShapes.empty();
+            else if (entityContext.getEntity() != null && (entityContext.getEntity().hasControllingPassenger()) || (entityContext.getEntity() instanceof MobEntity mobEntity && mobEntity.isLeashed())) return VoxelShapes.empty();
         }
         return super.getCollisionShape(state, world, pos, context);
     }

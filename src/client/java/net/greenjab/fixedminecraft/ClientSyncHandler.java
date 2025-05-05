@@ -40,7 +40,7 @@ public class ClientSyncHandler {
             context.client().execute(() -> {
                 MapBookStateManager.INSTANCE.putClientMapBookState(
                         payload.bookID(),
-                        new MapBookState(payload.mapIDs(), payload.players())
+                        new MapBookState(payload.mapIDs(), payload.players(), payload.marker())
                 );
             });
         }

@@ -97,15 +97,18 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                     vehicle.damage((ServerWorld) this.getWorld(), this.getDamageSources().fall(), 5.0F);
                 }
                 ref.set(true);
+
+                ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
+                        new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+                );
+                assert serverPlayerEntity2 != null;
+                serverPlayerEntity2.startRiding(vehicle);
+                return serverPlayerEntity2;
             }
         }
-
-        ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
+        return serverPlayerEntity.teleportTo(
                 new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
         );
-        assert serverPlayerEntity2 != null;
-        serverPlayerEntity2.startRiding(vehicle);
-        return serverPlayerEntity2;
     }
 
     /**

@@ -78,6 +78,19 @@ public class MapBookItem extends Item {
                     );
                     openMap = false;
                 }
+            } else if (otherHand.isOf(Items.SHEARS)) {
+                if (removeMapAtPos(item, (ServerWorld)world, player.getPos(), player)) {
+                    otherHand.damage(1, player);
+                    player.getWorld().playSoundFromEntity(
+                            null,
+                            player,
+                            SoundEvents.ENTITY_SHEEP_SHEAR,
+                            player.getSoundCategory(),
+                            1.0f,
+                            1.0f
+                    );
+                    openMap = false;
+                }
             } else if (otherHand.isOf(Items.PAPER)) {
                 if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), 0)) {
                     if (!player.getAbilities().creativeMode) {
@@ -133,6 +146,14 @@ public class MapBookItem extends Item {
             if (openMap && this.hasMapBookId(item)) {
                 getMapBookState(item, world).update();
                 mapBookOpen(player, item);
+                player.getWorld().playSoundFromEntity(
+                        null,
+                        player,
+                        SoundEvents.ITEM_BOOK_PAGE_TURN,
+                        player.getSoundCategory(),
+                        1.0f,
+                        1.0f
+                );
             }
         }
         return ActionResult.SUCCESS;
@@ -304,6 +325,24 @@ public class MapBookItem extends Item {
                     (int)Math.floor(pos.x), (int)Math.floor(pos.z), (byte)scale, true, false
             );
             state.addMapID(newMap.get(DataComponentTypes.MAP_ID).id());
+            return true;
+        }
+    }
+
+    private boolean removeMapAtPos(ItemStack item, ServerWorld world, Vec3d pos, ServerPlayerEntity player) {
+        MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
+        if (state.mapIDs.isEmpty()) return false;
+        MapStateData nearestState = this.getNearestMap(item, world, pos);
+        if (nearestState != null &&
+            (this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0)) {
+            return false;
+        } else {
+            ItemStack itemStack = new ItemStack(Items.FILLED_MAP);
+            itemStack.set(DataComponentTypes.MAP_ID, nearestState.id);
+            if (!player.getInventory().insertStack(itemStack)) {
+                player.dropItem(itemStack, true);
+            }
+            state.removeMapID(nearestState.id.id());
             return true;
         }
     }

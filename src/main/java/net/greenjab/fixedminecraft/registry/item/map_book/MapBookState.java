@@ -8,6 +8,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper.WrapperLookup;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.GlobalPos;
 import net.minecraft.world.PersistentState;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 public class MapBookState extends PersistentState {
     public ArrayList<MapBookPlayer> players = new ArrayList<>();
     public ArrayList<Integer> mapIDs = new ArrayList<>();
+    public MapBookPlayer marker = new MapBookPlayer();
 
     void addPlayer(PlayerEntity player) {
         MapBookPlayer p = new MapBookPlayer();
@@ -27,11 +30,12 @@ public class MapBookState extends PersistentState {
 
     }
 
-    public MapBookState(int[] ids, ArrayList<MapBookPlayer> players) {
+    public MapBookState(int[] ids, ArrayList<MapBookPlayer> players, MapBookPlayer marker) {
         mapIDs.clear();
         mapIDs.addAll(Arrays.stream(ids).boxed().toList());
         this.players.clear();
         this.players.addAll(players);
+        this.marker = marker;
 
         this.markDirty();
     }
@@ -41,7 +45,7 @@ public class MapBookState extends PersistentState {
             ServerPlayerEntity SPE = server.getPlayerManager().getPlayer(player.name);
             if (SPE != null) {
                 MapBookSyncPayload payload = new MapBookSyncPayload(id,
-                        mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone());
+                        mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone(), marker);
                 ServerPlayNetworking.send(SPE, payload);
             }
         }
@@ -53,6 +57,7 @@ public class MapBookState extends PersistentState {
         if (!mapIDs.isEmpty()) {
             nbt.putIntArray("mapIDs", this.mapIDs);
         }
+        marker.writeNbt(nbt);
 
         return nbt;
     }
@@ -61,6 +66,9 @@ public class MapBookState extends PersistentState {
         mapIDs.clear();
         int[] ids = nbt.getIntArray("mapIDs");
         mapIDs.addAll(Arrays.stream(ids).boxed().toList());
+
+        marker = MapBookPlayer.fromNbt(nbt);
+
         return this;
     }
 
@@ -68,7 +76,10 @@ public class MapBookState extends PersistentState {
         mapIDs.add(id);
         this.markDirty();
     }
-
+    void removeMapID(int id) {
+        mapIDs.remove(id);
+        this.markDirty();
+    }
 
     void update() {
         ArrayList<Integer> temp = new ArrayList<>();
@@ -83,4 +94,11 @@ public class MapBookState extends PersistentState {
         this.markDirty();
     }
 
+    public void setMarker(double x, double z, String dimension) {
+        marker = new MapBookPlayer();
+        marker.name = "MBPmarker";
+        marker.x = x;
+        marker.z = z;
+        marker.dimension = dimension;
+    }
 }
