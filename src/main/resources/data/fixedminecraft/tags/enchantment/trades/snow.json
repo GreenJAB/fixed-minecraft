@@ -4,6 +4,7 @@
         "minecraft:quick_charge",
         "minecraft:frost_walker",
         "minecraft:looting",
-        "minecraft:silk_touch"
+        "minecraft:silk_touch",
+        "minecraft:breach"
     ]
 }
