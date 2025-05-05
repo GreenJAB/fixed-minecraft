@@ -18,7 +18,6 @@ public abstract class ServerWorldMixin {
     private void turnInsomniaIntoHealthBoost(CallbackInfo ci) {
         ServerWorld serverWorld = (ServerWorld)(Object)this;
         (serverWorld.getPlayers().stream().filter(LivingEntity::isSleeping).toList()).forEach(player -> {
-            player.heal(10);
             if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) return;
             int i = player.getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier();
             player.removeStatusEffect(StatusRegistry.INSOMNIA);
@@ -26,6 +25,7 @@ public abstract class ServerWorldMixin {
             if (i == 4) {
                 Criteria.CONSUME_ITEM.trigger(player, Items.RED_BED.getDefaultStack());
             }
+            player.heal(10);
         });
     }
 }
