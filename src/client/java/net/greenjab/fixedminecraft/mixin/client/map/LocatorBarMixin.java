@@ -134,51 +134,70 @@ public class LocatorBarMixin {
         }
         PlayerEntity thisPlayer = client.player;
         MapBookState mps = MapBookStateManager.INSTANCE.getClientMapBookState(id);
-        if (mps!=null) {
-            MapBookPlayer p = new MapBookPlayer();
-            p.setPlayer(thisPlayer);
-            ArrayList<MapBookPlayer> mp = mps.players;
-            if (mp != null) {
-                try {
-                    for (MapBookPlayer player : mp) {
-                        if (player.dimension.contains(p.dimension)) {
-                            if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
-                                Vec3d c = client.gameRenderer.getCamera().getPos();
 
-                                double x = player.x;
-                                double y = player.y;
-                                double z = player.z;
+        if (mps.marker.dimension.contains(thisPlayer.getWorld().getDimensionEntry().getIdAsString())) {
+            Vec3d c = client.gameRenderer.getCamera().getPos();
+            double x = mps.marker.x;
+            double z = mps.marker.z;
 
-                                double a = getAngle(c, x, z, client);
-                                if (!(a <= -61.0) && !(a > 60.0)) {
-                                    int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
-                                    int m = (int) (a * 173.0 / 2.0 / 60.0);
+            double a = getAngle(c, x, z, client);
+            if (!(a <= -61.0) && !(a > 60.0)) {
+                int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
+                int m = (int) (a * 173.0 / 2.0 / 60.0);
+                double d = Math.sqrt((x-c.x)*(x-c.x)+(z-c.z)*(z-c.z));
+                if (d > 0.5 && d < 10000) {
+                    int dd = (int) (255 * (1 - (d / 10000)));
+                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                                    "hud/locator_bar_dot/map_decorations/target_x"),
+                            k + m, i - 2, 9, 9, (new Color(255, 255, 255, dd)).hashCode());
+                }
+            }
+        }
 
-                                    int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
-                                    for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
-                                        if (Objects.equals(playerListEntry.getProfile().getName(), player.name)) {
-                                            Team team = playerListEntry.getScoreboardTeam();
-                                            if (team != null) {
-                                                Formatting formatting = team.getColor();
-                                                if (formatting.isColor()) {
-                                                    color = (new Color(formatting.getColorValue().intValue()).hashCode());
-                                                }
+
+        MapBookPlayer p = new MapBookPlayer();
+        p.setPlayer(thisPlayer);
+        ArrayList<MapBookPlayer> mp = mps.players;
+        if (mp != null) {
+            try {
+                for (MapBookPlayer player : mp) {
+                    if (player.dimension.contains(p.dimension)) {
+                        if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
+                            Vec3d c = client.gameRenderer.getCamera().getPos();
+
+                            double x = player.x;
+                            double y = player.y;
+                            double z = player.z;
+
+                            double a = getAngle(c, x, z, client);
+                            if (!(a <= -61.0) && !(a > 60.0)) {
+                                int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
+                                int m = (int) (a * 173.0 / 2.0 / 60.0);
+
+                                int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
+                                for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
+                                    if (Objects.equals(playerListEntry.getProfile().getName(), player.name)) {
+                                        Team team = playerListEntry.getScoreboardTeam();
+                                        if (team != null) {
+                                            Formatting formatting = team.getColor();
+                                            if (formatting.isColor()) {
+                                                color = (new Color(formatting.getColorValue().intValue()).hashCode());
                                             }
                                         }
                                     }
+                                }
 
-                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/default_0"), k + m, i - 2, 9, 9, color);
-                                    int n = aboveOrBelow(c, x, y, z, client);
-                                    if (n != 0) {
-                                        int o = n < 0 ? 9 : -5;
-                                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), 14, 5, j, 0, k + m + 1, i + o - 1, 7, 5);
-                                    }
+                                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/default_0"), k + m, i - 2, 9, 9, color);
+                                int n = aboveOrBelow(c, x, y, z, client);
+                                if (n != 0) {
+                                    int o = n < 0 ? 9 : -5;
+                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), 14, 5, j, 0, k + m + 1, i + o - 1, 7, 5);
                                 }
                             }
                         }
                     }
-                } catch (ConcurrentModificationException ignored) {
                 }
+            } catch (ConcurrentModificationException ignored) {
             }
         }
     }
