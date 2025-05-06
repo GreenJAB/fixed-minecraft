@@ -4,6 +4,7 @@
         "minecraft:bane_of_arthropods",
         "minecraft:riptide",
         "minecraft:fortune",
-        "minecraft:flame"
+        "minecraft:flame",
+        "minecraft:density"
     ]
 }

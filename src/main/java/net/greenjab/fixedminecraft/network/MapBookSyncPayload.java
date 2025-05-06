@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPlayer> players) implements CustomPayload {
+public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPlayer> players, MapBookPlayer marker) implements CustomPayload {
     public static final Id<MapBookSyncPayload> PACKET_ID = new Id<>(Identifier.of("fixedminecraft", "map_book_sync"));
 
     public static final PacketCodec<RegistryByteBuf, MapBookSyncPayload> PACKET_CODEC = PacketCodec.tuple(
@@ -26,6 +26,8 @@ public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPla
             MapBookSyncPayload::mapIDs,
             MapBookPlayerNetwork.ARRAY_CODEC,
             MapBookSyncPayload::players,
+            MapBookPlayerNetwork.SINGLE,
+            MapBookSyncPayload::marker,
             MapBookSyncPayload::new
     );
 
@@ -45,7 +47,7 @@ public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPla
 
         MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(player.server, bookId);
         if (mapBookState != null) {
-            return new MapBookSyncPayload(bookId, mapBookState.mapIDs.stream().mapToInt(i -> i).toArray(), mapBookState.players);
+            return new MapBookSyncPayload(bookId, mapBookState.mapIDs.stream().mapToInt(i -> i).toArray(), mapBookState.players, mapBookState.marker);
         }
         return null;
     }

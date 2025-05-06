@@ -70,6 +70,27 @@ public class MapBookScreen extends Screen {
     }
 
     @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        if (button == 0 && Screen.hasShiftDown()) {
+            int id = getMapBookId(item);
+            if (id != -1) {
+                MapBookPlayer marker = MapBookStateManager.INSTANCE.getClientMapBookState(getMapBookId(item)).marker;
+
+                var pos = new Vec3d(mouseX, mouseY, 0.0);
+                pos = pos.multiply((1 / scale));
+                pos = pos.subtract(width / 2.0, height / 2.0, 0.0);
+                pos = pos.subtract(this.x / scale, this.y / scale, 0.0);
+                String dim = client.world.getDimensionEntry().getIdAsString();
+                if (!marker.dimension.contains(dim) || (pos.distanceTo(new Vec3d(marker.x, marker.z, 0)) * scale)>5) {
+                    MinecraftClient.getInstance().getNetworkHandler().sendCommand(String.format(
+                            "mapBookMarker %s \"%s\" \"%s\" \"%s\"",
+                            getMapBookId(item), pos.getX(), pos.getY(), dim));
+                } else {
+                    MinecraftClient.getInstance().getNetworkHandler().sendCommand(String.format(
+                            "mapBookMarker %s \"%s\" \"%s\" \"%s\"",
+                            getMapBookId(item), 0, 0, ""));
+                }
+            }
+        }
         if (button == 2) {
             if (client.player.getAbilities().creativeMode) {
                 var pos = new Vec3d(mouseX, mouseY, 0.0);
@@ -85,8 +106,10 @@ public class MapBookScreen extends Screen {
     }
 
     @Override public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        x += deltaX;
-        y += deltaY;
+        if (button < 2 && !Screen.hasShiftDown()) {
+            x += deltaX;
+            y += deltaY;
+        }
         return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
     }
 
@@ -110,21 +133,16 @@ public class MapBookScreen extends Screen {
         PlayerEntity thisPlayer = client.player;
         if (thisPlayer==null)return;
 
-        var stack = thisPlayer.getMainHandStack();
-        if (stack != null) {
-            if (!(stack.getItem() instanceof MapBookItem)) stack = thisPlayer.getOffHandStack();
-        }
-        if (stack == null) return;
-
-        int id = -1;
-        if (stack.contains(DataComponentTypes.MAP_ID)) {
-            id = stack.get(DataComponentTypes.MAP_ID).id();
-        }
+        int id = getMapBookId(item);
 
         if (id != -1) {
             renderIcons(context);
             MapBookPlayer p = new MapBookPlayer();
             p.setPlayer(thisPlayer);
+
+            MapBookPlayer marker = MapBookStateManager.INSTANCE.getClientMapBookState(id).marker;
+            if (marker.dimension.contains(p.dimension)) renderMarker(context, marker);
+
             ArrayList<MapBookPlayer> m = MapBookStateManager.INSTANCE.getClientMapBookState(id).players;
             if (m != null) {
                 try {
@@ -233,12 +251,7 @@ public class MapBookScreen extends Screen {
 
     private void renderIcons(DrawContext context) {
 
-        ItemStack stack = client.player.getMainHandStack();
-        if (stack != null) {
-            if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
-        }
-
-        for (MapStateData mapStateData : getMapStates(stack, client.world)) {
+        for (MapStateData mapStateData : getMapStates(item, client.world)) {
             float render = 0.0f;
             if (client.world.getDimensionEntry().getIdAsString().contains(mapStateData.mapState.dimension.getValue().toString()))
                 render = 1.0f;
@@ -298,6 +311,35 @@ public class MapBookScreen extends Screen {
                 }
             }
         }
+    }
+
+    private void renderMarker(DrawContext context, MapBookPlayer player) {
+        float x = (float) player.x;
+        float z = (float) player.z;
+        float rotation = player.yaw;
+        Matrix3x2fStack matrix = context.getMatrices();
+
+        matrix.pushMatrix();
+        matrix.translate(this.x, this.y);
+        matrix.scale(this.scale, this.scale);
+        matrix.translate(x + width/ 2.0f, z + height / 2.0f);
+        matrix.rotate((float) (rotation * Math.PI/180.0f));
+        matrix.scale(8.0f, 8.0f);
+        matrix.translate(0f, 0f);
+        matrix.scale(1f / this.scale, 1f / this.scale);
+        Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
+                new MapDecoration(
+                        MapDecorationTypes.TARGET_X,
+                        (byte) 0, (byte) 0, (byte) 0,Optional.empty()
+                )
+        );
+
+        context.goUpLayer();
+        context.goUpLayer();
+
+        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+        matrix.popMatrix();
+
     }
 
 

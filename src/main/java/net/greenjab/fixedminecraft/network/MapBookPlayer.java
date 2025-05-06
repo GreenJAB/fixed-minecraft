@@ -18,7 +18,7 @@ public class MapBookPlayer {
     public String dimension = "";
 
     public static final Codec<MapBookPlayer> CODEC = RecordCodecBuilder.create(
-            /* method_56812 */ instance -> instance.group(
+           instance -> instance.group(
                             Codec.STRING.fieldOf("name").forGetter(mapPlayer -> mapPlayer.name),
                             Codec.DOUBLE.fieldOf("x").forGetter(mapPlayer -> mapPlayer.x),
                             Codec.DOUBLE.fieldOf("y").forGetter(mapPlayer -> mapPlayer.y),
@@ -47,7 +47,7 @@ public class MapBookPlayer {
         this.y = player.getY();
         this.z = player.getZ();
         this.yaw = player.getYaw();
-        this.dimension = player.getWorld().getDimension().toString();
+        this.dimension = player.getWorld().getDimensionEntry().getIdAsString();
     }
 
     void toPacket(PacketByteBuf buf) {

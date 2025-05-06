@@ -50,7 +50,7 @@ public class LivingEntityMixin  {
                 user.setStackInHand(hand, broken);
             } else {
                 if (!user.getInventory().insertStack(broken)) {
-                    user.dropItem(broken, false);
+                    user.dropItem(broken, true);
                 }
             }
         }
