@@ -13,15 +13,18 @@ import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MapBookState extends PersistentState {
     public ArrayList<MapBookPlayer> players = new ArrayList<>();
     public ArrayList<Integer> mapIDs = new ArrayList<>();
+    public MapBookPlayer marker = new MapBookPlayer();
 
     public static final Codec<MapBookState> CODEC = RecordCodecBuilder.create(
            instance -> instance.group(
                             Codec.INT.listOf().optionalFieldOf("mapIDs", List.of()).forGetter(/* method_67427 */ mapState -> List.copyOf(mapState.mapIDs)),
-                            MapBookPlayer.CODEC.listOf().optionalFieldOf("players", List.of()).forGetter(/* method_67427 */ mapState -> List.copyOf(mapState.players))
+                            MapBookPlayer.CODEC.listOf().optionalFieldOf("players", List.of()).forGetter(/* method_67427 */ mapState -> List.copyOf(mapState.players)),
+                            MapBookPlayer.CODEC.fieldOf("marker").forGetter(/* method_67427 */ mapState -> mapState.marker)
                     ).apply(instance, MapBookState::new)
     );
 
@@ -32,8 +35,8 @@ public class MapBookState extends PersistentState {
         }, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA);
     }
 
-    public MapBookState(List<Integer> maps, List<MapBookPlayer> mapBookPlayers) {
-        this(new ArrayList<>(maps), new ArrayList<>(mapBookPlayers));
+    public MapBookState(List<Integer> maps, List<MapBookPlayer> mapBookPlayers, MapBookPlayer marker) {
+        this(new ArrayList<>(maps), new ArrayList<>(mapBookPlayers), marker);
     }
 
     void addPlayer(PlayerEntity player) {
@@ -45,12 +48,12 @@ public class MapBookState extends PersistentState {
     public MapBookState() {
     }
 
-    public MapBookState(ArrayList<Integer> ids, ArrayList<MapBookPlayer> players) {
+    public MapBookState(ArrayList<Integer> ids, ArrayList<MapBookPlayer> players, MapBookPlayer marker) {
         mapIDs.clear();
         mapIDs.addAll(ids);
         this.players.clear();
         this.players.addAll(players);
-
+        this.marker = marker;
         this.markDirty();
     }
 
@@ -59,7 +62,7 @@ public class MapBookState extends PersistentState {
             ServerPlayerEntity SPE = server.getPlayerManager().getPlayer(player.name);
             if (SPE != null) {
                 MapBookSyncPayload payload = new MapBookSyncPayload(id,
-                        mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone());
+                        mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone(), marker);
                 ServerPlayNetworking.send(SPE, payload);
             }
         }
@@ -71,6 +74,19 @@ public class MapBookState extends PersistentState {
         this.markDirty();
     }
 
+    boolean removeMapID(int id) {
+        boolean hasRemoved = false;
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i : mapIDs) {
+            if (i==id) hasRemoved = true;
+            else temp.add(i);
+        }
+        mapIDs.clear();
+        mapIDs.addAll(temp);
+
+        this.markDirty();
+        return hasRemoved;
+    }
 
     void update() {
         ArrayList<Integer> temp = new ArrayList<>();
@@ -83,6 +99,14 @@ public class MapBookState extends PersistentState {
         mapIDs.addAll(temp);
 
         this.markDirty();
+    }
+
+    public void setMarker(double x, double z, String dimension) {
+        marker = new MapBookPlayer();
+        marker.name = "MBPmarker";
+        marker.x = x;
+        marker.z = z;
+        marker.dimension = dimension;
     }
 
 }

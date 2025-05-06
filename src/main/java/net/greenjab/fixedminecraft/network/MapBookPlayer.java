@@ -3,11 +3,9 @@ package net.greenjab.fixedminecraft.network;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.map.MapBannerMarker;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.TextCodecs;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
+
 
 public class MapBookPlayer {
     public String name = "";
@@ -17,7 +15,7 @@ public class MapBookPlayer {
     public String dimension = "";
 
     public static final Codec<MapBookPlayer> CODEC = RecordCodecBuilder.create(
-            /* method_56812 */ instance -> instance.group(
+            instance -> instance.group(
                             Codec.STRING.fieldOf("name").forGetter(mapPlayer -> mapPlayer.name),
                             Codec.DOUBLE.fieldOf("x").forGetter(mapPlayer -> mapPlayer.x),
                             Codec.DOUBLE.fieldOf("z").forGetter(mapPlayer -> mapPlayer.z),
@@ -43,7 +41,7 @@ public class MapBookPlayer {
         this.x = player.getX();
         this.z = player.getZ();
         this.yaw = player.getYaw();
-        this.dimension = player.getWorld().getDimension().toString();
+        this.dimension = player.getWorld().getDimensionEntry().getIdAsString();
     }
 
     void toPacket(PacketByteBuf buf) {
@@ -62,5 +60,28 @@ public class MapBookPlayer {
         p.yaw = buf.readFloat();
         p.dimension = buf.readString();
         return p;
+    }
+
+    //TODO
+    public void writeNbt(NbtCompound nbt) {
+        nbt.putString("MBPname", this.name);
+        nbt.putDouble("MBPx", this.x);
+        nbt.putDouble("MBPz", this.z);
+        nbt.putFloat("MBPyaw", this.yaw);
+        nbt.putString("MBPdimension", this.dimension);
+    }
+
+    public static MapBookPlayer fromNbt(NbtCompound nbt) {
+        MapBookPlayer p = new MapBookPlayer();
+        p.name = nbt.getString("MBPname").get();
+        p.x = nbt.getDouble("MBPx").get();
+        p.z = nbt.getDouble("MBPz").get();
+        p.yaw = nbt.getFloat("MBPyaw").get();
+        p.dimension = nbt.getString("MBPdimension").get();
+        return p;
+    }
+
+    public String toString() {
+        return "" + this.name + ", " + this.x + ", " + this.z + ", " + this.dimension;
     }
 }

@@ -48,7 +48,7 @@ public class ClientSyncHandler {
                 MapBookStateManager.INSTANCE.putClientMapBookState(
                         payload.bookID(),
 
-                        new MapBookState(ints, payload.players())
+                        new MapBookState(ints, payload.players(), payload.marker())
                 );
             });
         }

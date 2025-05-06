@@ -36,6 +36,9 @@
         "minecraft:fortune",
         "minecraft:flame",
         "minecraft:luck_of_the_sea",
-        "minecraft:lure"
+        "minecraft:lure",
+        "minecraft:density",
+        "minecraft:breach",
+        "minecraft:wind_burst"
     ]
 }

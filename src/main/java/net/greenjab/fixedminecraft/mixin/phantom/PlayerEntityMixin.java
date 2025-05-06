@@ -19,7 +19,6 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;wakeUp(ZZ)V"))
     private void turnInsomniaIntoHealthBoost(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        PE.heal(10);
         if (!PE.hasStatusEffect(StatusRegistry.INSOMNIA)) return;
         int i = PE.getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier();
         PE.removeStatusEffect(StatusRegistry.INSOMNIA);
@@ -27,5 +26,6 @@ public abstract class PlayerEntityMixin {
         if ((LivingEntity)(Object)this instanceof ServerPlayerEntity SPE && i == 4) {
             Criteria.CONSUME_ITEM.trigger(SPE, Items.RED_BED.getDefaultStack());
         }
+        PE.heal(10);
     }
 }
