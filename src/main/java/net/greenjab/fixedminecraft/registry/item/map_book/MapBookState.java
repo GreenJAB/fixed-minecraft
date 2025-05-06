@@ -24,7 +24,7 @@ public class MapBookState extends PersistentState {
            instance -> instance.group(
                             Codec.INT.listOf().optionalFieldOf("mapIDs", List.of()).forGetter(/* method_67427 */ mapState -> List.copyOf(mapState.mapIDs)),
                             MapBookPlayer.CODEC.listOf().optionalFieldOf("players", List.of()).forGetter(/* method_67427 */ mapState -> List.copyOf(mapState.players)),
-                            MapBookPlayer.CODEC.fieldOf("marker").forGetter(/* method_67427 */ mapState -> mapState.marker)
+                            MapBookPlayer.CODEC.optionalFieldOf("marker").forGetter(/* method_67427 */ mapState -> Optional.ofNullable(mapState.marker))
                     ).apply(instance, MapBookState::new)
     );
 
@@ -35,8 +35,8 @@ public class MapBookState extends PersistentState {
         }, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA);
     }
 
-    public MapBookState(List<Integer> maps, List<MapBookPlayer> mapBookPlayers, MapBookPlayer marker) {
-        this(new ArrayList<>(maps), new ArrayList<>(mapBookPlayers), marker);
+    public MapBookState(List<Integer> maps, List<MapBookPlayer> mapBookPlayers, Optional<MapBookPlayer> marker) {
+        this(new ArrayList<>(maps), new ArrayList<>(mapBookPlayers), marker.orElse(new MapBookPlayer()));
     }
 
     void addPlayer(PlayerEntity player) {
