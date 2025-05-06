@@ -18,6 +18,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -29,6 +30,7 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -91,21 +93,6 @@ public class MapBookItem extends Item {
                     );
                     openMap = false;
                 }
-            } else if (otherHand.isOf(Items.PAPER)) {
-                if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), 0)) {
-                    if (!player.getAbilities().creativeMode) {
-                        otherHand.decrement(1);
-                    }
-                    player.getWorld().playSoundFromEntity(
-                            null,
-                            player,
-                            SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                            player.getSoundCategory(),
-                            1.0f,
-                            1.0f
-                    );
-                    openMap = false;
-                }
             } else if (otherHand.isOf(Items.FILLED_MAP)) {
                 if (addNewMapID(item, otherHand, (ServerWorld)world)) {
                     if (!player.getAbilities().creativeMode) {
@@ -121,12 +108,28 @@ public class MapBookItem extends Item {
                     );
                     openMap = false;
                 }
+            } else if (otherHand.isOf(Items.MAP)) {
+                if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), 0)) {
+                    if (!player.getAbilities().creativeMode) {
+                        otherHand.decrement(1);
+                    }
+                    player.getWorld().playSoundFromEntity(
+                            null,
+                            player,
+                            SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
+                            player.getSoundCategory(),
+                            1.0f,
+                            1.0f
+                    );
+                    openMap = false;
+                }
             } else {
-                ItemStack hasPaper = getPaper(user);
-                if (hasPaper.isOf(Items.PAPER)) {
-                    if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), 0)) {
+                ItemStack hasEmtpyMap = getEmptyMap(user);
+                if (hasEmtpyMap.isOf(Items.MAP)) {
+                    boolean hotbar = isHotbar(user, hasEmtpyMap);
+                    if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), hotbar?2:4)) {
                         if (!player.getAbilities().creativeMode) {
-                            hasPaper.decrement(1);
+                            hasEmtpyMap.decrement(1);
                         }
                         player.getWorld().playSoundFromEntity(
                                 null,
@@ -159,12 +162,20 @@ public class MapBookItem extends Item {
         return ActionResult.SUCCESS;
     }
 
-    private ItemStack getPaper(PlayerEntity playerEntity) {
+    private ItemStack getEmptyMap(PlayerEntity playerEntity) {
         for (int i = 0;i < playerEntity.getInventory().size(); i++) {
             ItemStack item = playerEntity.getInventory().getStack(i);
-            if (item.isOf(Items.PAPER)) return item;
+            if (item.isOf(Items.MAP)) return item;
         }
         return ItemStack.EMPTY;
+    }
+
+    private boolean isHotbar(PlayerEntity playerEntity, ItemStack stack) {
+        for (int i = 0;i < 9; i++) {
+            ItemStack item = playerEntity.getInventory().getStack(i);
+            if (item == stack) return true;
+        }
+        return false;
     }
 
     private void sendMapUpdates(ServerPlayerEntity player, ItemStack item) {
@@ -332,19 +343,18 @@ public class MapBookItem extends Item {
     private boolean removeMapAtPos(ItemStack item, ServerWorld world, Vec3d pos, ServerPlayerEntity player) {
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         if (state.mapIDs.isEmpty()) return false;
+        if (getMapStates(item, world).size()<2) return false;
         MapStateData nearestState = this.getNearestMap(item, world, pos);
-        if (nearestState != null &&
-            (this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0)) {
-            return false;
-        } else {
+        if (nearestState == null) return false;
+        if (this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0) return false;
+        if (state.removeMapID(nearestState.id.id())) {
             ItemStack itemStack = new ItemStack(Items.FILLED_MAP);
             itemStack.set(DataComponentTypes.MAP_ID, nearestState.id);
             if (!player.getInventory().insertStack(itemStack)) {
                 player.dropItem(itemStack, true);
             }
-            state.removeMapID(nearestState.id.id());
-            return true;
         }
+        return true;
     }
 
     private boolean addNewMapID(ItemStack item, ItemStack filledmap, ServerWorld world) {

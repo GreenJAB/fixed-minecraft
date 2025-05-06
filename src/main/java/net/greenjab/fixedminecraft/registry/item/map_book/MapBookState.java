@@ -76,9 +76,18 @@ public class MapBookState extends PersistentState {
         mapIDs.add(id);
         this.markDirty();
     }
-    void removeMapID(int id) {
-        mapIDs.remove(id);
+    boolean removeMapID(int id) {
+        boolean hasRemoved = false;
+        ArrayList<Integer> temp = new ArrayList<>();
+        for (int i : mapIDs) {
+            if (i==id) hasRemoved = true;
+            else temp.add(i);
+        }
+        mapIDs.clear();
+        mapIDs.addAll(temp);
+
         this.markDirty();
+        return hasRemoved;
     }
 
     void update() {
