@@ -178,8 +178,6 @@ public class MapStateMixin implements MapStateAccessor {
                     try {
                         int i = Integer.parseInt(name.substring(1));
                         newBanners.add(new MapBannerMarker(banner.pos(), banner.color(), Optional.of(Text.of("¶"+updateNames[i]))));
-                        //TODO test?
-                        //return Optional.of(Text.of("¶"+updateNames[i]));
                     } catch (NumberFormatException e) {
                         newBanners.add(banner);
                     }

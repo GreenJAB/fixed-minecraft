@@ -61,27 +61,4 @@ public class MapBookPlayer {
         p.dimension = buf.readString();
         return p;
     }
-
-    //TODO
-    public void writeNbt(NbtCompound nbt) {
-        nbt.putString("MBPname", this.name);
-        nbt.putDouble("MBPx", this.x);
-        nbt.putDouble("MBPz", this.z);
-        nbt.putFloat("MBPyaw", this.yaw);
-        nbt.putString("MBPdimension", this.dimension);
-    }
-
-    public static MapBookPlayer fromNbt(NbtCompound nbt) {
-        MapBookPlayer p = new MapBookPlayer();
-        p.name = nbt.getString("MBPname").get();
-        p.x = nbt.getDouble("MBPx").get();
-        p.z = nbt.getDouble("MBPz").get();
-        p.yaw = nbt.getFloat("MBPyaw").get();
-        p.dimension = nbt.getString("MBPdimension").get();
-        return p;
-    }
-
-    public String toString() {
-        return "" + this.name + ", " + this.x + ", " + this.z + ", " + this.dimension;
-    }
 }
