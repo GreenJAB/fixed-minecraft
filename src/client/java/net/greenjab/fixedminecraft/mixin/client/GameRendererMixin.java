@@ -13,6 +13,7 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Final;
@@ -22,6 +23,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.Predicate;
 
@@ -52,7 +54,9 @@ public class GameRendererMixin {
         Predicate<Entity> predicate = entityx -> !entityx.isSpectator() && entityx.canHit();
 
         EntityHitResult entityHitResult = ProjectileUtil.raycast(entity, vec3d, vec3d3, box, predicate, e);
-        if (entityHitResult != null) {
+
+        Entity vehicle = client.player.getVehicle();
+        if (entityHitResult != null && (!entityHitResult.getEntity().hasVehicle() || entityHitResult.getEntity().getVehicle() != vehicle)) {
             Vec3d vec3d4 = entityHitResult.getPos();
             double g = vec3d.squaredDistanceTo(vec3d4);
             if (bl2 && g > dist()) {
@@ -68,10 +72,6 @@ public class GameRendererMixin {
             assert client.world != null;
             if (client.world.getBlockState(hit.getBlockPos()).getCollisionShape(client.world, hit.getBlockPos()).isEmpty()) {
                 EntityHitResult entityHitResult2 = ProjectileUtil.getEntityCollision(entity.getWorld(), entity, vec3d, vec3d3, box, predicate, 0.0f);
-                Entity vehicle = null;
-                if (client.player.hasVehicle()) {
-                    vehicle = client.player.getVehicle();
-                }
                 if (entityHitResult2 != null && entityHitResult2.getEntity() != vehicle) {
                     HitResult hitResult = client.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
                     if (bl2 && vec3d.squaredDistanceTo(entityHitResult2.getPos()) < dist()) {
