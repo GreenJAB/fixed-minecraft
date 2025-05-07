@@ -40,6 +40,7 @@ public class PotionEntityMixin {
         areaEffectCloudEntity.setParticleType(ParticleTypes.SPLASH);
         areaEffectCloudEntity.setRadius(3.0F);
         areaEffectCloudEntity.setWaitTime(10);
+        areaEffectCloudEntity.setDuration(600);
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setPotionContents(potion);
 
