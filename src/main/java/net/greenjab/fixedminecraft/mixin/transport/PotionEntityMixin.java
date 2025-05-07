@@ -34,12 +34,13 @@ public class PotionEntityMixin {
         PotionEntity PE = (PotionEntity) (Object)this;
         AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(PE.getWorld(), PE.getX(), PE.getY(), PE.getZ());
         Entity entity = PE.getOwner();
-        if (entity instanceof LivingEntity) {
-            areaEffectCloudEntity.setOwner((LivingEntity)entity);
+        if (entity instanceof LivingEntity livingEntity) {
+            areaEffectCloudEntity.setOwner(livingEntity);
         }
         areaEffectCloudEntity.setParticleType(ParticleTypes.SPLASH);
         areaEffectCloudEntity.setRadius(3.0F);
         areaEffectCloudEntity.setWaitTime(10);
+        areaEffectCloudEntity.setDuration(600);
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setPotionContents(potion);
 
