@@ -92,26 +92,34 @@ public class AbstractHorseEntityMixin {
     private double modifyAttribute(double original, EntityAttribute attribute, Collection<StatusEffectInstance> effects) {
         StatusEffectInstance chosenEffect = null;
         int longestDuration = -1;
+        int highestLevel = -1;
 
         for (StatusEffectInstance effect : effects) {
             if (effectModififers.containsKey(effect.getEffectType())) {
-                if (effect.getDuration() > longestDuration) {
-                    longestDuration = effect.getDuration();
+                int lvl = effect.getAmplifier() + (effect.isAmbient()?0:1);
+                int dur = effect.getDuration();
+                if (lvl > highestLevel) {
+                    highestLevel = lvl;
+                    longestDuration = dur;
                     chosenEffect = effect;
-                }
-                if (effect.isInfinite()) {
-                    longestDuration = 999999999;
-                    chosenEffect = effect;
+                } else {
+                    if (effect.isInfinite()) {
+                        longestDuration = 999999999;
+                        chosenEffect = effect;
+                    } else if (dur > longestDuration) {
+                        longestDuration = dur;
+                        chosenEffect = effect;
+                    }
                 }
             }
         }
         if (chosenEffect != null) {
             if (attribute.getTranslationKey().contains(effectModififers.get(chosenEffect.getEffectType()))) {
                 double d = 0;
-                if (attribute.getTranslationKey().contains("max_health")) { d = 1; }
-                if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.04; }
-                if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.015; }
-                d*=(chosenEffect.getAmplifier()+1);
+                if (attribute.getTranslationKey().contains("max_health")) { d = 2; }
+                if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.08; }
+                if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.03; }
+                d*=(chosenEffect.getAmplifier()+1 + (chosenEffect.isAmbient()?0:1));
                 return original + d;
             }
         }
