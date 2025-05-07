@@ -216,10 +216,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "enchantments": [
-                "minecraft:swift_sneak"
-              ],
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+                "options": "minecraft:swift_sneak"
             }
           ],
           "name": "minecraft:book",
@@ -393,7 +391,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+                "options": "#minecraft:on_random_loot"
             }
           ],
           "name": "minecraft:book",
@@ -481,10 +480,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "enchantments": [
-                "minecraft:mending"
-              ],
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+                "options": "minecraft:mending"
             }
           ],
           "name": "minecraft:book",
