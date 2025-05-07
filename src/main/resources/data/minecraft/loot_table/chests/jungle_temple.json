@@ -137,7 +137,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_with_levels",
+              "function": "minecraft:enchant_with_levels",,
+                "options": "#minecraft:on_random_loot",
               "levels": 30.0,
               "treasure": true
             }
@@ -182,10 +183,8 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "enchantments": [
-                "minecraft:unbreaking"
-              ],
-              "function": "minecraft:enchant_randomly"
+              "function": "minecraft:enchant_randomly",
+                "options": "minecraft:unbreaking"
             }
           ],
           "name": "minecraft:book"
