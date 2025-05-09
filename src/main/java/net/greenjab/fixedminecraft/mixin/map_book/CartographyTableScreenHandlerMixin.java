@@ -163,6 +163,30 @@ public abstract class CartographyTableScreenHandlerMixin {
         return instance.isOf(Items.PAPER) || instance.isOf(Items.BOOK);
     }
 
+    @Redirect(method = "quickMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/slot/Slot;getStack()Lnet/minecraft/item/ItemStack;"))
+    private ItemStack quickMapBookCraft(Slot instance, @Local(argsOnly = true) PlayerEntity player) {
+        ItemStack stack = instance.getStack();
+        CartographyTableScreenHandler CTSH = (CartographyTableScreenHandler)(Object)this;
+        if (player instanceof ServerPlayerEntity) {
+            if (CTSH.slots.get(0).getStack().isOf(Items.FILLED_MAP)) {
+                if (CTSH.slots.get(1).getStack().isOf(Items.BOOK)) {
+                    if (stack.isOf(ItemRegistry.MAP_BOOK)) {
+                        if (Math.min(CTSH.slots.get(0).getStack().getCount(), CTSH.slots.get(1).getStack().getCount())==1) {
+                            int i = createMapBookState(stack, player.getServer());
+                            MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.getServer(), i);
+                            if (state != null) {
+                                state.addMapID(CTSH.slots.get(0).getStack().get(DataComponentTypes.MAP_ID).id());
+                            }
+                        }else{
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                }
+            }
+        }
+        return stack;
+    }
+
     @Unique
     private int allocateMapBookId(MinecraftServer server) {
         MapBookIdCountsState counts = server.getOverworld().getPersistentStateManager().getOrCreate(
