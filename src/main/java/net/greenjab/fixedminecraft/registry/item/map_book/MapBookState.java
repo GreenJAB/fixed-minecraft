@@ -26,7 +26,7 @@ public class MapBookState extends PersistentState {
         players.add(p);
     }
 
-    MapBookState() {
+    public MapBookState() {
 
     }
 
@@ -72,7 +72,7 @@ public class MapBookState extends PersistentState {
         return this;
     }
 
-    void addMapID(int id) {
+    public void addMapID(int id) {
         mapIDs.add(id);
         this.markDirty();
     }

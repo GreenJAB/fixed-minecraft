@@ -11,13 +11,5 @@ accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (L
 accessible class net/minecraft/screen/slot/ArmorSlot
 accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 accessible class net/minecraft/client/option/GameOptions$OptionVisitor
-#accessible field net/minecraft/entity/LivingEntity equipment Lnet/minecraft/entity/EntityEquipment;
-
-## Classes
-# <access>   class   <className>
-
-## Methods
-# <access>   method   <className>   <methodName>   <methodDesc>
-
-## Fields
-# <access>   field   <className>   <fieldName>   <fieldDesc>
+accessible method net/minecraft/item/ItemStack appendTooltip (Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V
+accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResultTime J

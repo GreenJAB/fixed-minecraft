@@ -359,8 +359,9 @@ public class MapBookItem extends Item {
 
     private boolean addNewMapID(ItemStack item, ItemStack filledmap, ServerWorld world) {
         MapIdComponent mapId = filledmap.get(DataComponentTypes.MAP_ID); //?: return false;
+        MapState mapState = world.getMapState(mapId);
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
-        if (state != null) {
+        if (state != null && !mapState.locked) {
             if (!state.mapIDs.contains(mapId.id())) {
                 state.addMapID(mapId.id());
                 return true;

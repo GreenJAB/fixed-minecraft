@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft;
 
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -8,20 +7,15 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
-import net.greenjab.fixedminecraft.registry.registries.RecipeRegistry;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.resource.Resource;
-import net.minecraft.resource.ResourceManager;
-import net.minecraft.resource.ResourceType;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -30,9 +24,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class FixedMinecraft implements ModInitializer {
@@ -52,7 +44,6 @@ public class FixedMinecraft implements ModInitializer {
 
         ItemGroupRegistry.register();
 
-        RecipeRegistry.register();
         GameruleRegistry.register();
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK);

@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.MergedComponentMap;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
@@ -7,11 +9,16 @@ import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.component.type.NbtComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +28,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
@@ -82,5 +91,12 @@ public abstract class ItemStackMixin {
                 }
             }
         }
+    }
+
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 0))
+    private void addBaitTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
+                                CallbackInfoReturnable<List<Text>> cir, @Local Consumer<Text> consumer) {
+        ItemStack stack = (ItemStack)(Object)this;
+        stack.appendTooltip(ItemRegistry.BAIT_POWER, context, consumer, type);
     }
 }
