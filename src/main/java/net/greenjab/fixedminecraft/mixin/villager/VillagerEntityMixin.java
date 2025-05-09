@@ -347,8 +347,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 }
             }
         }
-        possibleEnchantCount.replaceAll((e, v) -> 1 / v);
-        possibleEnchantCount.replaceAll((e, v) -> e.isIn(EnchantmentTags.CURSE) ? 0 : v);
+        possibleEnchantCount.replaceAll((e, v) -> e.isIn(EnchantmentTags.CURSE) ? 0: 1 / v);
 
         float max = 0;
         for (float f : possibleEnchantCount.values()) max += f;
