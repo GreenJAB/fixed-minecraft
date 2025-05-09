@@ -62,12 +62,13 @@
     "advancements.end.kill_omen_dragon.description": "Töte den Enderdrachen unter dem Einfluss von 'Böses Omen'",
     "filled_map.explorer" : "%s-Entdeckerkartep",
     "options.newArmorHud" : "Panzerung im HUD anzeigen",
-    "world.moon.full_moon": "Vollmond",
+    "world.moon.full_moon": "Vollmond \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Abnehmender Dreiviertelmond",
-    "world.moon.third_quarter": "Drittes Viertel",
+    "world.moon.third_quarter": "Drittes Viertel \uD83D\uDE9C",
     "world.moon.waning_crescent": "Abnehmender Halbmond",
-    "world.moon.new_moon": "Neumond",
+    "world.moon.new_moon": "Neumond ⚔",
     "world.moon.waxing_crescent": "Wachsender Halbmond",
-    "world.moon.first_quarter": "Erstes Viertel",
-    "world.moon.waxing_gibbous": "Zunehmender Dreiviertelmond"
+    "world.moon.first_quarter": "Erstes Viertel ⛏",
+    "world.moon.waxing_gibbous": "Zunehmender Dreiviertelmond",
+    "component.fixedminecraft.bait": "Köderstufe: %s"
 }

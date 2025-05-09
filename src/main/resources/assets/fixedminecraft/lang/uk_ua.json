@@ -62,12 +62,13 @@
     "effect.fixedminecraft.awkward": "Немає ефектів",
     "filled_map.explorer": "Мапа дослідника %s",
     "options.newArmorHud" : "Показати броню в HUD",
-    "world.moon.full_moon": "повний місяць",
+    "world.moon.full_moon": "повний місяць \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Згасаючий Гіббус",
-    "world.moon.third_quarter": "Третя чверть",
+    "world.moon.third_quarter": "Третя чверть \uD83D\uDE9C",
     "world.moon.waning_crescent": "Згасаючий півмісяць",
-    "world.moon.new_moon": "Молодик",
+    "world.moon.new_moon": "Молодик ⚔",
     "world.moon.waxing_crescent": "Зростаючий півмісяць",
-    "world.moon.first_quarter": "Перша чверть",
-    "world.moon.waxing_gibbous": "Восковий Гіббус"
+    "world.moon.first_quarter": "Перша чверть ⛏",
+    "world.moon.waxing_gibbous": "Восковий Гіббус",
+    "component.fixedminecraft.bait": "Рівень наживки: %s"
 }

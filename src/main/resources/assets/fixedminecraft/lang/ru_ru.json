@@ -62,12 +62,13 @@
     "advancements.end.kill_omen_dragon.description": "Убейте дракона края под эффектом дурного знака",
     "filled_map.explorer" : "Карта исследователя %s",
     "options.newArmorHud" : "Показать броню в HUD",
-    "world.moon.full_moon": "Полнолуние",
+    "world.moon.full_moon": "Полнолуние \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Убывающая Луна",
-    "world.moon.third_quarter": "Третья четверть",
+    "world.moon.third_quarter": "Третья четверть \uD83D\uDE9C",
     "world.moon.waning_crescent": "Убывающий полумесяц",
-    "world.moon.new_moon": "Новолуние",
+    "world.moon.new_moon": "Новолуние ⚔",
     "world.moon.waxing_crescent": "Растущий полумесяц",
-    "world.moon.first_quarter": "Первый квартал",
-    "world.moon.waxing_gibbous": "Растущая Луна"
+    "world.moon.first_quarter": "Первый квартал ⛏",
+    "world.moon.waxing_gibbous": "Растущая Луна",
+    "component.fixedminecraft.bait": "Уровень приманки: %s"
 }

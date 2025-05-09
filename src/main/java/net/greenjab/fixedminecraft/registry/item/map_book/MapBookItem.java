@@ -362,9 +362,10 @@ public class MapBookItem extends Item {
     }
 
     private boolean addNewMapID(ItemStack item, ItemStack filledmap, ServerWorld world) {
-        MapIdComponent mapId = filledmap.get(DataComponentTypes.MAP_ID); //?: return false;
+        MapIdComponent mapId = filledmap.get(DataComponentTypes.MAP_ID);
+        MapState mapState = world.getMapState(mapId);
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
-        if (state != null) {
+        if (state != null && mapState != null && !mapState.locked) {
             if (!state.mapIDs.contains(mapId.id())) {
                 state.addMapID(mapId.id());
                 return true;
@@ -407,12 +408,6 @@ public class MapBookItem extends Item {
         }
     }
 
-    static void setAdditions(ItemStack stack, List<Integer> additions) {
-        stack.set(
-                ItemRegistry.MAP_BOOK_ADDITIONS,
-                new MapBookAdditionsComponent(additions)
-        );
-    }
 
     private void applyAdditions(ItemStack stack, ServerWorld world) {
         MapBookAdditionsComponent additionsComponent = stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, null) ;//?: return

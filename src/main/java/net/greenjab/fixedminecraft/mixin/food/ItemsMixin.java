@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
@@ -168,8 +169,20 @@ public class ItemsMixin {
         return register("fishing_rod", FishingRodItem::new, new Item.Settings().maxDamage(64).enchantable(1).repairable(Items.STRING));
     }
 
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
+                                                                                                                                                                                                                                    target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;")))
+    private static Item spiderEyeBait(String id, Item.Settings settings) {
+        return register("spider_eye", new Item.Settings().food(FoodComponents.SPIDER_EYE, ConsumableComponents.SPIDER_EYE).component(ItemRegistry.BAIT_POWER, new BaitComponent(1)));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
+                                                                                                                                                                                                  target = "Lnet/minecraft/item/Items;SPIDER_EYE:Lnet/minecraft/item/Item;")))
+    private static Item fermentedSpiderEyeBait(String id) {
+        return register("fermented_spider_eye", new Item.Settings().component(ItemRegistry.BAIT_POWER, new BaitComponent(2)));
+    }
+
     @Unique
     private static Function<Item.Settings, Item> createBlockItemWithUniqueName(Block block) {
-        return /* method_63813 */ settings -> new BlockItem(block, settings.useItemPrefixedTranslationKey());
+        return settings -> new BlockItem(block, settings.useItemPrefixedTranslationKey());
     }
 }

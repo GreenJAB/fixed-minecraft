@@ -137,7 +137,7 @@
           "type": "minecraft:item",
           "functions": [
             {
-              "function": "minecraft:enchant_with_levels",,
+              "function": "minecraft:enchant_with_levels",
                 "options": "#minecraft:on_random_loot",
               "levels": 30.0,
               "treasure": true

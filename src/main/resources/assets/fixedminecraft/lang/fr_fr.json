@@ -62,12 +62,13 @@
     "advancements.end.kill_omen_dragon.description": "Vaincre le dragon sous l'influence du mauvais présage.",
     "filled_map.explorer" : "Carte d'exploration des %s",
     "options.newArmorHud" : "Afficher l'armure dans le HUD",
-    "world.moon.full_moon": "Pleine lune",
+    "world.moon.full_moon": "Pleine lune \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Gibbeuse décroissante",
-    "world.moon.third_quarter": "Troisième trimestre",
+    "world.moon.third_quarter": "Troisième trimestre \uD83D\uDE9C",
     "world.moon.waning_crescent": "Croissant décroissant",
-    "world.moon.new_moon": "Nouvelle lune",
+    "world.moon.new_moon": "Nouvelle lune ⚔",
     "world.moon.waxing_crescent": "Croissant de cire",
-    "world.moon.first_quarter": "Premier trimestre",
-    "world.moon.waxing_gibbous": "Gibbeuse croissante"
+    "world.moon.first_quarter": "Premier trimestre ⛏",
+    "world.moon.waxing_gibbous": "Gibbeuse croissante",
+    "component.fixedminecraft.bait": "Niveau d'appât: %s"
 }
