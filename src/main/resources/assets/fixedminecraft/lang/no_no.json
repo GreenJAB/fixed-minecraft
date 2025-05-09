@@ -62,12 +62,13 @@
     "advancements.end.kill_omen_dragon.description": "Drep dragen mens du er påvirket av dårlig gjærtegn",
     "filled_map.explorer" : "Oppdagelseskart over %s",
     "options.newArmorHud" : "Vis rustning i HUD",
-    "world.moon.full_moon": "Fullmåne",
+    "world.moon.full_moon": "Fullmåne \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Avtagende Gibbous",
-    "world.moon.third_quarter": "Tredje kvartal",
+    "world.moon.third_quarter": "Tredje kvartal \uD83D\uDE9C",
     "world.moon.waning_crescent": "Avtagende halvmåne",
-    "world.moon.new_moon": "Nymåne",
+    "world.moon.new_moon": "Nymåne ⚔",
     "world.moon.waxing_crescent": "Voksende halvmåne",
-    "world.moon.first_quarter": "Første kvartal",
-    "world.moon.waxing_gibbous": "Voksende Gibbous"
+    "world.moon.first_quarter": "Første kvartal ⛏",
+    "world.moon.waxing_gibbous": "Voksende Gibbous",
+    "component.fixedminecraft.bait": "Lokkemad niveau: %s"
 }

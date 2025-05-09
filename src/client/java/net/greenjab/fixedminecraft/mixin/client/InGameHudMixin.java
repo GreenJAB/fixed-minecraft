@@ -144,7 +144,7 @@ public class InGameHudMixin {
                      player.getMainHandStack().getItem() instanceof FilledMapItem ||
                      player.getOffHandStack().getItem() instanceof FilledMapItem ||
                        client.player.getJumpingMount() != null)) {
-                     top+=8;
+                     top+=6;
                  }
                  left = context.getScaledWindowWidth() / 2 - 91;
                  if (health == 0) left +=91- (client.textRenderer.getWidth(string))/2;

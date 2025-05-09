@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.night;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.FishingBobberEntity;
@@ -52,8 +53,7 @@ public class FishingBobberEntityMixin {
         }
 
         int baitpower = 0;
-        if (bait.isOf(Items.SPIDER_EYE))baitpower=1;
-        if (bait.isOf(Items.FERMENTED_SPIDER_EYE))baitpower=2;
+        if (bait!=ItemStack.EMPTY) baitpower = bait.getComponents().get(ItemRegistry.BAIT_POWER).level();
 
         if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
             baitpower += (playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
@@ -95,11 +95,11 @@ public class FishingBobberEntityMixin {
     private ItemStack getBait(PlayerEntity playerEntity) {
         ItemStack[] items = {playerEntity.getMainHandStack(), playerEntity.getOffHandStack()};
         for (ItemStack item : items) {
-            if (item.isOf(Items.SPIDER_EYE) || item.isOf(Items.FERMENTED_SPIDER_EYE)) return item;
+            if (item.getComponents().contains(ItemRegistry.BAIT_POWER)) return item;
         }
         for(int i = 0; i < playerEntity.getInventory().size(); ++i) {
             ItemStack item = playerEntity.getInventory().getStack(i);
-            if (item.isOf(Items.SPIDER_EYE)||item.isOf(Items.FERMENTED_SPIDER_EYE)) return item;
+            if (item.getComponents().contains(ItemRegistry.BAIT_POWER)) return item;
         }
         return ItemStack.EMPTY;
     }

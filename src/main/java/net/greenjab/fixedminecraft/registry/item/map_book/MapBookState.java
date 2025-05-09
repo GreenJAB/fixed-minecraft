@@ -69,7 +69,7 @@ public class MapBookState extends PersistentState {
         MapBookStateManager.INSTANCE.getMapBookState(server, id).players.clear();
     }
 
-    void addMapID(int id) {
+    public void addMapID(int id) {
         mapIDs.add(id);
         this.markDirty();
     }

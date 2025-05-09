@@ -6,6 +6,7 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsCompon
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem;
 import net.greenjab.fixedminecraft.registry.item.TotemItem;
+import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.minecraft.block.Block;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
@@ -82,6 +83,8 @@ public class ItemRegistry {
     /** This is used, IntelliJ just doesn't realise */
     public static final RegistryEntry<Potion> BLINDNESS = register("blindness", new Potion("blindness", new StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
     public static final RegistryEntry<Potion> LEVITATION = register("levitation", new Potion("levitation", new StatusEffectInstance(StatusEffects.LEVITATION, 1200)));
+
+    public static final ComponentType<BaitComponent> BAIT_POWER = registerComponent("bait_power", (builder) -> builder.codec(BaitComponent.CODEC).packetCodec(BaitComponent.PACKET_CODEC).cache());
 
     public static Item register(String id, Item.Settings settings) {
         return register(keyOf(id), Item::new, settings);

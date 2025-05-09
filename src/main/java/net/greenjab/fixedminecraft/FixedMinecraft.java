@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft;
 
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -14,7 +13,6 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
-import net.greenjab.fixedminecraft.registry.registries.RecipeRegistry;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -48,7 +46,6 @@ public class FixedMinecraft implements ModInitializer {
 
         ItemGroupRegistry.register();
 
-        RecipeRegistry.register();
         GameruleRegistry.register();
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
