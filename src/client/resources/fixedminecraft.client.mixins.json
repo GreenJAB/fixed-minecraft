@@ -12,6 +12,7 @@
         "AdvancementWidgetMixin",
         "AnvilScreenMixin",
         "BackgroundRendererMixin",
+        "CartographyTableScreenMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
         "CreateWorldScreenMixin",
