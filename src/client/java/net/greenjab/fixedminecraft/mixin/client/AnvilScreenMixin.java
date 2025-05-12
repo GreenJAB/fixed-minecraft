@@ -19,6 +19,7 @@ import java.awt.*;
 @Mixin(AnvilScreen.class)
 public class AnvilScreenMixin {
 
+    int cap = 0;
 
     @ModifyConstant(method = "drawForeground", constant = @Constant(intValue = 40, ordinal = 0))
     private int newMax(int i, @Local(argsOnly = true) DrawContext context) {
@@ -53,7 +54,7 @@ public class AnvilScreenMixin {
         ItemStack ItemOutput = ItemStack.EMPTY;
         if (ASH.getSlot(0).hasStack()) {
             ItemInput1 = ASH.slots.get(0).getStack();
-        }
+        } else cap = 0;
         if (ASH.getSlot(2).hasStack()) {
             ItemOutput = ASH.slots.get(2).getStack();
         }
@@ -64,16 +65,19 @@ public class AnvilScreenMixin {
             levelCost-=500;
             ItemCapacity++;
         }
+        if (cap!=0 && ItemCapacity==0 && ItemInput1!=ItemStack.EMPTY) {
+            ItemCapacity = cap;
+        }
+        cap = ItemCapacity;
         int OutputCost = levelCost;
         boolean netherite = FixedMinecraft.netheriteAnvil;
+
+        if (ItemCapacity==0) return levelCost;
 
         if (ItemInput1 != ItemStack.EMPTY) {
             InputCost = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemInput1, false);
             if (!ASH.getSlot(1).hasStack()) {
                 OutputCost = InputCost;
-            }
-            if (ItemCapacity == 0) {
-                OutputCost = 0;
             }
             if (!ItemOutput.isEmpty()) {
                 if (!ItemOutput.hasEnchantments() && !ItemInput1.isOf(Items.ENCHANTED_BOOK)) {
