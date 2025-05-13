@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.client.gui.screen.ingame.CartographyTableScreen;
 import net.minecraft.component.ComponentType;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,6 +17,6 @@ public class CartographyTableScreenMixin {
         if (itemStack.getItem() instanceof MapBookItem) {
             return null;
         }
-        return itemStack;
+        return itemStack.get(DataComponentTypes.MAP_ID);
     }
 }
