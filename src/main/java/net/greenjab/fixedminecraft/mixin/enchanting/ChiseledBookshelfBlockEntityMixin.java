@@ -46,7 +46,6 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
         NbtCompound nbt = Inventories.writeNbt(new NbtCompound(), inventory, registries);
         nbt.putInt("last_interacted_slot", lastInteractedSlot);
-        Networking.sendUpdatePacket(pos);
         return nbt;
     }
 
