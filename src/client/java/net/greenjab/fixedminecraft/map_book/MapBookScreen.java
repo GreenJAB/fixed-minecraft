@@ -57,10 +57,6 @@ public class MapBookScreen extends Screen {
         }
         setScale(targetScale, width/2.0f, height/2.0f);
 
-        /*for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
-                addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
-        }*/
-
         for (int i = 4;i >= 0;i--) {
             for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
                 if (mapStateData.mapState.scale == i) addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));

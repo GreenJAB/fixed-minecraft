@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/rail_flat",
-  "textures": {
-    "rail": "fixedminecraft:block/weathered_copper_rail"
-  }
+    "parent": "minecraft:block/powered_rail",
+    "textures": {
+        "particle": "fixedminecraft:block/weathered_copper_rail",
+        "rail": "fixedminecraft:block/weathered_copper_rail"
+    }
 }

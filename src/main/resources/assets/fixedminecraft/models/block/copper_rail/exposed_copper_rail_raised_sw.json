@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/template_rail_raised_sw",
-  "textures": {
-    "rail": "fixedminecraft:block/exposed_copper_rail"
-  }
+    "parent": "minecraft:block/powered_rail_raised_sw",
+    "textures": {
+        "particle": "fixedminecraft:block/exposed_copper_rail",
+        "rail": "fixedminecraft:block/exposed_copper_rail"
+    }
 }

@@ -9,6 +9,8 @@ import net.minecraft.text.TextCodecs;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Optional;
+
 public class MapBookPlayer {
     public String name = "";
     public double x = 0.0;
@@ -21,7 +23,7 @@ public class MapBookPlayer {
            instance -> instance.group(
                             Codec.STRING.fieldOf("name").forGetter(mapPlayer -> mapPlayer.name),
                             Codec.DOUBLE.fieldOf("x").forGetter(mapPlayer -> mapPlayer.x),
-                            Codec.DOUBLE.fieldOf("y").forGetter(mapPlayer -> mapPlayer.y),
+                            Codec.DOUBLE.optionalFieldOf("y").forGetter(mapPlayer -> Optional.of(mapPlayer.y)),
                             Codec.DOUBLE.fieldOf("z").forGetter(mapPlayer -> mapPlayer.z),
                             Codec.FLOAT.fieldOf("yaw").forGetter(mapPlayer -> mapPlayer.yaw),
                             Codec.STRING.fieldOf("dimension").forGetter(mapPlayer -> mapPlayer.dimension)
@@ -39,6 +41,10 @@ public class MapBookPlayer {
         this.z = z;
         this.yaw = yaw;
         this.dimension = dimension;
+    }
+
+    public MapBookPlayer(String name, Double x, Optional<Double> y, Double z, Float yaw, String dimension) {
+        this(name, x, y.orElse(0.0), z, yaw, dimension);
     }
 
     public void setPlayer(PlayerEntity player) {

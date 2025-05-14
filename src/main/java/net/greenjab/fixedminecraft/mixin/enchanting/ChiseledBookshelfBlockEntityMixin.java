@@ -7,22 +7,18 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.inventory.Inventories;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryOps;
 import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,8 +26,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import static net.minecraft.item.ItemStack.CODEC;
 
 @Mixin(ChiseledBookshelfBlockEntity.class)
 public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
@@ -49,68 +46,38 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
         return BlockEntityUpdateS2CPacket.create(this);
     }
 
-    /*@Unique
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        //NbtCompound nbt = Inventories.writeNbt(new NbtCompound(), inventory, registries);
-        NbtCompound nbt = super.toInitialChunkDataNbt(registries);
-        nbt.putNullable("hit_direction", ItemStack.MAP_CODEC.codec(), inventory.get(0));
-        nbt.putInt("last_interacted_slot", lastInteractedSlot);
-        Networking.sendUpdatePacket(pos);
-        return nbt;
-    }*/
-
-
-    /*@Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        NbtCompound nbtCompound = new NbtCompound();
-        for (int i = 0; i < 6;i++) {
-            if (!inventory.get(i).isEmpty()) {
-                RegistryOps<NbtElement> registryOps = registries.getOps(NbtOps.INSTANCE);
-                nbtCompound.put("item" + i, ItemStack.CODEC, registryOps, inventory.get(i));
-            }
-        }
+        NbtCompound nbtCompound = writeNbt(new NbtCompound(), inventory, registries);
         nbtCompound.putNullable("last_interacted_slot", Codec.INT, lastInteractedSlot);
-        Networking.sendUpdatePacket(pos);
         return nbtCompound;
     }
 
-    /*@Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        //Inventories.writeData(view, this.inventory, true);
-        for (int i = 0; i < 6;i++) {
-            if (!inventory.get(i).isEmpty()) {
-                RegistryOps<NbtElement> registryOps = registries.getOps(NbtOps.INSTANCE);
-                view.put("item" + i, ItemStack.CODEC, registryOps, inventory.get(i));
+    @Unique
+    private static NbtCompound writeNbt(NbtCompound nbt, DefaultedList<ItemStack> stacks, RegistryWrapper.WrapperLookup registries) {
+        NbtList nbtList = new NbtList();
+
+        for (int i = 0; i < stacks.size(); i++) {
+            ItemStack itemStack = stacks.get(i);
+            if (!itemStack.isEmpty()) {
+                NbtCompound nbtCompound = new NbtCompound();
+                nbtCompound.putByte("Slot", (byte)i);
+                nbtList.add(toNbt(itemStack, registries, nbtCompound));
             }
         }
-        view.putInt("last_interacted_slot", this.lastInteractedSlot);
-        Networking.sendUpdatePacket(pos);
-    }*/
+        nbt.put("Items", nbtList);
 
-    /*@Override
-    public void readData(ReadView view) {
-        System.out.println("read AAAAAAAAAAAAA");
-        for (int i = 0; i < 6;i++) {
-            inventory.set(i, view.read("item"+i, ItemStack.CODEC).orElse(ItemStack.EMPTY));
-            System.out.println(i +", "+ inventory.get(i));
+        return nbt;
+    }
+
+    @Unique
+    private static NbtElement toNbt(ItemStack itemStack, RegistryWrapper.WrapperLookup registries, NbtElement prefix) {
+        if (itemStack.isEmpty()) {
+            throw new IllegalStateException("Cannot encode empty ItemStack");
+        } else {
+            return CODEC.encode(itemStack, registries.getOps(NbtOps.INSTANCE), prefix).getOrThrow();
         }
-        lastInteractedSlot = view.read("last_interacted_slot", Codec.INT).orElse(null);
-    }*/
-    /*@Override
-    protected void writeData(WriteView view) {
-        super.writeData(view);
-        Inventories.writeData(view, this.inventory, true);
-        view.putInt("last_interacted_slot", this.lastInteractedSlot);
-        Networking.sendUpdatePacket(pos);
-    }*/
-
-    /*@Inject(method = "writeData", at = @At("TAIL"))
-    private void sendPacket(WriteView view, CallbackInfo ci) {
-        Networking.sendUpdatePacket(pos);
-    }*/
-
+    }
 
     @Inject(method = "removeStack(II)Lnet/minecraft/item/ItemStack;", at = @At(
             value = "RETURN"

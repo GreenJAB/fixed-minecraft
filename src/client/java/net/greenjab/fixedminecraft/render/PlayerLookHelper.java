@@ -54,7 +54,7 @@ public abstract class PlayerLookHelper {
         Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
         OptionalInt slot = getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
-        //System.out.println(blockEntity.getStack(slot.getAsInt()));
+        //System.out.println("getLookingAtBook, " + blockEntity.getStack(slot.getAsInt()));
         return blockEntity.getStack(slot.getAsInt());
     }
 
@@ -107,7 +107,7 @@ public abstract class PlayerLookHelper {
         List<Text> displayText = new ArrayList<>();
         displayText.add(book.getItem().getName());
         if (book.contains(DataComponentTypes.CUSTOM_NAME) || book.isOf(Items.WRITTEN_BOOK)) {
-            Style s = book.getName().getStyle().withItalic(true);
+            Style s = book.getName().getStyle().withItalic(true).withColor(-1);
             //s.withItalic(true);
             displayText.add(book.getName().getWithStyle(s).get(0));
         }

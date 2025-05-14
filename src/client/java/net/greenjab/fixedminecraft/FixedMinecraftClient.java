@@ -74,7 +74,7 @@ public class FixedMinecraftClient implements ClientModInitializer {
             List<Text> display = PlayerLookHelper.getBookText(book);
             for(int i = 0; i < display.size(); i++) {
                 Text text = display.get(i);
-                context.drawText(client.textRenderer, text, (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2), (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)), book.getItem() == Items.ENCHANTED_BOOK ? 16777045 : 16777215, true);
+                context.drawText(client.textRenderer, text, (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2), (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)), book.getItem() == Items.ENCHANTED_BOOK ? -171 : -1, true);//16777045 : 16777215
             }
         matrices.popMatrix();
     }

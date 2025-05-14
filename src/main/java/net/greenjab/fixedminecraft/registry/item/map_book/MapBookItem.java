@@ -71,7 +71,7 @@ public class MapBookItem extends Item {
             ItemStack otherHand = hand == Hand.MAIN_HAND ? player.getOffHandStack() : player.getMainHandStack();
 
             var openMap = true;
-            if (getNearestMap(item, world, player.getPos())==null) {
+            if (getNearestMap(item, world, player.getPos())==null || otherHand.isOf(Items.MAP)) {
                 if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(),0)) {
                     player.getWorld().playSoundFromEntity(
                             null,
