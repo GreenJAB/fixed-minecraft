@@ -39,6 +39,7 @@ public abstract class PlayerLookHelper {
      */
     @SuppressWarnings("JavadocReference")
     public static ItemStack getLookingAtBook(ChiseledBookshelfBlockEntity blockEntity) {
+
          ItemStack book = ItemStack.EMPTY;
         MinecraftClient client = MinecraftClient.getInstance();
         if (!(client.crosshairTarget instanceof BlockHitResult hit)) return book;
@@ -53,6 +54,7 @@ public abstract class PlayerLookHelper {
         Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
         OptionalInt slot = getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
+        //System.out.println(blockEntity.getStack(slot.getAsInt()));
         return blockEntity.getStack(slot.getAsInt());
     }
 

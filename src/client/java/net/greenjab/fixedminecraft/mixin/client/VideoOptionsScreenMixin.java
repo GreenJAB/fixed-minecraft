@@ -40,7 +40,7 @@ public class VideoOptionsScreenMixin  {
                 gameOptions.getGlintStrength(),
                 gameOptions.getMenuBackgroundBlurriness(),
                 gameOptions.getBobView(),
-                gameOptions.method_71270(),
+                gameOptions.getCloudRenderDistance(),
                 FixedMinecraftClient.newArmorHud
         });
     }

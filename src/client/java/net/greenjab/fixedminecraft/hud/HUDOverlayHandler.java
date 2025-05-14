@@ -46,7 +46,6 @@ public class HUDOverlayHandler
         float modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f));
         int endSaturationBar = (int) Math.ceil(modifiedSaturation / 2);
         int iconSize = 9;
-        context.goUpLayer();
         for (int i = 0; i < endSaturationBar; i++) {
             // gets the offset that needs to be render of icon
             IntPoint offset = foodBarOffsets.get(i);

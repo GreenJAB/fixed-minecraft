@@ -31,7 +31,7 @@ public class MapTile implements Drawable {
         Matrix3x2fStack matrix = context.getMatrices();
 
         context.getMatrices().pushMatrix();
-        for (int i = 0; i < 4-mapState.scale;i++)context.goUpLayer();
+        //for (int i = 0; i < 4-mapState.scale;i++)context.goUpLayer();
         matrix.translate(screen.x, screen.y);
         matrix.scale(screen.scale, screen.scale);
         matrix.translate(
@@ -39,7 +39,7 @@ public class MapTile implements Drawable {
                 (float) (mapState.centerZ - offset + screen.height / 2.0));
         matrix.scale(mapScale, mapScale);
         context.drawMap(mapRenderState);
-        for (int i = 0; i < 4-mapState.scale;i++)context.popLayer();
+        //for (int i = 0; i < 4-mapState.scale;i++)context.popLayer();
         matrix.popMatrix();
     }
 }

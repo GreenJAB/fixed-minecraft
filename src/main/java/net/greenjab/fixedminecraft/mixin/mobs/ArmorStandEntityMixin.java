@@ -30,9 +30,6 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
     @Shadow
     public abstract boolean shouldShowArms();
 
-    @Shadow
-    public abstract void tick();
-
     public ArmorStandEntityMixin(EntityType<? extends ArmorStandEntityMixin> entityType, World world) {
         super(entityType, world);
     }

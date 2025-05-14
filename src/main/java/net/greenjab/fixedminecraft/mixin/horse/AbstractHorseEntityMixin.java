@@ -143,7 +143,7 @@ public class AbstractHorseEntityMixin {
         return original;
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;canActVoluntarily()Z"))
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;isAngry()Z"))
     private void sprintCheck(CallbackInfo ci) {
         AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
         if (AHE.hasControllingPassenger() && AHE.isOnGround()) {

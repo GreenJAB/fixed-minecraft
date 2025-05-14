@@ -55,7 +55,7 @@ public class LocatorBarMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/entity/Entity;getWorld()Lnet/minecraft/world/World;"
     ))
-    private void addBannerMarkers(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci, @Local(ordinal = 1)int j){
+    private void addBannerMarkers(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         MinecraftClient client = MinecraftClient.getInstance();
         int i = getCenterY(client.getWindow());
 
@@ -192,8 +192,7 @@ public class LocatorBarMixin {
                                     int n = aboveOrBelow(c, x, y, z, client);
                                     if (n != 0) {
                                         int o = n < 0 ? 9 : -5;
-                                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), 14, 5, j, 0,
-                                                k + m + 1, i + o - 1, 7, 5);
+                                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), k + m + 1, i + o - 1, 7, 5);
                                     }
                                 }
                             }

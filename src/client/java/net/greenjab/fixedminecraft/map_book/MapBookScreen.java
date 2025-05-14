@@ -57,8 +57,14 @@ public class MapBookScreen extends Screen {
         }
         setScale(targetScale, width/2.0f, height/2.0f);
 
-        for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
+        /*for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
                 addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
+        }*/
+
+        for (int i = 4;i >= 0;i--) {
+            for (MapStateData mapStateData : MapBookItem.getMapStates(item, client.world)) {
+                if (mapStateData.mapState.scale == i) addDrawable(new MapTile(this, mapStateData.id, mapStateData.mapState, client));
+            }
         }
 
         addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> { this.close();})
@@ -81,11 +87,11 @@ public class MapBookScreen extends Screen {
                 pos = pos.subtract(this.x / scale, this.y / scale, 0.0);
                 String dim = client.world.getDimensionEntry().getIdAsString();
                 if (!marker.dimension.contains(dim) || (pos.distanceTo(new Vec3d(marker.x, marker.z, 0)) * scale)>5) {
-                    MinecraftClient.getInstance().getNetworkHandler().sendCommand(String.format(
+                    MinecraftClient.getInstance().getNetworkHandler().sendChatCommand(String.format(
                             "mapBookMarker %s \"%s\" \"%s\" \"%s\"",
                             getMapBookId(item), pos.getX(), pos.getY(), dim));
                 } else {
-                    MinecraftClient.getInstance().getNetworkHandler().sendCommand(String.format(
+                    MinecraftClient.getInstance().getNetworkHandler().sendChatCommand(String.format(
                             "mapBookMarker %s \"%s\" \"%s\" \"%s\"",
                             getMapBookId(item), 0, 0, ""));
                 }
@@ -97,7 +103,7 @@ public class MapBookScreen extends Screen {
                 pos = pos.multiply((1/scale));
                 pos = pos.subtract(width / 2.0, height / 2.0, 0.0);
                 pos = pos.subtract(this.x/scale, this.y/scale, 0.0);
-                MinecraftClient.getInstance().getNetworkHandler().sendCommand(String.format(
+                MinecraftClient.getInstance().getNetworkHandler().sendChatCommand(String.format(
                         "tp %.6f %.6f %.6f",
                         pos.getX(), client.player.getY(), pos.getY()));
             }
@@ -176,11 +182,8 @@ public class MapBookScreen extends Screen {
         Matrix3x2fStack matrix = context.getMatrices();
         matrix.pushMatrix();
         matrix.translate((int)((width / 2.0f) -o / 2f), (int)(height -60.0f + 8f));
-        context.goTopLayer();
-        context.popLayer();
         context.fill(- 1, - 1, o, 9 , (new Color(50, 50, 50, 150)).hashCode());
-        context.goUpLayer();
-        context.drawText(textRenderer, text, 0, 0, 16777215, true);
+        context.drawText(textRenderer, text, 0, 0, -1, true);
         matrix.popMatrix();
 
     }
@@ -207,9 +210,6 @@ public class MapBookScreen extends Screen {
                         (byte) 0, (byte) 0, (byte) 0,Optional.empty()
                 )
         );
-
-        context.goUpLayer();
-        context.goUpLayer();
 
         if (thisPlayer) {
             context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
@@ -241,9 +241,7 @@ public class MapBookScreen extends Screen {
         matrix.scale(1 / this.scale, 1 / this.scale);
         matrix.translate(-o / 2f, 8.0f);
 
-        context.goUpLayer();
         context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
-        context.goUpLayer();
         context.drawText(textRenderer, text, 0, 0, -1, true);
         matrix.popMatrix();
 
@@ -281,8 +279,6 @@ public class MapBookScreen extends Screen {
                                         (byte) 0,(byte) 0,(byte) 0,Optional.empty()
                                 )
                         );
-                        context.goUpLayer();
-                        context.goUpLayer();
                         context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
                         matrix.popMatrix();
 
@@ -301,9 +297,9 @@ public class MapBookScreen extends Screen {
                             matrix.scale(1 / this.scale, 1 / this.scale);
                             matrix.translate(-o / 2f, 8.0f);
 
-                            context.goUpLayer();
+                            //context.goUpLayer();
                             context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
-                            context.goUpLayer();
+                            //context.goUpLayer();
                             context.drawText(textRenderer, text, 0, 0, -1, true);
                             matrix.popMatrix();
                         }
@@ -334,12 +330,8 @@ public class MapBookScreen extends Screen {
                 )
         );
 
-        context.goUpLayer();
-        context.goUpLayer();
-
         context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
         matrix.popMatrix();
-
     }
 
 

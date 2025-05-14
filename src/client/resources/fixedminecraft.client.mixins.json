@@ -11,7 +11,6 @@
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",
         "AnvilScreenMixin",
-        "BackgroundRendererMixin",
         "CartographyTableScreenMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
@@ -23,6 +22,7 @@
         "GameOptionsMixin",
         "GameRendererMixin",
         "InGameHudMixin",
+        "LavaFogModifierMixin",
         "MerchantScreenMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
@@ -35,12 +35,14 @@
         "glint.EquipmentRendererMixin",
         "glint.ItemModelManagerMixin",
         "glint.ItemRendererMixin",
-        "map.ClickableWidgetMixin",
         "map.HeldItemRendererMixin",
         "map.InGameHudMixin",
         "map.ItemFrameEntityRendererMixin",
         "map.LocatorBarMixin",
         "map.MapPositionRequestMixin",
         "map.MapRendererMixin"
+    ],
+    "mixins": [
+        "FogRendererMixin"
     ]
 }

@@ -214,7 +214,6 @@ public abstract class AdvancementWidgetMixin {
         } else {
             q = originX + this.x;
         }
-        context.pushCheckpoint();
         int r = i + m;
 
         if (!this.description.isEmpty()) {
@@ -223,17 +222,14 @@ public abstract class AdvancementWidgetMixin {
         if (this.advancement.getAdvancement().rewards().experience()!=0) {
             context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
         }
-        context.goUpLayer();
 
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
 
-        context.goUpLayer();
         context.drawGuiTexture(
                 RenderPipelines.GUI_TEXTURED, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
         );
         int s = q + 5;
-        context.goUpLayer();
         if (bl) {
             this.drawText(context, this.title, s, j + 9, -1);
             if (text != null) {
@@ -250,12 +246,10 @@ public abstract class AdvancementWidgetMixin {
 
         if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
             OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
-            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
-            context.drawText(this.client.textRenderer, reward, s, k, colour, false);
+            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?-16711936:-5592406;//5569620:
+            context.drawTextWithShadow(this.client.textRenderer, reward, s, k, colour);
         }
-        context.goUpLayer();
         context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
-        context.popCheckpoint();
     }
 }
 

@@ -52,7 +52,7 @@ public abstract class ItemStackMixin {
         }
     }
 
-    @Inject(method = "fromNbt", at = @At("RETURN"), cancellable = true)
+    /*@Inject(method = "fromNbt", at = @At("RETURN"), cancellable = true)
     private static void addGreenGlintUpdate(RegistryWrapper.WrapperLookup registries, NbtElement nbt,
                                             CallbackInfoReturnable<Optional<ItemStack>> cir) {
         Optional<ItemStack> optionalItemStackstack = cir.getReturnValue();
@@ -70,7 +70,7 @@ public abstract class ItemStackMixin {
             dataFix(stack);
             cir.setReturnValue(Optional.of(stack));
         }
-    }
+    }*/
 
     @Unique
     private static void dataFix(ItemStack stack) {

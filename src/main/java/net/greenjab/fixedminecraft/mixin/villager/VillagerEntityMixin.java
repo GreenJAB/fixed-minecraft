@@ -324,7 +324,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .iterateEntries(biomeEnchants.get(villagerData.type().getIdAsString()));
         HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
         optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
-        List<VillagerEntity> list = villagerEntity.getEntityWorld()
+        List<VillagerEntity> list = villagerEntity.getWorld()
                 .getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(32), EntityPredicates.VALID_LIVING_ENTITY);
         for (VillagerEntity villager2 : list) {
             if (villager2 != villagerEntity) {
