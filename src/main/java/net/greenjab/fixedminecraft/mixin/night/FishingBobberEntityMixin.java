@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.night;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,9 +11,9 @@ import net.minecraft.entity.projectile.FishingBobberEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
-import net.minecraft.loot.context.LootWorldContext;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
@@ -33,7 +34,7 @@ public class FishingBobberEntityMixin {
     @Final
     private int luckBonus;
 
-    @ModifyArg(method = "use", at = @At(value = "INVOKE", target ="Lnet/minecraft/loot/context/LootWorldContext$Builder;luck(F)Lnet/minecraft/loot/context/LootWorldContext$Builder;"))
+    @ModifyArg(method = "use", at = @At(value = "INVOKE", target ="Lnet/minecraft/loot/context/LootContextParameterSet$Builder;luck(F)Lnet/minecraft/loot/context/LootContextParameterSet$Builder;"))
     private float oneItem(float luck) {
         return 0;
     }
@@ -73,17 +74,22 @@ public class FishingBobberEntityMixin {
         if (rand>chanceFish+chanceBad) lootPool = 2;
         if (rand>chanceFish+chanceBad+chanceMid) lootPool = 3;
 
-        String[] tables = {"fish", "junk", "mid", "treasure"};
+        String[] tables = {"junk", "mid", "treasure", "fish"};
 
-        Identifier lootTableId = FixedMinecraft.id("gameplay/fixed_fishing/" + tables[lootPool]);
-        LootTable lootTable = FBE.getWorld().getServer()
-                .getReloadableRegistries()
-                .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
+        LootTable lootTable = switch (lootPool) {
+            case 1 ->
+                    playerEntity.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, FixedMinecraft.id("gameplay/fixed_fishing/" + tables[0])));
+            case 2 ->
+                    playerEntity.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, FixedMinecraft.id("gameplay/fixed_fishing/" + tables[1])));
+            case 3 ->
+                    playerEntity.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, FixedMinecraft.id("gameplay/fixed_fishing/" + tables[2])));
+            default ->
+                    playerEntity.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, FixedMinecraft.id("gameplay/fixed_fishing/" + tables[3])));
+        };
 
-        LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
+        LootContextParameterSet lootContextParameterSet = (new LootContextParameterSet.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
         ObjectArrayList<ItemStack> loots = lootTable.generateLoot(lootContextParameterSet);
-        if (loots.isEmpty()) return Items.DIRT.getDefaultStack();
         loot = loots.get(0);
 
         if (!playerEntity.getAbilities().creativeMode) bait.decrement(1);

@@ -41,8 +41,8 @@ public class HeldItemRendererMixin {
 
     @ModifyArg(method = "renderFirstPersonMap",
                at = @At(value = "INVOKE",
-              target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/render/MapRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ZI)V"
-    ), index = 3)
+              target = "Lnet/minecraft/client/render/MapRenderer;draw(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/component/type/MapIdComponent;Lnet/minecraft/item/map/MapState;ZI)V"
+    ), index = 4)
     private boolean showIconsOnItemFrameMap(boolean bl){
         return false;
     }

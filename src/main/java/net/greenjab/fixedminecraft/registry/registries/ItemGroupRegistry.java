@@ -1,11 +1,17 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.loot.LootTables;
+
+import static net.minecraft.loot.LootDataType.LOOT_TABLES;
 
 public class ItemGroupRegistry {
 
@@ -36,8 +42,12 @@ public class ItemGroupRegistry {
                         entries.add(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
                     }).build();
 
-
     public static void register() {
         Registry.register(Registries.ITEM_GROUP, "fixed", FIXED);
+
+        String[] tables = {"fish", "junk", "mid", "treasure"};
+        Identifier lootTableId = FixedMinecraft.id("gameplay/fixed_fishing/" + tables[0]);
+        LootTables.LOOT_TABLES.add(lootTableId);
+
     }
 }

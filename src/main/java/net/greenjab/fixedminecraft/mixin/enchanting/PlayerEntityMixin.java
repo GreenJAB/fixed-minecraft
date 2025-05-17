@@ -22,10 +22,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
 
-    @Inject(method = "getExperienceToDrop", at = @At("HEAD"), cancellable = true)
-    private void removeExclusivity(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
+    @Inject(method = "getXpToDrop", at = @At("HEAD"), cancellable = true)
+    private void removeExclusivity(CallbackInfoReturnable<Integer> cir) {
         PlayerEntity player = (PlayerEntity) (Object)this;
-        if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
+        if (!player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
             int i = 0;
             for (int level = 0; level < player.experienceLevel/2;level++) {
                 i +=getNextLevelExperience(level);

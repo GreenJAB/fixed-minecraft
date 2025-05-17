@@ -182,7 +182,7 @@ public abstract class EnderDragonFightMixin {
 
             List<EndCrystalEntity> list = this.world.getNonSpectatingEntities(EndCrystalEntity.class, new Box(-50, 50, -50, 50, 120, 50));
             for (EndCrystalEntity endCrystalEntity : list) {
-                endCrystalEntity.kill(this.world);
+                endCrystalEntity.kill();
             }
 
             BlockPos blockPos = this.exitPortalLocation;
@@ -190,8 +190,7 @@ public abstract class EnderDragonFightMixin {
             BlockPos b = blockPos.up(1);
             for (Direction d : Direction.values()) {
                 if (d.getAxis().isHorizontal()) {
-                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world.getWorldChunk(b.offset(d, 3)).getWorld(), SpawnReason.CHUNK_GENERATION);
-
+                    EndCrystalEntity endCrystalEntity = EntityType.END_CRYSTAL.create(this.world.getWorldChunk(b.offset(d, 3)).getWorld());
                     if (endCrystalEntity != null) {
                         endCrystalEntity.refreshPositionAndAngles(b.offset(d, 3).getX()+0.5, b.getY(), b.offset(d, 3).getZ() + 0.5, 0, 0.0F);
                         endCrystalEntity.setInvulnerable(true);
@@ -225,7 +224,7 @@ public abstract class EnderDragonFightMixin {
             if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
                 playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
                 enderDragonEntity.addCommandTag("omen");
-                enderDragonEntity.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.MAX_HEALTH).getValue()*1.5);
+                enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getValue()*1.5);
                 enderDragonEntity.setHealth(enderDragonEntity.getMaxHealth());
             }
         }

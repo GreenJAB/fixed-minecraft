@@ -1,10 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.EnchantmentEffectComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -14,10 +15,12 @@ import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.InventoryChangedListener;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Equipment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.screen.MerchantScreenHandler;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
@@ -44,6 +47,9 @@ import java.util.Objects;
 @Mixin(MerchantScreenHandler.class)
 public abstract class MerchantScreenHandlerMixin extends ScreenHandler implements InventoryChangedListener {
 
+    @Shadow
+    protected abstract void playYesSound();
+
     @Unique
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{
             Identifier.ofVanilla("container/slot/helmet"),
@@ -51,8 +57,6 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
             Identifier.ofVanilla("container/slot/leggings"),
             Identifier.ofVanilla("container/slot/boots") };
 
-    @Shadow
-    protected abstract void playYesSound();
 
     @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
@@ -135,8 +139,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                 }
 
 
-                public Identifier getBackgroundSprite() {
-                    return EMPTY_ARMOR_SLOT_TEXTURES[finalI];
+                public Pair<Identifier, Identifier> getBackgroundSprite() {
+                    return Pair.of(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, EMPTY_ARMOR_SLOT_TEXTURES[equipmentSlot.getEntitySlotId()]);
                 }
             });
         }
@@ -144,10 +148,21 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
     }
 
-    @Unique
+    /*@Unique
     public final EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
         EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
         return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
+    }*/
+
+    @Unique
+    public EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
+        Equipment equipment = Equipment.fromStack(stack);
+        if (equipment != null) {
+            EquipmentSlot equipmentSlot = equipment.getSlotType();
+            return equipmentSlot;
+        }
+
+        return EquipmentSlot.MAINHAND;
     }
 
     static {

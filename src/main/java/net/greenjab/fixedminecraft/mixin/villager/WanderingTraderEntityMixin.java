@@ -251,7 +251,7 @@ public abstract class WanderingTraderEntityMixin {
             World world = WTE.getWorld();
             if (world instanceof ServerWorld serverWorld) {
 
-                int map = serverWorld.random.nextInt(6);
+                int map = serverWorld.random.nextInt(5);
                 switch (map) {
                     case 0:
                         CustomData.biomeSearch = BiomeKeys.MUSHROOM_FIELDS;
@@ -268,9 +268,6 @@ public abstract class WanderingTraderEntityMixin {
                     case 4:
                         CustomData.biomeSearch = BiomeKeys.WARM_OCEAN;
                         break;
-                    case 5:
-                        CustomData.biomeSearch = BiomeKeys.PALE_GARDEN;
-                        break;
                     default:
                         CustomData.biomeSearch = BiomeKeys.FOREST;
                         break;
@@ -282,9 +279,9 @@ public abstract class WanderingTraderEntityMixin {
                     ItemStack itemStack = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte) 2, true, true);
                     FilledMapItem.fillExplorationMap(serverWorld, itemStack);
 
-                    String[] names = {"mushroom_fields", "cherry_grove", "ice_spikes", "badlands", "warm_ocean", "pale_garden"};
+                    String[] names = {"mushroom_fields", "cherry_grove", "ice_spikes", "badlands", "warm_ocean"};
                     Text name = Text.translatable("filled_map.explorer", Text.translatable("biome.minecraft." + names[map]));
-                    int[] colour = {7412448, 16751570, 4639231, 16725801, 1938431, 10856879};
+                    int[] colour = {7412448, 16751570, 4639231, 16725801, 1938431};
 
                     itemStack.set(DataComponentTypes.ITEM_NAME, name);
                     MapState m = FilledMapItem.getMapState(itemStack, serverWorld);

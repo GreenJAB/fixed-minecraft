@@ -98,7 +98,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                         .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                             }
                             BlockPos b = this.dragon.getBodyParts()[5].getBlockPos();
-                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld(), SpawnReason.MOB_SUMMONED);
+                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld());
                             if (endermiteEntity != null) {
                                 endermiteEntity.refreshPositionAndAngles(b.getX()-this.dragon.getVelocity().getX(), b.up().getY(), b.getZ()-this.dragon.getVelocity().getZ(), 0, 0.0F);
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1));
@@ -107,7 +107,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 if (!this.dragon.getCommandTags().contains("omen")) {
                                     endermiteEntity.setHealth(1);
                                 }
-                                endermiteEntity.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).setBaseValue(30);
+                                endermiteEntity.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(30);
                                 this.dragon.getWorld().spawnEntity(endermiteEntity);
 
                                 this.seenTargetTimes = 0;
@@ -171,6 +171,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
         }
         ci.cancel();
     }
+
 
     @Override
     public PhaseType<? extends Phase> getType() {

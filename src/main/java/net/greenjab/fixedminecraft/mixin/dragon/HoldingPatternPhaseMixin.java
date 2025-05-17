@@ -43,7 +43,7 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
         if (player.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))>150*150) {
             ci.cancel();
         } else {
-            if (this.dragon.getRandom().nextInt(3) == 0 || player.isGliding()) {
+            if (this.dragon.getRandom().nextInt(3) == 0 || player.isFallFlying()) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
                 this.dragon.getPhaseManager()
                         .create(PhaseType.CHARGING_PLAYER)

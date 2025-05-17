@@ -43,22 +43,25 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
     }
 
     @Inject(method = "serverTick", at = @At("HEAD"),cancellable = true)
-    private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
+    private void redoTick(CallbackInfo ci) {
 
         this.ticks++;
 
         TargetPredicate CLOSE_PLAYER_PREDICATE;
         CLOSE_PLAYER_PREDICATE = TargetPredicate.createAttackable()
                 .setBaseMaxDistance(150.0)
-                .setPredicate(/* method_18447 */ (player, world) -> Math.abs(player.getY() - this.dragon.getY()) <= 10.0);
+                .setPredicate(/* method_18447 */ player -> Math.abs(player.getY() - this.dragon.getY()) <= 10.0);
 
-        LivingEntity livingEntity = serverWorld
+        LivingEntity livingEntity = this.dragon
+                .getWorld()
                 .getClosestPlayer(CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
 
         if (this.ticks >= 100) {
             if (this.dragon.getRandom().nextFloat()<((this.timesRun-1)/(this.timesRun+1.0f))) {
 
-                livingEntity = serverWorld.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+                livingEntity = this.dragon
+                        .getWorld()
+                        .getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150.0), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
                 this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
                 if (livingEntity != null) {
                     if (livingEntity.squaredDistanceTo(this.dragon)>10*10) {
@@ -89,6 +92,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 if (!this.dragon.isSilent()) {
                     this.dragon.getWorld().syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
+
                 DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
                 this.dragon.getWorld().spawnEntity(dragonFireballEntity);
@@ -133,9 +137,9 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 Vec3d vec3d = new Vec3d(
                         livingEntity.getX() - this.dragon.getX(), 0.0, livingEntity.getZ() - this.dragon.getZ()).normalize();
                 Vec3d vec3d2 = new Vec3d(
-                         MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
+                        MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
                         0.0,
-                         (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
+                        (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
                 )
                         .normalize();
                 float f = (float) vec3d2.dotProduct(vec3d);
@@ -161,6 +165,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
         }
         ci.cancel();
     }
+
 
     @Unique
     @NotNull

@@ -48,7 +48,6 @@ public class FixedMinecraft implements ModInitializer {
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK);
-        DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT);
 
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {

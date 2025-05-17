@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.Item;
@@ -18,7 +19,6 @@ import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -28,9 +28,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,7 +61,7 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
         if (world != null && !world.isClient()) {
             ServerPlayerEntity player = (ServerPlayerEntity) user;
             ItemStack item = user.getStackInHand(hand);
@@ -82,7 +82,7 @@ public class MapBookItem extends Item {
                 }
             } else if (otherHand.isOf(Items.SHEARS)) {
                 if (removeMapAtPos(item, (ServerWorld)world, player.getPos(), player)) {
-                    otherHand.damage(1, player);
+                    otherHand.damage(1, player, EquipmentSlot.OFFHAND);
                     player.getWorld().playSoundFromEntity(
                             null,
                             player,
@@ -159,7 +159,7 @@ public class MapBookItem extends Item {
                 );
             }
         }
-        return ActionResult.SUCCESS;
+        return TypedActionResult.success(user.getStackInHand(hand));
     }
 
     private ItemStack getEmptyMap(PlayerEntity playerEntity) {

@@ -35,13 +35,13 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "dropShoulderEntities", at = @At("HEAD"), cancellable = true)
     private void newCheck(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        if (!(!PE.getWorld().isClient && ( PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isGliding() || PE.inPowderSnow))) {
+        if (!(!PE.getWorld().isClient && ( PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isFallFlying() || PE.inPowderSnow))) {
             ci.cancel();
         }
     }
 
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;dropShoulderEntities()V"))
-    private void dropOnHurt(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void dropOnHurt(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         dropShoulderEntities2();
     }
 

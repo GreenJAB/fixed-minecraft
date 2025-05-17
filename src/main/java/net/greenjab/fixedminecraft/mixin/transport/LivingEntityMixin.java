@@ -52,9 +52,10 @@ public abstract class LivingEntityMixin extends Entity {
      * Reduces water drag when using riptide.
      */
     @ModifyExpressionValue(
-            method = "travelInFluid", at = @At(
+            method = "travel", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+            target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z",
+            ordinal = 1
     )
     )
     private boolean boostWhenRiptide(boolean original) {
@@ -84,14 +85,10 @@ public abstract class LivingEntityMixin extends Entity {
         addVelocity(h, k, l);
     }
 
-    @Redirect(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
+    @Redirect(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
     private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
-        if (instance instanceof PlayerEntity) {
-            return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
-                     CustomData.getData(instance, "airTime") > 15);
-        } else {
-            return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava());
-        }
+        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
+                 CustomData.getData(instance, "airTime") > 15);
     }
 
     @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
@@ -106,8 +103,8 @@ public abstract class LivingEntityMixin extends Entity {
         return constant+0.05F*i;
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"))
-    private void cancelElytraOnHit(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"))
+    private void cancelElytraOnHit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof PlayerEntity) {
             if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {

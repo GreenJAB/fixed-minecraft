@@ -10,7 +10,6 @@ import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.thrown.EnderPearlEntity;
 import net.minecraft.entity.projectile.thrown.ThrownItemEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -45,8 +44,8 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
      * Go to place B and mount a horse. Ask a friend or use redstone to trigger the ender pearl.
      * Voila, you have teleported your horse!
      */
-    @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At("TAIL"))
-    private void saveVehicle(World world, LivingEntity owner, ItemStack stack, CallbackInfo ci) {
+    @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;)V", at = @At("TAIL"))
+    private void saveVehicle(World world, LivingEntity owner, CallbackInfo ci) {
         if (owner.hasVehicle()) {
             if (owner == rootVehicle(owner).getControllingPassenger()) {
                 vehicle = rootVehicle(owner);
@@ -68,47 +67,50 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
     }
     /**
      * Teleports the player vehicle to the destination if it matches the saved one.
-     *
      */
     @Redirect(
             method = "onCollision", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/server/network/ServerPlayerEntity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/server/network/ServerPlayerEntity;"
+            target = "Lnet/minecraft/entity/Entity;teleportTo(Lnet/minecraft/world/TeleportTarget;)Lnet/minecraft/entity/Entity;"
     ))
-    private ServerPlayerEntity teleportWithVehicle(ServerPlayerEntity serverPlayerEntity, TeleportTarget teleportTarget,
-                                                   @Share("passed")
+    private Entity teleportWithVehicle(Entity instance, TeleportTarget teleportTarget,
+                                       @Share("passed")
                                      LocalBooleanRef ref) {
-        Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.ENDER_PEARL.getDefaultStack());
-        if (serverPlayerEntity.hasVehicle() ) {
-            LivingEntity currentVehicle = rootVehicle(serverPlayerEntity);
-            if (currentVehicle != null && currentVehicle.equals(vehicle)) {
-                vehicle.teleportTo(
-                        new TeleportTarget((ServerWorld) this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
-                );
-                assert vehicle != null;
-                vehicle.addCommandTag("tp");
+        if (instance instanceof ServerPlayerEntity serverPlayerEntity) {
+            Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.ENDER_PEARL.getDefaultStack());
+            if (serverPlayerEntity.hasVehicle()) {
+                LivingEntity currentVehicle = rootVehicle(serverPlayerEntity);
+                if (currentVehicle != null && currentVehicle.equals(vehicle)) {
+                    vehicle.teleportTo(
+                            new TeleportTarget((ServerWorld) this.getWorld(), this.getPos(), Vec3d.ZERO, 0.0F, 0.0F, TeleportTarget.NO_OP)
+                    );
+                    assert vehicle != null;
+                    vehicle.addCommandTag("tp");
 
-                if (vehicle instanceof PathAwareEntity pathAwareEntity)
-                    pathAwareEntity.getNavigation().stop();
+                    if (vehicle instanceof PathAwareEntity pathAwareEntity)
+                        pathAwareEntity.getNavigation().stop();
 
-                vehicle.onLanding();
-                EnderPearlEntity EPE = (EnderPearlEntity) (Object) this;
-                if (!((PlayerEntity) Objects.requireNonNull((EPE).getOwner())).getAbilities().creativeMode) {
-                    vehicle.damage((ServerWorld) this.getWorld(), this.getDamageSources().fall(), 5.0F);
+                    vehicle.onLanding();
+                    EnderPearlEntity EPE = (EnderPearlEntity) (Object) this;
+                    if (!((PlayerEntity) Objects.requireNonNull((EPE).getOwner())).getAbilities().creativeMode) {
+                        vehicle.damage( this.getDamageSources().fall(), 5.0F);
+                    }
+                    ref.set(true);
+
+                    Entity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
+                            new TeleportTarget((ServerWorld) this.getWorld(), this.getPos(), Vec3d.ZERO, 0.0F, 0.0F, TeleportTarget.NO_OP)
+                    );
+                    assert serverPlayerEntity2 != null;
+                    serverPlayerEntity2.startRiding(vehicle);
+                    return serverPlayerEntity2;
                 }
-                ref.set(true);
-
-                ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
-                        new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
-                );
-                assert serverPlayerEntity2 != null;
-                serverPlayerEntity2.startRiding(vehicle);
-                return serverPlayerEntity2;
             }
+            return serverPlayerEntity.teleportTo(
+                    new TeleportTarget((ServerWorld) this.getWorld(), this.getPos(), Vec3d.ZERO, 0.0F, 0.0F, TeleportTarget.NO_OP)
+            );
         }
-        return serverPlayerEntity.teleportTo(
-                new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
-        );
+        return instance.teleportTo(teleportTarget);
+
     }
 
     /**

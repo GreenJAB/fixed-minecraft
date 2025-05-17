@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
@@ -15,6 +17,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Saves player crafting inventory across restarts.
@@ -59,7 +62,7 @@ public class PlayerEntityMixin {
             if (!craftingGrid.getStack(i).isEmpty()) {
                 NbtCompound nbtCompound = new NbtCompound();
                 nbtCompound.putByte("Slot", (byte)i);
-                items.add(craftingGrid.getStack(i).toNbt(PE.getRegistryManager(), nbtCompound));
+                items.add(craftingGrid.getStack(i).encode(PE.getRegistryManager(), nbtCompound));
             }
         }
 
@@ -72,11 +75,19 @@ public class PlayerEntityMixin {
     }
 
     @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;dropAll()V"))
-    private void dropCraftingGridItems(ServerWorld world, CallbackInfo ci) {
+    private void dropCraftingGridItems(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        for (ItemStack itemStack : PE.playerScreenHandler.craftingInventory.getHeldStacks()) {
+        for (ItemStack itemStack : PE.playerScreenHandler.getCraftingInput().getHeldStacks()) {
             PE.dropItem(itemStack, false);
         }
+    }
+
+    @Inject(method = "dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ItemEntity;setVelocity(DDD)V", ordinal = 0))
+    private void onGroundForLonger(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir,
+                                   @Local ItemEntity itemEntity) {
+        int diff = itemEntity.getWorld().getDifficulty().getId();
+        if (diff == 2) itemEntity.setCovetedItem();
+        if (diff < 2) itemEntity.setNeverDespawn();
     }
 
 }

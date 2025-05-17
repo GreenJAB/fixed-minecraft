@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(PlayerScreenHandler.class)
 public class PlayerScreenHandlerMixin {
 
-    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 0), index = 0)
+    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/PlayerScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 2), index = 0)
     private Slot lapiscost(Slot par1, @Local(argsOnly = true) PlayerEntity owner, @Local(argsOnly = true) PlayerInventory inventory, @Local int i, @Local EquipmentSlot equipmentSlot, @Local Identifier identifier) {
         return new ArmorSlot(inventory,owner, equipmentSlot,  39 - i, 8, 8 + i * 18, identifier) {
             @Override

@@ -23,8 +23,6 @@ public class ModTags {
     public static final TagKey<Enchantment> ANY_TRADES = enchant_of("trades/any");
     public static final TagKey<Enchantment> FISHING_TRADES = enchant_of("trades/fishing");
 
-    public static final TagKey<Biome> IS_PALE_GARDEN = TagKey.of(RegistryKeys.BIOME, FixedMinecraft.id("is_pale_garden"));
-
     public static final TagKey<Item> STRINGTAG = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("string"));
 
     private static TagKey<Enchantment> enchant_of(String id)  {

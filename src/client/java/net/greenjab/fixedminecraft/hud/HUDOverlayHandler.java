@@ -68,7 +68,7 @@ public class HUDOverlayHandler
                 u = 2f * iconSize;
             else if (effectiveSaturationOfBar > .25)
                 u = 1f * iconSize;
-            context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
+            context.drawTexture(Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256);
         }
 
     }

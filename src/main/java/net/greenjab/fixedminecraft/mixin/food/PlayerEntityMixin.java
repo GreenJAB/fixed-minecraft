@@ -5,6 +5,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -22,4 +24,9 @@ public class PlayerEntityMixin
 
     @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))
     private void removeServerClientDesync(PlayerEntity instance, boolean b) {}
+
+    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
+    private float noStaminaNormalJump(float constant) {
+        return 0;
+    }
 }

@@ -21,10 +21,10 @@ public abstract class SkeletonHorseEntityMixin {
     @Inject(method = "initAttributes", at = @At(value = "TAIL"))
     private void randomisedAttributes(Random random, CallbackInfo ci){
         SkeletonHorseEntity SHE = (SkeletonHorseEntity)(Object)this;
-        EntityAttributeInstance var10000 = SHE.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        EntityAttributeInstance var10000 = SHE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         Objects.requireNonNull(random);
         var10000.setBaseValue(getChildHealthBonus(random::nextInt));
-        var10000 = SHE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        var10000 = SHE.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         Objects.requireNonNull(random);
         var10000.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
     }

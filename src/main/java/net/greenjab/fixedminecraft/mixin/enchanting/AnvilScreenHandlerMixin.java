@@ -52,8 +52,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     private @Nullable String newItemName;
 
     public AnvilScreenHandlerMixin(
-            @Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, ForgingSlotsManager forgingSlotsManager) {
-        super(type, syncId, playerInventory, context, forgingSlotsManager);
+            @Nullable ScreenHandlerType<?> type, int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
+        super(type, syncId, playerInventory, context);
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         if (!secondInputStack.isEmpty()) {
             boolean book2 = secondInputStack.contains(DataComponentTypes.STORED_ENCHANTMENTS);
             //2nd slot are ingots
-            if (outputItemStack.isDamageable() && firstInputStack.canRepairWith(secondInputStack)) {
+            if (outputItemStack.isDamageable() && outputItemStack.getItem().canRepair(firstInputStack, secondInputStack)) {
                 int k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 if (k <= 0) {
                     this.output.setStack(0, ItemStack.EMPTY);

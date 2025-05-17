@@ -6,13 +6,14 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.ZombieEntity;
-import net.minecraft.entity.passive.VillagerEntity;
+import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.village.TradeOfferList;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.LocalDifficulty;
@@ -23,7 +24,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -40,7 +40,7 @@ public abstract class ZombieEntityMixin extends HostileEntity {
             if (ZE.getWorld().random.nextInt(30)==0) {
                 if (!this.getWorld().isClient && this.isAlive()){
                     this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                    this.dropItem((ServerWorld) this.getWorld(), Items.SAND);
+                    this.dropItem(Items.SAND);
                     this.emitGameEvent(GameEvent.ENTITY_PLACE);
                 }
             }
@@ -52,18 +52,21 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         return Difficulty.HARD;
     }
 
-    @ModifyArg(method = "onKilledOther", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieEntity;infectVillager(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/VillagerEntity;)Z"), index = 1)
-    private VillagerEntity villagerIntoNitwit(VillagerEntity villager, @Local(argsOnly = true) ServerWorld serverWorld){
+    @Redirect(method = "onKilledOther", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/ZombieVillagerEntity;setOfferData(Lnet/minecraft/village/TradeOfferList;)V"))
+    private void villagerIntoNitwit(ZombieVillagerEntity instance, TradeOfferList offerData,
+                                    @Local(argsOnly = true) ServerWorld serverWorld){
         if (serverWorld.getDifficulty() == Difficulty.NORMAL || serverWorld.getDifficulty() == Difficulty.HARD) {
             if (serverWorld.getDifficulty() == Difficulty.HARD) {
-                villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                instance.setVillagerData(instance.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                return;
             } else {
                 if (this.random.nextBoolean()) {
-                    villager.setVillagerData(villager.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                    instance.setVillagerData(instance.getVillagerData().withProfession(VillagerProfession.NITWIT));
+                    return;
                 }
             }
         }
-        return villager;
+        instance.setOfferData(offerData);
     }
 
     @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))
@@ -71,7 +74,6 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         float diff = 0.01f;
         if (this.getWorld().getDifficulty() == Difficulty.HARD) diff = 0.1f;
         if (this.getWorld().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
-        if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) diff*=2;
         if (random.nextFloat() < diff) {
             int i = random.nextInt(5);
             int j = random.nextInt(2);

@@ -30,7 +30,7 @@ public class FallingBlockEntityMixin {
         FallingBlockEntity FBE = (FallingBlockEntity)(Object)this;
         if (FBE.getCommandTags().contains("convert")) {
             World world = FBE.getWorld();
-            FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.getWorld().getWorldChunk(FBE.getBlockPos()).getWorld(), SpawnReason.CONVERSION);
+            FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.getWorld().getWorldChunk(FBE.getBlockPos()).getWorld());
             fallingBlockEntity.refreshPositionAndAngles(FBE.getX(), FBE.getY(), FBE.getZ(), 0.0F, 0.0F);
             fallingBlockEntity.setVelocity(FBE.getVelocity().x, FBE.getVelocity().y,FBE.getVelocity().z);
             world.spawnEntity(fallingBlockEntity);

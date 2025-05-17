@@ -71,8 +71,4 @@ public abstract class ServerPlayerEntityMixin extends Entity
         if (SPE.isBlocking()) SPE.addExhaustion(0.03f);
     }
 
-    @ModifyConstant(method = "jump", constant = @Constant(floatValue = 0.05f))
-    private float noStaminaNormalJump(float constant) {
-        return 0;
-    }
 }

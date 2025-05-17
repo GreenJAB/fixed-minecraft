@@ -43,16 +43,18 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
     }
 
     @Inject(method = "serverTick", at = @At("HEAD"),cancellable = true)
-    private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
+    private void redoTick(CallbackInfo ci) {
         this.ticks++;
-        LivingEntity livingEntity = serverWorld.getClosestPlayer(this.CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+        LivingEntity livingEntity = this.dragon
+                .getWorld()
+                .getClosestPlayer(this.CLOSE_PLAYER_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (livingEntity != null) {
             if (this.ticks > 25) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.SITTING_ATTACKING);
             } else {
                 Vec3d vec3d = new Vec3d(livingEntity.getX() - this.dragon.getX(), 0.0, livingEntity.getZ() - this.dragon.getZ()).normalize();
                 Vec3d vec3d2 = new Vec3d(
-                         MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
+                        MathHelper.sin(this.dragon.getYaw() * (float) (Math.PI / 180.0)),
                         0.0,
                         (-MathHelper.cos(this.dragon.getYaw() * (float) (Math.PI / 180.0)))
                 )
@@ -78,7 +80,9 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
 
             }
         } else if (this.ticks >= 100) {
-            livingEntity = serverWorld.getClosestPlayer(PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+            livingEntity = this.dragon
+                    .getWorld()
+                    .getClosestPlayer(PLAYER_WITHIN_RANGE_PREDICATE, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
             this.dragon.getPhaseManager().setPhase(PhaseType.TAKEOFF);
             if (livingEntity != null) {
                 this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);
@@ -87,6 +91,7 @@ public class SittingScanningPhaseMixin extends AbstractSittingPhase {
         }
         ci.cancel();
     }
+
 
     @Override
     public PhaseType<? extends Phase> getType() {

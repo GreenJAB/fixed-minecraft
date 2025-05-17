@@ -51,9 +51,10 @@ public abstract class EnderDragonEntityMixin {
     @Shadow
     private @Nullable EnderDragonFight fight;
 
-    @ModifyConstant(method = "getNearestPathNodeIndex()I", constant = @Constant(intValue = 73))
-    private int newMinHeight(int constant){
-        return 69;
+    @ModifyArg(method = "getNearestPathNodeIndex()I", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/pathing/PathNode;<init>(III)V"), index = 1)
+    private int newMinHeight(int x) {
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        return EDE.getWorld().getSeaLevel() + 5;
     }
 
     @ModifyConstant(method = "getNearestPathNodeIndex()I", constant = @Constant(floatValue = 60.0f, ordinal = 0))
@@ -108,7 +109,7 @@ public abstract class EnderDragonEntityMixin {
     }
 
     @Inject(method = "damageLivingEntities", at = @At(value = "HEAD"), cancellable = true)
-    private void dontHitWhenDead(ServerWorld world, List<Entity> entities, CallbackInfo ci){
+    private void dontHitWhenDead(List<Entity> entities, CallbackInfo ci){
         if (this.phaseManager.getCurrent()==PhaseType.DYING)  ci.cancel();
     }
 
@@ -141,7 +142,7 @@ public abstract class EnderDragonEntityMixin {
                 double h = Math.max(f * f + g * g, 0.1);
                 entity.addVelocity(f / h * 4.0, 1.0, g / h * 4.0);
                 EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
-                entity.damage(world, EDE.getDamageSources().mobAttack(EDE), 5.0F);
+                entity.damage(EDE.getDamageSources().mobAttack(EDE), 5.0F);
                 EnchantmentHelper.onTargetDamaged(world, entity, EDE.getDamageSources().mobAttack(EDE));
             }
         }
@@ -153,18 +154,18 @@ public abstract class EnderDragonEntityMixin {
     private void moreHealth(EntityType<? extends EnderDragonEntity> entityType, World world, CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {150, 200, 300, 400};
-        EDE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
+        EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
     }
 
     @Inject(method = "damagePart", at = @At(
             value = "HEAD"), cancellable = true)
-    private void ignoreExplosions(ServerWorld world, EnderDragonPart part, DamageSource source, float amount,
+    private void ignoreExplosions(EnderDragonPart part, DamageSource source, float amount,
                                   CallbackInfoReturnable<Boolean> cir) {
         if(source.getAttacker() instanceof EnderDragonEntity)cir.setReturnValue(false);
     }
 
     @Inject(method = "damagePart", at = @At(value = "HEAD"))
-    private void addGlowingEffect(ServerWorld world, EnderDragonPart part, DamageSource source, float amount,
+    private void addGlowingEffect(EnderDragonPart part, DamageSource source, float amount,
                                   CallbackInfoReturnable<Boolean> cir){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         if (source.getSource() instanceof SpectralArrowEntity) {
@@ -174,7 +175,7 @@ public abstract class EnderDragonEntityMixin {
 
     @Inject(method = "destroyBlocks", at = @At(
             value = "HEAD"), cancellable = true)
-    private void dontBreakBlocksAfterFirst(ServerWorld world, Box box, CallbackInfoReturnable<Boolean> cir){
+    private void dontBreakBlocksAfterFirst(Box box, CallbackInfoReturnable<Boolean> cir){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         if (this.fight == null) return;
         if (this.fight.hasPreviouslyKilled() && !EDE.getCommandTags().contains("omen")) {

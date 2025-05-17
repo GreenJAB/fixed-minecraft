@@ -17,7 +17,7 @@ public class NewIceBlock extends IceBlock {
     @Override
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
-            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity() || world.getDimension().ultrawarm())
+            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity(world, pos) || world.getDimension().ultrawarm())
                 this.melt(state, world, pos);
         }
     }

@@ -23,7 +23,7 @@ public abstract class ZombieSiegeManagerMixin  {
             target = "Lnet/minecraft/server/world/ServerWorld;spawnEntityAndPassengers(Lnet/minecraft/entity/Entity;)V", shift = At.Shift.AFTER
     ))
     private void zombieHorse(ServerWorld world, CallbackInfo ci, @Local ZombieEntity zombieEntity){
-        ZombieHorseEntity ZHE = EntityType.ZOMBIE_HORSE.create(world, SpawnReason.EVENT);
+        ZombieHorseEntity ZHE = EntityType.ZOMBIE_HORSE.create(world);
         zombieEntity.setStackInHand(Hand.MAIN_HAND, Items.STONE_HOE.getDefaultStack());
         if (ZHE != null && world.random.nextInt(10)==0) {
             zombieEntity.setStackInHand(Hand.MAIN_HAND, Items.STONE_SWORD.getDefaultStack());

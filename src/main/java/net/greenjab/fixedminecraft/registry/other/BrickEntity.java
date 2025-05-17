@@ -21,8 +21,8 @@ import net.minecraft.world.World;
 
 public class BrickEntity extends ThrownItemEntity {
 
-    public BrickEntity(World world, LivingEntity owner, ItemStack stack) {
-        super(EntityType.SNOWBALL, owner, world, stack);
+    public BrickEntity(World world, LivingEntity owner) {
+        super(EntityType.SNOWBALL, owner, world);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class BrickEntity extends ThrownItemEntity {
     protected void onEntityHit(EntityHitResult entityHitResult) {
         super.onEntityHit(entityHitResult);
         Entity entity = entityHitResult.getEntity();
-        entity.serverDamage(this.getDamageSources().thrown(this, this.getOwner()), 2f);
+        entity.damage(this.getDamageSources().thrown(this, this.getOwner()), 2f);
     }
 
     @Override

@@ -32,7 +32,7 @@ public abstract class LivingEntityMixin
     @Inject(method = "damage", at = @At(value = "INVOKE",
                                         target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 5
     ))
-    private void eatCancelling(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void eatCancelling(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (this.isUsingItem()) {
             if (this.getStackInHand(this.getActiveHand()).getComponents().contains(DataComponentTypes.FOOD)) {
                 LivingEntity LE = (LivingEntity)(Object)this;
@@ -45,7 +45,7 @@ public abstract class LivingEntityMixin
         }
     }
 
-    @ModifyConstant(method = "getBlockingItem", constant = @Constant(intValue = 5))
+    @ModifyConstant(method = "isBlocking", constant = @Constant(intValue = 5))
     private int noShieldDelay(int constant){
         return 0;
     }

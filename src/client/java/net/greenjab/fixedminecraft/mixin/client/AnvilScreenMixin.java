@@ -127,7 +127,7 @@ public class AnvilScreenMixin {
     @Unique
     private int barPos(int x, int isc) {return 60 + Math.min((int) ((168 - 60) * (x / (isc + 0.0f))), 168 - 60);}
 
-    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V"), index = 3)
+    @ModifyArg(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"), index = 2)
     private int higherTEXT_FIELD_TEXTURE(int x) {
         return x-2;
     }
@@ -143,8 +143,6 @@ public class AnvilScreenMixin {
     private boolean canTake(Slot instance, PlayerEntity playerEntity){
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        int levelCost = ASH.getLevelCost();
-        while (levelCost>=500)levelCost-=500;
-        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost)) && Math.abs(levelCost) > 0;
+        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(ASH.getLevelCost())) && Math.abs(ASH.getLevelCost()) > 0;
     }
 }

@@ -32,10 +32,10 @@ public class HorseScreenHandlerMixin {
                 return 1;
             }
 
-            @Override
+            /*@Override
             public Identifier getBackgroundSprite() {
                 return Identifier.ofVanilla("container/slot/saddle");
-            }
+            }*/
         };
     }
 }

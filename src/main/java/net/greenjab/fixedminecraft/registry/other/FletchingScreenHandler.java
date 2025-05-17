@@ -41,7 +41,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
     @Override
     protected void addInputSlots(int x, int y) {
 
-        this.addSlot(new Slot(this.craftingInventory, 0, x, y){
+        this.addSlot(new Slot(this.input, 0, x, y){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.FLINT);
@@ -52,7 +52,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
         this.addSlot(new Slot(Inv(), 0, x + 2*18, y){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
 
-        this.addSlot(new Slot(this.craftingInventory, 3, x, y + 18){
+        this.addSlot(new Slot(this.input, 3, x, y + 18){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.STICK);
@@ -61,13 +61,13 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
         this.addSlot(new Slot(Inv(), 0, x + 18, y + 18){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
 
-        this.addSlot(new Slot(this.craftingInventory, 5, x + 2*18, y + 18){
+        this.addSlot(new Slot(this.input, 5, x + 2*18, y + 18){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.POTION) || stack.isOf(Items.GLOWSTONE);
             }
         });
-        this.addSlot(new Slot(this.craftingInventory, 6, x, y + 2*18){
+        this.addSlot(new Slot(this.input, 6, x, y + 2*18){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;
                 return stack.isOf(Items.FEATHER);
@@ -84,7 +84,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
     public void onContentChanged(Inventory inventory) {
         this.context.run( (world, pos) -> {
             if (world instanceof ServerWorld serverWorld) {
-                updateResult(this, serverWorld, this.getPlayer(), this.craftingInventory, this.craftingResultInventory);
+                updateResult(this, serverWorld, this.player, this.input, this.result);
             }
         });
     }
@@ -143,7 +143,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
 
     @Override
     public boolean canInsertIntoSlot(ItemStack stack, Slot slot) {
-        return slot.inventory != this.craftingResultInventory && super.canInsertIntoSlot(stack, slot);
+        return slot.inventory != this.result && super.canInsertIntoSlot(stack, slot);
     }
 
     protected static void updateResult(

@@ -11,15 +11,17 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.TntEntity;
 import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.conversion.EntityConversionContext;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.VexEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
+import net.minecraft.entity.mob.ZombieEntity;
+import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.passive.AllayEntity;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -53,7 +55,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "damage", at = @At(
             value = "HEAD"), cancellable = true)
-    private void witherSkeletonIgnoreWither(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void witherSkeletonIgnoreWither(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof WitherSkeletonEntity) {
             if (source.getAttacker() instanceof WitherEntity) cir.setReturnValue(false);
@@ -61,7 +63,7 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "damage",at = @At( value = "TAIL" ))
-    private void exitVehicleOnDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void exitVehicleOnDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = ((LivingEntity) (Object) this);
         if (amount <= 0) return;
         if (entity.isPlayer()) return;
@@ -73,11 +75,12 @@ public abstract class LivingEntityMixin {
         if (vehicleType.isIn(ModTags.VEHICLES)) entity.stopRiding();
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"),
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V"),
             cancellable = true
     )
-    private void cancel0Damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        if (modifyAppliedDamage(world, source, amount)<0.05 && !this.blockedByShield(source)) {
+    private void cancel0Damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = ((LivingEntity) (Object) this);
+        if (modifyAppliedDamage((ServerWorld) entity.getWorld(), source, amount)<0.05 && !this.blockedByShield(source)) {
             cir.setReturnValue(false);
         }
     }
@@ -127,15 +130,10 @@ public abstract class LivingEntityMixin {
             if (LE instanceof AllayEntity AE) {
                 if (damageSource.isOf(DamageTypes.SONIC_BOOM)) {
                     ServerWorld world = (ServerWorld) AE.getWorld();
-                    AE.dropItem(world, Items.ECHO_SHARD);
+                    AE.dropItem(Items.ECHO_SHARD);
                     this.drop(world, damageSource);
 
-                    VexEntity VE = AE.convertTo(
-                            EntityType.VEX, EntityConversionContext.create(AE, true, true), /* method_63655 */ vex -> {
-                                vex.initialize(world, world.getLocalDifficulty(vex.getBlockPos()), SpawnReason.CONVERSION, null);
-                                world.syncWorldEvent(null, WorldEvents.SKELETON_CONVERTS_TO_STRAY, this.lastBlockPos, 0);
-                            }
-                    );
+                    VexEntity VE = AE.convertTo(EntityType.VEX, false);
 
                     if (VE != null) {
                         VE.initialize(
@@ -152,7 +150,7 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @ModifyExpressionValue(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getExperienceToDrop(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)I"))
+    @ModifyExpressionValue(method = "dropXp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getXpToDrop(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)I"))
     private int bonusXP(int original){
         LivingEntity LE = (LivingEntity) (Object)this;
         float mul = 1;
@@ -168,7 +166,7 @@ public abstract class LivingEntityMixin {
         return constant;
     }
 
-    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateKilledAdvancementCriterion(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V"))
+    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateKilledAdvancementCriterion(Lnet/minecraft/entity/Entity;ILnet/minecraft/entity/damage/DamageSource;)V"))
     private void tntAdvancement(DamageSource damageSource, CallbackInfo ci) {
         if (damageSource.getSource() instanceof TntEntity) {
             if ((LivingEntity)(Object)this instanceof HostileEntity) {

@@ -243,7 +243,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             // count nearby bookshelves
             int bookShelfCount = FixedMinecraftEnchantmentHelper.countAccessibleBookshelves(world, blockPos);
             int power = (int)((FixedMinecraftEnchantmentHelper.POWER_WHEN_MAX_LEVEL-1) * bookShelfCount / 15f + 1);
-            IndexedIterable<RegistryEntry<Enchantment>> indexedIterable = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getIndexedEntries();
+            IndexedIterable<RegistryEntry<Enchantment>> indexedIterable = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getIndexedEntries();
 
             // generate enchantments for each slot
             for (int slot = 0; slot < 3; slot++) {
@@ -349,7 +349,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             // lifecycle stuff
             // entirely reimplemented from vanilla
             this.inventory.markDirty();
-            this.seed.set(player.getEnchantingTableSeed());
+            this.seed.set(player.getEnchantmentTableSeed());
             this.onContentChanged(this.inventory);
             world.playSound(null, blockPos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0F, world.random.nextFloat() * 0.1F + 0.9F);
 

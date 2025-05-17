@@ -1,25 +1,60 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import net.minecraft.block.Block;
-import net.minecraft.item.ToolMaterial;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.minecraft.item.Items;
+import net.minecraft.item.ToolMaterials;
+import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.registry.tag.TagKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(ToolMaterial.class)
+import java.util.function.Supplier;
+
+@Mixin(ToolMaterials.class)
 public class ToolMaterialsMixin {
 
-    @WrapOperation(
+    /*@WrapOperation(
             method = "<clinit>",
-            at = @At(value = "NEW",target = "(Lnet/minecraft/registry/tag/TagKey;IFFILnet/minecraft/registry/tag/TagKey;)Lnet/minecraft/item/ToolMaterial;")
-            )
-    private static ToolMaterial goldToolsLastLonger(TagKey<Block> tagKey, int i, float f, float g, int j, TagKey<Block> tagKey2,
-                                                     Operation<ToolMaterial> original) {
-        if (i == 32) {
-            return original.call(tagKey, 59, f, g, j, tagKey2);
+            at = @At(value = "NEW",target = "(Ljava/lang/String;ILnet/minecraft/registry/tag/TagKey;IFFILjava/util/function/Supplier;)Lnet/minecraft/item/ToolMaterials;")
+    )
+    private static ToolMaterials goldToolsLastLonger(String inverseTag, int itemDurability, TagKey miningSpeed, int attackDamage,
+                                                     float enchantability, float repairIngredient, int string, Supplier i,
+                                                     Operation<ToolMaterials> original) {
+        if (itemDurability == 32) {
+            return original.call(inverseTag, 59, miningSpeed, attackDamage,
+                    enchantability, repairIngredient, string, i);
         }
-        return original.call(tagKey, i, f, g, j, tagKey2);
+        if (itemDurability == 2031) {
+            return original.call(inverseTag, itemDurability, miningSpeed, attackDamage, enchantability, repairIngredient, string, () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
+        }
+        return original.call(inverseTag, itemDurability, miningSpeed, attackDamage,
+                enchantability, repairIngredient, string, i);
+    }*/
+    /*@Redirect(
+            method = "M",
+            at = @At(value = "NEW",target = "(Ljava/lang/String;ILnet/minecraft/registry/tag/TagKey;IFFILjava/util/function/Supplier;)Lnet/minecraft/item/ToolMaterials;")
+    )
+    private static ToolMaterials goldToolsLastLonger(String inverseTag, int itemDurability, TagKey miningSpeed, int attackDamage,
+                                                     float enchantability, float repairIngredient, int string, Supplier i) {
+        if (itemDurability == 32) {
+            return original.call(inverseTag, 59, miningSpeed, attackDamage,
+                    enchantability, repairIngredient, string, i);
+        }
+        if (itemDurability == 2031) {
+            return original.call(inverseTag, itemDurability, miningSpeed, attackDamage, enchantability, repairIngredient, string, () -> Ingredient.ofItems(Items.NETHERITE_INGOT));
+        }
+        return original.call(inverseTag, itemDurability, miningSpeed, attackDamage,
+                enchantability, repairIngredient, string, i);
+    }*/
+
+    @Inject(method = "getDurability", at = @At(
+            value = "RETURN"))
+    private void goldDura(CallbackInfoReturnable<Integer> cir){
+        if (cir.getReturnValue()==32) cir.setReturnValue(64);;
     }
 }

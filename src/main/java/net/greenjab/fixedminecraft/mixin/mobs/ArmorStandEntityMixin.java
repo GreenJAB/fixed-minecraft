@@ -51,12 +51,12 @@ public abstract class ArmorStandEntityMixin extends LivingEntity {
             if (itemStack.isOf(Items.SHEARS)) {
                 if (this.shouldShowArms()) {
                     this.setShowArms(false);
-                    if (!player.getAbilities().creativeMode) this.dropItem((ServerWorld) player.getWorld(), Items.STICK);
-                    if (!player.getAbilities().creativeMode) itemStack.damage(1, player);
+                    if (!player.getAbilities().creativeMode) this.dropItem(Items.STICK);
+                    if (!player.getAbilities().creativeMode) itemStack.damage(1, player, EquipmentSlot.MAINHAND);
                     Iterable<ItemStack> hands = this.getHandItems();
                     hands.forEach((stack) -> {
                         if (!stack.isEmpty()) {
-                            this.dropStack((ServerWorld) player.getWorld(), stack);
+                            this.dropStack( stack);
                         }
                     });
                     this.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());

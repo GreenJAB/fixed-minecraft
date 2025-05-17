@@ -14,7 +14,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.minecraft.world.block.WireOrientation;
 import net.minecraft.world.event.GameEvent;
 import net.minecraft.world.event.Vibrations;
 import org.jetbrains.annotations.Nullable;
@@ -41,12 +40,7 @@ public class NewAmethystBlock extends AmethystBlock {
 
     @Override
     protected void neighborUpdate(
-            BlockState state,
-            World world,
-            BlockPos pos,
-            Block sourceBlock,
-            @Nullable WireOrientation wireOrientation,
-            boolean notify
+            BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify
     ) {
         if (world != null) {
             if (!world.isClient) {

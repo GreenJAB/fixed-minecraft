@@ -21,7 +21,7 @@ public class MerchantScreenMixin {
         MerchantScreen MS = (MerchantScreen) (Object)this;
         int l = MS.getScreenHandler().getLevelProgress();
         for (int k = 5-l; k < 4; k++) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, CHEST_SLOTS_TEXTURE, 90, 54, 0, 0, i + 250 - 1 + 2, j + 8 + k * 18 - 1, 18, 18);
+            context.drawGuiTexture(CHEST_SLOTS_TEXTURE, 90, 54, 0, 0, i + 250 - 1 + 2, j + 8 + k * 18 - 1, 18, 18);
         }
     }
 }

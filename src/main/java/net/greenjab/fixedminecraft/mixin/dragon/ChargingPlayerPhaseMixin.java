@@ -39,12 +39,12 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
     }
 
     @Inject(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/Vec3d;squaredDistanceTo(DDD)D"))
-    private void chaseElytraPlayer(CallbackInfo ci, @Local(argsOnly = true) ServerWorld world){
+    private void chaseElytraPlayer(CallbackInfo ci){
         boolean ischasing = false;
-        PlayerEntity playerEntity = world.getClosestPlayer(TargetPredicate.createAttackable().ignoreVisibility(), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
+        PlayerEntity playerEntity = this.dragon.getWorld().getClosestPlayer(TargetPredicate.createAttackable().ignoreVisibility(), this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (playerEntity != null) {
             if (playerEntity.getPos().squaredDistanceTo(new Vec3d(0, 0, 0))<200*200) {
-                if (playerEntity.isGliding()) {
+                if (playerEntity.isFallFlying()) {
                     this.pathTarget = playerEntity.getPos().add(playerEntity.getVelocity().multiply(5)).add(new Vec3d(0, -3, 0));
                     this.chargingTicks = 0;
                     ischasing = true;
@@ -63,7 +63,7 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
                     this.dragon.getWorld()
                             .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
-                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(world, this.dragon, new Vec3d(o, p, q));
+                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
                 this.dragon.getWorld().spawnEntity(dragonFireballEntity);
 
@@ -81,8 +81,8 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
                 player.addVelocity((f / h * 2.0)+this.dragon.getVelocity().getX()*v, 1, (g / h * 2.0)+this.dragon.getVelocity().getZ()*v);
 
                 DamageSource damageSource = this.dragon.getDamageSources().mobAttack(this.dragon);
-                player.damage(world, damageSource, 5.0F);
-                EnchantmentHelper.onTargetDamaged(world, player, damageSource);
+                player.damage( damageSource, 5.0F);
+                EnchantmentHelper.onTargetDamaged((ServerWorld) this.dragon.getWorld(), player, damageSource);
             }
         }
     }

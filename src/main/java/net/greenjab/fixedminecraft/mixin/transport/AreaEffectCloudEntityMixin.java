@@ -25,14 +25,15 @@ public class AreaEffectCloudEntityMixin {
     @Shadow
     private PotionContentsComponent potionContentsComponent;
 
-    @Inject(method = "serverTick", at = @At(
+    @Inject(method = "tick", at = @At(
             value = "INVOKE",
             target = "Ljava/util/Map;entrySet()Ljava/util/Set;"
     ))
-    private void waterAreaEffect(CallbackInfo ci, @Local(argsOnly = true) ServerWorld serverWorld) {
+    private void waterAreaEffect(CallbackInfo ci) {
+        AreaEffectCloudEntity AECE = (AreaEffectCloudEntity) (Object)this;
         PotionContentsComponent potionContentsComponent = this.potionContentsComponent;
         if (potionContentsComponent.matches(Potions.WATER)) {
-            this.applyWater(serverWorld);
+            this.applyWater((ServerWorld) AECE.getWorld());
         }
     }
 
@@ -46,7 +47,7 @@ public class AreaEffectCloudEntityMixin {
             double d = AECE.squaredDistanceTo(livingEntity);
             if (d < AECE.getWidth()*AECE.getWidth()) {
                 if (livingEntity.hurtByWater()) {
-                    livingEntity.damage(serverWorld, AECE.getDamageSources().indirectMagic(AECE, AECE.getOwner()), 1.0F);
+                    livingEntity.damage(AECE.getDamageSources().indirectMagic(AECE, AECE.getOwner()), 1.0F);
                 }
 
                 if (livingEntity.isOnFire() && livingEntity.isAlive()) {
@@ -60,7 +61,7 @@ public class AreaEffectCloudEntityMixin {
         }
     }
 
-    @Redirect(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
     private boolean lingerAddition(LivingEntity instance, StatusEffectInstance effect, Entity source) {
         if (instance.hasStatusEffect(effect.getEffectType())) {
             StatusEffectInstance current = instance.getStatusEffect(effect.getEffectType());

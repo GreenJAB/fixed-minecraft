@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.TargetPredicate;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -29,18 +31,17 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;becomeAngry(Lnet/minecraft/entity/damage/DamageSource;)V"))
-    private void aggroEndermenToPlayer(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 5))
+    private void aggroEndermenToPlayer(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir,
+                                       @Local Entity entity) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof EndermiteEntity) {
-            Entity entity = source.getAttacker();
-            if (entity!=null) {
-                if (entity instanceof EndermanEntity endermanEntity){
-                    LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
-                            endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ(), 100.0,true);
-                    endermanEntity.setTarget(livingEntity);
-                    endermanEntity.setAngerTime(999999);
-                }
+            if (entity instanceof EndermanEntity endermanEntity) {
+                LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
+                        TargetPredicate.createAttackable().setBaseMaxDistance(150.0).ignoreVisibility(),
+                        endermanEntity, endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ());
+                endermanEntity.setTarget(livingEntity);
+                endermanEntity.setAngerTime(999999);
             }
         }
     }

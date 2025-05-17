@@ -56,7 +56,7 @@ public class WitherEntityMixin {
                         WE, WE.getX(), WE.getY(), WE.getZ(), 5, World.ExplosionSourceType.MOB
                 );
                 for (int i = 0;i<3;i++) {
-                    WitherSkeletonEntity WSE = EntityType.WITHER_SKELETON.create(WE.getWorld().getWorldChunk(WE.getBlockPos()).getWorld(), SpawnReason.MOB_SUMMONED);
+                    WitherSkeletonEntity WSE = EntityType.WITHER_SKELETON.create(WE.getWorld().getWorldChunk(WE.getBlockPos()).getWorld());
                     assert WSE != null;
                     WSE.refreshPositionAndAngles(WE.getX(), WE.getY(), WE.getZ(), 0.0F, 0.0F);
                     WSE.setVelocity(Math.cos(i*120*Math.PI/180.0), 0, Math.sin(i*120*Math.PI/180.0));
@@ -130,7 +130,7 @@ public class WitherEntityMixin {
     }
 
     @Inject(method = "damage", at = @At(value = "HEAD"))
-    private void addGlowingEffect(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    private void addGlowingEffect(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
         WitherEntity WE = (WitherEntity) (Object)this;
         if (source.getSource() instanceof SpectralArrowEntity) {
             WE.setStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 600), source.getAttacker());

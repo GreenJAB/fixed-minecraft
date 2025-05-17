@@ -30,18 +30,18 @@ public class ClientPlayerEntityMixin {
         cir.setReturnValue(instance.hasVehicle() || instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);
     }
 
-    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;checkGliding()Z"))
+    @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;checkFallFlying()Z"))
     private boolean failRealTest(ClientPlayerEntity instance) {
         return false;
     }
 
-    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isGliding()Z"))
+    @Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;isFallFlying()Z"))
     private void addMyTest(CallbackInfo ci) {
         ClientPlayerEntity CPE = (ClientPlayerEntity)(Object)this;
-        if (CPE.input.playerInput.jump()) {
+        if (CPE.input.jumping) {
             if (!CPE.isClimbing() && !CPE.isOnGround() && !CPE.hasVehicle() && !CPE.hasStatusEffect(StatusEffects.LEVITATION) && !CPE.isWet() && !CPE.isInLava() &&
                 CustomData.getData(CPE, "airTime") > 15) {
-                if (CPE.checkGliding()) {
+                if (CPE.checkFallFlying()) {
                     CPE.networkHandler.sendPacket(new ClientCommandC2SPacket(CPE, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 }
             }

@@ -9,7 +9,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.decoration.ArmorStandEntity;
@@ -41,18 +40,14 @@ public abstract class WorldRendererMixin{
     protected abstract void renderEntity(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta,
                                          MatrixStack matrices, VertexConsumerProvider vertexConsumers);
 
-    @Inject(method = "renderEntities", at = @At(
+    @Inject(method = "renderEntity", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/client/render/WorldRenderer;renderEntity(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V"
+            target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;render(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"
     ))
-    public void addVillagerArmorLayer(MatrixStack matrices, VertexConsumerProvider.Immediate immediate, Camera camera,
-                                      RenderTickCounter tickCounter, List<Entity> entities, CallbackInfo ci, @Local Entity entity) {
+    public void addVillagerArmorLayer(Entity entity, double cameraX, double cameraY, double cameraZ, float tickDelta, MatrixStack matrices,
+                                      VertexConsumerProvider vertexConsumers, CallbackInfo ci) {
         if (entity instanceof VillagerEntity) {
             ArmorStandEntity armorStandEntity= new ArmorStandEntity(entity.getWorld(), entity.getX(), entity.getY(), entity.getZ());
-            Vec3d vec3d = camera.getPos();
-            double d = vec3d.getX();
-            double e = vec3d.getY();
-            double f = vec3d.getZ();
             assert this.client.world != null;
             TickManager tickManager = this.client.world.getTickManager();
 
@@ -79,7 +74,7 @@ public abstract class WorldRendererMixin{
 
             Iterable<ItemStack> armor = ((VillagerEntity) entity).getArmorItems();
             for (ItemStack ii : armor) {
-                EquipmentSlot ES = getPreferredEquipmentSlot(ii);
+                EquipmentSlot ES = ((VillagerEntity) entity).getPreferredEquipmentSlot(ii);
                 armorStandEntity.equipStack(ES, ii);
             }
             armorStandEntity.equipStack(EquipmentSlot.MAINHAND, Items.AIR.getDefaultStack());
@@ -90,15 +85,11 @@ public abstract class WorldRendererMixin{
             armorStandEntity.setHideBasePlate(true);
 
 
-            float g = tickCounter.getTickDelta(!tickManager.shouldSkipTick(armorStandEntity));
-            this.renderEntity(armorStandEntity, d, e, f, g, matrices, immediate);
+
+            this.renderEntity(armorStandEntity, cameraX, cameraY, cameraZ, tickDelta, matrices, vertexConsumers);
         }
     }
-    @Unique
-    public final EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
-        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
-        return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
-    }
+
     @Unique
     private byte setBitField(byte value) {
         value = (byte)(value | 16);

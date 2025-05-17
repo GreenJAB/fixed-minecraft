@@ -65,7 +65,7 @@ public class InGameHudMixin {
                 if (!stack.isEmpty()) {
 
                     context.drawItem(player, stack, o, m, n);
-                    context.drawStackOverlay(client.textRenderer, stack, o, m);
+                    //TODO test //context.drawStackOverlay(client.textRenderer, stack, o, m);
                 }
 
             }
@@ -77,15 +77,15 @@ public class InGameHudMixin {
                 for(int n = 0; n < 10; ++n) {
                     int o = x + n * 8;
                     if (n * 2 + 1 < l) {
-                        context.drawGuiTexture(RenderLayer::getGuiTextured, Identifier.ofVanilla("hud/armor_full"), o, m, 9, 9);
+                        context.drawGuiTexture(Identifier.ofVanilla("hud/armor_full"), o, m, 9, 9);
                     }
 
                     if (n * 2 + 1 == l) {
-                        context.drawGuiTexture(RenderLayer::getGuiTextured, Identifier.ofVanilla("hud/armor_half"), o, m, 9, 9);
+                        context.drawGuiTexture(Identifier.ofVanilla("hud/armor_half"), o, m, 9, 9);
                     }
 
                     if (n * 2 + 1 > l) {
-                        context.drawGuiTexture(RenderLayer::getGuiTextured, Identifier.ofVanilla("hud/armor_empty"), o, m, 9, 9);
+                        context.drawGuiTexture(Identifier.ofVanilla("hud/armor_empty"), o, m, 9, 9);
                     }
                 }
 

@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +37,7 @@ public abstract class HungerManagerMixin {
     }
 
     @Inject(method = "update", at = @At("HEAD"))
-    private void HungerToSaturation(ServerPlayerEntity player, CallbackInfo ci) {
+    private void HungerToSaturation(PlayerEntity player, CallbackInfo ci) {
 
         int airTime = CustomData.getData(player, "airTime");// player.getWorld().getScoreboard().getOrCreateScore(player, player.getWorld().getScoreboard().getNullableObjective("airTime")).getScore();//.getNullableObjective("airTime").getScoreboard().get
         if (player.isOnGround()|| player.hasVehicle() || player.isClimbing() || player.isTouchingWater()) airTime=0;
@@ -107,8 +108,8 @@ public abstract class HungerManagerMixin {
         if (HM.getFoodLevel()==0) return 80;
         return 30;
     }
-    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;canFoodHeal()Z"))
-    private boolean needSaturationToHeal(ServerPlayerEntity instance) {
+    @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canFoodHeal()Z"))
+    private boolean needSaturationToHeal(PlayerEntity instance) {
         HungerManager HM = (HungerManager) (Object)this;
         if (instance.hurtTime>0) return false;
 

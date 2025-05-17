@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class PotionEntityMixin {
     @Inject(method = "onCollision", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/projectile/thrown/PotionEntity;applyWater(Lnet/minecraft/server/world/ServerWorld;)V"
+            target = "Lnet/minecraft/entity/projectile/thrown/PotionEntity;applyWater()V"
     ))
     private void waterAreaEffect(HitResult hitResult, CallbackInfo ci, @Local PotionContentsComponent potion) {
         PotionEntity PE = (PotionEntity) (Object)this;

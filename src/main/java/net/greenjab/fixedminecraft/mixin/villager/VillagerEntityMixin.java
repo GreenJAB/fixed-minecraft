@@ -275,7 +275,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .get(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
 
         int i = 0;
@@ -289,7 +289,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 } else {
                     optional = villagerEntity.getWorld()
                             .getRegistryManager()
-                            .getOrThrow(RegistryKeys.ENCHANTMENT)
+                            .get(RegistryKeys.ENCHANTMENT)
                             .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
                 }
             }
@@ -303,7 +303,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             int maxLevel = enchantment.getMaxLevel();
             int midLevel = (int)Math.ceil(maxLevel/2.0);
             int level = maxLevel==1?1:((rn.nextInt(midLevel))+1);
-            itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
+            itemStack = new ItemStack(Items.ENCHANTED_BOOK);
+            itemStack.addEnchantment(registryEntry, level);
             l = 2 + random.nextInt(5 + level * 10) + 3 * level;
             if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) l *= 2;
             if (l > 64) l = 64;
@@ -311,6 +312,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             l = 1;
             itemStack = new ItemStack(Items.BOOK);
         }
+
 
         return new EnchantedBookFactory(itemStack, l, 10);
     }
@@ -322,12 +324,12 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .get(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.getType()), random);
 
         Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getWorld()
                 .getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .get(RegistryKeys.ENCHANTMENT)
                 .iterateEntries(biomeEnchants.get(villagerData.getType()));
         HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
         optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
@@ -379,7 +381,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             int maxLevel = enchantment.getMaxLevel();
             int midLevel = (int) Math.ceil(maxLevel / 2.0);
             int level = maxLevel == 1 ? 1 : ((midLevel + rn.nextInt(maxLevel - midLevel)) + 1);
-            itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
+            itemStack = new ItemStack(Items.ENCHANTED_BOOK);
+            itemStack.addEnchantment(registryEntry, level);
             l = 2 + random.nextInt(5 + level * 10) + 3 * level;
             if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) l *= 2;
             if (l > 64) l = 64;
@@ -398,7 +401,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
-                .getOrThrow(RegistryKeys.ENCHANTMENT)
+                .get(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(ModTags.ANY_TRADES, random);
         int l;
         ItemStack itemStack;
@@ -407,7 +410,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             Enchantment enchantment = registryEntry.value();
             int maxLevel = enchantment.getMaxLevel();
             int level = maxLevel==1?1:(rn.nextInt(maxLevel)+1);
-            itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
+            itemStack = new ItemStack(Items.ENCHANTED_BOOK);
+            itemStack.addEnchantment(registryEntry, level);
             l = 2 + random.nextInt(5 + level * 10) + 3 * level;
             if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) l *= 2;
             if (l > 64) l = 64;
@@ -428,7 +432,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
         if (villagerEntity.getWorld() instanceof ServerWorld serverWorld) {
             for (ItemStack itemStack : villagerEntity.getArmorItems()) {
-                villagerEntity.dropStack(serverWorld, itemStack);
+                villagerEntity.dropStack(itemStack);
             }
             for (int i = 0; i < 4; i++) {
                 villagerEntity.equipStack(EQUIPMENT_SLOT_ORDER[i], ItemStack.EMPTY);

@@ -12,7 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(VideoOptionsScreen.class)
 public class VideoOptionsScreenMixin  {
 
-
     @Inject(method = "getOptions", at = @At("RETURN"), cancellable = true)
     private static void armorHudOption(GameOptions gameOptions, CallbackInfoReturnable<SimpleOption<?>[]> cir){
         cir.setReturnValue(new SimpleOption[]{
@@ -23,7 +22,7 @@ public class VideoOptionsScreenMixin  {
                 gameOptions.getAo(),
                 gameOptions.getMaxFps(),
                 gameOptions.getEnableVsync(),
-                gameOptions.getInactivityFpsLimit(),
+                gameOptions.getBobView(),
                 gameOptions.getGuiScale(),
                 gameOptions.getAttackIndicator(),
                 gameOptions.getGamma(),
@@ -39,7 +38,6 @@ public class VideoOptionsScreenMixin  {
                 gameOptions.getGlintSpeed(),
                 gameOptions.getGlintStrength(),
                 gameOptions.getMenuBackgroundBlurriness(),
-                gameOptions.getBobView(),
                 FixedMinecraftClient.newArmorHud
         });
     }

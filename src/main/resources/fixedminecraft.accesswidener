@@ -4,8 +4,8 @@ accessible method net/minecraft/entity/passive/AbstractHorseEntity setHorseFlag 
 accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
 accessible field net/minecraft/client/gui/screen/advancement/AdvancementWidget progress Lnet/minecraft/advancement/AdvancementProgress;
 accessible field net/minecraft/client/particle/Particle y D
-accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingInventory Lnet/minecraft/inventory/RecipeInputInventory;
-accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingResultInventory Lnet/minecraft/inventory/CraftingResultInventory;
+#accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingInventory Lnet/minecraft/inventory/RecipeInputInventory;
+#accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingResultInventory Lnet/minecraft/inventory/CraftingResultInventory;
 accessible field net/minecraft/entity/player/HungerManager exhaustion F
 accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (Lnet/minecraft/util/hit/BlockHitResult;Lnet/minecraft/block/BlockState;)Ljava/util/OptionalInt;
 accessible class net/minecraft/screen/slot/ArmorSlot
@@ -13,3 +13,6 @@ accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 accessible class net/minecraft/client/option/GameOptions$OptionVisitor
 accessible method net/minecraft/item/ItemStack appendTooltip (Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V
 accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResultTime J
+accessible field net/minecraft/loot/LootTables LOOT_TABLES Ljava/util/Set;
+accessible field net/minecraft/screen/CraftingScreenHandler input Lnet/minecraft/inventory/RecipeInputInventory;
+accessible field net/minecraft/screen/CraftingScreenHandler result Lnet/minecraft/inventory/CraftingResultInventory;

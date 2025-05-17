@@ -70,7 +70,7 @@ public class FixedMinecraftEnchantmentHelper {
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
         World world =  Objects.requireNonNull(FixedMinecraft.SERVER).getOverworld();
-        Registry<Enchantment> optional = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT);
+        Registry<Enchantment> optional = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT);
         Iterator<Enchantment> e = optional.stream().iterator();
         while (e.hasNext()) {
             Enchantment enchantment = e.next();
@@ -125,10 +125,6 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static ItemStack applySuperEnchants(ItemStack IS, Random random) {
-        return applySuperEnchants(IS, random, false);
-    }
-
-    public static ItemStack applySuperEnchants(ItemStack IS, Random random, boolean pale) {
         if (!IS.isOf(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultStack();
             ItemEnchantmentsComponent map = EnchantmentHelper.getEnchantments(IS);
@@ -140,7 +136,7 @@ public class FixedMinecraftEnchantmentHelper {
                 Enchantment e = registryEntry.value();
                 int i = entry.getIntValue();
                 if (e.getMaxLevel() != 1) {
-                    if (random.nextFloat() < (pale?0.15f:0.05f)) {
+                    if (random.nextFloat() < 0.05f) {
                         i = e.getMaxLevel() + 1;
                         isSuper = true;
                     }
