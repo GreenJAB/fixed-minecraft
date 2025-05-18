@@ -11,7 +11,6 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.recipe.book.RecipeBookType;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -38,7 +37,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
         return items;
     }
 
-    @Override
+    /*@Override
     protected void addInputSlots(int x, int y) {
 
         this.addSlot(new Slot(this.input, 0, x, y){
@@ -78,7 +77,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
         this.addSlot(new Slot(Inv(), 0, x + 2*18, y + 2*18){
             @Override public boolean canTakeItems(PlayerEntity playerEntity) {return false;}});
-    }
+    }*/
 
     @Override
     public void onContentChanged(Inventory inventory) {

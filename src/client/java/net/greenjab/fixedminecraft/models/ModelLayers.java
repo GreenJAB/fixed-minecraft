@@ -24,7 +24,7 @@ public class ModelLayers {
     }
 
     public static void onRegisterLayers() {
-        EntityModelLayerRegistry.registerModelLayer(VILLAGER_INNER_ARMOR, () -> VillagerArmorModel.createBodyLayer(new Dilation(0.0F), 0.0F, 0.25F));
-        EntityModelLayerRegistry.registerModelLayer(VILLAGER_OUTER_ARMOR, () -> VillagerArmorModel.createBodyLayer(new Dilation(1.0F), 0.0F, -0.5F));
+        //EntityModelLayerRegistry.registerModelLayer(VILLAGER_INNER_ARMOR, () -> VillagerArmorModel.createBodyLayer(new Dilation(0.0F), 0.0F, 0.25F));
+        //EntityModelLayerRegistry.registerModelLayer(VILLAGER_OUTER_ARMOR, () -> VillagerArmorModel.createBodyLayer(new Dilation(1.0F), 0.0F, -0.5F));
     }
 }

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(AnimalArmorItem.Type.class)
 public abstract class AnimalArmorItemTypeMixin <E>{
 
-    @ModifyArg(method = "<init>", at = @At(
+    /*@ModifyArg(method = "<init>", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/registry/entry/RegistryEntryList;of(Ljava/util/function/Function;[Ljava/lang/Object;)Lnet/minecraft/registry/entry/RegistryEntryList$Direct;"
     ), index = 1)
@@ -18,5 +18,5 @@ public abstract class AnimalArmorItemTypeMixin <E>{
             return (E[]) new EntityType<?>[]{EntityType.HORSE, EntityType.MULE};
         }
         return values;
-    }
+    }*/
 }

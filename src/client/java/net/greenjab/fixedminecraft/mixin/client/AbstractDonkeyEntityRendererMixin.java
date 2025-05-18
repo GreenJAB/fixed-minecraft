@@ -1,7 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import net.minecraft.client.render.entity.DonkeyEntityRenderer;
+import org.spongepowered.asm.mixin.Mixin;
 
-import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
+@Mixin(DonkeyEntityRenderer.class)
+public class AbstractDonkeyEntityRendererMixin{}
+
+
+/*import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.client.render.entity.AbstractDonkeyEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
@@ -58,3 +64,4 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
         return 0f;
     }
 }
+*/

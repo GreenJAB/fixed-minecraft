@@ -32,14 +32,10 @@ public class TradeOffersEnchantedToolMixin {
     private void needDiamond(Entity entity, Random random, CallbackInfoReturnable<TradeOffer> cir,
                            @Local ItemStack itemStack,
                            @Local TradedItem itemStack2) {
-        if (!itemStack.getItem().getComponents().contains(DataComponentTypes.REPAIRABLE)) {
-            cir.setReturnValue(new TradeOffer(itemStack2, itemStack, 3, this.experience, this.multiplier));
+        if (itemStack.getItem().getName().getString().toLowerCase().contains("diamond")) {
+            cir.setReturnValue(new TradeOffer(itemStack2, Optional.of(new TradedItem(Items.DIAMOND, 1)), itemStack, 3, this.experience, this.multiplier));
             return;
         }
-        if (itemStack.getItem().getComponents().get(DataComponentTypes.REPAIRABLE).matches(Items.DIAMOND.getDefaultStack())){//.getName().toString().toLowerCase().contains("diamond")) {
-            cir.setReturnValue(new TradeOffer(itemStack2, Optional.of(new TradedItem(Items.DIAMOND, 1)), itemStack, 3, this.experience, this.multiplier));
-        } else {
-            cir.setReturnValue(new TradeOffer(itemStack2, itemStack, 3, this.experience, this.multiplier));
-        }
+        cir.setReturnValue(new TradeOffer(itemStack2, itemStack, 3, this.experience, this.multiplier));
     }
 }

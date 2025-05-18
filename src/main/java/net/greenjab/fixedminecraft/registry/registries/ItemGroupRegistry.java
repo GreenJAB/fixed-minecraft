@@ -6,6 +6,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -47,7 +48,7 @@ public class ItemGroupRegistry {
 
         String[] tables = {"fish", "junk", "mid", "treasure"};
         Identifier lootTableId = FixedMinecraft.id("gameplay/fixed_fishing/" + tables[0]);
-        LootTables.LOOT_TABLES.add(lootTableId);
+        LootTables.LOOT_TABLES.add(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
 
     }
 }

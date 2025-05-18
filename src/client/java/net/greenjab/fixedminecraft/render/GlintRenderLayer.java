@@ -9,7 +9,6 @@ import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TriState;
 
 /** Credit: Pepperoni-Jabroni */
 @Environment(EnvType.CLIENT)
@@ -44,7 +43,7 @@ public class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of("glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
+                .texture(new Texture(res, false, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -58,7 +57,7 @@ public class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of("entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
+                .texture(new Texture(res, false, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -73,7 +72,7 @@ public class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of("armor_entity_glint", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, MultiPhaseParameters.builder()
                 .program(RenderPhase.ARMOR_ENTITY_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
+                .texture(new Texture(res, false, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)
@@ -88,7 +87,7 @@ public class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of("glint_translucent", VertexFormats.POSITION_TEXTURE, VertexFormat.DrawMode.QUADS, 256, RenderLayer.MultiPhaseParameters.builder()
                 .program(TRANSLUCENT_GLINT_PROGRAM)
-                .texture(new Texture(res, TriState.FALSE, false))
+                .texture(new Texture(res, false, false))
                 .writeMaskState(COLOR_MASK)
                 .cull(DISABLE_CULLING)
                 .depthTest(EQUAL_DEPTH_TEST)

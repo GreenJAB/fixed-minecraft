@@ -16,3 +16,5 @@ accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResu
 accessible field net/minecraft/loot/LootTables LOOT_TABLES Ljava/util/Set;
 accessible field net/minecraft/screen/CraftingScreenHandler input Lnet/minecraft/inventory/RecipeInputInventory;
 accessible field net/minecraft/screen/CraftingScreenHandler result Lnet/minecraft/inventory/CraftingResultInventory;
+accessible field net/minecraft/screen/CraftingScreenHandler player Lnet/minecraft/entity/player/PlayerEntity;
+accessible class net/minecraft/client/render/MapRenderer$MapTexture

@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.models;
 
+public class MuleArmorFeatureRenderer{}/*
+
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
@@ -84,3 +86,4 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
         return Items.AIR;
     }
 }
+*/

@@ -1,19 +1,16 @@
 package net.greenjab.fixedminecraft.models;
 
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 /** Credit: Viola-Siemens */
+public class HumanArmorFeatureRenderer{}/*
 public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M extends BipedEntityModel<S>, A extends BipedEntityModel<S>> extends FeatureRenderer<S, M> {
     private final A innerModel;
     private final A outerModel;
@@ -111,4 +108,4 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
         return slotType == EquipmentSlot.LEGS;
     }
 
-}
+}*/

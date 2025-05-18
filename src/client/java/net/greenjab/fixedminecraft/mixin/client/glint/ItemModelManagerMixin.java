@@ -2,6 +2,15 @@ package net.greenjab.fixedminecraft.mixin.client.glint;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.item.Item;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(ItemRenderer.class)
+public class ItemModelManagerMixin {}
+
+/*import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderState;
@@ -15,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /** Credit: Pepperoni-Jabroni */
-@Mixin(ItemModelManager.class)
+/*@Mixin(ItemModelManager.class)
 @Environment(EnvType.CLIENT)
 public class ItemModelManagerMixin {
 
@@ -25,3 +34,4 @@ public class ItemModelManagerMixin {
         EnchantGlint.setTargetStack(stack);
     }
 }
+*/

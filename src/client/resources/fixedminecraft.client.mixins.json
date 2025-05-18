@@ -16,7 +16,6 @@
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
         "CreateWorldScreenMixin",
-        "DragonEntityModelMixin",
         "ElderGuardianAppearanceParticleMixin",
         "EnchantmentScreenMixin",
         "EnderDragonEntityRendererMixin",

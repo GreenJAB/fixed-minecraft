@@ -15,8 +15,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.item.property.bool.BooleanProperties;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -26,9 +24,8 @@ import net.minecraft.util.Identifier;
 import java.util.List;
 
 public class FixedMinecraftClient implements ClientModInitializer {
-    public static float paleGardenFog = 0f;
-    public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
-    public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
+    //public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
+    //public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
     public static SimpleOption<Boolean> newArmorHud = SimpleOption.ofBoolean("options.newArmorHud", true);
 
     @Override
@@ -50,7 +47,7 @@ public class FixedMinecraftClient implements ClientModInitializer {
 
         HudRenderCallback.EVENT.register(this::renderCrosshair);
 
-        BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
+        //BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers();
 
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {
@@ -79,10 +76,10 @@ public class FixedMinecraftClient implements ClientModInitializer {
             }
         matrices.pop();
     }
-    private static EquipmentModel createHumanoidAndHorseModel(String id) {
+    /*private static EquipmentModel createHumanoidAndHorseModel(String id) {
         return EquipmentModel.builder()
                 .addHumanoidLayers(Identifier.ofVanilla(id))
                 .addLayers(EquipmentModel.LayerType.HORSE_BODY, EquipmentModel.Layer.createWithLeatherColor(Identifier.ofVanilla(id), false))
                 .build();
-    }
+    }*/
 }

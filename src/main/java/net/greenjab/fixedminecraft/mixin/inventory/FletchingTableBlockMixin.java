@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(FletchingTableBlock.class)
 public class FletchingTableBlockMixin {
 
-    @Unique
+    /*@Unique
     public NamedScreenHandlerFactory createScreenHandlerFactory(World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new FletchingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.of(Text.translatable("container.fletching")));
     }
@@ -38,5 +38,5 @@ public class FletchingTableBlockMixin {
            cir.setReturnValue( ActionResult.CONSUME);
        }
        cir.cancel();
-   }
+   }*/
 }

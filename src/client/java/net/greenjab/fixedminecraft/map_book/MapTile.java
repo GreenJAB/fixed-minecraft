@@ -5,7 +5,6 @@ import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.render.MapRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.map.MapState;
@@ -17,15 +16,17 @@ public class MapTile implements Drawable {
     private final MapState mapState;
     private final MinecraftClient client;
 
-    private final MapRenderState mapRenderState = new MapRenderState();
-
     public MapTile(MapBookScreen screen, MapIdComponent id, MapState mapState, MinecraftClient client) {
         this.screen = screen;
         this.id = id;
         this.mapState = mapState;
         this.client = client;
-        client.getMapRenderer().update(id, mapState, mapRenderState);
+        //client.gameRenderer.getMapRenderer().updateTexture(id, mapState, mapRenderState);
     }
+
+    //private final MapRenderState mapRenderState = new MapRenderState();
+
+
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -40,7 +41,8 @@ public class MapTile implements Drawable {
                 mapState.centerZ - offset + screen.height / 2.0, 0.0
         );
         matrix.scale(mapScale, mapScale, 1.0f);
-        client.getMapRenderer().draw(mapRenderState, matrix, ((DrawContextAccessor)context).getVertexConsumers(), true, 15728880);
+        client.gameRenderer.getMapRenderer().draw(context.getMatrices(), ((DrawContextAccessor)context).getVertexConsumers(), id, mapState, true, 15728880);
         matrix.pop();
     }
 }
+

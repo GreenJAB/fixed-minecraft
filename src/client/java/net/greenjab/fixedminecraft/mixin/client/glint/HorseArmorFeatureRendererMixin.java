@@ -1,5 +1,14 @@
 package net.greenjab.fixedminecraft.mixin.client.glint;
 
+import net.minecraft.client.render.entity.feature.FeatureRenderer;
+import net.minecraft.client.render.entity.feature.HorseArmorFeatureRenderer;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(HorseArmorFeatureRenderer.class)
+public abstract class HorseArmorFeatureRendererMixin {}/*
+
+
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -15,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /** Credit: Pepperoni-Jabroni */
-@Mixin(HorseArmorFeatureRenderer.class)
+/*@Mixin(HorseArmorFeatureRenderer.class)
 public abstract class HorseArmorFeatureRendererMixin<S extends BipedEntityRenderState, M extends BipedEntityModel<S>> extends FeatureRenderer<S, M> {
 
     public HorseArmorFeatureRendererMixin(FeatureRendererContext<S, M> context) {
@@ -28,3 +37,4 @@ public abstract class HorseArmorFeatureRendererMixin<S extends BipedEntityRender
         EnchantGlint.setTargetStack(horseEntityRenderState.armor);
     }
 }
+*/

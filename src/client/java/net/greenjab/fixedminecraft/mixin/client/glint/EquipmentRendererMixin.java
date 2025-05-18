@@ -1,5 +1,14 @@
 package net.greenjab.fixedminecraft.mixin.client.glint;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.ArmorRenderer;
+import net.minecraft.client.render.entity.feature.HorseArmorFeatureRenderer;
+import org.spongepowered.asm.mixin.Mixin;
+
+@Mixin(HorseArmorFeatureRenderer.class)
+public class EquipmentRendererMixin {}/*
+
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
@@ -26,3 +35,4 @@ public class EquipmentRendererMixin {
         return original;
     }
 }
+*/

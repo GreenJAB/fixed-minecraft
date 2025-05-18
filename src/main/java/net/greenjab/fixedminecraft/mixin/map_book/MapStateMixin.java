@@ -128,7 +128,7 @@ public class MapStateMixin implements MapStateAccessor {
         return instance.equals(o);
     }
 
-    @Inject(method = "getPlayerMarkerAndRotation", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "getPlayerMarkerAndRotation", at = @At("HEAD"), cancellable = true)
     private void betterPlayerMarker(RegistryEntry<MapDecorationType> type, @Nullable WorldAccess world, double rotation, float dx, float dz,
                                     CallbackInfoReturnable<Pair<RegistryEntry<MapDecorationType>, Byte>> cir) {
         double rot = rotation < 0.0 ? rotation + 360.0 : rotation;
@@ -149,7 +149,7 @@ public class MapStateMixin implements MapStateAccessor {
         byte b = (byte) ((int) rot + (byte) ((int) scale));
         cir.setReturnValue(Pair.of(MapDecorationTypes.PLAYER, b));
         cir.cancel();
-    }
+    }*/
 
     @Unique
     private static boolean isInBounds(float dx, float dz) {

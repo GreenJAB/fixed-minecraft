@@ -15,9 +15,6 @@ import net.minecraft.client.render.entity.model.VillagerResemblingModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
-import net.minecraft.client.render.entity.state.ArmorStandEntityRenderState;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
-import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -28,7 +25,8 @@ import org.jetbrains.annotations.NotNull;
 /** Credit: Viola-Siemens */
 /** Not cleaning up until I can make it work */
 //public class VillagerArmorModel<T extends VillagerEntity> extends CompositeEntityModel<T> implements ModelWithHat {
-public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithArms, ModelWithHead {// implements ModelWithHat {
+public class VillagerArmorModel{
+/*public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState> implements ModelWithArms, ModelWithHead {// implements ModelWithHat {
     protected final ModelPart root;
     protected final ModelPart hat;
     protected final ModelPart head;
@@ -89,10 +87,7 @@ public class VillagerArmorModel extends BipedEntityModel<BipedEntityRenderState>
     public void setHatVisible(boolean visible) {
     }
 
-    /*@Override
-    public void rotateArms(MatrixStack stack) {
 
-    }*/
 
     public void setBodyVisible(boolean visible) {
         this.body.visible = visible;

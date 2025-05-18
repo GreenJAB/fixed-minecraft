@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -16,14 +18,21 @@ public class FoodComponentsMixin {
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void ModifyStamina(CallbackInfo ci) {
         //bad food
-        ROTTEN_FLESH = new FoodComponent.Builder().nutrition(4).saturationModifier(0.1F).build();
-        SPIDER_EYE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.1F).build();
-        POISONOUS_POTATO = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.1F).build();
-        PUFFERFISH = (new FoodComponent.Builder()).nutrition(1).saturationModifier(0.1F).build();
+        ROTTEN_FLESH = new FoodComponent.Builder().nutrition(4).saturationModifier(0.1F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0), 0.8F).build();
+        SPIDER_EYE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.1F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 0), 1.0F).build();
+        POISONOUS_POTATO = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.1F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 100, 0), 0.6F).build();
+        PUFFERFISH = (new FoodComponent.Builder()).nutrition(1).saturationModifier(0.1F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.POISON, 1200, 1), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 300, 2), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 300, 0), 1.0F).build();
 
         //raw meat
         BEEF = (new FoodComponent.Builder()).nutrition(3).saturationModifier(0.15F).build();
-        CHICKEN = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.15F).build();
+        CHICKEN = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.15F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0), 0.3F).build();
         COD = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.15F).build();
         MUTTON = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.15F).build();
         PORKCHOP = (new FoodComponent.Builder()).nutrition(3).saturationModifier(0.15F).build();
@@ -69,8 +78,16 @@ public class FoodComponentsMixin {
         COOKIE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.6F).build();
 
         //gold
-        GOLDEN_APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(0.8F).alwaysEdible().build();
-        ENCHANTED_GOLDEN_APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(1.0F).alwaysEdible().build();
+        GOLDEN_APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(0.8F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 200, 1), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 2400, 0), 1.0F)
+                .alwaysEdible().build();
+        ENCHANTED_GOLDEN_APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 400, 1), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 6000, 0), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 6000, 0), 1.0F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 2400, 3), 1.0F)
+                .alwaysEdible().build();
         GOLDEN_CARROT = (new FoodComponent.Builder()).nutrition(6).saturationModifier(1.2F).build();
 
 
