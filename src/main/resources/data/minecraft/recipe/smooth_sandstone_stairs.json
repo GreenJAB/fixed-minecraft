@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:smooth_sandstone"
+        "#": {
+            "item": "minecraft:smooth_sandstone"
+        }
     },
     "result": {
         "count": 4,

@@ -7,9 +7,15 @@
     "@ @"
   ],
     "key": {
-      "#": "minecraft:leather",
-      "$": "minecraft:string",
-      "@": "minecraft:iron_ingot"
+      "#": {
+          "item": "minecraft:leather"
+      },
+      "$": {
+          "item": "minecraft:string"
+      },
+      "@": {
+          "item": "minecraft:iron_ingot"
+      }
    },
   "result": {
     "id": "minecraft:saddle",

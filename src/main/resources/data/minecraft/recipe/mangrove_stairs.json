@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:mangrove_planks"
+        "#": {
+            "item": "minecraft:mangrove_planks"
+        }
     },
     "pattern": [
         "# ",

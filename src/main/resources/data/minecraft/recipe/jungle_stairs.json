@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:jungle_planks"
+        "#": {
+            "item": "minecraft:jungle_planks"
+        }
     },
     "pattern": [
         "# ",

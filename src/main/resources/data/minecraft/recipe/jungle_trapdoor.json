@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:jungle_slab"
+        "_": {
+            "item": "minecraft:jungle_slab"
+        }
     },
     "result": {
         "count": 2,

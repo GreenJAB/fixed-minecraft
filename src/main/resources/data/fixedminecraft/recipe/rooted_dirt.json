@@ -6,8 +6,12 @@
     "$#"
   ],
     "key": {
-      "#": "minecraft:dirt",
-      "$": "minecraft:hanging_roots"
+      "#": {
+          "item": "minecraft:dirt"
+      },
+      "$": {
+          "item": "minecraft:hanging_roots"
+      }
     }
   ,
   "result": {

@@ -7,8 +7,12 @@
         "EEE"
     ],
     "key": {
-        "E": "minecraft:echo_shard",
-        "C": "minecraft:chorus_fruit"
+        "E": {
+            "item": "minecraft:echo_shard"
+        },
+        "C": {
+            "item": "minecraft:chorus_fruit"
+        }
     },
     "result": {
         "id": "fixedminecraft:echo_fruit",

@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:spruce_slab"
+        "_": {
+            "item": "minecraft:spruce_slab"
+        }
     },
     "result": {
         "count": 2,

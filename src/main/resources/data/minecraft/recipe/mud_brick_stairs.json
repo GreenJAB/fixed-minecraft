@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:mud_bricks"
+        "#": {
+            "item": "minecraft:mud_bricks"
+        }
     },
     "result": {
         "count": 4,

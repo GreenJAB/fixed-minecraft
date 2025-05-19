@@ -3,7 +3,9 @@
     "category": "redstone",
     "group": "wooden_pressure_plate",
     "key": {
-        "#": "minecraft:mangrove_planks"
+        "#": {
+            "item": "minecraft:mangrove_planks"
+        }
     },
     "pattern": [
         "##"

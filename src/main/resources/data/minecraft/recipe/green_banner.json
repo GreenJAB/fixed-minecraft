@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "banner",
   "key": {
-    "#": "minecraft:green_carpet",
-    "|": "minecraft:stick"
+    "#": {
+        "item": "minecraft:green_carpet"
+    },
+    "|": {
+        "item": "minecraft:stick"
+    }
   },
   "pattern": [
     " # ",

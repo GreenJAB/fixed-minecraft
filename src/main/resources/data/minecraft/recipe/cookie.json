@@ -1,9 +1,15 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        "minecraft:wheat",
-        "minecraft:cocoa_beans",
-        "minecraft:wheat"
+        {
+            "item": "minecraft:wheat"
+        },
+        {
+            "item": "minecraft:cocoa_beans"
+        },
+        {
+            "item": "minecraft:wheat"
+        }
     ],
     "result": {
         "count": 8,

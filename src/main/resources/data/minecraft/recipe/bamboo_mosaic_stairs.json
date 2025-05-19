@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:bamboo_mosaic"
+        "#": {
+            "item": "minecraft:bamboo_mosaic"
+        }
     },
     "pattern": [
         "# ",

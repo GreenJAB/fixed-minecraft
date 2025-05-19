@@ -1,7 +1,9 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        "minecraft:redstone"
+        {
+            "item": "minecraft:redstone"
+        }
     ],
     "result": {
         "count": 1,

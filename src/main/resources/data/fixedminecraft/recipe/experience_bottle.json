@@ -7,8 +7,12 @@
         "SSS"
     ],
     "key": {
-        "S": "minecraft:sculk",
-        "B": "minecraft:glass_bottle"
+        "S": {
+            "item": "minecraft:sculk"
+        },
+        "B": {
+            "item": "minecraft:glass_bottle"
+        }
     },
     "result": {
         "id": "minecraft:experience_bottle",

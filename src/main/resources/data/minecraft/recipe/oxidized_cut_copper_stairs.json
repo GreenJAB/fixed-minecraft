@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:oxidized_cut_copper"
+        "#": {
+            "item": "minecraft:oxidized_cut_copper"
+        }
     },
     "result": {
         "count": 4,

@@ -5,8 +5,12 @@
         "B#"
     ],
     "key": {
-        "#": "minecraft:red_mushroom",
-        "B": "minecraft:brown_mushroom"
+        "#": {
+            "item": "minecraft:red_mushroom"
+        },
+        "B": {
+            "item": "minecraft:brown_mushroom"
+        }
     },
     "result": {
         "count": 1,

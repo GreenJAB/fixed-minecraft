@@ -3,7 +3,9 @@
     "category": "redstone",
     "group": "wooden_button",
     "ingredients": [
-        "minecraft:mangrove_planks"
+        {
+            "item": "minecraft:mangrove_planks"
+        }
     ],
     "result": {
         "count": 4,

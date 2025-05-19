@@ -3,7 +3,9 @@
     "category": "redstone",
     "group": "wooden_pressure_plate",
     "key": {
-        "#": "minecraft:acacia_planks"
+        "#": {
+            "item": "minecraft:acacia_planks"
+        }
     },
     "pattern": [
         "##"

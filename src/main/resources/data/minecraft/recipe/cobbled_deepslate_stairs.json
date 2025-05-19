@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:cobbled_deepslate"
+        "#": {
+            "item": "minecraft:cobbled_deepslate"
+        }
     },
     "result": {
         "count": 4,

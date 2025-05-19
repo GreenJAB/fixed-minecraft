@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:crimson_slab"
+        "_": {
+            "item": "minecraft:crimson_slab"
+        }
     },
     "result": {
         "count": 2,

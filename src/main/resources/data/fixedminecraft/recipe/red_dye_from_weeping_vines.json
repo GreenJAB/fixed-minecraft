@@ -2,7 +2,9 @@
     "type": "minecraft:crafting_shapeless",
     "group": "red_dye",
     "ingredients": [
-        "minecraft:weeping_vines"
+        {
+            "item": "minecraft:weeping_vines"
+        }
     ],
     "result": {
         "id": "minecraft:red_dye"

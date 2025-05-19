@@ -114,7 +114,7 @@ public class ItemRegistry {
     }
 
     public static Item register(String id, Item item) {
-        return register(Identifier.ofVanilla(id), item);
+        return register(FixedMinecraft.id(id), item);
     }
 
     public static Item register(Identifier id, Item item) {

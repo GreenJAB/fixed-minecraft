@@ -2,9 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "category": "redstone",
     "key": {
-        "#": "#minecraft:stone_crafting_materials",
-        "R": "minecraft:redstone",
-        "X": "minecraft:bow"
+        "#": {
+            "tag": "minecraft:stone_tool_materials"
+        },
+        "R": {
+            "item": "minecraft:redstone"
+        },
+        "X": {
+            "item": "minecraft:bow"
+        }
     },
     "pattern": [
         "###",

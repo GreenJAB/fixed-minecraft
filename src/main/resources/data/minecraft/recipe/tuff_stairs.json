@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "#": "minecraft:tuff"
+    "#": {
+        "item": "minecraft:tuff"
+    }
   },
   "pattern": [
     "#  ",

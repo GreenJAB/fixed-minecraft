@@ -5,8 +5,12 @@
         "I I"
     ],
     "key": {
-        "C": "minecraft:chain",
-        "I": "minecraft:iron_nugget"
+        "C": {
+            "item": "minecraft:chain"
+        },
+        "I": {
+            "item": "minecraft:iron_nugget"
+        }
     },
     "result": {
         "id": "minecraft:chainmail_helmet"

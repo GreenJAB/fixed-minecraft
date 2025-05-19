@@ -1,46 +1,137 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 
-import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.item.BrickItem;
 import net.greenjab.fixedminecraft.registry.item.GlisteringMelonSliceItem;
 import net.greenjab.fixedminecraft.registry.item.PhantomMembraneItem;
 import net.greenjab.fixedminecraft.registry.item.TotemItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
-import net.minecraft.component.type.SuspiciousStewEffectsComponent;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.CrossbowItem;
-import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SplashPotionItem;
 import net.minecraft.item.SaddleItem;
-import net.minecraft.item.TridentItem;
 import net.minecraft.util.Rarity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
-
-import java.util.function.Function;
 
 import static net.minecraft.item.Items.register;
 
 @Mixin(Items.class)
 public class ItemsMixin {
 
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=brick"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item throwableBrick(Item.Settings settings) {
+        return new BrickItem((new Item.Settings()));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=nether_brick"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item throwableNetherBrick(Item.Settings settings) {
+        return new BrickItem((new Item.Settings()));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=totem_of_undying"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item useableTotem(Item.Settings settings) {
+        return new TotemItem((new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON)));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=phantom_membrane"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item edibleMembrane(Item.Settings settings) {
+        return new PhantomMembraneItem(new Item.Settings().food(FoodComponents.CHORUS_FRUIT));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=glistering_melon_slice"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item edibleGoldMelon(Item.Settings settings) {
+        return new GlisteringMelonSliceItem(new Item.Settings().food(new FoodComponent.Builder().nutrition(4).saturationModifier(0.8F).alwaysEdible().build()));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=rabbit_stew"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item stackedRabbitstew(Item.Settings settings) {
+        return new Item(new Item.Settings().maxCount(16).food(FoodComponents.RABBIT_STEW));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=beetroot_soup"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item stackedBeetrootSoup(Item.Settings settings) {
+        return new Item(new Item.Settings().maxCount(16).food(FoodComponents.BEETROOT_SOUP));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=mushroom_stew"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item stackedMushroomstew(Item.Settings settings) {
+        return new Item(new Item.Settings().maxCount(16).food(FoodComponents.MUSHROOM_STEW));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=suspicious_stew"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item stackedSuspiciousSoup(Item.Settings settings) {
+        return new Item(new Item.Settings().maxCount(16).food(FoodComponents.SUSPICIOUS_STEW));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=potion"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/PotionItem;", ordinal = 0 ))
+    private static PotionItem stackedPotions(Item.Settings settings) {
+        return new PotionItem(new Item.Settings().maxCount(16).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=splash_potion"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SplashPotionItem;" , ordinal = 0))
+    private static SplashPotionItem stackedSplashPotions(Item.Settings settings) {
+        return new SplashPotionItem(new Item.Settings().maxCount(16).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=lingering_potion"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/LingeringPotionItem;", ordinal = 0 ))
+    private static LingeringPotionItem stackedLingeringPotions(Item.Settings settings) {
+        return new LingeringPotionItem(new Item.Settings().maxCount(16).component(DataComponentTypes.POTION_CONTENTS, PotionContentsComponent.DEFAULT));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=saddle"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/SaddleItem;", ordinal = 0 ))
+    private static SaddleItem stackedSaddles(Item.Settings settings) {
+        return new SaddleItem(new Item.Settings().maxCount(16));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=spider_eye"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item spiderEyeBait(Item.Settings settings) {
+        return new Item(new Item.Settings().food(FoodComponents.SPIDER_EYE).component(ItemRegistry.BAIT_POWER, new BaitComponent(1)));
+    }
+
+    @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
+            "stringValue=fermented_spider_eye"},ordinal = 0)),at = @At(
+            value = "NEW",target = "(Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ))
+    private static Item fermentedSpiderEyeBait(Item.Settings settings) {
+        return new Item(new Item.Settings().component(ItemRegistry.BAIT_POWER, new BaitComponent(2)));
+    }
 
     /*@Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
                                                                                                                                                                                                   target = "Lnet/minecraft/item/Items;TADPOLE_BUCKET:Lnet/minecraft/item/Item;")))

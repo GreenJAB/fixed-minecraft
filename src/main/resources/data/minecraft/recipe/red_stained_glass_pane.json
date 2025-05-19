@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:red_stained_glass"
+        "#": {
+            "item": "minecraft:red_stained_glass"
+        }
     },
     "result": {
         "count": 12,

@@ -2,8 +2,12 @@
     "type": "minecraft:crafting_shapeless",
     "category": "misc",
     "ingredients": [
-        "minecraft:map",
-        "minecraft:book"
+        {
+            "item": "minecraft:map"
+        },
+        {
+            "item": "minecraft:book"
+        }
     ],
     "result": {
         "count": 1,

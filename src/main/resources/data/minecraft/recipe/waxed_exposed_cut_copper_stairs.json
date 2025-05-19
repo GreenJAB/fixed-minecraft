@@ -7,7 +7,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:waxed_exposed_cut_copper"
+        "#": {
+            "item": "minecraft:waxed_exposed_cut_copper"
+        }
     },
     "result": {
         "count": 4,

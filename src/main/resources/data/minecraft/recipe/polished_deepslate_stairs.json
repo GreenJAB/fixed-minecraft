@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:polished_deepslate"
+        "#": {
+            "item": "minecraft:polished_deepslate"
+        }
     },
     "result": {
         "count": 4,

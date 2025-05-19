@@ -5,7 +5,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:glass"
+        "#": {
+            "item": "minecraft:glass"
+        }
     },
     "result": {
         "count": 12,

@@ -1,8 +1,12 @@
 {
     "type": "minecraft:crafting_shapeless",
     "ingredients": [
-        "minecraft:bone_block",
-        "minecraft:coal"
+        {
+            "item": "minecraft:bone_block"
+        },
+        {
+            "item": "minecraft:coal"
+        }
     ],
     "result": {
         "count": 1,

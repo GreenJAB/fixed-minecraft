@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:oak_planks"
+        "#": {
+            "item": "minecraft:oak_planks"
+        }
     },
     "pattern": [
         "# ",

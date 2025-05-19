@@ -6,8 +6,12 @@
         "###"
     ],
     "key": {
-        "#": "minecraft:obsidian",
-        "G": "minecraft:ghast_tear"
+        "#": {
+            "item": "minecraft:obsidian"
+        },
+        "G": {
+            "item": "minecraft:ghast_tear"
+        }
     },
     "result": {
         "count": 1,

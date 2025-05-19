@@ -1,6 +1,8 @@
 {
     "type": "minecraft:stonecutting",
-    "ingredient": "minecraft:mangrove_planks",
+    "ingredient": {
+        "item": "minecraft:mangrove_planks"
+    },
     "result": {
         "id": "minecraft:mangrove_stairs",
         "count": 1

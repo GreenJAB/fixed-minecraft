@@ -7,8 +7,12 @@
         "EEE"
     ],
     "key": {
-        "E": "minecraft:echo_shard",
-        "T": "minecraft:totem_of_undying"
+        "E": {
+            "item": "minecraft:echo_shard"
+        },
+        "T": {
+            "item": "minecraft:totem_of_undying"
+        }
     },
     "result": {
         "id": "fixedminecraft:echo_totem",

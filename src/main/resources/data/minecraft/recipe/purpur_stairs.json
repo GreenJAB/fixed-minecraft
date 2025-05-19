@@ -7,8 +7,12 @@
     ],
     "key": {
         "#": [
-            "minecraft:purpur_block",
-            "minecraft:purpur_pillar"
+            {
+                "item": "minecraft:purpur_block"
+            },
+            {
+                "item": "minecraft:purpur_pillar"
+            }
         ]
     },
     "result": {

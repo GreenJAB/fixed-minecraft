@@ -56,10 +56,7 @@ public class BlockRegistry {
 
 
     public static Block register(String id, Block block) {
-        return Registry.register(Registries.BLOCK, id, block);
+        return Registry.register(Registries.BLOCK, FixedMinecraft.id(id), block);
     }
 
-    public static Block register(RegistryKey<Block> key, Block block) {
-        return Registry.register(Registries.BLOCK, key, block);
-    }
 }

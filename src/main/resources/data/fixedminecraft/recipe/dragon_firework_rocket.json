@@ -7,8 +7,12 @@
     "###"
   ],
     "key": {
-      "#": "minecraft:firework_rocket",
-      "$": "minecraft:dragon_breath"
+      "#": {
+          "item": "minecraft:firework_rocket"
+      },
+      "$": {
+          "item": "minecraft:dragon_breath"
+      }
     }
   ,
   "result": {

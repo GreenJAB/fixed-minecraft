@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:exposed_cut_copper"
+        "#": {
+            "item": "minecraft:exposed_cut_copper"
+        }
     },
     "result": {
         "count": 4,

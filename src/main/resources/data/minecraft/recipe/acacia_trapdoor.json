@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:acacia_slab"
+        "_": {
+            "item": "minecraft:acacia_slab"
+        }
     },
     "result": {
         "count": 2,

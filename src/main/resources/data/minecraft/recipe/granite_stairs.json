@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:granite"
+        "#": {
+            "item": "minecraft:granite"
+        }
     },
     "result": {
         "count": 4,

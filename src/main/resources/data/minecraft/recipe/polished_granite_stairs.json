@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:polished_granite"
+        "#": {
+            "item": "minecraft:polished_granite"
+        }
     },
     "result": {
         "count": 4,

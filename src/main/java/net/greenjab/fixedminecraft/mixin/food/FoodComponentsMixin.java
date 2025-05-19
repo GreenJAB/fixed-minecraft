@@ -60,7 +60,9 @@ public class FoodComponentsMixin {
         COOKED_SALMON = (new FoodComponent.Builder()).nutrition(6).saturationModifier(0.3F).build();
 
         //fruit
-        GLOW_BERRIES = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.3F).alwaysEdible().build();
+        GLOW_BERRIES = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.3F)
+                .statusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 1), 1.0f)
+                        .alwaysEdible().build();
         CHORUS_FRUIT = (new FoodComponent.Builder()).nutrition(4).saturationModifier(0.3F).alwaysEdible().build();
         APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(0.4F).build();
         MELON_SLICE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.4F).build();

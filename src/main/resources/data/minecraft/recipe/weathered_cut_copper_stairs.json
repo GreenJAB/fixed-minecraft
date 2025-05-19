@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:weathered_cut_copper"
+        "#": {
+            "item": "minecraft:weathered_cut_copper"
+        }
     },
     "result": {
         "count": 4,

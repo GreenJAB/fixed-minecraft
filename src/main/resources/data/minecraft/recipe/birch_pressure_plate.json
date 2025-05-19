@@ -3,7 +3,9 @@
     "category": "redstone",
     "group": "wooden_pressure_plate",
     "key": {
-        "#": "minecraft:birch_planks"
+        "#": {
+            "item": "minecraft:birch_planks"
+        }
     },
     "pattern": [
         "##"

@@ -2,7 +2,9 @@
     "type": "minecraft:crafting_shapeless",
     "group": "cyan_dye",
     "ingredients": [
-        "minecraft:warped_roots"
+        {
+            "item": "minecraft:warped_roots"
+        }
     ],
     "result": {
         "id": "minecraft:cyan_dye"

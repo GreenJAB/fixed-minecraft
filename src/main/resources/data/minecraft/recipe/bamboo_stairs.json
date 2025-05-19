@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:bamboo_planks"
+        "#": {
+            "item": "minecraft:bamboo_planks"
+        }
     },
     "pattern": [
         "# ",

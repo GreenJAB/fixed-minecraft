@@ -6,8 +6,12 @@
         "_I_"
     ],
     "key": {
-        "_": "minecraft:birch_slab",
-        "I": "minecraft:iron_nugget"
+        "_": {
+            "item": "minecraft:birch_slab"
+        },
+        "I": {
+            "item": "minecraft:iron_nugget"
+        }
     },
     "result": {
         "count": 2,

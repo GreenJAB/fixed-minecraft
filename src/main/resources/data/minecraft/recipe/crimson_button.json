@@ -3,7 +3,9 @@
     "category": "redstone",
     "group": "wooden_button",
     "ingredients": [
-        "minecraft:crimson_planks"
+        {
+            "item": "minecraft:crimson_planks"
+        }
     ],
     "result": {
         "count": 4,

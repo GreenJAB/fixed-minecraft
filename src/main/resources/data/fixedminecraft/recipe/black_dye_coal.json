@@ -3,7 +3,9 @@
     "category": "misc",
     "group": "black_dye",
     "ingredients": [
-        "minecraft:coal"
+        {
+            "item": "minecraft:coal"
+        }
     ],
     "result": {
         "count": 1,

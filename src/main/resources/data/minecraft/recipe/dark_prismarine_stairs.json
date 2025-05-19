@@ -6,7 +6,9 @@
         "##"
     ],
     "key": {
-        "#": "minecraft:dark_prismarine"
+        "#": {
+            "item": "minecraft:dark_prismarine"
+        }
     },
     "result": {
         "count": 4,

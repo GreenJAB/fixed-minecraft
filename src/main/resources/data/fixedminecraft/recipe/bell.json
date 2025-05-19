@@ -6,9 +6,15 @@
         "gGg"
     ],
     "key": {
-        "/": "minecraft:stick",
-        "g": "minecraft:gold_ingot",
-        "G": "minecraft:gold_nugget"
+        "/": {
+            "item": "minecraft:stick"
+        },
+        "g": {
+            "item": "minecraft:gold_ingot"
+        },
+        "G": {
+            "item": "minecraft:gold_nugget"
+        }
     },
     "result": {
         "count": 1,

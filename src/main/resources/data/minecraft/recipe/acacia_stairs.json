@@ -3,7 +3,9 @@
     "category": "building",
     "group": "wooden_stairs",
     "key": {
-        "#": "minecraft:acacia_planks"
+        "#": {
+            "item": "minecraft:acacia_planks"
+        }
     },
     "pattern": [
         "# ",

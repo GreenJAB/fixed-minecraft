@@ -3,12 +3,9 @@
     "criteria": {
         "arbalistic": {
             "conditions": {
-                "fired_from_weapon": {
-                    "items": "minecraft:crossbow"
-                },
-                "unique_entity_types": 5
+                "unique_entity_types": 50
             },
-            "trigger": "minecraft:killed_by_arrow"
+            "trigger": "minecraft:killed_by_crossbow"
         }
     },
     "display": {

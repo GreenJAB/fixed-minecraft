@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:mangrove_slab"
+        "_": {
+            "item": "minecraft:mangrove_slab"
+        }
     },
     "result": {
         "count": 2,

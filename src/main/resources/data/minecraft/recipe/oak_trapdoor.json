@@ -6,7 +6,9 @@
         "__"
     ],
     "key": {
-        "_": "minecraft:oak_slab"
+        "_": {
+            "item": "minecraft:oak_slab"
+        }
     },
     "result": {
         "count": 2,
