@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": "minecraft:diamond",
-    "P": "minecraft:iron_helmet"
+    "X": {
+        "item": "minecraft:diamond"
+    },
+    "P": {
+        "item": "minecraft:iron_helmet"
+    }
   },
   "pattern": [
     "XXX",

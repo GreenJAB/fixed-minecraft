@@ -6,9 +6,15 @@
         "IPI"
     ],
     "key": {
-        "C": "minecraft:chain",
-        "I": "minecraft:iron_nugget",
-        "P": "minecraft:leather_helmet"
+        "C": {
+            "item": "minecraft:chain"
+        },
+        "I": {
+            "item": "minecraft:iron_nugget"
+        },
+        "P": {
+            "item": "minecraft:leather_helmet"
+        }
     },
     "result": {
         "id": "minecraft:chainmail_helmet"

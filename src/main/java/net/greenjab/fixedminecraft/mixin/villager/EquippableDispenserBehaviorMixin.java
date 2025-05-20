@@ -19,7 +19,7 @@ public class EquippableDispenserBehaviorMixin {
     @Inject(method = "dispenseArmor", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;split(I)Lnet/minecraft/item/ItemStack;"), cancellable = true)
     private static void leatherGearOnVillagers(BlockPointer pointer, ItemStack armor, CallbackInfoReturnable<Boolean> cir, @Local LivingEntity livingEntity, @Local EquipmentSlot equipmentSlot){
         if (livingEntity instanceof VillagerEntity VE) {
-            if (!(armor.isIn(ItemTags.DYEABLE)) || !(VE.getVillagerData().getLevel() > equipmentSlot.getEntitySlotId())) {
+            if (!(armor.isIn(ItemTags.DYEABLE)) || !(VE.getVillagerData().getLevel()-1 > equipmentSlot.getEntitySlotId())) {
                 cir.setReturnValue(true);
                 cir.cancel();
             }

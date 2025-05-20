@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "minecraft:stick",
-    "X": "#minecraft:diamond_tool_materials",
-    "P": "minecraft:iron_shovel"
+    "#": {
+        "item": "minecraft:stick"
+    },
+    "X": {
+        "item": "minecraft:diamond"
+    },
+    "P": {
+        "item": "minecraft:iron_shovel"
+    }
   },
   "pattern": [
     "XP",

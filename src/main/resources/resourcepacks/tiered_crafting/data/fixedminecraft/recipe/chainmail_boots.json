@@ -6,9 +6,15 @@
         "CPC"
     ],
     "key": {
-        "C": "minecraft:chain",
-        "I": "minecraft:iron_nugget",
-        "P": "minecraft:leather_boots"
+        "C": {
+            "item": "minecraft:chain"
+        },
+        "I": {
+            "item": "minecraft:iron_nugget"
+        },
+        "P": {
+            "item": "minecraft:leather_boots"
+        }
     },
     "result": {
         "id": "minecraft:chainmail_boots"

@@ -39,7 +39,7 @@ public class ElderGuardianAppearanceParticleMixin {
     private float v(float deg, @Local(ordinal = 1)float f){
         ElderGuardianAppearanceParticle particle = (ElderGuardianAppearanceParticle)(Object)this;
         if (particle.y<-500) {
-            return 150.0F * (1-(f-0.2f)) - 60.0F;
+            return 150.0F * (1-(0.5f*f+0.35f)) - 60.0F;
         } else {
             return 150.0F * f - 60.0F;
         }

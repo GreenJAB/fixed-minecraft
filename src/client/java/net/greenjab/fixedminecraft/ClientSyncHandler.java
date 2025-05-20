@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.greenjab.fixedminecraft.map_book.MapBookScreen;
-import net.greenjab.fixedminecraft.network.BookShelfSyncPayload;
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
 import net.greenjab.fixedminecraft.network.MapPositionPayload;
@@ -28,7 +27,6 @@ public class ClientSyncHandler {
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
         ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
 
-        ClientPlayNetworking.registerGlobalReceiver(BookShelfSyncPayload.PACKET_ID, ClientSyncHandler::bookShelfSync);
 
     }
     private static void mapBookOpen(MapBookOpenPayload payload, ClientPlayNetworking.Context context) {
@@ -55,20 +53,6 @@ public class ClientSyncHandler {
                     ((MapStateAccessor)mapstate).fixedminecraft$setPosition(payload.centerX(), payload.centerZ());
                 }
             }
-        });
-    }
-
-    private static void bookShelfSync(BookShelfSyncPayload payload, ClientPlayNetworking.Context context) {
-
-        BlockPos pos = payload.pos();
-        context.client().execute(()-> {
-            assert(context.client().world != null);
-            context.client().world.updateListeners(
-                    pos,
-                    context.client().world.getBlockState(pos),
-                    context.client().world.getBlockState(pos),
-                    Block.NOTIFY_LISTENERS
-            );
         });
     }
 }

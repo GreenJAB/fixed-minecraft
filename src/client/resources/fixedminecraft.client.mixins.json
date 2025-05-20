@@ -40,5 +40,8 @@
         "map.ItemFrameEntityRendererMixin",
         "map.MapPositionRequestMixin",
         "map.MapRendererMixin"
+    ],
+    "mixins": [
+        "DrawContextMixin"
     ]
 }

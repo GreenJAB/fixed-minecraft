@@ -2,11 +2,21 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "E": "minecraft:echo_shard",
-        "S": "minecraft:prismarine_shard",
-        "P": "minecraft:ender_pearl",
-        "W": "minecraft:wind_charge",
-        "B": "minecraft:blaze_powder"
+        "E": {
+            "item": "minecraft:echo_shard"
+        },
+        "S": {
+            "item": "minecraft:prismarine_shard"
+        },
+        "P": {
+            "item": "minecraft:ender_pearl"
+        },
+        "W": {
+            "item": "minecraft:wind_charge"
+        },
+        "B": {
+            "item": "minecraft:blaze_powder"
+        }
     },
     "pattern": [
         " E ",

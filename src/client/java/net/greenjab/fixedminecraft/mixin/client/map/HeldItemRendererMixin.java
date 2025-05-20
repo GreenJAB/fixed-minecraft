@@ -26,14 +26,29 @@ public class HeldItemRendererMixin {
     @Final
     private MinecraftClient client;
 
-    @ModifyVariable(at = @At(value = "HEAD"), method = "renderFirstPersonMap", argsOnly = true)
+    @Unique
+    MapIdComponent id = null;
+
+    @ModifyVariable(at = @At(value = "HEAD"), method = "renderFirstPersonItem", argsOnly = true)
     private ItemStack sneakySwap(ItemStack original) {
+        id = null;
         if (original.getItem() instanceof MapBookItem mapBookItem) {
             //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
             MapStateData nearestMap = mapBookItem.getNearestMap(original, client.world, client.player.getPos());
             if (nearestMap == null) return original;
             ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
             map.set(DataComponentTypes.MAP_ID, nearestMap.id);
+            id = nearestMap.id;
+            return map;
+        }
+        return original;
+    }
+
+    @ModifyVariable(at = @At(value = "HEAD"), method = "renderFirstPersonMap", argsOnly = true)
+    private ItemStack sneakySwap2(ItemStack original) {
+        if (original.getItem() instanceof MapBookItem mapBookItem && id != null) {
+            ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
+            map.set(DataComponentTypes.MAP_ID, id);
             return map;
         }
         return original;

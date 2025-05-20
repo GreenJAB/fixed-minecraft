@@ -17,7 +17,6 @@ public class SyncHandler
         MapBookSyncPayload.register();
         MapPositionPayload.register();
         MapPositionRequestPayload.register();
-        BookShelfSyncPayload.register();
     }
 
     private static final Map<UUID, Float> lastSaturationLevels = new HashMap<UUID, Float>();

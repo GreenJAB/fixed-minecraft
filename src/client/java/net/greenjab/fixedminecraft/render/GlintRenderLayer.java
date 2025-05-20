@@ -7,6 +7,7 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderPhase;
 import net.minecraft.client.render.VertexFormat;
 import net.minecraft.client.render.VertexFormats;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 
@@ -15,12 +16,14 @@ import net.minecraft.util.Identifier;
 public class GlintRenderLayer extends RenderLayer{
 
     public static RenderLayer glintColor = buildGlintRenderLayer();
+    public static RenderLayer directGlintColor = buildDirectGlintRenderLayer();
     public static RenderLayer entityGlintColor = buildEntityGlintRenderLayer();
     public static RenderLayer armorEntityGlintColor = buildArmorEntityGlintRenderLayer();
     public static RenderLayer translucentGlintColor = buildTranslucentGlint();
 
     public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map) {
         addGlintTypes(map, glintColor);
+        addGlintTypes(map, directGlintColor);
         addGlintTypes(map, entityGlintColor);
         addGlintTypes(map, armorEntityGlintColor);
         addGlintTypes(map, translucentGlintColor);
@@ -50,6 +53,26 @@ public class GlintRenderLayer extends RenderLayer{
                 .transparency(GLINT_TRANSPARENCY)
                 .texturing(GLINT_TEXTURING)
                 .build(false));
+    }
+
+    private static RenderLayer buildDirectGlintRenderLayer() {
+        final Identifier res = Identifier.of("textures/misc/super_enchanted_glint_item.png");
+
+        return RenderLayer.of(
+                "entity_glint_direct",
+                VertexFormats.POSITION_TEXTURE,
+                VertexFormat.DrawMode.QUADS,
+                1536,
+                RenderLayer.MultiPhaseParameters.builder()
+                        .program(DIRECT_ENTITY_GLINT_PROGRAM)
+                        .texture(new RenderPhase.Texture(ItemRenderer.ENTITY_ENCHANTMENT_GLINT, true, false))
+                        .writeMaskState(COLOR_MASK)
+                        .cull(DISABLE_CULLING)
+                        .depthTest(EQUAL_DEPTH_TEST)
+                        .transparency(GLINT_TRANSPARENCY)
+                        .texturing(ENTITY_GLINT_TEXTURING)
+                        .build(false)
+        );
     }
 
     private static RenderLayer buildEntityGlintRenderLayer() {

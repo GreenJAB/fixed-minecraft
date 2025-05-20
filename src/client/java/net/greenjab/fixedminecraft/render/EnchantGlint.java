@@ -32,6 +32,12 @@ public class EnchantGlint {
     }
 
     @Environment(EnvType.CLIENT)
+    public static RenderLayer getDirectGlint() {
+        if (isSuper()) return GlintRenderLayer.directGlintColor;
+        else return RenderLayer.getDirectEntityGlint();
+    }
+
+    @Environment(EnvType.CLIENT)
     public static RenderLayer getEntityGlint() {
         if (isSuper()) return GlintRenderLayer.entityGlintColor;
         else return RenderLayer.getEntityGlint();

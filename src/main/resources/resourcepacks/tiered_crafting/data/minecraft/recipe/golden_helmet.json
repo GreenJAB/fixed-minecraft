@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": "minecraft:gold_ingot",
-    "P": "minecraft:chainmail_helmet"
+    "X": {
+        "item": "minecraft:gold_ingot"
+    },
+    "P": {
+        "item": "minecraft:chainmail_helmet"
+    }
   },
   "pattern": [
     "XXX",

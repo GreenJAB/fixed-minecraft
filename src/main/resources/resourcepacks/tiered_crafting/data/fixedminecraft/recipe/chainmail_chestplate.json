@@ -7,9 +7,15 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:chain",
-        "I": "minecraft:iron_nugget",
-        "P": "minecraft:leather_chestplate"
+        "C": {
+            "item": "minecraft:chain"
+        },
+        "I": {
+            "item": "minecraft:iron_nugget"
+        },
+        "P": {
+            "item": "minecraft:leather_chestplate"
+        }
     },
     "result": {
         "id": "minecraft:chainmail_chestplate"

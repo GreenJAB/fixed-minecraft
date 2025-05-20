@@ -65,7 +65,8 @@ public class InGameHudMixin {
                 if (!stack.isEmpty()) {
 
                     context.drawItem(player, stack, o, m, n);
-                    //TODO test //context.drawStackOverlay(client.textRenderer, stack, o, m);
+                    context.drawItemInSlot(client.textRenderer, stack, o, m);
+                    //context.drawStackOverlay(client.textRenderer, stack, o, m);
                 }
 
             }

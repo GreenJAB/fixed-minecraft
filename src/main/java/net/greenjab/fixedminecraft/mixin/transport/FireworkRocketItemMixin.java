@@ -12,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,13 +24,13 @@ public class FireworkRocketItemMixin {
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
     private void removeNormalFireworkElytraUse(World world, PlayerEntity user, Hand hand,
-                                               CallbackInfoReturnable<ActionResult> cir) {
+                                               CallbackInfoReturnable<TypedActionResult<ItemStack>> cir) {
         ItemStack itemStack = user.getStackInHand(hand);
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
             FireworksComponent fireworkComponent = itemStack.get(DataComponentTypes.FIREWORKS);
-            if (fireworkComponent == null) cir.setReturnValue(ActionResult.PASS);
+            if (fireworkComponent == null) cir.setReturnValue(TypedActionResult.pass(itemStack));
             if (fireworkComponent.explosions().isEmpty()) {
-                cir.setReturnValue(ActionResult.PASS);
+                cir.setReturnValue(TypedActionResult.pass(itemStack));
             }
         }
         if (user.isFallFlying()) {

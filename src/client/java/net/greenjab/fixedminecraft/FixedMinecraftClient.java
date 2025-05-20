@@ -9,9 +9,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.greenjab.fixedminecraft.map_book.MapBookFilledProperty;
 import net.greenjab.fixedminecraft.models.ModelLayers;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.render.PlayerLookHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.item.ModelPredicateProviderRegistry;
 import net.minecraft.client.option.SimpleOption;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
@@ -49,6 +51,18 @@ public class FixedMinecraftClient implements ClientModInitializer {
 
         //BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers();
+
+        ModelPredicateProviderRegistry.register(
+                Items.TOTEM_OF_UNDYING,
+                Identifier.ofVanilla("saving"),
+                /* method_43611 */ (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
+        );
+
+        ModelPredicateProviderRegistry.register(
+                ItemRegistry.ECHO_TOTEM,
+                Identifier.ofVanilla("saving"),
+                /* method_43611 */ (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F
+        );
 
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {
             ResourceManagerHelper.registerBuiltinResourcePack(

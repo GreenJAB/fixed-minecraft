@@ -2,9 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "minecraft:stick",
-    "X": "#minecraft:gold_tool_materials",
-    "P": "minecraft:stone_pickaxe"
+    "#": {
+        "item": "minecraft:stick"
+    },
+    "X": {
+        "item": "minecraft:gold_ingot"
+    },
+    "P": {
+        "item": "minecraft:stone_pickaxe"
+    }
   },
   "pattern": [
     "XXX",

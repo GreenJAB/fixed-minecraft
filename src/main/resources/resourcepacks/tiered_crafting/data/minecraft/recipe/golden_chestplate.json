@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": "minecraft:gold_ingot",
-    "P": "minecraft:chainmail_chestplate"
+    "X": {
+        "item": "minecraft:gold_ingot"
+    },
+    "P": {
+        "item": "minecraft:chainmail_chestplate"
+    }
   },
   "pattern": [
     "XPX",

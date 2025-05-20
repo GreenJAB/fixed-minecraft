@@ -143,6 +143,8 @@ public class AnvilScreenMixin {
     private boolean canTake(Slot instance, PlayerEntity playerEntity){
         AnvilScreen AS = (AnvilScreen)(Object)this;
         AnvilScreenHandler ASH = AS.getScreenHandler();
-        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(ASH.getLevelCost())) && Math.abs(ASH.getLevelCost()) > 0;
+        int levelCost = ASH.getLevelCost();
+        while (levelCost>=500) levelCost-=500;
+        return (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost)) && Math.abs(levelCost) > 0;
     }
 }
