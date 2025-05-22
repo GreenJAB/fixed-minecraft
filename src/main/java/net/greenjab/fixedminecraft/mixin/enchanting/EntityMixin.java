@@ -39,12 +39,8 @@ public class EntityMixin {
     @Inject(method = "isBeingRainedOn", at = @At(value = "HEAD"),cancellable = true)
     private void wetLingeringEffect(CallbackInfoReturnable<Boolean> cir) {
         Entity E = (Entity) (Object) this;
-        if (E instanceof PlayerEntity PE) {
-            for (AreaEffectCloudEntity effectCloud : PE.getWorld().getNonSpectatingEntities(AreaEffectCloudEntity.class, PE.getBoundingBox())) {
-                if (effectCloud.getParticleType().getType() == ParticleTypes.SPLASH) {
-                    cir.setReturnValue(true);
-                }
-            }
+        for (AreaEffectCloudEntity effectCloud : E.getWorld().getNonSpectatingEntities(AreaEffectCloudEntity.class, E.getBoundingBox())) {
+            if (effectCloud.getParticleType().getType() == ParticleTypes.SPLASH) cir.setReturnValue(true);
         }
     }
 }

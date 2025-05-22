@@ -6,7 +6,6 @@
         "defaultRequire": 1
     },
     "client": [
-        "AbstractDonkeyEntityRendererMixin",
         "AdvancementsScreenMixin",
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",
@@ -16,6 +15,7 @@
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
         "CreateWorldScreenMixin",
+        "DonkeyEntityRendererMixin",
         "ElderGuardianAppearanceParticleMixin",
         "EnchantmentScreenMixin",
         "EnderDragonEntityRendererMixin",
@@ -31,9 +31,6 @@
         "glint.ArmorFeatureRendererMixin",
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
-        "glint.EquipmentRendererMixin",
-        "glint.HorseArmorFeatureRendererMixin",
-        "glint.ItemModelManagerMixin",
         "glint.ItemRendererMixin",
         "map.DrawContextAccessor",
         "map.HeldItemRendererMixin",

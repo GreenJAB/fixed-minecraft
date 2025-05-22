@@ -51,12 +51,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
     protected abstract void playYesSound();
 
     @Unique
-    private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{
-            Identifier.ofVanilla("container/slot/helmet"),
-            Identifier.ofVanilla("container/slot/chestplate"),
-            Identifier.ofVanilla("container/slot/leggings"),
-            Identifier.ofVanilla("container/slot/boots") };
-
+    private static Identifier[] EMPTY_ARMOR_SLOT_TEXTURES;
 
     @Unique
     private static final EquipmentSlot[] EQUIPMENT_SLOT_ORDER;
@@ -148,11 +143,6 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
 
     }
 
-    /*@Unique
-    public final EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
-        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
-        return equippableComponent != null ? equippableComponent.slot() : EquipmentSlot.MAINHAND;
-    }*/
 
     @Unique
     public EquipmentSlot getPreferredEquipmentSlot(ItemStack stack) {
@@ -166,7 +156,8 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
     }
 
     static {
-         EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+        EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{PlayerScreenHandler.EMPTY_BOOTS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_LEGGINGS_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_CHESTPLATE_SLOT_TEXTURE, PlayerScreenHandler.EMPTY_HELMET_SLOT_TEXTURE};
+        EQUIPMENT_SLOT_ORDER = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
     }
 
     @Override

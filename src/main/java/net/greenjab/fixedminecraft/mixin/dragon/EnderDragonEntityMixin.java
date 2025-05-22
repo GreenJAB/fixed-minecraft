@@ -36,6 +36,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Set;
 
 @Mixin(EnderDragonEntity.class)
 public abstract class EnderDragonEntityMixin {
@@ -155,6 +156,39 @@ public abstract class EnderDragonEntityMixin {
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {150, 200, 300, 400};
         EDE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
+    }
+
+    @Inject(method = "tickMovement", at = @At(value = "TAIL"))
+    private void moveBackupHitbox(CallbackInfo ci){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
+        boolean found = false;
+        for (Entity e : entities) {
+            if (e instanceof InteractionEntity interactionEntity) {
+                if (interactionEntity.getCommandTags().contains("dragon")) {
+                    if (!found) {
+                        interactionEntity.teleport((ServerWorld) EDE.getWorld(), EDE.head.getX(), EDE.head.getY() + 1, EDE.head.getZ(), Set.of(), 0, 0);
+                        found = true;
+                    } else {
+                        interactionEntity.kill();
+                    }
+                }
+            }
+        }
+    }
+
+    @Inject(method = "damagePart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonEntity;setHealth(F)V"))
+    private void killBackupHitbox(EnderDragonPart part, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+        EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
+        List<Entity> entities = EDE.getWorld().getOtherEntities(EDE, EDE.getBoundingBox().expand(10));
+        for (Entity e : entities) {
+            if (e instanceof InteractionEntity interactionEntity) {
+                if (interactionEntity.getCommandTags().contains("dragon")) {
+                    interactionEntity.kill();
+                }
+                break;
+            }
+        }
     }
 
     @Inject(method = "damagePart", at = @At(

@@ -14,6 +14,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -38,6 +39,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
 
 
 @Mixin(AnvilScreenHandler.class)
@@ -122,7 +125,23 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         if (!secondInputStack.isEmpty()) {
             boolean book2 = secondInputStack.contains(DataComponentTypes.STORED_ENCHANTMENTS);
             //2nd slot are ingots
-            if (outputItemStack.isDamageable() && outputItemStack.getItem().canRepair(firstInputStack, secondInputStack)) {
+
+            List<Item> stringRepair = List.of(new Item[]{Items.BOW, Items.CROSSBOW, Items.FISHING_ROD});
+
+            boolean canRepair = false;
+            if (secondInputStack.isOf(Items.NETHERITE_SCRAP)) {
+                canRepair = outputItemStack.getItem().canRepair(firstInputStack, Items.NETHERITE_INGOT.getDefaultStack());
+            } else if (secondInputStack.isOf(Items.NETHERITE_INGOT)) {
+                canRepair = false;
+            } else if (firstInputStack.isOf(Items.TRIDENT)) {
+                canRepair = secondInputStack.isOf(Items.PRISMARINE_SHARD);
+            } else if (stringRepair.contains(secondInputStack.getItem())) {
+                canRepair = secondInputStack.isOf(Items.STRING);}
+            else {
+                outputItemStack.getItem().canRepair(firstInputStack, secondInputStack);
+            }
+
+            if (outputItemStack.isDamageable() && canRepair) {
                 int k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 if (k <= 0) {
                     this.output.setStack(0, ItemStack.EMPTY);

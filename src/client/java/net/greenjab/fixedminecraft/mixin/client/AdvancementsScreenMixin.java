@@ -39,6 +39,4 @@ public class AdvancementsScreenMixin {
     @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 140))
     private int largerScreenY4(int constant) {return newWINDOW_HEIGHT;}
 
-    //@ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 256))
-    //private int largerScreen(int constant) {return 512;}
 }

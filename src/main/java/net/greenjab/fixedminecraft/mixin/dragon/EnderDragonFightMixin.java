@@ -14,6 +14,7 @@ import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonFight;
 import net.minecraft.entity.boss.dragon.EnderDragonSpawnState;
 import net.minecraft.entity.decoration.EndCrystalEntity;
+import net.minecraft.entity.decoration.InteractionEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
@@ -219,6 +220,27 @@ public abstract class EnderDragonFightMixin {
                                              target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
     ))
     private void spawnOmenDragon(CallbackInfoReturnable<EnderDragonEntity> cir, @Local EnderDragonEntity enderDragonEntity){
+        PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
+        if (playerEntity != null) {
+            if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
+                playerEntity.removeStatusEffect(StatusEffects.BAD_OMEN);
+                enderDragonEntity.addCommandTag("omen");
+                enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(enderDragonEntity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).getValue()*1.5);
+                enderDragonEntity.setHealth(enderDragonEntity.getMaxHealth());
+            }
+        }
+    }
+
+    @Inject(method = "createDragon", at= @At(value = "INVOKE",
+                                             target = "Lnet/minecraft/server/world/ServerWorld;spawnEntity(Lnet/minecraft/entity/Entity;)Z"
+    ))
+    private void summonBackupHitbox(CallbackInfoReturnable<EnderDragonEntity> cir, @Local EnderDragonEntity enderDragonEntity){
+        InteractionEntity IE = EntityType.INTERACTION.create(this.world.getWorldChunk(new BlockPos(0, 0, 0)).getWorld());
+        if (IE != null) {
+            IE.refreshPositionAndAngles(0, 108, 0, 0, 0.0F);
+            IE.addCommandTag("dragon");
+            this.world.spawnEntity(IE);
+        }
         PlayerEntity playerEntity = this.world.getClosestPlayer(TargetPredicate.createAttackable().setBaseMaxDistance(150), enderDragonEntity, enderDragonEntity.getX(), enderDragonEntity.getY(), enderDragonEntity.getZ());
         if (playerEntity != null) {
             if (playerEntity.hasStatusEffect(StatusEffects.BAD_OMEN)) {
