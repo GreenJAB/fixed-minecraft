@@ -27,12 +27,15 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
@@ -53,6 +56,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -154,6 +158,30 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 }
             }
         }
+    }
+
+    @Inject(method = "writeCustomData", at = @At("TAIL"))
+    private void saveCustomData(WriteView view, CallbackInfo ci) {
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        Optional<LivingEntity> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ROAR_TARGET);
+        if (lastVillager!=null && lastVillager.isPresent()) view.putString("lastVillager", lastVillager.get().getUuid().toString());
+        Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
+        if (gossipTime!=null && gossipTime.isPresent()) view.putInt("gossipTime", gossipTime.get());
+        Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
+        if (sleepTime!=null && sleepTime.isPresent()) view.putInt("sleepTime", sleepTime.get());
+    }
+
+    @Inject(method = "readCustomData", at = @At("TAIL"))
+    private void loadCustomData(ReadView view, CallbackInfo ci) {
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        String s = view.getString("lastVillager", "");
+        if (!s.isEmpty()) {
+            UUID uuid = UUID.fromString(s);
+            LivingEntity lastVillager = (LivingEntity) ((ServerWorld) (villagerEntity.getWorld())).getEntity(uuid);
+            if (lastVillager != null) villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, lastVillager);
+        }
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, view.getInt("gossipTime", 0));
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, view.getInt("sleepTime", 0));
     }
 
     @Inject(method = "sleep", at = @At("HEAD"), cancellable = true)
