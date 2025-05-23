@@ -30,6 +30,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -60,6 +61,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Mixin(VillagerEntity.class)
 public abstract class VillagerEntityMixin extends MerchantEntity {
@@ -161,6 +163,30 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 }
             }
         }
+    }
+
+    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
+    private void saveCustomData(NbtCompound nbt, CallbackInfo ci) {
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        Optional<LivingEntity> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ROAR_TARGET);
+        if (lastVillager!=null && lastVillager.isPresent()) nbt.putString("lastVillager", lastVillager.get().getUuid().toString());
+        Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
+        if (gossipTime!=null && gossipTime.isPresent()) nbt.putInt("gossipTime", gossipTime.get());
+        Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
+        if (sleepTime!=null && sleepTime.isPresent()) nbt.putInt("sleepTime", sleepTime.get());
+    }
+
+    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
+    private void loadCustomData(NbtCompound nbt, CallbackInfo ci) {
+        VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
+        String s = nbt.getString("lastVillager");
+        if (!s.isEmpty()) {
+            UUID uuid = UUID.fromString(s);
+            LivingEntity lastVillager = (LivingEntity) ((ServerWorld) (villagerEntity.getWorld())).getEntity(uuid);
+            if (lastVillager != null) villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, lastVillager);
+        }
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, nbt.getInt("gossipTime"));
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, nbt.getInt("sleepTime"));
     }
 
     @Inject(method = "sleep", at = @At("HEAD"), cancellable = true)
