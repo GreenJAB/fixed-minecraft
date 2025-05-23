@@ -11,6 +11,7 @@
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",
         "AnvilScreenMixin",
+        "AtmosphericFogModifierMixin",
         "CartographyTableScreenMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",

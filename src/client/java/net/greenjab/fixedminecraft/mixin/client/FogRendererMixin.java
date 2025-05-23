@@ -23,9 +23,8 @@ public class FogRendererMixin  {
     private static List<FogModifier> FOG_MODIFIERS;
 
     @Inject(method = "<init>", at = @At(value = "TAIL"))
-    private void addVoidFog(CallbackInfo ci) {
+    private void addPaleFog(CallbackInfo ci) {
         FOG_MODIFIERS.add(5, new PaleFogModifier());
     }
-
 
 }
