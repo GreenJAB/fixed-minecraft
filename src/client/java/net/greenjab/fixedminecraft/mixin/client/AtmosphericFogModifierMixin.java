@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.fog.AtmosphericFogModifier;
 import net.minecraft.client.render.fog.FogData;
@@ -45,6 +46,9 @@ public class AtmosphericFogModifierMixin {
             float circ = (float) Math.sqrt(1-(1-palefog)*(1-palefog));
             data.environmentalEnd = lerp(data.environmentalEnd, paleEnd, circ);
             data.environmentalStart = lerp(data.environmentalStart, paleStart, circ);
+
+            data.skyEnd = lerp(viewDistance, data.environmentalEnd, palefog);
+            data.cloudEnd = lerp(MinecraftClient.getInstance().options.getCloudRenderDistance().getValue() * 16, data.environmentalEnd, palefog);
         }
 
     }
