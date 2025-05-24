@@ -35,8 +35,7 @@
         "map.DrawContextAccessor",
         "map.HeldItemRendererMixin",
         "map.ItemFrameEntityRendererMixin",
-        "map.MapPositionRequestMixin",
-        "map.MapRendererMixin"
+        "map.MapPositionRequestMixin"
     ],
     "mixins": [
         "DrawContextMixin"

@@ -29,9 +29,6 @@ public abstract class TridentEntityMixin {
     @Final
     private static TrackedData<Boolean> ENCHANTED;
 
-    @Shadow
-    public abstract ItemStack getWeaponStack();
-
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;)V", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/data/DataTracker;set(Lnet/minecraft/entity/data/TrackedData;Ljava/lang/Object;)V", ordinal = 0
@@ -50,8 +47,8 @@ public abstract class TridentEntityMixin {
     ))
     private float impalingEffectsWetMobs(float original, @Local(ordinal = 0) Entity entity) {
         if (entity instanceof LivingEntity) {
-            //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
-            ItemEnchantmentsComponent enchantments = this.getWeaponStack().getEnchantments();
+            TridentEntity TE = (TridentEntity) (Object)this;
+            ItemEnchantmentsComponent enchantments = TE.getItemStack().getEnchantments();
             int i = 0;
             for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
                 if (entry.getKey().get().equals(Enchantments.IMPALING)) {

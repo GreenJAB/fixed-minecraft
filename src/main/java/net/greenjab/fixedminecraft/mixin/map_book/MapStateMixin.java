@@ -4,6 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapDecorationType;
@@ -126,34 +128,6 @@ public class MapStateMixin implements MapStateAccessor {
             return false;
         }
         return instance.equals(o);
-    }
-
-    /*@Inject(method = "getPlayerMarkerAndRotation", at = @At("HEAD"), cancellable = true)
-    private void betterPlayerMarker(RegistryEntry<MapDecorationType> type, @Nullable WorldAccess world, double rotation, float dx, float dz,
-                                    CallbackInfoReturnable<Pair<RegistryEntry<MapDecorationType>, Byte>> cir) {
-        double rot = rotation < 0.0 ? rotation + 360.0 : rotation;
-        rot = (rot + 8) * 16.0 / 360.0;
-        if (rot >= 16) rot = 0;
-
-        //blocksPerScale * 4 bit - distance from center of map
-        double scale = (64 * 16) - (Math.abs(dx) + Math.abs(dz));
-        scale /= 64;
-        scale = Math.max(Math.floor(scale), this.unlimitedTracking ? 1 : 0);
-        scale = Math.min(scale, 14);
-
-        //flip end values so everything else renders fine
-        if (scale == 0) scale = 15;
-        if (isInBounds(dx, dz)) scale = 0;
-        scale *= 16;
-
-        byte b = (byte) ((int) rot + (byte) ((int) scale));
-        cir.setReturnValue(Pair.of(MapDecorationTypes.PLAYER, b));
-        cir.cancel();
-    }*/
-
-    @Unique
-    private static boolean isInBounds(float dx, float dz) {
-        return dx >= -63.0F && dz >= -63.0F && dx <= 63.0F && dz <= 63.0F;
     }
 
     @Unique
