@@ -113,4 +113,9 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
+    @ModifyConstant(method = "getJumpBoostVelocityModifier", constant = @Constant(floatValue = 1.0f))
+    private float betterJumpBoost(float original){
+        return 2.0f;
+    }
+
 }
