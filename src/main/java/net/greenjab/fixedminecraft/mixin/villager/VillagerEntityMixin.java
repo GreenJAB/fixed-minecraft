@@ -92,7 +92,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 MemoryModuleType.NEAREST_HOSTILE, MemoryModuleType.SECONDARY_JOB_SITE, MemoryModuleType.HIDING_PLACE,
                 MemoryModuleType.HEARD_BELL_TIME, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, MemoryModuleType.LAST_SLEPT,
                 MemoryModuleType.LAST_WOKEN, MemoryModuleType.LAST_WORKED_AT_POI, MemoryModuleType.GOLEM_DETECTED_RECENTLY,
-                MemoryModuleType.ROAR_TARGET, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
+                MemoryModuleType.ANGRY_AT, MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
     }
 
     @ModifyExpressionValue(method = "canSummonGolem", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/VillagerEntity;hasRecentlySlept(J)Z"))
@@ -163,8 +163,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Inject(method = "writeCustomData", at = @At("TAIL"))
     private void saveCustomData(WriteView view, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        Optional<LivingEntity> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ROAR_TARGET);
-        if (lastVillager!=null && lastVillager.isPresent()) view.putString("lastVillager", lastVillager.get().getUuid().toString());
+        Optional<UUID> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ANGRY_AT);
+        if (lastVillager!=null && lastVillager.isPresent()) view.putString("lastVillager", lastVillager.get().toString());
         Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
         if (gossipTime!=null && gossipTime.isPresent()) view.putInt("gossipTime", gossipTime.get());
         Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
@@ -175,11 +175,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private void loadCustomData(ReadView view, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         String s = view.getString("lastVillager", "");
-        if (!s.isEmpty()) {
-            UUID uuid = UUID.fromString(s);
-            LivingEntity lastVillager = (LivingEntity) ((ServerWorld) (villagerEntity.getWorld())).getEntity(uuid);
-            if (lastVillager != null) villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, lastVillager);
-        }
+        if (!s.isEmpty()) villagerEntity.getBrain().remember(MemoryModuleType.ANGRY_AT, UUID.fromString(s));
         villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, view.getInt("gossipTime", 0));
         villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, view.getInt("sleepTime", 0));
     }
@@ -203,14 +199,14 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Inject(method = "talkWithVillager", at = @At("HEAD"))
     private void talktime(ServerWorld world, VillagerEntity villager, long time, CallbackInfo ci){
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        Optional<LivingEntity> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ROAR_TARGET);
+        Optional<UUID> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ANGRY_AT);
         if (lastVillager!=null && lastVillager.isPresent()) {
-            if (lastVillager.get().getUuid() != villager.getUuid()) {
+            if (lastVillager.get() != villager.getUuid()) {
                 villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, 0);
-                villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, villager);
+                villagerEntity.getBrain().remember(MemoryModuleType.ANGRY_AT, villager.getUuid());
             }
         } else {
-            villagerEntity.getBrain().remember(MemoryModuleType.ROAR_TARGET, villager);
+            villagerEntity.getBrain().remember(MemoryModuleType.ANGRY_AT, villager.getUuid());
         }
     }
 
