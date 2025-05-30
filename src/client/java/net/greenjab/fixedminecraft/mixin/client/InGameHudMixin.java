@@ -120,7 +120,7 @@ public class InGameHudMixin {
 
                 string+= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
             } else {
-                string = player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
+                string = getDirection(player.getYaw()) + " | " + player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
             }
 
             int m = context.getScaledWindowWidth() / 2 + 91;
@@ -142,9 +142,22 @@ public class InGameHudMixin {
             }
 
             context.drawText(client.textRenderer, string, left, top, /*8453920*/-1, true);
-
-
         }
+    }
+
+    @Unique
+    private String getDirection(float yaw) {
+        while (yaw<0) yaw+=360;
+        yaw+=360+180;
+        yaw%=360;
+        yaw-=22.5f;
+        int dirID = 0;
+        String[] dirs = {"N","NE","E","SE","S","SW","W","NW","N"};
+        while (yaw>0){
+            yaw-=45;
+            dirID++;
+        }
+        return dirs[dirID];
     }
 
 
