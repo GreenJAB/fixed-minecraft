@@ -163,10 +163,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private void saveCustomData(NbtCompound nbt, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Optional<UUID> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ANGRY_AT);
-        if (lastVillager!=null && lastVillager.isPresent()) {
-            nbt.putString("lastVillager", lastVillager.get().toString());
-            System.out.println("save: "+lastVillager.get());
-        }
+        if (lastVillager!=null && lastVillager.isPresent())  nbt.putString("lastVillager", lastVillager.get().toString());
         Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
         if (gossipTime!=null && gossipTime.isPresent()) nbt.putInt("gossipTime", gossipTime.get());
         Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
