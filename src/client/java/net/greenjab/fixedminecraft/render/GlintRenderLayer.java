@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 
 /** Credit: Pepperoni-Jabroni */
 @Environment(EnvType.CLIENT)
-public class GlintRenderLayer extends RenderLayer{
+public abstract class GlintRenderLayer extends RenderLayer{
 
     public static RenderLayer glintColor = buildGlintRenderLayer();
     public static RenderLayer entityGlintColor = buildEntityGlintRenderLayer();
@@ -90,28 +90,6 @@ public class GlintRenderLayer extends RenderLayer{
                 .build(false));
     }
 
-    @Override
-    public void draw(BuiltBuffer buffer) {
 
-    }
 
-    @Override
-    public Framebuffer getTarget() {
-        return null;
-    }
-
-    @Override
-    public RenderPipeline getPipeline() {
-        return null;
-    }
-
-    @Override
-    public VertexFormat getVertexFormat() {
-        return null;
-    }
-
-    @Override
-    public VertexFormat.DrawMode getDrawMode() {
-        return null;
-    }
 }

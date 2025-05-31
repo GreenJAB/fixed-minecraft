@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -13,7 +13,7 @@ import net.greenjab.fixedminecraft.render.PlayerLookHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.BlockRenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.item.property.bool.BooleanProperties;
@@ -36,8 +36,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
 
         ClientSyncHandler.init();
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(
-                RenderLayer.getCutout(),
+        BlockRenderLayerMap.putBlocks(
+                BlockRenderLayer.CUTOUT,
                 BlockRegistry.COPPER_RAIL,
                 BlockRegistry.EXPOSED_COPPER_RAIL,
                 BlockRegistry.WEATHERED_COPPER_RAIL,
