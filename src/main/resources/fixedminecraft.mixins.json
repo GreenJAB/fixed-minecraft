@@ -37,6 +37,7 @@
         "enchanting.EntityMixin",
         "enchanting.GrindstoneScreenHandlerMixin",
         "enchanting.ItemStackMixin",
+        "enchanting.PersistentProjectileEntityMixin",
         "enchanting.PlayerEntityMixin",
         "enchanting.ToolMaterialsMixin",
         "enchanting.TridentEntityMixin",
