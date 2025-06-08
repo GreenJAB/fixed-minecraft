@@ -156,10 +156,10 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
                     !craftingInventory.getStack(6).isEmpty();
             if (b) {
                 ItemStack extra = craftingInventory.getStack(5);
-                if (extra.isEmpty()) itemStack = new ItemStack(Items.ARROW, 8);
-                else if (extra.isOf(Items.GLOWSTONE)) itemStack = new ItemStack(Items.SPECTRAL_ARROW, 8);
+                if (extra.isEmpty()) itemStack = new ItemStack(Items.ARROW, 16);
+                else if (extra.isOf(Items.GLOWSTONE)) itemStack = new ItemStack(Items.SPECTRAL_ARROW, 16);
                 else {
-                    ItemStack tippedArrow = new ItemStack(Items.TIPPED_ARROW, 8);
+                    ItemStack tippedArrow = new ItemStack(Items.TIPPED_ARROW, 16);
                     tippedArrow.set(DataComponentTypes.POTION_CONTENTS, extra.get(DataComponentTypes.POTION_CONTENTS));
                     itemStack = tippedArrow;
                 }
