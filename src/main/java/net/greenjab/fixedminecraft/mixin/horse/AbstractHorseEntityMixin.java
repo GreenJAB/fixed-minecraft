@@ -160,6 +160,7 @@ public class AbstractHorseEntityMixin {
 
         if (AHE.getCommandTags().contains("locate") && AHE.age>20 * 60 * 5) {
             AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(0);
+            AHE.removeCommandTag("locate");
         }
     }
 
@@ -174,6 +175,13 @@ public class AbstractHorseEntityMixin {
             String s = "/waypoint modify " + AHE.getUuidAsString() + " style set horse";
             AHE.getServer().getCommandManager().executeWithPrefix(createCommandSource(null, AHE.getWorld(), AHE.getBlockPos()), s);
         }
+    }
+
+    @Inject(method = "putPlayerOnBack", at = @At("HEAD"))
+    private void removeLocaterBarIcon(PlayerEntity player, CallbackInfo ci) {
+        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object) this;
+        AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(0);
+        AHE.removeCommandTag("locate");
     }
 
     @Unique

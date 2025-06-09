@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
@@ -14,6 +13,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.bar.LocatorBar;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.RenderTickCounter;
+import net.minecraft.client.resource.waypoint.WaypointStyleAsset;
 import net.minecraft.client.util.Window;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
@@ -29,7 +29,12 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.waypoint.TrackedWaypoint;
+import net.minecraft.world.waypoint.Waypoint;
+import net.minecraft.world.waypoint.WaypointStyles;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -46,6 +51,12 @@ import static net.minecraft.item.FilledMapItem.getMapState;
 @Mixin(LocatorBar.class)
 public class LocatorBarMixin {
 
+    @Shadow
+    @Final
+    private static Identifier ARROW_DOWN;
+    @Shadow
+    @Final
+    private static Identifier ARROW_UP;
     @Unique
     private static final Int2ObjectMap<Identifier> ARROWS = new Int2ObjectArrayMap<>(
             Map.of(1, Identifier.ofVanilla("hud/locator_bar_arrow_up"), -1, Identifier.ofVanilla("hud/locator_bar_arrow_down"))
@@ -54,18 +65,63 @@ public class LocatorBarMixin {
     @Inject(method = "renderAddons", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/Entity;getWorld()Lnet/minecraft/world/World;"
-    ))
+    ), cancellable = true
+    )
     private void addBannerMarkers(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         MinecraftClient client = MinecraftClient.getInstance();
         int i = getCenterY(client.getWindow());
+        World world = client.cameraEntity.getWorld();
+
+        client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.cameraEntity, (waypoint) -> {
+            if (!(Boolean)waypoint.getSource().left().map((uuid) -> {
+                return uuid.equals(client.cameraEntity.getUuid());
+            }).orElse(false)) {
+                if (waypoint.getConfig().style != WaypointStyles.DEFAULT) {
+                    double d = waypoint.getRelativeYaw(world, client.gameRenderer.getCamera());
+                    if (!(d <= -61.0) && !(d > 60.0)) {
+                        int j = MathHelper.ceil((float) (context.getScaledWindowWidth() - 9) / 2.0F);
+                        Waypoint.Config config = waypoint.getConfig();
+                        WaypointStyleAsset waypointStyleAsset = client.getWaypointStyleAssetManager().get(config.style);
+                        float f = MathHelper.sqrt((float) waypoint.squaredDistanceTo(client.cameraEntity));
+                        Identifier identifier = waypointStyleAsset.getSpriteForDistance(f);
+                        int k = (Integer) config.color.orElseGet(() -> {
+                            return (Integer) waypoint.getSource().map((uuid) -> {
+                                return ColorHelper.withBrightness(ColorHelper.withAlpha(255, uuid.hashCode()), 0.9F);
+                            }, (name) -> {
+                                return ColorHelper.withBrightness(ColorHelper.withAlpha(255, name.hashCode()), 0.9F);
+                            });
+                        });
+                        int l = (int) (d * 173.0 / 2.0 / 60.0);
+                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier, j + l, i - 2, 9, 9, k);
+                        TrackedWaypoint.Pitch pitch = waypoint.getPitch(world, client.gameRenderer);
+                        if (pitch != TrackedWaypoint.Pitch.NONE) {
+                            byte m;
+                            Identifier identifier2;
+                            if (pitch == TrackedWaypoint.Pitch.DOWN) {
+                                m = 6;
+                                identifier2 = ARROW_DOWN;
+                            }
+                            else {
+                                m = -6;
+                                identifier2 = ARROW_UP;
+                            }
+
+                            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier2, j + l + 1, i + m, 7, 5);
+                        }
+
+                    }
+                }
+            }
+        });
+
 
         ItemStack stack = client.player.getMainHandStack();
-        if (stack == null) return;
+        if (stack == null) {ci.cancel();return;}
         if (!(stack.getItem() instanceof MapBookItem)) stack = client.player.getOffHandStack();
         if (!(stack.getItem() instanceof MapBookItem)) {
             stack = client.player.getMainHandStack();
             if (!(stack.getItem() instanceof FilledMapItem)) stack = client.player.getOffHandStack();
-            if (!(stack.getItem() instanceof FilledMapItem)) return;
+            if (!(stack.getItem() instanceof FilledMapItem)) {ci.cancel();return;}
 
             MapState mapState = getMapState(stack, client.world);
             if (mapState!=null) {
@@ -92,6 +148,7 @@ public class LocatorBarMixin {
                     }
                 }
             }
+            ci.cancel();
             return;
         }
 
@@ -169,6 +226,7 @@ public class LocatorBarMixin {
                                 double y = player.y;
                                 double z = player.z;
 
+                                double dd = Math.sqrt((x-c.x)*(x-c.x)+(y-c.y)*(y-c.y)+(z-c.z)*(z-c.z));
                                 double a = getAngle(c, x, z, client);
                                 if (!(a <= -61.0) && !(a > 60.0)) {
                                     int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
@@ -186,14 +244,30 @@ public class LocatorBarMixin {
                                             }
                                         }
                                     }
-
-                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("hud/locator_bar_dot/default_0"),
+                                    WaypointStyleAsset waypointStyleAsset = client.getWaypointStyleAssetManager().get(WaypointStyles.DEFAULT);
+                                    Identifier identifier = waypointStyleAsset.getSpriteForDistance((float) dd);
+                                    context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier,
                                             k + m, i - 2, 9, 9, color);
                                     int n = aboveOrBelow(c, x, y, z, client);
+
                                     if (n != 0) {
+                                        byte o;
+                                        Identifier identifier2;
+                                        if (n == -1) {
+                                            o = 6;
+                                            identifier2 = ARROW_DOWN;
+                                        } else {
+                                            o = -6;
+                                            identifier2 = ARROW_UP;
+                                        }
+
+                                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier2, k + m + 1, i + o, 7, 5);
+                                    }
+
+                                    /*if (n != 0) {
                                         int o = n < 0 ? 9 : -5;
                                         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), k + m + 1, i + o - 1, 7, 5);
-                                    }
+                                    }*/
                                 }
                             }
                         }
@@ -202,6 +276,8 @@ public class LocatorBarMixin {
                 }
             }
         }
+
+        ci.cancel();
     }
 
     @Unique
@@ -223,13 +299,14 @@ public class LocatorBarMixin {
         double a = -Math.atan(xz / (y - c.y));
         a *= 180 / Math.PI;
         if (y < c.y) a += 180;
-        a -= client.gameRenderer.getCamera().getPitch() % 360;
+        a += client.gameRenderer.getCamera().getPitch() % 360;
+        a+=90;
         a += 720;
         a += 180;
         a %= 360;
         a -= 180;
-        if (a>60)return -1;
-        if (a<-60)return 1;
+        if (a<-60) return -1;
+        if (a>60) return 1;
         return 0;
     }
 
