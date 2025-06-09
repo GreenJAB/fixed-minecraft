@@ -219,7 +219,7 @@ public abstract class WanderingTraderEntityMixin {
                     break;
                 case 1:
                     //patreon
-                    String[] names = {"green_jab"};
+                    String[] names = {"Rellati"};
                     head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of(names[(int)(Math.random()*names.length)]), Optional.empty(), new PropertyMap()));
                     break;
                 default:
