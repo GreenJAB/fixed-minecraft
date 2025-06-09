@@ -24,7 +24,6 @@
         "dragon.StrafePlayerPhaseMixin",
         "enchanting.AnvilMixin",
         "enchanting.AnvilScreenHandlerMixin",
-        "enchanting.ArrowEntityMixin",
         "enchanting.ChiseledBookshelfBlockEntityMixin",
         "enchanting.ChiseledBookshelfBlockInvoker",
         "enchanting.ChiseledBookshelfBlockMixin",
