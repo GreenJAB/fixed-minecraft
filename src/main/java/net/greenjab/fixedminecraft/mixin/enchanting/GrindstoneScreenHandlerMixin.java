@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.screen.*;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,6 +24,8 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
     @Redirect(method = "updateResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;getOutputStack(Lnet/minecraft/item/ItemStack;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack injected(GrindstoneScreenHandler instance, ItemStack i1, ItemStack i2) {
         if (i1.isEmpty()||i2.isEmpty()) {
+            ItemStack original = getOutputStack(i1, i2);
+            if (original.isOf(Items.BOOK) || original.isOf(Items.ENCHANTED_BOOK)) return original;
             boolean bl4 = !i1.isEmpty();
             if (bl4) {
                 int max = i1.getMaxDamage();

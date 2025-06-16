@@ -41,7 +41,7 @@ public abstract class ItemStackMixin {
                 ItemStack stack = (ItemStack)(Object)this;
                 if (stack.hasEnchantments()) {
                     ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
-                    stack.remove(DataComponentTypes.REPAIR_COST);
+                    stack.set(DataComponentTypes.REPAIR_COST, 0);
                     for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
                         if (itemEnchantmentsComponent.getLevel(enchantment) > enchantment.value().getMaxLevel()) {
                             stack.set(DataComponentTypes.REPAIR_COST, 1);
