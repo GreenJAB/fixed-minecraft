@@ -30,6 +30,7 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
     public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
     public static SimpleOption<Boolean> newArmorHud = SimpleOption.ofBoolean("options.newArmorHud", true);
+    public static SimpleOption<Boolean> fog_21_6 = SimpleOption.ofBoolean("options.fog_21_6", true);
 
     @Override
     public void onInitializeClient() {

@@ -14,5 +14,6 @@ public class GameOptionsMixin {
     @Inject(method = "acceptProfiledOptions", at = @At("TAIL"))
     private void armorHudOption(GameOptions.OptionVisitor visitor, CallbackInfo ci){
         visitor.accept("newArmorHud", FixedMinecraftClient.newArmorHud);
+        visitor.accept("fog_21_6", FixedMinecraftClient.fog_21_6);
     }
 }

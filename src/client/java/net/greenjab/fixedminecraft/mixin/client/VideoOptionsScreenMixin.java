@@ -41,7 +41,8 @@ public class VideoOptionsScreenMixin  {
                 gameOptions.getMenuBackgroundBlurriness(),
                 gameOptions.getBobView(),
                 gameOptions.getCloudRenderDistance(),
-                FixedMinecraftClient.newArmorHud
+                FixedMinecraftClient.newArmorHud,
+                FixedMinecraftClient.fog_21_6
         });
     }
 }

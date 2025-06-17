@@ -62,6 +62,7 @@
     "advancements.end.kill_omen_dragon.description": "Slay the Dragon under the influence of Bad Omen",
     "filled_map.explorer" : "%s Explorer Map",
     "options.newArmorHud" : "Show Armour in HUD",
+    "options.fog_21_6" : "Disable 1.21.6 Fog",
     "world.moon.full_moon": "Full Moon \uD83C\uDFA3",
     "world.moon.waning_gibbous": "Waning Gibbous",
     "world.moon.third_quarter": "Third Quarter \uD83D\uDE9C",
