@@ -5,7 +5,6 @@ import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.client.render.entity.AbstractDonkeyEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.state.DonkeyEntityRenderState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;

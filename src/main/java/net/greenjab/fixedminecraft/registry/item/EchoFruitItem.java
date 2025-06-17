@@ -1,13 +1,8 @@
 package net.greenjab.fixedminecraft.registry.item;
 
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
-import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -41,7 +36,7 @@ public class EchoFruitItem extends Item {
                 }
 
                 Vec3d vec3d = serverPlayerEntity.getPos();
-                ServerWorld serverWorld = serverPlayerEntity.server.getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
+                ServerWorld serverWorld = serverPlayerEntity.getServer().getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
                 if (serverPlayerEntity.teleport(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch(), true)) {
                     while (!serverWorld.isSpaceEmpty(serverPlayerEntity) && serverPlayerEntity.getY() < serverWorld.getTopYInclusive()) {
                         serverPlayerEntity.setPosition(serverPlayerEntity.getX(), serverPlayerEntity.getY() + 1.0, serverPlayerEntity.getZ());

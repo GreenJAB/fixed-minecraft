@@ -33,14 +33,6 @@ import java.util.Optional;
 
 @Mixin(WanderingTraderManager.class)
 public abstract class WanderingTraderManagerMixin {
-    @Shadow
-    private int spawnTimer;
-
-    @Shadow
-    private int spawnChance;
-
-    @Shadow
-    private int spawnDelay;
 
     @Shadow
     @Final
@@ -49,9 +41,6 @@ public abstract class WanderingTraderManagerMixin {
     @Shadow
     @Final
     private Random random;
-
-    @Shadow
-    protected abstract boolean trySpawn(ServerWorld world);
 
     @Shadow
     @Nullable

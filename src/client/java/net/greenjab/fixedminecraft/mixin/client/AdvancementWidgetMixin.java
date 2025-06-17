@@ -5,11 +5,11 @@ import net.minecraft.advancement.AdvancementProgress;
 import net.minecraft.advancement.PlacedAdvancement;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.advancement.AdvancementObtainedStatus;
 import net.minecraft.client.gui.screen.advancement.AdvancementTab;
 import net.minecraft.client.gui.screen.advancement.AdvancementWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
@@ -103,7 +103,7 @@ public abstract class AdvancementWidgetMixin {
             }
 
             if (thisGot || parentGot) {
-                context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getFrameTexture(this.display.getFrame()),
+                context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus.getFrameTexture(this.display.getFrame()),
                         x + this.x + 3, y + this.y, 26, 26);
                 context.drawItemWithoutEntity(this.display.getIcon(), x + this.x + 8, y + this.y + 5);
             }
@@ -214,20 +214,20 @@ public abstract class AdvancementWidgetMixin {
         } else {
             q = originX + this.x;
         }
-
         int r = i + m;
 
         if (!this.description.isEmpty()) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
+            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, TITLE_BOX_TEXTURE, q, k - r, this.width, r);
         }
         if (this.advancement.getAdvancement().rewards().experience()!=0) {
-            context.drawGuiTexture(RenderLayer::getGuiTextured, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
+            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, TITLE_BOX_TEXTURE, q, j, this.width, 32+9 * this.title.size());
         }
 
-        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
-        context.drawGuiTexture(RenderLayer::getGuiTextured, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus.getBoxTexture(), 200, i, 0, 0, q, j, o, i);
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, advancementObtainedStatus2.getBoxTexture(), 200, i, 200 - p, 0, q + o, j, p, i);
+
         context.drawGuiTexture(
-                RenderLayer::getGuiTextured, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
+                RenderPipelines.GUI_TEXTURED, advancementObtainedStatus3.getFrameTexture(this.display.getFrame()), originX + this.x + 3, originY + this.y, 26, 26
         );
         int s = q + 5;
         if (bl) {
@@ -246,8 +246,8 @@ public abstract class AdvancementWidgetMixin {
 
         if (this.advancement.getAdvancement().rewards().experience()!=0 ) {
             OrderedText reward = Language.getInstance().reorder(client.textRenderer.trimToWidth(Text.of("XP: " + this.advancement.getAdvancement().rewards().experience()), 163));
-            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?5569620:-5592406;
-            context.drawText(this.client.textRenderer, reward, s, k, colour, false);
+            int colour = advancementObtainedStatus ==AdvancementObtainedStatus.OBTAINED?-16711936:-5592406;//5569620:
+            context.drawTextWithShadow(this.client.textRenderer, reward, s, k, colour);
         }
         context.drawItemWithoutEntity(this.display.getIcon(), originX + this.x + 8, originY + this.y + 5);
     }

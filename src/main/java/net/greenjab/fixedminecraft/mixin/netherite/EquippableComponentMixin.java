@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class EquippableComponentMixin {
 
     @Redirect(method = "equip", at = @At(value = "INVOKE",
-                                         target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
+          target = "Lnet/minecraft/entity/player/PlayerEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack noNetheriteFix2(PlayerEntity instance, EquipmentSlot equipmentSlot) {
         return instance.equipment.get(equipmentSlot); }

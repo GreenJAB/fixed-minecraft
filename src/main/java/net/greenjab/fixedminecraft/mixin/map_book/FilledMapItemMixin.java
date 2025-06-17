@@ -7,12 +7,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(FilledMapItem.class)
-public class FilledMapItemMixin {
+public class FilledMapItemMixin  {
 
-    @ModifyExpressionValue(
-            method = "updateColors",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/DimensionType;hasCeiling()Z")
-    )
+    @ModifyExpressionValue(method = "updateColors", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/dimension/DimensionType;hasCeiling()Z"))
     private boolean updateNetherColours(boolean original) {
         return false;
     }

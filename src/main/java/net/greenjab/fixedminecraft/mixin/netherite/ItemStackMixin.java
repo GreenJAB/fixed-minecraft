@@ -19,13 +19,13 @@ public abstract class ItemStackMixin {
 
     @Inject(method = "shouldBreak", at = @At("RETURN"), cancellable = true)
     private void dontBreakNetherite(CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
-            ItemStack itemStack = (ItemStack) (Object)this;
-            if (itemStack.isIn(ModTags.UNBREAKABLE)) {
-                this.setDamage(this.getMaxDamage()-1);
-                cir.setReturnValue(false);
-            }
-        }
-    }
+       if (cir.getReturnValue()) {
+           ItemStack itemStack = (ItemStack) (Object)this;
+           if (itemStack.isIn(ModTags.UNBREAKABLE)) {
+               this.setDamage(this.getMaxDamage()-1);
+               cir.setReturnValue(false);
+           }
+       }
+   }
 
 }

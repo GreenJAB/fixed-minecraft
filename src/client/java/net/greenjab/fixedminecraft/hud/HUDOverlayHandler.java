@@ -2,8 +2,8 @@ package net.greenjab.fixedminecraft.hud;
 
 import net.greenjab.fixedminecraft.util.IntPoint;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -43,11 +43,9 @@ public class HUDOverlayHandler
     }
 
     private static void drawSaturationOverlay(DrawContext context, Float saturationLevel, MinecraftClient mc, int right, int top) {
-
         float modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f));
         int endSaturationBar = (int) Math.ceil(modifiedSaturation / 2);
         int iconSize = 9;
-
         for (int i = 0; i < endSaturationBar; i++) {
             // gets the offset that needs to be render of icon
             IntPoint offset = foodBarOffsets.get(i);
@@ -68,9 +66,8 @@ public class HUDOverlayHandler
                 u = 2f * iconSize;
             else if (effectiveSaturationOfBar > .25)
                 u = 1f * iconSize;
-            context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
         }
-
     }
 
     private static void drawSaturationOverlay(HUDOverlayEvent.Saturation event, MinecraftClient mc) {

@@ -60,7 +60,6 @@ public class AreaEffectCloudEntityMixin {
         }
     }
 
-
     @Redirect(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
     private boolean lingerAddition(LivingEntity instance, StatusEffectInstance effect, Entity source) {
         if (instance.hasStatusEffect(effect.getEffectType())) {

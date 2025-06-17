@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class ArmorSlotMixin {
 
     @ModifyExpressionValue(method = "canTakeItems", at = @At(value = "INVOKE",
-                                                             target = "Lnet/minecraft/enchantment/EnchantmentHelper;hasAnyEnchantmentsWith(Lnet/minecraft/item/ItemStack;Lnet/minecraft/component/ComponentType;)Z"
+           target = "Lnet/minecraft/enchantment/EnchantmentHelper;hasAnyEnchantmentsWith(Lnet/minecraft/item/ItemStack;Lnet/minecraft/component/ComponentType;)Z"
     ))
     private boolean noNetheriteHarvest(boolean original, @Local ItemStack itemStack) {
         if (original)

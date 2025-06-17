@@ -39,6 +39,7 @@ public abstract class PlayerLookHelper {
      */
     @SuppressWarnings("JavadocReference")
     public static ItemStack getLookingAtBook(ChiseledBookshelfBlockEntity blockEntity) {
+
          ItemStack book = ItemStack.EMPTY;
         MinecraftClient client = MinecraftClient.getInstance();
         if (!(client.crosshairTarget instanceof BlockHitResult hit)) return book;
@@ -53,11 +54,12 @@ public abstract class PlayerLookHelper {
         Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
         OptionalInt slot = getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
+        //System.out.println("getLookingAtBook, " + blockEntity.getStack(slot.getAsInt()));
         return blockEntity.getStack(slot.getAsInt());
     }
 
     private static OptionalInt getSlotForHitPos(BlockHitResult hit, BlockState state) {
-        return (OptionalInt)getHitPos(hit, state.get(HorizontalFacingBlock.FACING)).map(/* method_55772 */ hitPos -> {
+        return getHitPos(hit, state.get(HorizontalFacingBlock.FACING)).map(/* method_55772 */ hitPos -> {
             int i = hitPos.y >= 0.5F ? 0 : 1;
             int j = getColumn(hitPos.x);
             return OptionalInt.of(j + i * 3);
@@ -70,7 +72,7 @@ public abstract class PlayerLookHelper {
             return Optional.empty();
         } else {
             BlockPos blockPos = hit.getBlockPos().offset(direction);
-            Vec3d vec3d = hit.getPos().subtract((double)blockPos.getX(), (double)blockPos.getY(), (double)blockPos.getZ());
+            Vec3d vec3d = hit.getPos().subtract(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             double d = vec3d.getX();
             double e = vec3d.getY();
             double f = vec3d.getZ();
@@ -105,7 +107,7 @@ public abstract class PlayerLookHelper {
         List<Text> displayText = new ArrayList<>();
         displayText.add(book.getItem().getName());
         if (book.contains(DataComponentTypes.CUSTOM_NAME) || book.isOf(Items.WRITTEN_BOOK)) {
-            Style s = book.getName().getStyle().withItalic(true);
+            Style s = book.getName().getStyle().withItalic(true).withColor(-1);
             //s.withItalic(true);
             displayText.add(book.getName().getWithStyle(s).get(0));
         }

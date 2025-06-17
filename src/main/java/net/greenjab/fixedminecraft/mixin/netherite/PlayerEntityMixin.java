@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class PlayerEntityMixin {
 
     @ModifyExpressionValue(method = "canHarvest", at = @At(value = "INVOKE",
-                                                           target = "Lnet/minecraft/entity/player/PlayerInventory;getSelectedStack()Lnet/minecraft/item/ItemStack;"
+           target = "Lnet/minecraft/entity/player/PlayerInventory;getSelectedStack()Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack noNetheriteHarvest(ItemStack original) {
         if (original.isIn(ModTags.UNBREAKABLE) && original.willBreakNextUse()) return ItemStack.EMPTY;
@@ -19,7 +19,7 @@ public abstract class PlayerEntityMixin {
     }
 
     @ModifyExpressionValue(method = "getBlockBreakingSpeed", at = @At(value = "INVOKE",
-                                                                      target = "Lnet/minecraft/entity/player/PlayerInventory;getSelectedStack()Lnet/minecraft/item/ItemStack;"
+           target = "Lnet/minecraft/entity/player/PlayerInventory;getSelectedStack()Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack noNetheriteMineSpeed(ItemStack original) {
         if (original.isIn(ModTags.UNBREAKABLE) && original.willBreakNextUse()) return ItemStack.EMPTY;

@@ -65,11 +65,11 @@ public class FixedMinecraft implements ModInitializer {
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(CommandManager.literal("mapBookMarker")
-                .then(CommandManager.argument("id", IntegerArgumentType.integer())
-                .then(CommandManager.argument("x", StringArgumentType.string())
-                .then(CommandManager.argument("z", StringArgumentType.string())
-                .then(CommandManager.argument("dim", StringArgumentType.string())
-                .executes(FixedMinecraft::executeMapBookMarker)))))));
+                        .then(CommandManager.argument("id", IntegerArgumentType.integer())
+                                .then(CommandManager.argument("x", StringArgumentType.string())
+                                        .then(CommandManager.argument("z", StringArgumentType.string())
+                                                .then(CommandManager.argument("dim", StringArgumentType.string())
+                                                        .executes(FixedMinecraft::executeMapBookMarker)))))));
     }
 
     private static int executeMapBookMarker(CommandContext<ServerCommandSource> context) {

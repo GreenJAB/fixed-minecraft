@@ -12,6 +12,7 @@ import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -99,8 +100,8 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         }
     }
 
-    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    private void removeTrainTag(NbtCompound nbt, CallbackInfo ci) {
+    @Inject(method = "readCustomData", at = @At("TAIL"))
+    private void removeTrainTag(ReadView view, CallbackInfo ci) {
         this.age=0;
         this.removeCommandTag("trainNoEngine");
         if (this.getCommandTags().contains("train")) {

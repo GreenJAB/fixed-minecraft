@@ -71,7 +71,7 @@ public class MapBookItem extends Item {
             ItemStack otherHand = hand == Hand.MAIN_HAND ? player.getOffHandStack() : player.getMainHandStack();
 
             var openMap = true;
-            if (getNearestMap(item, world, player.getPos())==null) {
+            if (getNearestMap(item, world, player.getPos())==null || otherHand.isOf(Items.MAP)) {
                 if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(),0)) {
                     player.getWorld().playSoundFromEntity(
                             null,
@@ -98,21 +98,6 @@ public class MapBookItem extends Item {
                 }
             } else if (otherHand.isOf(Items.FILLED_MAP)) {
                 if (addNewMapID(item, otherHand, (ServerWorld)world)) {
-                    if (!player.getAbilities().creativeMode) {
-                        otherHand.decrement(1);
-                    }
-                    player.getWorld().playSoundFromEntity(
-                            null,
-                            player,
-                            SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                            player.getSoundCategory(),
-                            1.0f,
-                            1.0f
-                    );
-                    openMap = false;
-                }
-            } else if (otherHand.isOf(Items.MAP)) {
-                if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), 0)) {
                     if (!player.getAbilities().creativeMode) {
                         otherHand.decrement(1);
                     }
@@ -172,7 +157,6 @@ public class MapBookItem extends Item {
         }
         return ItemStack.EMPTY;
     }
-
     private boolean isHotbar(PlayerEntity playerEntity, ItemStack stack) {
         for (int i = 0;i < 9; i++) {
             ItemStack item = playerEntity.getInventory().getStack(i);
@@ -407,7 +391,6 @@ public class MapBookItem extends Item {
             textConsumer.accept(Text.translatable("item.fixedminecraft.map_book_maps", mapsCount).formatted(Formatting.GRAY));
         }
     }
-
 
     private void applyAdditions(ItemStack stack, ServerWorld world) {
         MapBookAdditionsComponent additionsComponent = stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, null) ;//?: return

@@ -18,6 +18,8 @@ import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.collection.DefaultedList;
@@ -256,31 +258,29 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        nbt.putShort("Fuel", (short)fuel);
-        nbt.putBoolean("Lit", this.isLit());
-        nbt.putShort("TrainLength", (short)train.size());
+    protected void writeCustomData(WriteView view) {
+        super.writeCustomData(view);
+        view.putShort("Fuel", (short)this.fuel);
+        view.putShort("TrainLength", (short)train.size());
         for (int i = 1;i<train.size();i++) {
-            nbt.putString("Train"+i, String.valueOf(train.get(i).getUuid()));
+            view.putString("Train"+i, String.valueOf(train.get(i).getUuid()));
         }
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        fuel = nbt.getShort("Fuel", (short)0);
-        this.setLit(nbt.getBoolean("Lit", false));
-        int len = nbt.getShort("TrainLength", (short)0);
+    protected void readCustomData(ReadView view) {
+        super.readCustomData(view);
+        this.fuel = view.getShort("Fuel", (short)0);
+        int len = view.getShort("TrainLength", (short)0);
         for (int i = 1;i<len;i++) {
-            String uu = nbt.getString("Train" + i, "");
+            String uu = view.getString("Train" + i, "");
             if (!uu.isEmpty()) {
                 UUID uuid = UUID.fromString(uu);
                 uuids.add(uuid);
             }
-
         }
     }
+
 
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand) {

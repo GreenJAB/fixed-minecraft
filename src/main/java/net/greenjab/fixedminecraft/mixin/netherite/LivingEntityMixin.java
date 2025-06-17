@@ -22,8 +22,8 @@ public abstract class LivingEntityMixin {
     }
 
     @Redirect(method = "swapHandStacks", at = @At(value = "INVOKE",
-                                                  target = "Lnet/minecraft/entity/LivingEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/entity/LivingEntity;getEquippedStack(Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack noNetheriteFix1(LivingEntity instance, EquipmentSlot slot) {
-        return instance.equipment.get(slot); }
+    return instance.equipment.get(slot); }
 }

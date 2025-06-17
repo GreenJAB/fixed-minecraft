@@ -45,7 +45,7 @@ public record MapBookSyncPayload(int bookID, int[] mapIDs,  ArrayList<MapBookPla
         int bookId = MapBookItem.getMapBookId(itemStack);
         if (bookId == -1) return null;
 
-        MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(player.server, bookId);
+        MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(player.getServer(), bookId);
         if (mapBookState != null) {
             return new MapBookSyncPayload(bookId, mapBookState.mapIDs.stream().mapToInt(i -> i).toArray(), mapBookState.players, mapBookState.marker);
         }

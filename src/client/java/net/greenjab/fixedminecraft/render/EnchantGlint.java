@@ -17,8 +17,8 @@ public class EnchantGlint {
 
     public static boolean isSuper() {
         ItemStack target = targetStack.get();
-
         if (target == null || target.isEmpty())  return false;
+
         if (target.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
              return target.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
         }
@@ -38,8 +38,40 @@ public class EnchantGlint {
     }
 
     @Environment(EnvType.CLIENT)
+    public static RenderLayer getGlintTranslucent() {
+        if (isSuper()) return GlintRenderLayer.translucentGlintColor;
+        else return RenderLayer.getGlintTranslucent();
+    }
+
+    @Environment(EnvType.CLIENT)
     public static RenderLayer getArmorEntityGlint() {
         if (isSuper()) return GlintRenderLayer.armorEntityGlintColor;
         else return RenderLayer.getArmorEntityGlint();
     }
+
+
+    @Environment(EnvType.CLIENT)
+    public static RenderLayer getGlint(boolean green) {
+        if (green) return GlintRenderLayer.glintColor;
+        else return RenderLayer.getGlint();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static RenderLayer getEntityGlint(boolean green) {
+        if (green) return GlintRenderLayer.entityGlintColor;
+        else return RenderLayer.getEntityGlint();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static RenderLayer getGlintTranslucent(boolean green) {
+        if (green) return GlintRenderLayer.translucentGlintColor;
+        else return RenderLayer.getGlintTranslucent();
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static RenderLayer getArmorEntityGlint(boolean green) {
+        if (green) return GlintRenderLayer.armorEntityGlintColor;
+        else return RenderLayer.getArmorEntityGlint();
+    }
+
 }

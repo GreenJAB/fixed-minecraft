@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(CraftingResultSlot.class)
 public class CraftingResultSlotMixin {
 
+
     @Shadow
     @Final
     private PlayerEntity player;

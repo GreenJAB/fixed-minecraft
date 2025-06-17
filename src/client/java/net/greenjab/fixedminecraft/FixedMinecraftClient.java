@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
@@ -13,15 +13,15 @@ import net.greenjab.fixedminecraft.render.PlayerLookHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.SimpleOption;
-import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.BlockRenderLayer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.item.property.bool.BooleanProperties;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.joml.Matrix3x2fStack;
 
 import java.util.List;
 
@@ -30,14 +30,15 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
     public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
     public static SimpleOption<Boolean> newArmorHud = SimpleOption.ofBoolean("options.newArmorHud", true);
+    public static SimpleOption<Boolean> fog_21_6 = SimpleOption.ofBoolean("options.fog_21_6", true);
 
     @Override
     public void onInitializeClient() {
 
         ClientSyncHandler.init();
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(
-                RenderLayer.getCutout(),
+        BlockRenderLayerMap.putBlocks(
+                BlockRenderLayer.CUTOUT,
                 BlockRegistry.COPPER_RAIL,
                 BlockRegistry.EXPOSED_COPPER_RAIL,
                 BlockRegistry.WEATHERED_COPPER_RAIL,
@@ -62,11 +63,10 @@ public class FixedMinecraftClient implements ClientModInitializer {
             );
         });
     }
-
     public void renderCrosshair(DrawContext context,
                                 @SuppressWarnings("unused") RenderTickCounter tickDelta) {
-        MatrixStack matrices = context.getMatrices();
-        matrices.push();
+        Matrix3x2fStack matrices = context.getMatrices();
+        matrices.pushMatrix();
             MinecraftClient client = MinecraftClient.getInstance();
 
             ItemStack book = PlayerLookHelper.getLookingAtBook(null);
@@ -75,9 +75,9 @@ public class FixedMinecraftClient implements ClientModInitializer {
             List<Text> display = PlayerLookHelper.getBookText(book);
             for(int i = 0; i < display.size(); i++) {
                 Text text = display.get(i);
-                context.drawText(client.textRenderer, text, (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2), (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)), book.getItem() == Items.ENCHANTED_BOOK ? 16777045 : 16777215, true);
+                context.drawText(client.textRenderer, text, (int)(client.getWindow().getScaledWidth() / 2.0 - client.textRenderer.getWidth(text) / 2), (int)(client.getWindow().getScaledHeight() / 2.0 + 15 + (i * 10)), book.getItem() == Items.ENCHANTED_BOOK ? -171 : -1, true);//16777045 : 16777215
             }
-        matrices.pop();
+        matrices.popMatrix();
     }
     private static EquipmentModel createHumanoidAndHorseModel(String id) {
         return EquipmentModel.builder()

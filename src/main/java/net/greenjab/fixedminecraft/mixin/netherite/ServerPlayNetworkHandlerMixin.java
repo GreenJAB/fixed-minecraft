@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class ServerPlayNetworkHandlerMixin {
 
     @Redirect(method = "onPlayerAction", at = @At(value = "INVOKE",
-                                                  target = "Lnet/minecraft/server/network/ServerPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"
+            target = "Lnet/minecraft/server/network/ServerPlayerEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack noNetheriteFix3(ServerPlayerEntity instance, Hand hand) {
         if (hand == Hand.MAIN_HAND) {

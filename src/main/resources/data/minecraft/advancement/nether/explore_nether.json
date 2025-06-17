@@ -1,5 +1,5 @@
 {
-    "parent": "minecraft:nether/ride_strider",
+    "parent": "minecraft:husbandry/place_dried_ghast_in_water",
     "criteria": {
         "minecraft:basalt_deltas": {
             "conditions": {

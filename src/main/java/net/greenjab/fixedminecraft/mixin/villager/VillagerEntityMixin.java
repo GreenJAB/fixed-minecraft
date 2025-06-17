@@ -34,6 +34,8 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.storage.ReadView;
+import net.minecraft.storage.WriteView;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
@@ -70,7 +72,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             .put(VillagerType.SWAMP.getValue().toString(), ModTags.SWAMP_TRADES)
             .put(VillagerType.TAIGA.getValue().toString(), ModTags.TAIGA_TRADES)
             .build());
-
 
     @Shadow
     public abstract void sleep(BlockPos pos);
@@ -159,24 +160,24 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
     }
 
-    @Inject(method = "writeCustomDataToNbt", at = @At("TAIL"))
-    private void saveCustomData(NbtCompound nbt, CallbackInfo ci) {
+    @Inject(method = "writeCustomData", at = @At("TAIL"))
+    private void saveCustomData(WriteView view, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
         Optional<UUID> lastVillager = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.ANGRY_AT);
-        if (lastVillager!=null && lastVillager.isPresent())  nbt.putString("lastVillager", lastVillager.get().toString());
+        if (lastVillager!=null && lastVillager.isPresent()) view.putString("lastVillager", lastVillager.get().toString());
         Optional<Integer> gossipTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT);
-        if (gossipTime!=null && gossipTime.isPresent()) nbt.putInt("gossipTime", gossipTime.get());
+        if (gossipTime!=null && gossipTime.isPresent()) view.putInt("gossipTime", gossipTime.get());
         Optional<Integer> sleepTime = villagerEntity.getBrain().getOptionalMemory(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT);
-        if (sleepTime!=null && sleepTime.isPresent()) nbt.putInt("sleepTime", sleepTime.get());
+        if (sleepTime!=null && sleepTime.isPresent()) view.putInt("sleepTime", sleepTime.get());
     }
 
-    @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
-    private void loadCustomData(NbtCompound nbt, CallbackInfo ci) {
+    @Inject(method = "readCustomData", at = @At("TAIL"))
+    private void loadCustomData(ReadView view, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        String s = nbt.getString("lastVillager", "");
-        if (!s.isEmpty())  villagerEntity.getBrain().remember(MemoryModuleType.ANGRY_AT, UUID.fromString(s));
-        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, nbt.getInt("gossipTime"));
-        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, nbt.getInt("sleepTime"));
+        String s = view.getString("lastVillager", "");
+        if (!s.isEmpty()) villagerEntity.getBrain().remember(MemoryModuleType.ANGRY_AT, UUID.fromString(s));
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_HOGLIN_COUNT, view.getInt("gossipTime", 0));
+        villagerEntity.getBrain().remember(MemoryModuleType.VISIBLE_ADULT_PIGLIN_COUNT, view.getInt("sleepTime", 0));
     }
 
     @Inject(method = "sleep", at = @At("HEAD"), cancellable = true)
@@ -266,7 +267,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                             new TradeOffers.SellItemFactory(Blocks.BOOKSHELF, 9, 1, 12, 1)
                     })
                     .put(2, new TradeOffers.Factory[]{
-                            firstBook( villagerData),
+                           firstBook(villagerData),
                             new TradeOffers.SellItemFactory(Blocks.CHISELED_BOOKSHELF, 1, 1, 12, 5)})
                     .put(3, new TradeOffers.Factory[]{
                             new TradeOffers.BuyItemFactory(Items.INK_SAC, 5, 12, 20),
@@ -292,6 +293,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
+
 
         int i = 0;
         while (i < 10) {
@@ -334,11 +336,11 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     private EnchantedBookFactory masterBook(VillagerData villagerData) {
         Random rn = this.getWorld().random;
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
-
         Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
+
 
         Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getWorld()
                 .getRegistryManager()
@@ -346,16 +348,17 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 .iterateEntries(biomeEnchants.get(villagerData.type().getIdAsString()));
         HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
         optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
-        List<VillagerEntity> list = villagerEntity.getEntityWorld()
+        List<VillagerEntity> list = villagerEntity.getWorld()
                 .getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(32), EntityPredicates.VALID_LIVING_ENTITY);
         for (VillagerEntity villager2 : list) {
             if (villager2 != villagerEntity) {
-                if (villager2.getVillagerData().profession() == VillagerProfession.LIBRARIAN) {
+                if (villager2.getVillagerData().profession().getIdAsString().contains(VillagerProfession.LIBRARIAN.getValue().toString())) {
                     ItemStack eBook = ItemStack.EMPTY;
                     if (villager2.getOffers().size() >= 10) {
                         if (villager2.getOffers().get(8).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
                             eBook = villager2.getOffers().get(8).getSellItem();
-                        } else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                        }
+                        else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
                             eBook = villager2.getOffers().get(9).getSellItem();
                         }
                     }
@@ -370,7 +373,6 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             }
         }
         possibleEnchantCount.replaceAll((e, v) -> e.isIn(EnchantmentTags.CURSE) ? 0: 1 / v);
-
         float max = 0;
         for (float f : possibleEnchantCount.values()) max += f;
         float rand = villagerEntity.getWorld().random.nextFloat() * max;
@@ -423,13 +425,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
             int level = maxLevel==1?1:(rn.nextInt(maxLevel)+1);
             itemStack = EnchantmentHelper.getEnchantedBookWith(new EnchantmentLevelEntry(registryEntry, level));
             l = 2 + random.nextInt(5 + level * 10) + 3 * level;
-            if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
-                l *= 2;
-            }
-
-            if (l > 64) {
-                l = 64;
-            }
+            if (registryEntry.isIn(EnchantmentTags.DOUBLE_TRADE_PRICE)) l *= 2;
+            if (l > 64) l = 64;
         } else {
             l = 1;
             itemStack = new ItemStack(Items.BOOK);

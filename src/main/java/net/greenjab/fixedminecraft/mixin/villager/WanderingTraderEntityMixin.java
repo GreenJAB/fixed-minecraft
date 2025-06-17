@@ -1,13 +1,17 @@
 package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.SkullBlockEntity;
+import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.ProfileComponent;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.passive.WanderingTraderEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.FilledMapItem;
@@ -16,8 +20,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapState;
 import net.minecraft.potion.Potions;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -30,15 +36,20 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 @Mixin(WanderingTraderEntity.class)
 public abstract class WanderingTraderEntityMixin {
+
 
     @ModifyExpressionValue(method = "fillRecipes", at = @At(
             value = "FIELD",
@@ -150,6 +161,7 @@ public abstract class WanderingTraderEntityMixin {
 
         );
     }
+
 
     @Unique
     private ItemStack createSpecialItem() {
@@ -292,4 +304,5 @@ public abstract class WanderingTraderEntityMixin {
             }
         return Items.MAP.getDefaultStack();
     }
+
 }

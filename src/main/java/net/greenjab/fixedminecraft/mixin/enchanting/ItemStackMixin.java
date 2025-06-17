@@ -41,6 +41,7 @@ public abstract class ItemStackMixin {
                 ItemStack stack = (ItemStack)(Object)this;
                 if (stack.hasEnchantments()) {
                     ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
+                    //stack.remove(DataComponentTypes.REPAIR_COST);
                     stack.set(DataComponentTypes.REPAIR_COST, 0);
                     for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
                         if (itemEnchantmentsComponent.getLevel(enchantment) > enchantment.value().getMaxLevel()) {
@@ -48,27 +49,8 @@ public abstract class ItemStackMixin {
                         }
                     }
                 }
+                dataFix(stack);
             }
-        }
-    }
-
-    @Inject(method = "fromNbt", at = @At("RETURN"), cancellable = true)
-    private static void addGreenGlintUpdate(RegistryWrapper.WrapperLookup registries, NbtElement nbt,
-                                            CallbackInfoReturnable<Optional<ItemStack>> cir) {
-        Optional<ItemStack> optionalItemStackstack = cir.getReturnValue();
-        if (optionalItemStackstack.isPresent()) {
-            ItemStack stack = optionalItemStackstack.get();
-            if (stack.hasEnchantments()) {
-                ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
-                stack.remove(DataComponentTypes.REPAIR_COST);
-                for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
-                    if (itemEnchantmentsComponent.getLevel(enchantment) > enchantment.value().getMaxLevel()) {
-                        stack.set(DataComponentTypes.REPAIR_COST, 1);
-                    }
-                }
-            }
-            dataFix(stack);
-            cir.setReturnValue(Optional.of(stack));
         }
     }
 

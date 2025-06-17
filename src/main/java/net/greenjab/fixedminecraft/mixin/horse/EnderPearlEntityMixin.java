@@ -86,7 +86,6 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                 }
                 ref.set(true);
 
-
                 ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
                         new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
                 );
