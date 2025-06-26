@@ -13,3 +13,8 @@ accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
 accessible class net/minecraft/client/option/GameOptions$OptionVisitor
 accessible method net/minecraft/item/ItemStack appendTooltip (Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V
 accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResultTime J
+accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
+accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/block/BlockSetType;)Lnet/minecraft/block/BlockSetType;
+accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
+accessible field net/minecraft/block/AbstractCauldronBlock behaviorMap Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;
+accessible class net/minecraft/server/network/ServerPlayerEntity$RespawnPos

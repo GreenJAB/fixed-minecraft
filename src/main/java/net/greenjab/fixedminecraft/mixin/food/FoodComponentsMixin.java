@@ -64,7 +64,7 @@ public class FoodComponentsMixin {
         RABBIT_STEW = (new FoodComponent.Builder()).nutrition(10).saturationModifier(0.6F).build();
 
         //complex
-        HONEY_BOTTLE = (new FoodComponent.Builder()).nutrition(3).saturationModifier(0.5F).build();
+        HONEY_BOTTLE = (new FoodComponent.Builder()).nutrition(3).saturationModifier(0.5F).alwaysEdible().build();
         PUMPKIN_PIE = (new FoodComponent.Builder()).nutrition(8).saturationModifier(0.6F).build();
         COOKIE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.6F).build();
 

@@ -11,20 +11,26 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
+import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.spongepowered.asm.mixin.Unique;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 
 public class FixedMinecraft implements ModInitializer {
@@ -33,6 +39,7 @@ public class FixedMinecraft implements ModInitializer {
 
     public static boolean netheriteAnvil = false;
     public static HashMap<Item, Integer> ItemCapacities = new HashMap<>();
+    public static HashMap<Block, Block> corals = new HashMap<>();
 
     public static final String MOD_NAME = "Fixed Minecraft";
     public static final String NAMESPACE = "fixedminecraft";
@@ -43,9 +50,8 @@ public class FixedMinecraft implements ModInitializer {
         SyncHandler.init();
 
         ItemGroupRegistry.register();
-
         GameruleRegistry.register();
-
+        BlockRegistry.registerFireBlocks();
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
