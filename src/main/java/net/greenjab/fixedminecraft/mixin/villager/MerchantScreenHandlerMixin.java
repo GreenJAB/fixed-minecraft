@@ -110,7 +110,7 @@ public abstract class MerchantScreenHandlerMixin extends ScreenHandler implement
                 }
 
                 public boolean canInsert(ItemStack stack) {
-                    if (stack != null) {
+                    if (stack != null && finalLevel - 1 > 3- finalI) {
                         boolean extra = false;
                         if (equipmentSlot == EquipmentSlot.HEAD) {
                             extra =
