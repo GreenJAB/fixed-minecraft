@@ -73,6 +73,9 @@ public class MapBookItem extends Item {
             var openMap = true;
             if (getNearestMap(item, world, player.getPos())==null || otherHand.isOf(Items.MAP)) {
                 if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(),0)) {
+                    if (otherHand.isOf(Items.MAP) && !player.getAbilities().creativeMode) {
+                        otherHand.decrement(1);
+                    }
                     player.getWorld().playSoundFromEntity(
                             null,
                             player,
