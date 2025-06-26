@@ -2,13 +2,5 @@
   "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "fixedminecraft:item/echo_totem"
-  },
-    "overrides": [
-        {
-            "predicate": {
-                "saving": 1
-            },
-            "model": "fixedminecraft:item/using_echo_totem"
-        }
-    ]
+  }
 }

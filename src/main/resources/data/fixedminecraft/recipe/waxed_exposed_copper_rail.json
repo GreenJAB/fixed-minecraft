@@ -8,10 +8,31 @@
         },
         {
             "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:exposed_copper_rail"
         }
     ],
     "result": {
         "id": "fixedminecraft:waxed_exposed_copper_rail",
-        "count": 1
+        "count": 8
     }
 }

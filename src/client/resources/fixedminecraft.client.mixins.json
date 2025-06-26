@@ -10,7 +10,6 @@
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",
         "AnvilScreenMixin",
-        "BackgroundRendererMixin",
         "CartographyTableScreenMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
@@ -23,14 +22,20 @@
         "GameOptionsMixin",
         "GameRendererMixin",
         "InGameHudMixin",
+        "LivingEntityRendererMixin",
         "MerchantScreenMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
+        "VillagerClothingFeatureRendererMixin",
         "VillagerEntityRendererMixin",
+        "VillagerRenderStateMixin",
         "WorldRendererMixin",
+        "ZombieVillagerEntityModelMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
+        "glint.EquipmentRendererMixin",
+        "glint.ItemModelManagerMixin",
         "glint.ItemRendererMixin",
         "map.DrawContextAccessor",
         "map.HeldItemRendererMixin",
@@ -38,6 +43,10 @@
         "map.MapPositionRequestMixin"
     ],
     "mixins": [
-        "DrawContextMixin"
-    ]
+        "DrawContextMixin",
+        "map.MapPositionRequestMixin",
+        "map.MapRendererMixin"
+    ],
+    "mixins": [
+  ]
 }

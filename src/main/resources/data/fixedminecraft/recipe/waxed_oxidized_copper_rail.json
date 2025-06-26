@@ -8,10 +8,31 @@
         },
         {
             "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:oxidized_copper_rail"
         }
     ],
     "result": {
         "id": "fixedminecraft:waxed_oxidized_copper_rail",
-        "count": 1
+        "count": 8
     }
 }

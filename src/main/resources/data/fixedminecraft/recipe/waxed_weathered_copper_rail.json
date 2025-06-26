@@ -8,10 +8,31 @@
         },
         {
             "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
+        },
+        {
+            "item": "fixedminecraft:weathered_copper_rail"
         }
     ],
     "result": {
         "id": "fixedminecraft:waxed_weathered_copper_rail",
-        "count": 1
+        "count": 8
     }
 }

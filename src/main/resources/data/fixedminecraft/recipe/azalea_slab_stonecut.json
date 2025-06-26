@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": "fixedminecraft:azalea_planks",
+    "result": {
+        "id": "fixedminecraft:azalea_slab",
+        "count": 2
+    }
+}

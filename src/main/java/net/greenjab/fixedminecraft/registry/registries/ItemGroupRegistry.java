@@ -41,6 +41,25 @@ public class ItemGroupRegistry {
                         entries.add(ItemRegistry.WAXED_EXPOSED_COPPER_RAIL);
                         entries.add(ItemRegistry.WAXED_WEATHERED_COPPER_RAIL);
                         entries.add(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
+
+
+                         entries.add(BlockRegistry.AZALEA_PLANKS);
+                         entries.add(BlockRegistry.AZALEA_LOG);
+                         entries.add(BlockRegistry.STRIPPED_AZALEA_LOG);
+                         entries.add(BlockRegistry.AZALEA_WOOD);
+                         entries.add(BlockRegistry.STRIPPED_AZALEA_WOOD);
+                         entries.add(ItemRegistry.AZALEA_SIGN);
+                         entries.add(ItemRegistry.AZALEA_HANGING_SIGN);
+                         entries.add(BlockRegistry.AZALEA_PRESSURE_PLATE);
+                         entries.add(BlockRegistry.AZALEA_TRAPDOOR);
+                         entries.add(BlockRegistry.AZALEA_BUTTON);
+                         entries.add(BlockRegistry.AZALEA_STAIRS);
+                         entries.add(BlockRegistry.AZALEA_SLAB);
+                         entries.add(BlockRegistry.AZALEA_FENCE_GATE);
+                         entries.add(BlockRegistry.AZALEA_FENCE);
+                         entries.add(BlockRegistry.AZALEA_DOOR);
+                         entries.add(ItemRegistry.AZALEA_BOAT);
+                         entries.add(ItemRegistry.AZALEA_CHEST_BOAT);
                     }).build();
 
     public static void register() {

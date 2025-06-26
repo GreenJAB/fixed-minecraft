@@ -1,6 +1,7 @@
 {
   "parent": "item/smaller_util",
   "textures": {
-    "layer0": "item/compass_19"
+    "layer0": "item/compass",
+    "layer1": "item/compass_19"
   }
 }

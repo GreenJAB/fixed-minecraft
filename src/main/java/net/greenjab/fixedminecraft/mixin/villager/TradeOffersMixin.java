@@ -2,8 +2,12 @@ package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.google.common.collect.ImmutableMap;
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.other.SellCompassFactory;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.map.MapDecorationTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.VillagerProfession;
 import net.minecraft.village.VillagerType;
@@ -45,6 +49,34 @@ public class TradeOffersMixin {
                                 .build()
                 ),
                 FishingBook()});
+
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.CARTOGRAPHER).replace(3,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.BuyItemFactory(Items.COMPASS, 1, 12, 20),
+                        new TradeOffers.SellMapFactory(13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, 12, 10),
+                        new TradeOffers.SellMapFactory(12, StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS, 12, 10),
+                        new SellCompassFactory(12, ModTags.LODESTONE_COMPASS, 12, 10)
+                });
+
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.LEATHERWORKER).replace(3,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_HORSE_ARMOR, 6, 12, 5),
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_LEGGINGS, 9, 12, 10),
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_CHESTPLATE, 15, 12, 10)
+                });
+
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.LEATHERWORKER).replace(4,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.BuyItemFactory(Items.RABBIT_HIDE, 9, 12, 30),
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_HELMET, 13, 12, 20),
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_BOOTS, 11, 12, 20)
+                });
+
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.LEATHERWORKER).replace(5,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.BuyItemFactory(Items.TURTLE_SCUTE, 4, 12, 30),
+                        new TradeOffers.SellDyedArmorFactory(Items.LEATHER_HORSE_ARMOR, 20, 12, 30)
+                });
 
         PROFESSION_TO_LEVELED_TRADE.replace(VillagerProfession.ARMORER, REBALANCED_PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.ARMORER));
         PROFESSION_TO_LEVELED_TRADE.replace(VillagerProfession.CARTOGRAPHER, REBALANCED_PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.CARTOGRAPHER));

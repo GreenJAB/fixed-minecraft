@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"2": "block/redstone_dust_dot"
+		"2": "block/redstone_dust_dot",
+		"particle": "block/redstone_dust_dot"
 	},
 	"elements": [
 		{
@@ -19,5 +20,5 @@
 				"down": {"uv": [5, 5, 11, 11], "texture": "#2", "cullface": "down", "tintindex": 0}
 			}
 		}
-	]        
+	]
 }
