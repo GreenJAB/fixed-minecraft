@@ -17,7 +17,7 @@ https://youtu.be/VifCRUAzg5U
 - [Void Fog](https://modrinth.com/mod/void-fog)
 - [Potion Cauldron](https://modrinth.com/mod/potion-cauldron)
 
-If have you never played modded Minecraft before, go to the Fabric Homepage and download the downloader. Run it for the version of your choice, then in your minecraft folder (you can find by pressing open world folder ingame) there should be a mod folder. In it place the .jar file for this mod along with chosen version of the required mods listed above. Launch the game with fabric version selected. Now go create a new world. If you wish to make a server, this is needed on both server and client.
+If have you never played modded Minecraft before, go to the [Fabric Homepage](https://fabricmc.net/) and download the downloader. Run it for the version of your choice, then in your minecraft folder (you can find by pressing open world folder ingame) there should be a mod folder. In it place the .jar file for this mod along with chosen version of the required mods listed above. Launch the game with fabric version selected. Now go create a new world. If you wish to make a server, this is needed on both server and client.
 
 ### Gamerules and Video Settings (default):
 - iceMeltInNether (True): Lets packed/blue ice to melt in the nether.
