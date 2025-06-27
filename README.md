@@ -57,3 +57,15 @@ This mod is intended to feel vanilla and thus has designed to be plug and play w
 - Polish: Merzouuu
 
 One time Donations: [Ko-Fi](https://ko-fi.com/greenjab)
+
+## 💝 Thanks to
+
+- [GreenJAB](https://github.com/GreenJAB)
+- [kikugie](https://github.com/kikugie)
+- [Nettakrim](https://github.com/Nettakrim)
+- [Laazuli](https://github.com/Laazuli)
+- [solonovamax](https://github.com/solonovamax)
+- [Izwak](https://github.com/Izwak)
+- [TrigamDev](https://github.com/TrigamDev)
+- [klinbee](https://github.com/klinbee)
+- [ThatColdToast](https://github.com/ThatColdToast)
