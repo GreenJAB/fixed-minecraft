@@ -30,6 +30,8 @@ public class ModTags {
 
     public static final TagKey<Item> STRINGTAG = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("string"));
     public static final TagKey<Item> UNBREAKABLE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("unbreakable"));
+    public static final TagKey<Item> STAINED_GLASS = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass"));
+    public static final TagKey<Item> STAINED_GLASS_PANE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass_pane"));
 
     private static TagKey<Enchantment> enchant_of(String id)  {
         return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id));
