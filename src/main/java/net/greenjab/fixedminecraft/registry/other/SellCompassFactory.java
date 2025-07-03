@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.other;
 
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.component.type.LodestoneTrackerComponent;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,7 @@ public class SellCompassFactory implements TradeOffers.Factory {
             if (blockPos != null) {
                 ItemStack itemStack = Items.COMPASS.getDefaultStack();
                 itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(entity.getWorld().getRegistryKey(), blockPos.withY(-49))), true));
+                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(32767));
                 return new TradeOffer(
                         new TradedItem(Items.EMERALD, this.price), Optional.of(new TradedItem(Items.COMPASS)), itemStack, this.maxUses, this.experience, 0.2F
                 );
