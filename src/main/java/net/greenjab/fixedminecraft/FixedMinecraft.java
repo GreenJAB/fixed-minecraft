@@ -45,7 +45,6 @@ public class FixedMinecraft implements ModInitializer {
         SyncHandler.init();
 
         ItemGroupRegistry.register();
-
         GameruleRegistry.register();
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
