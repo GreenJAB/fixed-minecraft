@@ -121,6 +121,7 @@
         "night.LocalDifficultyMixin",
         "night.MobEntityMixin",
         "other.AdvancementMixin",
+        "other.BlockEntityTypeMixin",
         "other.BlocksMixin",
         "other.CauldronBehaviorMixin",
         "other.DyedColorComponentMixin",
