@@ -1,13 +1,32 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
+import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSetType;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ButtonBlock;
+import net.minecraft.block.DoorBlock;
+import net.minecraft.block.FenceBlock;
+import net.minecraft.block.FenceGateBlock;
+import net.minecraft.block.FireBlock;
+import net.minecraft.block.HangingSignBlock;
+import net.minecraft.block.MapColor;
 import net.minecraft.block.Oxidizable;
+import net.minecraft.block.PillarBlock;
+import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.block.SignBlock;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.block.TrapdoorBlock;
+import net.minecraft.block.WallHangingSignBlock;
+import net.minecraft.block.WallSignBlock;
+import net.minecraft.block.WoodType;
+import net.minecraft.block.enums.NoteBlockInstrument;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -16,6 +35,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 
 import java.util.function.Function;
+
+import static net.minecraft.block.Blocks.createButtonSettings;
+import static net.minecraft.block.Blocks.createLogSettings;
 
 public class BlockRegistry {
 
@@ -63,6 +85,127 @@ public class BlockRegistry {
             AbstractBlock.Settings.copy(Blocks.POWERED_RAIL));
 
 
+
+    static BlockSetType AZALEA_BLOCKSETTYPE = BlockSetType.register(new BlockSetType("azalea"));
+    static WoodType AZALEA_WOODTYPE = WoodType.register(new WoodType("azalea", AZALEA_BLOCKSETTYPE));
+
+    public static final Block AZALEA_PLANKS = register(
+            "azalea_planks",
+            AbstractBlock.Settings.create().mapColor(MapColor.LIME).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).burnable()
+    );
+    public static final Block AZALEA_LOG = register("azalea_log", PillarBlock::new, createLogSettings(MapColor.LIME, MapColor.LIME, BlockSoundGroup.WOOD));
+    public static final Block STRIPPED_AZALEA_LOG = register(
+            "stripped_azalea_log", PillarBlock::new, createLogSettings(MapColor.LIME, MapColor.LIME, BlockSoundGroup.WOOD)
+    );
+    public static final Block AZALEA_WOOD = register(
+            "azalea_wood",
+            PillarBlock::new,
+            AbstractBlock.Settings.create().mapColor(MapColor.GREEN).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+    );
+    public static final Block STRIPPED_AZALEA_WOOD = register(
+            "stripped_azalea_wood",
+            PillarBlock::new,
+            AbstractBlock.Settings.create().mapColor(MapColor.LIME).instrument(NoteBlockInstrument.BASS).strength(2.0F).sounds(BlockSoundGroup.WOOD).burnable()
+    );
+    public static final Block AZALEA_SIGN = register(
+            "azalea_sign",
+            /* method_63365 */ settings -> new SignBlock(AZALEA_WOODTYPE, settings),
+            AbstractBlock.Settings.create().mapColor(MapColor.LIME).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).burnable()
+    );
+    public static final Block AZALEA_WALL_SIGN = register(
+            "azalea_wall_sign",
+            /* method_63355 */ settings -> new WallSignBlock(AZALEA_WOODTYPE, settings),
+            copyLootTable(AZALEA_SIGN, true).mapColor(MapColor.LIME).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).burnable()
+    );
+    public static final Block AZALEA_HANGING_SIGN = register(
+            "azalea_hanging_sign",
+            /* method_63346 */ settings -> new HangingSignBlock(AZALEA_WOODTYPE, settings),
+            AbstractBlock.Settings.create().mapColor(MapColor.LIME).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).burnable()
+    );
+    public static final Block AZALEA_WALL_HANGING_SIGN = register(
+            "azalea_wall_hanging_sign",
+            /* method_63387 */ settings -> new WallHangingSignBlock(AZALEA_WOODTYPE, settings),
+            copyLootTable(AZALEA_HANGING_SIGN, true).mapColor(MapColor.LIME).solid().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).burnable()
+    );
+
+    public static final Block AZALEA_PRESSURE_PLATE = register(
+            "azalea_pressure_plate",
+            /* method_63373 */ settings -> new PressurePlateBlock(AZALEA_BLOCKSETTYPE, settings),
+            AbstractBlock.Settings.create()
+                    .mapColor(AZALEA_PLANKS.getDefaultMapColor())
+                    .solid()
+                    .instrument(NoteBlockInstrument.BASS)
+                    .noCollision()
+                    .strength(0.5F)
+                    .burnable()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+    public static final Block AZALEA_TRAPDOOR = register(
+            "azalea_trapdoor",
+            /* method_63308 */ settings -> new TrapdoorBlock(AZALEA_BLOCKSETTYPE, settings),
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.LIME)
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(3.0F)
+                    .nonOpaque()
+                    .allowsSpawning(Blocks::never)
+                    .burnable()
+    );
+    public static final Block AZALEA_BUTTON = register(
+            "azalea_button", /* method_63251 */ settings -> new ButtonBlock(AZALEA_BLOCKSETTYPE, 30, settings), createButtonSettings()
+    );
+    public static final Block AZALEA_STAIRS = registerOldStairsBlock("azalea_stairs", AZALEA_PLANKS);
+    public static final Block AZALEA_SLAB = register(
+            "azalea_slab",
+            SlabBlock::new,
+            AbstractBlock.Settings.create().mapColor(MapColor.LIME).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sounds(BlockSoundGroup.WOOD).burnable()
+    );
+    public static final Block AZALEA_FENCE_GATE = register(
+            "azalea_fence_gate",
+            /* method_63215 */ settings -> new FenceGateBlock(AZALEA_WOODTYPE, settings),
+            AbstractBlock.Settings.create().mapColor(AZALEA_PLANKS.getDefaultMapColor()).solid().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).burnable()
+    );
+    public static final Block AZALEA_FENCE = register(
+            "azalea_fence",
+            FenceBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(AZALEA_PLANKS.getDefaultMapColor())
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F, 3.0F)
+                    .burnable()
+                    .sounds(BlockSoundGroup.WOOD)
+    );
+    public static final Block AZALEA_DOOR = register(
+            "azalea_door",
+            /* method_63207 */ settings -> new DoorBlock(AZALEA_BLOCKSETTYPE, settings),
+            AbstractBlock.Settings.create()
+                    .mapColor(AZALEA_PLANKS.getDefaultMapColor())
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(3.0F)
+                    .nonOpaque()
+                    .burnable()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+
+    public static void registerFireBlocks() {
+        FireBlock fireBlock = (FireBlock)Blocks.FIRE;
+        fireBlock.registerFlammableBlock(AZALEA_PLANKS, 5, 20);
+        fireBlock.registerFlammableBlock(AZALEA_SLAB, 5, 20);
+        fireBlock.registerFlammableBlock(AZALEA_FENCE_GATE, 5, 20);
+        fireBlock.registerFlammableBlock(AZALEA_FENCE, 5, 20);
+        fireBlock.registerFlammableBlock(AZALEA_STAIRS, 5, 20);
+        fireBlock.registerFlammableBlock(AZALEA_LOG, 5, 5);
+        fireBlock.registerFlammableBlock(AZALEA_WOOD, 5, 5);
+        fireBlock.registerFlammableBlock(STRIPPED_AZALEA_LOG, 5, 5);
+        fireBlock.registerFlammableBlock(STRIPPED_AZALEA_LOG, 5, 5);
+
+        StrippableBlockRegistry.register(AZALEA_LOG, STRIPPED_AZALEA_LOG);
+        StrippableBlockRegistry.register(AZALEA_WOOD, STRIPPED_AZALEA_WOOD);
+    }
+
+    private static Block register(String id, AbstractBlock.Settings settings) {
+        return register(id, Block::new, settings);
+    }
     private static Block register(String id, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         return register(keyOf(id), factory, settings);
     }
@@ -72,5 +215,18 @@ public class BlockRegistry {
     public static Block register(RegistryKey<Block> key, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
         Block block = factory.apply(settings.registryKey(key));
         return Registry.register(Registries.BLOCK, key, block);
+    }
+
+    private static Block registerOldStairsBlock(String id, Block base) {
+        return register(id, /* method_63119 */ settings -> new StairsBlock(base.getDefaultState(), settings), AbstractBlock.Settings.copyShallow(base));
+    }
+    private static AbstractBlock.Settings copyLootTable(Block block, boolean copyTranslationKey) {
+        AbstractBlock.Settings settings = block.getSettings();
+        AbstractBlock.Settings settings2 = AbstractBlock.Settings.create().lootTable(block.getLootTableKey());
+        if (copyTranslationKey) {
+            settings2 = settings2.overrideTranslationKey(block.getTranslationKey());
+        }
+
+        return settings2;
     }
 }
