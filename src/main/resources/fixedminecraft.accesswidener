@@ -14,3 +14,6 @@ accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Lcom/mo
 accessible class net/minecraft/client/option/GameOptions$OptionVisitor
 accessible field net/minecraft/entity/LivingEntity equipment Lnet/minecraft/entity/EntityEquipment;
 accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResultTime J
+accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
+accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/block/BlockSetType;)Lnet/minecraft/block/BlockSetType;
+accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;

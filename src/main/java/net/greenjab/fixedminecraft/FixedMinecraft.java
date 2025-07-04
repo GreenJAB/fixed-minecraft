@@ -11,6 +11,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
+import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
 import net.minecraft.block.DispenserBlock;
@@ -46,7 +47,7 @@ public class FixedMinecraft implements ModInitializer {
 
         ItemGroupRegistry.register();
         GameruleRegistry.register();
-
+        BlockRegistry.registerFireBlocks();
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
