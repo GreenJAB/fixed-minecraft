@@ -33,9 +33,11 @@ import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.function.Function;
 
+import static net.greenjab.fixedminecraft.FixedMinecraft.corals;
 import static net.minecraft.block.Blocks.createButtonSettings;
 import static net.minecraft.block.Blocks.createLogSettings;
 
@@ -228,5 +230,31 @@ public class BlockRegistry {
         }
 
         return settings2;
+    }
+
+
+    @Unique
+    public static void addCoral() {
+        corals.clear();
+        corals.put(Blocks.DEAD_TUBE_CORAL, Blocks.TUBE_CORAL);
+        corals.put(Blocks.DEAD_BRAIN_CORAL, Blocks.BRAIN_CORAL);
+        corals.put(Blocks.DEAD_BUBBLE_CORAL, Blocks.BUBBLE_CORAL);
+        corals.put(Blocks.DEAD_FIRE_CORAL, Blocks.FIRE_CORAL);
+        corals.put(Blocks.DEAD_HORN_CORAL, Blocks.HORN_CORAL);
+        corals.put(Blocks.DEAD_TUBE_CORAL_BLOCK, Blocks.TUBE_CORAL_BLOCK);
+        corals.put(Blocks.DEAD_BRAIN_CORAL_BLOCK, Blocks.BRAIN_CORAL_BLOCK);
+        corals.put(Blocks.DEAD_BUBBLE_CORAL_BLOCK, Blocks.BUBBLE_CORAL_BLOCK);
+        corals.put(Blocks.DEAD_FIRE_CORAL_BLOCK, Blocks.FIRE_CORAL_BLOCK);
+        corals.put(Blocks.DEAD_HORN_CORAL_BLOCK, Blocks.HORN_CORAL_BLOCK);
+        corals.put(Blocks.DEAD_TUBE_CORAL_FAN, Blocks.TUBE_CORAL_FAN);
+        corals.put(Blocks.DEAD_BRAIN_CORAL_FAN, Blocks.BRAIN_CORAL_FAN);
+        corals.put(Blocks.DEAD_BUBBLE_CORAL_FAN, Blocks.BUBBLE_CORAL_FAN);
+        corals.put(Blocks.DEAD_FIRE_CORAL_FAN, Blocks.FIRE_CORAL_FAN);
+        corals.put(Blocks.DEAD_HORN_CORAL_FAN, Blocks.HORN_CORAL_FAN);
+        corals.put(Blocks.DEAD_TUBE_CORAL_WALL_FAN, Blocks.TUBE_CORAL_WALL_FAN);
+        corals.put(Blocks.DEAD_BRAIN_CORAL_WALL_FAN, Blocks.BRAIN_CORAL_WALL_FAN);
+        corals.put(Blocks.DEAD_BUBBLE_CORAL_WALL_FAN, Blocks.BUBBLE_CORAL_WALL_FAN);
+        corals.put(Blocks.DEAD_FIRE_CORAL_WALL_FAN, Blocks.FIRE_CORAL_WALL_FAN);
+        corals.put(Blocks.DEAD_HORN_CORAL_WALL_FAN, Blocks.HORN_CORAL_WALL_FAN);
     }
 }

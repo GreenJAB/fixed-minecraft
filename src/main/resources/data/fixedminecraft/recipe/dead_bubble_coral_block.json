@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CCC",
+        "CCC",
+        "CCC"
+    ],
+    "key": {
+        "C": "minecraft:dead_bubble_coral"
+    },
+    "result": {
+        "id": "minecraft:dead_bubble_coral_block"
+    },
+    "category": "misc"
+}
