@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CCC",
+        "CCC",
+        "CCC"
+    ],
+    "key": {
+        "C": "minecraft:tube_coral"
+    },
+    "result": {
+        "id": "minecraft:tube_coral_block"
+    },
+    "category": "misc"
+}

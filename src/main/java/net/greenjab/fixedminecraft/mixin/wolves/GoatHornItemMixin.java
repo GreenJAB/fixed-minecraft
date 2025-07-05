@@ -3,7 +3,9 @@ package net.greenjab.fixedminecraft.mixin.wolves;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
+import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.entity.passive.TameableEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.GoatHornItem;
@@ -27,21 +29,35 @@ public class GoatHornItemMixin {
         if (!world.isClient()) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)user;
 
-            // see PlayerPredicate
-            Vec3d vec3d = serverPlayerEntity.getEyePos();
-            Vec3d vec3d2 = serverPlayerEntity.getRotationVec(1.0F);
-            vec3d = vec3d.add(vec3d2.x * -3, vec3d2.y * -3, vec3d2.z * -3);
-            Vec3d vec3d3 = vec3d.add(vec3d2.x * 100.0, vec3d2.y * 100.0, vec3d2.z * 100.0);
+            if (user.isSneaking()) {
+                Box box = user.getBoundingBox().expand(32.0, 32.0, 32.0);
 
-            EntityHitResult entityHitResult = ProjectileUtil.getEntityCollision(serverPlayerEntity.getWorld(), serverPlayerEntity, vec3d, vec3d3, (new Box(vec3d, vec3d3)).expand(1.0), (hitEntity) -> HitPredicate(hitEntity, serverPlayerEntity), 2.0F);
-            if (entityHitResult == null) {
-                return;
-            }
+                for (WolfEntity wolfEntity : world.getNonSpectatingEntities(WolfEntity.class, box)) {
+                    if (wolfEntity.getOwner() == user) {
+                        wolfEntity.setAttacker(null);
+                        wolfEntity.setAngryAt(null);
+                        wolfEntity.setTarget(null);
+                        wolfEntity.setAngerTime(0);
+                    }
+                }
+            } else {
 
-            Entity entity = entityHitResult.getEntity();
-            if (serverPlayerEntity.canSee(entity)) {
-                // this is perhaps a silly way to make the wolves attack, but it is consistent!
-                serverPlayerEntity.onAttacking(entity);
+                // see PlayerPredicate
+                Vec3d vec3d = serverPlayerEntity.getEyePos();
+                Vec3d vec3d2 = serverPlayerEntity.getRotationVec(1.0F);
+                vec3d = vec3d.add(vec3d2.x * -3, vec3d2.y * -3, vec3d2.z * -3);
+                Vec3d vec3d3 = vec3d.add(vec3d2.x * 100.0, vec3d2.y * 100.0, vec3d2.z * 100.0);
+
+                EntityHitResult entityHitResult = ProjectileUtil.getEntityCollision(serverPlayerEntity.getWorld(), serverPlayerEntity, vec3d, vec3d3, (new Box(vec3d, vec3d3)).expand(1.0), (hitEntity) -> HitPredicate(hitEntity, serverPlayerEntity), 2.0F);
+                if (entityHitResult == null) {
+                    return;
+                }
+
+                Entity entity = entityHitResult.getEntity();
+                if (serverPlayerEntity.canSee(entity)) {
+                    // this is perhaps a silly way to make the wolves attack, but it is consistent!
+                    serverPlayerEntity.onAttacking(entity);
+                }
             }
         }
     }
