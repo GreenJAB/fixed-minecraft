@@ -14,6 +14,7 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -27,6 +28,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.Unique;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -36,6 +39,7 @@ public class FixedMinecraft implements ModInitializer {
 
     public static boolean netheriteAnvil = false;
     public static HashMap<Item, Integer> ItemCapacities = new HashMap<>();
+    public static HashMap<Block, Block> corals = new HashMap<>();
 
     public static final String MOD_NAME = "Fixed Minecraft";
     public static final String NAMESPACE = "fixedminecraft";

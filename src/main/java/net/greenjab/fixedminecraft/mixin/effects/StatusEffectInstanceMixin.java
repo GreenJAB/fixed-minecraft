@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.beacon;
+package net.greenjab.fixedminecraft.mixin.effects;
 
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;

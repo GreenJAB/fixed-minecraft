@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.effects;
 
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.item.Items;

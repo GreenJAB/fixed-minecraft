@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.transport;
+package net.greenjab.fixedminecraft.mixin.effects;
 
 import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.ThrowablePotionItem;

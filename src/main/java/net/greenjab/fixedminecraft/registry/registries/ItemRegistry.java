@@ -87,6 +87,7 @@ public class ItemRegistry {
     public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
             .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0), 1F))
             .build();
+
     public static ConsumableComponent.Builder food() {
         return ConsumableComponent.builder().consumeSeconds(1.6F).useAction(UseAction.EAT).sound(SoundEvents.ENTITY_GENERIC_EAT).consumeParticles(true);
     }
