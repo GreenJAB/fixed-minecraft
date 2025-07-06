@@ -121,7 +121,7 @@
         "netherite.PlayerEntityMixin",
         "netherite.ServerPlayNetworkHandlerMixin",
         "night.ApplyBonusLootFunctionMixin",
-        "night.BedBlockMixin",
+        "phantom.BedBlockMixin",
         "night.BlockMixin",
         "night.EnchantmentHelperMixin",
         "night.FishingBobberEntityMixin",

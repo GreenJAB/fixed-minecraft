@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.night;
+package net.greenjab.fixedminecraft.mixin.phantom;
 
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
