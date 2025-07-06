@@ -69,4 +69,5 @@ One time Donations: [Ko-Fi](https://ko-fi.com/greenjab)
 - [TrigamDev](https://github.com/TrigamDev)
 - [klinbee](https://github.com/klinbee)
 - [ThatColdToast](https://github.com/ThatColdToast)
-- [OpenGX11] (https://github.com/OpenGX11)
+- [OpenGX11](https://github.com/OpenGX11)
+
