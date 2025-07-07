@@ -14,7 +14,7 @@ public abstract class CreeperEntityMixin{
     @Redirect(method = "spawnEffectsCloud", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/AreaEffectCloudEntity;addEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)V"))
     private void notInfiniteEffect(AreaEffectCloudEntity areaEffectCloudEntity, StatusEffectInstance statusEffectInstance){
         if (statusEffectInstance.getDuration()==-1) {
-            statusEffectInstance = new StatusEffectInstance(statusEffectInstance.getEffectType(), 20*30, statusEffectInstance.getAmplifier());
+            statusEffectInstance = new StatusEffectInstance(statusEffectInstance.getEffectType(), 20*300, statusEffectInstance.getAmplifier());
         }
         areaEffectCloudEntity.addEffect(statusEffectInstance);
     }
