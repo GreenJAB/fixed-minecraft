@@ -27,10 +27,10 @@ public class BeeEntityMixin {
             if (pos.getY() > -500 && (flower.isIn(BlockTags.SMALL_FLOWERS) || (flower.isIn(BlockTags.FLOWERS) && flower.getProperties().contains(TallPlantBlock.HALF)))) {
                 boolean tall = false;
                 if (flower.isIn(BlockTags.FLOWERS) && flower.getProperties().contains(TallPlantBlock.HALF)) {
+                    tall = true;
                     BlockState below = world.getBlockState(pos.down());
                     if (flower.get(TallPlantBlock.HALF) == DoubleBlockHalf.UPPER && (below.isIn(BlockTags.FLOWERS) && below.getProperties().contains(TallPlantBlock.HALF))) {
                         pos = pos.down();
-                        tall = true;
                     }
                 }
                 int count = 0;
