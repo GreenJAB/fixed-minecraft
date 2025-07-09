@@ -63,15 +63,14 @@
     "item.minecraft.phantom_membrane":"Fantomhinne \u00a7f(\ueff4\u00a7f\ueff4)",
     "item.minecraft.glistering_melon_slice":"Glitrande vassmelonbåt \u00a7f(\ueff4)",
     "item.minecraft.firework_star.shape.burst": "Kube",
-    "enchantment.minecraft.bane_of_arthropods": "Leddyrsbane",
-    "enchantment.minecraft.protection": "Slagbeskyttelse",
+    "enchantment.minecraft.bane_of_arthropods": "Virvellausbane",
     "item.minecraft.tipped_arrow.effect.blindness": "Blendepil",
     "item.minecraft.lingering_potion.effect.blindness": "Vedvarende blendebrygg",
     "item.minecraft.potion.effect.blindness": "Blendebrygg",
     "item.minecraft.splash_potion.effect.blindness": "Kasteleg blendebrygg",
     "advancements.husbandry.allay_deliver_cake_to_note_block.description": "Få ei hjelpeånd til å sleppe eit kjeks på ei noteblokk",
     "advancements.husbandry.plant_any_sniffer_seed.description": "Plant alle moldnasefrøa",
-    "advancements.adventure.very_very_frightening.description": "Slå en creeper med lyn",
+    "advancements.adventure.very_very_frightening.description": "Slå ein creeper med lyn",
     "advancements.adventure.kill_all_mobs.title": "Utrydning!",
     "advancements.adventure.read_power_from_chiseled_bookshelf.description": "Plasser ei galdrebok i ei forma bokhylle for å oppgradere eit galdrebord"
 }

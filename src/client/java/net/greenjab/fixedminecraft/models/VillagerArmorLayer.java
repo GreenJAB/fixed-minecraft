@@ -5,8 +5,8 @@ import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
-import net.minecraft.client.render.entity.state.BipedEntityRenderState;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.EquippableComponent;
@@ -14,12 +14,12 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 
 /** Credit: Viola-Siemens */
-public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M extends BipedEntityModel<S>, A extends BipedEntityModel<S>> extends FeatureRenderer<S, M> {
+public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRenderState, M extends EntityModel<S>, A extends EntityModel<S> & HumanoidModel> extends FeatureRenderer<S, M> {
     private final A innerModel;
     private final A outerModel;
     private final EquipmentRenderer equipmentRenderer;
 
-    public HumanArmorFeatureRenderer(
+    public VillagerArmorLayer(
             FeatureRendererContext<S, M> context, A innerModel, A outerModel, EquipmentRenderer equipmentRenderer
     ) {
         super(context);
@@ -36,7 +36,7 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
         this.renderArmor(
                 matrixStack,
                 vertexConsumerProvider,
-                bipedEntityRenderState.equippedChestStack,
+                bipedEntityRenderState.fixed$chestEquipment(),
                 EquipmentSlot.CHEST,
                 i,
                 this.getModel(EquipmentSlot.CHEST)
@@ -44,7 +44,7 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
         this.renderArmor(
                 matrixStack,
                 vertexConsumerProvider,
-                bipedEntityRenderState.equippedLegsStack,
+                bipedEntityRenderState.fixed$legEquipment(),
                 EquipmentSlot.LEGS,
                 i,
                 this.getModel(EquipmentSlot.LEGS)
@@ -52,7 +52,7 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
         this.renderArmor(
                 matrixStack,
                 vertexConsumerProvider,
-                bipedEntityRenderState.equippedFeetStack,
+                bipedEntityRenderState.fixed$feetEquipment(),
                 EquipmentSlot.FEET,
                 i,
                 this.getModel(EquipmentSlot.FEET)
@@ -60,7 +60,7 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
         this.renderArmor(
                 matrixStack,
                 vertexConsumerProvider,
-                bipedEntityRenderState.equippedHeadStack,
+                bipedEntityRenderState.fixed$headEquipment(),
                 EquipmentSlot.HEAD,
                 i,
                 this.getModel(EquipmentSlot.HEAD)
@@ -71,7 +71,8 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
     private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot slot, int light, A armorModel) {
         EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
         if (equippableComponent != null && hasModel(equippableComponent, slot)) {
-            this.getContextModel().copyTransforms(armorModel);
+            //this.getContextModel().copyTransforms(armorModel);
+            armorModel.propertiesCopyFrom(this.getContextModel());
             this.setVisible(armorModel, slot);
             EquipmentModel.LayerType layerType = this.usesInnerModel(slot) ? EquipmentModel.LayerType.HUMANOID_LEGGINGS : EquipmentModel.LayerType.HUMANOID;
             this.equipmentRenderer
@@ -80,25 +81,22 @@ public class HumanArmorFeatureRenderer<S extends BipedEntityRenderState, M exten
     }
 
     protected void setVisible(A bipedModel, EquipmentSlot slot) {
-        bipedModel.setVisible(false);
+        bipedModel.setAllVisible(false);
         switch (slot) {
             case HEAD:
-                bipedModel.head.visible = true;
-                bipedModel.hat.visible = true;
+                bipedModel.setHeadVisible(true);
+                bipedModel.setHatVisible(true);
                 break;
             case CHEST:
-                bipedModel.body.visible = true;
-                bipedModel.rightArm.visible = true;
-                bipedModel.leftArm.visible = true;
+                bipedModel.setBodyVisible(true);
+                bipedModel.setArmsVisible(true);
                 break;
             case LEGS:
-                bipedModel.body.visible = true;
-                bipedModel.rightLeg.visible = true;
-                bipedModel.leftLeg.visible = true;
+                bipedModel.setBodyVisible(true);
+                bipedModel.setLegsVisible(true);
                 break;
             case FEET:
-                bipedModel.rightLeg.visible = true;
-                bipedModel.leftLeg.visible = true;
+                bipedModel.setLegsVisible(true);
         }
     }
 
