@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/brush_armadillo",
+  "parent": "minecraft:husbandry/tame_wolf",
   "criteria": {
     "repair_wolf_armor": {
       "conditions": {

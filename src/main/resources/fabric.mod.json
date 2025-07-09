@@ -8,6 +8,7 @@
         "Green_Jab"
     ],
     "contact": {
+        "sources" : "https://github.com/GreenJAB/fixed-minecraft"
     },
     "license": "MIT",
     "icon": "assets/fixedminecraft/icon.png",
@@ -34,6 +35,9 @@
         "java": ">=17",
         "minecraft": "~${minecraft}",
         "fabric-api": ">=${fabric_api}"
+    },
+    "breaks": {
+        "appleskin" : "*"
     },
     "accessWidener" : "fixedminecraft.accesswidener"
 }
