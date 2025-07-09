@@ -24,10 +24,13 @@
         "GameRendererMixin",
         "InGameHudMixin",
         "LavaFogModifierMixin",
+        "LivingEntityRendererMixin",
         "MerchantScreenMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
+        "VillagerClothingFeatureRendererMixin",
         "VillagerEntityRendererMixin",
+        "VillagerRenderStateMixin",
         "WorldRendererMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BasicItemModelMixin",
@@ -45,5 +48,5 @@
     ],
     "mixins": [
         "FogRendererMixin"
-    ]
+  ]
 }
