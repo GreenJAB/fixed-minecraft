@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:archaeology",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:blade_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:explorer_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:mourner_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:plenty_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:iron_axe"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:emerald",
+                    "weight": 2
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "minecraft:archaeology/ocean_ruin_cold"
+}
