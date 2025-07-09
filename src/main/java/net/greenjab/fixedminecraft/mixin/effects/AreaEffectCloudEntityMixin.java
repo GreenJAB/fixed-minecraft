@@ -6,6 +6,8 @@ import net.minecraft.entity.AreaEffectCloudEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.mob.HoglinEntity;
+import net.minecraft.entity.mob.PiglinEntity;
 import net.minecraft.entity.passive.AxolotlEntity;
 import net.minecraft.potion.Potions;
 import net.minecraft.server.world.ServerWorld;
@@ -34,6 +36,12 @@ public class AreaEffectCloudEntityMixin {
         if (potionContentsComponent.matches(Potions.WATER)) {
             this.applyWater(serverWorld);
         }
+        if (potionContentsComponent.matches(Potions.WATER)) {
+            this.applyWater(serverWorld);
+        }
+        if (potionContentsComponent.matches(Potions.AWKWARD)) {
+            this.applyAwkward();
+        }
     }
 
 
@@ -60,6 +68,18 @@ public class AreaEffectCloudEntityMixin {
         }
     }
 
+    @Unique
+    private void applyAwkward() {
+        AreaEffectCloudEntity AECE = (AreaEffectCloudEntity) (Object)this;
+        Box box = AECE.getBoundingBox();
+
+        for (PiglinEntity piglinEntity : AECE.getWorld().getNonSpectatingEntities(PiglinEntity.class, box)) {
+            piglinEntity.setImmuneToZombification(true);
+        }
+        for (HoglinEntity hoglinEntity : AECE.getWorld().getNonSpectatingEntities(HoglinEntity.class, box)) {
+            hoglinEntity.setImmuneToZombification(true);
+        }
+    }
 
     @Redirect(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
     private boolean lingerAddition(LivingEntity instance, StatusEffectInstance effect, Entity source) {
