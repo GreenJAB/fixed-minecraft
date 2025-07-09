@@ -32,11 +32,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-/** Because Villager Armor Rendering isnt working */
+/** Incase villager armour breaks again */
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin{
 
-    @Shadow
+    /*@Shadow
     @Final
     private MinecraftClient client;
 
@@ -104,5 +104,5 @@ public abstract class WorldRendererMixin{
     private byte setBitField(byte value) {
         value = (byte)(value | 16);
         return value;
-    }
+    }*/
 }
