@@ -1,0 +1,154 @@
+{
+    "type": "minecraft:archaeology",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:book",
+                    "weight": 3,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_with_levels",
+                            "levels": 20,
+                            "options": "#minecraft:on_random_loot"
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:iron_shovel",
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_with_levels",
+                            "levels": 20,
+                            "options": "#minecraft:on_random_loot"
+                        }
+                    ],
+                    "weight": 2
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:iron_ingot",
+                    "weight": 3,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "min": 3,
+                                "max": 8
+                            },
+                            "add": false
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:gold_ingot",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "min": 2,
+                                "max": 6
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:copper_ingot",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "min": 4,
+                                "max": 7
+                            }
+                        }
+                    ],
+                    "conditions": []
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:diamond",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "min": 2,
+                                "max": 5
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:emerald",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "min": 2,
+                                "max": 6
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:diamond_block",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:emerald_block",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:goat_horn",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:set_instrument",
+                            "options": "#minecraft:goat_horns"
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:enchanted_golden_apple",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:wolf_armor",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:skeleton_skull",
+                    "weight": 1
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:turtle_helmet",
+                    "weight": 1
+                }
+            ],
+            "rolls": 15
+        }
+    ],
+    "random_sequence": "minecraft:archaeology/trail_ruins_rare"
+}
