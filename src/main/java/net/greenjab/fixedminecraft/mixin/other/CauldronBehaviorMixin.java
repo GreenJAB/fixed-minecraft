@@ -39,10 +39,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.COMPASS, CauldronBehaviorMixin::cleanCompass);
 
         map.put(Items.WHITE_BUNDLE, CauldronBehaviorMixin::cleanBundle);
-        //map.put(Items.WHITE_WOOL, CauldronBehaviorMixin::cleanWool);
-        //map.put(Items.WHITE_CARPET, CauldronBehaviorMixin::cleanCarpet);
-        //map.put(Items.WHITE_BED, CauldronBehaviorMixin::cleanBed);
-       // map.put(Items.WHITE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.WHITE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.WHITE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.WHITE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -51,7 +47,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.LIGHT_GRAY_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.LIGHT_GRAY_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.LIGHT_GRAY_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.LIGHT_GRAY_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.LIGHT_GRAY_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.LIGHT_GRAY_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.LIGHT_GRAY_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -60,7 +55,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.GRAY_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.GRAY_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.GRAY_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.GRAY_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.GRAY_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.GRAY_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.GRAY_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -69,7 +63,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.BLACK_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.BLACK_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.BLACK_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.BLACK_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.BLACK_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.BLACK_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.BLACK_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -78,7 +71,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.BROWN_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.BROWN_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.BROWN_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.BROWN_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.BROWN_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.BROWN_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.BROWN_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -87,7 +79,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.RED_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.RED_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.RED_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.RED_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.RED_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.RED_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.RED_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -96,7 +87,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.ORANGE_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.ORANGE_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.ORANGE_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.ORANGE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.ORANGE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.ORANGE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.ORANGE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -105,7 +95,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.YELLOW_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.YELLOW_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.YELLOW_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.YELLOW_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.YELLOW_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.YELLOW_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.YELLOW_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -114,7 +103,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.LIME_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.LIME_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.LIME_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.LIME_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.LIME_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.LIME_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.LIME_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -123,7 +111,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.GREEN_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.GREEN_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.GREEN_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.GREEN_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.GREEN_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.GREEN_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.GREEN_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -132,7 +119,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.CYAN_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.CYAN_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.CYAN_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.CYAN_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.CYAN_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.CYAN_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.CYAN_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -141,7 +127,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.LIGHT_BLUE_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.LIGHT_BLUE_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.LIGHT_BLUE_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.LIGHT_BLUE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.LIGHT_BLUE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.LIGHT_BLUE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.LIGHT_BLUE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -150,7 +135,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.BLUE_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.BLUE_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.BLUE_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.BLUE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.BLUE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.BLUE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.BLUE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -159,7 +143,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.PURPLE_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.PURPLE_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.PURPLE_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.PURPLE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.PURPLE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.PURPLE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.PURPLE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -168,7 +151,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.MAGENTA_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.MAGENTA_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.MAGENTA_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.MAGENTA_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.MAGENTA_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.MAGENTA_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.MAGENTA_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -177,7 +159,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.PINK_WOOL, CauldronBehaviorMixin::cleanWool);
         map.put(Items.PINK_CARPET, CauldronBehaviorMixin::cleanCarpet);
         map.put(Items.PINK_BED, CauldronBehaviorMixin::cleanBed);
-        map.put(Items.PINK_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.PINK_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.PINK_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.PINK_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);
@@ -228,11 +209,6 @@ public interface CauldronBehaviorMixin {
     @Unique
     private static ActionResult cleanBed(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, ItemStack stack) {
         return cleanSimple(state, world, pos, player, hand, stack, ItemTags.BEDS, Items.WHITE_BED);
-    }
-
-    @Unique
-    private static ActionResult cleanHarness(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, ItemStack stack) {
-        return cleanSimple(state, world, pos, player, hand, stack, ItemTags.HARNESSES, Items.WHITE_HARNESS);
     }
 
     @Unique

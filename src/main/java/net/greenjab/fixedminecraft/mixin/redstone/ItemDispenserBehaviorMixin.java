@@ -37,7 +37,7 @@ public abstract class ItemDispenserBehaviorMixin  {
 
         if (!(blockState.getBlock() instanceof AbstractCauldronBlock cauldron)) return;
         if (cauldron.behaviorMap.map().containsKey(stack.getItem())) {
-            PlayerEntity p = new PlayerEntity(world, new GameProfile(UUID.randomUUID(), "abc")) {
+            PlayerEntity p = new PlayerEntity(world, pos, 0, new GameProfile(UUID.randomUUID(), "abc")) {
                 @Nullable
                 @Override
                 public GameMode getGameMode() {

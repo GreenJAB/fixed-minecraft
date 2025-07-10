@@ -87,7 +87,6 @@
         "map_book.MapDecorationMixin",
         "map_book.MapIdComponentMixin",
         "map_book.MapStateMixin",
-        "map_book.ServerWaypointHandlerMixin",
         "minecart.AbstractMinecartEntityMixin",
         "minecart.EntityTypeMixin",
         "minecart.ExperimentalMinecartControllerMixin",
