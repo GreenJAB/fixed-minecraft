@@ -3,7 +3,9 @@
   "category": "redstone",
   "group": "wooden_trapdoor",
   "key": {
-    "#": "fixedminecraft:azalea_slab"
+    "#": {
+        "item": "fixedminecraft:azalea_slab"
+    }
   },
   "pattern": [
     "##"

@@ -3,7 +3,9 @@
   "category": "building",
   "group": "bark",
   "key": {
-    "#": "fixedminecraft:stripped_azalea_log"
+    "#": {
+        "item": "fixedminecraft:stripped_azalea_log"
+    }
   },
   "pattern": [
     "##",

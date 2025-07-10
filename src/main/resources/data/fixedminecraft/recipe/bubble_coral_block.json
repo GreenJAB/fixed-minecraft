@@ -6,7 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:bubble_coral"
+        "C": {
+            "item": "minecraft:bubble_coral"
+        }
     },
     "result": {
         "id": "minecraft:bubble_coral_block"

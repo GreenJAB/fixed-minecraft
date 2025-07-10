@@ -62,7 +62,7 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
         }
         if (entity instanceof LivingEntity livingEntity && state.get(HALF) == DoubleBlockHalf.UPPER && !state.get(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.isInCreativeMode()) {
             if (world instanceof ServerWorld serverWorld) {
-                livingEntity.damage(serverWorld, world.getDamageSources().sweetBerryBush(), 10.0F);
+                livingEntity.damage(world.getDamageSources().sweetBerryBush(), 10.0F);
                 BlockState blockState = state.with(FULL, true);
                 world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
                 world.setBlockState(pos.down(), blockState.with(HALF, DoubleBlockHalf.LOWER), Block.NOTIFY_LISTENERS);

@@ -32,7 +32,7 @@ import java.util.List;
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin{
 
-    /*@Shadow
+    @Shadow
     @Final
     private MinecraftClient client;
 
@@ -94,5 +94,5 @@ public abstract class WorldRendererMixin{
     private byte setBitField(byte value) {
         value = (byte)(value | 16);
         return value;
-    }*/
+    }
 }

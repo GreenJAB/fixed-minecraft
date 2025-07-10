@@ -3,7 +3,9 @@
   "category": "building",
   "group": "wooden_stairs",
   "key": {
-    "#": "fixedminecraft:azalea_planks"
+    "#": {
+        "item": "fixedminecraft:azalea_planks"
+    }
   },
   "pattern": [
     "#  ",

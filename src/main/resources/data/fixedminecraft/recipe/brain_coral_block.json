@@ -6,7 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:brain_coral"
+        "C": {
+            "item": "minecraft:brain_coral"
+        }
     },
     "result": {
         "id": "minecraft:brain_coral_block"

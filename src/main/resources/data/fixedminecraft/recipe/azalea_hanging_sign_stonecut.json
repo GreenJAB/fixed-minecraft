@@ -1,6 +1,8 @@
 {
     "type": "minecraft:stonecutting",
-    "ingredient": "fixedminecraft:azalea_planks",
+    "ingredient": {
+        "item": "fixedminecraft:azalea_planks"
+    },
     "result": {
         "id": "fixedminecraft:azalea_hanging_sign",
         "count": 1

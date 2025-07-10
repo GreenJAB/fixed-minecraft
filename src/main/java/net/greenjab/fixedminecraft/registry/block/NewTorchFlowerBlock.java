@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry.block;
 
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowerBlock;
 import net.minecraft.entity.Entity;
@@ -17,7 +18,7 @@ import net.minecraft.world.World;
 
 public class NewTorchFlowerBlock extends FlowerBlock {
 
-    public NewTorchFlowerBlock(RegistryEntry<StatusEffect> stewEffect, float effectLengthInSeconds, Settings settings) {
+    public NewTorchFlowerBlock(RegistryEntry<StatusEffect> stewEffect, float effectLengthInSeconds, AbstractBlock.Settings settings) {
         super(stewEffect, effectLengthInSeconds, settings);
     }
 
@@ -33,7 +34,7 @@ public class NewTorchFlowerBlock extends FlowerBlock {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         BlockPos blockPos = pos.up();
-        if (world.getBlockState(blockPos).isAir() && !world.getBlockState(blockPos).isOpaqueFullCube()) {
+        if (world.getBlockState(blockPos).isAir() && !world.getBlockState(blockPos).isOpaqueFullCube(world, pos)) {
             if (random.nextInt(20) == 0) {
                 double d = pos.getX()+0.5;
                 double e = pos.getY()+0.5;

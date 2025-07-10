@@ -6,7 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:dead_bubble_coral"
+        "C": {
+            "item": "minecraft:dead_bubble_coral"
+        }
     },
     "result": {
         "id": "minecraft:dead_bubble_coral_block"

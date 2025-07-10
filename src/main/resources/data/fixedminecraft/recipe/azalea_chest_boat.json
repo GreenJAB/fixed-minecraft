@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "chest_boat",
   "ingredients": [
-    "minecraft:chest",
-      "fixedminecraft:azalea_boat"
+      {
+          "item": "minecraft:chest"
+      },
+      {
+          "item": "fixedminecraft:azalea_boat"
+      }
   ],
   "result": {
     "id": "fixedminecraft:azalea_chest_boat"

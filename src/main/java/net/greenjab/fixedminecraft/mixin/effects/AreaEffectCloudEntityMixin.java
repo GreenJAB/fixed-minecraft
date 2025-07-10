@@ -37,9 +37,6 @@ public class AreaEffectCloudEntityMixin {
         if (potionContentsComponent.matches(Potions.WATER)) {
             this.applyWater((ServerWorld) AECE.getWorld());
         }
-        if (potionContentsComponent.matches(Potions.WATER)) {
-            this.applyWater(serverWorld);
-        }
         if (potionContentsComponent.matches(Potions.AWKWARD)) {
             this.applyAwkward();
         }
@@ -82,7 +79,7 @@ public class AreaEffectCloudEntityMixin {
         }
     }
 
-    @Redirect(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"))
     private boolean lingerAddition(LivingEntity instance, StatusEffectInstance effect, Entity source) {
         if (instance.hasStatusEffect(effect.getEffectType())) {
             StatusEffectInstance current = instance.getStatusEffect(effect.getEffectType());

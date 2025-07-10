@@ -6,7 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:dead_fire_coral"
+        "C": {
+            "item": "minecraft:dead_fire_coral"
+        }
     },
     "result": {
         "id": "minecraft:dead_fire_coral_block"

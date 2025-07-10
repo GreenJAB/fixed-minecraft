@@ -142,7 +142,6 @@
         "redstone.DaylightDetectorBlockMixin",
         "redstone.DispenserBehaviorMixin",
         "redstone.ItemDispenserBehaviorMixin",
-        "redstone.NoteBlockMixin",
         "redstone.SculkSensorBlockMixin",
         "structure.BlockAgeStructureProcessorMixin",
         "structure.HugeMushroomFeatureMixin",

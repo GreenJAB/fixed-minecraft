@@ -3,7 +3,9 @@
   "category": "redstone",
   "group": "wooden_pressure_plate",
   "key": {
-    "#": "fixedminecraft:azalea_planks"
+    "#": {
+        "item": "fixedminecraft:azalea_planks"
+    }
   },
   "pattern": [
     "##"

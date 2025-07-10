@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "hanging_sign",
   "key": {
-    "#": "fixedminecraft:stripped_azalea_log",
-    "X":  "minecraft:chain"
+    "#": {
+        "item": "fixedminecraft:stripped_azalea_log"
+    },
+    "X": {
+        "item": "minecraft:chain"
+    }
   },
   "pattern": [
     "X X",

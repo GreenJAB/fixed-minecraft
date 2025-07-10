@@ -6,7 +6,9 @@
         "CCC"
     ],
     "key": {
-        "C": "minecraft:horn_coral"
+        "C": {
+            "item": "minecraft:horn_coral"
+        }
     },
     "result": {
         "id": "minecraft:horn_coral_block"

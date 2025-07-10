@@ -22,20 +22,15 @@
         "GameOptionsMixin",
         "GameRendererMixin",
         "InGameHudMixin",
-        "LivingEntityRendererMixin",
+        "ItemColorsMixin",
         "MerchantScreenMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
-        "VillagerClothingFeatureRendererMixin",
-        "VillagerEntityRendererMixin",
-        "VillagerRenderStateMixin",
         "WorldRendererMixin",
         "ZombieVillagerEntityModelMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
-        "glint.EquipmentRendererMixin",
-        "glint.ItemModelManagerMixin",
         "glint.ItemRendererMixin",
         "map.DrawContextAccessor",
         "map.HeldItemRendererMixin",
@@ -44,9 +39,6 @@
     ],
     "mixins": [
         "DrawContextMixin",
-        "map.MapPositionRequestMixin",
-        "map.MapRendererMixin"
-    ],
-    "mixins": [
-  ]
+        "map.MapPositionRequestMixin"
+    ]
 }

@@ -3,7 +3,9 @@
   "category": "misc",
   "group": "boat",
   "key": {
-    "#": "fixedminecraft:azalea_planks"
+    "#": {
+        "item": "fixedminecraft:azalea_planks"
+    }
   },
   "pattern": [
     "# #",

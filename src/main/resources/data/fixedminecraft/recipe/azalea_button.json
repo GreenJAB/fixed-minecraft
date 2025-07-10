@@ -3,7 +3,9 @@
   "category": "redstone",
   "group": "wooden_button",
   "ingredients": [
-      "fixedminecraft:azalea_planks"
+      {
+          "item": "fixedminecraft:azalea_planks"
+      }
   ],
   "result": {
       "count": 4,

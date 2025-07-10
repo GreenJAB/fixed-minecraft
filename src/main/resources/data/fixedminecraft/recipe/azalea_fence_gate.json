@@ -3,8 +3,12 @@
   "category": "redstone",
   "group": "wooden_fence_gate",
   "key": {
-    "#":  "minecraft:stick",
-    "W":  "fixedminecraft:azalea_planks"
+    "#": {
+        "item": "minecraft:stick"
+    },
+    "W": {
+        "item": "fixedminecraft:azalea_planks"
+    }
   },
   "pattern": [
     "#W#",

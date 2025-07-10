@@ -21,6 +21,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.AnimalArmorItem;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.entity.vehicle.ChestBoatEntity;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BoatItem;
 import net.minecraft.item.FireworkRocketItem;
@@ -29,9 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
-import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.item.equipment.ArmorMaterials;
 import net.minecraft.potion.Potion;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -83,14 +81,6 @@ public class ItemRegistry {
     public static final Item WAXED_EXPOSED_COPPER_RAIL = register(BlockRegistry.WAXED_EXPOSED_COPPER_RAIL);
     public static final Item WAXED_WEATHERED_COPPER_RAIL = register(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL);
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
-
-    public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
-            .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0), 1F))
-            .build();
-
-    public static ConsumableComponent.Builder food() {
-        return ConsumableComponent.builder().consumeSeconds(1.6F).useAction(UseAction.EAT).sound(SoundEvents.ENTITY_GENERIC_EAT).consumeParticles(true);
-    }
 
     /** This is used, IntelliJ just doesn't realise */
     public static final RegistryEntry<Potion> BLINDNESS = register("blindness", new Potion("blindness", new StatusEffectInstance(StatusEffects.BLINDNESS, 800)));
@@ -160,22 +150,20 @@ public class ItemRegistry {
     public static final Item AZALEA_STAIRS = register(BlockRegistry.AZALEA_STAIRS);
     public static final Item AZALEA_BUTTON = register(BlockRegistry.AZALEA_BUTTON);
     public static final Item AZALEA_PRESSURE_PLATE = register(BlockRegistry.AZALEA_PRESSURE_PLATE);
-    public static final Item AZALEA_DOOR = register(BlockRegistry.AZALEA_DOOR, TallBlockItem::new);
+    public static final Item AZALEA_DOOR = register(new TallBlockItem(BlockRegistry.AZALEA_DOOR, new Item.Settings()));
     public static final Item AZALEA_TRAPDOOR = register(BlockRegistry.AZALEA_TRAPDOOR);
     public static final Item AZALEA_FENCE_GATE = register(BlockRegistry.AZALEA_FENCE_GATE);
 
     public static final Item AZALEA_SIGN = register(
-            BlockRegistry.AZALEA_SIGN, /* method_63727 */ (block, settings) -> new SignItem(block, BlockRegistry.AZALEA_WALL_SIGN, settings), new Item.Settings().maxCount(16)
+            BlockRegistry.AZALEA_SIGN, new SignItem(new Item.Settings().maxCount(16), BlockRegistry.AZALEA_SIGN, BlockRegistry.AZALEA_WALL_SIGN)
     );
     public static final Item AZALEA_HANGING_SIGN = register(
-            BlockRegistry.AZALEA_HANGING_SIGN,
-            /* method_63705 */ (block, settings) -> new HangingSignItem(block, BlockRegistry.AZALEA_WALL_HANGING_SIGN, settings),
-            new Item.Settings().maxCount(16)
+            BlockRegistry.AZALEA_HANGING_SIGN,new HangingSignItem(BlockRegistry.AZALEA_HANGING_SIGN, BlockRegistry.AZALEA_WALL_HANGING_SIGN, new Item.Settings().maxCount(16))
     );
 
-    public static final EntityType<BoatEntity> AZALEA_BOAT_ENTITY = register2(
+    /*public static final EntityType<BoatEntity> AZALEA_BOAT_ENTITY = register(
             "azalea_boat",
-            EntityType.Builder.create(getBoatFactory(/* method_64431 */ () -> ItemRegistry.AZALEA_BOAT), SpawnGroup.MISC)
+            EntityType.Builder.create(getBoatFactory( () -> ItemRegistry.AZALEA_BOAT), SpawnGroup.MISC)
                     .dropsNothing()
                     .dimensions(1.375F, 0.5625F)
                     .eyeHeight(0.5625F)
@@ -183,33 +171,18 @@ public class ItemRegistry {
     );
     public static final EntityType<ChestBoatEntity> AZALEA_CHEST_BOAT_ENTITY = register2(
             "azalea_chest_boat",
-            EntityType.Builder.create(getChestBoatFactory(/* method_64430 */ () -> ItemRegistry.AZALEA_CHEST_BOAT), SpawnGroup.MISC)
+            EntityType.Builder.create(getChestBoatFactory( () -> ItemRegistry.AZALEA_CHEST_BOAT), SpawnGroup.MISC)
                     .dropsNothing()
                     .dimensions(1.375F, 0.5625F)
                     .eyeHeight(0.5625F)
                     .maxTrackingRange(10)
-    );
+    );*/
 
     public static final Item AZALEA_BOAT = register(
-            "azalea_boat", /* method_63883 */ settings -> new BoatItem(AZALEA_BOAT_ENTITY, settings), new Item.Settings().maxCount(1)
+            "azalea_boat", new BoatItem(false, BoatEntity.Type.ACACIA, new Item.Settings().maxCount(1))
     );
     public static final Item AZALEA_CHEST_BOAT = register(
-            "azalea_chest_boat", /* method_63882 */ settings -> new BoatItem(AZALEA_CHEST_BOAT_ENTITY, settings), new Item.Settings().maxCount(1)
+            "azalea_chest_boat", new BoatItem(true, BoatEntity.Type.ACACIA, new Item.Settings().maxCount(1))
     );
 
-    private static EntityType.EntityFactory<BoatEntity> getBoatFactory(Supplier<Item> itemSupplier) {
-        return /* method_64439 */ (type, world) -> new BoatEntity(type, world, itemSupplier);
-    }
-    private static EntityType.EntityFactory<ChestBoatEntity> getChestBoatFactory(Supplier<Item> itemSupplier) {
-        return /* method_64437 */ (type, world) -> new ChestBoatEntity(type, world, itemSupplier);
-    }
-    private static <T extends Entity> EntityType<T> register2(String id, EntityType.Builder<T> type) {
-        return register2(keyOf2(id), type);
-    }
-    private static RegistryKey<EntityType<?>> keyOf2(String id) {
-        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id(id));
-    }
-    private static <T extends Entity> EntityType<T> register2(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
-        return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
-    }
 }

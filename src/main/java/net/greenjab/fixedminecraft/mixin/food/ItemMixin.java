@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;

@@ -3,8 +3,12 @@
   "category": "misc",
   "group": "wooden_sign",
   "key": {
-    "#": "fixedminecraft:azalea_planks",
-    "X":  "minecraft:stick"
+    "#": {
+        "item": "fixedminecraft:azalea_planks"
+    },
+    "X": {
+        "item": "minecraft:stick"
+    }
   },
   "pattern": [
     "###",
