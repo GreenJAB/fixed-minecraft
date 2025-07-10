@@ -36,7 +36,7 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
         ModelData modelData = new ModelData();
         ModelPartData modelPartData = modelData.getRoot();
         modelPartData.addChild("head",
-                ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -10F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
+                ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -9.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
                 ModelTransform.NONE);
         modelPartData.addChild("body",
                 ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.add(0.2F, 0.0F, 1.0F)),
