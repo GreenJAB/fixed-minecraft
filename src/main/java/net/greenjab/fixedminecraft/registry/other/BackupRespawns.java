@@ -41,8 +41,7 @@ public class BackupRespawns extends PersistentState {
     }
 
     public BackupRespawn addPlayer(PlayerEntity player) {
-        //BackupRespawn backupRespawn = new BackupRespawn(player.getName().getLiteralString());
-        BackupRespawn backupRespawn = new BackupRespawn("Player159");
+        BackupRespawn backupRespawn = new BackupRespawn(player.getName().getLiteralString());
         backupRespawns.add(backupRespawn);
         return backupRespawn;
     }
@@ -50,9 +49,9 @@ public class BackupRespawns extends PersistentState {
     public BackupRespawn getPlayer(PlayerEntity player) {
         for (BackupRespawn backupRespawn : backupRespawns) {
             String name = player.getName().getLiteralString();
-            //if (name.contains(backupRespawn.name) && backupRespawn.name.contains(name)){
+            if (name.contains(backupRespawn.name) && backupRespawn.name.contains(name)){
                 return backupRespawn;
-            //}
+            }
         }
         return addPlayer(player);
     }
