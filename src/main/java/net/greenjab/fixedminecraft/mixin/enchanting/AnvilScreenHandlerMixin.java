@@ -138,7 +138,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             } else if (stringRepair.contains(secondInputStack.getItem())) {
                 canRepair = secondInputStack.isOf(Items.STRING);}
             else {
-                outputItemStack.getItem().canRepair(firstInputStack, secondInputStack);
+                canRepair = outputItemStack.getItem().canRepair(firstInputStack, secondInputStack);
             }
 
             if (outputItemStack.isDamageable() && canRepair) {
