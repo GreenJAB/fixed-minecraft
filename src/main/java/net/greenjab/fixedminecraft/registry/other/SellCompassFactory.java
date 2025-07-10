@@ -41,7 +41,7 @@ public class SellCompassFactory implements TradeOffers.Factory {
             if (blockPos != null) {
                 ItemStack itemStack = Items.COMPASS.getDefaultStack();
                 itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(entity.getWorld().getRegistryKey(), blockPos.withY(-49))), true));
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(32767));
+                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(32767, true));
                 return new TradeOffer(
                         new TradedItem(Items.EMERALD, this.price), Optional.of(new TradedItem(Items.COMPASS)), itemStack, this.maxUses, this.experience, 0.2F
                 );

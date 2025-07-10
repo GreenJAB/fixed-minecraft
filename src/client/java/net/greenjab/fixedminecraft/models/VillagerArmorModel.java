@@ -45,13 +45,13 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
                 ModelPartBuilder.create()
                         .uv(40, 16).cuboid(-8.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F))
                         .uv(40, 16).mirrored().cuboid(4.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F)),
-                ModelTransform.origin(0.0F, 2.0F, 0.0F));
+                ModelTransform.pivot(0.0F, 2.0F, 0.0F));
         modelPartData.addChild("right_leg",
                 ModelPartBuilder.create().uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(0.19F, 0.26F, 0.26F)),
-                ModelTransform.origin(-2.0F, 12.0F, 0.0F));
+                ModelTransform.pivot(-2.0F, 12.0F, 0.0F));
         modelPartData.addChild("left_leg",
                 ModelPartBuilder.create().uv(0, 16).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(0.19F,0.26F, 0.26F)),
-                ModelTransform.origin(2.0F, 12.0F, 0.0F));
+                ModelTransform.pivot(2.0F, 12.0F, 0.0F));
         return TexturedModelData.of(modelData, 64, 32);
     }
 
@@ -96,7 +96,7 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
         if(model instanceof VillagerResemblingModel villagerModel) {
             this.head.copyTransform(villagerModel.getHead());
             //System.out.println(this.head.originY);
-            this.head.originY = 1.5f;
+            this.head.pivotY = 1.5f;
             this.body.copyTransform(villagerModel.getRootPart().getChild("body"));
             this.arms.copyTransform(villagerModel.getRootPart().getChild("arms"));
             this.rightLeg.copyTransform(villagerModel.getRootPart().getChild("right_leg"));
@@ -107,7 +107,7 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
     @Override
     public void setAngles(S state) {
         super.setAngles(state);
-        this.head.yaw = state.relativeHeadYaw * (float) (Math.PI / 180.0);
+        this.head.yaw = state.yawDegrees * (float) (Math.PI / 180.0);
         this.head.pitch = state.pitch * (float) (Math.PI / 180.0);
         if (state.shaking) {
             this.head.roll = 0.3F * MathHelper.sin(0.45F * state.age);
@@ -116,8 +116,8 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
             this.head.roll = 0.0F;
         }
 
-        this.rightLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F) * 1.4F * state.limbSwingAmplitude * 0.5F;
-        this.leftLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F + (float) Math.PI) * 1.4F * state.limbSwingAmplitude * 0.5F;
+        this.rightLeg.pitch = MathHelper.cos(state.limbFrequency * 0.6662F) * 1.4F * state.limbAmplitudeMultiplier * 0.5F;
+        this.leftLeg.pitch = MathHelper.cos(state.limbFrequency * 0.6662F + (float) Math.PI) * 1.4F * state.limbAmplitudeMultiplier * 0.5F;
         this.rightLeg.yaw = 0.0F;
         this.leftLeg.yaw = 0.0F;
     }
