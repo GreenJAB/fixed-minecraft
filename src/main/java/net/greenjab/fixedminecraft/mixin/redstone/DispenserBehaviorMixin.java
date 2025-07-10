@@ -32,7 +32,7 @@ public interface DispenserBehaviorMixin {
 
     @ModifyArg(method = "registerDefaults", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/block/DispenserBlock;registerBehavior(Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/block/dispenser/DispenserBehavior;)V", ordinal = 45
+            target = "Lnet/minecraft/block/DispenserBlock;registerBehavior(Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/block/dispenser/DispenserBehavior;)V", ordinal = 46
     ), index = 1)
     private static DispenserBehavior hudrateCoralDispenser(DispenserBehavior behavior) {
 

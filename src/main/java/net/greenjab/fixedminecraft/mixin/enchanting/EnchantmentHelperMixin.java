@@ -77,7 +77,7 @@ public class EnchantmentHelperMixin {
         if (damageSource.isIn(DamageTypeTags.IS_EXPLOSION)) return;
         if (damageSource.isIn(DamageTypeTags.IS_PROJECTILE)) return;
         if (damageSource.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
-        for (ItemStack equipment : FixedMinecraft.getArmor(user)) {
+        for (ItemStack equipment : user.getArmorItems()) {
             if (equipment.getItem().getName().getString().toLowerCase().contains("chain")) i++;
         }
         cir.setReturnValue(i);
