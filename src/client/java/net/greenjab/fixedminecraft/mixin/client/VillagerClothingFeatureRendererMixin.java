@@ -13,7 +13,7 @@ public class VillagerClothingFeatureRendererMixin <S extends LivingEntityRenderS
 
     @ModifyArg(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/LivingEntityRenderState;FF)V",
                at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/feature/VillagerClothingFeatureRenderer;getTexture(Ljava/lang/String;Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/util/Identifier;"))
-    private String leggingsRemoveHalfOfCloak (String keyType, @Local S livingEntityRenderState){
+    private String leggingsRemoveHalfOfCloak (String keyType, @Local(argsOnly = true) S livingEntityRenderState){
         if (livingEntityRenderState.headItemAnimationProgress == 1) return keyType + "_half";
         return keyType;
     }

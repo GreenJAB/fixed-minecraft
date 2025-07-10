@@ -5,6 +5,7 @@ import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +18,7 @@ public class LivingEntityRendererMixin <T extends LivingEntity, S extends Living
     @Inject(method = "updateRenderState(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/render/entity/state/LivingEntityRenderState;F)V",
             at = @At(value = "TAIL"))
     private void test (T livingEntity, S livingEntityRenderState, float f, CallbackInfo ci){
-        if (livingEntity instanceof VillagerEntity) {
+        if (livingEntity instanceof VillagerEntity || livingEntity instanceof ZombieVillagerEntity) {
             if (!livingEntity.getEquippedStack(EquipmentSlot.LEGS).isEmpty()){
                 livingEntityRenderState.headItemAnimationProgress = 1;
             }
