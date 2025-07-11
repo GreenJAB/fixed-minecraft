@@ -1,0 +1,44 @@
+{
+    "display": {
+        "icon": {
+            "id": "minecraft:tnt"
+        },
+        "title": {
+            "translate": "advancements.adventure.revenge.title"
+        },
+        "description": {
+            "translate": "advancements.adventure.revenge.description"
+        },
+        "frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "parent": "minecraft:adventure/kill_with_tnt",
+    "criteria": {
+        "tnt_explode": {
+            "trigger": "minecraft:player_killed_entity",
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:creeper"
+                },
+                "killing_blow": {
+                    "tags": [
+                        {
+                            "id": "minecraft:is_explosion",
+                            "expected": true
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "requirements": [
+        [
+            "tnt_explode"
+        ]
+    ],
+    "rewards": {
+        "experience": 500
+    }
+}
