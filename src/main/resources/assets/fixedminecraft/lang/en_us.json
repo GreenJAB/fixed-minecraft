@@ -71,6 +71,7 @@
     "world.moon.waxing_crescent": "Waxing Crescent",
     "world.moon.first_quarter": "First Quarter ⛏",
     "world.moon.waxing_gibbous": "Waxing Gibbous",
+    "generator.fixedminecraft.floating_islands": "Floating Islands",
     "component.fixedminecraft.bait": "Bait Level: %s",
     "item.fixedminecraft.azalea_boat": "Azalea Boat",
     "item.fixedminecraft.azalea_chest_boat": "Azalea Boat with Chest",
