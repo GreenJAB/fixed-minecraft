@@ -74,6 +74,7 @@ public abstract class WanderingTraderEntityMixin {
                 }, 3+(int)(Math.random()*2)),
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.SellItemFactory(Items.PACKED_ICE, 1, 1, 6, 1),
+                        new TradeOffers.SellItemFactory(Items.CACTUS, 1, 1, 5, 1),
                         new TradeOffers.SellItemFactory(Items.BLUE_ICE, 6, 1, 6, 1),
                         new TradeOffers.SellItemFactory(Items.GUNPOWDER, 1, 4, 2, 1),
                         new TradeOffers.SellItemFactory(Items.PODZOL, 3, 3, 6, 1),
@@ -91,6 +92,7 @@ public abstract class WanderingTraderEntityMixin {
                 Pair.of(new TradeOffers.Factory[]{
                         new TradeOffers.SellItemFactory(Items.TROPICAL_FISH_BUCKET, 3, 1, 4, 1),
                         new TradeOffers.SellItemFactory(Items.PUFFERFISH_BUCKET, 3, 1, 4, 1),
+                        new TradeOffers.SellItemFactory(Items.TADPOLE_BUCKET, 3, 1, 4, 1),
                         new TradeOffers.SellItemFactory(Items.SEA_PICKLE, 2, 1, 5, 1),
                         new TradeOffers.SellItemFactory(Items.SLIME_BALL, 4, 1, 5, 1),
                         new TradeOffers.SellItemFactory(Items.GLOWSTONE, 2, 1, 5, 1),
