@@ -100,7 +100,6 @@ public abstract class WanderingTraderEntityMixin {
                         new TradeOffers.SellItemFactory(Items.SUGAR_CANE, 1, 1, 8, 1),
                         new TradeOffers.SellItemFactory(Items.PUMPKIN, 1, 1, 4, 1),
                         new TradeOffers.SellItemFactory(Items.KELP, 3, 1, 12, 1),
-                        new TradeOffers.SellItemFactory(Items.CACTUS, 3, 1, 8, 1),
                         new TradeOffers.SellItemFactory(Items.DANDELION, 1, 1, 12, 1),
                         new TradeOffers.SellItemFactory(Items.POPPY, 1, 1, 12, 1),
                         new TradeOffers.SellItemFactory(Items.BLUE_ORCHID, 1, 1, 8, 1),
