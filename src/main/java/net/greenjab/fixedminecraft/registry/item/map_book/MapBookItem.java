@@ -49,7 +49,7 @@ public class MapBookItem extends Item {
         BlockState blockState = context.getWorld().getBlockState(context.getBlockPos());
 
         if (blockState.isIn(BlockTags.BANNERS)) {
-            if (!context.getWorld().isClient) {
+            if (!context.getWorld().isClient()) {
                 MapStateData mapStateData = this.getNearestMap(context.getStack(), context.getWorld(), context.getBlockPos().toCenterPos());
                 MapState mapState = mapStateData.mapState;
                 if (mapState != null && !mapState.addBanner(context.getWorld(), context.getBlockPos())) {
@@ -76,7 +76,7 @@ public class MapBookItem extends Item {
                     if (otherHand.isOf(Items.MAP) && !player.getAbilities().creativeMode) {
                         otherHand.decrement(1);
                     }
-                    player.getWorld().playSoundFromEntity(
+                    player.getEntityWorld().playSoundFromEntity(
                             null,
                             player,
                             SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
@@ -89,7 +89,7 @@ public class MapBookItem extends Item {
             } else if (otherHand.isOf(Items.SHEARS)) {
                 if (removeMapAtPos(item, (ServerWorld)world, player.getPos(), player)) {
                     otherHand.damage(1, player);
-                    player.getWorld().playSoundFromEntity(
+                    player.getEntityWorld().playSoundFromEntity(
                             null,
                             player,
                             SoundEvents.ENTITY_SHEEP_SHEAR,
@@ -104,7 +104,7 @@ public class MapBookItem extends Item {
                     if (!player.getAbilities().creativeMode) {
                         otherHand.decrement(1);
                     }
-                    player.getWorld().playSoundFromEntity(
+                    player.getEntityWorld().playSoundFromEntity(
                             null,
                             player,
                             SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
@@ -122,7 +122,7 @@ public class MapBookItem extends Item {
                         if (!player.getAbilities().creativeMode) {
                             hasEmtpyMap.decrement(1);
                         }
-                        player.getWorld().playSoundFromEntity(
+                        player.getEntityWorld().playSoundFromEntity(
                                 null,
                                 player,
                                 SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
@@ -140,7 +140,7 @@ public class MapBookItem extends Item {
             if (openMap && this.hasMapBookId(item)) {
                 getMapBookState(item, world).update();
                 mapBookOpen(player, item);
-                player.getWorld().playSoundFromEntity(
+                player.getEntityWorld().playSoundFromEntity(
                         null,
                         player,
                         SoundEvents.ITEM_BOOK_PAGE_TURN,
@@ -169,7 +169,7 @@ public class MapBookItem extends Item {
     }
 
     private void sendMapUpdates(ServerPlayerEntity player, ItemStack item) {
-        for (MapStateData mapStateData : getMapStates(item, player.getWorld())) {
+        for (MapStateData mapStateData : getMapStates(item, player.getEntityWorld())) {
             mapStateData.mapState.getPlayerSyncData(player);
             Packet<?> packet  = mapStateData.mapState.getPlayerMarkerPacket(mapStateData.id, player);
             if (packet != null) {
@@ -195,7 +195,7 @@ public class MapBookItem extends Item {
                     MapBookStateManager.INSTANCE.currentBooks.add(id);
                 }
                 if ((slot==EquipmentSlot.MAINHAND||slot==EquipmentSlot.OFFHAND) || ((PlayerEntity) entity).getOffHandStack() == stack) {
-                    for (MapStateData mapStateData : getMapStates(stack, entity.getWorld())) {
+                    for (MapStateData mapStateData : getMapStates(stack, entity.getEntityWorld())) {
                         mapStateData.mapState.update(player, stack);
                         if (!mapStateData.mapState.locked) {
                             if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.getPos()) < 128.0) {
@@ -228,7 +228,7 @@ public class MapBookItem extends Item {
     private static MapBookState getMapBookState(ItemStack stack, World world) {
         int id = getMapBookId(stack);
         if (id == -1) return null;
-        if (world.isClient) {
+        if (world.isClient()) {
             return MapBookStateManager.INSTANCE.getClientMapBookState(id);
         } else if (world.getServer() != null) {
             return MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);
@@ -460,7 +460,7 @@ public class MapBookItem extends Item {
 
     @Override
     public void onCraft(ItemStack stack, World world) {
-        if (!world.isClient) {
+        if (!world.isClient()) {
             applyAdditions(stack, (ServerWorld)world);
         }
     }

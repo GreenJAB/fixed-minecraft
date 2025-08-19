@@ -33,8 +33,8 @@ public class DragonFireballEntityMixin {
     private void explodeOnImpact(HitResult hitResult, CallbackInfo ci) {
 
         DragonFireballEntity DFE = (DragonFireballEntity)(Object)this;
-        ServerWorld world = DFE.getServer().getWorld(DFE.getWorld().getRegistryKey());
-        int explosionPower = (DFE.getWorld().getDifficulty().getId()+1)/2;
+        ServerWorld world = DFE.getServer().getWorld(DFE.getEntityWorld().getRegistryKey());
+        int explosionPower = (DFE.getEntityWorld().getDifficulty().getId()+1)/2;
         if (DFE.getOwner()!=null) {
             if (DFE.getOwner().getCommandTags().contains("omen")) {
                 explosionPower++;

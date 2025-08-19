@@ -53,7 +53,7 @@ public class MapBookPlayer {
         this.y = player.getY();
         this.z = player.getZ();
         this.yaw = player.getYaw();
-        this.dimension = player.getWorld().getDimensionEntry().getIdAsString();
+        this.dimension = player.getEntityWorld().getDimensionEntry().getIdAsString();
     }
 
     void toPacket(PacketByteBuf buf) {

@@ -4,6 +4,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DaylightDetectorBlock;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 public class NewDaylightDetectorBlock extends DaylightDetectorBlock {
@@ -18,8 +19,8 @@ public class NewDaylightDetectorBlock extends DaylightDetectorBlock {
     }
 
     @Override
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-        if (!world.isClient && world.getDimension().hasSkyLight()) {
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos, Direction direction) {
+        if (!world.isClient() && world.getDimension().hasSkyLight()) {
             boolean bl = state.get(INVERTED);
              if (bl) {
                  return world.getMoonPhase()+1;

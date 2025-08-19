@@ -38,7 +38,7 @@ public abstract class LivingEntityMixin
         if (this.isUsingItem()) {
             if (this.getStackInHand(this.getActiveHand()).getComponents().contains(DataComponentTypes.FOOD)) {
                 LivingEntity LE = (LivingEntity)(Object)this;
-                if (LE.getWorld().getDifficulty().getId()>1) {
+                if (LE.getEntityWorld().getDifficulty().getId()>1) {
                     if (source.getAttacker()!=null) {
                         this.stopUsingItem();
                     }

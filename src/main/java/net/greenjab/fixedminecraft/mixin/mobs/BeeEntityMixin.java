@@ -20,7 +20,7 @@ public class BeeEntityMixin {
     @Inject(method = "setHasNectar", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/BeeEntity;resetPollinationTicks()V"))
     private void spreadFlowers(boolean hasNectar, CallbackInfo ci){
         BeeEntity bee = (BeeEntity)(Object)this;
-        World world = bee.getWorld();
+        World world = bee.getEntityWorld();
         BlockPos pos = bee.getFlowerPos();
         if (pos != null) {
             BlockState flower = world.getBlockState(pos);

@@ -69,7 +69,7 @@ public class GameRendererMixin {
         if (client.crosshairTarget instanceof BlockHitResult hit && client.targetedEntity == null) {
             assert client.world != null;
             if (client.world.getBlockState(hit.getBlockPos()).getCollisionShape(client.world, hit.getBlockPos()).isEmpty()) {
-                EntityHitResult entityHitResult2 = ProjectileUtil.getEntityCollision(entity.getWorld(), entity, vec3d, vec3d3, box, predicate, 0.0f);
+                EntityHitResult entityHitResult2 = ProjectileUtil.getEntityCollision(entity.getEntityWorld(), entity, vec3d, vec3d3, box, predicate, 0.0f);
                 if (entityHitResult2 != null && entityHitResult2.getEntity() != vehicle) {
                     HitResult hitResult = client.world.raycast(new RaycastContext(vec3d, vec3d3, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
                     if (bl2 && vec3d.squaredDistanceTo(entityHitResult2.getPos()) < dist()) {

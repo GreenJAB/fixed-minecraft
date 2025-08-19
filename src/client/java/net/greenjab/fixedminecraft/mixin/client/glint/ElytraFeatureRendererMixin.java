@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ElytraFeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
@@ -24,8 +25,8 @@ public abstract class ElytraFeatureRendererMixin<S extends BipedEntityRenderStat
         super(context);
     }
 
-    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/BipedEntityRenderState;FF)V", at = @At("HEAD"))
-    private void setEnchantTheRainbowItemStack(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i,
+    @Inject(method = "render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/entity/command/EntityRenderCommandQueue;ILnet/minecraft/client/render/entity/state/BipedEntityRenderState;FF)V", at = @At("HEAD"))
+    private void setEnchantTheRainbowItemStack(MatrixStack matrixStack, EntityRenderCommandQueue entityRenderCommandQueue, int i,
                                                S bipedEntityRenderState, float f, float g, CallbackInfo ci) {
         EnchantGlint.setTargetStack(bipedEntityRenderState.equippedChestStack);
     }

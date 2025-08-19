@@ -25,7 +25,7 @@ class PhantomMoveControlMixin {
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 4.0f))
     private float dontTurnAtHighSpeed(float constant){
         PhantomEntity PE = this.field_7330;
-        LivingEntity Player = PE.getWorld().getClosestPlayer(PE, 10);
+        LivingEntity Player = PE.getEntityWorld().getClosestPlayer(PE, 10);
         if (Player != null) {
             if (PE.getVelocity().horizontalLength() > 0.3) {
                 return 0;

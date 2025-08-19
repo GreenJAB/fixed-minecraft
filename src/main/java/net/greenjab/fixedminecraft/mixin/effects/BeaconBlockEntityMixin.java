@@ -95,7 +95,7 @@ public class BeaconBlockEntityMixin {
         int statusLevel = beaconLevel >= 3?1:0;
         if (world.getBlockState(pos.down()) == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
 
-        if (!world.isClient && primaryEffect != null) {
+        if (!world.isClient() && primaryEffect != null) {
             double d = (beaconLevel * 20 + 10);
 
             int j = (9 + beaconLevel * 2) * 20;

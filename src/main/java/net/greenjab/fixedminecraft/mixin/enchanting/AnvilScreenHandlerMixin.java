@@ -63,7 +63,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     private void calculateCost(CallbackInfo ci) {
         boolean netherite;
         int capNum = 500;
-        if (!player.getWorld().isClient) {
+        if (!player.getEntityWorld().isClient()) {
             netherite = player.getCommandTags().contains("netherite_anvil");
         } else {
             netherite = FixedMinecraft.netheriteAnvil;

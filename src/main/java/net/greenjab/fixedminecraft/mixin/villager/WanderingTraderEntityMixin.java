@@ -223,7 +223,8 @@ public abstract class WanderingTraderEntityMixin {
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
 
-            int who = (int)(Math.random()*2);
+            //TODO player heads
+            /*int who = (int)(Math.random()*2);
             switch (who) {
                 case 0:
                     //mod maker
@@ -237,11 +238,11 @@ public abstract class WanderingTraderEntityMixin {
                 default:
                     //discontinued
                     WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
-                    PlayerEntity playerEntity = WTE.getWorld().getClosestPlayer(WTE, 100);
+                    PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
                     if (playerEntity != null) {
                         head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
                     }
-            }
+            }*/
 
         }
         return head;
@@ -255,7 +256,7 @@ public abstract class WanderingTraderEntityMixin {
             Objects.requireNonNull(var10001);
             Predicate<RegistryEntry<Biome>> predicate = var10001::contains;
 
-            World world = WTE.getWorld();
+            World world = WTE.getEntityWorld();
             if (world instanceof ServerWorld serverWorld) {
 
                 int map = serverWorld.random.nextInt(6);

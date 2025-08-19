@@ -29,7 +29,7 @@ public class HoldingPatternPhaseMixin extends AbstractPhase {
 
     @ModifyConstant(method = "tickInRange", constant = @Constant(intValue = 2))
     private int moreAttacks(int constant, @Local int i){
-        return 1-i+(6-2*this.dragon.getWorld().getDifficulty().getId());
+        return 1-i+(6-2*this.dragon.getEntityWorld().getDifficulty().getId());
     }
 
 

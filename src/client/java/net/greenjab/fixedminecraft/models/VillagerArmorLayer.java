@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.models;
 
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -75,8 +76,10 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
             armorModel.propertiesCopyFrom(this.getContextModel());
             this.setVisible(armorModel, slot);
             EquipmentModel.LayerType layerType = this.usesInnerModel(slot) ? EquipmentModel.LayerType.HUMANOID_LEGGINGS : EquipmentModel.LayerType.HUMANOID;
-            this.equipmentRenderer
-                    .render(layerType, equippableComponent.assetId().orElseThrow(), armorModel, stack, matrices, vertexConsumers, light);
+
+            //TODO villager armor render.. again
+            //this.equipmentRenderer
+            //        .render(layerType, equippableComponent.assetId().orElseThrow(), armorModel, stack, matrices, vertexConsumers, light);
         }
     }
 
@@ -109,4 +112,8 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
         return slotType == EquipmentSlot.LEGS;
     }
 
+    @Override
+    public void render(MatrixStack matrices, EntityRenderCommandQueue queue, int light, S state, float limbAngle, float limbDistance) {
+
+    }
 }

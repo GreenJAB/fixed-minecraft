@@ -8,6 +8,7 @@ import net.minecraft.client.render.item.ItemRenderState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.HeldItemContext;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +22,7 @@ public class ItemModelManagerMixin {
 
     @Inject(method = "update", at = @At("HEAD"))
     private void setEnchantTheRainbowItemStack(ItemRenderState renderState, ItemStack stack, ItemDisplayContext displayContext, World world,
-                                               LivingEntity entity, int seed, CallbackInfo ci) {
+                                               HeldItemContext heldItemContext, int seed, CallbackInfo ci) {
         EnchantGlint.setTargetStack(stack);
     }
 }

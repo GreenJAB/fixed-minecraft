@@ -87,11 +87,11 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 double p = livingEntity.getBodyY(0.5) - m;
                 double q = livingEntity.getZ() - n;
                 if (!this.dragon.isSilent()) {
-                    this.dragon.getWorld().syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
+                    this.dragon.getEntityWorld().syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
-                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
+                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getEntityWorld(), this.dragon, new Vec3d(o, p, q));
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
-                this.dragon.getWorld().spawnEntity(dragonFireballEntity);
+                this.dragon.getEntityWorld().spawnEntity(dragonFireballEntity);
 
             } else {
 
@@ -103,7 +103,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 double h = g;
                 BlockPos.Mutable mutable = new BlockPos.Mutable(d, g, e);
 
-                while (this.dragon.getWorld().isAir(mutable)) {
+                while (this.dragon.getEntityWorld().isAir(mutable)) {
                     if (--h < 0.0) {
                         h = g;
                         break;
@@ -113,7 +113,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 }
 
                 if (this.dragon.getCommandTags().contains("omen")) {
-                    List<Entity> entities = this.dragon.getWorld()
+                    List<Entity> entities = this.dragon.getEntityWorld()
                             .getOtherEntities(this.dragon, this.dragon.head.getBoundingBox().expand(2.0, 3.0, 2.0).offset(0.0, -1.0, 0.0), EntityPredicates.EXCEPT_CREATIVE_OR_SPECTATOR);
                     for (Entity ee : entities) {
                         ee.setFireTicks(300);
@@ -124,8 +124,8 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
                 AreaEffectCloudEntity areaEffectCloudEntity = dragonAreaEffectCloudEntity(d, h, e);
                 areaEffectCloudEntity.addEffect(new StatusEffectInstance(StatusEffects.INSTANT_DAMAGE, 1, 1));
 
-                this.dragon.getWorld().syncWorldEvent(WorldEvents.DRAGON_BREATH_CLOUD_SPAWNS, this.dragon.getBlockPos(), this.dragon.isSilent() ? -1 : 1);
-                this.dragon.getWorld().spawnEntity(areaEffectCloudEntity);
+                this.dragon.getEntityWorld().syncWorldEvent(WorldEvents.DRAGON_BREATH_CLOUD_SPAWNS, this.dragon.getBlockPos(), this.dragon.isSilent() ? -1 : 1);
+                this.dragon.getEntityWorld().spawnEntity(areaEffectCloudEntity);
             }
         } else if (this.ticks >= 30) {
 
@@ -165,7 +165,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
     @Unique
     @NotNull
     private AreaEffectCloudEntity dragonAreaEffectCloudEntity(double d, double h, double e) {
-        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getWorld(), d, h, e);
+        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getEntityWorld(), d, h, e);
         areaEffectCloudEntity.setOwner(this.dragon);
         areaEffectCloudEntity.setParticleType(ParticleTypes.DRAGON_BREATH);
         areaEffectCloudEntity.setRadius(5.0F);

@@ -20,7 +20,7 @@ public abstract class ParrotEntityMixin {
        ParrotEntity PE = (ParrotEntity)(Object)this;
        if (itemStack.isEmpty()) {
            if (PE.isInAir() && PE.isTamed() && PE.isOwner(player)) {
-               if (!player.getWorld().isClient) {
+               if (!player.getEntityWorld().isClient()) {
                    if (PE.mountOnto((ServerPlayerEntity) player)) {
                        cir.setReturnValue(ActionResult.SUCCESS);
                        cir.cancel();

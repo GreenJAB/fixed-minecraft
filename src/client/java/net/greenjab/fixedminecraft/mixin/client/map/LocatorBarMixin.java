@@ -29,6 +29,8 @@ import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.tick.TickManager;
+import net.minecraft.world.waypoint.EntityTickProgress;
 import net.minecraft.world.waypoint.TrackedWaypoint;
 import net.minecraft.world.waypoint.Waypoint;
 import net.minecraft.world.waypoint.WaypointStyles;
@@ -64,25 +66,27 @@ public class LocatorBarMixin {
 
     @Inject(method = "renderAddons", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/Entity;getWorld()Lnet/minecraft/world/World;"
+            target = "Lnet/minecraft/entity/Entity;getEntityWorld()Lnet/minecraft/world/World;"
     ), cancellable = true
     )
     private void addBannerMarkers(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         MinecraftClient client = MinecraftClient.getInstance();
         int i = getCenterY(client.getWindow());
-        World world = client.cameraEntity.getWorld();
+        World world = client.getCameraEntity().getEntityWorld();
+        TickManager tickManager = world.getTickManager();
+        EntityTickProgress entityTickProgress = /* method_73215 */ entityx -> tickCounter.getTickProgress(!tickManager.shouldSkipTick(entityx));
 
-        client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.cameraEntity, (waypoint) -> {
+        client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.getCameraEntity(), (waypoint) -> {
             if (!(Boolean)waypoint.getSource().left().map((uuid) -> {
-                return uuid.equals(client.cameraEntity.getUuid());
+                return uuid.equals(client.getCameraEntity().getUuid());
             }).orElse(false)) {
                 if (waypoint.getConfig().style != WaypointStyles.DEFAULT) {
-                    double d = waypoint.getRelativeYaw(world, client.gameRenderer.getCamera());
+                    double d = waypoint.getRelativeYaw(world, client.gameRenderer.getCamera(), entityTickProgress);
                     if (!(d <= -61.0) && !(d > 60.0)) {
                         int j = MathHelper.ceil((float) (context.getScaledWindowWidth() - 9) / 2.0F);
                         Waypoint.Config config = waypoint.getConfig();
                         WaypointStyleAsset waypointStyleAsset = client.getWaypointStyleAssetManager().get(config.style);
-                        float f = MathHelper.sqrt((float) waypoint.squaredDistanceTo(client.cameraEntity));
+                        float f = MathHelper.sqrt((float) waypoint.squaredDistanceTo(client.getCameraEntity()));
                         Identifier identifier = waypointStyleAsset.getSpriteForDistance(f);
                         int k = (Integer) config.color.orElseGet(() -> {
                             return (Integer) waypoint.getSource().map((uuid) -> {
@@ -93,7 +97,7 @@ public class LocatorBarMixin {
                         });
                         int l = (int) (d * 173.0 / 2.0 / 60.0);
                         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier, j + l, i - 2, 9, 9, k);
-                        TrackedWaypoint.Pitch pitch = waypoint.getPitch(world, client.gameRenderer);
+                        TrackedWaypoint.Pitch pitch = waypoint.getPitch(world, client.gameRenderer, entityTickProgress);
                         if (pitch != TrackedWaypoint.Pitch.NONE) {
                             byte m;
                             Identifier identifier2;
@@ -192,7 +196,7 @@ public class LocatorBarMixin {
         PlayerEntity thisPlayer = client.player;
         MapBookState mps = MapBookStateManager.INSTANCE.getClientMapBookState(id);
         if (mps != null ) {
-            if (mps.marker.dimension.contains(thisPlayer.getWorld().getDimensionEntry().getIdAsString())) {
+            if (mps.marker.dimension.contains(thisPlayer.getEntityWorld().getDimensionEntry().getIdAsString())) {
                 Vec3d c = client.gameRenderer.getCamera().getPos();
                 double x = mps.marker.x;
                 double z = mps.marker.z;

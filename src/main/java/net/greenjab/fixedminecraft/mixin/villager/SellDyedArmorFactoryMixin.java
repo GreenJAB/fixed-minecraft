@@ -35,12 +35,12 @@ public class SellDyedArmorFactoryMixin {
     private ItemStack enchantedLeatherGear(ItemStack sellItem, @Local(argsOnly = true) Entity entity, @Local(argsOnly = true) Random random){
         if (this.experience>5) {
             int i = 15;
-            DynamicRegistryManager dynamicRegistryManager = entity.getWorld().getRegistryManager();
+            DynamicRegistryManager dynamicRegistryManager = entity.getEntityWorld().getRegistryManager();
             Optional<RegistryEntryList.Named<Enchantment>> optional = dynamicRegistryManager.getOrThrow(RegistryKeys.ENCHANTMENT)
                     .getOptional(EnchantmentTags.ON_TRADED_EQUIPMENT);
             sellItem = EnchantmentHelper.enchant(random, sellItem, i, dynamicRegistryManager, optional);
             if (!sellItem.isOf(Items.LEATHER_HORSE_ARMOR)){
-                ArmorTrimmer.trimAtChanceIfTrimable(sellItem, random, entity.getWorld().getRegistryManager(), true);
+                ArmorTrimmer.trimAtChanceIfTrimable(sellItem, random, entity.getEntityWorld().getRegistryManager(), true);
             }
         }
         return sellItem;

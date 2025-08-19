@@ -15,7 +15,7 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "dropItem", at = @At(value = "RETURN"))
     private void onGroundForLonger(ItemStack stack, boolean throwRandomly, boolean retainOwnership, CallbackInfoReturnable<ItemEntity> cir, @Local ItemEntity itemEntity) {
         if (!retainOwnership && itemEntity != null) {
-            int diff = itemEntity.getWorld().getDifficulty().getId();
+            int diff = itemEntity.getEntityWorld().getDifficulty().getId();
             if (diff == 2) itemEntity.setCovetedItem();
             if (diff < 2) itemEntity.setNeverDespawn();
         }

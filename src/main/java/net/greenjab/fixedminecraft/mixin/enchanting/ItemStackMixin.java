@@ -58,7 +58,7 @@ public abstract class ItemStackMixin {
     private static void dataFix(ItemStack stack) {
         NbtComponent nbt = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA);
         if (nbt != null) {
-            boolean has = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA).contains("fixedminecraft:map_book");
+            boolean has = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA).toString().contains("fixedminecraft:map_book");
             if (has) {
                 String[] s = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA).toString().split("fixedminecraft:map_book");
                 s = s[1].split(",");

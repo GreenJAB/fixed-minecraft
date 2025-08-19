@@ -49,7 +49,7 @@ public class NewAmethystBlock extends AmethystBlock {
             boolean notify
     ) {
         if (world != null) {
-            if (!world.isClient) {
+            if (!world.isClient()) {
                 boolean bl = state.get(LIT);
                 if (bl != world.isReceivingRedstonePower(pos)) {
                     if (bl) {

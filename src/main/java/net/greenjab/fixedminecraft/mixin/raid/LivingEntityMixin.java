@@ -33,7 +33,7 @@ public class LivingEntityMixin  {
     @ModifyExpressionValue(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack requireUsingTotem(ItemStack original) {
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (!((ServerWorld)LE.getWorld()).getGameRules().getBoolean(GameruleRegistry.Require_Totem_Use) || LE.isUsingItem()) {
+        if (!((ServerWorld)LE.getEntityWorld()).getGameRules().getBoolean(GameruleRegistry.Require_Totem_Use) || LE.isUsingItem()) {
             return original;
         } else {
             return new ItemStack(Items.AIR);
@@ -56,7 +56,7 @@ public class LivingEntityMixin  {
         }
     }
 
-    @Inject(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getWorld()Lnet/minecraft/world/World;", shift = At.Shift.AFTER))
+    @Inject(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getEntityWorld()Lnet/minecraft/world/World;", shift = At.Shift.AFTER))
     private void echoTeleport(DamageSource source, CallbackInfoReturnable<Boolean> cir, @Local ItemStack itemStack) {
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof ServerPlayerEntity SPE) {

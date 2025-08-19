@@ -31,7 +31,7 @@ public class EndCrystalEntityMixin {
     private void checkForDragonFight(CallbackInfo ci) {
         EndCrystalEntity ECE = (EndCrystalEntity)(Object)this;
         if (this.endCrystalAge%100==0 && ECE.isInvulnerable()) {
-            EnderDragonFight enderDragonFight = ((ServerWorld)ECE.getWorld()).getEnderDragonFight();
+            EnderDragonFight enderDragonFight = ((ServerWorld)ECE.getEntityWorld()).getEnderDragonFight();
             if (enderDragonFight != null) {
                 enderDragonFight.respawnDragon();
             }

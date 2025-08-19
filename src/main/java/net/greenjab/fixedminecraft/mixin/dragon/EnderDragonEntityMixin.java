@@ -153,7 +153,7 @@ public abstract class EnderDragonEntityMixin {
     private void moreHealth(EntityType<? extends EnderDragonEntity> entityType, World world, CallbackInfo ci){
         EnderDragonEntity EDE = (EnderDragonEntity) (Object)this;
         int[] health = {150, 200, 300, 400};
-        EDE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(health[EDE.getWorld().getDifficulty().getId()]);
+        EDE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(health[EDE.getEntityWorld().getDifficulty().getId()]);
     }
 
     @Inject(method = "damagePart", at = @At(

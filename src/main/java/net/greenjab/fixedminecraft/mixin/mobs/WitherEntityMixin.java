@@ -52,18 +52,18 @@ public class WitherEntityMixin {
             WE.noClip=true;
             if (!WE.getCommandTags().contains("phase2")) {
                 WE.addCommandTag("phase2");
-                WE.getWorld().createExplosion(
+                WE.getEntityWorld().createExplosion(
                         WE, WE.getX(), WE.getY(), WE.getZ(), 5, World.ExplosionSourceType.MOB
                 );
                 for (int i = 0;i<3;i++) {
-                    WitherSkeletonEntity WSE = EntityType.WITHER_SKELETON.create(WE.getWorld().getWorldChunk(WE.getBlockPos()).getWorld(), SpawnReason.MOB_SUMMONED);
+                    WitherSkeletonEntity WSE = EntityType.WITHER_SKELETON.create(WE.getEntityWorld().getWorldChunk(WE.getBlockPos()).getWorld(), SpawnReason.MOB_SUMMONED);
                     assert WSE != null;
                     WSE.refreshPositionAndAngles(WE.getX(), WE.getY(), WE.getZ(), 0.0F, 0.0F);
                     WSE.setVelocity(Math.cos(i*120*Math.PI/180.0), 0, Math.sin(i*120*Math.PI/180.0));
                     WSE.equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
                     WSE.equipStack(EquipmentSlot.HEAD, new ItemStack(Items.STONE_BUTTON));
                     WSE.setEquipmentDropChance(EquipmentSlot.HEAD, 0);
-                    WE.getWorld().spawnEntity(WSE);
+                    WE.getEntityWorld().spawnEntity(WSE);
                 }
             }
 
@@ -73,7 +73,7 @@ public class WitherEntityMixin {
     @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/WitherEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V"), index = 0)
     private Vec3d floatUpInBlocks(Vec3d vec3d) {
         WitherEntity WE = (WitherEntity) (Object)this;
-        World world = WE.getWorld();
+        World world = WE.getEntityWorld();
         BlockPos blockpos = WE.getBlockPos();
         ChunkPos chunk = world.getWorldChunk(blockpos).getPos();
         BlockView blockView = world.getChunkAsView(chunk.x, chunk.z);
@@ -114,9 +114,9 @@ public class WitherEntityMixin {
     @ModifyArg(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/WitherEntity;setYaw(F)V"), index = 0)
     private float facePlayer(float v){
         WitherEntity WE = (WitherEntity) (Object)this;
-        if (!WE.getWorld().isClient ){
+        if (!WE.getEntityWorld().isClient()){
             if (WE.getTrackedEntityId(0) > 0) {
-                Entity entity = WE.getWorld().getEntityById(WE.getTrackedEntityId(0));
+                Entity entity = WE.getEntityWorld().getEntityById(WE.getTrackedEntityId(0));
                 if (entity != null) {
                     double dx = entity.getX()-WE.getX();
                     double dz = entity.getZ()-WE.getZ();

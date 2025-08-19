@@ -23,8 +23,8 @@ public class EntityMixin {
     private void tridentReturnsFromVoid(CallbackInfo ci) {
         Entity E = (Entity) (Object)this;
         if (E instanceof TridentEntity TE) {
-            if (TE.getY() < (double)(TE.getWorld().getBottomY() - 48)) {
-                int i = TE.getWorld() instanceof ServerWorld serverWorld
+            if (TE.getY() < (double)(TE.getEntityWorld().getBottomY() - 48)) {
+                int i = TE.getEntityWorld() instanceof ServerWorld serverWorld
                         ? (byte) MathHelper.clamp(EnchantmentHelper.getTridentReturnAcceleration(serverWorld, TE.getItemStack(), E), 0, 127)
                         : 0;
                 if (i>0) {
@@ -39,7 +39,7 @@ public class EntityMixin {
     @Inject(method = "isBeingRainedOn", at = @At(value = "HEAD"),cancellable = true)
     private void wetLingeringEffect(CallbackInfoReturnable<Boolean> cir) {
         Entity E = (Entity) (Object) this;
-        for (AreaEffectCloudEntity effectCloud : E.getWorld().getNonSpectatingEntities(AreaEffectCloudEntity.class, E.getBoundingBox())) {
+        for (AreaEffectCloudEntity effectCloud : E.getEntityWorld().getNonSpectatingEntities(AreaEffectCloudEntity.class, E.getBoundingBox())) {
             if (effectCloud.getParticleType().getType() == ParticleTypes.SPLASH) {
                 cir.setReturnValue(true);
             }

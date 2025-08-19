@@ -34,7 +34,7 @@ public abstract class LivingEntityMixin
         LivingEntity LE = (LivingEntity) (Object)this;
         if (LE instanceof AbstractHorseEntity && LE.hasControllingPassenger() && LE.shouldDismountUnderwater()) {
             BlockPos blockPos = BlockPos.ofFloored(LE.getX(), LE.getY()+1, LE.getZ());
-            FluidState fluidState = LE.getWorld().getFluidState(blockPos);
+            FluidState fluidState = LE.getEntityWorld().getFluidState(blockPos);
             if (fluidState.isIn(FluidTags.WATER)) {
                 if (LE.getRandom().nextFloat() < 0.8F) {
                     LE.setVelocity(LE.getVelocity().add(0.0, 0.04F, 0.0));

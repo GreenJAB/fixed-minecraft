@@ -19,7 +19,7 @@ public class ApplyBonusLootFunctionMixin {
     private int nightFortune(int i, @Local(argsOnly = true) LootContext context) {
         Entity entity = context.get(LootContextParameters.THIS_ENTITY);
         if (entity!=null) {
-            World world = entity.getWorld();
+            World world = entity.getEntityWorld();
             if (entity instanceof PlayerEntity) {
                 if (world.getLightLevel(LightType.SKY, entity.getBlockPos()) > 10) {
                     if (world.isNight() && world.getMoonPhase() == 6) i++;

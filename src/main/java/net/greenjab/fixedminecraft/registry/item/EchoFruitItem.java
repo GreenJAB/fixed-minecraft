@@ -26,7 +26,7 @@ public class EchoFruitItem extends Item {
         super.finishUsing(stack, world, user);
         if (user instanceof ServerPlayerEntity serverPlayerEntity) {
             Optional<GlobalPos> deathOpt = serverPlayerEntity.getLastDeathPos();
-            if (!world.isClient && deathOpt.isPresent()) {
+            if (!world.isClient() && deathOpt.isPresent()) {
                 GlobalPos deathPos = deathOpt.get();
                 double d = deathPos.pos().getX();
                 double e = deathPos.pos().getY();

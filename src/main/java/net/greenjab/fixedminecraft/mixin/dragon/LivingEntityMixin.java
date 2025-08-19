@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin {
             Entity entity = source.getAttacker();
             if (entity!=null) {
                 if (entity instanceof EndermanEntity endermanEntity){
-                    LivingEntity livingEntity = endermanEntity.getWorld().getClosestPlayer(
+                    LivingEntity livingEntity = endermanEntity.getEntityWorld().getClosestPlayer(
                             endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ(), 100.0,true);
                     endermanEntity.setTarget(livingEntity);
                     endermanEntity.setAngerTime(999999);

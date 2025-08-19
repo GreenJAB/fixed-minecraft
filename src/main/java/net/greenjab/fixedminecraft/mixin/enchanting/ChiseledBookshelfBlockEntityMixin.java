@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.mojang.serialization.Codec;
-import net.greenjab.fixedminecraft.enchanting.Networking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -33,8 +32,9 @@ import static net.minecraft.item.ItemStack.CODEC;
 @Mixin(ChiseledBookshelfBlockEntity.class)
 public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
     @Shadow private int lastInteractedSlot;
-    @Shadow @Final
-    private DefaultedList<ItemStack> inventory;
+    @Shadow
+    @Final
+    private DefaultedList<ItemStack> heldStacks;
 
     public ChiseledBookshelfBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -48,7 +48,7 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
 
     @Override
     public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        NbtCompound nbtCompound = writeNbt(new NbtCompound(), inventory, registries);
+        NbtCompound nbtCompound = writeNbt(new NbtCompound(), heldStacks, registries);
         nbtCompound.putNullable("last_interacted_slot", Codec.INT, lastInteractedSlot);
         return nbtCompound;
     }

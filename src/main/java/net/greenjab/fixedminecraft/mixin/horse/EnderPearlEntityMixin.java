@@ -71,7 +71,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
             LivingEntity currentVehicle = rootVehicle(serverPlayerEntity);
             if (currentVehicle != null && currentVehicle.equals(vehicle)) {
                 vehicle.teleportTo(
-                        new TeleportTarget((ServerWorld) this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+                        new TeleportTarget((ServerWorld) this.getEntityWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
                 );
                 assert vehicle != null;
                 vehicle.addCommandTag("tp");
@@ -82,12 +82,12 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
                 vehicle.onLanding();
                 EnderPearlEntity EPE = (EnderPearlEntity) (Object) this;
                 if (!((PlayerEntity) Objects.requireNonNull((EPE).getOwner())).getAbilities().creativeMode) {
-                    vehicle.damage((ServerWorld) this.getWorld(), this.getDamageSources().fall(), 5.0F);
+                    vehicle.damage((ServerWorld) this.getEntityWorld(), this.getDamageSources().fall(), 5.0F);
                 }
                 ref.set(true);
 
                 ServerPlayerEntity serverPlayerEntity2 = serverPlayerEntity.teleportTo(
-                        new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+                        new TeleportTarget((ServerWorld)this.getEntityWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
                 );
                 assert serverPlayerEntity2 != null;
                 serverPlayerEntity2.startRiding(vehicle);
@@ -96,7 +96,7 @@ public abstract class EnderPearlEntityMixin extends ThrownItemEntity {
         }
 
         return serverPlayerEntity.teleportTo(
-                new TeleportTarget((ServerWorld)this.getWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
+                new TeleportTarget((ServerWorld)this.getEntityWorld(), this.getLastRenderPos(), Vec3d.ZERO, 0.0F, 0.0F, PositionFlag.combine(PositionFlag.ROT, PositionFlag.DELTA), TeleportTarget.NO_OP)
         );
     }
 

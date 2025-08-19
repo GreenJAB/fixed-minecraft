@@ -49,13 +49,13 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     @Inject(method = "initEquipment", at = @At(value = "HEAD"),cancellable = true)
     private void Armor(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         int y= this.getBlockPos().getY();
-        boolean pale = this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN);
-        float f = this.getWorld().getDifficulty() == Difficulty.HARD ? 0.25F : 0.15F;
+        boolean pale = this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN);
+        float f = this.getEntityWorld().getDifficulty() == Difficulty.HARD ? 0.25F : 0.15F;
         if (pale) {
             f*=2.5f;
             this.addCommandTag("pale");
         }
-        if (y < this.getWorld().getSeaLevel()) f += (this.getWorld().getSeaLevel() - y) / (128 * 10f);
+        if (y < this.getEntityWorld().getSeaLevel()) f += (this.getEntityWorld().getSeaLevel() - y) / (128 * 10f);
         EquipmentSlot[] var6 = EquipmentSlot.values();
         for (EquipmentSlot equipmentSlot : var6) {
             if (random.nextFloat() < f * localDifficulty.getClampedLocalDifficulty()) {
@@ -70,11 +70,11 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
                     if (itemStack.isEmpty()) {
                         ItemStack item = new ItemStack(Objects.requireNonNull(MobEntity.getEquipmentForSlot(equipmentSlot, i)));
                         if (i==0) {
-                            DyeItem dye = DyeItem.byColor(DyeColor.byIndex(this.getWorld().random.nextInt(16)));
+                            DyeItem dye = DyeItem.byColor(DyeColor.byIndex(this.getEntityWorld().random.nextInt(16)));
                             List<DyeItem> colour = List.of(dye);
                             item = DyedColorComponent.setColor(item, colour);
                         }
-                        this.equipStack(equipmentSlot, ArmorTrimmer.trimAtChanceIfTrimable(item, this.random, this.getWorld().getRegistryManager(), pale));
+                        this.equipStack(equipmentSlot, ArmorTrimmer.trimAtChanceIfTrimable(item, this.random, this.getEntityWorld().getRegistryManager(), pale));
                     }
                 }
             }
@@ -89,21 +89,21 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     )
     private float applySuperEnchantArmor(
             float power) {
-        return power*(this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)?1.5f:1);
+        return power*(this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)?1.5f:1);
     }
 
     @ModifyArg(method = "enchantEquipment(Lnet/minecraft/world/ServerWorldAccess;Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/util/math/random/Random;FLnet/minecraft/world/LocalDifficulty;)V", at = @At(value = "INVOKE",
                                                                                                                                                                                                                 target = "Lnet/minecraft/entity/mob/MobEntity;equipStack(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;)V"), index = 1)
     private ItemStack applySuperEnchantArmor(
             ItemStack stack) {
-        return FixedMinecraftEnchantmentHelper.applySuperEnchants(stack, random, this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN));
+        return FixedMinecraftEnchantmentHelper.applySuperEnchants(stack, random, this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN));
     }
 
     @Inject(method = "initialize", at=@At(value = "HEAD"))
     private void addStuff(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData,
                           CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
-        Random random = LE.getWorld().getRandom();
+        Random random = LE.getEntityWorld().getRandom();
         int y= LE.getBlockPos().getY();
         if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
             addEffect(world, difficulty, LE, y);
@@ -117,7 +117,7 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
         int i = 0;
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
         if (world.getDifficulty() == Difficulty.HARD) i = 2;
-        if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) i = 3;
+        if (this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) i = 3;
         float h = i*3*gaussian();
         increaseHealth(LE, h);
         increaseSpeed(random, LE, i);
@@ -142,9 +142,9 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     @Unique
     private void addEffect(ServerWorldAccess world, LocalDifficulty localDifficulty, MobEntity LE, int y){
         if (random.nextFloat() < 0.2f * localDifficulty.getClampedLocalDifficulty()) {
-            boolean pale = this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN);
+            boolean pale = this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN);
             if ((world.getLightLevel(LightType.SKY, LE.getBlockPos()) < 7 ||pale)  && !(LE instanceof SpiderEntity)) {
-                if ((random.nextFloat() < (LE.getWorld().getSeaLevel() - y) / 128f ||pale)) {
+                if ((random.nextFloat() < (LE.getEntityWorld().getSeaLevel() - y) / 128f ||pale)) {
                     StatusEffectInstance effect = getEffect(random, LE);
                     LE.addStatusEffect(effect);
                 }

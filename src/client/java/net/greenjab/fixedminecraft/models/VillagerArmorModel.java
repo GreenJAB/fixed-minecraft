@@ -84,23 +84,23 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
 
     @SuppressWarnings("unused")
     public void copyPropertiesTo(VillagerArmorModel<S> model) {
-        model.head.copyTransform(this.head);
-        model.body.copyTransform(this.body);
-        model.arms.copyTransform(this.arms);
-        model.rightLeg.copyTransform(this.rightLeg);
-        model.leftLeg.copyTransform(this.leftLeg);
+        model.head.setTransform(this.head.getTransform());
+        model.body.setTransform(this.body.getTransform());
+        model.arms.setTransform(this.arms.getTransform());
+        model.rightLeg.setTransform(this.rightLeg.getTransform());
+        model.leftLeg.setTransform(this.leftLeg.getTransform());
     }
 
     @Override
     public <E extends EntityRenderState> void propertiesCopyFrom(EntityModel<E> model) {
         if(model instanceof VillagerResemblingModel villagerModel) {
-            this.head.copyTransform(villagerModel.getHead());
+            this.head.setTransform(villagerModel.getHead().getTransform());
             //System.out.println(this.head.originY);
             this.head.originY = 1.5f;
-            this.body.copyTransform(villagerModel.getRootPart().getChild("body"));
-            this.arms.copyTransform(villagerModel.getRootPart().getChild("arms"));
-            this.rightLeg.copyTransform(villagerModel.getRootPart().getChild("right_leg"));
-            this.leftLeg.copyTransform(villagerModel.getRootPart().getChild("left_leg"));
+            this.body.setTransform(villagerModel.getRootPart().getChild("body").getTransform());
+            this.arms.setTransform(villagerModel.getRootPart().getChild("arms").getTransform());
+            this.rightLeg.setTransform(villagerModel.getRootPart().getChild("right_leg").getTransform());
+            this.leftLeg.setTransform(villagerModel.getRootPart().getChild("left_leg").getTransform());
         }
     }
 

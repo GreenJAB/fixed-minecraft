@@ -39,7 +39,7 @@ public abstract class HungerManagerMixin {
     @Inject(method = "update", at = @At("HEAD"))
     private void HungerToSaturation(ServerPlayerEntity player, CallbackInfo ci) {
 
-        int airTime = CustomData.getData(player, "airTime");// player.getWorld().getScoreboard().getOrCreateScore(player, player.getWorld().getScoreboard().getNullableObjective("airTime")).getScore();//.getNullableObjective("airTime").getScoreboard().get
+        int airTime = CustomData.getData(player, "airTime");// player.getEntityWorld().getScoreboard().getOrCreateScore(player, player.getEntityWorld().getScoreboard().getNullableObjective("airTime")).getScore();//.getNullableObjective("airTime").getScoreboard().get
         if (player.isOnGround()|| player.hasVehicle() || player.isClimbing() || player.isTouchingWater()) airTime=0;
         else if (player.getAbilities().flying) airTime = 10;
         else airTime++;
@@ -52,7 +52,7 @@ public abstract class HungerManagerMixin {
 
 
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
-            if (saturationLevel != 0 || player.getWorld().getTime()%3==0)
+            if (saturationLevel != 0 || player.getEntityWorld().getTime()%3==0)
             ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 30);
         } else {
             ticksSinceLastExhaustion = 0;

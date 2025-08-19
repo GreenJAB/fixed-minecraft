@@ -38,10 +38,10 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     private void sand(CallbackInfo ci){
         ZombieEntity ZE = (ZombieEntity)(Object)this;
         if (ZE instanceof HuskEntity){
-            if (ZE.getWorld().random.nextInt(30)==0) {
-                if (!this.getWorld().isClient && this.isAlive()){
+            if (ZE.getEntityWorld().random.nextInt(30)==0) {
+                if (!this.getEntityWorld().isClient() && this.isAlive()){
                     this.playSound(SoundEvents.BLOCK_SAND_BREAK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                    this.dropItem((ServerWorld) this.getWorld(), Items.SAND);
+                    this.dropItem((ServerWorld) this.getEntityWorld(), Items.SAND);
                     this.emitGameEvent(GameEvent.ENTITY_PLACE);
                 }
             }
@@ -70,9 +70,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))
     private void moreWeapons(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         float diff = 0.01f;
-        if (this.getWorld().getDifficulty() == Difficulty.HARD) diff = 0.1f;
-        if (this.getWorld().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
-        if (this.getWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) diff*=2;
+        if (this.getEntityWorld().getDifficulty() == Difficulty.HARD) diff = 0.1f;
+        if (this.getEntityWorld().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
+        if (this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) diff*=2;
         if (random.nextFloat() < diff) {
             int i = random.nextInt(5);
             int j = random.nextInt(2);

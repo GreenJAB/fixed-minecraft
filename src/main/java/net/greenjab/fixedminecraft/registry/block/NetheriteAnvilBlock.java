@@ -47,7 +47,7 @@ public class NetheriteAnvilBlock extends AnvilBlock {
             }
         }
 
-        if (!world.isClient) {
+        if (!world.isClient()) {
             player.addCommandTag("netherite_anvil");
             player.openHandledScreen(state.createScreenHandlerFactory(world, pos));
             player.incrementStat(Stats.INTERACT_WITH_ANVIL);

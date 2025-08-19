@@ -20,8 +20,8 @@ public abstract class AbstractSkeletonEntityMixin  {
                                        CallbackInfoReturnable<PersistentProjectileEntity> cir) {
         AbstractSkeletonEntity skele = (AbstractSkeletonEntity)(Object)this;
         if (!skele.getStatusEffects().isEmpty()) {
-            if (skele.getWorld().getDifficulty().getId() > 1) {
-                if (Math.random() < (skele.getWorld().getDifficulty().getId() - 1) / 10.0) {
+            if (skele.getEntityWorld().getDifficulty().getId() > 1) {
+                if (Math.random() < (skele.getEntityWorld().getDifficulty().getId() - 1) / 10.0) {
                     PersistentProjectileEntity arrowProj = cir.getReturnValue();
                     if (arrowProj instanceof ArrowEntity arrowEntity) {
                         int effectCount = skele.getStatusEffects().size();

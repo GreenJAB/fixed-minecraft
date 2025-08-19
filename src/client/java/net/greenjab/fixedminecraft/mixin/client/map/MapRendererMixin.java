@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.render.MapRenderState;
 import net.minecraft.client.render.MapRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,8 +18,8 @@ public class MapRendererMixin {
             at = @At(value = "INVOKE",
               target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionfc;)V"
     ))
-    private void scalePlayerMarkerWithDistance(MapRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers,
-                                               boolean bl, int light, CallbackInfo ci,
+    private void scalePlayerMarkerWithDistance(MapRenderState state, MatrixStack matrices,
+                                               EntityRenderCommandQueue entityRenderCommandQueue, boolean bl, int light, CallbackInfo ci,
                                                @Local MapRenderState.Decoration decoration){
         int rot = decoration.rotation;
         if (rot < 0) rot+=256;

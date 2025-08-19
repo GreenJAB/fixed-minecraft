@@ -92,13 +92,13 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                         double dx = this.dragon.getX() - this.target.getX();
                         double dz = this.dragon.getZ() - this.target.getZ();
 
-                        if (dx*dx+dz*dz < 16*16 && this.dragon.getWorld().getDifficulty().getId()>1) {
+                        if (dx*dx+dz*dz < 16*16 && this.dragon.getEntityWorld().getDifficulty().getId()>1) {
                             if (!this.dragon.isSilent()) {
-                                this.dragon.getWorld()
+                                this.dragon.getEntityWorld()
                                         .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                             }
                             BlockPos b = this.dragon.getBodyParts()[5].getBlockPos();
-                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getWorld().getWorldChunk(b).getWorld(), SpawnReason.MOB_SUMMONED);
+                            EndermiteEntity endermiteEntity = EntityType.ENDERMITE.create(this.dragon.getEntityWorld().getWorldChunk(b).getWorld(), SpawnReason.MOB_SUMMONED);
                             if (endermiteEntity != null) {
                                 endermiteEntity.refreshPositionAndAngles(b.getX()-this.dragon.getVelocity().getX(), b.up().getY(), b.getZ()-this.dragon.getVelocity().getZ(), 0, 0.0F);
                                 endermiteEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, -1));
@@ -108,7 +108,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                     endermiteEntity.setHealth(1);
                                 }
                                 endermiteEntity.getAttributeInstance(EntityAttributes.KNOCKBACK_RESISTANCE).setBaseValue(30);
-                                this.dragon.getWorld().spawnEntity(endermiteEntity);
+                                this.dragon.getEntityWorld().spawnEntity(endermiteEntity);
 
                                 this.seenTargetTimes = 0;
                                 if (this.path != null) {
@@ -137,12 +137,12 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                 double q = this.target.getZ() - n;
 
                                 if (!this.dragon.isSilent()) {
-                                    this.dragon.getWorld()
+                                    this.dragon.getEntityWorld()
                                             .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                                 }
-                                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getWorld(), this.dragon, new Vec3d(o, p, q));
+                                DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(this.dragon.getEntityWorld(), this.dragon, new Vec3d(o, p, q));
                                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
-                                this.dragon.getWorld().spawnEntity(dragonFireballEntity);
+                                this.dragon.getEntityWorld().spawnEntity(dragonFireballEntity);
                                 this.seenTargetTimes = 0;
                                 if (this.path != null) {
                                     while (!this.path.isFinished()) {
@@ -150,7 +150,7 @@ public abstract class StrafePlayerPhaseMixin extends AbstractPhase {
                                     }
                                 }
 
-                                if (this.dragon.getRandom().nextBoolean()||this.dragon.getWorld().getDifficulty().getId()<2) {
+                                if (this.dragon.getRandom().nextBoolean()||this.dragon.getEntityWorld().getDifficulty().getId()<2) {
                                     this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
                                 }if (this.dragon.getRandom().nextInt(10)==0) {
                                     this.dragon.getPhaseManager().setPhase(PhaseType.CHARGING_PLAYER);

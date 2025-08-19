@@ -19,6 +19,6 @@ public abstract class PiglinEntityMixin extends AbstractPiglinEntity {
     // Belongs to Feature: Mobs have a chance to spawn with randomly trimmed armor
     @ModifyArg(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/PiglinEntity;equipAtChance(Lnet/minecraft/entity/EquipmentSlot;Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/math/random/Random;)V"), index = 1)
     public ItemStack trimAtChance(ItemStack stack) {
-        return ArmorTrimmer.trimAtChanceIfTrimable(stack, this.random, this.getWorld().getRegistryManager());
+        return ArmorTrimmer.trimAtChanceIfTrimable(stack, this.random, this.getEntityWorld().getRegistryManager());
     }
 }

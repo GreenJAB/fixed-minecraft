@@ -31,8 +31,8 @@ public class FallingBlockEntityMixin {
     private void changeToSand(CallbackInfo ci) {
         FallingBlockEntity FBE = (FallingBlockEntity)(Object)this;
         if (FBE.getCommandTags().contains("convert")) {
-            World world = FBE.getWorld();
-            FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.getWorld().getWorldChunk(FBE.getBlockPos()).getWorld(), SpawnReason.CONVERSION);
+            World world = FBE.getEntityWorld();
+            FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.getEntityWorld().getWorldChunk(FBE.getBlockPos()).getWorld(), SpawnReason.CONVERSION);
             fallingBlockEntity.refreshPositionAndAngles(FBE.getX(), FBE.getY(), FBE.getZ(), 0.0F, 0.0F);
             fallingBlockEntity.setVelocity(FBE.getVelocity().x, FBE.getVelocity().y,FBE.getVelocity().z);
             world.spawnEntity(fallingBlockEntity);

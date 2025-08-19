@@ -14,7 +14,7 @@ public class PlayerEntityMixin
     @ModifyVariable(method = "addExhaustion", at = @At(value = "HEAD"), argsOnly = true)
     private float exhaustionGamerule(float value) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        if (PE.getWorld() instanceof ServerWorld serverWorld) {
+        if (PE.getEntityWorld() instanceof ServerWorld serverWorld) {
             return value* serverWorld.getGameRules().getInt(GameruleRegistry.Stamina_Drain_Speed)/100f;
         }
         return value;

@@ -25,8 +25,8 @@ public class PlayerManagerMixin
     ))
     private float dontSpawnAtMaxHealth(ServerPlayerEntity instance){
         float multiplier = 1f;
-        if (instance.getWorld().getDifficulty() == Difficulty.NORMAL)multiplier=0.5f;
-        if (instance.getWorld().getDifficulty() == Difficulty.HARD)multiplier=0.3f;
+        if (instance.getEntityWorld().getDifficulty() == Difficulty.NORMAL)multiplier=0.5f;
+        if (instance.getEntityWorld().getDifficulty() == Difficulty.HARD)multiplier=0.3f;
         instance.getHungerManager().setFoodLevel((int)(20*multiplier));
         instance.getHungerManager().setSaturationLevel((int)(20*multiplier));
         return instance.getHealth()*multiplier;

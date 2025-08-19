@@ -35,7 +35,7 @@ public abstract class PlayerEntityMixin {
     @Inject(method = "dropShoulderEntities", at = @At("HEAD"), cancellable = true)
     private void newCheck(CallbackInfo ci) {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        if (!(!PE.getWorld().isClient && ( PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isGliding() || PE.inPowderSnow))) {
+        if (!(!PE.getEntityWorld().isClient() && ( PE.fallDistance > 10 || PE.isSubmergedInWater() || PE.isSleeping() || PE.isGliding() || PE.inPowderSnow))) {
             ci.cancel();
         }
     }
@@ -48,7 +48,7 @@ public abstract class PlayerEntityMixin {
     @Unique
     protected void dropShoulderEntities2() {
         PlayerEntity PE = (PlayerEntity) (Object)this;
-        if (this.shoulderEntityAddedTime + 20L < PE.getWorld().getTime()) {
+        if (this.shoulderEntityAddedTime + 20L < PE.getEntityWorld().getTime()) {
             this.dropShoulderEntity(this.getShoulderEntityLeft());
             this.setShoulderEntityLeft(new NbtCompound());
             this.dropShoulderEntity(this.getShoulderEntityRight());

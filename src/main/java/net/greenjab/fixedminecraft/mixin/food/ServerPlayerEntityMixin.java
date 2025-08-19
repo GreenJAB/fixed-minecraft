@@ -44,7 +44,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
             if (s.contains("iron")||s.contains("gold")) weight+=1;
             if (s.contains("diamond")||s.contains("netherite")) weight+=2;
         }
-        int diff = this.getWorld().getDifficulty().getId();
+        int diff = this.getEntityWorld().getDifficulty().getId();
         float multiplier = (diff*weight)/48.0f;
         return 0.1f*(multiplier+1.0f);
     }
@@ -61,7 +61,7 @@ public abstract class ServerPlayerEntityMixin extends Entity
             if (s.contains("iron")||s.contains("gold")) weight+=1;
             if (s.contains("diamond")||s.contains("netherite")) weight+=2;
         }
-        int diff = this.getWorld().getDifficulty().getId();
+        int diff = this.getEntityWorld().getDifficulty().getId();
         float multiplier = (diff*weight)/48.0f;
         return 0.03f*(multiplier+1.0f);
     }

@@ -47,15 +47,15 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
 
     @Override
     public void tick() {
-        if (!this.getWorld().isClient()) {
+        if (!this.getEntityWorld().isClient()) {
             if (!uuids.isEmpty()) {
                 train.clear();
                 train.add(this);
                 for (UUID uuid : uuids) {
-                    Entity entity = ((ServerWorld) this.getWorld()).getEntity(uuid);
+                    Entity entity = ((ServerWorld) this.getEntityWorld()).method_73284(uuid);
                     if (entity instanceof AbstractMinecartEntity minecart) {
                         BlockPos var11 = minecart.getRailOrMinecartPos();
-                        BlockState blockState = this.getWorld().getBlockState(var11);
+                        BlockState blockState = this.getEntityWorld().getBlockState(var11);
                         boolean bl = AbstractRailBlock.isRail(blockState);
                         minecart.setOnRail(bl);
                         minecart.addCommandTag("train");
@@ -68,8 +68,8 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
             }
         }
         super.tick();
-        if (!this.getWorld().isClient()) {
-            ServerWorld world = (ServerWorld) this.getWorld();
+        if (!this.getEntityWorld().isClient()) {
+            ServerWorld world = (ServerWorld) this.getEntityWorld();
             AbstractMinecartEntity fakeMinecart = new ChestMinecartEntity(EntityType.CHEST_MINECART, world);
             fakeMinecart.noClip = true;
             fakeMinecart.addCommandTag("train");
@@ -82,8 +82,8 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 if (inv != null) {
                     for (int i = 0; i < inv.size();i++) {
                         ItemStack itemStack = inv.get(i);
-                        if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
-                            int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
+                        if (this.getEntityWorld().getFuelRegistry().isFuel(itemStack)) {
+                            int itemFuel = this.getEntityWorld().getFuelRegistry().getFuelTicks(itemStack);
                             if (itemStack.isOf(Items.LAVA_BUCKET)) {
                                 inv.set(i, Items.BUCKET.getDefaultStack());
                             } else {
@@ -114,7 +114,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 minecart.removeCommandTag("trainMove");
                 if (cont) {
                     BlockPos var11 = minecart.getRailOrMinecartPos();
-                    BlockState blockState = this.getWorld().getBlockState(var11);
+                    BlockState blockState = this.getEntityWorld().getBlockState(var11);
                     boolean bl = AbstractRailBlock.isRail(blockState);
                     minecart.setOnRail(bl);
                     if (!bl) rail = false;
@@ -161,7 +161,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
 
         }
         if (this.isLit() && this.random.nextInt(4) == 0) {
-            this.getWorld().addParticleClient(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
+            this.getEntityWorld().addParticleClient(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
         }
     }
 
@@ -196,7 +196,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                     );
                     if (!list.isEmpty()) {
                         BlockPos var5 = list.get(0).getRailOrMinecartPos();
-                        BlockState blockState = this.getWorld().getBlockState(var5);
+                        BlockState blockState = this.getEntityWorld().getBlockState(var5);
                         if (AbstractRailBlock.isRail(blockState)) {
                             addMinecart(list.get(0), fakeMinecart);
                         }
@@ -205,7 +205,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                     for (AbstractMinecartEntity minecart : list) {
                         if (train.size()<8) {
                             BlockPos var5 = minecart.getRailOrMinecartPos();
-                            BlockState blockState = this.getWorld().getBlockState(var5);
+                            BlockState blockState = this.getEntityWorld().getBlockState(var5);
                             if (AbstractRailBlock.isRail(blockState)) {
                                 addMinecart(minecart, lastMinecart);
                             }
@@ -227,7 +227,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         minecart.setYaw((minecart2.getYaw() + 360) % 360);
         minecart.age = 0;
         train.add(minecart);
-        minecart.getWorld()
+        minecart.getEntityWorld()
                 .playSound(minecart, minecart.getBlockPos(), SoundEvents.UI_BUTTON_CLICK.value(), SoundCategory.BLOCKS, 1.0F, 1.0F);
     }
 
@@ -286,8 +286,8 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     public ActionResult interact(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
         if (fuel>0) this.setLit(true);
-        if (this.getWorld().getFuelRegistry().isFuel(itemStack)) {
-            int itemFuel = this.getWorld().getFuelRegistry().getFuelTicks(itemStack);
+        if (this.getEntityWorld().getFuelRegistry().isFuel(itemStack)) {
+            int itemFuel = this.getEntityWorld().getFuelRegistry().getFuelTicks(itemStack);
             if (fuel + itemFuel <= 32000) {
                 fuel += itemFuel;
                 this.setLit(true);
@@ -316,7 +316,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
     @Override
     public Entity teleportTo(TeleportTarget teleportTarget) {
-        if (this.getWorld() instanceof ServerWorld serverWorld) {
+        if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
             serverWorld.resetIdleTimeout();
             serverWorld.getChunkManager().addTicket(ChunkTicketType.PORTAL, new ChunkPos(this.getBlockPos()), 3);
         }

@@ -191,7 +191,7 @@ public interface CauldronBehaviorMixin {
         } else if (!stack.contains(DataComponentTypes.DYED_COLOR)) {
             return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
         } else {
-            if (!world.isClient) {
+            if (!world.isClient()) {
                 stack.remove(DataComponentTypes.DYED_COLOR);
                 player.incrementStat(Stats.CLEAN_ARMOR);
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos);
@@ -205,7 +205,7 @@ public interface CauldronBehaviorMixin {
         if (!(stack.getItem() instanceof BundleItem)) {
             return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
         } else {
-            if (!world.isClient) {
+            if (!world.isClient()) {
                 ItemStack itemStack = stack.copyComponentsToNewStack(Items.BUNDLE, 1);
                 player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, itemStack, true));
                 player.incrementStat(Stats.CLEAN_SHULKER_BOX);
@@ -255,7 +255,7 @@ public interface CauldronBehaviorMixin {
         if (!(stack.isIn(itemTag))) {
             return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
         } else {
-            if (!world.isClient) {
+            if (!world.isClient()) {
                 ItemStack itemStack = stack.copyComponentsToNewStack(into, stack.getCount());
                 player.setStackInHand(hand, itemStack);
                 LeveledCauldronBlock.decrementFluidLevel(state, world, pos);

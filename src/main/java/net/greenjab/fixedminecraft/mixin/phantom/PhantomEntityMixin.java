@@ -23,8 +23,8 @@ public abstract class PhantomEntityMixin {
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void diveTerrariaBossStyle2(CallbackInfo ci){
         PhantomEntity PE = (PhantomEntity)(Object)this;
-        if (!PE.getWorld().isClient()) {
-            if (PE.getWorld().isDay()) {
+        if (!PE.getEntityWorld().isClient()) {
+            if (PE.getEntityWorld().isDay()) {
                 PE.noClip = true;
             }
             if (PE.noClip) {

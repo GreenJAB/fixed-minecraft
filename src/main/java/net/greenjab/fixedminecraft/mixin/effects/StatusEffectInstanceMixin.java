@@ -33,7 +33,7 @@ public class StatusEffectInstanceMixin {
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/effect/StatusEffect;applyUpdateEffect(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;I)Z"))
     private boolean modifySaturationEffect(StatusEffect effect, ServerWorld world, LivingEntity entity, int amplifier) {
         if (effect.getName().getString().toLowerCase().contains("saturation")) {
-            if (!entity.getWorld().isClient && entity instanceof PlayerEntity playerEntity) {
+            if (!entity.getEntityWorld().isClient() && entity instanceof PlayerEntity playerEntity) {
                 playerEntity.getHungerManager().add(+ 1, 0.0F);
             }
         } else {

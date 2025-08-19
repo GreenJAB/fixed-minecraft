@@ -54,7 +54,7 @@ public interface DispenserBehaviorMixin {
                     if (!(blockState.isIn(BlockTags.CONVERTABLE_TO_MUD)|| corals.containsKey(blockState.getBlock()))) {
                         return this.fallbackBehavior.dispense(pointer, stack);
                     } else {
-                        if (!serverWorld.isClient) {
+                        if (!serverWorld.isClient()) {
                             for (int i = 0; i < 5; i++) {
                                 serverWorld.spawnParticles(
                                         ParticleTypes.SPLASH,

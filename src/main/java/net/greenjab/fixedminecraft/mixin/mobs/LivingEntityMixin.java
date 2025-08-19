@@ -138,7 +138,7 @@ public abstract class LivingEntityMixin {
         if (!LE.isRemoved() && !this.dead) {
             if (LE instanceof AllayEntity AE) {
                 if (damageSource.isOf(DamageTypes.SONIC_BOOM)) {
-                    ServerWorld world = (ServerWorld) AE.getWorld();
+                    ServerWorld world = (ServerWorld) AE.getEntityWorld();
                     AE.dropItem(world, Items.ECHO_SHARD);
                     this.drop(world, damageSource);
 

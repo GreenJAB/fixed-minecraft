@@ -93,11 +93,11 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "updatePlayers", at = @At(value = "HEAD"))
     private void omenBossBar(CallbackInfo ci) {
-        if (!this.world.isClient) {
+        if (!this.world.isClient()) {
             List<ServerPlayerEntity> playerList = world.getPlayers();
             if (!this.previouslyKilled && this.world.getDifficulty().getId() > 1) {
                 for (ServerPlayerEntity player : playerList) {
-                    if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    if (player.getEntityWorld().getRegistryKey() == this.world.getRegistryKey()) {
                         WorldBorder WB = new WorldBorder();
                         WB.setSize(700);
                         player.networkHandler.sendPacket(new WorldBorderInitializeS2CPacket(WB));
@@ -105,7 +105,7 @@ public abstract class EnderDragonFightMixin {
                 }
             } else {
                 for (ServerPlayerEntity player : playerList) {
-                    if (player.getWorld().getRegistryKey() == this.world.getRegistryKey()) {
+                    if (player.getEntityWorld().getRegistryKey() == this.world.getRegistryKey()) {
                         WorldBorder WB = new WorldBorder();
                         WB.setSize(this.world.getServer().getOverworld().getWorldBorder().getSize());
                         player.networkHandler.sendPacket(new WorldBorderInitializeS2CPacket(WB));
@@ -115,8 +115,8 @@ public abstract class EnderDragonFightMixin {
         }//*/
         this.bossBar.setColor(BossBar.Color.PINK);
         if (this.dragonUuid!=null) {
-            if (this.world.getEntity(this.dragonUuid)!=null) {
-                if (this.world.getEntity(this.dragonUuid).getCommandTags().contains("omen")) {
+            if (this.world.method_73284(this.dragonUuid)!=null) {
+                if (this.world.method_73284(this.dragonUuid).getCommandTags().contains("omen")) {
                     this.bossBar.setColor(BossBar.Color.PURPLE);
                 }
             }
@@ -234,10 +234,10 @@ public abstract class EnderDragonFightMixin {
     @Inject(method = "dragonKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/boss/dragon/EnderDragonFight;generateEndPortal(Z)V"))
     private void spawnElytraItem(EnderDragonEntity dragon, CallbackInfo ci) {
         if (dragon.getCommandTags().contains("omen")) {
-            ItemEntity itemEntity = new ItemEntity(dragon.getWorld(), 0, dragon.getY()-2, 0, Items.ELYTRA.getDefaultStack());
+            ItemEntity itemEntity = new ItemEntity(dragon.getEntityWorld(), 0, dragon.getY()-2, 0, Items.ELYTRA.getDefaultStack());
             itemEntity.refreshPositionAndAngles(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
             itemEntity.setVelocity(new Vec3d(0, 0, 0));
-            dragon.getWorld().spawnEntity(itemEntity);
+            dragon.getEntityWorld().spawnEntity(itemEntity);
             this.world.setBlockState(this.world.getTopPosition(Heightmap.Type.MOTION_BLOCKING, EndPortalFeature.offsetOrigin(this.origin)), Blocks.DRAGON_EGG.getDefaultState());
         }
 

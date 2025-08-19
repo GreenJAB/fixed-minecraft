@@ -25,11 +25,11 @@ class PhantomCircleMovementGoalMixin {
     private boolean dive(World instance, BlockPos blockPos){
         PhantomEntity PE = this.field_7325;
         if (PE.noClip) {
-            World world = PE.getWorld();
+            World world = PE.getEntityWorld();
             BlockPos blockpos = PE.getBlockPos();
             ChunkPos chunk = world.getWorldChunk(blockpos).getPos();
             BlockView blockView = world.getChunkAsView(chunk.x, chunk.z);
-            if (PE.getWorld().getBlockState(blockPos.up(4)).isSolidBlock(blockView, blockPos)) {
+            if (PE.getEntityWorld().getBlockState(blockPos.up(4)).isSolidBlock(blockView, blockPos)) {
                 PE.discard();
             }
             return true;

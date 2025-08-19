@@ -41,10 +41,10 @@ public class PotionEntityMixin {
         PotionEntity PE = (PotionEntity) (Object)this;
         Box box = PE.getBoundingBox().expand(4.0, 2.0, 4.0);
 
-        for (PiglinEntity piglinEntity : PE.getWorld().getNonSpectatingEntities(PiglinEntity.class, box)) {
+        for (PiglinEntity piglinEntity : PE.getEntityWorld().getNonSpectatingEntities(PiglinEntity.class, box)) {
             piglinEntity.setImmuneToZombification(true);
         }
-        for (HoglinEntity hoglinEntity : PE.getWorld().getNonSpectatingEntities(HoglinEntity.class, box)) {
+        for (HoglinEntity hoglinEntity : PE.getEntityWorld().getNonSpectatingEntities(HoglinEntity.class, box)) {
             hoglinEntity.setImmuneToZombification(true);
         }
     }
@@ -52,7 +52,7 @@ public class PotionEntityMixin {
     @Unique
     private void applyLingeringPotion(PotionContentsComponent potion) {
         PotionEntity PE = (PotionEntity) (Object)this;
-        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(PE.getWorld(), PE.getX(), PE.getY(), PE.getZ());
+        AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(PE.getEntityWorld(), PE.getX(), PE.getY(), PE.getZ());
         Entity entity = PE.getOwner();
         if (entity instanceof LivingEntity livingEntity) {
             areaEffectCloudEntity.setOwner(livingEntity);
@@ -64,6 +64,6 @@ public class PotionEntityMixin {
         areaEffectCloudEntity.setRadiusGrowth(-areaEffectCloudEntity.getRadius() / (float)areaEffectCloudEntity.getDuration());
         areaEffectCloudEntity.setPotionContents(potion);
 
-        PE.getWorld().spawnEntity(areaEffectCloudEntity);
+        PE.getEntityWorld().spawnEntity(areaEffectCloudEntity);
     }
 }

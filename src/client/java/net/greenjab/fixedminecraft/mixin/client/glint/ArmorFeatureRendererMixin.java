@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.client.glint;
 
 import net.greenjab.fixedminecraft.render.EnchantGlint;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -24,8 +25,8 @@ public abstract class ArmorFeatureRendererMixin <S extends BipedEntityRenderStat
     }
 
     @Inject(method = "renderArmor", at = @At("HEAD"))
-    private void setEnchantTheRainbowItemStack(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack,
-                                               EquipmentSlot armorSlot, int light, A armorModel, CallbackInfo ci) {
+    private void setEnchantTheRainbowItemStack(MatrixStack matrices, EntityRenderCommandQueue entityRenderCommandQueue, ItemStack stack,
+                                               EquipmentSlot slot, int light, S bipedEntityRenderState, CallbackInfo ci) {
         EnchantGlint.setTargetStack(stack);
     }
 }

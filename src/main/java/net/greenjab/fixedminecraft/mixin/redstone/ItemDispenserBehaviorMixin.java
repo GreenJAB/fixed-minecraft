@@ -29,7 +29,7 @@ public abstract class ItemDispenserBehaviorMixin  {
     public void CauldronMixin(BlockPointer pointer, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
 
         World world = pointer.world();
-        if (world.isClient)  return;
+        if (world.isClient())  return;
         if (!pointer.state().isOf(Blocks.DISPENSER))  return;
 
         BlockPos pos = BlockPos.ofFloored(DispenserBlock.getOutputLocation(pointer));

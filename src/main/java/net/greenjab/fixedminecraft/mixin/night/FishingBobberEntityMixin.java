@@ -46,7 +46,7 @@ public class FishingBobberEntityMixin {
         ItemStack bait = getBait(playerEntity);
         int luck = this.luckBonus;
 
-        World world = FBE.getWorld();
+        World world = FBE.getEntityWorld();
         if (playerEntity.hasStatusEffect(StatusEffects.CONDUIT_POWER))luck += 2;
         if (world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) {
             if (world.isRaining())luck+=2;
@@ -67,7 +67,7 @@ public class FishingBobberEntityMixin {
         int chanceBad = Math.max(40-chanceGood*2, 0);
         int chanceMid = Math.max(100-chanceGood-chanceFish-chanceBad, 0);
 
-        int rand = playerEntity.getWorld().random.nextInt(100);
+        int rand = playerEntity.getEntityWorld().random.nextInt(100);
         int lootPool = 0;
         if (rand>chanceFish) lootPool = 1;
         if (rand>chanceFish+chanceBad) lootPool = 2;
@@ -76,11 +76,11 @@ public class FishingBobberEntityMixin {
         String[] tables = {"fish", "junk", "mid", "treasure"};
 
         Identifier lootTableId = FixedMinecraft.id("gameplay/fixed_fishing/" + tables[lootPool]);
-        LootTable lootTable = FBE.getWorld().getServer()
+        LootTable lootTable = FBE.getEntityWorld().getServer()
                 .getReloadableRegistries()
                 .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
 
-        LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
+        LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getEntityWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
         ObjectArrayList<ItemStack> loots = lootTable.generateLoot(lootContextParameterSet);
         if (loots.isEmpty()) return Items.DIRT.getDefaultStack();

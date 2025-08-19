@@ -183,7 +183,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Inject(method = "sleep", at = @At("HEAD"), cancellable = true)
     private void requirePrivacy(BlockPos pos, CallbackInfo ci){
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        List<VillagerEntity> list = villagerEntity.getWorld().getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(15, 5, 15), EntityPredicates.VALID_LIVING_ENTITY);
+        List<VillagerEntity> list = villagerEntity.getEntityWorld().getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(15, 5, 15), EntityPredicates.VALID_LIVING_ENTITY);
         int canSee = 0;
         for (VillagerEntity villager : list) {
             if (villager != villagerEntity) {
@@ -287,9 +287,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     @Unique
     private EnchantedBookFactory firstBook(VillagerData villagerData) {
-        Random rn = this.getWorld().random;
+        Random rn = this.getEntityWorld().random;
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
+        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getEntityWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
@@ -304,7 +304,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
                 if (enchantment.getMaxLevel() != 1 || registryEntry.isIn(EnchantmentTags.CURSE)) {
                     i=10;
                 } else {
-                    optional = villagerEntity.getWorld()
+                    optional = villagerEntity.getEntityWorld()
                             .getRegistryManager()
                             .getOrThrow(RegistryKeys.ENCHANTMENT)
                             .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
@@ -334,21 +334,21 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
 
     @Unique
     private EnchantedBookFactory masterBook(VillagerData villagerData) {
-        Random rn = this.getWorld().random;
+        Random rn = this.getEntityWorld().random;
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
-        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
+        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getEntityWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(biomeEnchants.get(villagerData.type().getIdAsString()), random);
 
 
-        Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getWorld()
+        Iterable<RegistryEntry<Enchantment>> optional2 = villagerEntity.getEntityWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .iterateEntries(biomeEnchants.get(villagerData.type().getIdAsString()));
         HashMap<RegistryEntry<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
         optional2.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
-        List<VillagerEntity> list = villagerEntity.getWorld()
+        List<VillagerEntity> list = villagerEntity.getEntityWorld()
                 .getEntitiesByClass(VillagerEntity.class, villagerEntity.getBoundingBox().expand(32), EntityPredicates.VALID_LIVING_ENTITY);
         for (VillagerEntity villager2 : list) {
             if (villager2 != villagerEntity) {
@@ -375,7 +375,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         possibleEnchantCount.replaceAll((e, v) -> e.isIn(EnchantmentTags.CURSE) ? 0: 1 / v);
         float max = 0;
         for (float f : possibleEnchantCount.values()) max += f;
-        float rand = villagerEntity.getWorld().random.nextFloat() * max;
+        float rand = villagerEntity.getEntityWorld().random.nextFloat() * max;
 
         if (max != 0) {
             for (RegistryEntry<Enchantment> ee : possibleEnchantCount.keySet()) {
@@ -410,9 +410,9 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Unique
     private EnchantedBookFactory anyBook() {
 
-        Random rn = this.getWorld().random;
+        Random rn = this.getEntityWorld().random;
         VillagerEntity villagerEntity = (VillagerEntity)(Object)this;
-        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getWorld()
+        Optional<RegistryEntry<Enchantment>> optional = villagerEntity.getEntityWorld()
                 .getRegistryManager()
                 .getOrThrow(RegistryKeys.ENCHANTMENT)
                 .getRandomEntry(ModTags.ANY_TRADES, random);
@@ -442,7 +442,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/MerchantEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V"))
     private void dropArmor(DamageSource damageSource, CallbackInfo ci) {
         VillagerEntity villagerEntity = (VillagerEntity) (Object) this;
-        if (villagerEntity.getWorld() instanceof ServerWorld serverWorld) {
+        if (villagerEntity.getEntityWorld() instanceof ServerWorld serverWorld) {
             for (ItemStack itemStack : FixedMinecraft.getArmor(villagerEntity)) {
                 villagerEntity.dropStack(serverWorld, itemStack);
             }

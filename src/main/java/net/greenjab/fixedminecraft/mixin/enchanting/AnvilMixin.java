@@ -55,7 +55,7 @@ public class AnvilMixin  {
     @Inject(method = "onUse", at = @At(value = "HEAD"), cancellable = true)
     private void repairAnvil(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                                 CallbackInfoReturnable<ActionResult> cir){
-        if (world.isClient) FixedMinecraft.netheriteAnvil = false;
+        if (world.isClient()) FixedMinecraft.netheriteAnvil = false;
         ItemStack[] items = {player.getMainHandStack(), player.getOffHandStack()};
         for (ItemStack itemStack: items) {
             if (itemStack.isOf(Items.IRON_BLOCK)) {

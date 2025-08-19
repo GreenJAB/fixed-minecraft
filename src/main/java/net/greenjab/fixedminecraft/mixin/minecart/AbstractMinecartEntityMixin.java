@@ -61,7 +61,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
             value = "INVOKE",
             target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;setVelocity(Lnet/minecraft/util/math/Vec3d;)V", ordinal = 0))
     private void groundFriction(AbstractMinecartEntity instance, Vec3d vec3d) {
-        instance.setVelocity(instance.getVelocity().multiply(this.getWorld().getBlockState(this.getVelocityAffectingPos()).getBlock().getSlipperiness()));
+        instance.setVelocity(instance.getVelocity().multiply(this.getEntityWorld().getBlockState(this.getVelocityAffectingPos()).getBlock().getSlipperiness()));
     }
 
     @Redirect(method = "pushAwayFromMinecart", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;addVelocity(DDD)V"))

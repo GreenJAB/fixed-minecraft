@@ -60,24 +60,24 @@ public abstract class ChargingPlayerPhaseMixin extends AbstractPhase {
                 double q = playerEntity.getZ() - n;
 
                 if (!this.dragon.isSilent()) {
-                    this.dragon.getWorld()
+                    this.dragon.getEntityWorld()
                             .syncWorldEvent(null, WorldEvents.ENDER_DRAGON_SHOOTS, this.dragon.getBlockPos(), 0);
                 }
                 DragonFireballEntity dragonFireballEntity = new DragonFireballEntity(world, this.dragon, new Vec3d(o, p, q));
                 dragonFireballEntity.refreshPositionAndAngles(l, m, n, 0.0F, 0.0F);
-                this.dragon.getWorld().spawnEntity(dragonFireballEntity);
+                this.dragon.getEntityWorld().spawnEntity(dragonFireballEntity);
 
                 this.dragon.getPhaseManager().setPhase(PhaseType.HOLDING_PATTERN);
 
             }
         }
-        List<Entity> entities = this.dragon.getWorld().getOtherEntities(this.dragon, this.dragon.getBoundingBox().expand(ischasing?1:-1).offset(0, -3, 0));
+        List<Entity> entities = this.dragon.getEntityWorld().getOtherEntities(this.dragon, this.dragon.getBoundingBox().expand(ischasing?1:-1).offset(0, -3, 0));
         for (Entity e : entities) {
             if (e instanceof LivingEntity player) {
                 double f = player.getX() - this.dragon.getX();
                 double g = player.getZ() - this.dragon.getZ();
                 double h = Math.max(f * f + g * g, 0.1);
-                int v = 2*(1+this.dragon.getWorld().getDifficulty().getId() + (this.dragon.getCommandTags().contains("omen")?1:0));
+                int v = 2*(1+this.dragon.getEntityWorld().getDifficulty().getId() + (this.dragon.getCommandTags().contains("omen")?1:0));
                 player.addVelocity((f / h * 2.0)+this.dragon.getVelocity().getX()*v, 1, (g / h * 2.0)+this.dragon.getVelocity().getZ()*v);
 
                 DamageSource damageSource = this.dragon.getDamageSources().mobAttack(this.dragon);

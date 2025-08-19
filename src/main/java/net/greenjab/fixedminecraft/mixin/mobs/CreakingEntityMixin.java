@@ -38,7 +38,7 @@ public abstract class CreakingEntityMixin {
         CreakingEntity CE = (CreakingEntity)(Object)this;
         BlockPos home = CE.getHomePos();
         if (home!=null) {
-            if (CE.getWorld().getBlockEntity(home) instanceof CreakingHeartBlockEntity creakingHeartBlockEntity) {
+            if (CE.getEntityWorld().getBlockEntity(home) instanceof CreakingHeartBlockEntity creakingHeartBlockEntity) {
                 if (!CE.hasCustomName()) {
                     boolean root = CE.shouldBeUnrooted();
                     LivingEntity target = CE.getTarget();
@@ -54,8 +54,8 @@ public abstract class CreakingEntityMixin {
                         }
                     }
                     if (target == null) {
-                        if (CE.getWorld().getTime() % 100 == 0) {
-                            if (CE.getWorld().random.nextInt(33) == 0) {
+                        if (CE.getEntityWorld().getTime() % 100 == 0) {
+                            if (CE.getEntityWorld().random.nextInt(33) == 0) {
                                 creakingHeartBlockEntity.killPuppet(CE.getDamageSources().cramming());
                             }
                         }

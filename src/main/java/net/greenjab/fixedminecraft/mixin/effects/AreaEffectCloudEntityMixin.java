@@ -50,7 +50,7 @@ public class AreaEffectCloudEntityMixin {
         AreaEffectCloudEntity AECE = (AreaEffectCloudEntity) (Object)this;
         Box box = AECE.getBoundingBox();
         Predicate<LivingEntity> AFFECTED_BY_WATER = entity -> entity.hurtByWater() || entity.isOnFire();
-        for (LivingEntity livingEntity : AECE.getWorld().getEntitiesByClass(LivingEntity.class, box, AFFECTED_BY_WATER)) {
+        for (LivingEntity livingEntity : AECE.getEntityWorld().getEntitiesByClass(LivingEntity.class, box, AFFECTED_BY_WATER)) {
             double d = AECE.squaredDistanceTo(livingEntity);
             if (d < AECE.getWidth()*AECE.getWidth()) {
                 if (livingEntity.hurtByWater()) {
@@ -63,7 +63,7 @@ public class AreaEffectCloudEntityMixin {
             }
         }
 
-        for (AxolotlEntity axolotlEntity : AECE.getWorld().getNonSpectatingEntities(AxolotlEntity.class, box)) {
+        for (AxolotlEntity axolotlEntity : AECE.getEntityWorld().getNonSpectatingEntities(AxolotlEntity.class, box)) {
             axolotlEntity.hydrateFromPotion();
         }
     }
@@ -73,10 +73,10 @@ public class AreaEffectCloudEntityMixin {
         AreaEffectCloudEntity AECE = (AreaEffectCloudEntity) (Object)this;
         Box box = AECE.getBoundingBox();
 
-        for (PiglinEntity piglinEntity : AECE.getWorld().getNonSpectatingEntities(PiglinEntity.class, box)) {
+        for (PiglinEntity piglinEntity : AECE.getEntityWorld().getNonSpectatingEntities(PiglinEntity.class, box)) {
             piglinEntity.setImmuneToZombification(true);
         }
-        for (HoglinEntity hoglinEntity : AECE.getWorld().getNonSpectatingEntities(HoglinEntity.class, box)) {
+        for (HoglinEntity hoglinEntity : AECE.getEntityWorld().getNonSpectatingEntities(HoglinEntity.class, box)) {
             hoglinEntity.setImmuneToZombification(true);
         }
     }

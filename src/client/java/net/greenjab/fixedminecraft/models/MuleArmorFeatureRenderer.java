@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -36,7 +37,9 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
         this.model = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.MULE));
         this.babyModel = new DonkeyEntityModel(loader.getModelPart(EntityModelLayers.MULE_BABY));
     }
-    @Override
+
+    //TODO Mule armour render
+    /*@Override
     public void render(
             MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, DonkeyEntityRenderState donkeyEntityRenderState, float f, float g
     ) {
@@ -57,7 +60,7 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
                             i
                     );
         }
-    }
+    }*/
 
     private ItemStack getArmorData(DonkeyEntityRenderState donkeyEntityRenderState) {
         float data = donkeyEntityRenderState.headItemAnimationProgress;
@@ -82,5 +85,27 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
         if (i==5) return Items.DIAMOND_HORSE_ARMOR;
         if (i==6) return ItemRegistry.NETHERITE_HORSE_ARMOR;
         return Items.AIR;
+    }
+
+    @Override
+    public void render(MatrixStack matrixStack, EntityRenderCommandQueue queue, int light, DonkeyEntityRenderState donkeyEntityRenderState, float limbAngle,
+                       float limbDistance) {
+        /*ItemStack itemStack = getArmorData(donkeyEntityRenderState);// state.;
+        EnchantGlint.setTargetStack(itemStack);
+        EquippableComponent equippableComponent = itemStack.get(DataComponentTypes.EQUIPPABLE);
+        if (equippableComponent != null && equippableComponent.assetId().isPresent()) {
+            DonkeyEntityModel donkeyEntityModel = donkeyEntityRenderState.baby ? this.babyModel : this.model;
+            donkeyEntityModel.setAngles(donkeyEntityRenderState);
+            this.equipmentRenderer
+                    .render(
+                            EquipmentModel.LayerType.HORSE_BODY,
+                            equippableComponent.assetId().get(),
+                            donkeyEntityModel,
+                            itemStack,
+                            matrixStack,
+                            queue,
+                            light
+                    );
+        }*/
     }
 }

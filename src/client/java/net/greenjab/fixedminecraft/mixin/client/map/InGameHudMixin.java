@@ -22,9 +22,9 @@ public class InGameHudMixin {
          ClientPlayerEntity player = MinecraftClient.getInstance().player;
          MinecraftClient client = MinecraftClient.getInstance();
          AtomicBoolean hasWaypoint = new AtomicBoolean(false);
-         client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.cameraEntity, (waypoint) -> {
+         client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.getCameraEntity(), (waypoint) -> {
              if (!(Boolean)waypoint.getSource().left().map((uuid) -> {
-                 return uuid.equals(client.cameraEntity.getUuid());
+                 return uuid.equals(client.getCameraEntity().getUuid());
              }).orElse(false)) {
                  hasWaypoint.set(hasWaypoint.get() || (waypoint.getConfig().style != WaypointStyles.DEFAULT));
              }

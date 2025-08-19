@@ -1,8 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
 import net.greenjab.fixedminecraft.registry.other.FletchingScreenHandler;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FletchingTableBlock;
+//import net.minecraft.block.FletchingTableBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -19,10 +20,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(FletchingTableBlock.class)
+//TODO fletching table
+//@Mixin(FletchingTableBlock.class)
+@Mixin(Block.class)
 public class FletchingTableBlockMixin {
 
-    @Unique
+    /*@Unique
     public NamedScreenHandlerFactory createScreenHandlerFactory(World world, BlockPos pos) {
         return new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new FletchingScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos)), Text.of(Text.translatable("container.fletching")));
     }
@@ -38,5 +41,5 @@ public class FletchingTableBlockMixin {
            cir.setReturnValue( ActionResult.CONSUME);
        }
        cir.cancel();
-   }
+   }*/
 }

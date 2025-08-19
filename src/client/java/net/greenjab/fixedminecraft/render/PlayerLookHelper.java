@@ -51,7 +51,7 @@ public abstract class PlayerLookHelper {
             blockEntity = blockEntityOptional.get();
         } else if (!hit.getBlockPos().equals(blockEntity.getPos())) return book;
         // Get hit position on the block and the slot
-        Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPos(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
+        Optional<Vec2f> hitPos = ChiseledBookshelfBlockInvoker.getHitPosOnFront(hit, blockEntity.getCachedState().get(HorizontalFacingBlock.FACING));
         if (hitPos.isEmpty()) return book;
         OptionalInt slot = getSlotForHitPos(hit, client.world.getBlockState(hit.getBlockPos()));
         //System.out.println("getLookingAtBook, " + blockEntity.getStack(slot.getAsInt()));

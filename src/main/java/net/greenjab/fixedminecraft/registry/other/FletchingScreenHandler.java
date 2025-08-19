@@ -149,7 +149,7 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
             RecipeInputInventory craftingInventory,
             CraftingResultInventory resultInventory
     ) {
-        if (!world.isClient) {
+        if (!world.isClient()) {
             ServerPlayerEntity serverPlayerEntity = (ServerPlayerEntity)player;
             ItemStack itemStack = ItemStack.EMPTY;
             boolean b = !craftingInventory.getStack(0).isEmpty() && !craftingInventory.getStack(3).isEmpty() &&

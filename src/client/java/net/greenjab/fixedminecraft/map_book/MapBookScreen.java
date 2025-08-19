@@ -24,6 +24,7 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -71,7 +72,7 @@ public class MapBookScreen extends Screen {
         return false;
     }
 
-    @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
+    @Override public boolean mouseClicked(double mouseX, double mouseY, int button, boolean doubleClick) {
         if (button == 0 && Screen.hasShiftDown()) {
             int id = getMapBookId(item);
             if (id != -1) {
@@ -104,7 +105,7 @@ public class MapBookScreen extends Screen {
                         pos.getX(), client.player.getY(), pos.getY()));
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(mouseX, mouseY, button, doubleClick);
     }
 
     @Override public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
@@ -200,15 +201,19 @@ public class MapBookScreen extends Screen {
         matrix.scale(8.0f, 8.0f);
         matrix.translate(0f, 0f);
         matrix.scale(1f / this.scale, 1f / this.scale);
-        Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
+        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
                 new MapDecoration(
                         MapDecorationTypes.PLAYER,
                         (byte) 0, (byte) 0, (byte) 0,Optional.empty()
                 )
-        );
+        );*/
 
         if (thisPlayer) {
-            context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                            //"hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
+                            "hud/locator_bar_dot/map_decorations/player"),
+                    0, 0, 9, 9, -1);
+            //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
         } else {
             int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
             for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
@@ -222,7 +227,10 @@ public class MapBookScreen extends Screen {
                     }
                 }
             }
-            context.drawTexturedQuad(RenderPipelines.GUI_TEXTURED, sprite.getAtlasId(), -1, 1, -1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV(), color);
+            context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                            "hud/locator_bar_dot/map_decorations/player"),
+                    0, 0, 9, 9, color);
+            //context.drawTexturedQuad(RenderPipelines.GUI_TEXTURED, sprite.getAtlasId(), -1, 1, -1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV(), color);
         }
         matrix.popMatrix();
 
@@ -269,13 +277,16 @@ public class MapBookScreen extends Screen {
                         matrix.scale(8.0f, 8.0f);
                         matrix.translate(0f, 0f);
                         matrix.scale(1f / this.scale, 1f / this.scale);
-                        Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
+                        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
                                 new MapDecoration(
                                         mapIcon.type(),
                                         (byte) 0,(byte) 0,(byte) 0,Optional.empty()
                                 )
-                        );
-                        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+                        );*/
+                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                                        "hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
+                                0, 0, 9, 9, -1);
+                        //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
                         matrix.popMatrix();
 
                         if (mapIcon.name().isPresent()) {
@@ -319,14 +330,17 @@ public class MapBookScreen extends Screen {
         matrix.scale(8.0f, 8.0f);
         matrix.translate(0f, 0f);
         matrix.scale(1f / this.scale, 1f / this.scale);
-        Sprite sprite = client.getMapDecorationsAtlasManager().getSprite(
+        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
                 new MapDecoration(
                         MapDecorationTypes.TARGET_X,
                         (byte) 0, (byte) 0, (byte) 0,Optional.empty()
                 )
-        );
+        );*/
 
-        context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
+                        "hud/locator_bar_dot/map_decorations/target_x"),
+                0, 0, 9, 9, -1);
+        //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
         matrix.popMatrix();
     }
 
