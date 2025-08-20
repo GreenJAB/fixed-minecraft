@@ -198,22 +198,17 @@ public class MapBookScreen extends Screen {
         matrix.scale(this.scale, this.scale);
         matrix.translate(x + width/ 2.0f, z + height / 2.0f);
         matrix.rotate((float) (rotation * Math.PI/180.0f));
+        matrix.rotate((float) (Math.PI));
         matrix.scale(8.0f, 8.0f);
-        matrix.translate(0f, 0f);
+        matrix.scale(2.5f, 2.5f);
         matrix.scale(1f / this.scale, 1f / this.scale);
-        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
-                new MapDecoration(
-                        MapDecorationTypes.PLAYER,
-                        (byte) 0, (byte) 0, (byte) 0,Optional.empty()
-                )
-        );*/
+        matrix.translate(-0.5f, -0.5f);
 
         if (thisPlayer) {
             context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
                             //"hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
                             "hud/locator_bar_dot/map_decorations/player"),
-                    0, 0, 9, 9, -1);
-            //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+                    0, 0, 1, 1, -1);
         } else {
             int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
             for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
@@ -229,8 +224,7 @@ public class MapBookScreen extends Screen {
             }
             context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
                             "hud/locator_bar_dot/map_decorations/player"),
-                    0, 0, 9, 9, color);
-            //context.drawTexturedQuad(RenderPipelines.GUI_TEXTURED, sprite.getAtlasId(), -1, 1, -1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV(), color);
+                    0, 0, 1, 1, color);
         }
         matrix.popMatrix();
 
@@ -243,7 +237,7 @@ public class MapBookScreen extends Screen {
         matrix.scale(this.scale, this.scale);
         matrix.translate(x + width / 2.0f, z + height / 2.0f);
         matrix.scale(1 / this.scale, 1 / this.scale);
-        matrix.translate(-o / 2f, 8.0f);
+        matrix.translate(-o / 2f, 10.0f);
 
         context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
         context.drawText(textRenderer, text, 0, 0, -1, true);
@@ -273,20 +267,14 @@ public class MapBookScreen extends Screen {
                         float x = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
                         float z = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
                         matrix.translate(x + width / 2.0f, z + height / 2.0f);
-                        matrix.rotate((float) Math.PI);
                         matrix.scale(8.0f, 8.0f);
-                        matrix.translate(0f, 0f);
+                        matrix.scale(2.5f, 2.5f);
                         matrix.scale(1f / this.scale, 1f / this.scale);
-                        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
-                                new MapDecoration(
-                                        mapIcon.type(),
-                                        (byte) 0,(byte) 0,(byte) 0,Optional.empty()
-                                )
-                        );*/
+                        matrix.translate(-0.5f, -0.5f);
+
                         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
                                         "hud/locator_bar_dot/map_decorations/" + mapIcon.getAssetId().getPath()),
-                                0, 0, 9, 9, -1);
-                        //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+                                0, 0, 1, 1, -1);
                         matrix.popMatrix();
 
                         if (mapIcon.name().isPresent()) {
@@ -302,11 +290,9 @@ public class MapBookScreen extends Screen {
                             float mapz = (mapStateData.mapState.centerZ - offset + (mapIcon.z() + 128 + 1) * mapScale / 2) * render;
                             matrix.translate(mapx + width / 2.0f, mapz + height / 2.0f);
                             matrix.scale(1 / this.scale, 1 / this.scale);
-                            matrix.translate(-o / 2f, 8.0f);
+                            matrix.translate(-o / 2f, 10.0f);
 
-                            //context.goUpLayer();
                             context.fill(- 1, - 1, o, 9, (new Color(50, 50, 50, 150)).hashCode());
-                            //context.goUpLayer();
                             context.drawText(textRenderer, text, 0, 0, -1, true);
                             matrix.popMatrix();
                         }
@@ -327,20 +313,15 @@ public class MapBookScreen extends Screen {
         matrix.scale(this.scale, this.scale);
         matrix.translate(x + width/ 2.0f, z + height / 2.0f);
         matrix.rotate((float) (rotation * Math.PI/180.0f));
+        matrix.rotate((float) (Math.PI));
         matrix.scale(8.0f, 8.0f);
-        matrix.translate(0f, 0f);
+        matrix.scale(2.5f, 2.5f);
         matrix.scale(1f / this.scale, 1f / this.scale);
-        /*Sprite sprite = client.getMapRenderer().decorationsAtlasManager.getSprite(
-                new MapDecoration(
-                        MapDecorationTypes.TARGET_X,
-                        (byte) 0, (byte) 0, (byte) 0,Optional.empty()
-                )
-        );*/
+        matrix.translate(-0.5f, -0.5f);
 
         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
                         "hud/locator_bar_dot/map_decorations/target_x"),
-                0, 0, 9, 9, -1);
-        //context.drawTexturedQuad(sprite.getAtlasId(), -1, -1, 1, 1, sprite.getMinU(), sprite.getMaxU(), sprite.getMaxV(), sprite.getMinV());
+                0, 0, 1, 1, -1);
         matrix.popMatrix();
     }
 

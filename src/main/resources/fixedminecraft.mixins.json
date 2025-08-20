@@ -76,7 +76,6 @@
         "inventory.BundleContentsComponentMixin",
         "inventory.CraftingInventoryAccessor",
         "inventory.CraftingResultSlotMixin",
-        "inventory.FletchingTableBlockMixin",
         "inventory.PlayerEntityMixin",
         "inventory.PlayerInventoryMixin",
         "inventory.PlayerScreenHandlerMixin",

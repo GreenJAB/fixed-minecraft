@@ -8,6 +8,7 @@ import net.greenjab.fixedminecraft.registry.block.NewAmethystBlock;
 import net.greenjab.fixedminecraft.registry.block.NewDaylightDetectorBlock;
 import net.greenjab.fixedminecraft.registry.block.NewTorchFlowerBlock;
 import net.greenjab.fixedminecraft.registry.block.NewPitcherCropBlock;
+import net.greenjab.fixedminecraft.registry.block.FletchingTableBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -108,6 +109,16 @@ public class BlocksMixin {
                         .offset(AbstractBlock.OffsetType.XZ)
                         .burnable()
                         .pistonBehavior(PistonBehavior.DESTROY)
+        );
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from = @At( value = "FIELD",
+                          target = "Lnet/minecraft/block/Blocks;CARTOGRAPHY_TABLE:Lnet/minecraft/block/Block;")))
+    private static Block newFletchingTable(String id, AbstractBlock.Settings settings) {
+        return register(
+                "fletching_table",
+                FletchingTableBlock::new,
+                AbstractBlock.Settings.create().mapColor(MapColor.OAK_TAN).instrument(NoteBlockInstrument.BASS).strength(2.5F).sounds(BlockSoundGroup.WOOD).burnable()
         );
     }
 

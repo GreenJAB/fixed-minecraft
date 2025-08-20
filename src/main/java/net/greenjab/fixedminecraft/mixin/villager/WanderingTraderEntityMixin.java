@@ -6,6 +6,7 @@ import com.mojang.authlib.properties.PropertyMap;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.SkullBlockEntity;
+import net.minecraft.class_11755;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
@@ -23,9 +24,11 @@ import net.minecraft.potion.Potions;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.Uuids;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradedItem;
@@ -222,27 +225,31 @@ public abstract class WanderingTraderEntityMixin {
         Item[] heads = {Items.ZOMBIE_HEAD, Items.SKELETON_SKULL, Items.CREEPER_HEAD, Items.WITHER_SKELETON_SKULL, Items.PIGLIN_HEAD, Items.PLAYER_HEAD};
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
-
-            //TODO player heads
-            /*int who = (int)(Math.random()*2);
+            WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
+            MinecraftServer minecraftServer = WTE.getServer();
+            class_11755 lv = minecraftServer.method_73550().profileResolver();
+            Optional<GameProfile> optional;
+            int who = (int)(Math.random()*2);
             switch (who) {
                 case 0:
                     //mod maker
-                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of("green_jab"), Optional.empty(), new PropertyMap()));
+                    optional = lv.method_73289("green_jab");
+                    head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(optional.get()));
                     break;
                 case 1:
                     //patreon
                     String[] names = {"Rellati"};
-                    head.set(DataComponentTypes.PROFILE, new ProfileComponent(Optional.of(names[(int)(Math.random()*names.length)]), Optional.empty(), new PropertyMap()));
+                    optional = lv.method_73289(names[(int)(Math.random()*names.length)]);
+                    head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(optional.get()));
                     break;
                 default:
                     //discontinued
-                    WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
                     PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
                     if (playerEntity != null) {
-                        head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
+                        head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(playerEntity.getGameProfile()));
+                        // head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
                     }
-            }*/
+            }
 
         }
         return head;

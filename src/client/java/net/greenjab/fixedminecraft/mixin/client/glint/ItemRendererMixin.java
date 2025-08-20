@@ -43,7 +43,7 @@ public class ItemRendererMixin {
          return getItemGlintConsumer(vertexConsumers, layer, solid, glint, specialglint);
     }
 
-
+    //TODO armour green glint (also trident, horse armour)
     /*@Redirect(method = "getArmorGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getArmorEntityGlint() {
         return EnchantGlint.getArmorEntityGlint();
