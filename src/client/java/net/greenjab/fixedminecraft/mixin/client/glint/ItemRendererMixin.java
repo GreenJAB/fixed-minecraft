@@ -43,12 +43,6 @@ public class ItemRendererMixin {
          return getItemGlintConsumer(vertexConsumers, layer, solid, glint, specialglint);
     }
 
-    //TODO armour green glint (also trident, horse armour)
-    /*@Redirect(method = "getArmorGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
-    private static RenderLayer getArmorEntityGlint() {
-        return EnchantGlint.getArmorEntityGlint();
-    }*/
-
     @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlint() {
         return EnchantGlint.getGlint();
@@ -64,13 +58,28 @@ public class ItemRendererMixin {
         return EnchantGlint.getEntityGlint();
     }
 
+    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    private static RenderLayer getGlintTrident() {
+        return EnchantGlint.getGlint();
+    }
+
+    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
+    private static RenderLayer getGlintTranslucentTrident() {
+        return EnchantGlint.getGlintTranslucent();
+    }
+
+    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    private static RenderLayer getEntityGlintTrident() {
+        return EnchantGlint.getEntityGlint();
+    }
+
 
     @Unique
     private static VertexConsumer getItemGlintConsumer(VertexConsumerProvider vertexConsumers, RenderLayer layer, boolean solid,
                                                        boolean glint, ItemRenderState.Glint specialglint) {
         boolean special = specialglint == ItemRenderState.Glint.SPECIAL;
         if (glint) {
-            return method_71139(layer)
+            return useTranslucentGlint(layer)
                     ? VertexConsumers.union(vertexConsumers.getBuffer(EnchantGlint.getGlintTranslucent(special)), vertexConsumers.getBuffer(layer))
                     : VertexConsumers.union(vertexConsumers.getBuffer(solid ? EnchantGlint.getGlint(special) : EnchantGlint.getEntityGlint(special)), vertexConsumers.getBuffer(layer));
         } else {
@@ -78,7 +87,7 @@ public class ItemRendererMixin {
         }
     }
     @Unique
-    private static boolean method_71139(RenderLayer renderLayer) {
+    private static boolean useTranslucentGlint(RenderLayer renderLayer) {
         return MinecraftClient.isFabulousGraphicsOrBetter() && renderLayer == TexturedRenderLayers.getItemEntityTranslucentCull();
     }
 }

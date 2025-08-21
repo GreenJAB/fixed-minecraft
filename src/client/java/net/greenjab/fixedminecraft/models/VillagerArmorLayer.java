@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.models;
 
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
@@ -16,71 +15,26 @@ import net.minecraft.item.ItemStack;
 
 /** Credit: Viola-Siemens */
 public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRenderState, M extends EntityModel<S>, A extends EntityModel<S> & HumanoidModel> extends FeatureRenderer<S, M> {
-    private final A innerModel;
-    private final A outerModel;
+    //private final EquipmentModelData<A> Model;
+    private final A Model_HEAD;
+    private final A Model_CHEST;
+    private final A Model_LEGS;
+    private final A Model_FEET;
     private final EquipmentRenderer equipmentRenderer;
 
     public VillagerArmorLayer(
-            FeatureRendererContext<S, M> context, A innerModel, A outerModel, EquipmentRenderer equipmentRenderer
+            FeatureRendererContext<S, M> context, A Model_HEAD,A Model_CHEST,A Model_LEGS,A Model_FEET, EquipmentRenderer equipmentRenderer
     ) {
         super(context);
-        this.innerModel = innerModel;
-        this.outerModel = outerModel;
+        this.Model_HEAD = Model_HEAD;
+        this.Model_CHEST = Model_CHEST;
+        this.Model_LEGS = Model_LEGS;
+        this.Model_FEET = Model_FEET;
         this.equipmentRenderer = equipmentRenderer;
     }
 
     private static boolean hasModel(EquippableComponent component, EquipmentSlot slot) {
         return component.assetId().isPresent() && component.slot() == slot;
-    }
-
-    public void render(MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, S bipedEntityRenderState, float f, float g) {
-        this.renderArmor(
-                matrixStack,
-                vertexConsumerProvider,
-                bipedEntityRenderState.fixed$chestEquipment(),
-                EquipmentSlot.CHEST,
-                i,
-                this.getModel(EquipmentSlot.CHEST)
-        );
-        this.renderArmor(
-                matrixStack,
-                vertexConsumerProvider,
-                bipedEntityRenderState.fixed$legEquipment(),
-                EquipmentSlot.LEGS,
-                i,
-                this.getModel(EquipmentSlot.LEGS)
-        );
-        this.renderArmor(
-                matrixStack,
-                vertexConsumerProvider,
-                bipedEntityRenderState.fixed$feetEquipment(),
-                EquipmentSlot.FEET,
-                i,
-                this.getModel(EquipmentSlot.FEET)
-        );
-        this.renderArmor(
-                matrixStack,
-                vertexConsumerProvider,
-                bipedEntityRenderState.fixed$headEquipment(),
-                EquipmentSlot.HEAD,
-                i,
-                this.getModel(EquipmentSlot.HEAD)
-        );
-    }
-
-
-    private void renderArmor(MatrixStack matrices, VertexConsumerProvider vertexConsumers, ItemStack stack, EquipmentSlot slot, int light, A armorModel) {
-        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
-        if (equippableComponent != null && hasModel(equippableComponent, slot)) {
-            //this.getContextModel().copyTransforms(armorModel);
-            armorModel.propertiesCopyFrom(this.getContextModel());
-            this.setVisible(armorModel, slot);
-            EquipmentModel.LayerType layerType = this.usesInnerModel(slot) ? EquipmentModel.LayerType.HUMANOID_LEGGINGS : EquipmentModel.LayerType.HUMANOID;
-
-            //TODO villager armor render.. again
-            //this.equipmentRenderer
-            //        .render(layerType, equippableComponent.assetId().orElseThrow(), armorModel, stack, matrices, vertexConsumers, light);
-        }
     }
 
     protected void setVisible(A bipedModel, EquipmentSlot slot) {
@@ -104,16 +58,51 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
     }
 
     private A getModel(EquipmentSlot slot) {
-        return this.usesInnerModel(slot) ? this.innerModel : this.outerModel;
+        if (slot == EquipmentSlot.HEAD) {
+            return Model_HEAD;
+        } else if (slot == EquipmentSlot.CHEST) {
+            return Model_CHEST;
+        } else if (slot == EquipmentSlot.LEGS) {
+            return Model_LEGS;
+        } else {
+            return Model_FEET;
+        }
     }
-
 
     private boolean usesInnerModel(EquipmentSlot slotType) {
         return slotType == EquipmentSlot.LEGS;
     }
 
     @Override
-    public void render(MatrixStack matrices, EntityRenderCommandQueue queue, int light, S state, float limbAngle, float limbDistance) {
+    public void render(MatrixStack matrixStack, EntityRenderCommandQueue entityRenderCommandQueue, int light, S bipedEntityRenderState, float limbAngle, float limbDistance) {
 
+        this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$chestEquipment(), EquipmentSlot.CHEST, light, bipedEntityRenderState);
+        this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$legEquipment(), EquipmentSlot.LEGS, light, bipedEntityRenderState);
+        this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$feetEquipment(), EquipmentSlot.FEET, light, bipedEntityRenderState);
+        this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$headEquipment(), EquipmentSlot.HEAD, light, bipedEntityRenderState);
+
+    }
+    private void renderArmor(
+            MatrixStack matrices, EntityRenderCommandQueue entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState
+    ) {
+        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
+        if (equippableComponent != null && hasModel(equippableComponent, slot)) {
+            A bipedEntityModel = getModel(slot);
+            bipedEntityModel.propertiesCopyFrom(this.getContextModel());
+            this.setVisible(bipedEntityModel, slot);
+            EquipmentModel.LayerType layerType = this.usesInnerModel(slot) ? EquipmentModel.LayerType.HUMANOID_LEGGINGS : EquipmentModel.LayerType.HUMANOID;
+            this.equipmentRenderer
+                    .render(
+                            layerType,
+                            equippableComponent.assetId().orElseThrow(),
+                            bipedEntityModel,
+                            bipedEntityRenderState,
+                            stack,
+                            matrices,
+                            entityRenderCommandQueue,
+                            light,
+                            bipedEntityRenderState.outlineColor
+                    );
+        }
     }
 }

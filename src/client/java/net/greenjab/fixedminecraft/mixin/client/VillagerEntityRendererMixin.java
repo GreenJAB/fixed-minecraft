@@ -7,6 +7,9 @@ import net.greenjab.fixedminecraft.models.ModelLayers;
 import net.greenjab.fixedminecraft.models.VillagerArmorModel;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.VillagerEntityRenderer;
+import net.minecraft.client.render.entity.model.ArmorStandArmorEntityModel;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.model.EquipmentModelData;
 import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.passive.VillagerEntity;
@@ -25,8 +28,12 @@ public class VillagerEntityRendererMixin {
 
         current.addFeature(new VillagerArmorLayer(
                 current,
-                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_INNER_ARMOR)),
-                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_OUTER_ARMOR)),
+                //EquipmentModelData.mapToEntityModel(ModelLayers.VILLAGER_ARMOR, context.getEntityModels(), VillagerArmorModel::new),
+                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_ARMOR_HEAD)),
+                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_ARMOR_CHEST)),
+                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_ARMOR_LEGS)),
+                new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_ARMOR_FEET)),
+                //new VillagerArmorModel(context.getPart(ModelLayers.VILLAGER_OUTER_ARMOR)),
                 context.getEquipmentRenderer()
         ));
     }

@@ -5,12 +5,15 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
+import net.greenjab.fixedminecraft.render.EnchantGlint;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.item.equipment.EquipmentAsset;
 import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(EquipmentRenderer.class)
 @Environment(EnvType.CLIENT)
@@ -24,5 +27,10 @@ public class EquipmentRendererMixin {
         if (assetKey.getValue().toString().toLowerCase().contains("netherite")) return FixedMinecraftClient.netheriteModel;
         if (assetKey.getValue().toString().toLowerCase().contains("chainmail")) return FixedMinecraftClient.chainmailModel;
         return original;
+    }
+
+    @Redirect(method = "render(Lnet/minecraft/client/render/entity/equipment/EquipmentModel$LayerType;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/entity/command/EntityRenderCommandQueue;ILnet/minecraft/util/Identifier;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getArmorEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    private RenderLayer getGlintTrident() {
+        return EnchantGlint.getArmorEntityGlint();
     }
 }

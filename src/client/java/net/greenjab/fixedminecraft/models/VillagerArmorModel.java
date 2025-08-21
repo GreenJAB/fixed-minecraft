@@ -5,16 +5,18 @@ import net.minecraft.client.model.ModelData;
 import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.VillagerResemblingModel;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.ModelPartBuilder;
+import net.minecraft.client.render.entity.state.ArmorStandEntityRenderState;
 import net.minecraft.client.render.entity.state.EntityRenderState;
 import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
 import net.minecraft.util.math.MathHelper;
 
 /** Credit: Viola-Siemens */
-public class VillagerArmorModel<S extends VillagerEntityRenderState> extends EntityModel<S> implements HumanoidModel {
+public class VillagerArmorModel <S extends VillagerEntityRenderState> extends EntityModel<S>  implements HumanoidModel {
     protected final ModelPart root;
     protected final ModelPart head;
     protected final ModelPart body;
@@ -45,7 +47,8 @@ public class VillagerArmorModel<S extends VillagerEntityRenderState> extends Ent
                 ModelPartBuilder.create()
                         .uv(40, 16).cuboid(-8.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F))
                         .uv(40, 16).mirrored().cuboid(4.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F)),
-                ModelTransform.origin(0.0F, 2.0F, 0.0F));
+                //ModelTransform.origin(0.0F, 2.0F, 0.0F));
+                ModelTransform.rotation(-0.75f, 0, 0).moveOrigin(0.0F, 2.0F, 0.0F));
         modelPartData.addChild("right_leg",
                 ModelPartBuilder.create().uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(0.19F, 0.26F, 0.26F)),
                 ModelTransform.origin(-2.0F, 12.0F, 0.0F));
