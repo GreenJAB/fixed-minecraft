@@ -19,5 +19,6 @@ accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/bloc
 accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
 accessible field net/minecraft/block/AbstractCauldronBlock behaviorMap Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;
 accessible class net/minecraft/server/network/ServerPlayerEntity$RespawnPos
+accessible method net/minecraft/block/Block generateBlockInteractLoot (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;Ljava/util/function/BiConsumer;)Z
 #accessible field net/minecraft/client/render/MapRenderer decorationsAtlasManager Lnet/minecraft/client/texture/SpriteAtlasTexture;
 

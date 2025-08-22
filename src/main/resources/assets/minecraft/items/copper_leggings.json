@@ -1,0 +1,368 @@
+{
+    "model": {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:damage",
+        "entries": [
+            {
+                "threshold": 0,
+                "model": {
+                    "type": "minecraft:select",
+                    "cases": [
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_quartz_trim"
+                            },
+                            "when": "minecraft:quartz"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_iron_trim"
+                            },
+                            "when": "minecraft:iron"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_netherite_trim"
+                            },
+                            "when": "minecraft:netherite"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_redstone_trim"
+                            },
+                            "when": "minecraft:redstone"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_copper_trim"
+                            },
+                            "when": "minecraft:copper"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_gold_trim"
+                            },
+                            "when": "minecraft:gold"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_emerald_trim"
+                            },
+                            "when": "minecraft:emerald"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_diamond_trim"
+                            },
+                            "when": "minecraft:diamond"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_lapis_trim"
+                            },
+                            "when": "minecraft:lapis"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_amethyst_trim"
+                            },
+                            "when": "minecraft:amethyst"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_resin_trim"
+                            },
+                            "when": "minecraft:resin"
+                        }
+                    ],
+                    "fallback": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_leggings"
+                    },
+                    "property": "minecraft:trim_material"
+                }
+            },
+            {
+                "threshold": 0.25,
+                "model": {
+                    "type": "minecraft:select",
+                    "cases": [
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_quartz_trim"
+                            },
+                            "when": "minecraft:quartz"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_iron_trim"
+                            },
+                            "when": "minecraft:iron"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_netherite_trim"
+                            },
+                            "when": "minecraft:netherite"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_redstone_trim"
+                            },
+                            "when": "minecraft:redstone"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_copper_trim"
+                            },
+                            "when": "minecraft:copper"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_gold_trim"
+                            },
+                            "when": "minecraft:gold"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_emerald_trim"
+                            },
+                            "when": "minecraft:emerald"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_diamond_trim"
+                            },
+                            "when": "minecraft:diamond"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_lapis_trim"
+                            },
+                            "when": "minecraft:lapis"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_amethyst_trim"
+                            },
+                            "when": "minecraft:amethyst"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_exposed_resin_trim"
+                            },
+                            "when": "minecraft:resin"
+                        }
+                    ],
+                    "fallback": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_leggings_exposed"
+                    },
+                    "property": "minecraft:trim_material"
+                }
+            },
+            {
+                "threshold": 0.5,
+                "model": {
+                    "type": "minecraft:select",
+                    "cases": [
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_quartz_trim"
+                            },
+                            "when": "minecraft:quartz"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_iron_trim"
+                            },
+                            "when": "minecraft:iron"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_netherite_trim"
+                            },
+                            "when": "minecraft:netherite"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_redstone_trim"
+                            },
+                            "when": "minecraft:redstone"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_copper_trim"
+                            },
+                            "when": "minecraft:copper"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_gold_trim"
+                            },
+                            "when": "minecraft:gold"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_emerald_trim"
+                            },
+                            "when": "minecraft:emerald"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_diamond_trim"
+                            },
+                            "when": "minecraft:diamond"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_lapis_trim"
+                            },
+                            "when": "minecraft:lapis"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_amethyst_trim"
+                            },
+                            "when": "minecraft:amethyst"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_weathered_resin_trim"
+                            },
+                            "when": "minecraft:resin"
+                        }
+                    ],
+                    "fallback": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_leggings_weathered"
+                    },
+                    "property": "minecraft:trim_material"
+                }
+            },
+            {
+                "threshold": 0.75,
+                "model": {
+                    "type": "minecraft:select",
+                    "cases": [
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_quartz_trim"
+                            },
+                            "when": "minecraft:quartz"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_iron_trim"
+                            },
+                            "when": "minecraft:iron"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_netherite_trim"
+                            },
+                            "when": "minecraft:netherite"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_redstone_trim"
+                            },
+                            "when": "minecraft:redstone"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_copper_trim"
+                            },
+                            "when": "minecraft:copper"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_gold_trim"
+                            },
+                            "when": "minecraft:gold"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_emerald_trim"
+                            },
+                            "when": "minecraft:emerald"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_diamond_trim"
+                            },
+                            "when": "minecraft:diamond"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_lapis_trim"
+                            },
+                            "when": "minecraft:lapis"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_amethyst_trim"
+                            },
+                            "when": "minecraft:amethyst"
+                        },
+                        {
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_leggings_oxidized_resin_trim"
+                            },
+                            "when": "minecraft:resin"
+                        }
+                    ],
+                    "fallback": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_leggings_oxidized"
+                    },
+                    "property": "minecraft:trim_material"
+                }
+            }
+        ]
+    }
+}

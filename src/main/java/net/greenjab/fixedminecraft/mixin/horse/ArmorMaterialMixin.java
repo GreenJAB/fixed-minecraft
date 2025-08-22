@@ -31,4 +31,12 @@ public class ArmorMaterialMixin {
         }
         return map;
     }
+
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private static int adjustedCopperDurability(int value,
+                                                @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetId) {
+        if (assetId == EquipmentAssetKeys.COPPER)
+            return 20;
+        return value;
+    }
 }

@@ -9,6 +9,7 @@ import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.equipment.EquipmentAsset;
 import net.minecraft.registry.RegistryKey;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,9 +24,22 @@ public class EquipmentRendererMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/client/render/entity/equipment/EquipmentModelLoader;get(Lnet/minecraft/registry/RegistryKey;)Lnet/minecraft/client/render/entity/equipment/EquipmentModel;"
     ))
-    private EquipmentModel useNetheriteArmorModel(EquipmentModel original, @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetKey) {
+    private EquipmentModel useNewArmorModel(EquipmentModel original, @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetKey, @Local(argsOnly = true)
+                                            ItemStack stack, @Local(argsOnly = true) EquipmentModel.LayerType layerType) {
         if (assetKey.getValue().toString().toLowerCase().contains("netherite")) return FixedMinecraftClient.netheriteModel;
         if (assetKey.getValue().toString().toLowerCase().contains("chainmail")) return FixedMinecraftClient.chainmailModel;
+        if (assetKey.getValue().toString().toLowerCase().contains("copper") && (layerType == EquipmentModel.LayerType.HUMANOID||layerType == EquipmentModel.LayerType.HUMANOID_LEGGINGS)) {
+            float durability = stack.getDamage() /(stack.getMaxDamage()+0.0f);
+            if (durability>0.75f) {
+                return FixedMinecraftClient.copperOxidizedModel;
+            }
+            if (durability>0.5f) {
+                return FixedMinecraftClient.copperWeatheredModel;
+            }
+            if (durability>0.25f) {
+                return FixedMinecraftClient.copperExposedModel;
+            }
+        }
         return original;
     }
 

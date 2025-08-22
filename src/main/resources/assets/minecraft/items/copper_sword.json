@@ -1,0 +1,36 @@
+{
+    "model": {
+        "type": "minecraft:range_dispatch",
+        "property": "minecraft:damage",
+        "entries": [
+            {
+                "threshold": 0,
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "minecraft:item/copper_sword"
+                }
+            },
+            {
+                "threshold": 0.25,
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "minecraft:item/copper_sword_exposed"
+                }
+            },
+            {
+                "threshold": 0.5,
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "minecraft:item/copper_sword_weathered"
+                }
+            },
+            {
+                "threshold": 0.75,
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "minecraft:item/copper_sword_oxidized"
+                }
+            }
+        ]
+    }
+}

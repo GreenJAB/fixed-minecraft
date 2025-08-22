@@ -29,6 +29,9 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public static float paleGardenFog = 0f;
     public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
     public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
+    public static EquipmentModel copperExposedModel = createHumanoidOnlyModel("copper_exposed");
+    public static EquipmentModel copperWeatheredModel = createHumanoidOnlyModel("copper_weathered");
+    public static EquipmentModel copperOxidizedModel = createHumanoidOnlyModel("copper_oxidized");
     public static SimpleOption<Boolean> newArmorHud = SimpleOption.ofBoolean("options.newArmorHud", true);
     public static SimpleOption<Boolean> fog_21_6 = SimpleOption.ofBoolean("options.fog_21_6", true);
 
@@ -48,7 +51,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
                 BlockRegistry.WAXED_WEATHERED_COPPER_RAIL,
                 BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL,
                 BlockRegistry.AZALEA_DOOR,
-                BlockRegistry.AZALEA_TRAPDOOR
+                BlockRegistry.AZALEA_TRAPDOOR,
+                BlockRegistry.COPPER_FIRE
                 );
 
         HudRenderCallback.EVENT.register(this::renderCrosshair);
@@ -85,6 +89,11 @@ public class FixedMinecraftClient implements ClientModInitializer {
         return EquipmentModel.builder()
                 .addHumanoidLayers(Identifier.ofVanilla(id))
                 .addLayers(EquipmentModel.LayerType.HORSE_BODY, EquipmentModel.Layer.createWithLeatherColor(Identifier.ofVanilla(id), false))
+                .build();
+    }
+    private static EquipmentModel createHumanoidOnlyModel(String id) {
+        return EquipmentModel.builder()
+                .addHumanoidLayers(Identifier.ofVanilla(id))
                 .build();
     }
 }
