@@ -5,10 +5,6 @@ import net.greenjab.fixedminecraft.models.MuleArmorFeatureRenderer;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.client.render.entity.AbstractDonkeyEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.entity.feature.SaddleFeatureRenderer;
-import net.minecraft.client.render.entity.model.EntityModelLayers;
-import net.minecraft.client.render.entity.model.HorseEntityModel;
 import net.minecraft.client.render.entity.state.DonkeyEntityRenderState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
@@ -29,17 +25,6 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
         if (type == AbstractDonkeyEntityRenderer.Type.MULE) {
             AbstractDonkeyEntityRenderer<AbstractDonkeyEntity> current = ((AbstractDonkeyEntityRenderer<AbstractDonkeyEntity>)(Object)this);
             current.addFeature(new MuleArmorFeatureRenderer(current, context.getEntityModels(), context.getEquipmentRenderer()));
-            /*current.addFeature(
-                    new SaddleFeatureRenderer<>(
-                            this,
-                            context.getEquipmentRenderer(),
-                            EquipmentModel.LayerType.HORSE_BODY,
-                             horseEntityRenderState -> horseEntityRenderState.armor,
-                            new HorseEntityModel(context.getPart(EntityModelLayers.HORSE_ARMOR)),
-                            new HorseEntityModel(context.getPart(EntityModelLayers.HORSE_ARMOR_BABY)),
-                            2
-                    )
-            );*/
         }
     }
 

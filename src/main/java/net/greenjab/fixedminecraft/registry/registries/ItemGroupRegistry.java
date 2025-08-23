@@ -35,6 +35,7 @@ public class ItemGroupRegistry {
                         entries.add(ItemRegistry.WAXED_WEATHERED_COPPER_RAIL);
                         entries.add(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
                         entries.add(ItemRegistry.PATINA);
+                        entries.add(ItemRegistry.REDSTONE_LANTERN);
 
 
                          entries.add(BlockRegistry.AZALEA_PLANKS);

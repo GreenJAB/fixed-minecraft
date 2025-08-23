@@ -6,6 +6,7 @@ import net.greenjab.fixedminecraft.registry.block.CopperFireBlock;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
+import net.greenjab.fixedminecraft.registry.block.RedstoneLanternBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSetType;
@@ -16,6 +17,7 @@ import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.HangingSignBlock;
+import net.minecraft.block.LanternBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.PillarBlock;
@@ -201,6 +203,19 @@ public class BlockRegistry {
                     .breakInstantly()
                     .luminance(/* method_26150 */ state -> 10)
                     .sounds(BlockSoundGroup.WOOL)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+
+    public static final Block REDSOTNE_LANTERN = register(
+            "redstone_lantern",
+            RedstoneLanternBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.GOLD)
+                    .solid()
+                    .strength(3.5F)
+                    .sounds(BlockSoundGroup.LANTERN)
+                    .luminance(/* method_24419 */ state -> 10)
+                    .nonOpaque()
                     .pistonBehavior(PistonBehavior.DESTROY)
     );
 

@@ -52,7 +52,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
                 BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL,
                 BlockRegistry.AZALEA_DOOR,
                 BlockRegistry.AZALEA_TRAPDOOR,
-                BlockRegistry.COPPER_FIRE
+                BlockRegistry.COPPER_FIRE,
+                BlockRegistry.REDSOTNE_LANTERN
                 );
 
         HudRenderCallback.EVENT.register(this::renderCrosshair);

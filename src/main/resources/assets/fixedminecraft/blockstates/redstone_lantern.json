@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "hanging=false,lit=true": {
+      "model": "fixedminecraft:block/redstone_lantern_lit"
+    },
+    "hanging=true,lit=true": {
+      "model": "fixedminecraft:block/redstone_lantern_hanging_lit"
+    },
+    "hanging=false,lit=false": {
+      "model": "fixedminecraft:block/redstone_lantern"
+    },
+    "hanging=true,lit=false": {
+      "model": "fixedminecraft:block/redstone_lantern_hanging"
+    }
+  }
+}

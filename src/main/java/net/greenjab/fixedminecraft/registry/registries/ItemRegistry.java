@@ -85,8 +85,8 @@ public class ItemRegistry {
     public static final Item WAXED_WEATHERED_COPPER_RAIL = register(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL);
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
 
-    public static final Item PATINA = register(
-            "patina", PatinaItem::new, new Item.Settings());
+    public static final Item PATINA = register("patina", PatinaItem::new, new Item.Settings());
+    public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSOTNE_LANTERN);
 
     public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
             .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0), 1F))

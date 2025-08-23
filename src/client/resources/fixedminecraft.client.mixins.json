@@ -26,6 +26,7 @@
         "LavaFogModifierMixin",
         "LivingEntityRendererMixin",
         "MerchantScreenMixin",
+        "MinecraftClientMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
         "VillagerClothingFeatureRendererMixin",

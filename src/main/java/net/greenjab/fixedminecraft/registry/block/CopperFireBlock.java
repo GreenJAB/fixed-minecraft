@@ -44,7 +44,7 @@ public class CopperFireBlock extends AbstractFireBlock {
     }
 
     public static boolean isCopperBase(BlockState state) {
-        return state.isIn(BlockTags.COPPER);
+        return state.getBlock().getName().toString().toLowerCase().contains("copper");
     }
 
     @Override
