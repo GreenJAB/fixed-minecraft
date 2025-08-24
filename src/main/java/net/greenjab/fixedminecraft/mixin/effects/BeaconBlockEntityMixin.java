@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -11,8 +12,10 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -74,8 +77,7 @@ public class BeaconBlockEntityMixin {
             Blocks.IRON_BLOCK.getDefaultState(), StatusEffects.STRENGTH,
             Blocks.DIAMOND_BLOCK.getDefaultState(), StatusEffects.REGENERATION,
             Blocks.ANCIENT_DEBRIS.getDefaultState(), StatusEffects.RESISTANCE,
-            Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE,
-            Blocks.WAXED_COPPER_BLOCK.getDefaultState(), StatusEffects.SPEED);
+            Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE);
 
     @Unique
     private static Map<BlockState, RegistryEntry<StatusEffect>> newEffects = Map.of(
@@ -87,13 +89,16 @@ public class BeaconBlockEntityMixin {
     @Inject(method = "applyPlayerEffects", at = @At("HEAD"), cancellable = true)
     private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, @Nullable RegistryEntry<StatusEffect> primaryEffect,
                                             @Nullable RegistryEntry<StatusEffect> secondaryEffect, CallbackInfo ci) {
-
-        primaryEffect = vanillaEffects.get(world.getBlockState(pos.down()));
+        BlockState blockState = world.getBlockState(pos.down());
+        primaryEffect = vanillaEffects.get(blockState);
         if (primaryEffect == null) {
-            primaryEffect = newEffects.get(world.getBlockState(pos.down()));
+            primaryEffect = newEffects.get(blockState);
+        }
+        if (blockState.isIn(BlockTags.COPPER)){
+            primaryEffect = StatusEffects.SPEED;
         }
         int statusLevel = beaconLevel >= 3?1:0;
-        if (world.getBlockState(pos.down()) == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
+        if (blockState == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
 
         if (!world.isClient() && primaryEffect != null) {
             double d = (beaconLevel * 20 + 10);
@@ -106,6 +111,11 @@ public class BeaconBlockEntityMixin {
             while(var11.hasNext()) {
                 playerEntity = var11.next();
                 playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false, true));
+
+               if (statusLevel==1 && blockState == Blocks.DIAMOND_BLOCK.getDefaultState()) {
+                   if (playerEntity instanceof ServerPlayerEntity SPE)
+                       Criteria.CONSUME_ITEM.trigger(SPE, Items.BEACON.getDefaultStack());
+               }
             }
 
 

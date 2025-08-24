@@ -13,14 +13,15 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 
 public class OtherRegistry {
-    public static final RegistryEntry<MapDecorationType> PILLAGER_OUTPOST = registerMapDecorationType("outpost", "outpost", true, MapColor.LIGHT_GRAY.color, false, true);
+    /*public static RegistryEntry<MapDecorationType> PILLAGER_OUTPOST = registerMapDecorationType("outpost", "outpost", true, MapColor.LIGHT_GRAY.color, false, true);
 
 
     private static RegistryEntry<MapDecorationType> registerMapDecorationType(
             String id, String assetId, boolean showOnItemFrame, int mapColor, boolean trackCount, boolean explorationMapElement
     ) {
+        System.out.println("MAPPPPPPPPPPPPPPPPPP");
         RegistryKey<MapDecorationType> registryKey = RegistryKey.of(RegistryKeys.MAP_DECORATION_TYPE, Identifier.ofVanilla(id));
         MapDecorationType mapDecorationType = new MapDecorationType(Identifier.ofVanilla(assetId), showOnItemFrame, mapColor, explorationMapElement, trackCount);
         return Registry.registerReference(Registries.MAP_DECORATION_TYPE, registryKey, mapDecorationType);
-    }
+    }*/
 }

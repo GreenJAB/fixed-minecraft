@@ -278,15 +278,20 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         ci.cancel();
     }
 
+    ItemStack anvilHolder = ItemStack.EMPTY;
+
     @Inject(method = "canTakeOutput", at = @At(value = "HEAD"), cancellable = true)
     private void canTake(PlayerEntity playerEntity, boolean present, CallbackInfoReturnable<Boolean> cir){
         int levelCost = this.levelCost.get();
         while (levelCost>=500)levelCost-=500;
+        if (!this.output.getStack(0).isEmpty())
+            anvilHolder = this.output.getStack(0).copy();
         cir.setReturnValue (playerEntity.getAbilities().creativeMode || playerEntity.experienceLevel >= Math.abs(levelCost) && Math.abs(levelCost) > 0);
     }
 
     @Inject(method = "onTakeOutput", at = @At(value = "HEAD"), cancellable = true)
     private void onTake(PlayerEntity player, ItemStack stack, CallbackInfo ci){
+        if (stack.isEmpty()) stack = anvilHolder;
         int levelCost = this.levelCost.get();
         while (levelCost>=500)levelCost-=500;
         if (!player.getAbilities().creativeMode) {
@@ -303,7 +308,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
 
-        boolean netherite = levelCost<0;
+        boolean netherite;
+        if (!player.getEntityWorld().isClient()) {
+            netherite = player.getCommandTags().contains("netherite_anvil");
+        } else {
+            netherite = FixedMinecraft.netheriteAnvil;
+        }
         int cost = 12;
         if (netherite) {
             cost = levelCost;

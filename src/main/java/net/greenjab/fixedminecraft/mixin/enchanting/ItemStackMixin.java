@@ -75,4 +75,15 @@ public abstract class ItemStackMixin {
         ItemStack stack = (ItemStack)(Object)this;
         stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
     }
+
+
+    @ModifyArg(method = "appendComponentTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/tooltip/TooltipAppender;appendTooltip(Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;Lnet/minecraft/component/ComponentsAccess;)V"), index = 2)
+    private TooltipType addEnchantLocationIcon(TooltipType type) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if (stack.isOf(Items.ENCHANTED_BOOK)) {
+            return TooltipType.ADVANCED;
+        }
+        return TooltipType.BASIC;
+    }
+
 }
