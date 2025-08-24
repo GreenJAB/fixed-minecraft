@@ -2,10 +2,14 @@
     "parent": "minecraft:nether/create_beacon",
     "criteria": {
         "beacon": {
+            "trigger": "minecraft:consume_item",
             "conditions": {
-                "level": 3
-            },
-            "trigger": "minecraft:construct_beacon"
+                "item": {
+                    "items": [
+                        "minecraft:beacon"
+                    ]
+                }
+            }
         }
     },
     "display": {
@@ -32,7 +36,7 @@
         ]
     ],
     "rewards": {
-        "experience": 1000
+        "experience": 3000
     },
     "sends_telemetry_event": true
 }
