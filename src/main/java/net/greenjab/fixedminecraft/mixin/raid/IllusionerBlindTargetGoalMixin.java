@@ -1,22 +1,23 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 
 @Mixin(targets = "net.minecraft.entity.mob.IllusionerEntity$BlindTargetGoal")
 class IllusionerBlindTargetGoalMixin {
 
 
-    @ModifyArgs(method = "castSpell", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z"
+    @Redirect(method = "castSpell", at = @At(
+            value = "NEW",
+            target = "(Lnet/minecraft/registry/entry/RegistryEntry;I)Lnet/minecraft/entity/effect/StatusEffectInstance;"
     ))
-    private void nauseaSpell(Args args) {
-        args.set(0, StatusEffects.NAUSEA);
-        args.set(1, 240);
+    private StatusEffectInstance nauseaSpell(RegistryEntry<StatusEffect> effect, int duration) {
+        return new StatusEffectInstance(StatusEffects.NAUSEA, 240);
     }
 }
