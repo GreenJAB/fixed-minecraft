@@ -1,0 +1,82 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "conditions": [
+                {
+                    "condition": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "type_specific": {
+                            "type": "minecraft:raider",
+                            "is_captain": true
+                        }
+                    }
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "add": false,
+                            "count": 1,
+                            "function": "minecraft:set_count"
+                        },
+                        {
+                            "amplifier": {
+                                "type": "minecraft:uniform",
+                                "max": 4,
+                                "min": 0
+                            },
+                            "function": "minecraft:set_ominous_bottle_amplifier"
+                        }
+                    ],
+                    "name": "minecraft:ominous_bottle"
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "bonus_rolls": 0,
+            "conditions": [
+                {
+                    "condition": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "type_specific": {
+                            "type": "minecraft:raider",
+                            "has_raid": false,
+                            "is_captain": true
+                        }
+                    }
+                }
+            ],
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_outpost_maps",
+                            "decoration": "minecraft:outpost",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 1
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.outpost"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "minecraft:entities/pillager"
+}

@@ -129,7 +129,13 @@
         "maxCount": 4,
         "minCount": 4,
         "weight": 8
-      }
+      },
+      {
+		"type": "minecraft:allay",
+        "maxCount": 1,
+        "minCount": 1,
+        "weight": 1
+	  }
     ],
     "misc": [],
     "monster": [

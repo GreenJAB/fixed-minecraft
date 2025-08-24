@@ -5,6 +5,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
 import net.minecraft.entity.player.PlayerEntity;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.MapColorComponent;
+import net.minecraft.component.type.MapDecorationsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.item.map.MapDecoration;
@@ -27,6 +31,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -52,6 +59,31 @@ public class MapStateMixin implements MapStateAccessor {
     public void fixedminecraft$setPosition(int centerX, int centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
+    }
+
+    @Unique
+    private static HashMap<RegistryEntry<MapDecorationType>, Integer> decoToColor;
+
+    static {
+        decoToColor = new HashMap<>();
+        decoToColor.put(MapDecorationTypes.VILLAGE_PLAINS, 3003659);
+        decoToColor.put(MapDecorationTypes.VILLAGE_DESERT, 16766219);
+        decoToColor.put(MapDecorationTypes.VILLAGE_SAVANNA, 13536268);
+        decoToColor.put(MapDecorationTypes.VILLAGE_TAIGA, 6857828);
+        decoToColor.put(MapDecorationTypes.VILLAGE_SNOWY, 14872575);
+        decoToColor.put(MapDecorationTypes.JUNGLE_TEMPLE, 1999367);
+        decoToColor.put(MapDecorationTypes.SWAMP_HUT, 5390853);
+
+        decoToColor.put(StatusRegistry.PILLAGER_OUTPOST, 10373376);
+    }
+
+    @Inject(method = "addDecorationsNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapDecorationType;hasMapColor()Z"), cancellable = true)
+    private static void addColorToBlandMaps(ItemStack stack, BlockPos pos, String id, RegistryEntry<MapDecorationType> decorationType,
+                                            CallbackInfo ci){
+        if (decoToColor.containsKey(decorationType)){
+            stack.set(DataComponentTypes.MAP_COLOR, new MapColorComponent(decoToColor.get(decorationType)));
+            ci.cancel();
+        }
     }
 
     @Inject(method = "addDecoration", at = @At(value = "TAIL"))

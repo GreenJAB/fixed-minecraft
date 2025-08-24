@@ -6,6 +6,138 @@
             "entries": [
                 {
                     "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_woodland_explorer_maps",
+                            "decoration": "minecraft:mansion",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.mansion"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_desert_village_maps",
+                            "decoration": "minecraft:village_desert",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.village_desert"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_plains_village_maps",
+                            "decoration": "minecraft:village_plains",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.village_plains"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_savanna_village_maps",
+                            "decoration": "minecraft:village_savanna",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.village_savanna"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_snowy_village_maps",
+                            "decoration": "minecraft:village_snowy",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.village_snowy"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "minecraft:on_taiga_village_maps",
+                            "decoration": "minecraft:village_taiga",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 2
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.village_taiga"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
                     "name": "minecraft:crossbow"
                 }
             ],
