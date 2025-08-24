@@ -41,6 +41,7 @@
         "enchanting.EnchantWithLevelsLootFunctionMixin",
         "enchanting.EntityMixin",
         "enchanting.GrindstoneScreenHandlerMixin",
+        "enchanting.ItemEnchantmentsComponentMixin",
         "enchanting.ItemStackMixin",
         "enchanting.PersistentProjectileEntityMixin",
         "enchanting.PlayerEntityMixin",
