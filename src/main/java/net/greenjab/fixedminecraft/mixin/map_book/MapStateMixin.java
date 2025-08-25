@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.map_book;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
+import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
 import net.minecraft.entity.player.PlayerEntity;
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
@@ -110,11 +111,65 @@ public class MapStateMixin implements MapStateAccessor {
             if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '¶') {
                 String[] s = text.getLiteralString().split("¶");
                 type = getMapType(s[1]);
-                //return new MapDecoration(type, x, z, rotation, optional);
                 return new MapDecoration(type, x, z, rotation, Optional.empty());
+            }
+
+            if (Objects.requireNonNull(text.getLiteralString()).charAt(0) == '[') {
+                String[] s = text.getLiteralString().split("\\[");
+                if (s.length == 2) {
+                    String[] s2 = s[1].split("]");
+                    RegistryEntry<MapDecorationType> type2 = getMapTypeLimited(s2[0]);
+                    if (type2 != null) {
+                        if (s2.length == 1) {
+                            return new MapDecoration(type2, x, z, rotation, Optional.empty());
+                        } else if (s2.length == 2) {
+                            if (s2[1].charAt(0) == ' ') s2[1] = s2[1].substring(1);
+                            return new MapDecoration(type2, x, z, rotation, Optional.of(Text.of(s2[1])));
+                        }
+                    }
+                }
             }
         }
         return new MapDecoration(type, x, z, rotation, optional);
+    }
+
+
+
+    @Redirect(method = "removeBanner", at = @At(value = "INVOKE",
+                                                target = "Lnet/minecraft/item/map/MapBannerMarker;equals(Ljava/lang/Object;)Z"
+    ))
+    private boolean noRemoveCustomIconBanner(MapBannerMarker instance, Object o){
+        if (instance.pos().getY() == -32768) {
+            return true;
+        }
+        if (instance.pos().getY() <= -1000) {
+            return false;
+        }
+        return instance.equals(o);
+    }
+
+    @Unique
+    private static final String[] updateNames = {"player", "frame", "red_marker", "blue_marker", "target_x", "target_point",
+            "player_off_map", "player_off_limits", "woodland_mansion", "ocean_monument", "white_banner", "orange_banner", "magenta_banner",
+            "light_blue_banner", "light_blue_banner", "lime_banner", "pink_banner", "gray_banner", "light_gray_banner",
+            "cyan_banner", "purple_banner", "blue_banner", "brown_banner", "green_banner", "red_banner", "black_banner",
+            "red_x", "desert_village", "plains_village", "savanna_village", "snowy_village", "taiga_village", "jungle_temple",
+            "swamp_hut", "trial_chambers", "outpost"};
+
+    @ModifyExpressionValue(method = "fromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapBannerMarker;name()Ljava/util/Optional;"))
+    private static Optional<Text> updateName(Optional<Text> original) {
+        if (original.isPresent()) {
+            String name = original.get().getString();
+            if (name.contains("¶")) {
+                try {
+                    int i = Integer.parseInt(name.substring(1));
+                    return Optional.of(Text.of("¶"+updateNames[i]));
+                } catch (NumberFormatException ignored) {
+
+                }
+            }
+        }
+        return original;
     }
 
     @Unique
@@ -146,43 +201,37 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("brown_banner")) return MapDecorationTypes.BANNER_BROWN;
         if (type.contains("green_banner")) return MapDecorationTypes.BANNER_GREEN;
         if (type.contains("red_banner")) return MapDecorationTypes.BANNER_RED;
+
+        if (type.contains("player")) return MapDecorationTypes.PLAYER;
+        if (type.contains("frame")) return MapDecorationTypes.FRAME;
+        if (type.contains("red_marker")) return MapDecorationTypes.RED_MARKER;
+        if (type.contains("blue_marker")) return MapDecorationTypes.BLUE_MARKER;
+        if (type.contains("target_x")) return MapDecorationTypes.TARGET_X;
+        if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
+        if (type.contains("player_off_map")) return MapDecorationTypes.PLAYER_OFF_MAP;
+        if (type.contains("player_off_limits")) return MapDecorationTypes.PLAYER_OFF_LIMITS;
+
+        if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
+
         return MapDecorationTypes.BANNER_BLACK;
     }
 
-    @Redirect(method = "removeBanner", at = @At(value = "INVOKE",
-                                                target = "Lnet/minecraft/item/map/MapBannerMarker;equals(Ljava/lang/Object;)Z"
-    ))
-    private boolean noRemoveCustomIconBanner(MapBannerMarker instance, Object o){
-        if (instance.pos().getY() == -32768) {
-            return true;
-        }
-        if (instance.pos().getY() <= -1000) {
-            return false;
-        }
-        return instance.equals(o);
-    }
-
     @Unique
-    private static final String[] updateNames = {"player", "frame", "red_marker", "blue_marker", "target_x", "target_point",
-            "player_off_map", "player_off_limits", "woodland_mansion", "ocean_monument", "white_banner", "orange_banner", "magenta_banner",
-            "light_blue_banner", "light_blue_banner", "lime_banner", "pink_banner", "gray_banner", "light_gray_banner",
-            "cyan_banner", "purple_banner", "blue_banner", "brown_banner", "green_banner", "red_banner", "black_banner",
-            "red_x", "desert_village", "plains_village", "savanna_village", "snowy_village", "taiga_village", "jungle_temple",
-            "swamp_hut", "trial_chambers"};
+    private RegistryEntry<MapDecorationType> getMapTypeLimited(String type) {
+        if (type.contains("woodland_mansion")) return MapDecorationTypes.MANSION;
+        if (type.contains("ocean_monument")) return MapDecorationTypes.MONUMENT;
+        if (type.contains("desert_village")) return MapDecorationTypes.VILLAGE_DESERT;
+        if (type.contains("plains_village")) return MapDecorationTypes.VILLAGE_PLAINS;
+        if (type.contains("savanna_village")) return MapDecorationTypes.VILLAGE_SAVANNA;
+        if (type.contains("snowy_village")) return MapDecorationTypes.VILLAGE_SNOWY;
+        if (type.contains("taiga_village")) return MapDecorationTypes.VILLAGE_TAIGA;
+        if (type.contains("jungle_temple")) return MapDecorationTypes.JUNGLE_TEMPLE;
+        if (type.contains("swamp_hut")) return MapDecorationTypes.SWAMP_HUT;
+        if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
+        if (type.contains("red_x")) return MapDecorationTypes.RED_X;
+        if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
+        if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
 
-    @ModifyExpressionValue(method = "fromNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapBannerMarker;name()Ljava/util/Optional;"))
-    private static Optional<Text> updateName(Optional<Text> original) {
-        if (original.isPresent()) {
-            String name = original.get().getString();
-            if (name.contains("¶")) {
-                try {
-                    int i = Integer.parseInt(name.substring(1));
-                    return Optional.of(Text.of("¶"+updateNames[i]));
-                } catch (NumberFormatException ignored) {
-
-                }
-            }
-        }
-        return original;
+        return null;
     }
 }

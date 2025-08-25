@@ -77,7 +77,7 @@ public class FoodComponentsMixin {
         //complex
         HONEY_BOTTLE = (new FoodComponent.Builder()).nutrition(3).saturationModifier(0.5F).alwaysEdible().build();
         PUMPKIN_PIE = (new FoodComponent.Builder()).nutrition(8).saturationModifier(0.6F).build();
-        COOKIE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.6F).build();
+        COOKIE = (new FoodComponent.Builder()).nutrition(2).saturationModifier(0.6F).alwaysEdible().build();
 
         //gold
         GOLDEN_APPLE = (new FoodComponent.Builder()).nutrition(4).saturationModifier(0.8F)
@@ -90,7 +90,7 @@ public class FoodComponentsMixin {
                 .statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 6000, 0), 1.0F)
                 .statusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 2400, 3), 1.0F)
                 .alwaysEdible().build();
-        GOLDEN_CARROT = (new FoodComponent.Builder()).nutrition(6).saturationModifier(1.2F).build();
+        GOLDEN_CARROT = (new FoodComponent.Builder()).nutrition(6).saturationModifier(1.2F).alwaysEdible().build();
 
 
     }

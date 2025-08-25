@@ -47,7 +47,7 @@ public class PackedIceBlock extends TranslucentBlock {
         if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
             if (random.nextFloat() < 0.33f) {
                 if (world.getDimension().ultrawarm()) {
-                    this.melt(world, pos);
+                    if (!NewIceBlock.nextToCryingObsidian(world, pos)) this.melt(world, pos);
                 }
             }
         }
