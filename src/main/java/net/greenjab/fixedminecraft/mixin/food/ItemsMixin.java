@@ -15,6 +15,7 @@ import net.minecraft.component.type.ChargedProjectilesComponent;
 import net.minecraft.component.type.ConsumableComponents;
 import net.minecraft.component.type.DeathProtectionComponent;
 import net.minecraft.component.type.EquippableComponent;
+import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
@@ -22,6 +23,7 @@ import net.minecraft.component.type.SuspiciousStewEffectsComponent;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BowItem;
 import net.minecraft.item.CrossbowItem;
+import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -37,6 +39,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
+import java.util.List;
 import java.util.function.Function;
 
 import static net.minecraft.item.Items.register;
@@ -164,21 +167,29 @@ public class ItemsMixin {
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
-                                 target = "Lnet/minecraft/item/Items;BLACK_BUNDLE:Lnet/minecraft/item/Item;")))
+                                target = "Lnet/minecraft/item/Items;BLACK_BUNDLE:Lnet/minecraft/item/Item;")))
     private static Item repairableFishingRod(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
         return register("fishing_rod", FishingRodItem::new, new Item.Settings().maxDamage(64).enchantable(1).repairable(Items.STRING));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
-                                                                                                                                                                                                                                    target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;")))
+                                  target = "Lnet/minecraft/item/Items;POTION:Lnet/minecraft/item/Item;")))
     private static Item spiderEyeBait(String id, Item.Settings settings) {
         return register("spider_eye", new Item.Settings().food(FoodComponents.SPIDER_EYE, ConsumableComponents.SPIDER_EYE).component(ItemRegistry.BAIT_POWER, new BaitComponent(1)));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
-                                                                                                                                                                                                  target = "Lnet/minecraft/item/Items;SPIDER_EYE:Lnet/minecraft/item/Item;")))
+                          target = "Lnet/minecraft/item/Items;SPIDER_EYE:Lnet/minecraft/item/Item;")))
     private static Item fermentedSpiderEyeBait(String id) {
         return register("fermented_spider_eye", new Item.Settings().component(ItemRegistry.BAIT_POWER, new BaitComponent(2)));
+    }
+
+    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
+                     target = "Lnet/minecraft/item/Items;PUMPKIN_PIE:Lnet/minecraft/item/Item;")))
+    private static Item fireWorkCooldown(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
+        return register(
+                "firework_rocket", FireworkRocketItem::new, new Item.Settings().component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of())).useCooldown(5)
+        );
     }
 
     @Unique
