@@ -18,10 +18,13 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.FluidTags;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 @Mixin(InGameHud.class)
@@ -118,8 +122,9 @@ public class InGameHudMixin {
 
                  int moon = player.clientWorld.getMoonPhase();
                  Text moonPhase = Text.translatable("world.moon." + names[moon]);
-
-                 string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
+                 if (player.clientWorld.isNight())
+                    string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
+                 else string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | §7" + moonPhase.getString();
              } else {
                  string = getDirection(player.getYaw()) + " | " + player.getBlockX() + ", " + player.getBlockY() + ", " + player.getBlockZ();
              }
