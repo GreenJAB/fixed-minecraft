@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.ZombieEntity;
@@ -65,6 +66,16 @@ public abstract class ZombieEntityMixin extends HostileEntity {
             }
         }
         return villager;
+    }
+
+    @Inject(method = "setBaby", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/attribute/EntityAttributeInstance;addTemporaryModifier(Lnet/minecraft/entity/attribute/EntityAttributeModifier;)V"))
+        private void halfBabyHealth(boolean baby, CallbackInfo ci) {
+        ZombieEntity ZE = (ZombieEntity) (Object) this;
+        float newHealth = (float) (ZE.getAttributeBaseValue(EntityAttributes.MAX_HEALTH)/2.0f);
+        if (newHealth>=10) {
+            ZE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(newHealth);
+            ZE.setHealth(newHealth);
+        }
     }
 
     @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))
