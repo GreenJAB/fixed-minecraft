@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
@@ -50,10 +51,11 @@ public abstract class HungerManagerMixin {
         int ticksSinceLastExhaustion = CustomData.getData(player, "ticksSinceLastExhaustion");
         float saturationSinceLastHunger = CustomData.getData(player, "saturationSinceLastHunger")/1000.0f;
 
+        int staminaPause = 15 + 5 * player.getEntityWorld().getDifficulty().getId();
 
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
             if (saturationLevel != 0 || player.getWorld().getTime()%3==0)
-            ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, 30);
+                ticksSinceLastExhaustion = Math.min(ticksSinceLastExhaustion+1, staminaPause);
         } else {
             ticksSinceLastExhaustion = 0;
             lastExhaustion = this.exhaustion;
@@ -62,7 +64,7 @@ public abstract class HungerManagerMixin {
             ticksSinceLastExhaustion = 0;
         }
         if (this.saturationLevel < this.foodLevel) {
-            if (ticksSinceLastExhaustion == 30) {
+            if (ticksSinceLastExhaustion == staminaPause) {
                 float h = 0.03f + this.saturationLevel / 100.0f;
                 this.saturationLevel = Math.min(this.saturationLevel + h, this.foodLevel);
                 saturationSinceLastHunger += h;
@@ -102,10 +104,10 @@ public abstract class HungerManagerMixin {
         return 0;
     }
     @ModifyConstant(method = "update", constant = @Constant(intValue = 80))
-    private int fasterHeal(int value) {
+    private int fasterHeal(int value, @Local(argsOnly = true) ServerPlayerEntity player) {
         HungerManager HM = (HungerManager) (Object)this;
         if (HM.getFoodLevel()==0) return 80;
-        return 30;
+        return 15 + 5 * player.getEntityWorld().getDifficulty().getId();
     }
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;canFoodHeal()Z"))
     private boolean needSaturationToHeal(ServerPlayerEntity instance) {

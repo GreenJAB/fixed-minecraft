@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.map_book;
 
 import net.greenjab.fixedminecraft.mixin.client.map.DrawContextAccessor;
+import net.greenjab.fixedminecraft.mixin.map_book.MapStateMixin;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
@@ -22,8 +23,11 @@ import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;
+import net.minecraft.item.map.MapDecorationType;
 import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.scoreboard.Team;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;

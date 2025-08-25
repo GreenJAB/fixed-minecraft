@@ -5,6 +5,7 @@ import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
@@ -15,6 +16,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
+import net.minecraft.item.map.MapDecorationType;
+import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.packet.Packet;
@@ -31,6 +34,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.Iterator;
