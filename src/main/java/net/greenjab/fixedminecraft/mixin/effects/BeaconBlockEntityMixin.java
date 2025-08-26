@@ -54,7 +54,12 @@ public class BeaconBlockEntityMixin {
                         bl = false;
                         break;
                     }
-                    if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
+                    if (base.getDefaultState().isIn(BlockTags.COPPER)) {
+                        if (!world.getBlockState(new BlockPos(l, k, m)).isIn(BlockTags.COPPER)) {
+                            bl = false;
+                            break;
+                        }
+                    } else if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
                         bl = false;
                         break;
                     }
