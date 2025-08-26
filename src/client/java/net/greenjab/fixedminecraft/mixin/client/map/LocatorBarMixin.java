@@ -238,7 +238,7 @@ public class LocatorBarMixin {
 
                                     int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
                                     for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
-                                        if (Objects.equals(playerListEntry.getProfile().getName(), player.name)) {
+                                        if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
                                             Team team = playerListEntry.getScoreboardTeam();
                                             if (team != null) {
                                                 Formatting formatting = team.getColor();

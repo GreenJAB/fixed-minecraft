@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
 import net.minecraft.component.type.DyedColorComponent;
@@ -14,6 +16,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.CreeperEntity;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.mob.SpiderEntity;
@@ -50,20 +53,23 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     private void Armor(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         int y= this.getBlockPos().getY();
         boolean pale = this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN);
-        float f = this.getEntityWorld().getDifficulty() == Difficulty.HARD ? 0.25F : 0.15F;
+        float f = this.getEntityWorld().getDifficulty() == Difficulty.HARD ? 0.175F : 0.075F;
         if (pale) {
-            f*=2.5f;
+            f*=2.25f;
             this.addCommandTag("pale");
         }
         if (y < this.getEntityWorld().getSeaLevel()) f += (this.getEntityWorld().getSeaLevel() - y) / (128 * 10f);
         EquipmentSlot[] var6 = EquipmentSlot.values();
         for (EquipmentSlot equipmentSlot : var6) {
             if (random.nextFloat() < f * localDifficulty.getClampedLocalDifficulty()) {
-                int i = 0;
+                int i = 2;
                 if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
                 if (random.nextFloat() < f) i++;
-                if (random.nextFloat() < f) i++;
+                if (i ==2) i = 0;
+
+                MobEntity ME = (MobEntity) (Object) this;
+                if (ME instanceof HuskEntity) i = 2;
 
                 if (equipmentSlot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
                     ItemStack itemStack = this.getEquippedStack(equipmentSlot);
@@ -80,6 +86,14 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
             }
         }
         ci.cancel();
+    }
+
+    @ModifyExpressionValue(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
+    private boolean copperDurability(boolean original, @Local ItemStack itemStack) {
+        if (itemStack.getItem().getName().getLiteralString().toLowerCase().contains("copper")) {
+            return false;
+        }
+        return original;
     }
 
     @ModifyVariable(

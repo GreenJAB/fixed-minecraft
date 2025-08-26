@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": "minecraft:chain",
+    "X": "minecraft:iron_chain",
     "L": "minecraft:leather"
   },
   "pattern": [

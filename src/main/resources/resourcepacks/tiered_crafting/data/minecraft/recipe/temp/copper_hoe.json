@@ -3,16 +3,16 @@
   "category": "equipment",
   "key": {
     "#": "minecraft:stick",
-    "X": "#minecraft:iron_tool_materials",
-    "P": "minecraft:copper_pickaxe"
+    "X": "#minecraft:copper_tool_materials",
+    "P": "minecraft:stone_hoe"
   },
   "pattern": [
-    "XXX",
-    " #P",
-    " # "
+    "XX",
+    "P#",
+    " #"
   ],
   "result": {
     "count": 1,
-    "id": "minecraft:iron_pickaxe"
+    "id": "minecraft:copper_hoe"
   }
 }

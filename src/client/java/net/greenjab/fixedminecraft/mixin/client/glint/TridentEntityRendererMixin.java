@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.client.glint;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.entity.TridentEntityRenderer;
-import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.SaddleFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.state.LivingEntityRenderState;

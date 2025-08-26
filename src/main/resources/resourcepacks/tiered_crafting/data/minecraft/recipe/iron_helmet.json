@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "X": "minecraft:iron_ingot",
-    "P": "minecraft:chainmail_helmet"
+    "P": "minecraft:copper_helmet"
   },
   "pattern": [
     "XXX",

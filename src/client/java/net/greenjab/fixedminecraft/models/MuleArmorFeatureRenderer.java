@@ -5,7 +5,7 @@ import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -67,7 +67,7 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
     }
 
     @Override
-    public void render(MatrixStack matrixStack, EntityRenderCommandQueue queue, int light, DonkeyEntityRenderState donkeyEntityRenderState, float limbAngle,
+    public void render(MatrixStack matrixStack, OrderedRenderCommandQueue queue, int light, DonkeyEntityRenderState donkeyEntityRenderState, float limbAngle,
                        float limbDistance) {
         ItemStack itemStack = getArmorData(donkeyEntityRenderState);// state.;
         EnchantGlint.setTargetStack(itemStack);

@@ -6,7 +6,6 @@ import com.mojang.authlib.properties.PropertyMap;
 import net.greenjab.fixedminecraft.CustomData;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.SkullBlockEntity;
-import net.minecraft.class_11755;
 import net.minecraft.component.ComponentChanges;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
@@ -24,6 +23,7 @@ import net.minecraft.potion.Potions;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.GameProfileResolver;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -227,26 +227,26 @@ public abstract class WanderingTraderEntityMixin {
         if (head.isOf(Items.PLAYER_HEAD)) {
             WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
             MinecraftServer minecraftServer = WTE.getServer();
-            class_11755 lv = minecraftServer.method_73550().profileResolver();
+            GameProfileResolver lv = minecraftServer.getApiServices().profileResolver();
             Optional<GameProfile> optional;
             int who = (int)(Math.random()*2);
             switch (who) {
                 case 0:
                     //mod maker
-                    optional = lv.method_73289("green_jab");
-                    head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(optional.get()));
+                    optional = lv.getProfileByName("green_jab");
+                    head.set(DataComponentTypes.PROFILE, ProfileComponent.ofStatic(optional.get()));
                     break;
                 case 1:
                     //patreon
                     String[] names = {"Rellati"};
-                    optional = lv.method_73289(names[(int)(Math.random()*names.length)]);
-                    head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(optional.get()));
+                    optional = lv.getProfileByName(names[(int)(Math.random()*names.length)]);
+                    head.set(DataComponentTypes.PROFILE, ProfileComponent.ofStatic(optional.get()));
                     break;
                 default:
                     //discontinued
                     PlayerEntity playerEntity = WTE.getEntityWorld().getClosestPlayer(WTE, 100);
                     if (playerEntity != null) {
-                        head.set(DataComponentTypes.PROFILE, ProfileComponent.method_73307(playerEntity.getGameProfile()));
+                        head.set(DataComponentTypes.PROFILE, ProfileComponent.ofStatic(playerEntity.getGameProfile()));
                         // head.set(DataComponentTypes.PROFILE, new ProfileComponent(playerEntity.getGameProfile()));
                     }
             }

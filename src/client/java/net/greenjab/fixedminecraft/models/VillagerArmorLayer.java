@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.models;
 
-import net.minecraft.client.render.entity.command.EntityRenderCommandQueue;
+import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
@@ -74,7 +74,7 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
     }
 
     @Override
-    public void render(MatrixStack matrixStack, EntityRenderCommandQueue entityRenderCommandQueue, int light, S bipedEntityRenderState, float limbAngle, float limbDistance) {
+    public void render(MatrixStack matrixStack, OrderedRenderCommandQueue entityRenderCommandQueue, int light, S bipedEntityRenderState, float limbAngle, float limbDistance) {
 
         this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$chestEquipment(), EquipmentSlot.CHEST, light, bipedEntityRenderState);
         this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$legEquipment(), EquipmentSlot.LEGS, light, bipedEntityRenderState);
@@ -83,7 +83,7 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
 
     }
     private void renderArmor(
-            MatrixStack matrices, EntityRenderCommandQueue entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState
+            MatrixStack matrices, OrderedRenderCommandQueue entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState
     ) {
         EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
         if (equippableComponent != null && hasModel(equippableComponent, slot)) {

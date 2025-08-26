@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.HuskEntity;
 import net.minecraft.entity.mob.ZombieEntity;
@@ -78,7 +79,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         }
     }
 
-    @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"))
+    @Inject(method = "initEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;nextFloat()F"),
+            cancellable = true
+    )
     private void moreWeapons(Random random, LocalDifficulty localDifficulty, CallbackInfo ci) {
         float diff = 0.01f;
         if (this.getEntityWorld().getDifficulty() == Difficulty.HARD) diff = 0.1f;
@@ -90,8 +93,13 @@ public abstract class ZombieEntityMixin extends HostileEntity {
             if (random.nextFloat() < 2*diff)  j++;
             if (random.nextFloat() < diff)  j++;
 
+            ZombieEntity ZE = (ZombieEntity) (Object) this;
+            if (ZE instanceof HuskEntity) j = -1;
+            //if (ZE instanceof DrownedEntity) j = -2;
+
             this.equipStack(EquipmentSlot.MAINHAND, new ItemStack(getEquipmentForHand(i,j)));
         }
+        ci.cancel();
     }
 
     @Unique
@@ -99,63 +107,63 @@ public abstract class ZombieEntityMixin extends HostileEntity {
         switch (equipmentType) {
             case 0:
                 if (equipmentLevel == 0) {
-                    return Items.STONE_SWORD;
+                    return Items.WOODEN_SWORD;
                 } else if (equipmentLevel == 1) {
-                    return Items.GOLDEN_SWORD;
+                    return Items.STONE_SWORD;
                 } else if (equipmentLevel == 2) {
                     return Items.IRON_SWORD;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_SWORD;
-                } else {
-                    return Items.WOODEN_SWORD;
+                } else if (equipmentLevel == -1) {
+                    return Items.GOLDEN_SWORD;
                 }
             case 1:
                 if (equipmentLevel == 0) {
-                    return Items.STONE_AXE;
+                    return Items.WOODEN_AXE;
                 } else if (equipmentLevel == 1) {
-                    return Items.GOLDEN_AXE;
+                    return Items.STONE_AXE;
                 } else if (equipmentLevel == 2) {
                     return Items.IRON_AXE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_AXE;
-                } else {
-                    return Items.WOODEN_AXE;
+                } else if (equipmentLevel == -1) {
+                    return Items.GOLDEN_AXE;
                 }
             case 2:
                 if (equipmentLevel == 0) {
-                    return Items.STONE_SHOVEL;
+                    return Items.WOODEN_SHOVEL;
                 } else if (equipmentLevel == 1) {
-                    return Items.GOLDEN_SHOVEL;
+                    return Items.STONE_SHOVEL;
                 } else if (equipmentLevel == 2) {
                     return Items.IRON_SHOVEL;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_SHOVEL;
-                } else {
-                    return Items.WOODEN_SHOVEL;
+                } else if (equipmentLevel == -1) {
+                    return Items.GOLDEN_SHOVEL;
                 }
             case 3:
                 if (equipmentLevel == 0) {
-                    return Items.STONE_PICKAXE;
+                    return Items.WOODEN_PICKAXE;
                 } else if (equipmentLevel == 1) {
-                    return Items.GOLDEN_PICKAXE;
+                    return Items.STONE_PICKAXE;
                 } else if (equipmentLevel == 2) {
                     return Items.IRON_PICKAXE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_PICKAXE;
-                } else {
-                    return Items.WOODEN_PICKAXE;
+                } else if (equipmentLevel == -1) {
+                    return Items.GOLDEN_PICKAXE;
                 }
             case 4:
                 if (equipmentLevel == 0) {
-                    return Items.STONE_HOE;
+                    return Items.WOODEN_HOE;
                 } else if (equipmentLevel == 1) {
-                    return Items.GOLDEN_HOE;
+                    return Items.STONE_HOE;
                 } else if (equipmentLevel == 2) {
                     return Items.IRON_HOE;
                 } else if (equipmentLevel == 3) {
                     return Items.DIAMOND_HOE;
-                } else {
-                    return Items.WOODEN_HOE;
+                } else if (equipmentLevel == -1) {
+                    return Items.GOLDEN_HOE;
                 }
             default:
                 return Items.AIR;

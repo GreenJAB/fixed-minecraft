@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": "minecraft:iron_ingot",
-    "P": "minecraft:copper_chestplate"
+    "X": "minecraft:copper_ingot",
+    "P": "minecraft:chainmail_leggings"
   },
   "pattern": [
-    "XPX",
     "XXX",
-    "XXX"
+    "XPX",
+    "X X"
   ],
   "result": {
     "count": 1,
-    "id": "minecraft:iron_chestplate"
+    "id": "minecraft:copper_leggings"
   }
 }
