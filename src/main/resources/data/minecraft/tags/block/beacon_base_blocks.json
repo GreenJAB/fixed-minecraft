@@ -5,7 +5,7 @@
     "minecraft:coal_block",
     "minecraft:lapis_block",
     "minecraft:ancient_debris",
-    "minecraft:waxed_copper_block",
-    "minecraft:quartz_block"
+    "minecraft:quartz_block",
+    "#fixedminecraft:copper"
   ]
 }
