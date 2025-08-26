@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
@@ -54,7 +55,12 @@ public class BeaconBlockEntityMixin {
                         bl = false;
                         break;
                     }
-                    if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
+                    if (world.getBlockState(new BlockPos(l, k, m)).isIn(ModTags.COPPER)) {
+                        if (!base.getDefaultState().isIn(ModTags.COPPER)) {
+                            bl = false;
+                            break;
+                        }
+                    } else if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
                         bl = false;
                         break;
                     }
@@ -94,7 +100,7 @@ public class BeaconBlockEntityMixin {
         if (primaryEffect == null) {
             primaryEffect = newEffects.get(blockState);
         }
-        if (blockState.isIn(BlockTags.COPPER)){
+        if (blockState.isIn(ModTags.COPPER)){
             primaryEffect = StatusEffects.SPEED;
         }
         int statusLevel = beaconLevel >= 3?1:0;
