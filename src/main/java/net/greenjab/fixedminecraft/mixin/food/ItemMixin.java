@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -29,15 +30,15 @@ public class ItemMixin {
         }
     }
 
-    @Inject(method = "use", at = @At("HEAD"))
-    private void rawFoodDebuf(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        ItemStack itemStack = user.getStackInHand(hand);
-
+    @Inject(method = "finishUsing", at = @At("HEAD"))
+    private void rawFoodDebuf(ItemStack itemStack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
-        if (foodComponent != null) {
-            if (foodComponent.saturation()/(foodComponent.nutrition()*2.0f)==0.15f) {
-                if (Math.random() < 0.15f) {
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0));
+        if (user instanceof ServerPlayerEntity) {
+            if (foodComponent != null) {
+                if (foodComponent.saturation() / (foodComponent.nutrition() * 2.0f) == 0.15f) {
+                    if (Math.random() < 0.15f) {
+                        user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0));
+                    }
                 }
             }
         }
