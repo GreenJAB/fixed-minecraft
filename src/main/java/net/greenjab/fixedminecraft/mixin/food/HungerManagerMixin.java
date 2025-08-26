@@ -105,7 +105,7 @@ public abstract class HungerManagerMixin {
         return 0;
     }
     @ModifyConstant(method = "update", constant = @Constant(intValue = 80))
-    private int fasterHeal(int value, @Local(argsOnly = true) ServerPlayerEntity player) {
+    private int fasterHeal(int value, @Local(argsOnly = true) PlayerEntity player) {
         HungerManager HM = (HungerManager) (Object)this;
         if (HM.getFoodLevel()==0) return 80;
         return 15 + 5 * player.getWorld().getDifficulty().getId();

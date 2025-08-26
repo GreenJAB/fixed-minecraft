@@ -72,8 +72,8 @@ public class CopperRailBlock extends AbstractRailBlock {
         };*/
 
         Oxidizable.OxidationLevel level = ((CopperRailBlock)state.getBlock()).oxidationLevel;
-        if (level == UNAFFECTED) return 40.0;
-        if (level == EXPOSED) return 20.0;
+        if (level == UNAFFECTED) return 20.0;
+        if (level == EXPOSED) return 15.0;
         if (level == WEATHERED) return 10.0;
         if (level == OXIDIZED) return 5.0;
         return 8.0;

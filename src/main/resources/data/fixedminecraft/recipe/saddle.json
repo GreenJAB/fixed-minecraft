@@ -2,8 +2,12 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "key": {
-        "L": "minecraft:leather",
-        "I": "minecraft:iron_ingot"
+        "L": {
+            "item": "minecraft:leather"
+        },
+        "I": {
+            "item": "minecraft:iron_ingot"
+        }
     },
     "pattern": [
         " L ",

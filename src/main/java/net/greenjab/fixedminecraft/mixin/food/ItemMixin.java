@@ -28,10 +28,8 @@ public class ItemMixin {
         }
     }
 
-    @Inject(method = "use", at = @At("HEAD"))
-    private void rawFoodDebuf(World world, PlayerEntity user, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
-        ItemStack itemStack = user.getStackInHand(hand);
-
+    @Inject(method = "finishUsing", at = @At("HEAD"))
+    private void rawFoodDebuf(ItemStack itemStack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
         FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
         if (foodComponent != null) {
             if (foodComponent.saturation()/(foodComponent.nutrition()*2.0f)==0.15f) {

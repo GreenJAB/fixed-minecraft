@@ -12,9 +12,6 @@ import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.component.type.ChargedProjectilesComponent;
-import net.minecraft.component.type.ConsumableComponents;
-import net.minecraft.component.type.DeathProtectionComponent;
-import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.component.type.FireworksComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.component.type.FoodComponents;
@@ -278,16 +275,4 @@ public class ItemsMixin {
     }*/
 
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0), slice = @Slice(from = @At( value = "FIELD",
-                     target = "Lnet/minecraft/item/Items;PUMPKIN_PIE:Lnet/minecraft/item/Item;")))
-    private static Item fireWorkCooldown(String id, Function<Item.Settings, Item> factory, Item.Settings settings) {
-        return register(
-                "firework_rocket", FireworkRocketItem::new, new Item.Settings().component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of())).useCooldown(5)
-        );
-    }
-
-    @Unique
-    private static Function<Item.Settings, Item> createBlockItemWithUniqueName(Block block) {
-        return settings -> new BlockItem(block, settings.useItemPrefixedTranslationKey());
-    }
 }

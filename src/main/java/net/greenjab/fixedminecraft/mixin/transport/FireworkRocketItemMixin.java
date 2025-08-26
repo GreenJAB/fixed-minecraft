@@ -39,25 +39,19 @@ public class FireworkRocketItemMixin {
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
             FireworksComponent fireworkComponent = itemStack.get(DataComponentTypes.FIREWORKS);
             if (fireworkComponent == null || fireworkComponent.explosions().isEmpty()) {
-                if (user.isGliding()) {
+                if (user.isFallFlying()) {
                     user.addVelocity(0, 1, 0);
                     if (world instanceof ServerWorld serverWorld) {
-                        ProjectileEntity.spawn(
-                                new FireworkRocketEntity(
-                                        world,
-                                        user.getX(),
-                                        user.getY(),
-                                        user.getZ(),
-                                        itemStack
-                                ),
-                                serverWorld,
-                                itemStack
-                        );
+                        user.getItemCooldownManager().set(itemStack.getItem(),100);
+                        FireworkRocketEntity fireworkRocketEntity = new FireworkRocketEntity(world,  user.getX(),
+                                user.getY(),
+                                user.getZ(),itemStack);
+                        world.spawnEntity(fireworkRocketEntity);
+
                         itemStack.decrementUnlessCreative(1, user);
                         user.incrementStat(Stats.USED.getOrCreateStat((FireworkRocketItem)(Object)this));
                     }
-
-                    cir.setReturnValue(ActionResult.SUCCESS);
+                    cir.setReturnValue(TypedActionResult.success(user.getStackInHand(hand), world.isClient()));
                 }
             }
         }

@@ -84,7 +84,6 @@
         "map_book.MapBannerMarkerMixin",
         "map_book.MapDecorationMixin",
         "map_book.MapStateMixin",
-        "minecart.AbstractMinecartEntityMixin",
         "minecart.HoneycombItemMixin",
         "minecart.OxidizableMixin",
         "minecart.PlayerEntityMixin",

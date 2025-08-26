@@ -73,9 +73,9 @@ public abstract class ZombieEntityMixin extends HostileEntity {
     @Inject(method = "setBaby", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/attribute/EntityAttributeInstance;addTemporaryModifier(Lnet/minecraft/entity/attribute/EntityAttributeModifier;)V"))
         private void halfBabyHealth(boolean baby, CallbackInfo ci) {
         ZombieEntity ZE = (ZombieEntity) (Object) this;
-        float newHealth = (float) (ZE.getAttributeBaseValue(EntityAttributes.MAX_HEALTH)/2.0f);
+    float newHealth = (float) (ZE.getAttributeBaseValue(EntityAttributes.GENERIC_MAX_HEALTH)/2.0f);
         if (newHealth>=10) {
-            ZE.getAttributeInstance(EntityAttributes.MAX_HEALTH).setBaseValue(newHealth);
+            ZE.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH).setBaseValue(newHealth);
             ZE.setHealth(newHealth);
         }
     }
