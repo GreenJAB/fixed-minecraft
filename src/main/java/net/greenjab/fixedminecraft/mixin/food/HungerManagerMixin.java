@@ -51,7 +51,7 @@ public abstract class HungerManagerMixin {
         int ticksSinceLastExhaustion = CustomData.getData(player, "ticksSinceLastExhaustion");
         float saturationSinceLastHunger = CustomData.getData(player, "saturationSinceLastHunger")/1000.0f;
 
-        int staminaPause = 15 + 5 * player.getEntityWorld().getDifficulty().getId();
+        int staminaPause = 15 + 5 * player.getWorld().getDifficulty().getId();
 
         if (Math.abs(this.exhaustion - lastExhaustion)<0.001f || ticksSinceLastExhaustion<0) {
             if (saturationLevel != 0 || player.getWorld().getTime()%3==0)
@@ -107,7 +107,7 @@ public abstract class HungerManagerMixin {
     private int fasterHeal(int value, @Local(argsOnly = true) ServerPlayerEntity player) {
         HungerManager HM = (HungerManager) (Object)this;
         if (HM.getFoodLevel()==0) return 80;
-        return 15 + 5 * player.getEntityWorld().getDifficulty().getId();
+        return 15 + 5 * player.getWorld().getDifficulty().getId();
     }
     @Redirect(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;canFoodHeal()Z"))
     private boolean needSaturationToHeal(ServerPlayerEntity instance) {
