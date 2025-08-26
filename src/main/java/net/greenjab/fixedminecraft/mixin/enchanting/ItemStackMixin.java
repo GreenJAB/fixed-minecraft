@@ -95,7 +95,7 @@ public abstract class ItemStackMixin {
         }
     }
 
-    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 0))
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 5))
     private void addBaitTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
                                 CallbackInfoReturnable<List<Text>> cir, @Local Consumer<Text> consumer) {
         ItemStack stack = (ItemStack)(Object)this;
@@ -103,12 +103,13 @@ public abstract class ItemStackMixin {
     }
 
 
-    @ModifyArg(method = "appendComponentTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/tooltip/TooltipAppender;appendTooltip(Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;Lnet/minecraft/component/ComponentsAccess;)V"), index = 2)
+    @ModifyArg(method = "getTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 2), index = 3)
     private TooltipType addEnchantLocationIcon(TooltipType type) {
-        ItemStack stack = (ItemStack)(Object)this;
-        if (stack.isOf(Items.ENCHANTED_BOOK)) {
-            return TooltipType.ADVANCED;
-        }
+        return TooltipType.ADVANCED;
+    }
+
+    @ModifyArg(method = "getTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 3), index = 3)
+    private TooltipType noEnchantLocationIconOnItems(TooltipType type) {
         return TooltipType.BASIC;
     }
 
