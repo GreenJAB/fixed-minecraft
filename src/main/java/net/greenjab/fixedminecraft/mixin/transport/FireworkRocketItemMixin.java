@@ -37,19 +37,10 @@ public class FireworkRocketItemMixin {
         ItemStack itemStack = user.getStackInHand(hand);
         if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
             FireworksComponent fireworkComponent = itemStack.get(DataComponentTypes.FIREWORKS);
-            if (fireworkComponent == null) {
+            if (fireworkComponent == null || fireworkComponent.explosions().isEmpty()) {
                 if (user.isGliding()) {
                     user.addVelocity(0, 1, 0);
                     if (world instanceof ServerWorld serverWorld) {
-                        if (user.detachAllHeldLeashes(null)) {
-                            world.playSoundFromEntity(null, user, SoundEvents.ITEM_LEAD_BREAK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        }
-                        /*LivingEntity Null = EntityType.PIG.create(world, SpawnReason.TRIGGERED);
-                        if (Null != null) {
-                            Null.refreshPositionAndAngles(user.getX(), user.getY(), user.getZ(), 0, 0.0F);
-                            ProjectileEntity.spawn(new FireworkRocketEntity(world, itemStack, Null), serverWorld, itemStack);
-                            Null.remove(Entity.RemovalReason.DISCARDED);
-                        }*/
                         ProjectileEntity.spawn(
                                 new FireworkRocketEntity(
                                         world,
@@ -61,27 +52,6 @@ public class FireworkRocketItemMixin {
                                 serverWorld,
                                 itemStack
                         );
-                        itemStack.decrementUnlessCreative(1, user);
-                        user.incrementStat(Stats.USED.getOrCreateStat((FireworkRocketItem)(Object)this));
-                    }
-
-                    cir.setReturnValue(ActionResult.SUCCESS);
-                }
-            }
-            if (fireworkComponent.explosions().isEmpty()) {
-                //cir.setReturnValue(ActionResult.PASS);
-                if (user.isGliding()) {
-                    user.addVelocity(0, 1, 0);
-                    if (world instanceof ServerWorld serverWorld) {
-                        if (user.detachAllHeldLeashes(null)) {
-                            world.playSoundFromEntity(null, user, SoundEvents.ITEM_LEAD_BREAK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
-                        }
-                        LivingEntity Null = EntityType.PIG.create(world, SpawnReason.TRIGGERED);
-                        if (Null != null) {
-                            Null.refreshPositionAndAngles(user.getX(), user.getY(), user.getZ(), 0, 0.0F);
-                            ProjectileEntity.spawn(new FireworkRocketEntity(world, itemStack, Null), serverWorld, itemStack);
-                            Null.remove(Entity.RemovalReason.DISCARDED);
-                        }
                         itemStack.decrementUnlessCreative(1, user);
                         user.incrementStat(Stats.USED.getOrCreateStat((FireworkRocketItem)(Object)this));
                     }
