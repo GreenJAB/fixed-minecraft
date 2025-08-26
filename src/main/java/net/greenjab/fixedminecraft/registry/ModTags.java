@@ -14,6 +14,7 @@ import net.minecraft.world.gen.structure.Structure;
 public class ModTags {
     public static final TagKey<EntityType<?>> VEHICLES = TagKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id("vehicles"));
     public static final TagKey<Block> ORES = TagKey.of(RegistryKeys.BLOCK, FixedMinecraft.id("ores"));
+    public static final TagKey<Block> COPPER = TagKey.of(RegistryKeys.BLOCK, FixedMinecraft.id("copper"));
 
     public static final TagKey<Enchantment> DESERT_TRADES = enchant_of("trades/desert");
     public static final TagKey<Enchantment> JUNGLE_TRADES = enchant_of("trades/jungle");
