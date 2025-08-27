@@ -40,7 +40,7 @@ public class ClientPlayerEntityMixin {
         ClientPlayerEntity CPE = (ClientPlayerEntity)(Object)this;
         if (CPE.input.jumping) {
             if (!CPE.isClimbing() && !CPE.isOnGround() && !CPE.hasVehicle() && !CPE.hasStatusEffect(StatusEffects.LEVITATION) &&
-                (CPE.getEntityWorld().getDifficulty().getId()>1?!CPE.isWet():!CPE.isTouchingWater()) &&
+                (CPE.getWorld().getDifficulty().getId()>1?!CPE.isWet():!CPE.isTouchingWater()) &&
                  !CPE.isInLava() &&
                 CustomData.getData(CPE, "airTime") > 15) {
                 if (CPE.checkFallFlying()) {
