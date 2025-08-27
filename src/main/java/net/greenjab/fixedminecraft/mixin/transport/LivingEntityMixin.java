@@ -88,12 +88,12 @@ public abstract class LivingEntityMixin extends Entity {
     private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
         if (instance instanceof PlayerEntity) {
             return !(!instance.hasStatusEffect(effect) &&
-                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
+                     (instance.getWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
                      !instance.isInLava() &&
                      CustomData.getData(instance, "airTime") > 15);
         } else {
             return !(!instance.hasStatusEffect(effect) &&
-                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
+                     (instance.getWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
                      !instance.isInLava());
         }
     }
