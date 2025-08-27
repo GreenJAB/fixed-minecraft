@@ -29,6 +29,6 @@ public class PlayerEntityMixin
     @Inject(method = "canConsume", at = @At("HEAD"), cancellable = true)
     private void alwaysEatInPeaceful(boolean ignoreHunger, CallbackInfoReturnable<Boolean> cir) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        if (PE.getEntityWorld().getDifficulty().getId()==0) cir.setReturnValue(true);
+        if (PE.getWorld().getDifficulty().getId()==0) cir.setReturnValue(true);
     }
 }
