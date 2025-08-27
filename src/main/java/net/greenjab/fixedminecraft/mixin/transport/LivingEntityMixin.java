@@ -87,8 +87,16 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Redirect(method = "tickFallFlying", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
     private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
-        return !(!instance.hasStatusEffect(effect) && !instance.isWet() && !instance.isInLava() &&
-                 CustomData.getData(instance, "airTime") > 15);
+        if (instance instanceof PlayerEntity) {
+            return !(!instance.hasStatusEffect(effect) &&
+                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isWet():!instance.isTouchingWater()) &&
+                     !instance.isInLava() &&
+                     CustomData.getData(instance, "airTime") > 15);
+        } else {
+            return !(!instance.hasStatusEffect(effect) &&
+                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isWet():!instance.isTouchingWater()) &&
+                     !instance.isInLava());
+        }
     }
 
     @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
