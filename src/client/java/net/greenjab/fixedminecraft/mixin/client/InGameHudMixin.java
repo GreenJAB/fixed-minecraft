@@ -122,7 +122,7 @@ public class InGameHudMixin {
 
                  int moon = player.clientWorld.getMoonPhase();
                  Text moonPhase = Text.translatable("world.moon." + names[moon]);
-                 if (player.clientWorld.isNight())
+                 if (player.clientWorld.isNight() && player.clientWorld.isSkyVisible(player.getBlockPos()))
                     string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
                  else string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | §7" + moonPhase.getString();
              } else {
