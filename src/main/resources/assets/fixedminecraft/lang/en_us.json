@@ -92,5 +92,7 @@
     "block.fixedminecraft.azalea_wood": "Azalea Wood",
     "block.fixedminecraft.stripped_azalea_log": "Stripped Azalea Log",
     "block.fixedminecraft.stripped_azalea_wood": "Stripped Azalea Wood",
-    "generator.fixedminecraft.floating_islands": "Floating Islands"
+    "generator.fixedminecraft.floating_islands": "Floating Islands",
+    "item.fixedminecraft.patina": "Patina",
+    "block.fixedminecraft.redstone_lantern": "Redstone Lantern"
 }

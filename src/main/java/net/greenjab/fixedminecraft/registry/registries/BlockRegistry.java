@@ -2,9 +2,11 @@ package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.block.CopperFireBlock;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
+import net.greenjab.fixedminecraft.registry.block.RedstoneLanternBlock;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSetType;
@@ -186,6 +188,32 @@ public class BlockRegistry {
                     .strength(3.0F)
                     .nonOpaque()
                     .burnable()
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+
+    public static final Block COPPER_FIRE = register(
+            "copper_fire",
+            CopperFireBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.LIME)
+                    .replaceable()
+                    .noCollision()
+                    .breakInstantly()
+                    .luminance(/* method_26150 */ state -> 10)
+                    .sounds(BlockSoundGroup.WOOL)
+                    .pistonBehavior(PistonBehavior.DESTROY)
+    );
+
+    public static final Block REDSOTNE_LANTERN = register(
+            "redstone_lantern",
+            RedstoneLanternBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(MapColor.GOLD)
+                    .solid()
+                    .strength(3.5F)
+                    .sounds(BlockSoundGroup.LANTERN)
+                    .luminance(/* method_24419 */ state -> 10)
+                    .nonOpaque()
                     .pistonBehavior(PistonBehavior.DESTROY)
     );
 
