@@ -10,6 +10,7 @@
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",
         "AnvilScreenMixin",
+        "AtmosphericFogModifierMixin",
         "CartographyTableScreenMixin",
         "ClientPlayerEntityMixin",
         "ClientPlayNetworkHandlerMixin",
@@ -24,11 +25,16 @@
         "InGameHudMixin",
         "ItemColorsMixin",
         "MerchantScreenMixin",
+        "LavaFogModifierMixin",
+        "LivingEntityRendererMixin",
+        "MerchantScreenMixin",
+        "MinecraftClientMixin",
         "RecipeBookWidgetMixin",
         "VideoOptionsScreenMixin",
         "WorldRendererMixin",
         "ZombieVillagerEntityModelMixin",
         "glint.ArmorFeatureRendererMixin",
+        "glint.BasicItemModelMixin",
         "glint.BufferBuilderStorageMixin",
         "glint.ElytraFeatureRendererMixin",
         "glint.ItemRendererMixin",
@@ -40,5 +46,12 @@
     "mixins": [
         "DrawContextMixin",
         "map.MapPositionRequestMixin"
-    ]
+        "map.HeldItemRendererMixin",
+        "map.InGameHudMixin",
+        "map.ItemFrameEntityRendererMixin",
+        "map.LocatorBarMixin",
+        "map.MapPositionRequestMixin",
+        "map.MapRendererMixin",
+        "FogRendererMixin"
+  ]
 }
