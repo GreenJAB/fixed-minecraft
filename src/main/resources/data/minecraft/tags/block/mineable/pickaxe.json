@@ -11,6 +11,7 @@
         "fixedminecraft:waxed_copper_rail",
         "fixedminecraft:waxed_exposed_copper_rail",
         "fixedminecraft:waxed_weathered_copper_rail",
-        "fixedminecraft:waxed_oxidized_copper_rail"
+        "fixedminecraft:waxed_oxidized_copper_rail",
+        "fixedminecraft:redstone_lantern"
     ]
 }
