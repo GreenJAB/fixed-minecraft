@@ -22,7 +22,7 @@ import static net.minecraft.block.Block.dropStack;
 public class AxeItemMixin {
     @Inject(method = "tryStrip", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;syncWorldEvent(Lnet/minecraft/entity/Entity;ILnet/minecraft/util/math/BlockPos;I)V", ordinal = 0
+            target = "Lnet/minecraft/world/World;syncWorldEvent(Lnet/minecraft/entity/player/PlayerEntity;ILnet/minecraft/util/math/BlockPos;I)V", ordinal = 0
     ))
     private void addCopperRails(World world, BlockPos pos, @Nullable PlayerEntity player,
                                 BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {
