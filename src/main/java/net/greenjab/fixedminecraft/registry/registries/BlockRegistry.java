@@ -211,7 +211,7 @@ public class BlockRegistry {
 
     public static final Block COPPER_FIRE = register(
             "copper_fire",
-            CopperFireBlock::new,
+            new CopperFireBlock(
             AbstractBlock.Settings.create()
                     .mapColor(MapColor.LIME)
                     .replaceable()
@@ -220,11 +220,12 @@ public class BlockRegistry {
                     .luminance(/* method_26150 */ state -> 10)
                     .sounds(BlockSoundGroup.WOOL)
                     .pistonBehavior(PistonBehavior.DESTROY)
+            )
     );
 
     public static final Block REDSOTNE_LANTERN = register(
             "redstone_lantern",
-            RedstoneLanternBlock::new,
+            new RedstoneLanternBlock(
             AbstractBlock.Settings.create()
                     .mapColor(MapColor.GOLD)
                     .solid()
@@ -233,6 +234,7 @@ public class BlockRegistry {
                     .luminance(/* method_24419 */ state -> 10)
                     .nonOpaque()
                     .pistonBehavior(PistonBehavior.DESTROY)
+            )
     );
 
     public static void registerFireBlocks() {

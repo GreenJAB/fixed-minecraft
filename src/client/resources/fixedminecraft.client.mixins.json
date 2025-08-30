@@ -24,7 +24,6 @@
         "InGameHudMixin",
         "ItemColorsMixin",
         "MerchantScreenMixin",
-        "LivingEntityRendererMixin",
         "MerchantScreenMixin",
         "MinecraftClientMixin",
         "RecipeBookWidgetMixin",
@@ -42,11 +41,9 @@
     ],
     "mixins": [
         "DrawContextMixin",
-        "map.MapPositionRequestMixin"
+        "map.MapPositionRequestMixin",
         "map.HeldItemRendererMixin",
         "map.ItemFrameEntityRendererMixin",
-        "map.MapPositionRequestMixin",
-        "map.MapRendererMixin",
-        "FogRendererMixin"
+        "map.MapPositionRequestMixin"
     ]
 }
