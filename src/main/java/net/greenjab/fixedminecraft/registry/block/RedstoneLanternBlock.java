@@ -42,8 +42,12 @@ public class RedstoneLanternBlock extends Block implements Waterloggable {
     public static final BooleanProperty LIT = Properties.LIT;
     public static final BooleanProperty HANGING = Properties.HANGING;
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
-    private static final VoxelShape STANDING_SHAPE = VoxelShapes.union(Block.createColumnShape(4.0, 7.0, 9.0), Block.createColumnShape(6.0, 0.0, 7.0));
-    private static final VoxelShape HANGING_SHAPE = STANDING_SHAPE.offset(0.0, 0.0625, 0.0).simplify();
+    protected static final VoxelShape STANDING_SHAPE = VoxelShapes.union(
+            Block.createCuboidShape(5.0, 0.0, 5.0, 11.0, 7.0, 11.0), Block.createCuboidShape(6.0, 7.0, 6.0, 10.0, 9.0, 10.0)
+    );
+    protected static final VoxelShape HANGING_SHAPE = VoxelShapes.union(
+            Block.createCuboidShape(5.0, 1.0, 5.0, 11.0, 8.0, 11.0), Block.createCuboidShape(6.0, 8.0, 6.0, 10.0, 10.0, 10.0)
+    );
     //public static final BooleanProperty HANGING = LanternBlock.HANGING;
     private static final int SCHEDULED_TICK_DELAY = 2;
     private static final Map<BlockView, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap();
@@ -130,7 +134,7 @@ public class RedstoneLanternBlock extends Block implements Waterloggable {
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+    protected void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!moved) {
             this.update(world, pos, state);
         }
@@ -188,7 +192,7 @@ public class RedstoneLanternBlock extends Block implements Waterloggable {
             double d = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.5;
             double e = pos.getY() + 0.4 + (random.nextDouble() - 0.5) * 0.5;
             double f = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.5;
-            world.addParticleClient(DustParticleEffect.DEFAULT, d, e, f, 0.0, 0.0, 0.0);
+            world.addParticle(DustParticleEffect.DEFAULT, d, e, f, 0.0, 0.0, 0.0);
         }
     }
 
