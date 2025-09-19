@@ -31,7 +31,6 @@ public class DragonFireballEntityMixin {
                                             target = "Lnet/minecraft/entity/AreaEffectCloudEntity;<init>(Lnet/minecraft/world/World;DDD)V"
     ))
     private void explodeOnImpact(HitResult hitResult, CallbackInfo ci) {
-        //TODO test
         DragonFireballEntity DFE = (DragonFireballEntity)(Object)this;
         ServerWorld world = (ServerWorld) DFE.getEntityWorld();
         int explosionPower = (DFE.getEntityWorld().getDifficulty().getId()+1)/2;

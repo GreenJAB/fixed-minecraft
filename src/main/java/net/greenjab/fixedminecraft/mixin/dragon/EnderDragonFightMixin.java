@@ -113,7 +113,6 @@ public abstract class EnderDragonFightMixin {
                 }
             }
         }//*/
-        //TODO test
         this.bossBar.setColor(BossBar.Color.PINK);
         if (this.dragonUuid!=null) {
             if (this.world.getEntity(this.dragonUuid)!=null) {

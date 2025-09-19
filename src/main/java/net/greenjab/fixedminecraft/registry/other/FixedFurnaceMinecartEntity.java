@@ -52,7 +52,6 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 train.clear();
                 train.add(this);
                 for (UUID uuid : uuids) {
-                    //TODO test
                     Entity entity = ((ServerWorld) this.getEntityWorld()).getEntity(uuid);
                     if (entity instanceof AbstractMinecartEntity minecart) {
                         BlockPos var11 = minecart.getRailOrMinecartPos();
