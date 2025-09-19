@@ -13,6 +13,7 @@ import net.minecraft.entity.boss.dragon.phase.SittingFlamingPhase;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.projectile.DragonFireballEntity;
+import net.minecraft.particle.DragonBreathParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
@@ -167,7 +168,7 @@ public class SittingFlamingPhaseMixin extends AbstractSittingPhase {
     private AreaEffectCloudEntity dragonAreaEffectCloudEntity(double d, double h, double e) {
         AreaEffectCloudEntity areaEffectCloudEntity = new AreaEffectCloudEntity(this.dragon.getEntityWorld(), d, h, e);
         areaEffectCloudEntity.setOwner(this.dragon);
-        areaEffectCloudEntity.setParticleType(ParticleTypes.DRAGON_BREATH);
+        areaEffectCloudEntity.setParticleType(DragonBreathParticleEffect.of(ParticleTypes.DRAGON_BREATH, 1.0F));
         areaEffectCloudEntity.setRadius(5.0F);
         areaEffectCloudEntity.setDuration(300);
         areaEffectCloudEntity.setRadiusGrowth((-0.5F - areaEffectCloudEntity.getRadius()) / (float)areaEffectCloudEntity.getDuration());

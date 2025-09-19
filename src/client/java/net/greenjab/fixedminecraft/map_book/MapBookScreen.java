@@ -9,6 +9,7 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gl.RenderPipelines;
+import net.minecraft.client.gui.Click;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -75,13 +76,13 @@ public class MapBookScreen extends Screen {
         return false;
     }
 
-    @Override public boolean mouseClicked(double mouseX, double mouseY, int button, boolean doubleClick) {
-        if (button == 0 && Screen.hasShiftDown()) {
+    @Override public boolean mouseClicked(Click click, boolean doubleClick) {
+        if (click.button() == 0 && client.isShiftPressed()) {
             int id = getMapBookId(item);
             if (id != -1) {
                 MapBookPlayer marker = MapBookStateManager.INSTANCE.getClientMapBookState(getMapBookId(item)).marker;
 
-                var pos = new Vec3d(mouseX, mouseY, 0.0);
+                var pos = new Vec3d(click.x(), click.y(), 0.0);
                 pos = pos.multiply((1 / scale));
                 pos = pos.subtract(width / 2.0, height / 2.0, 0.0);
                 pos = pos.subtract(this.x / scale, this.y / scale, 0.0);
@@ -97,9 +98,9 @@ public class MapBookScreen extends Screen {
                 }
             }
         }
-        if (button == 2) {
+        if (click.button() == 2) {
             if (client.player.getAbilities().creativeMode) {
-                var pos = new Vec3d(mouseX, mouseY, 0.0);
+                var pos = new Vec3d(click.x(), click.y(), 0.0);
                 pos = pos.multiply((1/scale));
                 pos = pos.subtract(width / 2.0, height / 2.0, 0.0);
                 pos = pos.subtract(this.x/scale, this.y/scale, 0.0);
@@ -108,15 +109,15 @@ public class MapBookScreen extends Screen {
                         pos.getX(), client.player.getY(), pos.getY()));
             }
         }
-        return super.mouseClicked(mouseX, mouseY, button, doubleClick);
+        return super.mouseClicked(click, doubleClick);
     }
 
-    @Override public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY) {
-        if (button < 2 && !Screen.hasShiftDown()) {
+    @Override public boolean mouseDragged(Click click, double deltaX, double deltaY) {
+        if (click.button() < 2 && !client.isShiftPressed()) {
             x += deltaX;
             y += deltaY;
         }
-        return super.mouseDragged(mouseX, mouseY, button, deltaX, deltaY);
+        return super.mouseDragged(click, deltaX, deltaY);
     }
 
     @Override public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {

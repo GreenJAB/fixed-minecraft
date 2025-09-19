@@ -44,12 +44,6 @@ public class FireworkRocketItemMixin {
                         if (user.detachAllHeldLeashes(null)) {
                             world.playSoundFromEntity(null, user, SoundEvents.ITEM_LEAD_BREAK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
                         }
-                        /*LivingEntity Null = EntityType.PIG.create(world, SpawnReason.TRIGGERED);
-                        if (Null != null) {
-                            Null.refreshPositionAndAngles(user.getX(), user.getY(), user.getZ(), 0, 0.0F);
-                            ProjectileEntity.spawn(new FireworkRocketEntity(world, itemStack, Null), serverWorld, itemStack);
-                            Null.remove(Entity.RemovalReason.DISCARDED);
-                        }*/
                         ProjectileEntity.spawn(
                                 new FireworkRocketEntity(
                                         world,

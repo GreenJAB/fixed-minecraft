@@ -69,8 +69,8 @@ public class CartographyTableScreenHandlerMixin {
                     if (CTSH.slots.get(0).getStack().isOf(Items.FILLED_MAP)) {
                         if (CTSH.slots.get(1).getStack().isOf(Items.BOOK)) {
                             if (stack.isOf(ItemRegistry.MAP_BOOK)) {
-                                int i = createMapBookState(stack, player.getServer());
-                                MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.getServer(), i);
+                                int i = createMapBookState(stack, player.getEntityWorld().getServer());
+                                MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.getEntityWorld().getServer(), i);
                                 if (state != null) {
                                     state.addMapID(CTSH.slots.get(0).getStack().get(DataComponentTypes.MAP_ID).id());
                                 }
@@ -160,8 +160,8 @@ public class CartographyTableScreenHandlerMixin {
                 if (CTSH.slots.get(1).getStack().isOf(Items.BOOK)) {
                     if (stack.isOf(ItemRegistry.MAP_BOOK)) {
                         if (Math.min(CTSH.slots.get(0).getStack().getCount(), CTSH.slots.get(1).getStack().getCount())==1) {
-                            int i = createMapBookState(stack, player.getServer());
-                            MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.getServer(), i);
+                            int i = createMapBookState(stack, player.getEntityWorld().getServer());
+                            MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.getEntityWorld().getServer(), i);
                             if (state != null) {
                                 state.addMapID(CTSH.slots.get(0).getStack().get(DataComponentTypes.MAP_ID).id());
                             }

@@ -171,9 +171,9 @@ public class AbstractHorseEntityMixin {
             AHE.age = 0;
             AHE.addCommandTag("locate");
             AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);
-
+            //TODO test
             String s = "/waypoint modify " + AHE.getUuidAsString() + " style set horse";
-            AHE.getServer().getCommandManager().executeWithPrefix(createCommandSource(null, AHE.getEntityWorld(), AHE.getBlockPos()), s);
+            AHE.getEntityWorld().getServer().getCommandManager().executeWithPrefix(createCommandSource(null, AHE.getEntityWorld(), AHE.getBlockPos()), s);
         }
     }
 

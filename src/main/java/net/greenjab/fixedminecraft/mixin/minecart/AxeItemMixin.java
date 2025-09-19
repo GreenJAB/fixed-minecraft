@@ -26,9 +26,9 @@ import java.util.Optional;
 public class AxeItemMixin {
     @Inject(method = "tryStrip", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/World;syncWorldEvent(Lnet/minecraft/entity/Entity;ILnet/minecraft/util/math/BlockPos;I)V", ordinal = 0
+            target = "Lnet/minecraft/item/AxeItem;method_74886(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/block/BlockState;Lnet/minecraft/sound/SoundEvent;I)V", ordinal = 0
     ))
-    private void addCopperRails(World world, BlockPos pos, @Nullable PlayerEntity player,
+    private void addScrapedCopper(World world, BlockPos pos, @Nullable PlayerEntity player,
                                        BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {
         if (world instanceof ServerWorld serverWorld && state.isFullCube(world, pos) && world.random.nextFloat()<0.3f) {
             Identifier lootTableId = FixedMinecraft.id("gameplay/other/scrape");

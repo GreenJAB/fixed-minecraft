@@ -116,13 +116,13 @@ public class InGameHudMixin {
          if (clock||compass) {
              String string = "";
              if (clock) {
-                 int time = (int) ((player.clientWorld.getTimeOfDay()+6000)%24000);
+                 int time = (int) ((player.getEntityWorld().getTimeOfDay()+6000)%24000);
                  int hour = time/1000;
                  int min = ((time%1000)*60)/1000;
 
-                 int moon = player.clientWorld.getMoonPhase();
+                 int moon = player.getEntityWorld().getMoonPhase();
                  Text moonPhase = Text.translatable("world.moon." + names[moon]);
-                 if (player.clientWorld.isNight() && player.clientWorld.isSkyVisible(player.getBlockPos()))
+                 if (player.getEntityWorld().isNight() && player.getEntityWorld().isSkyVisible(player.getBlockPos()))
                     string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | " + moonPhase.getString();
                  else string= (hour<10?"0":"") + hour + ":" + (min<10?"0":"") + min + " | §7" + moonPhase.getString();
              } else {

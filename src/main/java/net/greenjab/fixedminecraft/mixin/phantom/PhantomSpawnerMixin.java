@@ -45,7 +45,7 @@ public class PhantomSpawnerMixin {
     }
 
     @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(III)I", shift = At.Shift.AFTER))
-    private void giveInsomniaOnNoSleep(ServerWorld world, boolean spawnMonsters, boolean spawnAnimals, CallbackInfo ci,
+    private void giveInsomniaOnNoSleep(ServerWorld world, boolean spawnMonsters, CallbackInfo ci,
                                        @Local ServerPlayerEntity serverPlayerEntity) {
         ServerStatHandler serverStatHandler = serverPlayerEntity.getStatHandler();
         int j = MathHelper.clamp(serverStatHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);

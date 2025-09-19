@@ -115,7 +115,7 @@
         "mobs.MobEntityMixin",
         "mobs.ParrotEntityMixin",
         "mobs.PiglinEntityMixin",
-        "mobs.PlayerEntityMixin",
+        "mobs.ServerPlayerEntityMixin",
         "mobs.WitherEntityMixin",
         "mobs.ZombieEntityMixin",
         "netherite.ArmorSlotMixin",

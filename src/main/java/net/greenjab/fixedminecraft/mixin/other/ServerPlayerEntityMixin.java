@@ -35,7 +35,7 @@ public abstract class ServerPlayerEntityMixin {
     @Inject(method = "setSpawnPoint", at = @At("HEAD"))
     private void setBackupSpawn(ServerPlayerEntity.Respawn respawn, boolean sendMessage, CallbackInfo ci) {
         ServerPlayerEntity SPE = (ServerPlayerEntity)(Object)this;
-        BackupRespawns.getBackupRespawns(SPE.getServer()).getPlayer(SPE).pushRespawn(respawn);
+        BackupRespawns.getBackupRespawns(SPE.getEntityWorld().getServer()).getPlayer(SPE).pushRespawn(respawn);
     }
 
     @Unique
@@ -67,7 +67,7 @@ public abstract class ServerPlayerEntityMixin {
 
     @Unique
     private static RegistryKey<World> getDimension(@Nullable ServerPlayerEntity.Respawn respawn) {
-        return respawn != null ? respawn.dimension() : World.OVERWORLD;
+        return respawn != null ? respawn.respawnData().method_74894() : World.OVERWORLD;
     }
 
     @ModifyArg(method = "getRespawnTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/TeleportTarget;<init>(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;FFLnet/minecraft/world/TeleportTarget$PostDimensionTransition;)V"), index = 0)

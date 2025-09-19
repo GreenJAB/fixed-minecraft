@@ -36,7 +36,7 @@ public class EchoFruitItem extends Item {
                 }
 
                 Vec3d vec3d = serverPlayerEntity.getPos();
-                ServerWorld serverWorld = serverPlayerEntity.getServer().getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
+                ServerWorld serverWorld = serverPlayerEntity.getEntityWorld().getServer().getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
                 if (serverPlayerEntity.teleport(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch(), true)) {
                     while (!serverWorld.isSpaceEmpty(serverPlayerEntity) && serverPlayerEntity.getY() < serverWorld.getTopYInclusive()) {
                         serverPlayerEntity.setPosition(serverPlayerEntity.getX(), serverPlayerEntity.getY() + 1.0, serverPlayerEntity.getZ());

@@ -28,9 +28,4 @@ public class LavaFogModifierMixin {
         return 2.5f + 0.25f*Math.min(2*i,25);
     }
 
-    /*@ModifyConstant(method = "applyFog(Lnet/minecraft/client/render/Camera;Lorg/joml/Vector4f;FZF)V", constant = @Constant(floatValue = 4.0f))
-    private float moreSkyFog(float constant,
-                             @Local(ordinal = 0, argsOnly = true) float viewDistance) { return Math.min(64f, viewDistance / 2);}
-
-*/
 }

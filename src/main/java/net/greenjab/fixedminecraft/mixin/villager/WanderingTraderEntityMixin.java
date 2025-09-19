@@ -226,7 +226,7 @@ public abstract class WanderingTraderEntityMixin {
         ItemStack head = heads[(int)(Math.random()*heads.length)].getDefaultStack();
         if (head.isOf(Items.PLAYER_HEAD)) {
             WanderingTraderEntity WTE = (WanderingTraderEntity)(Object)this;
-            MinecraftServer minecraftServer = WTE.getServer();
+            MinecraftServer minecraftServer = WTE.getEntityWorld().getServer();
             GameProfileResolver lv = minecraftServer.getApiServices().profileResolver();
             Optional<GameProfile> optional;
             int who = (int)(Math.random()*2);
