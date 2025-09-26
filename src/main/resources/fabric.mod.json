@@ -32,7 +32,7 @@
     ],
     "depends": {
         "java": ">=17",
-        "minecraft": "1.21.9-beta.1",
+        "minecraft": "1.21.9-rc.1",
         "fabric-api": ">=${fabric_api}"
     },
     "accessWidener" : "fixedminecraft.accesswidener"

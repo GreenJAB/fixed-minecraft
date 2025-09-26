@@ -28,7 +28,7 @@ public abstract class PhantomEntityMixin {
                 PE.noClip = true;
             }
             if (PE.noClip) {
-                this.targetPosition = PE.getPos().add(0, -30, 0);
+                this.targetPosition = PE.getEntityPos().add(0, -30, 0);
                 PE.setVelocity((PE.getVelocity().multiply(0.98)).add(0, -0.1, 0));
                 float n = (float) (-(MathHelper.atan2(-PE.getVelocity().y, PE.getVelocity().horizontalLength()) * 180.0F /
                                      (float) Math.PI));

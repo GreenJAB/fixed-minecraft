@@ -67,7 +67,7 @@ public abstract class ServerPlayerEntityMixin {
 
     @Unique
     private static RegistryKey<World> getDimension(@Nullable ServerPlayerEntity.Respawn respawn) {
-        return respawn != null ? respawn.respawnData().method_74894() : World.OVERWORLD;
+        return respawn != null ? respawn.respawnData().getDimension() : World.OVERWORLD;
     }
 
     @ModifyArg(method = "getRespawnTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/TeleportTarget;<init>(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;FFLnet/minecraft/world/TeleportTarget$PostDimensionTransition;)V"), index = 0)

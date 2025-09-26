@@ -125,9 +125,9 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                         minecart.getController().moveOnRail(world);
                         if (this.isOnRail()) {
                             fakeMinecart.getController().moveOnRail(world);
-                            if (minecart.getPos().squaredDistanceTo(fakeMinecart.getPos()) < 4) {
+                            if (minecart.getEntityPos().squaredDistanceTo(fakeMinecart.getEntityPos()) < 4) {
 
-                                minecart.setPosition(fakeMinecart.getPos());
+                                minecart.setPosition(fakeMinecart.getEntityPos());
                                 minecart.setPitch(fakeMinecart.getPitch());
                                 minecart.setYaw((fakeMinecart.getYaw() + 360) % 360);
                                 Vec3d vel = fakeMinecart.getVelocity()
@@ -152,7 +152,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                         minecart.addCommandTag("trainMove");
                     }
                 }
-                if (minecart.getPos().squaredDistanceTo(prevMinecart.getPos())>9) {
+                if (minecart.getEntityPos().squaredDistanceTo(prevMinecart.getEntityPos())>9) {
                     minecart.age+=10;
                 }
             }
@@ -166,7 +166,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     }
 
     private void setFakeMinecart(AbstractMinecartEntity fakeMinecart, AbstractMinecartEntity minecart) {
-        fakeMinecart.setPosition(minecart.getPos());
+        fakeMinecart.setPosition(minecart.getEntityPos());
         fakeMinecart.setOnRail(true);
         fakeMinecart.setPitch(minecart.getPitch());
         fakeMinecart.setYaw((minecart.getYaw()+360)%360);
@@ -222,7 +222,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         minecart.addCommandTag("train");
         minecart.addCommandTag("trainMove");
         minecart.setVelocity(train.get(train.size()-1).getVelocity().add(0, 0.1, 0));
-        minecart.setPosition(minecart2.getPos());
+        minecart.setPosition(minecart2.getEntityPos());
         minecart.setPitch(minecart2.getPitch());
         minecart.setYaw((minecart2.getYaw() + 360) % 360);
         minecart.age = 0;

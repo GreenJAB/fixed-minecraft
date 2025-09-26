@@ -139,7 +139,7 @@ public abstract class EnderDragonFightMixin {
         if (this.previouslyKilled) {
             this.generateEndPortal(false);
             for (ServerPlayerEntity serverPlayerEntity : (this.world)
-                    .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 128.0F)) {
+                    .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getEntityPos().horizontalLength() < 128.0F)) {
                 Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.END_CRYSTAL.getDefaultStack());
             }
         }
@@ -242,7 +242,7 @@ public abstract class EnderDragonFightMixin {
         }
 
         for (ServerPlayerEntity serverPlayerEntity : (this.world)
-                .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getPos().horizontalLength() < 128.0F)) {
+                .getPlayers( serverPlayerEntityx -> serverPlayerEntityx.getEntityPos().horizontalLength() < 128.0F)) {
             Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_HEAD.getDefaultStack());
             if (dragon.getCommandTags().contains("omen")) {
                 Criteria.CONSUME_ITEM.trigger(serverPlayerEntity, Items.DRAGON_EGG.getDefaultStack());

@@ -76,8 +76,8 @@ public class MapBookItem extends Item {
             ItemStack otherHand = hand == Hand.MAIN_HAND ? player.getOffHandStack() : player.getMainHandStack();
 
             var openMap = true;
-            if (getNearestMap(item, world, player.getPos())==null || otherHand.isOf(Items.MAP)) {
-                if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(),0)) {
+            if (getNearestMap(item, world, player.getEntityPos())==null || otherHand.isOf(Items.MAP)) {
+                if (addNewMapAtPos(item, (ServerWorld)world, player.getEntityPos(),0)) {
                     if (otherHand.isOf(Items.MAP) && !player.getAbilities().creativeMode) {
                         otherHand.decrement(1);
                     }
@@ -92,7 +92,7 @@ public class MapBookItem extends Item {
                     openMap = false;
                 }
             } else if (otherHand.isOf(Items.SHEARS)) {
-                if (removeMapAtPos(item, (ServerWorld)world, player.getPos(), player)) {
+                if (removeMapAtPos(item, (ServerWorld)world, player.getEntityPos(), player)) {
                     otherHand.damage(1, player);
                     player.getEntityWorld().playSoundFromEntity(
                             null,
@@ -123,7 +123,7 @@ public class MapBookItem extends Item {
                 ItemStack hasEmtpyMap = getEmptyMap(user);
                 if (hasEmtpyMap.isOf(Items.MAP)) {
                     boolean hotbar = isHotbar(user, hasEmtpyMap);
-                    if (addNewMapAtPos(item, (ServerWorld)world, player.getPos(), hotbar?2:4)) {
+                    if (addNewMapAtPos(item, (ServerWorld)world, player.getEntityPos(), hotbar?2:4)) {
                         if (!player.getAbilities().creativeMode) {
                             hasEmtpyMap.decrement(1);
                         }
@@ -203,7 +203,7 @@ public class MapBookItem extends Item {
                     for (MapStateData mapStateData : getMapStates(stack, entity.getEntityWorld())) {
                         mapStateData.mapState.update(player, stack);
                         if (!mapStateData.mapState.locked) {
-                            if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.getPos()) < 128.0) {
+                            if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.getEntityPos()) < 128.0) {
                                 ((FilledMapItem)Items.FILLED_MAP ).updateColors(world, entity, mapStateData.mapState);
                             }
                         }

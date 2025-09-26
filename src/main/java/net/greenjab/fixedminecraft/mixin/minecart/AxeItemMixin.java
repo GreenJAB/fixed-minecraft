@@ -26,7 +26,7 @@ import java.util.Optional;
 public class AxeItemMixin {
     @Inject(method = "tryStrip", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/AxeItem;method_74886(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/block/BlockState;Lnet/minecraft/sound/SoundEvent;I)V", ordinal = 0
+            target = "Lnet/minecraft/item/AxeItem;strip(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/block/BlockState;Lnet/minecraft/sound/SoundEvent;I)V", ordinal = 0
     ))
     private void addScrapedCopper(World world, BlockPos pos, @Nullable PlayerEntity player,
                                        BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {

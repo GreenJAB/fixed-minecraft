@@ -58,17 +58,17 @@ public class ItemRendererMixin {
         return EnchantGlint.getEntityGlint();
     }
 
-    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlintTrident() {
         return EnchantGlint.getGlint();
     }
 
-    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlintTranslucentTrident() {
         return EnchantGlint.getGlintTranslucent();
     }
 
-    @Redirect(method = "method_72988", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getEntityGlintTrident() {
         return EnchantGlint.getEntityGlint();
     }

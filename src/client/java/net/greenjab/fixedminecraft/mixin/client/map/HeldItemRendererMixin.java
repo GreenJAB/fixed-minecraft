@@ -30,7 +30,7 @@ public class HeldItemRendererMixin {
     private ItemStack sneakySwap(ItemStack original) {
         if (original.getItem() instanceof MapBookItem mapBookItem) {
             //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
-            MapStateData nearestMap = mapBookItem.getNearestMap(original, client.world, client.player.getPos());
+            MapStateData nearestMap = mapBookItem.getNearestMap(original, client.world, client.player.getEntityPos());
             if (nearestMap == null) return original;
             ItemStack map = new ItemStack(Items.FILLED_MAP, 1);
             map.set(DataComponentTypes.MAP_ID, nearestMap.id);

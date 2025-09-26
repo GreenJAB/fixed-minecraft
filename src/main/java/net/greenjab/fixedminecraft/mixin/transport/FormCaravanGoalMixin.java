@@ -23,7 +23,7 @@ public abstract class FormCaravanGoalMixin {
             LlamaEntity l = this.llama.getFollowing();
             assert l != null;
             if (l.isOnGround()) {
-                Vec3d v = l.getPos();
+                Vec3d v = l.getEntityPos();
                 this.llama.requestTeleport(v.x, v.y, v.z);
                 this.llama.fallDistance = 0;
             }

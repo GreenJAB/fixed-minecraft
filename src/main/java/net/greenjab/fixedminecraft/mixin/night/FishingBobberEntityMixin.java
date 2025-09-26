@@ -80,7 +80,7 @@ public class FishingBobberEntityMixin {
                 .getReloadableRegistries()
                 .getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId));
 
-        LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getEntityWorld())).add(LootContextParameters.ORIGIN, FBE.getPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
+        LootWorldContext lootContextParameterSet = (new LootWorldContext.Builder((ServerWorld)FBE.getEntityWorld())).add(LootContextParameters.ORIGIN, FBE.getEntityPos()).add(LootContextParameters.TOOL, rod).add(LootContextParameters.THIS_ENTITY, FBE).luck(/*(float)this.luckOfTheSeaLevel +*/ playerEntity.getLuck()).build(LootContextTypes.FISHING);
 
         ObjectArrayList<ItemStack> loots = lootTable.generateLoot(lootContextParameterSet);
         if (loots.isEmpty()) return Items.DIRT.getDefaultStack();
