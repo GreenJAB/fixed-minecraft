@@ -76,6 +76,7 @@ public class MapStateMixin implements MapStateAccessor {
         decoToColor.put(MapDecorationTypes.SWAMP_HUT, 5390853);
 
         decoToColor.put(StatusRegistry.PILLAGER_OUTPOST, 10373376);
+        decoToColor.put(StatusRegistry.RUINED_PORTAL, 11796480);
     }
 
     @Inject(method = "addDecorationsNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapDecorationType;hasMapColor()Z"), cancellable = true)
@@ -212,6 +213,7 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("player_off_limits")) return MapDecorationTypes.PLAYER_OFF_LIMITS;
 
         if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
+        if (type.contains("portal")) return StatusRegistry.RUINED_PORTAL;
 
         return MapDecorationTypes.BANNER_BLACK;
     }
@@ -231,6 +233,7 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("red_x")) return MapDecorationTypes.RED_X;
         if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
         if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
+        if (type.contains("portal")) return StatusRegistry.RUINED_PORTAL;
 
         return null;
     }

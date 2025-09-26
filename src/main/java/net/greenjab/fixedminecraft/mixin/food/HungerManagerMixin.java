@@ -2,10 +2,14 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.CustomData;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ItemCooldownManager;
+import net.minecraft.item.Items;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -81,6 +85,13 @@ public abstract class HungerManagerMixin {
                 this.saturationLevel = 1;
                 this.exhaustion = 0;
             }
+        }
+
+        if (saturationLevel == 0) {
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 10, 99, true, false, true));
+            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 10, 99, true, false, true));
+            if (player.isBlocking()) player.stopUsingItem();
+            player.getItemCooldownManager().set(Items.SHIELD.getDefaultStack(), 10);
         }
 
         CustomData.setData(player, "lastExhaustion", (int)(lastExhaustion*1000));

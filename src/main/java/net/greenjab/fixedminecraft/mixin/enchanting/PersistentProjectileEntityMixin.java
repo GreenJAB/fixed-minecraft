@@ -55,4 +55,5 @@ public abstract class PersistentProjectileEntityMixin {
         if (PPE.getCommandTags().contains("pierced")) return Items.ARROW.getDefaultStack();
         return PPE.getItemStack().copy();
     }
+
 }
