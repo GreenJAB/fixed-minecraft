@@ -48,7 +48,6 @@
         "enchanting.ItemStackMixin",
         "enchanting.PersistentProjectileEntityMixin",
         "enchanting.PlayerEntityMixin",
-        "enchanting.ProjectileUtilMixin",
         "enchanting.ToolMaterialsMixin",
         "enchanting.TridentEntityMixin",
         "food.CakeBlockMixin",
