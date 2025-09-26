@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.villager;
 import com.google.common.collect.ImmutableMap;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.SellCompassFactory;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapDecorationTypes;
@@ -51,6 +52,14 @@ public class TradeOffersMixin {
                 FishingBook()});
 
 
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.CARTOGRAPHER).replace(3,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.BuyItemFactory(Items.COMPASS, 1, 12, 20),
+                        new TradeOffers.SellMapFactory(13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, 12, 10),
+                        new TradeOffers.SellMapFactory(12, StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS, 12, 10),
+                        new TradeOffers.SellMapFactory(12, ModTags.ON_RUINED_PORTAL_MAPS, "filled_map.ruined_portal", StatusRegistry.RUINED_PORTAL, 12, 10),
+                        //new SellCompassFactory(12, ModTags.LODESTONE_COMPASS, 12, 10)
+                });
 
         PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.LEATHERWORKER).replace(3,
                 new TradeOffers.Factory[]{

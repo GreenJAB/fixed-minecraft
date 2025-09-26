@@ -29,6 +29,7 @@ public class ModTags {
     public static final TagKey<Biome> IS_PALE_GARDEN = TagKey.of(RegistryKeys.BIOME, FixedMinecraft.id("is_pale_garden"));
 
     public static final TagKey<Structure> LODESTONE_COMPASS = TagKey.of(RegistryKeys.STRUCTURE, FixedMinecraft.id("lodestone_compass"));
+    public static final TagKey<Structure> ON_RUINED_PORTAL_MAPS = TagKey.of(RegistryKeys.STRUCTURE, FixedMinecraft.id("on_ruined_portal_maps"));
 
     public static final TagKey<Item> STRINGTAG = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("string"));
     public static final TagKey<Item> STAINED_GLASS = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass"));
