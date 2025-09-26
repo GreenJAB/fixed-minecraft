@@ -51,9 +51,7 @@ import java.util.function.Function;
 import static net.greenjab.fixedminecraft.FixedMinecraft.corals;
 import static net.minecraft.block.Blocks.createLogBlock;
 import static net.minecraft.block.Blocks.createWoodenButtonBlock;
-import static net.minecraft.block.Blocks.createButtonSettings;
 import static net.minecraft.block.Blocks.createLightLevelFromLitBlockState;
-import static net.minecraft.block.Blocks.createLogSettings;
 
 public class BlockRegistry {
 
