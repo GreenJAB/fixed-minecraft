@@ -41,6 +41,7 @@ import java.util.function.Function;
 
 import static net.greenjab.fixedminecraft.FixedMinecraft.corals;
 import static net.minecraft.block.Blocks.createButtonSettings;
+import static net.minecraft.block.Blocks.createLightLevelFromLitBlockState;
 import static net.minecraft.block.Blocks.createLogSettings;
 
 public class BlockRegistry {
@@ -212,7 +213,7 @@ public class BlockRegistry {
                     .solid()
                     .strength(3.5F)
                     .sounds(BlockSoundGroup.LANTERN)
-                    .luminance(/* method_24419 */ state -> 10)
+                    .luminance(createLightLevelFromLitBlockState(10))
                     .nonOpaque()
                     .pistonBehavior(PistonBehavior.DESTROY)
     );
