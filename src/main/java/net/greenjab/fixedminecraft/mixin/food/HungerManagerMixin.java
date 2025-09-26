@@ -91,7 +91,7 @@ public abstract class HungerManagerMixin {
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.MINING_FATIGUE, 10, 99, true, false, true));
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 10, 99, true, false, true));
             if (player.isBlocking()) player.stopUsingItem();
-            player.getItemCooldownManager().set(Items.SHIELD.getDefaultStack(), 10);
+            player.getItemCooldownManager().set(Items.SHIELD, 10);
         }
 
         CustomData.setData(player, "lastExhaustion", (int)(lastExhaustion*1000));

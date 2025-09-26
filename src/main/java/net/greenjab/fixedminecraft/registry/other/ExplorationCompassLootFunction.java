@@ -31,7 +31,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.Vec3d;
@@ -82,10 +81,7 @@ public class ExplorationCompassLootFunction extends ConditionalLootFunction {
         return StatusRegistry.EXPLORATION_COMPASS;
     }
 
-    @Override
-    public Set<ContextParameter<?>> getAllowedParameters() {
-        return Set.of(LootContextParameters.ORIGIN);
-    }
+
 
     @Override
     public ItemStack process(ItemStack stack, LootContext context) {
