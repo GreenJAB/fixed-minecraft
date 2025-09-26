@@ -52,15 +52,6 @@ public class TradeOffersMixin {
                 FishingBook()});
 
 
-        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.CARTOGRAPHER).replace(3,
-                new TradeOffers.Factory[]{
-                        new TradeOffers.BuyItemFactory(Items.COMPASS, 1, 12, 20),
-                        new TradeOffers.SellMapFactory(13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, 12, 10),
-                        new TradeOffers.SellMapFactory(12, StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS, 12, 10),
-                        new TradeOffers.SellMapFactory(12, ModTags.ON_RUINED_PORTAL_MAPS, "filled_map.ruined_portal", StatusRegistry.RUINED_PORTAL, 12, 10),
-                        //new SellCompassFactory(12, ModTags.LODESTONE_COMPASS, 12, 10)
-                });
-
         PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.LEATHERWORKER).replace(3,
                 new TradeOffers.Factory[]{
                         new TradeOffers.SellDyedArmorFactory(Items.LEATHER_HORSE_ARMOR, 6, 12, 5),
@@ -88,7 +79,8 @@ public class TradeOffersMixin {
                         new TradeOffers.BuyItemFactory(Items.COMPASS, 1, 12, 20),
                         new TradeOffers.SellMapFactory(13, StructureTags.ON_OCEAN_EXPLORER_MAPS, "filled_map.monument", MapDecorationTypes.MONUMENT, 12, 10),
                         new TradeOffers.SellMapFactory(12, StructureTags.ON_TRIAL_CHAMBERS_MAPS, "filled_map.trial_chambers", MapDecorationTypes.TRIAL_CHAMBERS, 12, 10),
-                        new SellCompassFactory(12, ModTags.LODESTONE_COMPASS, 12, 10)
+                        new TradeOffers.SellMapFactory(12, ModTags.ON_RUINED_PORTAL_MAPS, "filled_map.ruined_portal", StatusRegistry.RUINED_PORTAL, 12, 10),
+                        //new SellCompassFactory(12, ModTags.LODESTONE_COMPASS, 12, 10)
                 });
     }
 
