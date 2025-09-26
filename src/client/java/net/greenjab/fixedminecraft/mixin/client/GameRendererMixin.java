@@ -86,6 +86,10 @@ public class GameRendererMixin {
                 }
             }
         }
+        if (client.player.getHungerManager().getSaturationLevel()==0) {
+            client.crosshairTarget = entity.raycast(d, tickDelta, false);
+            client.targetedEntity = null;
+        }
     }
 
     @Unique
