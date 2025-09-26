@@ -6,6 +6,15 @@
             "entries": [
                 {
                     "type": "minecraft:item",
+                    "name": "minecraft:compass",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "fixedminecraft:exploration_compass"
+                        }
+                    ]
+                },{
+                    "type": "minecraft:item",
                     "name": "minecraft:book",
                     "weight": 3,
                     "functions": [
