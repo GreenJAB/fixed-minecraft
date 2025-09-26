@@ -86,6 +86,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         boolean isGold = firstInputStack.isIn(ItemTags.PIGLIN_LOVED);
 
         boolean newName = false;
+        boolean repair = false;
         if (this.newItemName != null && !StringHelper.isBlank(this.newItemName)) {
             if (!this.newItemName.equals(firstInputStack.getName().getString())) {
                 newName = true;
@@ -137,10 +138,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                     outputItemStack.setDamage(n);
                     k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
                 }
-
+                repair = true;
                 this.repairItemUsage = m;
-            }
-            else {
+            } else {
                 //2nd slot isnt usable
                 if (!book2 && (!outputItemStack.isOf(secondInputStack.getItem()) || !outputItemStack.isDamageable())) {
                     this.output.setStack(0, ItemStack.EMPTY);
@@ -251,7 +251,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
-        this.levelCost.set(enchantmentPower + capNum*enchantmentCapacity);
+        if (repair) this.levelCost.set((int)Math.ceil(enchantmentPower/2.0f) + capNum*enchantmentCapacity);
+        else this.levelCost.set(enchantmentPower + capNum*enchantmentCapacity);
 
         if (!netherite) {
             if (!this.player.getAbilities().creativeMode) {

@@ -43,6 +43,7 @@ public class BackupRespawns extends PersistentState {
     public BackupRespawn addPlayer(PlayerEntity player) {
         BackupRespawn backupRespawn = new BackupRespawn(player.getName().getLiteralString());
         backupRespawns.add(backupRespawn);
+        if (backupRespawns.size()>64) backupRespawns.remove(0);
         return backupRespawn;
     }
 

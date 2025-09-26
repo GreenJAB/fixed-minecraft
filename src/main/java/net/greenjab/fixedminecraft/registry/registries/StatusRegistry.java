@@ -1,10 +1,16 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
+import com.mojang.serialization.MapCodec;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.effect.CustomEffect;
+import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.block.MapColor;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.map.MapDecorationType;
+import net.minecraft.loot.function.ExplorationMapLootFunction;
+import net.minecraft.loot.function.LootFunction;
+import net.minecraft.loot.function.LootFunctionType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -24,6 +30,7 @@ public class StatusRegistry {
 
 
     public static RegistryEntry<MapDecorationType> PILLAGER_OUTPOST = registerMapDecorationType("outpost", "outpost", true, MapColor.LIGHT_GRAY.color, false, true);
+    public static RegistryEntry<MapDecorationType> RUINED_PORTAL = registerMapDecorationType("ruined_portal", "ruined_portal", true, MapColor.PURPLE.color, false, true);
 
     private static RegistryEntry<MapDecorationType> registerMapDecorationType(
             String id, String assetId, boolean showOnItemFrame, int mapColor, boolean trackCount, boolean explorationMapElement
@@ -31,5 +38,11 @@ public class StatusRegistry {
         RegistryKey<MapDecorationType> registryKey = RegistryKey.of(RegistryKeys.MAP_DECORATION_TYPE, Identifier.ofVanilla(id));
         MapDecorationType mapDecorationType = new MapDecorationType(Identifier.ofVanilla(assetId), showOnItemFrame, mapColor, explorationMapElement, trackCount);
         return Registry.registerReference(Registries.MAP_DECORATION_TYPE, registryKey, mapDecorationType);
+    }
+
+
+    public static LootFunctionType<ExplorationCompassLootFunction> EXPLORATION_COMPASS = registerLootFunction("exploration_compass", ExplorationCompassLootFunction.CODEC);
+    private static <T extends LootFunction> LootFunctionType<T> registerLootFunction(String id, MapCodec<T> codec) {
+        return Registry.register(Registries.LOOT_FUNCTION_TYPE, FixedMinecraft.id(id), new LootFunctionType<>(codec));
     }
 }
