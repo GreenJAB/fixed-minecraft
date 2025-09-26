@@ -97,7 +97,7 @@ public class ExplorationCompassLootFunction extends ConditionalLootFunction {
                 if (blockPos != null) {
                     ItemStack itemStack = Items.COMPASS.getDefaultStack();
                     itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(serverWorld.getRegistryKey(), blockPos.withY(-49))), true));
-                    itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(this.color));
+                    itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(this.color, true));
                     return itemStack;
                 }
             }
