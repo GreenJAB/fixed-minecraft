@@ -27,15 +27,4 @@ public class ProjectileUtilMixin {
         }
         return instance.raycast(from, to);
     }
-
-    @ModifyExpressionValue(method = "getToleranceMargin", at = @At(value = "FIELD", target = "Lnet/minecraft/entity/Entity;age:I"))
-    private static int serverClientSync(int original, @Local(argsOnly = true)Entity arrow) {
-        if (arrow instanceof ProjectileEntity) {
-            if (arrow.getWorld().isClient()) {
-                return original-1;
-            }
-        }
-        return original;
-    }
-
 }
