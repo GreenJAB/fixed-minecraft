@@ -315,17 +315,15 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         } else {
             netherite = FixedMinecraft.netheriteAnvil;
         }
-        int cost = 12;
+        int breakChance = 10;
         if (netherite) {
-            cost = levelCost;
             int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(stack);
-            if (cost > cap){
-                cost = 5+cost-cap;
-            } else {
-                cost = 0;
+            int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(stack, false);
+            if (current <= cap) {
+                breakChance = 0;
             }
         }
-        final int finalCost = cost + 5*superEnchants;
+        final int finalbreakChance = breakChance + 5*superEnchants;
 
         if (this.repairItemUsage > 0) {
             ItemStack itemStack = this.input.getStack(1);
@@ -353,7 +351,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
         this.context.run((world, pos) -> {
             BlockState blockState = world.getBlockState(pos);
-            if (!player.getAbilities().creativeMode && blockState.isIn(BlockTags.ANVIL) && player.getRandom().nextFloat()*100 < finalCost) {
+            if (!player.getAbilities().creativeMode && blockState.isIn(BlockTags.ANVIL) && player.getRandom().nextFloat()*100 < finalbreakChance) {
                 BlockState blockState2 = AnvilBlock.getLandingState(blockState);
                 if (blockState2 == null) {
                     world.removeBlock(pos, false);
