@@ -87,7 +87,8 @@
         ],
         [
             "minecraft:glow_lichen",
-            "minecraft:patch_pumpkin"
+            "minecraft:patch_pumpkin",
+            "fixedminecraft:cave_snow"
         ],
         [
             "minecraft:freeze_top_layer"

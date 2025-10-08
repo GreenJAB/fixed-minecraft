@@ -74,7 +74,8 @@
             "minecraft:disk_sand",
             "minecraft:disk_clay",
             "minecraft:disk_gravel",
-            "fixedminecraft:ore_emerald"
+            "fixedminecraft:ore_emerald",
+            "fixedminecraft:ore_packed_ice"
         ],
         [
             "minecraft:ore_infested"
@@ -87,7 +88,8 @@
         [
             "minecraft:glow_lichen",
             "minecraft:trees_grove",
-            "minecraft:patch_pumpkin"
+            "minecraft:patch_pumpkin",
+            "fixedminecraft:cave_snow"
         ],
         [
             "minecraft:freeze_top_layer"
