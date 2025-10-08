@@ -55,6 +55,10 @@
             ],
             "entries": [
                 {
+                    "type": "minecraft:empty",
+                    "weight": 2
+                },
+                {
                     "type": "minecraft:item",
                     "functions": [
                         {

@@ -86,7 +86,8 @@
             "minecraft:spring_lava_frozen"
         ],
         [
-            "minecraft:glow_lichen"
+            "minecraft:glow_lichen",
+            "fixedminecraft:cave_snow"
         ],
         [
             "minecraft:freeze_top_layer"
