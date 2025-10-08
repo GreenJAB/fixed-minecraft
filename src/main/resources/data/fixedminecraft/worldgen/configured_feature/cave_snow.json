@@ -8,13 +8,9 @@
                     "to_place": {
                         "type": "minecraft:simple_state_provider",
                         "state": {
-                            "Name": "minecraft:pale_moss_carpet",
+                            "Name": "minecraft:snow",
                             "Properties": {
-                                "bottom": "true",
-                                "east": "none",
-                                "north": "none",
-                                "south": "none",
-                                "west": "none"
+                                "layers": "1"
                             }
                         }
                     }
@@ -26,18 +22,6 @@
                     "predicate": {
                         "type": "minecraft:matching_blocks",
                         "blocks": "minecraft:air"
-                    }
-                },
-                {
-                    "type": "minecraft:block_predicate_filter",
-                    "predicate": {
-                        "type": "minecraft:matching_block_tag",
-                        "offset": [
-                            0,
-                            -1,
-                            0
-                        ],
-                        "tag": "minecraft:overworld_carver_replaceables"
                     }
                 }
             ]

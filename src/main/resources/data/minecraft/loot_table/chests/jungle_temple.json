@@ -6,6 +6,36 @@
             "entries": [
                 {
                     "type": "minecraft:item",
+                    "name": "minecraft:diamond"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "fixedminecraft:on_trail_ruins_maps",
+                            "decoration": "minecraft:trail_ruins",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 1
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.trail_ruins"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
                     "functions": [
                         {
                             "add": false,

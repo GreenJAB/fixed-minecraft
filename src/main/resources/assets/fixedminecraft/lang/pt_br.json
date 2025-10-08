@@ -1,0 +1,118 @@
+{
+    "item.fixedminecraft.dragon_firework_rocket": "Foguete de Fogos do Dragão",
+    "item.fixedminecraft.chainmail_horse_armor": "Armadura de Malha para Cavalo",
+    "item.fixedminecraft.netherite_horse_armor": "Armadura de Netherita para Cavalo",
+    "item.fixedminecraft.map_book": "Livro de Mapas",
+    "item.fixedminecraft.map_book_empty": "Livro de Mapas Vazio",
+    "item.fixedminecraft.map_book_new": "Novo Livro de Mapas",
+    "item.fixedminecraft.map_book_id": "Livro: %s",
+    "item.fixedminecraft.map_book_maps": "Mapas: %s",
+    "item.fixedminecraft.broken_totem": "Totem Quebrado",
+    "item.fixedminecraft.echo_totem": "Totem do Eco",
+    "item.fixedminecraft.echo_fruit": "Fruta do Eco",
+
+    "block.fixedminecraft.netherite_anvil": "Bigorna de Netherita",
+    "block.fixedminecraft.chipped_netherite_anvil": "Bigorna de Netherita Lascada",
+    "block.fixedminecraft.damaged_netherite_anvil": "Bigorna de Netherita Danificada",
+
+    "block.fixedminecraft.copper_rail": "Trilho de Cobre",
+    "block.fixedminecraft.exposed_copper_rail": "Trilho de Cobre Exposto",
+    "block.fixedminecraft.weathered_copper_rail": "Trilho de Cobre Envelhecido",
+    "block.fixedminecraft.oxidized_copper_rail": "Trilho de Cobre Oxidado",
+    "block.fixedminecraft.waxed_copper_rail": "Trilho de Cobre Encerado",
+    "block.fixedminecraft.waxed_exposed_copper_rail": "Trilho de Cobre Exposto Encerado",
+    "block.fixedminecraft.waxed_weathered_copper_rail": "Trilho de Cobre Envelhecido Encerado",
+    "block.fixedminecraft.waxed_oxidized_copper_rail": "Trilho de Cobre Oxidado Encerado",
+
+    "block.minecraft.bed.awake": "Você não pode dormir, não está cansado",
+
+    "container.fletching": "Fabricação de Flechas",
+    "itemgroup.fixed": "Fixed",
+
+    "effect.fixedminecraft.awkward": "Sem Efeitos",
+    "effect.fixedminecraft.reach": "Alcance",
+    "effect.fixedminecraft.insomnia": "Insônia",
+
+    "gamerule.iceMeltInNether": "O gelo derrete no Nether",
+    "gamerule.insomniaSleepRequirement": "Necessário estar com Insônia para dormir",
+    "gamerule.requireTotemUse": "Necessário usar o Totem ativamente para funcionar",
+
+    "advancements.husbandry.bake_bread.title": "Delícia do Padeiro",
+    "advancements.husbandry.bake_bread.description": "Transforme Trigo em Pão",
+    "advancements.husbandry.bake_cake.title": "A Mentira",
+    "advancements.husbandry.bake_cake.description": "Asse um Bolo",
+    "advancements.husbandry.eat_enchanted_golden_apple.title": "O Poder do Notch",
+    "advancements.husbandry.eat_enchanted_golden_apple.description": "Coma uma Maçã Dourada Encantada",
+
+    "advancements.nether.repair_super_gear.title": "Mestre Artesão",
+    "advancements.nether.repair_super_gear.description": "Repare um Equipamento Superencantado em uma Bigorna de Netherita",
+
+    "advancements.story.repair_gear.title": "Novo e Melhorado",
+    "advancements.story.repair_gear.description": "Repare um Item em uma Bigorna",
+    "advancements.story.diamond_tools.title": "O Mais Novo e Melhor",
+    "advancements.story.diamond_tools.description": "Construa uma Picareta de Diamante",
+    "advancements.story.when_pigs_fly.title": "Quando os Porcos Voarem",
+    "advancements.story.when_pigs_fly.description": "Monte um Porco de um Penhasco",
+    "advancements.story.use_ender_pearl.title": "O Prestígio",
+    "advancements.story.use_ender_pearl.description": "Teleporte-se usando uma Pérola do Fim",
+
+    "advancements.adventure.sleep_with_insomnia_5.title": "Bem Descansado",
+    "advancements.adventure.sleep_with_insomnia_5.description": "Durma com Insônia 5",
+    "advancements.adventure.on_a_rail.title": "Encruzilhada",
+    "advancements.adventure.on_a_rail.description": "Viaje um Quilômetro em Trilho",
+    "advancements.adventure.level_100.title": "Subir de Nível",
+    "advancements.adventure.level_100.description": "Alcance o Nível 100",
+    "advancements.adventure.kill_with_tnt.title": "A Arte da Guerra",
+    "advancements.adventure.kill_with_tnt.description": "Mate uma Criatura usando TNT",
+    "advancements.adventure.kill_the_warden.title": "Se Sangra...",
+    "advancements.adventure.kill_the_warden.description": "Derrote o Guardião",
+
+    "advancements.end.dragon_fireworks.title": "Ao Infinito e Além",
+    "advancements.end.dragon_fireworks.description": "Use um Foguete de Dragão enquanto voa com uma Élitro",
+    "advancements.end.kill_omen_dragon.title": "O Panteão do Minecraft",
+    "advancements.end.kill_omen_dragon.description": "Derrote o Dragão sob o efeito de Mau Presságio",
+
+    "filled_map.explorer": "Mapa do Explorador de %s",
+
+    "options.newArmorHud": "Mostrar Armadura no HUD",
+    "options.fog_21_6": "Desativar Névoa da 1.21.6",
+
+    "world.moon.full_moon": "Lua Cheia \uD83C\uDFA3",
+    "world.moon.waning_gibbous": "Minguante Gibosa",
+    "world.moon.third_quarter": "Quarto Minguante \uD83D\uDE9C",
+    "world.moon.waning_crescent": "Minguante Crescente",
+    "world.moon.new_moon": "Lua Nova \u2694",
+    "world.moon.waxing_crescent": "Crescente",
+    "world.moon.first_quarter": "Quarto Crescente \u26CF",
+    "world.moon.waxing_gibbous": "Crescente Gibosa",
+
+    "component.fixedminecraft.bait": "Nível de Isca: %s",
+
+    "item.fixedminecraft.azalea_boat": "Barco de Azaleia",
+    "item.fixedminecraft.azalea_chest_boat": "Barco de Azaleia com Baú",
+    "entity.fixedminecraft.azalea_boat": "Barco de Azaleia",
+    "entity.fixedminecraft.azalea_chest_boat": "Barco de Azaleia com Baú",
+
+    "block.fixedminecraft.azalea_button": "Botão de Azaleia",
+    "block.fixedminecraft.azalea_door": "Porta de Azaleia",
+    "block.fixedminecraft.azalea_fence": "Cerca de Azaleia",
+    "block.fixedminecraft.azalea_fence_gate": "Portão de Cerca de Azaleia",
+    "block.fixedminecraft.azalea_hanging_sign": "Placa Suspensa de Azaleia",
+    "block.fixedminecraft.azalea_log": "Tronco de Azaleia",
+    "block.fixedminecraft.azalea_planks": "Tábuas de Azaleia",
+    "block.fixedminecraft.azalea_pressure_plate": "Placa de Pressão de Azaleia",
+    "block.fixedminecraft.azalea_sign": "Placa de Azaleia",
+    "block.fixedminecraft.azalea_slab": "Laje de Azaleia",
+    "block.fixedminecraft.azalea_stairs": "Escadas de Azaleia",
+    "block.fixedminecraft.azalea_trapdoor": "Alçapão de Azaleia",
+    "block.fixedminecraft.azalea_wall_hanging_sign": "Placa de Parede Suspensa de Azaleia",
+    "block.fixedminecraft.azalea_wall_sign": "Placa de Parede de Azaleia",
+    "block.fixedminecraft.azalea_wood": "Madeira de Azaleia",
+    "block.fixedminecraft.stripped_azalea_log": "Tronco de Azaleia Descascado",
+    "block.fixedminecraft.stripped_azalea_wood": "Madeira de Azaleia Descascada",
+
+    "generator.fixedminecraft.floating_islands": "Ilhas Flutuantes",
+
+    "item.fixedminecraft.patina": "Pátina",
+    "block.fixedminecraft.redstone_lantern": "Lanterna de Redstone"
+}
