@@ -55,6 +55,10 @@ This mod is intended to feel vanilla and thus has designed to be plug and play w
 - Hebrew: gaming_everyday
 - Ukraine: Eevan99
 - Polish: Merzouuu
+- Czech: Dadamalda (Also UK English and Anglish)
+- Italian: Giulmort27
+- Brazilian: richaell
+
 
 One time Donations: [Ko-Fi](https://ko-fi.com/greenjab)
 

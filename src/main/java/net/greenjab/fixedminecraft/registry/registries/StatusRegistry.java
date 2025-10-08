@@ -35,8 +35,9 @@ public class StatusRegistry {
 
 
     //map decoration type
-    public static RegistryEntry<MapDecorationType> PILLAGER_OUTPOST = registerMapDecorationType("outpost", "outpost", true, MapColor.LIGHT_GRAY.color, false, true);
+    public static RegistryEntry<MapDecorationType> PILLAGER_OUTPOST = registerMapDecorationType("outpost", "outpost", true, MapColor.BROWN.color, false, true);
     public static RegistryEntry<MapDecorationType> RUINED_PORTAL = registerMapDecorationType("ruined_portal", "ruined_portal", true, MapColor.PURPLE.color, false, true);
+    public static RegistryEntry<MapDecorationType> TRAIL_RUINS = registerMapDecorationType("trail_ruins", "trail_ruins", true, MapColor.LIGHT_GRAY.color, false, true);
 
     private static RegistryEntry<MapDecorationType> registerMapDecorationType(
             String id, String assetId, boolean showOnItemFrame, int mapColor, boolean trackCount, boolean explorationMapElement

@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.redstone;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
@@ -14,7 +15,6 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -45,6 +45,25 @@ public abstract class MoveItemsTaskMixin {
     @Inject(method = "placeStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/brain/task/MoveItemsTask;resetVisitedPositions(Lnet/minecraft/entity/mob/PathAwareEntity;)V"))
     private void rememberLastLocation(PathAwareEntity entity, Inventory inventory, CallbackInfo ci) {
         entity.getBrain().remember(MemoryModuleType.NEAREST_BED, targetStorage.pos(), 6000L);
+    }
+
+    @WrapOperation(method = "takeStack", at = @At(value = "INVOKE",
+                                                  target = "Lnet/minecraft/entity/ai/brain/task/MoveItemsTask;extractStack(Lnet/minecraft/inventory/Inventory;)Lnet/minecraft/item/ItemStack;"
+    ))
+    private ItemStack searchForLastItemFirst(Inventory inventory, Operation<ItemStack> original, @Local(argsOnly = true) PathAwareEntity entity) {
+        if (entity.getBrain().hasMemoryModule(StatusRegistry.LAST_ITEM_TYPE)) {
+            Item lastItem = entity.getBrain().getOptionalMemory(StatusRegistry.LAST_ITEM_TYPE).orElse(Items.AIR);
+
+            int i = 0;
+            for (ItemStack itemStack : inventory) {
+                if (!itemStack.isEmpty() && itemStack.isOf(lastItem)) {
+                    int j = Math.min(itemStack.getCount(), 16);
+                    return inventory.removeStack(i, j);
+                }
+                i++;
+            }
+        }
+        return original.call(inventory);
     }
 
 
