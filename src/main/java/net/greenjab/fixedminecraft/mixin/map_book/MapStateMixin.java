@@ -234,6 +234,7 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
         if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
         if (type.contains("portal")) return StatusRegistry.RUINED_PORTAL;
+        if (type.contains("trail_ruins")) return StatusRegistry.TRAIL_RUINS;
 
         return null;
     }

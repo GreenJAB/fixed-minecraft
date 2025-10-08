@@ -1,0 +1,40 @@
+{
+    "type": "minecraft:archaeology",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:arms_up_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:brewer_pottery_sherd"
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "destination": "fixedminecraft:on_trail_ruins_maps",
+                            "decoration": "minecraft:trail_ruins",
+                            "function": "minecraft:exploration_map",
+                            "skip_existing_chunks": false,
+                            "zoom": 1
+                        },
+                        {
+                            "function": "minecraft:set_name",
+                            "name": {
+                                "translate": "filled_map.trail_ruins"
+                            },
+                            "target": "item_name"
+                        }
+                    ],
+                    "name": "minecraft:map"
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "minecraft:archaeology/desert_well"
+}
