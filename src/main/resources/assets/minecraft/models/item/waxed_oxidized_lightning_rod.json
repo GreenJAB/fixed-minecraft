@@ -1,0 +1,7 @@
+{
+	"parent": "item/waxed_lightning_rod",
+	"textures": {
+		"particle": "block/oxidized_lightning_rod",
+		"texture": "item/waxed_oxidized_lightning_rod"
+	}
+}
