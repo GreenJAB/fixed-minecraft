@@ -13,7 +13,7 @@
                     "functions": [
                         {
                             "destination": "fixedminecraft:on_trail_ruins_maps",
-                            "decoration": "fixedminecraft:trail_ruins",
+                            "decoration": "minecraft:trail_ruins",
                             "function": "minecraft:exploration_map",
                             "skip_existing_chunks": false,
                             "zoom": 1
