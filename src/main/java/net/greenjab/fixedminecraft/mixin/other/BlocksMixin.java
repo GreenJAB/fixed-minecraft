@@ -76,13 +76,35 @@ public class BlocksMixin {
             "stringValue=amethyst_block"},ordinal = 0)),at = @At(
             value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/AmethystBlock;", ordinal = 0))
     private static AmethystBlock powerAmethystBlock(AbstractBlock.Settings settings) {
-        return new NewAmethystBlock(AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).strength(1.5F).sounds(BlockSoundGroup.AMETHYST_BLOCK).requiresTool());
-
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from = @At( value = "FIELD",
-                            target = "Lnet/minecraft/block/Blocks;BLACK_CANDLE_CAKE:Lnet/minecraft/block/Block;")))
-    private static Block powerAmethystBlock(String id, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
-        return register("amethyst_block", NewAmethystBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.PURPLE).strength(1.5F).sounds(BlockSoundGroup.AMETHYST_BLOCK).requiresTool());
+        return new NewAmethystBlock(AbstractBlock.Settings.create()
+                .mapColor(MapColor.PURPLE)
+                .strength(1.5F)
+                .sounds(BlockSoundGroup.AMETHYST_BLOCK)
+                .requiresTool());
     }
+
+        /*@Redirect(method="<clinit>", slice = @Slice(from = @At(value = "CONSTANT",args= {
+                "stringValue=snow"}, ordinal = 0)),at = @At(
+                value = "NEW",target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/SnowBlock;", ordinal = 0))
+        private static SnowBlock snow(AbstractBlock.Settings settings) {
+        System.out.println("snowAAAAAAAAAAAA");
+            return new NewSnowBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).replaceable().notSolid().ticksRandomly().strength(0.1F).requiresTool().sounds(BlockSoundGroup.SNOW).blockVision((state, world, pos) -> {
+                return (Integer)state.get(SnowBlock.LAYERS) >= 8;
+            }).pistonBehavior(PistonBehavior.DESTROY));
+        }*/
+
+              /*@Redirect(method="<clinit>", slice = @Slice(from = @At(value = "CONSTANT",args= {
+                "stringValue=snow"}, ordinal = 0)),at = @At(
+                value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Lnet/minecraft/block/Block;)Lnet/minecraft/block/Block;", ordinal = 0))
+        private static Block snow(String id, Block block) {
+        System.out.println("snowAAAAAAAAAAAA " + id);
+            return register2("snow", new NewSnowBlock(AbstractBlock.Settings.create().mapColor(MapColor.WHITE).replaceable().notSolid().ticksRandomly().strength(0.1F).requiresTool().sounds(BlockSoundGroup.SNOW).blockVision((state, world, pos) -> state.get(SnowBlock.LAYERS) >= 8).pistonBehavior(PistonBehavior.DESTROY)));
+        }
+
+    @Unique
+    private static Block register2(String id, Block block) {
+        return (Block) Registry.register(Registries.BLOCK, id, block);
+    }*/
 
     @Redirect(method = "<clinit>",slice = @Slice(from = @At(value = "CONSTANT",args= {
             "stringValue=daylight_detector"},ordinal = 0)),at = @At(
@@ -136,11 +158,6 @@ public class BlocksMixin {
                         .pistonBehavior(PistonBehavior.DESTROY));
     }
 
-
-    @Unique
-    private static Block register(String id, Block block) {
-        return Registry.register(Registries.BLOCK, id, block);
-    }
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE",
                                             target = "Lnet/minecraft/block/AbstractBlock$Settings;mapColor(Lnet/minecraft/block/MapColor;)Lnet/minecraft/block/AbstractBlock$Settings;", ordinal = 0), slice = @Slice( from =
@@ -266,25 +283,25 @@ public class BlocksMixin {
 
 
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE",
-                                            target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from =
-    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;LADDER:Lnet/minecraft/block/Block;")), index = 2)
+    /*@ModifyArg(method="<clinit>", at = @At( value = "NEW",
+                                            target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/RailBlock;", ordinal = 0), slice = @Slice( from =
+    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;LADDER:Lnet/minecraft/block/Block;")), index = 0)
     private static AbstractBlock.Settings railMapColor(AbstractBlock.Settings settings) {return settings.mapColor(MapColor.IRON_GRAY);}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE",
-                                            target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from =
-    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;BLACK_BED:Lnet/minecraft/block/Block;")), index = 2)
+    @ModifyArg(method="<clinit>", at = @At( value = "NEW",
+                                            target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/PoweredRailBlock;", ordinal = 0), slice = @Slice( from =
+    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;BLACK_BED:Lnet/minecraft/block/Block;")), index = 0)
     private static AbstractBlock.Settings powerrailMapColor(AbstractBlock.Settings settings) {return settings.mapColor(MapColor.IRON_GRAY);}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE",
-                                            target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from =
-    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;POWERED_RAIL:Lnet/minecraft/block/Block;")), index = 2)
+    @ModifyArg(method="<clinit>", at = @At( value = "NEW",
+                                            target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/DetectorRailBlock;", ordinal = 0), slice = @Slice( from =
+    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;POWERED_RAIL:Lnet/minecraft/block/Block;")), index = 0)
     private static AbstractBlock.Settings detectorrailMapColor(AbstractBlock.Settings settings) {return settings.mapColor(MapColor.IRON_GRAY);}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE",
-                                            target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from =
-    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;QUARTZ_STAIRS:Lnet/minecraft/block/Block;")), index = 2)
+    @ModifyArg(method="<clinit>", at = @At( value = "NEW",
+                                            target = "(Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/PoweredRailBlock;", ordinal = 0), slice = @Slice( from =
+    @At( value = "FIELD",target = "Lnet/minecraft/block/Blocks;QUARTZ_STAIRS:Lnet/minecraft/block/Block;")), index = 0)
     private static AbstractBlock.Settings activatorrailMapColor(AbstractBlock.Settings settings) {return settings.mapColor(MapColor.IRON_GRAY);}
-
+*/
 
 }

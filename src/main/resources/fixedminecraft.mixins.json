@@ -121,7 +121,6 @@
         "other.ExplosionImplMixin",
         "other.FallingBlockEntityMixin",
         "other.FallingBlockMixin",
-        "other.FlowerPotBlockMixin",
         "other.LootPoolMixin",
         "other.PlayerScreenHandlerMixin",
         "other.VineMixin",

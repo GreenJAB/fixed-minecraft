@@ -66,7 +66,7 @@ public class ServerWorldMixin {
                         }
                     }
 
-                    Biome.Precipitation precipitation = biome.getPrecipitation(mutable2, world.getSeaLevel());
+                    Biome.Precipitation precipitation = biome.getPrecipitation(mutable2);
                     if (precipitation != Biome.Precipitation.NONE) {
                         BlockState blockState3 = world.getBlockState(mutable2);
                         blockState3.getBlock().precipitationTick(blockState3, world, mutable2, precipitation);

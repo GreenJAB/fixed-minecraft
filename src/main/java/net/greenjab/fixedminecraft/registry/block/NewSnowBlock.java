@@ -25,8 +25,8 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class NewSnowBlock extends FallingBlock {
@@ -46,9 +46,11 @@ public class NewSnowBlock extends FallingBlock {
         this.setDefaultState(this.stateManager.getDefaultState().with(LAYERS, 1));
     }
 
-    @Override
     protected boolean canPathfindThrough(BlockState state, NavigationType type) {
-        return type == NavigationType.LAND ? (Integer)state.get(LAYERS) < 5 : false;
+        return switch (type) {
+            case LAND -> (Integer) state.get(LAYERS) < 5;
+            case WATER, AIR -> false;
+        };
     }
 
     @Override
@@ -58,7 +60,7 @@ public class NewSnowBlock extends FallingBlock {
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        return LAYERS_TO_SHAPE[state.get(LAYERS) - 1];
+        return LAYERS_TO_SHAPE[state.get(LAYERS) - 1+1];
     }
 
     @Override
@@ -93,18 +95,8 @@ public class NewSnowBlock extends FallingBlock {
         }
     }
 
-    @Override
-    protected BlockState getStateForNeighborUpdate(
-            BlockState state,
-            WorldView world,
-            ScheduledTickView tickView,
-            BlockPos pos,
-            Direction direction,
-            BlockPos neighborPos,
-            BlockState neighborState,
-            Random random
-    ) {
-        return super.getStateForNeighborUpdate(state, world, tickView, pos, direction, neighborPos, neighborState, random);
+    protected BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+        return !state.canPlaceAt(world, pos) ? Blocks.AIR.getDefaultState() : super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
 
     @Override

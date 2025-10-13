@@ -52,7 +52,7 @@ public class FallingBlockEntityMixin {
             cancellable = true)
     private void fallingSnow2(CallbackInfo ci) { if (tryFallingSnow()) ci.cancel();}
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/FallingBlockEntity;dropItem(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;", ordinal = 0),
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/FallingBlockEntity;dropItem(Lnet/minecraft/item/ItemConvertible;)Lnet/minecraft/entity/ItemEntity;", ordinal = 0),
             cancellable = true)
     private void fallingSnow3(CallbackInfo ci) {
         if (tryFallingSnow()) ci.cancel();}
