@@ -1,0 +1,7 @@
+{
+	"parent": "item/waxed_copper_chest",
+	"textures": {
+		"texture": "item/waxed_exposed_copper_chest",
+		"particle": "block/exposed_copper"
+	}
+}

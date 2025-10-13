@@ -43,7 +43,7 @@ public class NewPitcherPlantBlock extends TallPlantBlock {
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
         if (entity instanceof LivingEntity livingEntity && state.get(HALF) == DoubleBlockHalf.UPPER && !state.get(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.isInCreativeMode()) {
             //entity.slowMovement(state, new Vec3d(0.8F, 0.75, 0.8F));
             if (world instanceof ServerWorld serverWorld) {

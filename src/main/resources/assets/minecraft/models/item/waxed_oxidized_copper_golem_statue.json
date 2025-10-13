@@ -1,0 +1,7 @@
+{
+	"parent": "item/waxed_copper_golem_statue",
+	"textures": {
+		"particle": "block/oxidized_copper",
+		"texture": "item/waxed_oxidized_copper_golem_statue"
+	}
+}

@@ -23,7 +23,7 @@ public class NewTorchFlowerBlock extends FlowerBlock {
     }
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
         if (entity instanceof LivingEntity && entity.getType() != EntityType.SNIFFER ) {
             if (world instanceof ServerWorld) {
                 entity.setFireTicks(100);

@@ -50,7 +50,7 @@ public abstract class LeavesBlockMixin extends Block {
     // Slow down the vehicle when moving though leaves
 
     @Override
-    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler) {
+    protected void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
         if (entity.hasControllingPassenger()) entity.slowMovement(state, new Vec3d(0.85, 1, 0.85));
     }
 }
