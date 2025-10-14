@@ -173,7 +173,7 @@ public abstract class LivingEntityMixin {
 
             if (LE instanceof PillagerEntity PE) {
                 if (PE.getCommandTags().contains("map")) {
-                    ServerWorld serverWorld = (ServerWorld) PE.getEntityWorld();
+                    ServerWorld serverWorld = (ServerWorld) PE.getWorld();
                     BlockPos blockPos = serverWorld.locateStructure(ModTags.ON_OUTPOST_MAPS, PE.getBlockPos(), 50, true);
                     if (blockPos != null) {
                         ItemStack itemStack = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
