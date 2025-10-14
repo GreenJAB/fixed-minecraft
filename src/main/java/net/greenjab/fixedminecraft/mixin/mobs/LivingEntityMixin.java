@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.Entity;
@@ -167,7 +168,7 @@ public abstract class LivingEntityMixin {
                         FilledMapItem.fillExplorationMap(serverWorld, itemStack);
                         MapState.addDecorationsNbt(itemStack, blockPos, "+", StatusRegistry.PILLAGER_OUTPOST);
                         itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable("filled_map.outpost"));
-                        PE.dropItem(itemStack, true, false);
+                        PE.dropStack(serverWorld, itemStack);
                     }
                 }
             }
