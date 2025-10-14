@@ -168,7 +168,7 @@ public abstract class LivingEntityMixin {
                         FilledMapItem.fillExplorationMap(serverWorld, itemStack);
                         MapState.addDecorationsNbt(itemStack, blockPos, "+", StatusRegistry.PILLAGER_OUTPOST);
                         itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable("filled_map.outpost"));
-                        PE.dropStack(serverWorld, itemStack);
+                        PE.dropStack(itemStack);
                     }
                 }
             }
