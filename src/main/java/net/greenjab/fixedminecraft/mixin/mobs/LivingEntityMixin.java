@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.DamageUtil;
@@ -15,18 +16,25 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.PillagerEntity;
 import net.minecraft.entity.mob.VexEntity;
 import net.minecraft.entity.mob.WitherSkeletonEntity;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.mob.ZombieVillagerEntity;
 import net.minecraft.entity.passive.AllayEntity;
+import net.minecraft.item.FilledMapItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.item.map.MapState;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.village.TradeOffer;
+import net.minecraft.village.TradedItem;
 import net.minecraft.world.WorldEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,6 +45,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
@@ -145,6 +155,20 @@ public abstract class LivingEntityMixin {
                     }
                     AE.discard();
                     ci.cancel();
+                }
+            }
+
+            if (LE instanceof PillagerEntity PE) {
+                if (PE.getCommandTags().contains("map")) {
+                    ServerWorld serverWorld = (ServerWorld) PE.getEntityWorld();
+                    BlockPos blockPos = serverWorld.locateStructure(ModTags.ON_OUTPOST_MAPS, PE.getBlockPos(), 50, true);
+                    if (blockPos != null) {
+                        ItemStack itemStack = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
+                        FilledMapItem.fillExplorationMap(serverWorld, itemStack);
+                        MapState.addDecorationsNbt(itemStack, blockPos, "+", StatusRegistry.PILLAGER_OUTPOST);
+                        itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable("filled_map.outpost"));
+                        PE.dropItem(itemStack, true, false);
+                    }
                 }
             }
         }

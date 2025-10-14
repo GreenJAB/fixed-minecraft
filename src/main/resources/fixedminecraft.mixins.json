@@ -101,6 +101,7 @@
         "mobs.LlamaEntityMixin",
         "mobs.MobEntityMixin",
         "mobs.ParrotEntityMixin",
+        "mobs.PatrolSpawnerMixin",
         "mobs.PiglinEntityMixin",
         "mobs.PlayerEntityMixin",
         "mobs.WitherEntityMixin",
