@@ -55,6 +55,7 @@ public class ItemGroupRegistry {
                          entries.add(BlockRegistry.AZALEA_DOOR);
                          entries.add(ItemRegistry.AZALEA_BOAT);
                          entries.add(ItemRegistry.AZALEA_CHEST_BOAT);
+                         entries.add(ItemRegistry.AZALEA_SHELF);
                     }).build();
 
 

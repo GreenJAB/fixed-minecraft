@@ -160,6 +160,7 @@ public class ItemRegistry {
     public static final Item AZALEA_DOOR = register(BlockRegistry.AZALEA_DOOR, TallBlockItem::new);
     public static final Item AZALEA_TRAPDOOR = register(BlockRegistry.AZALEA_TRAPDOOR);
     public static final Item AZALEA_FENCE_GATE = register(BlockRegistry.AZALEA_FENCE_GATE);
+    public static final Item AZALEA_SHELF = register(BlockRegistry.AZALEA_SHELF);
 
     public static final Item AZALEA_SIGN = register(
             BlockRegistry.AZALEA_SIGN, /* method_63727 */ (block, settings) -> new SignItem(block, BlockRegistry.AZALEA_WALL_SIGN, settings), new Item.Settings().maxCount(16)
