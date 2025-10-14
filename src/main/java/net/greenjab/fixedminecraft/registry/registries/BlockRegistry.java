@@ -22,6 +22,7 @@ import net.minecraft.block.MapColor;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.block.ShelfBlock;
 import net.minecraft.block.SignBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoulFireBlock;
@@ -192,6 +193,17 @@ public class BlockRegistry {
                     .nonOpaque()
                     .burnable()
                     .pistonBehavior(PistonBehavior.DESTROY)
+    );
+
+    public static final Block AZALEA_SHELF = register(
+            "azalea_shelf",
+            ShelfBlock::new,
+            AbstractBlock.Settings.create()
+                    .mapColor(AZALEA_PLANKS.getDefaultMapColor())
+                    .instrument(NoteBlockInstrument.BASS)
+                    .strength(2f,3.0F)
+                    .burnable()
+                    .sounds(BlockSoundGroup.SHELF)
     );
 
     public static final Block COPPER_FIRE = register(

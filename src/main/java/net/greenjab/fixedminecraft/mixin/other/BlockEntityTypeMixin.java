@@ -6,6 +6,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.HangingSignBlockEntity;
+import net.minecraft.block.entity.ShelfBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
 import org.slf4j.Logger;
 import org.spongepowered.asm.mixin.Final;
@@ -41,7 +42,7 @@ public abstract class BlockEntityTypeMixin <T extends SignBlockEntity>{
     }
 
     @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntityType;create(Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;[Lnet/minecraft/block/Block;)Lnet/minecraft/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
-              target = "Lnet/minecraft/block/entity/BlockEntityType;SIGN:Lnet/minecraft/block/entity/BlockEntityType;")))
+                                target = "Lnet/minecraft/block/entity/BlockEntityType;SIGN:Lnet/minecraft/block/entity/BlockEntityType;")))
     private static BlockEntityType<SignBlockEntity> hanging_sign(String id, BlockEntityType.BlockEntityFactory<? extends SignBlockEntity> factory, Block[] blocks) {
         return create("hanging_sign",HangingSignBlockEntity::new,
                 Blocks.OAK_HANGING_SIGN,Blocks.SPRUCE_HANGING_SIGN,Blocks.BIRCH_HANGING_SIGN,
@@ -53,6 +54,18 @@ public abstract class BlockEntityTypeMixin <T extends SignBlockEntity>{
                 Blocks.DARK_OAK_WALL_HANGING_SIGN,Blocks.PALE_OAK_WALL_HANGING_SIGN,Blocks.CRIMSON_WALL_HANGING_SIGN,
                 Blocks.WARPED_WALL_HANGING_SIGN,Blocks.MANGROVE_WALL_HANGING_SIGN,Blocks.BAMBOO_WALL_HANGING_SIGN,
                 BlockRegistry.AZALEA_HANGING_SIGN, BlockRegistry.AZALEA_WALL_HANGING_SIGN
+        );
+    }
+
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntityType;create(Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;[Lnet/minecraft/block/Block;)Lnet/minecraft/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
+                target = "Lnet/minecraft/block/entity/BlockEntityType;CHISELED_BOOKSHELF:Lnet/minecraft/block/entity/BlockEntityType;")))
+    private static BlockEntityType<ShelfBlockEntity> shelf(String id, BlockEntityType.BlockEntityFactory<? extends ShelfBlockEntity> factory, Block[] blocks) {
+        return create("shelf", ShelfBlockEntity::new,
+                Blocks.OAK_SHELF,Blocks.SPRUCE_SHELF,Blocks.BIRCH_SHELF,
+                Blocks.ACACIA_SHELF, Blocks.CHERRY_SHELF,Blocks.JUNGLE_SHELF,
+                Blocks.DARK_OAK_SHELF,Blocks.PALE_OAK_SHELF,Blocks.CRIMSON_SHELF,
+                Blocks.WARPED_SHELF,Blocks.MANGROVE_SHELF,Blocks.BAMBOO_SHELF,
+                BlockRegistry.AZALEA_SHELF
         );
     }
 
