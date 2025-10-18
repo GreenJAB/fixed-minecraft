@@ -38,7 +38,7 @@ public abstract class BlockPlacementDispenserBehaviorMixin {
         World world = pointer.world();
         if (world.isClient())  return;
         if (!pointer.state().isOf(Blocks.DISPENSER))  return;
-        if (!stack.isIn(ItemTags.SHULKER_BOXES)) return;
+        if (!stack.getItem().toString().toLowerCase().contains("shulker_box")) return;
         if (stack.isOf(Items.SHULKER_BOX))  return;
         BlockState blockState = world.getBlockState(blockPos);
         if (!(blockState.getBlock() instanceof AbstractCauldronBlock cauldron)) return;
