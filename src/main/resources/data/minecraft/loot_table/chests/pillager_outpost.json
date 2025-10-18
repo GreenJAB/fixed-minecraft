@@ -6,6 +6,7 @@
             "entries": [
                 {
                     "type": "minecraft:item",
+                    "weight": 5,
                     "functions": [
                         {
                             "destination": "minecraft:on_woodland_explorer_maps",
@@ -23,15 +24,10 @@
                         }
                     ],
                     "name": "minecraft:map"
-                }
-            ],
-            "rolls": 1
-        },
-        {
-            "bonus_rolls": 0,
-            "entries": [
+                },
                 {
                     "type": "minecraft:item",
+                    "weight": 1,
                     "functions": [
                         {
                             "destination": "minecraft:on_desert_village_maps",
@@ -52,6 +48,7 @@
                 },
                 {
                     "type": "minecraft:item",
+                    "weight": 1,
                     "functions": [
                         {
                             "destination": "minecraft:on_plains_village_maps",
@@ -72,6 +69,7 @@
                 },
                 {
                     "type": "minecraft:item",
+                    "weight": 1,
                     "functions": [
                         {
                             "destination": "minecraft:on_savanna_village_maps",
@@ -92,6 +90,7 @@
                 },
                 {
                     "type": "minecraft:item",
+                    "weight": 1,
                     "functions": [
                         {
                             "destination": "minecraft:on_snowy_village_maps",
@@ -112,6 +111,7 @@
                 },
                 {
                     "type": "minecraft:item",
+                    "weight": 1,
                     "functions": [
                         {
                             "destination": "minecraft:on_taiga_village_maps",
