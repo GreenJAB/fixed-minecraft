@@ -63,8 +63,13 @@ public abstract class ServerPlayerEntityMixin extends Entity
         }
         int diff = this.getWorld().getDifficulty().getId();
         float multiplier = (diff*weight)/48.0f;
-        return 0.03f*(multiplier+1.0f);
+        return 0.06f*(multiplier+1.0f);
     }
+
+    @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.01f, ordinal = 2))
+    public float walkSwimNoStamina(float constant) { return 0; }
+    @ModifyConstant(method = "increaseTravelMotionStats", constant = @Constant(floatValue = 0.01f, ordinal = 4))
+    public float walkSwimNoStamina2(float constant) { return 0; }
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void shieldDrainsStamina(CallbackInfo ci) {
