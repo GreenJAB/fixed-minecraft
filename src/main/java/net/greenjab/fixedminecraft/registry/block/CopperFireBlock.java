@@ -33,7 +33,8 @@ public class CopperFireBlock extends AbstractFireBlock {
 
     @Override
     protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        return isCopperBase(world.getBlockState(pos.down()));
+        pos = pos.down();
+        return isCopperBase(world.getBlockState(pos)) && world.getBlockState(pos).isSideSolidFullSquare(world, pos, Direction.UP);
     }
 
     public static boolean isCopperBase(BlockState state) {

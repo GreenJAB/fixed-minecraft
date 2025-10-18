@@ -181,6 +181,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
                         if (p < outputItemStack.getDamage()) {
                             outputItemStack.setDamage(p);
+                            repair = true;
                         }
                     }
                 }
@@ -298,6 +299,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         ci.cancel();
     }
 
+    @Unique
     ItemStack anvilHolder = ItemStack.EMPTY;
 
     @Inject(method = "canTakeOutput", at = @At(value = "HEAD"), cancellable = true)

@@ -64,7 +64,7 @@ public class FixedMinecraftEnchantmentHelper {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentLevelEntry.enchantment, enchantmentLevelEntry.level);
         }
         boolean isGold = itemStack.isIn(ItemTags.PIGLIN_LOVED);
-        return Math.min((int)Math.ceil(power*(isGold?0.75f:0.43f)), 50);
+        return Math.min((int)Math.ceil(power*(isGold?0.75f:0.54f)), 50);
     }
 
     public static List<EnchantmentLevelEntry> getPossibleEntries(ItemStack stack) {
