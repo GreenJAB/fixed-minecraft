@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
@@ -36,6 +37,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -88,12 +90,20 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
         ci.cancel();
     }
 
-    @ModifyExpressionValue(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
+   /* @ModifyExpressionValue(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
     private boolean copperDurability(boolean original, @Local ItemStack itemStack) {
         if (itemStack.getItem().getName().getLiteralString().toLowerCase().contains("copper")) {
             return false;
         }
         return original;
+    }*/
+
+    @Redirect(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
+    private boolean copperDurability(ItemStack instance) {
+        if (instance.isIn(ModTags.COPPER_ARMOR)) {
+            return false;
+        }
+        return instance.isDamageable();
     }
 
     @ModifyVariable(
