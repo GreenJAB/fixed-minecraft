@@ -12,7 +12,6 @@ https://youtu.be/VifCRUAzg5U
 ### Other mods you might like to use:
 - [Hotbar Cycle](https://modrinth.com/mod/hotbarcycle)
 - [Item Scroller](https://modrinth.com/mod/item-scroller)
-- [Shulkerbox Tooltips](https://modrinth.com/mod/shulkerboxtooltip)
 - [Endercon](https://modrinth.com/datapack/endercon)
 - [Void Fog](https://modrinth.com/mod/void-fog)
 - [Potion Cauldron](https://modrinth.com/mod/potion-cauldron)
@@ -57,7 +56,8 @@ This mod is intended to feel vanilla and thus has designed to be plug and play w
 - Polish: Merzouuu
 - Czech: Dadamalda (Also UK English and Anglish)
 - Italian: Giulmort27
-- Brazilian: richaell
+- Brazilian Portuguese: richaell
+- Traditional Chinese: skps2010 蘆筍
 
 
 One time Donations: [Ko-Fi](https://ko-fi.com/greenjab)

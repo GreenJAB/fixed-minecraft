@@ -28,6 +28,7 @@
         "MerchantScreenMixin",
         "MinecraftClientMixin",
         "RecipeBookWidgetMixin",
+        "TooltipComponentMixin",
         "VideoOptionsScreenMixin",
         "VillagerClothingFeatureRendererMixin",
         "VillagerEntityRendererMixin",
