@@ -11,6 +11,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.collection.DefaultedList;
+import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -76,9 +77,11 @@ public class PlayerEntityMixin {
 
     @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;dropAll()V"))
     private void dropCraftingGridItems(CallbackInfo ci) {
-        PlayerEntity PE = (PlayerEntity)(Object)this;
-        for (ItemStack itemStack : PE.playerScreenHandler.getCraftingInput().getHeldStacks()) {
-            PE.dropItem(itemStack, false);
+		if (!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+			PlayerEntity PE = (PlayerEntity)(Object)this;
+			for (ItemStack itemStack : PE.playerScreenHandler.getCraftingInput().getHeldStacks()) {
+				PE.dropItem(itemStack, false);
+			}
         }
     }
 

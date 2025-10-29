@@ -27,6 +27,7 @@
         "MerchantScreenMixin",
         "MinecraftClientMixin",
         "RecipeBookWidgetMixin",
+        "TooltipComponentMixin",
         "VideoOptionsScreenMixin",
         "WorldRendererMixin",
         "ZombieVillagerEntityModelMixin",

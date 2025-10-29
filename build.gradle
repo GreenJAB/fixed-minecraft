@@ -3,9 +3,7 @@ plugins {
     alias(libs.plugins.yamlang)
 }
 
-version = "1.5.1-1.21.1"
-group = "net.green_jab.fixedminecraft"
-
+version = "1.5.1a-1.21.1"
 base {
     archivesName = project.name
 }
