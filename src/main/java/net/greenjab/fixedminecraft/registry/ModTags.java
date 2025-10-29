@@ -36,6 +36,7 @@ public class ModTags {
     public static final TagKey<Item> UNBREAKABLE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("unbreakable"));
     public static final TagKey<Item> STAINED_GLASS = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass"));
     public static final TagKey<Item> STAINED_GLASS_PANE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass_pane"));
+    public static final TagKey<Item> COPPER_ARMOR = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("copper_armor"));
 
     //public static final TagKey<Block> AZALEA_LOGS = TagKey.of(RegistryKeys.BLOCK, FixedMinecraft.id("azalea_logs"));
     public static final TagKey<Block> AZALEA_LOGS = TagKey.of(RegistryKeys.BLOCK, Identifier.ofVanilla("azalea_logs"));
