@@ -77,8 +77,8 @@ public class PlayerEntityMixin {
 
     @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;dropAll()V"))
     private void dropCraftingGridItems(CallbackInfo ci) {
-		if (!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
-			PlayerEntity PE = (PlayerEntity)(Object)this;
+        PlayerEntity PE = (PlayerEntity)(Object)this;
+		if (!PE.getEntityWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
 			for (ItemStack itemStack : PE.playerScreenHandler.getCraftingInput().getHeldStacks()) {
 				PE.dropItem(itemStack, false);
 			}

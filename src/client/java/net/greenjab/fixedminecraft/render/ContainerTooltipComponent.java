@@ -16,7 +16,8 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public class ContainerTooltipComponent implements TooltipComponent {
-    private static final Identifier BUNDLE_SLOT_BACKGROUND_TEXTURE = Identifier.ofVanilla("container/bundle/slot_background");
+    private static final Identifier BUNDLE_SLOT_BACKGROUND_TEXTURE = Identifier.ofVanilla("container/bundle/slot");
+    private static final Identifier BACKGROUND_TEXTURE = Identifier.ofVanilla("container/bundle/background");
     private final ContainerComponent contents;
     private int numberOfSlots;
 
@@ -26,26 +27,26 @@ public class ContainerTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public int getHeight(TextRenderer textRenderer) {
-        return this.getHeightOfNonEmpty();
+    public int getHeight() {
+        return this.getHeightOfNonEmpty()+4;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return this.getColumnsHeight() ;
+        return this.getColumnsWidth() ;
     }
 
-    @Override
+    /*@Override
     public boolean isSticky() {
         return true;
-    }
+    }*/
 
     private int getHeightOfNonEmpty() {
         return this.getRowsHeight();
     }
 
     private int getRowsHeight() {
-        return this.getRows() * 24;
+        return this.getRows() * 20+2;
     }
 
     private int getRows() {
@@ -57,8 +58,9 @@ public class ContainerTooltipComponent implements TooltipComponent {
         return MathHelper.ceil(Math.max(Math.sqrt(numberOfSlots), numberOfSlots / 3.0));
     }
 
-    private int getColumnsHeight() {
-        return this.getColumns() * 24;
+
+    private int getColumnsWidth() {
+        return this.getColumns() * 18 + 2;
     }
 
     public static int ceilDiv(int x, int y) {
@@ -71,11 +73,12 @@ public class ContainerTooltipComponent implements TooltipComponent {
 
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
-            this.drawNonEmptyTooltip(textRenderer, x, y, width, height, context);
+    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
+        context.drawGuiTexture(BACKGROUND_TEXTURE, x, y, this.getColumnsWidth(), this.getRowsHeight());
+            this.drawNonEmptyTooltip(textRenderer, x+1, y+1, context);
     }
 
-    private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
+    private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, DrawContext context) {
         List<ItemStack> list = this.firstStacksInContents();
         numberOfSlots = list.size();
         if (!list.isEmpty()) {
@@ -85,8 +88,8 @@ public class ContainerTooltipComponent implements TooltipComponent {
 
             for (int l = 0; l < this.getRows(); l++) {
                 for (int m = 0; m < this.getColumns(); m++) {
-                    int n = i + m * 24;
-                    int o = j + l * 24;
+                    int n = i + m * 18;
+                    int o = j + l * 20;
                     if (k >= numberOfSlots) break;
                     this.drawItem(k, n, o, list, k, textRenderer, context);
                     k++;
@@ -104,10 +107,10 @@ public class ContainerTooltipComponent implements TooltipComponent {
 
     private void drawItem(int index, int x, int y, List<ItemStack> stacks, int seed, TextRenderer textRenderer, DrawContext drawContext) {
         ItemStack itemStack = stacks.get(index);
-        drawContext.drawGuiTexture(RenderLayer::getGuiTextured, BUNDLE_SLOT_BACKGROUND_TEXTURE, x, y, 24, 24);
+        drawContext.drawGuiTexture(BUNDLE_SLOT_BACKGROUND_TEXTURE, x, y, 18, 20);
 
-        drawContext.drawItem(itemStack, x + 4, y + 4, seed);
-        drawContext.drawStackOverlay(textRenderer, itemStack, x + 4, y + 4);
+        drawContext.drawItem(itemStack, x+1 , y+1 , seed);
+        drawContext.drawItemInSlot(textRenderer, itemStack, x+1, y+1);
     }
 
 }
