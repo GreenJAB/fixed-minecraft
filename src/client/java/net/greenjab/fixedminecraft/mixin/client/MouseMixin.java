@@ -23,9 +23,9 @@ public class MouseMixin {
     private MinecraftClient client;
 
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE",
-                                               target = "Lnet/minecraft/entity/player/PlayerInventory;setSelectedSlot(I)V"
+                                               target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"
     ), cancellable = true)
-    public void addHotBarScoller(long window, double horizontal, double vertical, CallbackInfo ci, @Local PlayerInventory playerInventory) {
+    public void addHotBarScoller(long window, double horizontal, double vertical, CallbackInfo ci) {
 
         final Direction direction = Math.signum(vertical) > 0
                 ? Direction.UP : Direction.DOWN;
@@ -33,7 +33,7 @@ public class MouseMixin {
             if (client.player.isSneaking()) {
                 HotbarCycler.shiftRows(MinecraftClient.getInstance(), direction);
             } else {
-                HotbarCycler.shiftSingle(MinecraftClient.getInstance(), playerInventory.selectedSlot, direction);
+                HotbarCycler.shiftSingle(MinecraftClient.getInstance(), MinecraftClient.getInstance().player.getInventory().selectedSlot, direction);
             }
             ci.cancel();
         }

@@ -21,7 +21,6 @@
         "FireworksSparkParticleMixin",
         "GameOptionsMixin",
         "GameRendererMixin",
-        "HandledScreenMixin",
         "InGameHudMixin",
         "ItemColorsMixin",
         "MerchantScreenMixin",
