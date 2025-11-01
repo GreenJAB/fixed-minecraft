@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.greenjab.fixedminecraft.hud.HotbarCycler;
 import net.greenjab.fixedminecraft.map_book.MapBookFilledProperty;
 import net.greenjab.fixedminecraft.models.ModelLayers;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
@@ -34,6 +35,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public void onInitializeClient() {
 
         ClientSyncHandler.init();
+		
+		HotbarCycler.register();
 
         BlockRenderLayerMap.INSTANCE.putBlocks(
                 RenderLayer.getCutout(),
