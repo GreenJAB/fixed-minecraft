@@ -22,3 +22,4 @@ accessible class net/minecraft/server/network/ServerPlayerEntity$RespawnPos
 accessible method net/minecraft/block/Block generateBlockInteractLoot (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;Ljava/util/function/BiConsumer;)Z
 #accessible field net/minecraft/client/render/MapRenderer decorationsAtlasManager Lnet/minecraft/client/texture/SpriteAtlasTexture;
 accessible class net/minecraft/client/particle/ElderGuardianParticleRenderer$State
+accessible method net/minecraft/entity/mob/ShulkerEntity setColor (Ljava/util/Optional;)V
