@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:blue_dye",
-    "minecraft:yellow_dye"
+      {
+          "item": "minecraft:blue_dye"
+      },
+      {
+          "item": "minecraft:yellow_dye"
+      }
   ],
   "result": {
     "count": 2,

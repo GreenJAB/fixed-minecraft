@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "minecraft:orange_dye",
-    "minecraft:black_dye"
+      {
+          "item": "minecraft:orange_dye"
+      },
+      {
+          "item": "minecraft:black_dye"
+      }
   ],
   "result": {
     "count": 2,
