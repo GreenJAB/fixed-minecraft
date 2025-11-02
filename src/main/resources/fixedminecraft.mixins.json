@@ -111,6 +111,7 @@
         "mobs.CreeperEntityMixin",
         "mobs.DrownedEntityMixin",
         "mobs.DungeonFeatureMixin",
+        "mobs.DyeItemMixin",
         "mobs.GameRulesMixin",
         "mobs.LivingEntityMixin",
         "mobs.LlamaEntityMixin",
