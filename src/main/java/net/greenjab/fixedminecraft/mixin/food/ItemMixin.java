@@ -9,6 +9,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -35,6 +36,9 @@ public class ItemMixin {
         FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
         if (user instanceof ServerPlayerEntity) {
             if (foodComponent != null) {
+                if (itemStack.isOf(Items.SWEET_BERRIES)) {
+                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0));
+                } else
                 if (foodComponent.saturation() / (foodComponent.nutrition() * 2.0f) == 0.15f) {
                     if (Math.random() < 0.15f) {
                         user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0));
