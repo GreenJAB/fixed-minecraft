@@ -96,6 +96,7 @@
         "mobs.CaveSpiderEntityMixin",
         "mobs.CreeperEntityMixin",
         "mobs.DungeonFeatureMixin",
+        "mobs.DyeItemMixin",
         "mobs.GameRulesMixin",
         "mobs.LivingEntityMixin",
         "mobs.LlamaEntityMixin",
