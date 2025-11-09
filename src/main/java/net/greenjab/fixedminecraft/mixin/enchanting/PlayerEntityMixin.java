@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerEntityMixin {
 
     @Inject(method = "getExperienceToDrop", at = @At("HEAD"), cancellable = true)
-    private void removeExclusivity(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
+    private void halfLevelsOnDeath(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
         PlayerEntity player = (PlayerEntity) (Object)this;
         if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
             int i = 0;
@@ -32,7 +32,7 @@ public class PlayerEntityMixin {
             }
             if (player.experienceLevel%2==1) i +=getNextLevelExperience(player.experienceLevel/2)/2;
             i+= (int) (player.experienceProgress/2);
-            cir.setReturnValue(i+1);
+            cir.setReturnValue(i);
         } else {
             cir.setReturnValue(0);
         }
