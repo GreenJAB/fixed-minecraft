@@ -18,12 +18,12 @@ public class PlayerEntityMixin
     private float exhaustionGamerule(float value) {
         PlayerEntity PE = (PlayerEntity)(Object)this;
         if (PE.getEntityWorld() instanceof ServerWorld serverWorld) {
-            return value* serverWorld.getGameRules().getInt(GameruleRegistry.Stamina_Drain_Speed)/100f;
+            return value* serverWorld.getGameRules().getValue(GameruleRegistry.Stamina_Drain_Speed)/100f;
         }
         return value;
     }
 
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))
+    @Redirect(method = "knockbackTarget", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;setSprinting(Z)V"))
     private void removeServerClientDesync(PlayerEntity instance, boolean b) {}
 
     @Inject(method = "canConsume", at = @At("HEAD"), cancellable = true)

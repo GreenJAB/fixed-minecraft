@@ -2,13 +2,14 @@ package net.greenjab.fixedminecraft.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.screen.world.CreateWorldScreen;
+import net.minecraft.client.gui.screen.world.EditGameRulesScreen;
 import net.minecraft.client.gui.screen.world.WorldCreator;
 import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.CyclingButtonWidget;
 import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.text.Text;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -25,18 +26,18 @@ public class CreateWorldScreenMixin {
             cyclingButtonWidget2.active = !instance.isHardcore();
             cyclingButtonWidget2.setTooltip(Tooltip.of(instance.getDifficulty().getInfo()));
         });
-
+        GameRules gameRules = instance.getGameRules();
         CyclingButtonWidget<Boolean> cyclingButtonWidget = adder.add(
-                CyclingButtonWidget.onOffBuilder()
-                        .tooltip(value -> Tooltip.of(Text.translatable("gamerule.keepInventory")))
-                        .build(0, 0, 210, 20, Text.translatable("gamerule.keepInventory"),  (button, value) -> {
-                            GameRules gameRules = instance.getGameRules();
-                            gameRules.get(GameRules.KEEP_INVENTORY).set(value, null);
+                CyclingButtonWidget.onOffBuilder((Boolean) gameRules.getValue(GameRules.KEEP_INVENTORY))
+                        .narration( button -> button.getGenericNarrationMessage().append("\n").append(Text.translatable("gamerule.minecraft.keep_inventory")))
+                        .tooltip(value -> Tooltip.of(Text.translatable("gamerule.minecraft.keep_inventory")))
+                        .build(0, 0, 210, 20, Text.translatable("gamerule.minecraft.keep_inventory"),  (button, value) -> {
+                            gameRules.setValue(GameRules.KEEP_INVENTORY, value, null);
                         })
         );
-        cyclingButtonWidget.setValue(instance.getGameRules().getBoolean(GameRules.KEEP_INVENTORY));
+        cyclingButtonWidget.setValue(instance.getGameRules().getValue(GameRules.KEEP_INVENTORY));
         instance.addListener( creator -> {
-            cyclingButtonWidget.setValue(instance.getGameRules().getBoolean(GameRules.KEEP_INVENTORY));
+            cyclingButtonWidget.setValue(instance.getGameRules().getValue(GameRules.KEEP_INVENTORY));
             cyclingButtonWidget.active = !instance.isHardcore();
         });
     }

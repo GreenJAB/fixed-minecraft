@@ -19,10 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BedBlock.class)
 public class BedBlockMixin {
 
-    @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BedBlock;isBedWorking(Lnet/minecraft/world/World;)Z"), cancellable = true)
+    @Inject(method = "onUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;trySleep(Lnet/minecraft/util/math/BlockPos;)Lcom/mojang/datafixers/util/Either;"), cancellable = true)
     private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                           CallbackInfoReturnable<ActionResult> cir){
-        if (((ServerWorld)world).getGameRules().getBoolean(GameruleRegistry.Insomnia_Sleep_Requirement)) {
+        if (((ServerWorld)world).getGameRules().getValue(GameruleRegistry.Insomnia_Sleep_Requirement)) {
             if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);

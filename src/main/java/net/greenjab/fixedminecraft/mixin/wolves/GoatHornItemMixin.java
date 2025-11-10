@@ -37,7 +37,7 @@ public class GoatHornItemMixin {
                         wolfEntity.setAttacker(null);
                         wolfEntity.setAngryAt(null);
                         wolfEntity.setTarget(null);
-                        wolfEntity.setAngerTime(0);
+                        wolfEntity.setAngerDuration(0);
                     }
                 }
             } else {

@@ -14,6 +14,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import org.jetbrains.annotations.Nullable;
 
 public class PackedIceBlock extends TranslucentBlock {
@@ -36,7 +37,7 @@ public class PackedIceBlock extends TranslucentBlock {
     public void afterBreak(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, ItemStack tool) {
         super.afterBreak(world, player, pos, state, blockEntity, tool);
         if (!EnchantmentHelper.hasAnyEnchantmentsIn(tool, EnchantmentTags.PREVENTS_ICE_MELTING)) {
-            if (world.getDimension().ultrawarm()) {
+            if (world.getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.WATER_EVAPORATES_GAMEPLAY, pos)) {
                 world.removeBlock(pos, false);
             }
         }
@@ -44,9 +45,9 @@ public class PackedIceBlock extends TranslucentBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
+        if (world.getGameRules().getValue(GameruleRegistry.Ice_Melt_In_Nether)) {
             if (random.nextFloat() < 0.33f) {
-                if (world.getDimension().ultrawarm()) {
+                if (world.getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.WATER_EVAPORATES_GAMEPLAY, pos)) {
                     if (!NewIceBlock.nextToCryingObsidian(world, pos)) this.melt(world, pos);
                 }
             }

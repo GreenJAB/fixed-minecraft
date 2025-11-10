@@ -18,7 +18,9 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.LightType;
+import net.minecraft.world.MoonPhase;
 import net.minecraft.world.World;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -58,7 +60,8 @@ public class FishingBobberEntityMixin {
         if (playerEntity.hasStatusEffect(StatusEffects.LUCK))
             baitpower += (playerEntity.getStatusEffect(StatusEffects.LUCK).getAmplifier()+1);
 
-        if (world.isNight() && world.getMoonPhase()==0 && world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) baitpower++;
+        MoonPhase moonPhase = (world).getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.MOON_PHASE_VISUAL, playerEntity.getBlockPos());
+        if (world.isNight() && moonPhase.getIndex() == 0 && world.getLightLevel(LightType.SKY, FBE.getBlockPos())>10) baitpower++;
 
         //https://www.desmos.com/calculator/xgxywuavpe
 

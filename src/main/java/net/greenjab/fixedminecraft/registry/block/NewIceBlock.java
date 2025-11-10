@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.LightType;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 
 public class NewIceBlock extends IceBlock {
 
@@ -18,8 +19,8 @@ public class NewIceBlock extends IceBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (world.getGameRules().getBoolean(GameruleRegistry.Ice_Melt_In_Nether)) {
-            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity() || world.getDimension().ultrawarm())
+        if (world.getGameRules().getValue(GameruleRegistry.Ice_Melt_In_Nether)) {
+            if (world.getLightLevel(LightType.BLOCK, pos) > 11 - state.getOpacity() || world.getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.WATER_EVAPORATES_GAMEPLAY, pos))
                 if (!nextToCryingObsidian(world, pos)) this.melt(state, world, pos);
         }
     }

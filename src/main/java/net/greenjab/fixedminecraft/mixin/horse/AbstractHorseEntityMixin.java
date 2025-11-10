@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
+import net.minecraft.command.permission.LeveledPermissionPredicate;
 import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +31,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -172,7 +173,7 @@ public class AbstractHorseEntityMixin {
             AHE.addCommandTag("locate");
             AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);
             String s = "/waypoint modify " + AHE.getUuidAsString() + " style set horse";
-            AHE.getEntityWorld().getServer().getCommandManager().parseAndExecute(createCommandSource(null, AHE.getEntityWorld(), AHE.getBlockPos()), s);
+            AHE.getEntityWorld().getServer().getCommandManager().parseAndExecute(createCommandSource(null, (ServerWorld) AHE.getEntityWorld(), AHE.getBlockPos()), s);
         }
     }
 
@@ -184,9 +185,11 @@ public class AbstractHorseEntityMixin {
     }
 
     @Unique
-    private static ServerCommandSource createCommandSource(@Nullable PlayerEntity player, World world, BlockPos pos) {
-        String string = player == null ? "Sign" : player.getName().getString();
+    private static ServerCommandSource createCommandSource(@Nullable PlayerEntity player, ServerWorld world, BlockPos pos) {
+        String string = player == null ? "Sign" : player.getStringifiedName();
         Text text = (Text)(player == null ? Text.literal("Sign") : player.getDisplayName());
-        return new ServerCommandSource(CommandOutput.DUMMY, Vec3d.ofCenter(pos), Vec2f.ZERO, (ServerWorld)world, 2, string, text, world.getServer(), player);
+        return new ServerCommandSource(
+                CommandOutput.DUMMY, Vec3d.ofCenter(pos), Vec2f.ZERO, world, LeveledPermissionPredicate.GAMEMASTERS, string, text, world.getServer(), player
+        );
     }
 }

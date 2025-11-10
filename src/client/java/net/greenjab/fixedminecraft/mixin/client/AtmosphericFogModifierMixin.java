@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.client;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.render.fog.AtmosphericFogModifier;
 import net.minecraft.client.render.fog.FogData;
@@ -23,8 +24,8 @@ public class AtmosphericFogModifierMixin {
     public float fogMultiplier;
 
     @Inject(method = "applyStartEndModifier", at = @At(value = "TAIL"))
-    private void revertAndPaleFog(FogData data, Entity cameraEntity, BlockPos cameraPos, ClientWorld world, float viewDistance,
-                           RenderTickCounter tickCounter, CallbackInfo ci){
+    private void revertAndPaleFog(FogData data, Camera camera, ClientWorld world, float viewDistance, RenderTickCounter tickCounter,
+                                  CallbackInfo ci){
         if (FixedMinecraftClient.fog_21_6.getValue()) {
         data.environmentalEnd = lerp(viewDistance, 1024.0F, this.fogMultiplier) + -256.0F * this.fogMultiplier;
         data.environmentalStart = lerp(viewDistance-Math.min(64f, viewDistance / 2), this.fogMultiplier * -160.0F, this.fogMultiplier);
@@ -32,7 +33,7 @@ public class AtmosphericFogModifierMixin {
 
 
         float palefog = FixedMinecraftClient.paleGardenFog;
-        boolean inPale = world.getBiome(cameraEntity.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN);
+        boolean inPale = world.getBiome(camera.getBlockPos()).isIn(ModTags.IS_PALE_GARDEN);
         float delta = tickCounter.getDynamicDeltaTicks();
         if (inPale) {
             float f = (float) (delta * Math.sqrt(1-palefog*palefog)*0.01f);

@@ -9,7 +9,7 @@ import net.minecraft.block.SnowyBlock;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;
@@ -51,7 +51,7 @@ public class ServerWorldMixin {
                 }
 
                 if (world.isRaining()) {
-                    int h = world.getGameRules().getInt(GameRules.SNOW_ACCUMULATION_HEIGHT);
+                    int h = world.getGameRules().getValue(GameRules.MAX_SNOW_ACCUMULATION_HEIGHT);
                     if (h > 0 && biome.canSetSnow(world, mutable)) {
                         BlockState blockState = world.getBlockState(mutable);
                         if (blockState.isOf(Blocks.SNOW)) {

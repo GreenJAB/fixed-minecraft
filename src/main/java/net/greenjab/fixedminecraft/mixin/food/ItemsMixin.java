@@ -67,7 +67,7 @@ public class ItemsMixin {
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/item/Items;register(Ljava/lang/String;Lnet/minecraft/item/Item$Settings;)Lnet/minecraft/item/Item;", ordinal = 0 ), slice = @Slice(from = @At( value = "FIELD",
-                                   target = "Lnet/minecraft/item/Items;SHIELD:Lnet/minecraft/item/Item;")))
+                                   target = "Lnet/minecraft/item/Items;NETHERITE_SPEAR:Lnet/minecraft/item/Item;")))
     private static Item useableTotem(String id, Item.Settings settings) {
         return register("totem_of_undying", TotemItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).component(DataComponentTypes.DEATH_PROTECTION, DeathProtectionComponent.TOTEM_OF_UNDYING));
     }

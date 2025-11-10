@@ -33,9 +33,9 @@
     "effect.fixedminecraft.reach": "Alcance",
     "effect.fixedminecraft.insomnia": "Insônia",
 
-    "gamerule.iceMeltInNether": "O gelo derrete no Nether",
-    "gamerule.insomniaSleepRequirement": "Necessário estar com Insônia para dormir",
-    "gamerule.requireTotemUse": "Necessário usar o Totem ativamente para funcionar",
+    "gamerule.fixedminecraft.ice_melt_in_nether": "O gelo derrete no Nether",
+    "gamerule.fixedminecraft.insomnia_sleep_requirement": "Necessário estar com Insônia para dormir",
+    "gamerule.fixedminecraft.require_totem_use": "Necessário usar o Totem ativamente para funcionar",
 
     "advancements.husbandry.bake_bread.title": "Delícia do Padeiro",
     "advancements.husbandry.bake_bread.description": "Transforme Trigo em Pão",

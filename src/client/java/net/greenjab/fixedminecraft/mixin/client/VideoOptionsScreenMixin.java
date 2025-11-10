@@ -13,34 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class VideoOptionsScreenMixin  {
 
 
-    @Inject(method = "getOptions", at = @At("RETURN"), cancellable = true)
-    private static void armorHudOption(GameOptions gameOptions, CallbackInfoReturnable<SimpleOption<?>[]> cir){
+    @Inject(method = "getDisplayOptions", at = @At("RETURN"), cancellable = true)
+    private static void armorHudOption(GameOptions options, CallbackInfoReturnable<SimpleOption<?>[]> cir){
         cir.setReturnValue(new SimpleOption[]{
-                gameOptions.getGraphicsMode(),
-                gameOptions.getViewDistance(),
-                gameOptions.getChunkBuilderMode(),
-                gameOptions.getSimulationDistance(),
-                gameOptions.getAo(),
-                gameOptions.getMaxFps(),
-                gameOptions.getEnableVsync(),
-                gameOptions.getInactivityFpsLimit(),
-                gameOptions.getGuiScale(),
-                gameOptions.getAttackIndicator(),
-                gameOptions.getGamma(),
-                gameOptions.getCloudRenderMode(),
-                gameOptions.getFullscreen(),
-                gameOptions.getParticles(),
-                gameOptions.getMipmapLevels(),
-                gameOptions.getEntityShadows(),
-                gameOptions.getDistortionEffectScale(),
-                gameOptions.getEntityDistanceScaling(),
-                gameOptions.getFovEffectScale(),
-                gameOptions.getShowAutosaveIndicator(),
-                gameOptions.getGlintSpeed(),
-                gameOptions.getGlintStrength(),
-                gameOptions.getMenuBackgroundBlurriness(),
-                gameOptions.getBobView(),
-                gameOptions.getCloudRenderDistance(),
+                options.getMaxFps(), options.getEnableVsync(), options.getInactivityFpsLimit(), options.getGuiScale(), options.getFullscreen(), options.getGamma(),
                 FixedMinecraftClient.newArmorHud,
                 FixedMinecraftClient.fog_21_6
         });

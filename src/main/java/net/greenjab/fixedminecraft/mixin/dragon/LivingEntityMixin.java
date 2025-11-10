@@ -39,7 +39,7 @@ public abstract class LivingEntityMixin {
                     LivingEntity livingEntity = endermanEntity.getEntityWorld().getClosestPlayer(
                             endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ(), 100.0,true);
                     endermanEntity.setTarget(livingEntity);
-                    endermanEntity.setAngerTime(999999);
+                    endermanEntity.setAngerDuration(999999);
                 }
             }
         }

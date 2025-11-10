@@ -33,7 +33,7 @@ public class LivingEntityMixin  {
     @ModifyExpressionValue(method = "tryUseDeathProtector", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;"))
     private ItemStack requireUsingTotem(ItemStack original) {
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (!((ServerWorld)LE.getEntityWorld()).getGameRules().getBoolean(GameruleRegistry.Require_Totem_Use) || LE.isUsingItem()) {
+        if (!((ServerWorld)LE.getEntityWorld()).getGameRules().getValue(GameruleRegistry.Require_Totem_Use) || LE.isUsingItem()) {
             return original;
         } else {
             return new ItemStack(Items.AIR);

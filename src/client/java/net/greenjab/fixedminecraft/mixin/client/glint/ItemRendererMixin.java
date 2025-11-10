@@ -43,32 +43,32 @@ public class ItemRendererMixin {
          return getItemGlintConsumer(vertexConsumers, layer, solid, glint, specialglint);
     }
 
-    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;glint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlint() {
         return EnchantGlint.getGlint();
     }
 
-    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;glintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlintTranslucent() {
         return EnchantGlint.getGlintTranslucent();
     }
 
-    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getItemGlintConsumer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;entityGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getEntityGlint() {
         return EnchantGlint.getEntityGlint();
     }
 
-    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;glint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlintTrident() {
         return EnchantGlint.getGlint();
     }
 
-    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getGlintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;glintTranslucent()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getGlintTranslucentTrident() {
         return EnchantGlint.getGlintTranslucent();
     }
 
-    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayer;getEntityGlint()Lnet/minecraft/client/render/RenderLayer;"))
+    @Redirect(method = "getGlintRenderLayers", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/RenderLayers;entityGlint()Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer getEntityGlintTrident() {
         return EnchantGlint.getEntityGlint();
     }
@@ -79,7 +79,7 @@ public class ItemRendererMixin {
                                                        boolean glint, ItemRenderState.Glint specialglint) {
         boolean special = specialglint == ItemRenderState.Glint.SPECIAL;
         if (glint) {
-            return useTranslucentGlint(layer)
+            return useTransparentGlint(layer)
                     ? VertexConsumers.union(vertexConsumers.getBuffer(EnchantGlint.getGlintTranslucent(special)), vertexConsumers.getBuffer(layer))
                     : VertexConsumers.union(vertexConsumers.getBuffer(solid ? EnchantGlint.getGlint(special) : EnchantGlint.getEntityGlint(special)), vertexConsumers.getBuffer(layer));
         } else {
@@ -87,7 +87,8 @@ public class ItemRendererMixin {
         }
     }
     @Unique
-    private static boolean useTranslucentGlint(RenderLayer renderLayer) {
-        return MinecraftClient.isFabulousGraphicsOrBetter() && renderLayer == TexturedRenderLayers.getItemEntityTranslucentCull();
+    private static boolean useTransparentGlint(RenderLayer renderLayer) {
+        return MinecraftClient.usesImprovedTransparency()
+               && (renderLayer == TexturedRenderLayers.getItemEntityTranslucentCull() || renderLayer == TexturedRenderLayers.method_76545());
     }
 }

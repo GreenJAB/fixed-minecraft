@@ -131,7 +131,7 @@ public class LocatorBarMixin {
             if (mapState!=null) {
                 for (MapDecoration mapIcon : mapState.getDecorations()) {
                     if (!mapIcon.type().getIdAsString().contains("player")) {
-                        Vec3d c = client.gameRenderer.getCamera().getPos();
+                        Vec3d c = client.gameRenderer.getCamera().getCameraPos();
                         float mapScale = (float) Math.pow(2, mapState.scale);
                         float offset = 64f * mapScale;
                         float x = (mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2);
@@ -166,7 +166,7 @@ public class LocatorBarMixin {
            if (render > 0) {
                 for (MapDecoration mapIcon : mapStateData.mapState.getDecorations()) {
                     if (!mapIcon.type().getIdAsString().contains("player")) {
-                        Vec3d c = client.gameRenderer.getCamera().getPos();
+                        Vec3d c = client.gameRenderer.getCamera().getCameraPos();
                         float mapScale = (float) Math.pow(2, mapStateData.mapState.scale);
                         float offset = 64f * mapScale;
                         float x = (mapStateData.mapState.centerX - offset + (mapIcon.x() + 128 + 1) * mapScale / 2) * render;
@@ -197,7 +197,7 @@ public class LocatorBarMixin {
         MapBookState mps = MapBookStateManager.INSTANCE.getClientMapBookState(id);
         if (mps != null ) {
             if (mps.marker.dimension.contains(thisPlayer.getEntityWorld().getDimensionEntry().getIdAsString())) {
-                Vec3d c = client.gameRenderer.getCamera().getPos();
+                Vec3d c = client.gameRenderer.getCamera().getCameraPos();
                 double x = mps.marker.x;
                 double z = mps.marker.z;
 
@@ -224,7 +224,7 @@ public class LocatorBarMixin {
                     for (MapBookPlayer player : mp) {
                         if (player.dimension.contains(p.dimension)) {
                             if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
-                                Vec3d c = client.gameRenderer.getCamera().getPos();
+                                Vec3d c = client.gameRenderer.getCamera().getCameraPos();
 
                                 double x = player.x;
                                 double y = player.y;

@@ -34,20 +34,15 @@ public class SellCompassFactory implements TradeOffers.Factory {
 
     @Nullable
     @Override
-    public TradeOffer create(Entity entity, Random random) {
-
-        if (entity.getEntityWorld() instanceof ServerWorld serverWorld) {
-            BlockPos blockPos = serverWorld.locateStructure(this.structure, entity.getBlockPos(), 100, true);
-            if (blockPos != null) {
-                ItemStack itemStack = Items.COMPASS.getDefaultStack();
-                itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(entity.getEntityWorld().getRegistryKey(), blockPos.withY(-49))), true));
-                itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(32767));
-                return new TradeOffer(
-                        new TradedItem(Items.EMERALD, this.price), Optional.of(new TradedItem(Items.COMPASS)), itemStack, this.maxUses, this.experience, 0.2F
-                );
-            } else {
-                return null;
-            }
+    public TradeOffer create(ServerWorld serverWorld, Entity entity, Random random) {
+        BlockPos blockPos = serverWorld.locateStructure(this.structure, entity.getBlockPos(), 100, true);
+        if (blockPos != null) {
+            ItemStack itemStack = Items.COMPASS.getDefaultStack();
+            itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(entity.getEntityWorld().getRegistryKey(), blockPos.withY(-49))), true));
+            itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(32767));
+            return new TradeOffer(
+                    new TradedItem(Items.EMERALD, this.price), Optional.of(new TradedItem(Items.COMPASS)), itemStack, this.maxUses, this.experience, 0.2F
+            );
         } else {
             return null;
         }

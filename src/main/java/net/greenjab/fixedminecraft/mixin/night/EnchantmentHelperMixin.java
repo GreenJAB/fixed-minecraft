@@ -9,6 +9,8 @@ import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.function.EnchantedCountIncreaseLootFunction;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.LightType;
+import net.minecraft.world.MoonPhase;
+import net.minecraft.world.attribute.EnvironmentAttributes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -24,7 +26,8 @@ public class EnchantmentHelperMixin {
         ServerWorld world = context.getWorld();
         if (entity instanceof PlayerEntity) {
             if (world.getLightLevel(LightType.SKY, entity.getBlockPos()) > 10) {
-                if (world.isNight() && world.getMoonPhase() == 4) {
+                MoonPhase moonPhase = (world).getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.MOON_PHASE_VISUAL, entity.getBlockPos());
+                if (world.isNight() && moonPhase.getIndex() == 4) {
                     return original+1;
                 }
             }

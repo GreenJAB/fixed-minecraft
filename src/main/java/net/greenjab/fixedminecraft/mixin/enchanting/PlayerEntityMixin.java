@@ -12,7 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.EntityTypeTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,7 +25,7 @@ public class PlayerEntityMixin {
     @Inject(method = "getExperienceToDrop", at = @At("HEAD"), cancellable = true)
     private void halfLevelsOnDeath(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
         PlayerEntity player = (PlayerEntity) (Object)this;
-        if (!serverWorld.getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
+        if (!serverWorld.getGameRules().getValue(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
             int i = 0;
             for (int level = 0; level < player.experienceLevel/2;level++) {
                 i +=getNextLevelExperience(level);

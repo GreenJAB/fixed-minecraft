@@ -11,7 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.storage.WriteView;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.GameRules;
+import net.minecraft.world.rule.GameRules;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -104,7 +104,7 @@ public class PlayerEntityMixin {
 
     @Inject(method = "dropInventory", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;dropAll()V"))
     private void dropCraftingGridItems(ServerWorld world, CallbackInfo ci) {
-        if (!world.getGameRules().getBoolean(GameRules.KEEP_INVENTORY)) {
+        if (!world.getGameRules().getValue(GameRules.KEEP_INVENTORY)) {
             PlayerEntity PE = (PlayerEntity) (Object) this;
             for (ItemStack itemStack : PE.playerScreenHandler.craftingInventory.getHeldStacks()) {
                 PE.dropItem(itemStack, false);

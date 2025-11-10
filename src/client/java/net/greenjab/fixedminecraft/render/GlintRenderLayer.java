@@ -8,8 +8,12 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.render.BuiltBuffer;
+import net.minecraft.client.render.LayeringTransform;
+import net.minecraft.client.render.OutputTarget;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderPhase;
+import net.minecraft.client.render.RenderSetup;
+import net.minecraft.client.render.TextureTransform;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 
@@ -21,6 +25,10 @@ public abstract class GlintRenderLayer extends RenderLayer{
     public static RenderLayer entityGlintColor = buildEntityGlintRenderLayer();
     public static RenderLayer armorEntityGlintColor = buildArmorEntityGlintRenderLayer();
     public static RenderLayer translucentGlintColor = buildTranslucentGlint();
+
+    public GlintRenderLayer(String name, RenderSetup renderSetup) {
+        super(name, renderSetup);
+    }
 
     public static void addGlintTypes(Object2ObjectLinkedOpenHashMap<RenderLayer, BufferAllocator> map) {
         addGlintTypes(map, glintColor);
@@ -34,21 +42,15 @@ public abstract class GlintRenderLayer extends RenderLayer{
                 map.put(renderType, new BufferAllocator(renderType.getExpectedBufferSize()));
     }
 
-    public GlintRenderLayer(String name, int size, boolean hasCrumbling, boolean translucent, Runnable begin, Runnable end) {
-        super(name, size, hasCrumbling, translucent, begin, end);
-    }
-
     private static RenderLayer buildGlintRenderLayer() {
         final Identifier res = Identifier.of("textures/misc/super_enchanted_glint_item.png");
 
         return RenderLayer.of(
                 "glint",
-                1536,
-                RenderPipelines.GLINT,
-                RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, false))
-                        .texturing(GLINT_TEXTURING)
-                        .build(false)
+                RenderSetup.builder(RenderPipelines.GLINT)
+                        .texture("Sampler0", res)
+                        .textureTransform(TextureTransform.GLINT_TEXTURING)
+                        .build()
         );
     }
 
@@ -57,12 +59,10 @@ public abstract class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of(
                 "entity_glint",
-                1536,
-                RenderPipelines.GLINT,
-                RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, false))
-                        .texturing(ENTITY_GLINT_TEXTURING)
-                        .build(false)
+                RenderSetup.builder(RenderPipelines.GLINT)
+                        .texture("Sampler0", res)
+                        .textureTransform(TextureTransform.ENTITY_GLINT_TEXTURING)
+                        .build()
         );
     }
 
@@ -71,23 +71,25 @@ public abstract class GlintRenderLayer extends RenderLayer{
 
         return RenderLayer.of(
                 "armor_entity_glint",
-                1536,
-                RenderPipelines.GLINT,
-                RenderLayer.MultiPhaseParameters.builder()
-                        .texture(new RenderPhase.Texture(res, false))
-                        .texturing(ARMOR_ENTITY_GLINT_TEXTURING)
-                        .layering(VIEW_OFFSET_Z_LAYERING)
-                        .build(false));
+                RenderSetup.builder(RenderPipelines.GLINT)
+                        .texture("Sampler0", res)
+                        .textureTransform(TextureTransform.ARMOR_ENTITY_GLINT_TEXTURING)
+                        .layeringTransform(LayeringTransform.VIEW_OFFSET_Z_LAYERING)
+                        .build()
+        );
     }
 
     private static RenderLayer buildTranslucentGlint() {
         final Identifier res = Identifier.of( "textures/misc/super_enchanted_glint_item.png");
 
-        return RenderLayer.of("glint_translucent", 1536, RenderPipelines.GLINT,RenderLayer.MultiPhaseParameters.builder()
-                .texture(new RenderPhase.Texture(res, false))
-                .texturing(GLINT_TEXTURING)
-                .target(ITEM_ENTITY_TARGET)
-                .build(false));
+        return RenderLayer.of(
+                "glint_translucent",
+                RenderSetup.builder(RenderPipelines.GLINT)
+                        .texture("Sampler0", res)
+                        .textureTransform(TextureTransform.GLINT_TEXTURING)
+                        .outputTarget(OutputTarget.ITEM_ENTITY_TARGET)
+                        .build()
+        );
     }
 
 

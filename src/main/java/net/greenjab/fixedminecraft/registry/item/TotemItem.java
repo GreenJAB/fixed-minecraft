@@ -30,7 +30,7 @@ public class TotemItem extends Item {
     public ActionResult use(World world, PlayerEntity user, Hand hand)  {
         if (world != null) {
             if (world instanceof ServerWorld serverWorld) {
-                if (serverWorld.getGameRules().getBoolean(GameruleRegistry.Require_Totem_Use)) {
+                if (serverWorld.getGameRules().getValue(GameruleRegistry.Require_Totem_Use)) {
                     user.playSound(SoundEvents.ITEM_SPYGLASS_USE, 1.0f, 1.0f);
                     return ItemUsage.consumeHeldItem(world, user, hand);
                 }

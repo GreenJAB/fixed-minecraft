@@ -52,7 +52,7 @@ public abstract class LivingEntityMixin extends Entity {
      * Reduces water drag when using riptide.
      */
     @ModifyExpressionValue(
-            method = "travelInFluid", at = @At(
+            method = "travelInWater", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
     )

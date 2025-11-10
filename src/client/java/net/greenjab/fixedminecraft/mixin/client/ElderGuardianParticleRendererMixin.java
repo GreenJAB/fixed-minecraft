@@ -6,6 +6,7 @@ import net.minecraft.client.particle.ElderGuardianParticle;
 import net.minecraft.client.particle.ElderGuardianParticleRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ElderGuardianParticleRenderer.State.class)
 public class ElderGuardianParticleRendererMixin {
-    private static final RenderLayer renderLayer2 = RenderLayer.getEntityTranslucent(Identifier.ofVanilla("textures/entity/phantom.png"));
+    private static final RenderLayer renderLayer2 = RenderLayers.entityTranslucent(Identifier.ofVanilla("textures/entity/phantom.png"));
 
     @ModifyExpressionValue(method = "create", at = @At(value = "FIELD", target = "Lnet/minecraft/client/particle/ElderGuardianParticle;renderLayer:Lnet/minecraft/client/render/RenderLayer;"))
     private static RenderLayer phantomTexture(RenderLayer original,

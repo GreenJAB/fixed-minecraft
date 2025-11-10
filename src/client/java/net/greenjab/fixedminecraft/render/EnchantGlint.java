@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.render;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.RenderLayers;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 
@@ -28,50 +29,50 @@ public class EnchantGlint {
     @Environment(EnvType.CLIENT)
     public static RenderLayer getGlint() {
         if (isSuper()) return GlintRenderLayer.glintColor;
-        else return RenderLayer.getGlint();
+        else return RenderLayers.glint();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getEntityGlint() {
         if (isSuper()) return GlintRenderLayer.entityGlintColor;
-        else return RenderLayer.getEntityGlint();
+        else return RenderLayers.entityGlint();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getGlintTranslucent() {
         if (isSuper()) return GlintRenderLayer.translucentGlintColor;
-        else return RenderLayer.getGlintTranslucent();
+        else return RenderLayers.glintTranslucent();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getArmorEntityGlint() {
         if (isSuper()) return GlintRenderLayer.armorEntityGlintColor;
-        else return RenderLayer.getArmorEntityGlint();
+        else return RenderLayers.armorEntityGlint();
     }
 
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getGlint(boolean green) {
         if (green) return GlintRenderLayer.glintColor;
-        else return RenderLayer.getGlint();
+        else return RenderLayers.glint();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getEntityGlint(boolean green) {
         if (green) return GlintRenderLayer.entityGlintColor;
-        else return RenderLayer.getEntityGlint();
+        else return RenderLayers.entityGlint();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getGlintTranslucent(boolean green) {
         if (green) return GlintRenderLayer.translucentGlintColor;
-        else return RenderLayer.getGlintTranslucent();
+        else return RenderLayers.glintTranslucent();
     }
 
     @Environment(EnvType.CLIENT)
     public static RenderLayer getArmorEntityGlint(boolean green) {
         if (green) return GlintRenderLayer.armorEntityGlintColor;
-        else return RenderLayer.getArmorEntityGlint();
+        else return RenderLayers.armorEntityGlint();
     }
 
 }
