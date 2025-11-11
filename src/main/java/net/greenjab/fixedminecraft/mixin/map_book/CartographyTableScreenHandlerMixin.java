@@ -37,16 +37,17 @@ import java.util.function.BiConsumer;
 @Mixin(CartographyTableScreenHandler.class)
 public abstract class CartographyTableScreenHandlerMixin {
 
-    /*@ModifyArg(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/CartographyTableScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 0), index = 0)
+    @ModifyArg(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V",
+               at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/CartographyTableScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 0), index = 0)
     private Slot notInfEffect(Slot par1){
         CartographyTableScreenHandler CTSH = (CartographyTableScreenHandler)(Object)this;
         return new Slot(CTSH.inventory, 0, 15, 15) {
             @Override
             public boolean canInsert(ItemStack stack) {
-                return stack.contains(DataComponentTypes.MAP_ID) && !stack.isOf(ItemRegistry.MAP_BOOK);
+                return stack.isOf(Items.FILLED_MAP) || stack.isOf(ItemRegistry.MAP_BOOK);
             }
         };
-    }*/
+    }
 
 
     @Shadow
@@ -158,7 +159,13 @@ public abstract class CartographyTableScreenHandlerMixin {
     }
 
     @Redirect(method = "quickMove",
-               at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 0))
+              at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 0))
+    private boolean mapBookQuickMove(ItemStack instance, Item item){
+        return instance.isOf(Items.FILLED_MAP) || instance.isOf(ItemRegistry.MAP_BOOK);
+    }
+
+    @Redirect(method = "quickMove",
+               at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z", ordinal = 1))
     private boolean bookQuickMove(ItemStack instance, Item item){
         return instance.isOf(Items.PAPER) || instance.isOf(Items.BOOK);
     }

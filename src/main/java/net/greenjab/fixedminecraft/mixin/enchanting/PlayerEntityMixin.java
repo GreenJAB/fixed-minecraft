@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class PlayerEntityMixin {
 
     @Inject(method = "getXpToDrop", at = @At("HEAD"), cancellable = true)
-    private void halfLevelsOnDeath(CallbackInfoReturnable<Integer> cir, @Local(argsOnly = true) ServerWorld serverWorld) {
+    private void halfLevelsOnDeath(CallbackInfoReturnable<Integer> cir) {
         PlayerEntity player = (PlayerEntity) (Object)this;
         if (!player.getWorld().getGameRules().getBoolean(GameRules.KEEP_INVENTORY) && !player.isSpectator()) {
             int i = 0;
