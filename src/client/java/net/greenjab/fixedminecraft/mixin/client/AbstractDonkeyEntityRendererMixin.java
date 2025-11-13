@@ -36,7 +36,7 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
         float data = getArmorValue(armor);
         if (armor.hasEnchantments()) data+=10;
         if (armor.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-            if (armor.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1) data+=10;
+            if (armor.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==1) data+=10;
         }
         if (armor.getComponents().contains(DataComponentTypes.DYED_COLOR)) {
             DyedColorComponent colorData = armor.getComponents().get(DataComponentTypes.DYED_COLOR);

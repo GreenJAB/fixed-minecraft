@@ -37,17 +37,20 @@ public class EchoFruitItem extends Item {
 
                 Vec3d vec3d = serverPlayerEntity.getEntityPos();
                 ServerWorld serverWorld = serverPlayerEntity.getEntityWorld().getServer().getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
-                if (serverPlayerEntity.teleport(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch(), true)) {
-                    while (!serverWorld.isSpaceEmpty(serverPlayerEntity) && serverPlayerEntity.getY() < serverWorld.getTopYInclusive()) {
-                        serverPlayerEntity.setPosition(serverPlayerEntity.getX(), serverPlayerEntity.getY() + 1.0, serverPlayerEntity.getZ());
+                if (serverWorld!=null) {
+                    if (serverPlayerEntity.teleport(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch(), true)) {
+                        while (!serverWorld.isSpaceEmpty(serverPlayerEntity) &&
+                               serverPlayerEntity.getY() < serverWorld.getTopYInclusive()) {
+                            serverPlayerEntity.setPosition(serverPlayerEntity.getX(),
+                                    serverPlayerEntity.getY() + 1.0, serverPlayerEntity.getZ());
+                        }
+                        world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(serverPlayerEntity));
+                        SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
+                        SoundCategory soundCategory = SoundCategory.PLAYERS;
+
+                        world.playSound(null, vec3d.getX(), vec3d.getY(), vec3d.getZ(), soundEvent, soundCategory);
+                        user.onLanding();
                     }
-                    world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(serverPlayerEntity));
-                    SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
-                    SoundCategory soundCategory = SoundCategory.PLAYERS;
-
-                    world.playSound(null, vec3d.getX(), vec3d.getY(), vec3d.getZ(), soundEvent, soundCategory);
-                    user.onLanding();
-
                 }
             }
         }

@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.other;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.block.NewSnowBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -40,10 +38,12 @@ public class FallingBlockEntityMixin {
         if (FBE.getCommandTags().contains("convert")) {
             World world = FBE.getEntityWorld();
             FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.getEntityWorld().getWorldChunk(FBE.getBlockPos()).getWorld(), SpawnReason.CONVERSION);
-            fallingBlockEntity.refreshPositionAndAngles(FBE.getX(), FBE.getY(), FBE.getZ(), 0.0F, 0.0F);
-            fallingBlockEntity.setVelocity(FBE.getVelocity().x, FBE.getVelocity().y,FBE.getVelocity().z);
-            world.spawnEntity(fallingBlockEntity);
-            FBE.discard();
+            if (fallingBlockEntity != null) {
+                fallingBlockEntity.refreshPositionAndAngles(FBE.getX(), FBE.getY(), FBE.getZ(), 0.0F, 0.0F);
+                fallingBlockEntity.setVelocity(FBE.getVelocity().x, FBE.getVelocity().y, FBE.getVelocity().z);
+                world.spawnEntity(fallingBlockEntity);
+                FBE.discard();
+            }
             ci.cancel();
         }
     }

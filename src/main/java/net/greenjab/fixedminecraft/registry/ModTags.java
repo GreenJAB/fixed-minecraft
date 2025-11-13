@@ -7,7 +7,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.Structure;
 
@@ -36,9 +35,6 @@ public class ModTags {
     public static final TagKey<Item> STAINED_GLASS = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass"));
     public static final TagKey<Item> STAINED_GLASS_PANE = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("stained_glass_pane"));
     public static final TagKey<Item> COPPER_ARMOR = TagKey.of(RegistryKeys.ITEM, FixedMinecraft.id("copper_armor"));
-
-    //public static final TagKey<Block> AZALEA_LOGS = TagKey.of(RegistryKeys.BLOCK, FixedMinecraft.id("azalea_logs"));
-    public static final TagKey<Block> AZALEA_LOGS = TagKey.of(RegistryKeys.BLOCK, Identifier.ofVanilla("azalea_logs"));
 
     private static TagKey<Enchantment> enchant_of(String id)  {
         return TagKey.of(RegistryKeys.ENCHANTMENT, FixedMinecraft.id(id));

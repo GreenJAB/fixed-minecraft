@@ -15,11 +15,6 @@ public abstract class PhantomEntityMixin {
     @Shadow
     Vec3d targetPosition;
 
-    /*@Inject(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/PhantomEntity;setOnFireFor(F)V", shift = At.Shift.AFTER))
-    private void diveTerrariaBossStyle(CallbackInfo ci){
-        PhantomEntity PE = (PhantomEntity)(Object)this;
-        PE.setFireTicks(0);
-    }*/
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void diveTerrariaBossStyle2(CallbackInfo ci){
         PhantomEntity PE = (PhantomEntity)(Object)this;

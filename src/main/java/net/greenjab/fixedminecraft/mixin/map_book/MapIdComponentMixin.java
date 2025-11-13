@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
-import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.component.ComponentsAccess;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;

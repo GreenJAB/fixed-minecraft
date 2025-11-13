@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class CartographyTableScreenMixin {
 
     @Redirect(method = "drawBackground", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;get(Lnet/minecraft/component/ComponentType;)Ljava/lang/Object;"))
-    private Object mapBookDisplay(ItemStack itemStack, ComponentType componentType) {
+    private Object mapBookDisplay(ItemStack itemStack, ComponentType<?> componentType) {
         if (itemStack.getItem() instanceof MapBookItem) {
             return null;
         }

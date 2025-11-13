@@ -10,7 +10,6 @@ import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.ExperimentalMinecartController;
 import net.minecraft.entity.vehicle.FurnaceMinecartEntity;
 import net.minecraft.entity.vehicle.VehicleEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.storage.ReadView;
 import net.minecraft.util.math.BlockPos;
@@ -133,9 +132,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
                 return false;
             }
             if (otherEntity instanceof FixedFurnaceMinecartEntity fixedFurnaceMinecartEntity) {
-                if (fixedFurnaceMinecartEntity.getTrain().contains(thisEntity)) {
-                    return false;
-                }
+                return !fixedFurnaceMinecartEntity.getTrain().contains(thisEntity);
             }
         }
         return true;

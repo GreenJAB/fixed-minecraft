@@ -35,7 +35,7 @@ public class FireworkRocketItemMixin {
     private void removeNormalFireworkElytraUse(World world, PlayerEntity user, Hand hand,
                                                CallbackInfoReturnable<ActionResult> cir) {
         ItemStack itemStack = user.getStackInHand(hand);
-        if (itemStack.getItem().equals(Items.FIREWORK_ROCKET)) {
+        if (itemStack.getItem().equals(Items.FIREWORK_ROCKET) && itemStack.getComponents().contains(DataComponentTypes.FIREWORKS)) {
             FireworksComponent fireworkComponent = itemStack.get(DataComponentTypes.FIREWORKS);
             if (fireworkComponent == null) {
                 if (user.isGliding()) {
@@ -63,7 +63,6 @@ public class FireworkRocketItemMixin {
                 }
             }
             if (fireworkComponent.explosions().isEmpty()) {
-                //cir.setReturnValue(ActionResult.PASS);
                 if (user.isGliding()) {
                     user.addVelocity(0, 1, 0);
                     if (world instanceof ServerWorld serverWorld) {

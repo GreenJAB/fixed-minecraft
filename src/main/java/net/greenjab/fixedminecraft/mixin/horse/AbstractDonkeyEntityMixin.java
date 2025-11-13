@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.entity.passive.AbstractDonkeyEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.MuleEntity;
@@ -36,12 +35,14 @@ public abstract class AbstractDonkeyEntityMixin extends AbstractHorseEntity {
     private void randomisedAttributes(Random random, CallbackInfo ci){
         AbstractDonkeyEntity ADE = (AbstractDonkeyEntity)(Object)this;
 
-        EntityAttributeInstance var10000 = ADE.getAttributeInstance(EntityAttributes.JUMP_STRENGTH);
+        EntityAttributeInstance attribute = ADE.getAttributeInstance(EntityAttributes.JUMP_STRENGTH);
         Objects.requireNonNull(random);
-        var10000.setBaseValue(getChildJumpStrengthBonus(random::nextDouble));
+        Objects.requireNonNull(attribute);
+        attribute.setBaseValue(getChildJumpStrengthBonus(random::nextDouble));
 
-        var10000 = ADE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        attribute = ADE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         Objects.requireNonNull(random);
-        var10000.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
+        Objects.requireNonNull(attribute);
+        attribute.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
     }
 }

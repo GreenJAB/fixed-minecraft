@@ -21,7 +21,8 @@ public class FogRendererMixin  {
                                                             target = "Lnet/minecraft/client/render/fog/FogModifier;getFogColor(Lnet/minecraft/client/world/ClientWorld;Lnet/minecraft/client/render/Camera;IF)I"
     ))
     private int undergroundDarkness(int original, @Local(ordinal = 0) FogModifier fogModifier, @Local(argsOnly = true) ClientWorld world, @Local(argsOnly = true) Camera camera) {
-        if (!fogModifier.toString().toLowerCase().contains("AtmosphericFogModifier")) return original;
+        System.out.println();
+        if (!fogModifier.toString().toLowerCase().contains("atmosphericfogmodifier")) return original;
         int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
         float l = Math.min(Math.max(0.3f+light/7f, 0.15f), 1);
         Vector3f c = ColorHelper.toVector(original);

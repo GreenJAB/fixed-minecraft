@@ -9,16 +9,18 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.HashMap;
 
 @Mixin(ItemEnchantmentsComponent.class)
 public class ItemEnchantmentsComponentMixin {
 
-    private static HashMap<String, String> enchantToBiome;
-    private static HashMap<String, String> biomeToIcon;
+    @Unique
+    private static final HashMap<String, String> enchantToBiome;
+    @Unique
+    private static final HashMap<String, String> biomeToIcon;
 
     static {
         enchantToBiome = new HashMap<>();
@@ -98,37 +100,4 @@ public class ItemEnchantmentsComponentMixin {
         }
         return original;
     }
-
-    /*@ModifyExpressionValue(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getName(Lnet/minecraft/registry/entry/RegistryEntry;I)Lnet/minecraft/text/Text;"))
-    private Text addEnchantLocationTooltip(Text original, @Local(argsOnly = true) TooltipType type, @Local RegistryEntry<Enchantment> registryEntry) {
-        MutableText text = (MutableText)Text.of("");
-        if (type == TooltipType.ADVANCED) {
-            if (enchantToBiome.containsKey(registryEntry.getIdAsString())) {
-                if (biomeToIcon.containsKey(enchantToBiome.get(registryEntry.getIdAsString()))) {
-                    text.append(biomeToIcon.get(enchantToBiome.get(registryEntry.getIdAsString())) + " ");
-                }
-            }
-        }
-        text.append(original);
-        return text;
-    }*/
-
-    /*@Redirect(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getName(Lnet/minecraft/registry/entry/RegistryEntry;I)Lnet/minecraft/text/Text;"))
-    private Text addEnchantLocationTooltip(RegistryEntry<Enchantment> enchantment, int level,
-                                           @Local(argsOnly = true) TooltipType type) {
-
-        if (type == TooltipType.ADVANCED) {
-            MutableText mt = (MutableText) original;
-            if (enchantToBiome.containsKey(enchantment.getIdAsString())) {
-                if (biomeToIcon.containsKey(enchantToBiome.get(enchantment.getIdAsString()))) {
-                    mt.append(" " + biomeToIcon.get(enchantToBiome.get(enchantment.getIdAsString())));
-                } else {
-                    mt.append(" (" + enchantToBiome.get(enchantment.getIdAsString()) + ")");
-                }
-            }
-        }
-        Enchantment.getName(enchantment, level);
-        return original;
-    }*/
-
 }

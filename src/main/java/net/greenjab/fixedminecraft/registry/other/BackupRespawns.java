@@ -2,11 +2,9 @@ package net.greenjab.fixedminecraft.registry.other;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateType;
 
@@ -25,7 +23,6 @@ public class BackupRespawns extends PersistentState {
         this(new ArrayList<>(respawns));
     }
     public BackupRespawns(ArrayList<BackupRespawn> respawns) {
-        this.backupRespawns.clear();
         this.backupRespawns.addAll(respawns);
         this.markDirty();
     }
@@ -50,6 +47,7 @@ public class BackupRespawns extends PersistentState {
     public BackupRespawn getPlayer(PlayerEntity player) {
         for (BackupRespawn backupRespawn : backupRespawns) {
             String name = player.getName().getLiteralString();
+            assert name != null;
             if (name.contains(backupRespawn.name) && backupRespawn.name.contains(name)){
                 return backupRespawn;
             }

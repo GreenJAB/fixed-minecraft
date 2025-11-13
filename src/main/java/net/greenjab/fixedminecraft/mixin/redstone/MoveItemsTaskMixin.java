@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.redstone;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.BundleContentsComponent;
@@ -39,7 +39,7 @@ public abstract class MoveItemsTaskMixin {
 
     @Inject(method = "placeStack", at = @At(value = "HEAD"))
     private void rememberItem(PathAwareEntity entity, Inventory inventory, CallbackInfo ci) {
-        entity.getBrain().remember(StatusRegistry.LAST_ITEM_TYPE, entity.getMainHandStack().getItem(), 6000L);
+        entity.getBrain().remember(OtherRegistry.LAST_ITEM_TYPE, entity.getMainHandStack().getItem(), 6000L);
     }
 
     @Inject(method = "placeStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ai/brain/task/MoveItemsTask;resetVisitedPositions(Lnet/minecraft/entity/mob/PathAwareEntity;)V"))
@@ -51,8 +51,8 @@ public abstract class MoveItemsTaskMixin {
                                                   target = "Lnet/minecraft/entity/ai/brain/task/MoveItemsTask;extractStack(Lnet/minecraft/inventory/Inventory;)Lnet/minecraft/item/ItemStack;"
     ))
     private ItemStack searchForLastItemFirst(Inventory inventory, Operation<ItemStack> original, @Local(argsOnly = true) PathAwareEntity entity) {
-        if (entity.getBrain().hasMemoryModule(StatusRegistry.LAST_ITEM_TYPE)) {
-            Item lastItem = entity.getBrain().getOptionalMemory(StatusRegistry.LAST_ITEM_TYPE).orElse(Items.AIR);
+        if (entity.getBrain().hasMemoryModule(OtherRegistry.LAST_ITEM_TYPE)) {
+            Item lastItem = entity.getBrain().getOptionalMemory(OtherRegistry.LAST_ITEM_TYPE).orElse(Items.AIR);
 
             int i = 0;
             for (ItemStack itemStack : inventory) {
@@ -69,7 +69,7 @@ public abstract class MoveItemsTaskMixin {
 
     @Inject(method = "takeStack", at = @At(value = "TAIL"))
     private void revisitLastChestIfSameItem(PathAwareEntity entity, Inventory inventory, CallbackInfo ci) {
-        if (entity.getMainHandStack().getItem() == entity.getBrain().getOptionalMemory(StatusRegistry.LAST_ITEM_TYPE).orElse(Items.AIR)) {
+        if (entity.getMainHandStack().getItem() == entity.getBrain().getOptionalMemory(OtherRegistry.LAST_ITEM_TYPE).orElse(Items.AIR)) {
             World world = entity.getEntityWorld();
             if (entity.getBrain().hasMemoryModule(MemoryModuleType.NEAREST_BED)) {
                 BlockEntity blockEntity = world.getBlockEntity(entity.getBrain().getOptionalMemory(MemoryModuleType.NEAREST_BED).get());

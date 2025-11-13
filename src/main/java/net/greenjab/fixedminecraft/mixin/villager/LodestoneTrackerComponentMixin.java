@@ -18,7 +18,7 @@ public class LodestoneTrackerComponentMixin {
                     target = "Lnet/minecraft/world/poi/PointOfInterestStorage;hasTypeAt(Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/util/math/BlockPos;)Z"
             )
     )
-    private boolean test(boolean original, @Local(argsOnly = true) ServerWorld world, @Local BlockPos blockPos) {
+    private boolean trackUngeneratedChunks(boolean original, @Local(argsOnly = true) ServerWorld world, @Local BlockPos blockPos) {
         return original || !world.isChunkLoaded(blockPos);
     }
 }

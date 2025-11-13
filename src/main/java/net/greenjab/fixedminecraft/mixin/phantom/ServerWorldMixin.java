@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -18,9 +18,9 @@ public abstract class ServerWorldMixin {
     private void turnInsomniaIntoHealthBoost(CallbackInfo ci) {
         ServerWorld serverWorld = (ServerWorld)(Object)this;
         (serverWorld.getPlayers().stream().filter(LivingEntity::isSleeping).toList()).forEach(player -> {
-            if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) return;
-            int i = player.getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier();
-            player.removeStatusEffect(StatusRegistry.INSOMNIA);
+            if (!player.hasStatusEffect(OtherRegistry.INSOMNIA)) return;
+            int i = player.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier();
+            player.removeStatusEffect(OtherRegistry.INSOMNIA);
             player.addStatusEffect(new StatusEffectInstance(StatusEffects.HEALTH_BOOST, (i+1)*5*60*20, i, true, false, true));
             if (i == 4) {
                 Criteria.CONSUME_ITEM.trigger(player, Items.RED_BED.getDefaultStack());

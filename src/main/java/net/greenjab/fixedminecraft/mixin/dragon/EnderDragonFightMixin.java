@@ -173,7 +173,7 @@ public abstract class EnderDragonFightMixin {
         if (instance.isEmpty()) {
             return false;
         }
-        return instance.contains(o);
+        return instance.contains((EndCrystalEntity)o);
     }
 
     @Inject(method = "generateEndPortal", at = @At(value = "TAIL"))

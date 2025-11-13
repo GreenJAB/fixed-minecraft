@@ -12,7 +12,7 @@ import net.minecraft.util.math.random.Random;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
-
+/** Credit: Laazuli */
 public class ArmorTrimmer {
     public static ItemStack trimAtChanceIfTrimable(ItemStack stack, @NotNull Random random, @NotNull DynamicRegistryManager registryManager) {
         return trimAtChanceIfTrimable(stack, random, registryManager, false);

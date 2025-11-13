@@ -5,22 +5,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SnowBlock;
-import net.minecraft.block.SnowyBlock;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.rule.GameRules;
-import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.FreezeTopLayerFeature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 
 @Mixin(ServerWorld.class)
 public class ServerWorldMixin {
@@ -43,7 +36,7 @@ public class ServerWorldMixin {
             BlockPos mutable = blockPos.down(i);
             BlockState blockStateTest = world.getBlockState(mutable);
             if (blockStateTest.isOf(Blocks.SNOW) || blockStateTest.isIn(BlockTags.LEAVES)) {
-
+                //skip
             } else if (blockStateTest.isOf(Blocks.AIR)) {
                 BlockPos mutable2 = blockPos2.down(i);
                 if (biome.canSetIce(world, mutable2)) {
@@ -55,7 +48,7 @@ public class ServerWorldMixin {
                     if (h > 0 && biome.canSetSnow(world, mutable)) {
                         BlockState blockState = world.getBlockState(mutable);
                         if (blockState.isOf(Blocks.SNOW)) {
-                            int j = (Integer)blockState.get(SnowBlock.LAYERS);
+                            int j = blockState.get(SnowBlock.LAYERS);
                             if (j < Math.min(h, 8)) {
                                 BlockState blockState2 = blockState.with(SnowBlock.LAYERS, j + 1);
                                 Block.pushEntitiesUpBeforeBlockChange(blockState, blockState2, world, mutable);

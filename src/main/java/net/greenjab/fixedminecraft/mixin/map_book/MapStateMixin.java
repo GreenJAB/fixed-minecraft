@@ -2,12 +2,10 @@ package net.greenjab.fixedminecraft.mixin.map_book;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapColorComponent;
-import net.minecraft.component.type.MapDecorationsComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.item.map.MapDecoration;
@@ -74,8 +72,8 @@ public class MapStateMixin implements MapStateAccessor {
         decoToColor.put(MapDecorationTypes.JUNGLE_TEMPLE, 1999367);
         decoToColor.put(MapDecorationTypes.SWAMP_HUT, 5390853);
 
-        decoToColor.put(StatusRegistry.PILLAGER_OUTPOST, 10373376);
-        decoToColor.put(StatusRegistry.RUINED_PORTAL, 11796480);
+        decoToColor.put(OtherRegistry.PILLAGER_OUTPOST, 10373376);
+        decoToColor.put(OtherRegistry.RUINED_PORTAL, 11796480);
     }
 
     @Inject(method = "addDecorationsNbt", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/map/MapDecorationType;hasMapColor()Z"), cancellable = true)
@@ -244,8 +242,8 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("player_off_map")) return MapDecorationTypes.PLAYER_OFF_MAP;
         if (type.contains("player_off_limits")) return MapDecorationTypes.PLAYER_OFF_LIMITS;
 
-        if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
-        if (type.contains("portal")) return StatusRegistry.RUINED_PORTAL;
+        if (type.contains("outpost")) return OtherRegistry.PILLAGER_OUTPOST;
+        if (type.contains("portal")) return OtherRegistry.RUINED_PORTAL;
 
         return MapDecorationTypes.BANNER_BLACK;
     }
@@ -264,9 +262,9 @@ public class MapStateMixin implements MapStateAccessor {
         if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
         if (type.contains("red_x")) return MapDecorationTypes.RED_X;
         if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
-        if (type.contains("outpost")) return StatusRegistry.PILLAGER_OUTPOST;
-        if (type.contains("portal")) return StatusRegistry.RUINED_PORTAL;
-        if (type.contains("trail_ruins")) return StatusRegistry.TRAIL_RUINS;
+        if (type.contains("outpost")) return OtherRegistry.PILLAGER_OUTPOST;
+        if (type.contains("portal")) return OtherRegistry.RUINED_PORTAL;
+        if (type.contains("trail_ruins")) return OtherRegistry.TRAIL_RUINS;
 
         return null;
     }

@@ -25,8 +25,6 @@ public class HotbarCycler
     }
 
     public static void shiftRows(MinecraftClient client, final Direction direction) {
-
-        @SuppressWarnings("resource")
         ClientPlayerInteractionManager interactionManager = client.interactionManager;
         if (interactionManager == null || client.player == null) return;
 
@@ -39,8 +37,6 @@ public class HotbarCycler
     }
 
     public static void shiftSingle(MinecraftClient client, int hotbarSlot, final Direction direction) {
-
-        @SuppressWarnings("resource")
         ClientPlayerInteractionManager interactionManager = client.interactionManager;
         if (interactionManager == null || client.player == null) return;
 

@@ -36,7 +36,6 @@
         "VillagerClothingFeatureRendererMixin",
         "VillagerEntityRendererMixin",
         "VillagerRenderStateMixin",
-        "WorldRendererMixin",
         "ZombieVillagerEntityModelMixin",
         "glint.ArmorFeatureRendererMixin",
         "glint.BasicItemModelMixin",

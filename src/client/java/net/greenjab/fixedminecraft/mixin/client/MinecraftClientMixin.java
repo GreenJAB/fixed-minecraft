@@ -34,20 +34,21 @@ public class MinecraftClientMixin {
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;doRandomBlockDisplayTicks(III)V"))
     public void addWaxParticles(CallbackInfo ci) {
-        Random random = Random.create();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
-        if (MinecraftClient.getInstance().player.getMainHandStack().isOf(Items.HONEYCOMB)) {
+        assert player != null;
+        assert world != null;
+        if (player.getMainHandStack().isOf(Items.HONEYCOMB)) {
             for (int j = 0; j < 50; j++) {
-                randomWaxedCopperBlockDisplayTick(world, player.getBlockX(), player.getBlockY(), player.getBlockZ(), 8, random, mutable);
+                randomWaxedCopperBlockDisplayTick(world, player.getBlockX(), player.getBlockY(), player.getBlockZ(), 8, world.random, mutable);
             }
         }
     }
 
     @Unique
     public void randomWaxedCopperBlockDisplayTick(ClientWorld world, int centerX, int centerY, int centerZ, int radius, Random random, BlockPos.Mutable pos) {
-        int i = centerX + world.random.nextInt(radius) - world.random.nextInt(radius);
-        int j = centerY + world.random.nextInt(radius) - world.random.nextInt(radius);
-        int k = centerZ + world.random.nextInt(radius) - world.random.nextInt(radius);
+        int i = centerX + random.nextInt(radius) - random.nextInt(radius);
+        int j = centerY + random.nextInt(radius) - random.nextInt(radius);
+        int k = centerZ + random.nextInt(radius) - random.nextInt(radius);
         pos.set(i, j, k);
         BlockState blockState = world.getBlockState(pos);
         if (HoneycombItem.getWaxedState(blockState).isPresent()) {

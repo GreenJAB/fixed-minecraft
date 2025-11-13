@@ -5,6 +5,7 @@ import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
@@ -29,14 +30,14 @@ public class TradeOffersEnchantedToolMixin {
     private int experience;
 
     @Inject(method = "create", at = @At(value = "RETURN"), cancellable = true)
-    private void needDiamond(Entity entity, Random random, CallbackInfoReturnable<TradeOffer> cir,
-                           @Local ItemStack itemStack,
-                           @Local TradedItem itemStack2) {
+    private void needDiamond(ServerWorld world, Entity entity, Random random, CallbackInfoReturnable<TradeOffer> cir,
+                             @Local ItemStack itemStack,
+                             @Local TradedItem itemStack2) {
         if (!itemStack.getItem().getComponents().contains(DataComponentTypes.REPAIRABLE)) {
             cir.setReturnValue(new TradeOffer(itemStack2, itemStack, 3, this.experience, this.multiplier));
             return;
         }
-        if (itemStack.getItem().getComponents().get(DataComponentTypes.REPAIRABLE).matches(Items.DIAMOND.getDefaultStack())){//.getName().toString().toLowerCase().contains("diamond")) {
+        if (itemStack.getItem().getComponents().get(DataComponentTypes.REPAIRABLE).matches(Items.DIAMOND.getDefaultStack())){
             cir.setReturnValue(new TradeOffer(itemStack2, Optional.of(new TradedItem(Items.DIAMOND, 1)), itemStack, 3, this.experience, this.multiplier));
         } else {
             cir.setReturnValue(new TradeOffer(itemStack2, itemStack, 3, this.experience, this.multiplier));

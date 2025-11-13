@@ -10,7 +10,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -19,23 +18,18 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.MoonPhase;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.awt.*;
 import java.util.ArrayList;
 
 @Mixin(InGameHud.class)
@@ -61,23 +55,24 @@ public class InGameHudMixin {
      ))
     private void renderArmorItems(DrawContext context, PlayerEntity player, int i, int j, int k, int x){
          if (FixedMinecraftClient.newArmorHud.getValue()) {
-            MinecraftClient client = MinecraftClient.getInstance();
-         ArrayList<ItemStack> armor = FixedMinecraft.getArmorBypass(client.player);
+             MinecraftClient client = MinecraftClient.getInstance();
+             assert client.player != null;
+             ArrayList<ItemStack> armor = FixedMinecraft.getArmorBypass(client.player);
 
-         int m = i - (j - 1) * k - 10-6;
+             int m = i - (j - 1) * k - 10 - 6;
 
-         for (int n = 0; n < armor.size(); n++) {
-             int n2 = armor.size()-n-1;
-             ItemStack stack = armor.get(n2);
-             int o = (int) (x + n * 8 * 2.5) + 3;
+             for (int n = 0; n < armor.size(); n++) {
+                 int n2 = armor.size() - n - 1;
+                 ItemStack stack = armor.get(n2);
+                 int o = (int) (x + n * 8 * 2.5) + 3;
 
-             if (!stack.isEmpty()) {
+                 if (!stack.isEmpty()) {
 
-                 context.drawItem(player, stack, o, m, n);
-                 context.drawStackOverlay(client.textRenderer, stack, o, m);
+                     context.drawItem(player, stack, o, m, n);
+                     context.drawStackOverlay(client.textRenderer, stack, o, m);
+                 }
+
              }
-
-         }
          } else {
              int l = player.getArmor();
              if (l > 0) {
@@ -107,7 +102,7 @@ public class InGameHudMixin {
 
          MinecraftClient client = MinecraftClient.getInstance();
          ClientPlayerEntity player = client.player;
-
+         assert client.player != null;
          boolean clock = player.getMainHandStack().isOf(Items.CLOCK);
          boolean compass = player.getMainHandStack().isOf(Items.COMPASS);
          if (!clock && !compass) {
@@ -116,13 +111,13 @@ public class InGameHudMixin {
          }
 
          if (clock||compass) {
-             String string = "";
+             String string;
              if (clock) {
                  int time = (int) ((player.getEntityWorld().getTimeOfDay()+6000)%24000);
                  int hour = time/1000;
                  int min = ((time%1000)*60)/1000;
 
-
+                 assert client.world != null;
                  MoonPhase moonPhase =client.world.getEnvironmentAttributes().getAttributeValue(EnvironmentAttributes.MOON_PHASE_VISUAL, player.getBlockPos());
                  int moon = moonPhase.getIndex();
                  Text textMoonPhase = Text.translatable("world.moon." + names[moon]);

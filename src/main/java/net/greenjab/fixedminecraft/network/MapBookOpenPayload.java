@@ -1,14 +1,14 @@
 package net.greenjab.fixedminecraft.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
 
 public record MapBookOpenPayload(ItemStack itemStack) implements CustomPayload {
-    public static final Id<MapBookOpenPayload> PACKET_ID = new Id<>(Identifier.of("fixedminecraft", "map_book_open"));
+    public static final Id<MapBookOpenPayload> PACKET_ID = new Id<>(FixedMinecraft.id("map_book_open"));
 
     public static final PacketCodec<RegistryByteBuf, MapBookOpenPayload> PACKET_CODEC = PacketCodec.tuple(
             ItemStack.PACKET_CODEC,

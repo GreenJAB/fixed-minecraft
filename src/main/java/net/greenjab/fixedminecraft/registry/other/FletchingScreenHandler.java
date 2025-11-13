@@ -11,7 +11,6 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
-import net.minecraft.recipe.book.RecipeBookType;
 import net.minecraft.screen.CraftingScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -40,7 +39,6 @@ public class FletchingScreenHandler extends CraftingScreenHandler {
 
     @Override
     protected void addInputSlots(int x, int y) {
-        /** Setting max to 1 as it causes issues if more */
         this.addSlot(new Slot(this.craftingInventory, 0, x, y){
             @Override public boolean canInsert(ItemStack stack) {
                 if (stack == null) return false;

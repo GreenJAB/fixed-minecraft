@@ -57,7 +57,7 @@ public class PlayerEntityMixin {
             ItemEnchantmentsComponent enchantments = PE.getMainHandStack().getEnchantments();
             int i = 0;
             for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
-                if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                if (entry.getKey().isPresent() && entry.getKey().get().equals(Enchantments.IMPALING)) {
                     i = enchantments.getLevel(entry);
                 }
             }

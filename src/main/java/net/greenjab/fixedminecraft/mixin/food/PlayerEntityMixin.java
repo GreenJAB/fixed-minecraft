@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;

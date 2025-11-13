@@ -19,6 +19,7 @@ import java.awt.*;
 @Mixin(AnvilScreen.class)
 public class AnvilScreenMixin {
 
+    @Unique
     int cap = 0;
 
     @ModifyConstant(method = "drawForeground", constant = @Constant(intValue = 40, ordinal = 0))

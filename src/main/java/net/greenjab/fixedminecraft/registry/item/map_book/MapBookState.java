@@ -49,7 +49,6 @@ public class MapBookState extends PersistentState {
     }
 
     public MapBookState(ArrayList<Integer> ids, ArrayList<MapBookPlayer> players, MapBookPlayer marker) {
-        mapIDs.clear();
         mapIDs.addAll(ids);
         this.players.clear();
         this.players.addAll(players);

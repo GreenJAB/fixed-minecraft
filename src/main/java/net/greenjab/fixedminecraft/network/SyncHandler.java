@@ -19,7 +19,7 @@ public class SyncHandler
         MapPositionRequestPayload.register();
     }
 
-    private static final Map<UUID, Float> lastSaturationLevels = new HashMap<UUID, Float>();
+    private static final Map<UUID, Float> lastSaturationLevels = new HashMap<>();
 
     public static void onPlayerUpdate(ServerPlayerEntity player)
     {

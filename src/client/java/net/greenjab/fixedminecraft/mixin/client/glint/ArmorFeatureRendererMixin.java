@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.mixin.client.glint;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
@@ -18,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /** Credit: Pepperoni-Jabroni */
 @Mixin(ArmorFeatureRenderer.class)
-public abstract class ArmorFeatureRendererMixin <S extends BipedEntityRenderState, M extends BipedEntityModel<S>, A extends BipedEntityModel<S>> extends FeatureRenderer<S, M> {
+public abstract class ArmorFeatureRendererMixin <S extends BipedEntityRenderState, M extends BipedEntityModel<S>> extends FeatureRenderer<S, M> {
 
     public ArmorFeatureRendererMixin(FeatureRendererContext<S, M> context) {
         super(context);

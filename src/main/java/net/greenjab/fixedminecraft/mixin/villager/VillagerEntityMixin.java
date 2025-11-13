@@ -27,11 +27,9 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BiomeTags;
 import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
@@ -354,15 +352,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         for (VillagerEntity villager2 : list) {
             if (villager2 != villagerEntity) {
                 if (villager2.getVillagerData().profession().getIdAsString().contains(VillagerProfession.LIBRARIAN.getValue().toString())) {
-                    ItemStack eBook = ItemStack.EMPTY;
-                    if (villager2.getOffers().size() >= 10) {
-                        if (villager2.getOffers().get(8).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
-                            eBook = villager2.getOffers().get(8).getSellItem();
-                        }
-                        else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
-                            eBook = villager2.getOffers().get(9).getSellItem();
-                        }
-                    }
+                    ItemStack eBook = getBook(villager2);
                     if (eBook.isOf(Items.ENCHANTED_BOOK)) {
                         for (RegistryEntry<Enchantment> e : EnchantmentHelper.getEnchantments(eBook).getEnchantments()) {
                             if (possibleEnchantCount.containsKey(e)) {
@@ -406,6 +396,20 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         }
 
         return new EnchantedBookFactory(itemStack, l, 30);
+    }
+
+    @Unique
+    private static ItemStack getBook(VillagerEntity villager2) {
+        ItemStack eBook = ItemStack.EMPTY;
+        if (villager2.getOffers().size() >= 10) {
+            if (villager2.getOffers().get(8).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                eBook = villager2.getOffers().get(8).getSellItem();
+            }
+            else if (villager2.getOffers().get(9).getSellItem().isOf(Items.ENCHANTED_BOOK)) {
+                eBook = villager2.getOffers().get(9).getSellItem();
+            }
+        }
+        return eBook;
     }
 
     @Unique

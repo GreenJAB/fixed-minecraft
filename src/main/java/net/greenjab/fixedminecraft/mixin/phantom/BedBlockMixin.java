@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
 import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
@@ -23,7 +23,7 @@ public class BedBlockMixin {
     private void notTired(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
                           CallbackInfoReturnable<ActionResult> cir){
         if (((ServerWorld)world).getGameRules().getValue(GameruleRegistry.Insomnia_Sleep_Requirement)) {
-            if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) {
+            if (!player.hasStatusEffect(OtherRegistry.INSOMNIA)) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 cir.setReturnValue(ActionResult.SUCCESS);
             }

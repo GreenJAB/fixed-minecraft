@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.greenjab.fixedminecraft.map_book.MapBookScreen;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
@@ -11,7 +10,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.bar.LocatorBar;
-import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.resource.waypoint.WaypointStyleAsset;
 import net.minecraft.client.util.Window;
@@ -22,8 +20,6 @@ import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;
 import net.minecraft.item.map.MapState;
-import net.minecraft.scoreboard.Team;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
@@ -45,8 +41,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.Map;
-import java.util.Objects;
 
 import static net.minecraft.item.FilledMapItem.getMapState;
 
@@ -59,10 +53,6 @@ public class LocatorBarMixin {
     @Shadow
     @Final
     private static Identifier ARROW_UP;
-    @Unique
-    private static final Int2ObjectMap<Identifier> ARROWS = new Int2ObjectArrayMap<>(
-            Map.of(1, Identifier.ofVanilla("hud/locator_bar_arrow_up"), -1, Identifier.ofVanilla("hud/locator_bar_arrow_down"))
-    );
 
     @Inject(method = "renderAddons", at = @At(
             value = "INVOKE",
@@ -72,14 +62,15 @@ public class LocatorBarMixin {
     private void addBannerMarkers(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci){
         MinecraftClient client = MinecraftClient.getInstance();
         int i = getCenterY(client.getWindow());
+        assert client.world != null;
+        assert client.player != null;
+        assert client.getCameraEntity() != null;
         World world = client.getCameraEntity().getEntityWorld();
         TickManager tickManager = world.getTickManager();
-        EntityTickProgress entityTickProgress = /* method_73215 */ entityx -> tickCounter.getTickProgress(!tickManager.shouldSkipTick(entityx));
+        EntityTickProgress entityTickProgress = entityx -> tickCounter.getTickProgress(!tickManager.shouldSkipTick(entityx));
 
         client.player.networkHandler.getWaypointHandler().forEachWaypoint(client.getCameraEntity(), (waypoint) -> {
-            if (!(Boolean)waypoint.getSource().left().map((uuid) -> {
-                return uuid.equals(client.getCameraEntity().getUuid());
-            }).orElse(false)) {
+            if (!(Boolean)waypoint.getSource().left().map((uuid) -> uuid.equals(client.getCameraEntity().getUuid())).orElse(false)) {
                 if (waypoint.getConfig().style != WaypointStyles.DEFAULT) {
                     double d = waypoint.getRelativeYaw(world, client.gameRenderer.getCamera(), entityTickProgress);
                     if (!(d <= -61.0) && !(d > 60.0)) {
@@ -88,13 +79,9 @@ public class LocatorBarMixin {
                         WaypointStyleAsset waypointStyleAsset = client.getWaypointStyleAssetManager().get(config.style);
                         float f = MathHelper.sqrt((float) waypoint.squaredDistanceTo(client.getCameraEntity()));
                         Identifier identifier = waypointStyleAsset.getSpriteForDistance(f);
-                        int k = (Integer) config.color.orElseGet(() -> {
-                            return (Integer) waypoint.getSource().map((uuid) -> {
-                                return ColorHelper.withBrightness(ColorHelper.withAlpha(255, uuid.hashCode()), 0.9F);
-                            }, (name) -> {
-                                return ColorHelper.withBrightness(ColorHelper.withAlpha(255, name.hashCode()), 0.9F);
-                            });
-                        });
+                        int k =  config.color.orElseGet(() -> waypoint.getSource().map(
+                                (uuid) -> ColorHelper.withBrightness(ColorHelper.withAlpha(255, uuid.hashCode()), 0.9F),
+                                (name) -> ColorHelper.withBrightness(ColorHelper.withAlpha(255, name.hashCode()), 0.9F)));
                         int l = (int) (d * 173.0 / 2.0 / 60.0);
                         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier, j + l, i - 2, 9, 9, k);
                         TrackedWaypoint.Pitch pitch = waypoint.getPitch(world, client.gameRenderer, entityTickProgress);
@@ -236,18 +223,7 @@ public class LocatorBarMixin {
                                     int k = MathHelper.ceil((context.getScaledWindowWidth() - 9) / 2.0F);
                                     int m = (int) (a * 173.0 / 2.0 / 60.0);
 
-                                    int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
-                                    for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
-                                        if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
-                                            Team team = playerListEntry.getScoreboardTeam();
-                                            if (team != null) {
-                                                Formatting formatting = team.getColor();
-                                                if (formatting.isColor()) {
-                                                    color = (new Color(formatting.getColorValue().intValue()).hashCode());
-                                                }
-                                            }
-                                        }
-                                    }
+                                    int color = MapBookScreen.getColor(player, client);
                                     WaypointStyleAsset waypointStyleAsset = client.getWaypointStyleAssetManager().get(WaypointStyles.DEFAULT);
                                     Identifier identifier = waypointStyleAsset.getSpriteForDistance((float) dd);
                                     context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier,
@@ -267,11 +243,6 @@ public class LocatorBarMixin {
 
                                         context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, identifier2, k + m + 1, i + o, 7, 5);
                                     }
-
-                                    /*if (n != 0) {
-                                        int o = n < 0 ? 9 : -5;
-                                        context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, ARROWS.get(n), k + m + 1, i + o - 1, 7, 5);
-                                    }*/
                                 }
                             }
                         }
@@ -322,7 +293,7 @@ public class LocatorBarMixin {
     @Unique
     private ArrayList<MapStateData> getMapStates(ItemStack stack, World world) {
         ArrayList<MapStateData> list = new ArrayList<>();
-        MapBookState mapBookState = getMapBookState(stack, world);
+        MapBookState mapBookState = getMapBookState(stack);
 
         if (mapBookState != null) {
             for (int i : mapBookState.mapIDs) {
@@ -336,7 +307,7 @@ public class LocatorBarMixin {
     }
 
     @Unique
-    private MapBookState getMapBookState(ItemStack stack, World world) {
+    private MapBookState getMapBookState(ItemStack stack) {
         int id = getMapBookId(stack) ;
         if (id == -1) return null;
         return MapBookStateManager.INSTANCE.getClientMapBookState(id);

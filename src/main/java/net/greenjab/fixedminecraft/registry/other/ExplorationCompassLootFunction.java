@@ -8,16 +8,12 @@ import java.util.Optional;
 import java.util.Set;
 
 import net.greenjab.fixedminecraft.registry.ModTags;
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.component.type.LodestoneTrackerComponent;
-import net.minecraft.item.FilledMapItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.map.MapDecorationType;
-import net.minecraft.item.map.MapDecorationTypes;
-import net.minecraft.item.map.MapState;
 import net.minecraft.loot.condition.LootCondition;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.loot.context.LootContextParameters;
@@ -25,18 +21,13 @@ import net.minecraft.loot.function.ConditionalLootFunction;
 import net.minecraft.loot.function.ExplorationMapLootFunction;
 import net.minecraft.loot.function.LootFunction;
 import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.loot.function.LootFunctionTypes;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.StructureTags;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.context.ContextParameter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.village.TradeOffer;
-import net.minecraft.village.TradedItem;
 import net.minecraft.world.gen.structure.Structure;
 
 public class ExplorationCompassLootFunction extends ConditionalLootFunction {
@@ -79,7 +70,7 @@ public class ExplorationCompassLootFunction extends ConditionalLootFunction {
 
     @Override
     public LootFunctionType<ExplorationCompassLootFunction> getType() {
-        return StatusRegistry.EXPLORATION_COMPASS;
+        return OtherRegistry.EXPLORATION_COMPASS;
     }
 
     @Override

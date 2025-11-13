@@ -24,7 +24,7 @@ public class ClientPlayerEntityMixin {
     @Final
     protected MinecraftClient client;
 
-    @Inject(method = "canSprint()Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canSprint", at = @At("HEAD"), cancellable = true)
     private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
         PlayerEntity instance = (PlayerEntity)(Object)this;
         cir.setReturnValue(instance.hasVehicle() || instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);

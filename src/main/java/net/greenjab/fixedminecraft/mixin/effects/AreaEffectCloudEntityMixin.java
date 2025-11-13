@@ -85,7 +85,7 @@ public class AreaEffectCloudEntityMixin {
     private boolean lingerAddition(LivingEntity instance, StatusEffectInstance effect, Entity source) {
         if (instance.hasStatusEffect(effect.getEffectType())) {
             StatusEffectInstance current = instance.getStatusEffect(effect.getEffectType());
-            if (current.getAmplifier() == effect.getAmplifier()) {
+            if (current!=null && current.getAmplifier() == effect.getAmplifier()) {
                 return instance.addStatusEffect(new StatusEffectInstance(effect.getEffectType(), (int) (current.getDuration() + Math.ceil(effect.getDuration()/3.0)), effect.getAmplifier(), effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon()), source);
 
             }

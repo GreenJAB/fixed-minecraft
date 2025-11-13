@@ -5,7 +5,6 @@ import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
 import net.minecraft.client.item.ItemModelManager;
 import net.minecraft.client.render.item.ItemRenderState;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.HeldItemContext;

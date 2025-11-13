@@ -14,8 +14,6 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.FlowerbedBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.SnowBlock;
 import net.minecraft.block.enums.NoteBlockInstrument;
@@ -37,8 +35,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 import java.util.function.Function;
-
-import static net.minecraft.block.Blocks.IRON_BLOCK;
 
 @Mixin(Blocks.class)
 public class BlocksMixin {
@@ -64,7 +60,7 @@ public class BlocksMixin {
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from = @At( value = "FIELD",
                      target = "Lnet/minecraft/block/Blocks;STONE_BUTTON:Lnet/minecraft/block/Block;")))
     private static Block snow(String id, Function<AbstractBlock.Settings, Block> factory, AbstractBlock.Settings settings) {
-        return register("snow", NewSnowBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.WHITE).replaceable().notSolid().ticksRandomly().strength(0.1F).requiresTool().sounds(BlockSoundGroup.SNOW).blockVision(/* method_39537 */ (state, world, pos) -> (Integer)state.get(SnowBlock.LAYERS) >= 8).pistonBehavior(PistonBehavior.DESTROY));
+        return register("snow", NewSnowBlock::new, AbstractBlock.Settings.create().mapColor(MapColor.WHITE).replaceable().notSolid().ticksRandomly().strength(0.1F).requiresTool().sounds(BlockSoundGroup.SNOW).blockVision((state, world, pos) -> state.get(SnowBlock.LAYERS) >= 8).pistonBehavior(PistonBehavior.DESTROY));
     }
 
     @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/block/AbstractBlock$Settings;)Lnet/minecraft/block/Block;", ordinal = 0), slice = @Slice( from = @At( value = "FIELD",

@@ -8,7 +8,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.village.TradeOffer;
 import net.minecraft.village.TradeOffers;
 import net.minecraft.village.TradedItem;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 

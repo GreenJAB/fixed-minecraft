@@ -1,22 +1,16 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
-import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 /** Credit: Nettakrim */
@@ -30,6 +24,7 @@ public class HeldItemRendererMixin {
     private ItemStack sneakySwap(ItemStack original) {
         if (original.getItem() instanceof MapBookItem mapBookItem) {
             //pretend the map book is actually a filled map item, this ensures it renders properly, even when if offhand etc
+            assert client.player !=null;
             MapStateData nearestMap = mapBookItem.getNearestMap(original, client.world, client.player.getEntityPos());
             if (nearestMap == null) return original;
             ItemStack map = new ItemStack(Items.FILLED_MAP, 1);

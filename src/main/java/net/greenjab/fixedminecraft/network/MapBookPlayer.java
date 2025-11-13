@@ -3,11 +3,7 @@ package net.greenjab.fixedminecraft.network;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.map.MapBannerMarker;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.text.TextCodecs;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.Optional;
 

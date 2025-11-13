@@ -49,6 +49,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
+/** Credits: Laazuli*/
 @Mixin(EnchantmentScreenHandler.class)
 public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
@@ -145,7 +146,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 }
 
                 if (itemStackAtRandomSlot.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-                    if (itemStackAtRandomSlot.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==2) continue;
+                    if (itemStackAtRandomSlot.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==2) continue;
                 }
 
                 chosenItemStacks.add(itemStackAtRandomSlot);

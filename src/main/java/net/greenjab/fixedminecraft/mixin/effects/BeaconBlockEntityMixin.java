@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -87,7 +87,7 @@ public class BeaconBlockEntityMixin {
     @Unique
     private static Map<BlockState, RegistryEntry<StatusEffect>> newEffects = Map.of(
             Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
-            Blocks.REDSTONE_BLOCK.getDefaultState(), StatusRegistry.REACH,
+            Blocks.REDSTONE_BLOCK.getDefaultState(), OtherRegistry.REACH,
             Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION,
             Blocks.QUARTZ_BLOCK.getDefaultState(), StatusEffects.INVISIBILITY);
 

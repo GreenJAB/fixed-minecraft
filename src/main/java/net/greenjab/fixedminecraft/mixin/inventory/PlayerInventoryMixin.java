@@ -49,6 +49,7 @@ public abstract class PlayerInventoryMixin {
     private boolean tryBundle(ItemStack bundle, ItemStack item) {
         if ( !bundle.isEmpty() && bundle.getComponents().contains(DataComponentTypes.BUNDLE_CONTENTS)){
             BundleContentsComponent bundleComponent = bundle.get(DataComponentTypes.BUNDLE_CONTENTS);
+            assert bundleComponent!=null;
             for (int i = 0; i < bundleComponent.size();i++) {
                 ItemStack bundleStack = bundleComponent.get(i);
                 BundleContentsComponent.Builder builder = new BundleContentsComponent.Builder(bundleComponent);

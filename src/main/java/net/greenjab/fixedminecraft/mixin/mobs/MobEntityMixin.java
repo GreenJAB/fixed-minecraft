@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
 import net.greenjab.fixedminecraft.registry.ModTags;
@@ -90,14 +88,6 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
         ci.cancel();
     }
 
-   /* @ModifyExpressionValue(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
-    private boolean copperDurability(boolean original, @Local ItemStack itemStack) {
-        if (itemStack.getItem().getName().getLiteralString().toLowerCase().contains("copper")) {
-            return false;
-        }
-        return original;
-    }*/
-
     @Redirect(method = "dropEquipment", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isDamageable()Z"))
     private boolean copperDurability(ItemStack instance) {
         if (instance.isIn(ModTags.COPPER_ARMOR)) {
@@ -142,7 +132,7 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
         if (world.getDifficulty() == Difficulty.HARD) i = 2;
         if (this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) i = 3;
-        float h = i*3*gaussian();
+        float h = i*3*gaussian(random);
         increaseHealth(LE, h);
         increaseSpeed(random, LE, i);
     }
@@ -151,7 +141,7 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     private static void increaseSpeed(Random random, MobEntity LE, int i) {
         if (LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)!=null) {
             if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(
-                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian())));
+                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
         }
     }
 
@@ -177,8 +167,8 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     }
 
     @Unique
-    private static float gaussian(){
-        return (float)(Math.tan(0.87433408*Math.PI*(Math.random()-0.5f))/10.0f)+0.5f;
+    private static float gaussian(Random random){
+        return (float)(Math.tan(0.87433408*Math.PI*(random.nextFloat()-0.5f))/10.0f)+0.5f;
     }
 
     @Unique

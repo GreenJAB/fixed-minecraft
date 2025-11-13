@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.hud;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.util.IntPoint;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gl.RenderPipelines;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 
 import java.util.Random;
@@ -26,28 +26,27 @@ public class HUDOverlayHandler
     public static void onRender(DrawContext context) {
         MinecraftClient mc = MinecraftClient.getInstance();
         PlayerEntity player = mc.player;
+        assert player != null;
         HungerManager stats = player.getHungerManager();
 
         int top = mc.getWindow().getScaledHeight() - FOOD_BAR_HEIGHT;
-        int left = mc.getWindow().getScaledWidth() / 2 - 91;
         int right = mc.getWindow().getScaledWidth() / 2 + 91;
 
-        generateBarOffsets(top, left, right, mc.inGameHud.getTicks(), player);
+        generateBarOffsets(top, right, mc.inGameHud.getTicks(), player);
 
         HUDOverlayEvent.Saturation saturationRenderEvent = new HUDOverlayEvent.Saturation(stats.getSaturationLevel(), right, top, context);
 
         if (!saturationRenderEvent.isCanceled) {
-            drawSaturationOverlay(saturationRenderEvent, mc);
+            drawSaturationOverlay(saturationRenderEvent);
         }
 
     }
 
-    private static void drawSaturationOverlay(DrawContext context, Float saturationLevel, MinecraftClient mc, int right, int top) {
+    private static void drawSaturationOverlay(DrawContext context, Float saturationLevel, int right, int top) {
         float modifiedSaturation = Math.max(0.0f, Math.min(saturationLevel, 20.0f));
         int endSaturationBar = (int) Math.ceil(modifiedSaturation / 2);
         int iconSize = 9;
         for (int i = 0; i < endSaturationBar; i++) {
-            // gets the offset that needs to be render of icon
             IntPoint offset = foodBarOffsets.get(i);
             if (offset == null)
                 continue;
@@ -66,15 +65,15 @@ public class HUDOverlayHandler
                 u = 2f * iconSize;
             else if (effectiveSaturationOfBar > .25)
                 u = 1f * iconSize;
-            context.drawTexture(RenderPipelines.GUI_TEXTURED, Identifier.of("fixedminecraft", "textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
+            context.drawTexture(RenderPipelines.GUI_TEXTURED, FixedMinecraft.id("textures/icons.png"), x, y, u, v, iconSize, iconSize, 256, 256,  ColorHelper.getWhite(1F));
         }
     }
 
-    private static void drawSaturationOverlay(HUDOverlayEvent.Saturation event, MinecraftClient mc) {
-        drawSaturationOverlay(event.context, event.saturationLevel, mc, event.x, event.y);
+    private static void drawSaturationOverlay(HUDOverlayEvent.Saturation event) {
+        drawSaturationOverlay(event.context, event.saturationLevel, event.x, event.y);
     }
 
-    private static void generateBarOffsets(int top, int left, int right, int ticks, PlayerEntity player) {
+    private static void generateBarOffsets(int top, int right, int ticks, PlayerEntity player) {
         int preferFoodBars = 10;
         var shouldAnimatedFood = false;
         HungerManager hungerManager = player.getHungerManager();

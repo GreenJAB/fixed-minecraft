@@ -2,21 +2,13 @@ package net.greenjab.fixedminecraft.registry.other;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.greenjab.fixedminecraft.network.MapBookPlayer;
-import net.minecraft.datafixer.DataFixTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class BackupRespawn {
-    public String name = "";
+    public String name;
     public ArrayList<ServerPlayerEntity.Respawn> respawns = new ArrayList<>();
 
     public static final Codec<BackupRespawn> CODEC = RecordCodecBuilder.create(
@@ -36,7 +28,6 @@ public class BackupRespawn {
 
     public BackupRespawn(String name, ArrayList<ServerPlayerEntity.Respawn> respawns){
         this.name = name;
-        this.respawns.clear();
         this.respawns.addAll(respawns);
     }
 

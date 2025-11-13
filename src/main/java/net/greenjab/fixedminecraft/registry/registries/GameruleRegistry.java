@@ -5,7 +5,6 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.serialization.Codec;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.minecraft.SharedConstants;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureSet;
@@ -41,7 +40,7 @@ public class GameruleRegistry {
                 defaultValue,
                 FeatureSet.empty(),
                 GameRuleVisitor::visitBoolean,
-                /* method_76193 */ value -> value ? 1 : 0
+                value -> value ? 1 : 0
         );
     }
 

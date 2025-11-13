@@ -50,11 +50,10 @@ public abstract class TridentEntityMixin {
     ))
     private float impalingEffectsWetMobs(float original, @Local(ordinal = 0) Entity entity) {
         if (entity instanceof LivingEntity) {
-            //int i = EnchantmentHelper.getLevel(Enchantments.IMPALING, PE.getMainHandStack());
             ItemEnchantmentsComponent enchantments = this.getWeaponStack().getEnchantments();
             int i = 0;
             for (RegistryEntry<Enchantment> entry : enchantments.getEnchantments()) {
-                if (entry.getKey().get().equals(Enchantments.IMPALING)) {
+                if (entry.getKey().isPresent() && entry.getKey().get().equals(Enchantments.IMPALING)) {
                     i = enchantments.getLevel(entry);
                 }
             }

@@ -1,19 +1,14 @@
 package net.greenjab.fixedminecraft.render;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.RenderPipelines;
-import net.minecraft.client.render.BuiltBuffer;
 import net.minecraft.client.render.LayeringTransform;
 import net.minecraft.client.render.OutputTarget;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.RenderSetup;
 import net.minecraft.client.render.TextureTransform;
-import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.BufferAllocator;
 import net.minecraft.util.Identifier;
 

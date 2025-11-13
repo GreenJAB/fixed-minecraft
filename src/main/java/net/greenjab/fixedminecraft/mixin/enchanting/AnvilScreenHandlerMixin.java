@@ -259,7 +259,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             if (!this.player.getAbilities().creativeMode) {
                 boolean isSuper = false;
                 if (outputItemStack.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-                    isSuper = outputItemStack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+                    isSuper = outputItemStack.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==1;
                 }
 
                 if (outputItemStack.isIn(ItemTags.PIGLIN_LOVED)) {
@@ -340,7 +340,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 if (netherite) {
                     boolean isSuper = false;
                     if (stack.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-                        isSuper = stack.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+                        isSuper = stack.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==1;
                     }
                     if (isSuper) {
                         Criteria.CONSUME_ITEM.trigger(SPE, ItemRegistry.NETHERITE_ANVIL.getDefaultStack());

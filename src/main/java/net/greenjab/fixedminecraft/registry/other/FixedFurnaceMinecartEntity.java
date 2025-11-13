@@ -12,7 +12,6 @@ import net.minecraft.entity.vehicle.HopperMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
@@ -52,7 +51,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 train.clear();
                 train.add(this);
                 for (UUID uuid : uuids) {
-                    Entity entity = ((ServerWorld) this.getEntityWorld()).getEntity(uuid);
+                    Entity entity = this.getEntityWorld().getEntity(uuid);
                     if (entity instanceof AbstractMinecartEntity minecart) {
                         BlockPos var11 = minecart.getRailOrMinecartPos();
                         BlockState blockState = this.getEntityWorld().getBlockState(var11);

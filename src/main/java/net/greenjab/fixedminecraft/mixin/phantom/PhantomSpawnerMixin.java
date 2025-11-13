@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.phantom;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
@@ -31,7 +31,7 @@ public class PhantomSpawnerMixin {
     @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/ServerStatHandler;getStat(Lnet/minecraft/stat/Stat;)I"))
     private int phantomSpawnByEffect(ServerStatHandler instance, Stat<?> stat,
                                      @Local ServerPlayerEntity serverPlayerEntity) {
-        if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSOMNIA)) return 0;
+        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
         return 720000;
     }
 
@@ -40,8 +40,8 @@ public class PhantomSpawnerMixin {
                                      @Local ServerPlayerEntity serverPlayerEntity,
                                      @Local LocalDifficulty localDifficulty,
                                      @Local Random random) {
-        if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSOMNIA)) return 0;
-        return instance.getId() + serverPlayerEntity.getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier()*2;
+        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
+        return instance.getId() + serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier()*2;
     }
 
     @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(III)I", shift = At.Shift.AFTER))
@@ -50,8 +50,8 @@ public class PhantomSpawnerMixin {
         ServerStatHandler serverStatHandler = serverPlayerEntity.getStatHandler();
         int j = MathHelper.clamp(serverStatHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
         if (j<72000) return;
-        if (!serverPlayerEntity.hasStatusEffect(StatusRegistry.INSOMNIA)) {
-            serverPlayerEntity.addStatusEffect(new StatusEffectInstance(StatusRegistry.INSOMNIA, -1, 0, true, false, true));
+        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) {
+            serverPlayerEntity.addStatusEffect(new StatusEffectInstance(OtherRegistry.INSOMNIA, -1, 0, true, false, true));
             serverPlayerEntity.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
         }
     }

@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.google.common.collect.Lists;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.greenjab.fixedminecraft.FixedMinecraft;
@@ -9,10 +8,8 @@ import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -25,8 +22,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.AbstractList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -39,8 +34,8 @@ public class EnchantmentHelperMixin {
                                                   CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
         List<EnchantmentLevelEntry> list = Lists.newArrayList();
         boolean bl = stack.isOf(Items.BOOK);
-        possibleEnchantments.filter(/* method_60143 */ enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
-                .forEach(/* method_60106 */ enchantmentx -> {
+        possibleEnchantments.filter( enchantment -> (enchantment.value()).isPrimaryItem(stack) || bl)
+                .forEach( enchantmentx -> {
                     Enchantment enchantment = enchantmentx.value();
                     for (int j = enchantment.getMaxLevel(); j >= enchantment.getMinLevel(); j--) {
                         int enchPower = FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentx, j);

@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.util.math.Direction;
@@ -21,8 +20,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Iterator;
 
 @Mixin(HandledScreen.class)
 public abstract class HandledScreenMixin<T extends ScreenHandler> {
@@ -39,7 +36,9 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
     @Inject(method = "mouseScrolled", at = @At(value = "HEAD"), cancellable = true)
     public void addHotBarScoller(double mouseX, double mouseY, double horizontal, double vertical,
                                  CallbackInfoReturnable<Boolean> cir) {
-        HandledScreen handledScreen = (HandledScreen)(Object)this;
+        MinecraftClient client = MinecraftClient.getInstance();
+        assert client.player != null;
+        HandledScreen<?> handledScreen = (HandledScreen<?>)(Object)this;
         if (MinecraftClient.getInstance().player.isSpectator()) return;
         if (!(handledScreen instanceof InventoryScreen || handledScreen instanceof CreativeInventoryScreen)) return;
         if ( handledScreen instanceof CreativeInventoryScreen creativeInventoryScreen && !creativeInventoryScreen.isInventoryTabSelected()) return;
@@ -47,16 +46,16 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
         final Direction direction = Math.signum(vertical) > 0
                 ? Direction.UP : Direction.DOWN;
         if (handler.getCursorStack().isEmpty()) {
-            if (InputUtil.isKeyPressed(MinecraftClient.getInstance().getWindow(), HotbarCycler.getCycleKeyBinding()
+            if (InputUtil.isKeyPressed(client.getWindow(), HotbarCycler.getCycleKeyBinding()
                     .getDefaultKey()
                     .getCode())) {
-                if (MinecraftClient.getInstance().isShiftPressed()) {
-                    HotbarCycler.shiftRows(MinecraftClient.getInstance(), direction);
+                if (client.isShiftPressed()) {
+                    HotbarCycler.shiftRows(client, direction);
                 }
                 else {
                     int i = getSlotX();
                     if (i!=-1) {
-                        HotbarCycler.shiftSingle(MinecraftClient.getInstance(), i, direction);
+                        HotbarCycler.shiftSingle(client, i, direction);
                     }
                 }
                 cir.setReturnValue(true);
@@ -71,7 +70,9 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
             ItemStack test = Items.KNOWLEDGE_BOOK.getDefaultStack();
             focusedSlot.setStack(test);
             int i = 0;
-            for (ItemStack stack : MinecraftClient.getInstance().player.getInventory().getMainStacks()) {
+            MinecraftClient client = MinecraftClient.getInstance();
+            assert client.player != null;
+            for (ItemStack stack : client.player.getInventory().getMainStacks()) {
                 if (stack == focusedSlot.getStack()) {
                     focusedSlot.setStack(holder);
                     return i%9;

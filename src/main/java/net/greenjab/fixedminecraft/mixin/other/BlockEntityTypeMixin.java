@@ -8,8 +8,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.HangingSignBlockEntity;
 import net.minecraft.block.entity.ShelfBlockEntity;
 import net.minecraft.block.entity.SignBlockEntity;
-import org.slf4j.Logger;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,8 +16,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 
 
 @Mixin(BlockEntityType.class)
-public abstract class BlockEntityTypeMixin <T extends SignBlockEntity>{
-
+public abstract class BlockEntityTypeMixin{
 
     @Shadow
     private static <T extends BlockEntity> BlockEntityType<T> create(String id, BlockEntityType.BlockEntityFactory<? extends T> factory,
@@ -68,6 +65,4 @@ public abstract class BlockEntityTypeMixin <T extends SignBlockEntity>{
                 BlockRegistry.AZALEA_SHELF
         );
     }
-
-
 }

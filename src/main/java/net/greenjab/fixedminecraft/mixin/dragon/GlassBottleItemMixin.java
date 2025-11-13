@@ -33,7 +33,7 @@ public class GlassBottleItemMixin {
             if (enderDragonFight!=null) {
                UUID uuid = enderDragonFight.getDragonUuid();
                Entity entity = serverWorld.getEntity(uuid);
-               if (entity.getCommandTags().contains("omen")) {
+               if (entity!=null && entity.getCommandTags().contains("omen")) {
                    user.getInventory().insertStack(Items.DRAGON_BREATH.getDefaultStack());
                }
             }

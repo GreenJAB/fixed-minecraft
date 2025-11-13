@@ -18,6 +18,7 @@ public class RecipeBookWidgetMixin  {
 
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void nofletchingTableBook(Click click, boolean doubleClick, CallbackInfoReturnable<Boolean> cir) {
+        assert this.client.currentScreen!=null;
         if (this.client.currentScreen.getTitle().toString().contains("fletch")) {
             cir.setReturnValue(false);
             cir.cancel();

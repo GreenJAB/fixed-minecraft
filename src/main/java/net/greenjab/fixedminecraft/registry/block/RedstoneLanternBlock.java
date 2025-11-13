@@ -2,12 +2,9 @@ package net.greenjab.fixedminecraft.registry.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.AbstractFireBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.LanternBlock;
-import net.minecraft.block.RedstoneTorchBlock;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -19,10 +16,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
-import net.minecraft.world.WorldView;
 import net.minecraft.world.block.OrientationHelper;
 import net.minecraft.world.block.WireOrientation;
-import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -32,9 +27,7 @@ import java.util.WeakHashMap;
 public class RedstoneLanternBlock extends LanternBlock {
     public static final MapCodec<RedstoneLanternBlock> CODEC = createCodec(RedstoneLanternBlock::new);
     public static final BooleanProperty LIT = Properties.LIT;
-    //public static final BooleanProperty HANGING = LanternBlock.HANGING;
-    private static final int SCHEDULED_TICK_DELAY = 2;
-    private static final Map<BlockView, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap();
+    private static final Map<BlockView, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap<>();
 
     @Override
     public MapCodec<? extends RedstoneLanternBlock> getCodec() {

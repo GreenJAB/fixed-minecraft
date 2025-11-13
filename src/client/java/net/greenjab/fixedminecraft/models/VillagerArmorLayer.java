@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 
 /** Credit: Viola-Siemens */
 public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRenderState, M extends EntityModel<S>, A extends EntityModel<S> & HumanoidModel> extends FeatureRenderer<S, M> {
-    //private final EquipmentModelData<A> Model;
     private final A Model_HEAD;
     private final A Model_CHEST;
     private final A Model_LEGS;

@@ -21,7 +21,7 @@ public class EnchantGlint {
         if (target == null || target.isEmpty())  return false;
 
         if (target.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-             return target.getComponents().get(DataComponentTypes.REPAIR_COST).intValue() ==1;
+             return target.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==1;
         }
         return false;
     }
@@ -67,12 +67,6 @@ public class EnchantGlint {
     public static RenderLayer getGlintTranslucent(boolean green) {
         if (green) return GlintRenderLayer.translucentGlintColor;
         else return RenderLayers.glintTranslucent();
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static RenderLayer getArmorEntityGlint(boolean green) {
-        if (green) return GlintRenderLayer.armorEntityGlintColor;
-        else return RenderLayers.armorEntityGlint();
     }
 
 }

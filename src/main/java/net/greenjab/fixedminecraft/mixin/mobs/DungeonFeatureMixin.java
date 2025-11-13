@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(DungeonFeature.class)
-public class DungeonFeatureMixin <T extends EntityType<?>> {
+public class DungeonFeatureMixin {
     @ModifyExpressionValue(method = "generate", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/gen/feature/DungeonFeature;getMobSpawnerEntity(Lnet/minecraft/util/math/random/Random;)Lnet/minecraft/entity/EntityType;"))
     private EntityType<?> biomeVariant(EntityType<?> original, @Local BlockPos blockPos, @Local StructureWorldAccess structureWorldAccess) {
         RegistryEntry<Biome> biome =  structureWorldAccess.getBiome(blockPos);

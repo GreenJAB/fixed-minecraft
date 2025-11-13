@@ -1,15 +1,12 @@
 package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec;
-import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FallingBlock;
-import net.minecraft.block.IceBlock;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.FallingBlockEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.tag.BlockTags;
@@ -23,17 +20,14 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.LightType;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 import org.jetbrains.annotations.Nullable;
 
 public class NewSnowBlock extends FallingBlock {
     public static final MapCodec<NewSnowBlock> CODEC = createCodec(NewSnowBlock::new);
-    public static final int MAX_LAYERS = 8;
     public static final IntProperty LAYERS = Properties.LAYERS;
-    private static final VoxelShape[] SHAPES_BY_LAYERS = Block.createShapeArray(8, /* method_66467 */ layers -> Block.createColumnShape(16.0, 0.0, layers * 2));
-    public static final int field_31248 = 5;
+    private static final VoxelShape[] SHAPES_BY_LAYERS = Block.createShapeArray(8, layers -> Block.createColumnShape(16.0, 0.0, layers * 2));
 
     @Override
     public MapCodec<NewSnowBlock> getCodec() {
@@ -47,7 +41,7 @@ public class NewSnowBlock extends FallingBlock {
 
     @Override
     protected boolean canPathfindThrough(BlockState state, NavigationType type) {
-        return type == NavigationType.LAND ? (Integer)state.get(LAYERS) < 5 : false;
+        return type == NavigationType.LAND && state.get(LAYERS) < 5;
     }
 
     @Override
@@ -86,9 +80,7 @@ public class NewSnowBlock extends FallingBlock {
         if (blockState.isIn(BlockTags.SNOW_LAYER_CANNOT_SURVIVE_ON)) {
             return false;
         } else {
-            return blockState.isIn(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON)
-                    ? true
-                    : Block.isFaceFullSquare(blockState.getCollisionShape(world, pos.down()), Direction.UP) || blockState.isOf(this) && (Integer)blockState.get(LAYERS) == 8;
+            return blockState.isIn(BlockTags.SNOW_LAYER_CAN_SURVIVE_ON) || Block.isFaceFullSquare(blockState.getCollisionShape(world, pos.down()), Direction.UP) || blockState.isOf(this) && blockState.get(LAYERS) == 8;
         }
     }
 
@@ -123,11 +115,11 @@ public class NewSnowBlock extends FallingBlock {
 
     @Override
     protected boolean canReplace(BlockState state, ItemPlacementContext context) {
-        int i = (Integer)state.get(LAYERS);
+        int i = state.get(LAYERS);
         if (!context.getStack().isOf(this.asItem()) || i >= 8) {
             return i == 1;
         } else {
-            return context.canReplaceExisting() ? context.getSide() == Direction.UP : true;
+            return !context.canReplaceExisting() || context.getSide() == Direction.UP;
         }
     }
 
@@ -136,7 +128,7 @@ public class NewSnowBlock extends FallingBlock {
     public BlockState getPlacementState(ItemPlacementContext ctx) {
         BlockState blockState = ctx.getWorld().getBlockState(ctx.getBlockPos());
         if (blockState.isOf(this)) {
-            int i = (Integer)blockState.get(LAYERS);
+            int i = blockState.get(LAYERS);
             return blockState.with(LAYERS, Math.min(8, i + 1));
         } else {
             return super.getPlacementState(ctx);

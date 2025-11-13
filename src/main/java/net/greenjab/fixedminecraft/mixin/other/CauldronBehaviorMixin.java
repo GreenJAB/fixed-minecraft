@@ -39,10 +39,6 @@ public interface CauldronBehaviorMixin {
         map.put(Items.COMPASS, CauldronBehaviorMixin::cleanCompass);
 
         map.put(Items.WHITE_BUNDLE, CauldronBehaviorMixin::cleanBundle);
-        //map.put(Items.WHITE_WOOL, CauldronBehaviorMixin::cleanWool);
-        //map.put(Items.WHITE_CARPET, CauldronBehaviorMixin::cleanCarpet);
-        //map.put(Items.WHITE_BED, CauldronBehaviorMixin::cleanBed);
-       // map.put(Items.WHITE_HARNESS, CauldronBehaviorMixin::cleanHarness);
         map.put(Items.WHITE_STAINED_GLASS, CauldronBehaviorMixin::cleanGlass);
         map.put(Items.WHITE_STAINED_GLASS_PANE, CauldronBehaviorMixin::cleanGlassPane);
         map.put(Items.WHITE_TERRACOTTA, CauldronBehaviorMixin::cleanTerracotta);

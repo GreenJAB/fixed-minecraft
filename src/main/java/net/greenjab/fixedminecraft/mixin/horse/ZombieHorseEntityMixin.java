@@ -21,12 +21,14 @@ public abstract class ZombieHorseEntityMixin {
     @Inject(method = "initAttributes", at = @At(value = "TAIL"))
     private void randomisedAttributes(Random random, CallbackInfo ci){
         ZombieHorseEntity ZHE = (ZombieHorseEntity)(Object)this;
-        EntityAttributeInstance var10000 = ZHE.getAttributeInstance(EntityAttributes.MAX_HEALTH);
+        EntityAttributeInstance attrribute = ZHE.getAttributeInstance(EntityAttributes.MAX_HEALTH);
         Objects.requireNonNull(random);
-        var10000.setBaseValue(getChildHealthBonus(random::nextInt));
-        var10000 = ZHE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
+        Objects.requireNonNull(attrribute);
+        attrribute.setBaseValue(getChildHealthBonus(random::nextInt));
+        attrribute = ZHE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED);
         Objects.requireNonNull(random);
-        var10000.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
+        Objects.requireNonNull(attrribute);
+        attrribute.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
     }
 
     @Unique

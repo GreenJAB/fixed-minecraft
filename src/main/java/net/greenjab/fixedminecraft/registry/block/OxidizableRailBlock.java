@@ -28,8 +28,6 @@ public class OxidizableRailBlock extends CopperRailBlock implements Oxidizable {
         return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
 
-    public Oxidizable.OxidationLevel getDegradationLevel() { return oxidationLevel; }
-
     @Override
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
     this.tickDegradation(state, world, pos, random);}

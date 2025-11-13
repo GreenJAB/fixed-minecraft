@@ -4,14 +4,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.render.EnchantGlint;
-import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.command.OrderedRenderCommandQueue;
 import net.minecraft.client.render.entity.equipment.EquipmentModel;
 import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.DonkeyEntityModel;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.client.render.entity.model.LoadedEntityModels;
 import net.minecraft.client.render.entity.state.DonkeyEntityRenderState;
@@ -22,8 +20,6 @@ import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.equipment.EquipmentAsset;
-import net.minecraft.registry.RegistryKey;
 
 @Environment(EnvType.CLIENT)
 public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRenderState, DonkeyEntityModel> {
@@ -71,13 +67,13 @@ public class MuleArmorFeatureRenderer extends FeatureRenderer<DonkeyEntityRender
                        float limbDistance) {
         ItemStack itemStack = getArmorData(donkeyEntityRenderState);// state.;
         EnchantGlint.setTargetStack(itemStack);
-        EquippableComponent equippableComponent = (EquippableComponent)itemStack.get(DataComponentTypes.EQUIPPABLE);
-        if (equippableComponent != null && !equippableComponent.assetId().isEmpty()) {
-            EntityModel entityModel = donkeyEntityRenderState.baby ? this.babyModel : this.model;
+        EquippableComponent equippableComponent = itemStack.get(DataComponentTypes.EQUIPPABLE);
+        if (equippableComponent != null && equippableComponent.assetId().isPresent()) {
+            DonkeyEntityModel entityModel = donkeyEntityRenderState.baby ? this.babyModel : this.model;
             this.equipmentRenderer
                     .render(
                             EquipmentModel.LayerType.HORSE_BODY,
-                            (RegistryKey<EquipmentAsset>)equippableComponent.assetId().get(),
+                            equippableComponent.assetId().get(),
                             entityModel,
                             donkeyEntityRenderState,
                             itemStack,

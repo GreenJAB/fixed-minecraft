@@ -5,10 +5,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.block.AbstractCauldronBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.BlockPlacementDispenserBehavior;
-import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -18,9 +15,8 @@ import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -44,9 +40,8 @@ public abstract class BlockPlacementDispenserBehaviorMixin {
         if (!(blockState.getBlock() instanceof AbstractCauldronBlock cauldron)) return;
         if (cauldron.behaviorMap.map().containsKey(stack.getItem())) {
             PlayerEntity p = new PlayerEntity(world, new GameProfile(UUID.randomUUID(), "abc")) {
-                @Nullable
                 @Override
-                public GameMode getGameMode() {
+                public @NotNull GameMode getGameMode() {
                     return GameMode.SURVIVAL;
                 }
             };

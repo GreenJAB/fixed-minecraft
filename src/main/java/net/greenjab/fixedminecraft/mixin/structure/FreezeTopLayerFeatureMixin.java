@@ -33,7 +33,7 @@ public abstract class FreezeTopLayerFeatureMixin {
 
             BlockState blockStateTest = structureWorldAccess.getBlockState(mutable);
             if (blockStateTest.isOf(Blocks.SNOW) || blockStateTest.isIn(BlockTags.LEAVES)) {
-
+                //skip
             } else if (blockStateTest.isOf(Blocks.AIR)) {
                 BlockPos mutable2 = mutable02.down(i);
                 if (biome.canSetIce(structureWorldAccess, mutable2, false)) {

@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.map_book;
 
-import net.greenjab.fixedminecraft.mixin.map_book.MapStateMixin;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
@@ -14,16 +13,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;
-import net.minecraft.item.map.MapDecorationType;
-import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
@@ -34,13 +29,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.joml.Matrix3x2fStack;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Optional;
 
 /** Credit: Nettakrim */
 public class MapBookScreen extends Screen {
@@ -56,7 +49,8 @@ public class MapBookScreen extends Screen {
     }
 
     @Override public void init() {
-        if (client != null && client.player != null) {
+        assert client != null;
+        if (client.player != null) {
             x = (float) -client.player.getX();
             y = (float) -client.player.getZ();
         }
@@ -68,7 +62,7 @@ public class MapBookScreen extends Screen {
             }
         }
 
-        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> { this.close();})
+        addDrawableChild(ButtonWidget.builder(ScreenTexts.DONE, button -> this.close())
                 .dimensions(width / 2 - 100, height -40, 200, 20).build());
     }
 
@@ -77,6 +71,9 @@ public class MapBookScreen extends Screen {
     }
 
     @Override public boolean mouseClicked(Click click, boolean doubleClick) {
+        assert client.world != null;
+        assert client.player != null;
+        assert MinecraftClient.getInstance().getNetworkHandler() != null;
         if (click.button() == 0 && client.isShiftPressed()) {
             int id = getMapBookId(item);
             if (id != -1) {
@@ -114,8 +111,8 @@ public class MapBookScreen extends Screen {
 
     @Override public boolean mouseDragged(Click click, double deltaX, double deltaY) {
         if (click.button() < 2 && !client.isShiftPressed()) {
-            x += deltaX;
-            y += deltaY;
+            x += (float) deltaX;
+            y += (float) deltaY;
         }
         return super.mouseDragged(click, deltaX, deltaY);
     }
@@ -190,7 +187,6 @@ public class MapBookScreen extends Screen {
     }
 
     private void renderPlayerIcon(DrawContext context, MapBookPlayer player, boolean thisPlayer) {
-
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
         float x = (float) player.x;
         float z = (float) player.z;
@@ -214,18 +210,7 @@ public class MapBookScreen extends Screen {
                             "hud/locator_bar_dot/map_decorations/player"),
                     0, 0, 1, 1, -1);
         } else {
-            int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
-            for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
-                if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
-                    Team team = playerListEntry.getScoreboardTeam();
-                    if (team != null) {
-                        Formatting formatting = team.getColor();
-                        if (formatting.isColor()) {
-                            color = (new Color(formatting.getColorValue().intValue()).hashCode());
-                        }
-                    }
-                }
-            }
+            int color = getColor(player, client);
             context.drawGuiTexture(RenderPipelines.GUI_TEXTURED, Identifier.of(
                             "hud/locator_bar_dot/map_decorations/player"),
                     0, 0, 1, 1, color);
@@ -249,8 +234,26 @@ public class MapBookScreen extends Screen {
 
     }
 
-    private void renderIcons(DrawContext context) {
+    public static int getColor(MapBookPlayer player, MinecraftClient client) {
+        assert client.player != null;
+        int color = ColorHelper.withBrightness(ColorHelper.withAlpha(255, player.name.hashCode()), 0.9F);
+        for (PlayerListEntry playerListEntry : client.player.networkHandler.getPlayerList()) {
+            if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
+                Team team = playerListEntry.getScoreboardTeam();
+                if (team != null) {
+                    Formatting formatting = team.getColor();
+                    if (formatting.isColor()) {
+                        assert formatting.getColorValue() != null;
+                        color = (new Color(formatting.getColorValue()).hashCode());
+                    }
+                }
+            }
+        }
+        return color;
+    }
 
+    private void renderIcons(DrawContext context) {
+        assert client.world != null;
         for (MapStateData mapStateData : getMapStates(item, client.world)) {
             float render = 0.0f;
             if (client.world.getDimensionEntry().getIdAsString().contains(mapStateData.mapState.dimension.getValue().toString()))
@@ -332,7 +335,7 @@ public class MapBookScreen extends Screen {
 
     private ArrayList<MapStateData> getMapStates(ItemStack stack, World world) {
         ArrayList<MapStateData> list = new ArrayList<>();
-        MapBookState mapBookState = getMapBookState(stack, world);
+        MapBookState mapBookState = getMapBookState(stack);
 
         if (mapBookState != null) {
             for (int i : mapBookState.mapIDs) {
@@ -345,7 +348,7 @@ public class MapBookScreen extends Screen {
         return list;
     }
 
-    private MapBookState getMapBookState(ItemStack stack, World world) {
+    private MapBookState getMapBookState(ItemStack stack) {
         int id = getMapBookId(stack) ;
         if (id == -1) return null;
         return MapBookStateManager.INSTANCE.getClientMapBookState(id);

@@ -17,7 +17,6 @@ import net.minecraft.block.FenceBlock;
 import net.minecraft.block.FenceGateBlock;
 import net.minecraft.block.FireBlock;
 import net.minecraft.block.HangingSignBlock;
-import net.minecraft.block.LanternBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.PillarBlock;
@@ -25,7 +24,6 @@ import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.block.ShelfBlock;
 import net.minecraft.block.SignBlock;
 import net.minecraft.block.SlabBlock;
-import net.minecraft.block.SoulFireBlock;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.WallHangingSignBlock;
@@ -263,16 +261,15 @@ public class BlockRegistry {
     }
 
     private static Block registerOldStairsBlock(String id, Block base) {
-        return register(id, /* method_63119 */ settings -> new StairsBlock(base.getDefaultState(), settings), AbstractBlock.Settings.copyShallow(base));
+        return register(id, settings -> new StairsBlock(base.getDefaultState(), settings), AbstractBlock.Settings.copyShallow(base));
     }
     private static AbstractBlock.Settings copyLootTable(Block block, boolean copyTranslationKey) {
-        AbstractBlock.Settings settings = block.getSettings();
-        AbstractBlock.Settings settings2 = AbstractBlock.Settings.create().lootTable(block.getLootTableKey());
+        AbstractBlock.Settings settings = AbstractBlock.Settings.create().lootTable(block.getLootTableKey());
         if (copyTranslationKey) {
-            settings2 = settings2.overrideTranslationKey(block.getTranslationKey());
+            settings = settings.overrideTranslationKey(block.getTranslationKey());
         }
 
-        return settings2;
+        return settings;
     }
 
 

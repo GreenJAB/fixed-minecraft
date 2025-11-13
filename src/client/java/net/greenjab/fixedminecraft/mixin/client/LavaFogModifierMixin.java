@@ -6,9 +6,6 @@ import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.fog.LavaFogModifier;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +23,7 @@ public class LavaFogModifierMixin {
                               @Local(argsOnly = true) Camera camera) {
         int i = 0;
         if (camera.getFocusedEntity() instanceof PlayerEntity entity) {
-            for (ItemStack item : FixedMinecraft.getArmor((PlayerEntity) entity)) {
+            for (ItemStack item : FixedMinecraft.getArmor(entity)) {
                 i += FixedMinecraftEnchantmentHelper.enchantLevel(item, "fire_protection");
             }
         }

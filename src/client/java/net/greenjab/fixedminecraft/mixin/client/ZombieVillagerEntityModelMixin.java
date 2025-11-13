@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.ModelPartBuilder;
 import net.minecraft.client.render.entity.model.ZombieVillagerEntityModel;

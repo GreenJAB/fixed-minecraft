@@ -4,8 +4,6 @@ import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
 import net.minecraft.block.BlockState;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.MapIdComponent;
@@ -18,12 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.Items;
-import net.minecraft.item.map.MapDecorationType;
-import net.minecraft.item.map.MapDecorationTypes;
 import net.minecraft.item.map.MapState;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -34,10 +29,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.village.raid.RaidManager;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -423,33 +416,6 @@ public class MapBookItem extends Item {
                 }
             }
         }
-    }
-
-    public static boolean hasInvalidAdditions(ItemStack stack, World world, List<Integer> additions) {
-        MapBookState mapBookState = getMapBookState(stack, world);
-
-        for (int i = 0; i < additions.size();i++){// in additions.indices) {
-            int additionA = additions.get(i);
-            if (mapBookState != null && mapBookState.mapIDs.contains(additionA)) {
-                return true;
-            }
-
-            MapState mapA = world.getMapState(new MapIdComponent(additionA)); //?: return true;
-
-            for (int j = i + 1; j < additions.size();j++) {
-                int additionB = additions.get(j);
-                if (additionA == additionB) {
-                    return true;
-                }
-
-                MapState mapB = world.getMapState(new MapIdComponent(additionB));
-                if (mapB == null || mapsAreSameLocation(mapA, mapB)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     private static boolean mapsAreSameLocation(MapState mapA, MapState mapB) {

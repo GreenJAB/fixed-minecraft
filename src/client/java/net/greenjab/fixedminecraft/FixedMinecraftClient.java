@@ -64,14 +64,13 @@ public class FixedMinecraftClient implements ClientModInitializer {
         BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers();
 
-        FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {
-            ResourceManagerHelper.registerBuiltinResourcePack(
-                    Identifier.of("fixedminecraft", "greentweaks"),
-                    modContainer,
-                    Text.of("Green Tweaks"),
-                    ResourcePackActivationType.DEFAULT_ENABLED
-            );
-        });
+        FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer ->
+                ResourceManagerHelper.registerBuiltinResourcePack(
+                FixedMinecraft.id( "greentweaks"),
+                modContainer,
+                Text.of("Green Tweaks"),
+                ResourcePackActivationType.DEFAULT_ENABLED
+        ));
     }
     public void renderCrosshair(DrawContext context,
                                 @SuppressWarnings("unused") RenderTickCounter tickDelta) {

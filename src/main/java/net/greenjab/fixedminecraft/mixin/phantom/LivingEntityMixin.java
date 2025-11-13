@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -29,11 +29,11 @@ public abstract class LivingEntityMixin {
         if (LE instanceof PhantomEntity) {
             if (entity != null) {
                 if (entity.isPlayer()) {
-                    if (((ServerPlayerEntity) entity).hasStatusEffect(StatusRegistry.INSOMNIA)) {
-                        int i = ((ServerPlayerEntity) entity).getStatusEffect(StatusRegistry.INSOMNIA).getAmplifier();
+                    if (((ServerPlayerEntity) entity).hasStatusEffect(OtherRegistry.INSOMNIA)) {
+                        int i = ((ServerPlayerEntity) entity).getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier();
                         if (i < 4) {
                             if (Math.random() < 1 / (5 * Math.pow(i + 1, 2))) {
-                                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(StatusRegistry.INSOMNIA, -1, ++i, true, false, true));
+                                ((ServerPlayerEntity) entity).addStatusEffect(new StatusEffectInstance(OtherRegistry.INSOMNIA, -1, ++i, true, false, true));
                                 ((ServerPlayerEntity) entity).networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
                             }
                         }

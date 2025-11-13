@@ -44,7 +44,7 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
             float f = getAvailableMoisture(this, world, pos);
             boolean bl = random.nextInt((int)(25.0F / f) + 1) == 0;
             if (bl) {
-                tryGrow(world, state, pos, 1);
+                tryGrow(world, state, pos);
             }
         }
     }
@@ -94,7 +94,7 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
                 BlockState blockState = world.getBlockState(blockPos.add(i, 0, j));
                 if (blockState.isOf(Blocks.FARMLAND)) {
                     g = 1.0F;
-                    if ((Integer)blockState.get(FarmlandBlock.MOISTURE) > 0) {
+                    if (blockState.get(FarmlandBlock.MOISTURE) > 0) {
                         g = 3.0F;
                     }
                 }
@@ -127,8 +127,8 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
 
         return f;
     }
-    private void tryGrow(ServerWorld world, BlockState state, BlockPos pos, int amount) {
-        int i = Math.min((Integer)state.get(AGE) + amount, 4);
+    private void tryGrow(ServerWorld world, BlockState state, BlockPos pos) {
+        int i = Math.min(state.get(AGE) + 1, 4);
         if (this.canGrow(world, pos, state, i)) {
             BlockState blockState = state.with(AGE, i);
             world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);

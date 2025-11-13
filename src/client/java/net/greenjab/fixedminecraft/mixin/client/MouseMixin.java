@@ -25,7 +25,7 @@ public class MouseMixin {
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE",
                                                target = "Lnet/minecraft/entity/player/PlayerInventory;setSelectedSlot(I)V"
     ), cancellable = true)
-    public void addHotBarScoller(long window, double horizontal, double vertical, CallbackInfo ci, @Local PlayerInventory playerInventory) {
+    public void addHotBarScroller(long window, double horizontal, double vertical, CallbackInfo ci, @Local PlayerInventory playerInventory) {
 
         final Direction direction = Math.signum(vertical) > 0
                 ? Direction.UP : Direction.DOWN;

@@ -17,8 +17,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.Random;
-
 @Mixin(HoldingPatternPhase.class)
 public class HoldingPatternPhaseMixin extends AbstractPhase {
 

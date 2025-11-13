@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
-import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,8 +14,8 @@ public class PlayerEntityMixin {
     private void longerBlockReach(CallbackInfoReturnable<Double> cir) {
         double d =  cir.getReturnValueD();
         PlayerEntity PE = (PlayerEntity)(Object)this;
-        if (PE.hasStatusEffect(StatusRegistry.REACH)) {
-            d+=0.5*(1+PE.getStatusEffect(StatusRegistry.REACH).getAmplifier());
+        if (PE.hasStatusEffect(OtherRegistry.REACH)) {
+            d+=0.5*(1+PE.getStatusEffect(OtherRegistry.REACH).getAmplifier());
         }
         cir.setReturnValue(d);
     }

@@ -72,21 +72,18 @@ public class ContainerTooltipComponent implements TooltipComponent {
 
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
-            this.drawNonEmptyTooltip(textRenderer, x, y, width, height, context);
+            this.drawNonEmptyTooltip(textRenderer, x, y, context);
     }
 
-    private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, int width, int height, DrawContext context) {
+    private void drawNonEmptyTooltip(TextRenderer textRenderer, int x, int y, DrawContext context) {
         List<ItemStack> list = this.firstStacksInContents();
         numberOfSlots = list.size();
         if (!list.isEmpty()) {
-            int i = x;
-            int j = y;
             int k = 0;
-
             for (int l = 0; l < this.getRows(); l++) {
                 for (int m = 0; m < this.getColumns(); m++) {
-                    int n = i + m * 24;
-                    int o = j + l * 24;
+                    int n = x + m * 24;
+                    int o = y + l * 24;
                     if (k >= numberOfSlots) break;
                     this.drawItem(k, n, o, list, k, textRenderer, context);
                     k++;

@@ -2,12 +2,8 @@ package net.greenjab.fixedminecraft.mixin.other;
 
 import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Mixin(DyeColor.class)
 public class DyeColorMixin {

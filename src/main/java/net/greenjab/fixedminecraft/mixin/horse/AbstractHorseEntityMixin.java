@@ -5,8 +5,6 @@ import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.command.permission.LeveledPermissionPredicate;
-import net.minecraft.component.ComponentType;
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -20,7 +18,6 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
@@ -30,8 +27,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -76,15 +71,6 @@ public class AbstractHorseEntityMixin {
         float chance = rageChance.getOrDefault(armor.getItem(), 0F);
         if (chance > 0 && chance < 1 || Math.random() <= chance) ci.cancel();
     }
-    /** Causes Server-Client Desync */
-    /*@Inject(method = "tickControlled", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;isOnGround()Z"
-    ))
-    private void jumpOutOfBoat(PlayerEntity controllingPlayer, Vec3d movementInput, CallbackInfo ci) {
-        AbstractHorseEntity AHE = (AbstractHorseEntity) (Object)this;
-        if (this.jumpStrength> 0.0F && AHE.hasVehicle()) AHE.stopRiding();
-    }*/
 
     @ModifyArg(method = "setChildAttribute", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;calculateAttributeBaseValue(DDDDLnet/minecraft/util/math/random/Random;)D"
@@ -107,6 +93,24 @@ public class AbstractHorseEntityMixin {
 
     @Unique
     private double modifyAttribute(double original, EntityAttribute attribute, Collection<StatusEffectInstance> effects) {
+        StatusEffectInstance chosenEffect = getStatusEffectInstance(effects);
+        if (chosenEffect != null) {
+            if (attribute.getTranslationKey().contains(effectModififers.get(chosenEffect.getEffectType()))) {
+                double d = 0;
+                if (attribute.getTranslationKey().contains("max_health")) { d = 2; }
+                if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.08; }
+                if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.03; }
+                d*=(chosenEffect.getAmplifier()+1 + (chosenEffect.isAmbient()?0:1));
+                return original + d;
+            }
+        }
+
+        return original;
+    }
+
+    @Unique
+    @org.jetbrains.annotations.Nullable
+    private static StatusEffectInstance getStatusEffectInstance(Collection<StatusEffectInstance> effects) {
         StatusEffectInstance chosenEffect = null;
         int longestDuration = -1;
         int highestLevel = -1;
@@ -130,18 +134,7 @@ public class AbstractHorseEntityMixin {
                 }
             }
         }
-        if (chosenEffect != null) {
-            if (attribute.getTranslationKey().contains(effectModififers.get(chosenEffect.getEffectType()))) {
-                double d = 0;
-                if (attribute.getTranslationKey().contains("max_health")) { d = 2; }
-                if (attribute.getTranslationKey().contains("jump_strength")) { d = 0.08; }
-                if (attribute.getTranslationKey().contains("movement_speed")) { d = 0.03; }
-                d*=(chosenEffect.getAmplifier()+1 + (chosenEffect.isAmbient()?0:1));
-                return original + d;
-            }
-        }
-
-        return original;
+        return chosenEffect;
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AbstractHorseEntity;isAngry()Z"))
@@ -173,7 +166,7 @@ public class AbstractHorseEntityMixin {
             AHE.addCommandTag("locate");
             AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);
             String s = "/waypoint modify " + AHE.getUuidAsString() + " style set horse";
-            AHE.getEntityWorld().getServer().getCommandManager().parseAndExecute(createCommandSource(null, (ServerWorld) AHE.getEntityWorld(), AHE.getBlockPos()), s);
+            AHE.getEntityWorld().getServer().getCommandManager().parseAndExecute(createCommandSource((ServerWorld) AHE.getEntityWorld(), AHE.getBlockPos()), s);
         }
     }
 
@@ -185,11 +178,11 @@ public class AbstractHorseEntityMixin {
     }
 
     @Unique
-    private static ServerCommandSource createCommandSource(@Nullable PlayerEntity player, ServerWorld world, BlockPos pos) {
-        String string = player == null ? "Sign" : player.getStringifiedName();
-        Text text = (Text)(player == null ? Text.literal("Sign") : player.getDisplayName());
+    private static ServerCommandSource createCommandSource(ServerWorld world, BlockPos pos) {
+        String string = "Sign";
+        Text text = Text.literal("Sign");
         return new ServerCommandSource(
-                CommandOutput.DUMMY, Vec3d.ofCenter(pos), Vec2f.ZERO, world, LeveledPermissionPredicate.GAMEMASTERS, string, text, world.getServer(), player
+                CommandOutput.DUMMY, Vec3d.ofCenter(pos), Vec2f.ZERO, world, LeveledPermissionPredicate.GAMEMASTERS, string, text, world.getServer(), null
         );
     }
 }
