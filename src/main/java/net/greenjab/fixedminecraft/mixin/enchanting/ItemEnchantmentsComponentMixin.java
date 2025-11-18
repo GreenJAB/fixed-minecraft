@@ -41,6 +41,7 @@ public class ItemEnchantmentsComponentMixin {
         enchantToBiome.put("minecraft:punch", "plains");
         enchantToBiome.put("minecraft:fire_aspect", "plains");
         enchantToBiome.put("minecraft:multishot", "plains");
+        enchantToBiome.put("minecraft:lunge", "plains");
         enchantToBiome.put("minecraft:knockback", "savanna");
         enchantToBiome.put("minecraft:sharpness", "savanna");
         enchantToBiome.put("minecraft:depth_strider", "savanna");

@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(HungerManager.class)
@@ -129,6 +130,12 @@ public abstract class HungerManagerMixin {
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
         return 3;
+    }
+
+    @Inject(method = "canSprint", at = @At("HEAD"), cancellable = true)
+    private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
+        HungerManager HM = (HungerManager) (Object)this;
+        cir.setReturnValue(HM.getSaturationLevel() > 0.0F);
     }
 
 }

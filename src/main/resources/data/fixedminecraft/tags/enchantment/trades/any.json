@@ -39,6 +39,7 @@
         "minecraft:lure",
         "minecraft:density",
         "minecraft:breach",
-        "minecraft:wind_burst"
+        "minecraft:wind_burst",
+        "minecraft:lunge"
     ]
 }

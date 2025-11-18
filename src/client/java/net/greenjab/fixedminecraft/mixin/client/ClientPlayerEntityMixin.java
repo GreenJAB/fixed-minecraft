@@ -6,7 +6,6 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -23,12 +22,6 @@ public class ClientPlayerEntityMixin {
     @Shadow
     @Final
     protected MinecraftClient client;
-
-    @Inject(method = "canSprint", at = @At("HEAD"), cancellable = true)
-    private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
-        PlayerEntity instance = (PlayerEntity)(Object)this;
-        cir.setReturnValue(instance.hasVehicle() || instance.getHungerManager().getSaturationLevel() > 0.0F || instance.getAbilities().allowFlying);
-    }
 
     @Redirect(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;checkGliding()Z"))
     private boolean failRealTest(ClientPlayerEntity instance) {

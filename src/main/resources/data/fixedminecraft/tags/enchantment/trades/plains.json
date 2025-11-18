@@ -4,6 +4,7 @@
         "minecraft:smite",
         "minecraft:punch",
         "minecraft:fire_aspect",
-        "minecraft:multishot"
+        "minecraft:multishot",
+        "minecraft:lunge"
     ]
 }

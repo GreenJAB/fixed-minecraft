@@ -1,9 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.night;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.entity.mob.ZombieHorseEntity;
 import net.minecraft.world.LightType;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -24,5 +28,10 @@ public class MobEntityMixin {
                 HE.addCommandTag("night");
             }
         }
+    }
+
+    @WrapOperation(method = "tickMovement", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/MobEntity;tickBurnInDaylight()V"))
+    private void dontBurnPhantom(MobEntity entity, Operation<Void> original) {
+        if (!(entity instanceof PhantomEntity || entity instanceof ZombieHorseEntity))original.call(entity);
     }
 }
