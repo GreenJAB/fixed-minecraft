@@ -23,3 +23,5 @@ accessible method net/minecraft/block/Block generateBlockInteractLoot (Lnet/mine
 #accessible field net/minecraft/client/render/MapRenderer decorationsAtlasManager Lnet/minecraft/client/texture/SpriteAtlasTexture;
 accessible class net/minecraft/client/particle/ElderGuardianParticleRenderer$State
 accessible method net/minecraft/entity/mob/ShulkerEntity setColor (Ljava/util/Optional;)V
+
+accessible method net/minecraft/block/entity/DispenserBlockEntity setHeldStacks (Lnet/minecraft/util/collection/DefaultedList;)V

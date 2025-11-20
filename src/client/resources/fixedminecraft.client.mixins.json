@@ -20,6 +20,7 @@
         "ElderGuardianParticleMixin",
         "ElderGuardianParticleRendererMixin",
         "EnchantmentScreenMixin",
+		"EntityModelsMixin",
         "FireworksSparkParticleMixin",
         "GameOptionsMixin",
         "GameRendererMixin",
@@ -56,5 +57,6 @@
     ],
     "mixins": [
         "FogRendererMixin"
+
   ]
 }

@@ -10,7 +10,6 @@ https://youtu.be/VifCRUAzg5U
 - 1.20.4: [Kotlin Programming Language Mod](https://modrinth.com/mod/fabric-language-kotlin)
 
 ### Other mods you might like to use:
-- [Hotbar Cycle](https://modrinth.com/mod/hotbarcycle)
 - [Item Scroller](https://modrinth.com/mod/item-scroller)
 - [Endercon](https://modrinth.com/datapack/endercon)
 - [Void Fog](https://modrinth.com/mod/void-fog)
