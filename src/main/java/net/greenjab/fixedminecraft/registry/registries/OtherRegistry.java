@@ -3,8 +3,12 @@ package net.greenjab.fixedminecraft.registry.registries;
 import com.mojang.serialization.MapCodec;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.effect.CustomEffect;
+import net.greenjab.fixedminecraft.registry.other.DispencerMinecartEntity;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.block.MapColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
@@ -58,5 +62,17 @@ public class OtherRegistry {
     public static final MemoryModuleType<Item> LAST_ITEM_TYPE = registerMemory("last_item_type");
     private static <U> MemoryModuleType<U> registerMemory(String id) {
         return Registry.register(Registries.MEMORY_MODULE_TYPE, Identifier.ofVanilla(id), new MemoryModuleType<>(Optional.empty()));
+    }
+
+
+    //entitytype
+    public static final EntityType<DispencerMinecartEntity> DISPENCER_MINECART_ENTITY_TYPE = registerEntityType(
+            keyOf("dispenser_minecart"), EntityType.Builder.create(DispencerMinecartEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.98F, 0.7F).passengerAttachments(0.1875F).maxTrackingRange(8));
+
+    private static <T extends Entity> EntityType<T> registerEntityType(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
+        return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
+    }
+    private static RegistryKey<EntityType<?>> keyOf(String id) {
+        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id(id));
     }
 }

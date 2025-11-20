@@ -9,6 +9,8 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.greenjab.fixedminecraft.hud.HotbarCycler;
 import net.greenjab.fixedminecraft.map_book.MapBookFilledProperty;
 import net.greenjab.fixedminecraft.models.ModelLayers;
+import net.greenjab.fixedminecraft.registrties.EntityModelLayerRegistry;
+import net.greenjab.fixedminecraft.registrties.EntityRendererRegistry;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.render.PlayerLookHelper;
 import net.minecraft.client.MinecraftClient;
@@ -63,6 +65,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
 
         BooleanProperties.ID_MAPPER.put(FixedMinecraft.id("map_book/filled"), MapBookFilledProperty.CODEC);
         ModelLayers.onRegisterLayers();
+        EntityRendererRegistry.registerEntityRenderer();
+        EntityModelLayerRegistry.registerEntityModelLayer();
 
         FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer ->
                 ResourceManagerHelper.registerBuiltinResourcePack(

@@ -98,5 +98,7 @@
     "generator.fixedminecraft.floating_islands": "Floating Islands",
     "item.fixedminecraft.patina": "Patina",
     "block.fixedminecraft.redstone_lantern": "Redstone Lantern",
-    "key.fixedminecraft.hotbar_cycle": "Hotbar Cycle (Hold)"
+    "key.fixedminecraft.hotbar_cycle": "Hotbar Cycle (Hold)",
+    "item.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
+    "entity.fixedminecraft.dispenser_minecart": "Dispenser Minecart"
 }
