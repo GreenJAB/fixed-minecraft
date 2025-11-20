@@ -3,8 +3,13 @@ package net.greenjab.fixedminecraft.registry.registries;
 import com.mojang.serialization.MapCodec;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.effect.CustomEffect;
+import net.greenjab.fixedminecraft.registry.other.DispencerMinecartEntity;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.block.MapColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.map.MapDecorationType;
@@ -44,5 +49,16 @@ public class StatusRegistry {
     public static LootFunctionType<ExplorationCompassLootFunction> EXPLORATION_COMPASS = registerLootFunction("exploration_compass", ExplorationCompassLootFunction.CODEC);
     private static <T extends LootFunction> LootFunctionType<T> registerLootFunction(String id, MapCodec<T> codec) {
         return Registry.register(Registries.LOOT_FUNCTION_TYPE, FixedMinecraft.id(id), new LootFunctionType<>(codec));
+    }
+
+    //entitytype
+    public static final EntityType<DispencerMinecartEntity> DISPENCER_MINECART_ENTITY_TYPE = registerEntityType(
+            keyOf("dispenser_minecart"), EntityType.Builder.create(DispencerMinecartEntity::new, SpawnGroup.MISC).dropsNothing().dimensions(0.98F, 0.7F).passengerAttachments(0.1875F).maxTrackingRange(8));
+
+    private static <T extends Entity> EntityType<T> registerEntityType(RegistryKey<EntityType<?>> key, EntityType.Builder<T> type) {
+        return Registry.register(Registries.ENTITY_TYPE, key, type.build(key));
+    }
+    private static RegistryKey<EntityType<?>> keyOf(String id) {
+        return RegistryKey.of(RegistryKeys.ENTITY_TYPE, FixedMinecraft.id(id));
     }
 }

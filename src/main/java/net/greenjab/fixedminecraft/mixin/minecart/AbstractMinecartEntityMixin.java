@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.other.DispencerMinecartEntity;
 import net.greenjab.fixedminecraft.registry.other.FixedFurnaceMinecartEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -89,7 +90,7 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
                                                                             BlockState blockState, boolean ignoreWeight,
                                                                             @Local T abstractMinecartEntity, @Local(argsOnly = true) PlayerEntity player) {
         controller.adjustToRail(blockPos, blockState, true);
-        if (player != null && abstractMinecartEntity instanceof FurnaceMinecartEntity) {
+        if (player != null && (abstractMinecartEntity instanceof FurnaceMinecartEntity || abstractMinecartEntity instanceof DispencerMinecartEntity)) {
             float rot = (-player.headYaw -90+720)%360;
             if (Math.cos((rot-abstractMinecartEntity.getYaw())*Math.PI/180f)<0) {
                 abstractMinecartEntity.setYaw((abstractMinecartEntity.getYaw()+180)%360);
