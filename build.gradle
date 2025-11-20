@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.fabric.loom)
     alias(libs.plugins.yamlang)
 }
-
-version = "1.5.1a-1.21.4"
+version = "1.6.0-1.21.4"
+group = "net.green_jab.fixedminecraft"
 base {
     archivesName = project.name
 }

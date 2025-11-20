@@ -19,6 +19,7 @@
         "DragonEntityModelMixin",
         "ElderGuardianAppearanceParticleMixin",
         "EnchantmentScreenMixin",
+		"EntityModelsMixin",
         "FireworksSparkParticleMixin",
         "GameOptionsMixin",
         "GameRendererMixin",

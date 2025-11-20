@@ -6,9 +6,11 @@ import net.minecraft.block.Blocks;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
+import net.minecraft.block.dispenser.FallibleItemDispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
+import net.minecraft.entity.TntEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
@@ -20,7 +22,10 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import net.minecraft.world.GameRules;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -34,7 +39,7 @@ public interface DispenserBehaviorMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/block/DispenserBlock;registerBehavior(Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/block/dispenser/DispenserBehavior;)V", ordinal = 46
     ), index = 1)
-    private static DispenserBehavior hudrateCoralDispenser(DispenserBehavior behavior) {
+    private static DispenserBehavior hydrateCoralDispenser(DispenserBehavior behavior) {
 
         return new ItemDispenserBehavior() /* DispenserBehavior$7 */ {
             private final ItemDispenserBehavior fallbackBehavior = new ItemDispenserBehavior();
@@ -84,6 +89,29 @@ public interface DispenserBehaviorMixin {
                         return this.decrementStackWithRemainder(pointer, stack, new ItemStack(Items.GLASS_BOTTLE));
                     }
                 }
+            }
+        };
+    }
+
+    @ModifyArg(method = "registerDefaults", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/DispenserBlock;registerBehavior(Lnet/minecraft/item/ItemConvertible;Lnet/minecraft/block/dispenser/DispenserBehavior;)V", ordinal = 36), index = 1)
+    private static DispenserBehavior launchTNTaway(DispenserBehavior behavior) {
+        return new ItemDispenserBehavior() /* DispenserBehavior$16 */ {
+            @Override
+            protected ItemStack dispenseSilently(BlockPointer pointer, ItemStack stack) {
+                World world = pointer.world();
+                BlockPos blockPos = pointer.pos().offset(pointer.state().get(DispenserBlock.FACING));
+                TntEntity tntEntity = new TntEntity(world, (double)blockPos.getX() + 0.5, (double)blockPos.getY(), (double)blockPos.getZ() + 0.5, null);
+                Direction dir = pointer.state().get(DispenserBlock.FACING);
+                if (dir.getAxis() != Direction.Axis.Y){
+                    float dis = dir.getPositiveHorizontalDegrees();
+                    double d = (dis*(Math.PI)/180f)+(world.random.nextDouble()*0.4-0.2);
+                    tntEntity.setVelocity(-Math.sin(d) * 0.02, 0.2F, Math.cos(d) * 0.02);
+                }
+                world.spawnEntity(tntEntity);
+                world.playSound(null, tntEntity.getX(), tntEntity.getY(), tntEntity.getZ(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.emitGameEvent(null, GameEvent.ENTITY_PLACE, blockPos);
+                stack.decrement(1);
+                return stack;
             }
         };
     }
