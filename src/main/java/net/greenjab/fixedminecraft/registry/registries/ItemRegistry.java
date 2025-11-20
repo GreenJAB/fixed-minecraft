@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
-
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.item.PatinaItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent;
@@ -29,6 +28,7 @@ import net.minecraft.item.FireworkRocketItem;
 import net.minecraft.item.HangingSignItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.item.MinecartItem;
 import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
 import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
@@ -88,6 +88,10 @@ public class ItemRegistry {
 
     public static final Item PATINA = register("patina", PatinaItem::new, new Item.Settings());
     public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSOTNE_LANTERN);
+
+    public static final Item DISPENSER_MINECART = register(
+            "dispenser_minecart", settings -> new MinecartItem(StatusRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Settings().maxCount(1)
+    );
 
     public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
             .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0), 1F))

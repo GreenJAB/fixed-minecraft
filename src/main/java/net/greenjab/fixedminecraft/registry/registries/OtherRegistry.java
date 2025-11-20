@@ -1,7 +1,15 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.effect.CustomEffect;
 import net.minecraft.block.MapColor;
+import net.greenjab.fixedminecraft.registry.other.DispencerMinecartEntity;
+import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
+import net.minecraft.block.MapColor;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.item.map.MapDecorationType;
@@ -24,4 +32,5 @@ public class OtherRegistry {
         MapDecorationType mapDecorationType = new MapDecorationType(Identifier.ofVanilla(assetId), showOnItemFrame, mapColor, explorationMapElement, trackCount);
         return Registry.registerReference(Registries.MAP_DECORATION_TYPE, registryKey, mapDecorationType);
     }*/
+    
 }
