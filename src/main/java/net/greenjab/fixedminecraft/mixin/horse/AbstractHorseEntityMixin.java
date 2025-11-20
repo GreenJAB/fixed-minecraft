@@ -168,6 +168,7 @@ public class AbstractHorseEntityMixin {
     private void addLocaterBarIcon(LivingEntity passenger, CallbackInfoReturnable<Vec3d> cir) {
         if (passenger instanceof ServerPlayerEntity) {
             AbstractHorseEntity AHE = (AbstractHorseEntity) (Object) this;
+            if (!AHE.isTame())return;
             AHE.age = 0;
             AHE.addCommandTag("locate");
             AHE.getAttributes().getCustomInstance(EntityAttributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);

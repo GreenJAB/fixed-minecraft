@@ -56,6 +56,8 @@ public class ItemGroupRegistry {
                          entries.add(ItemRegistry.AZALEA_BOAT);
                          entries.add(ItemRegistry.AZALEA_CHEST_BOAT);
                          entries.add(ItemRegistry.AZALEA_SHELF);
+
+                         entries.add(ItemRegistry.DISPENSER_MINECART);
                     }).build();
 
 
