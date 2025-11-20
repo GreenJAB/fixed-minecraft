@@ -25,5 +25,4 @@ accessible class net/minecraft/client/particle/ElderGuardianParticleRenderer$Sta
 accessible method net/minecraft/entity/mob/ShulkerEntity setColor (Ljava/util/Optional;)V
 accessible method net/minecraft/client/render/RenderLayer <init> (Ljava/lang/String;Lnet/minecraft/client/render/RenderSetup;)V
 accessible method net/minecraft/client/render/RenderLayer of (Ljava/lang/String;Lnet/minecraft/client/render/RenderSetup;)Lnet/minecraft/client/render/RenderLayer;
-accessible method net/minecraft/block/entity/DispenserBlockEntity getHeldStacks ()Lnet/minecraft/util/collection/DefaultedList;
 accessible method net/minecraft/block/entity/DispenserBlockEntity setHeldStacks (Lnet/minecraft/util/collection/DefaultedList;)V
