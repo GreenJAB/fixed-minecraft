@@ -20,3 +20,6 @@ accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/Wo
 accessible field net/minecraft/block/AbstractCauldronBlock behaviorMap Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;
 accessible class net/minecraft/server/network/ServerPlayerEntity$RespawnPos
 accessible method net/minecraft/entity/mob/ShulkerEntity setColor (Ljava/util/Optional;)V
+
+accessible method net/minecraft/block/entity/DispenserBlockEntity setHeldStacks (Lnet/minecraft/util/collection/DefaultedList;)V
+accessible method net/minecraft/client/render/entity/EntityRenderers register (Lnet/minecraft/entity/EntityType;Lnet/minecraft/client/render/entity/EntityRendererFactory;)V
