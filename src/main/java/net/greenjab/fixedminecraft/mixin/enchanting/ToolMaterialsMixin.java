@@ -55,6 +55,6 @@ public class ToolMaterialsMixin {
     @Inject(method = "getDurability", at = @At(
             value = "RETURN"), cancellable = true)
     private void goldDura(CallbackInfoReturnable<Integer> cir){
-        if (cir.getReturnValue()==32) cir.setReturnValue(64);
+        if (cir.getReturnValue()==32) cir.setReturnValue(48);
     }
 }

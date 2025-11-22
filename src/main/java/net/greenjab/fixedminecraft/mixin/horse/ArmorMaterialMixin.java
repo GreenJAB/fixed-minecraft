@@ -53,4 +53,12 @@ public class ArmorMaterialMixin {
         }
         args.set(1, map);
     }
+
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private static int adjustedCopperDurability(int value,
+                                                @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetId) {
+        if (assetId == EquipmentAssetKeys.GOLD)
+            return 4;
+        return value;
+    }
 }
