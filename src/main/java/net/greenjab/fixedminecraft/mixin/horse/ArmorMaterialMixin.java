@@ -2,14 +2,13 @@ package net.greenjab.fixedminecraft.mixin.horse;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ArmorMaterials;
 import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.EnumMap;
@@ -54,11 +53,13 @@ public class ArmorMaterialMixin {
         args.set(1, map);
     }
 
-    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
-    private static int adjustedCopperDurability(int value,
-                                                @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetId) {
+    /*@ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private static ArmorMaterials adjustedCopperDurability(ArmorMaterials value,
+                                                           @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetId) {
         if (assetId == EquipmentAssetKeys.GOLD)
             return 4;
         return value;
-    }
+    }*/
+
+
 }
