@@ -17,8 +17,9 @@ public class ToolMaterialsMixin {
             )
     private static ToolMaterial goldToolsLastLonger(TagKey<Block> tagKey, int i, float f, float g, int j, TagKey<Block> tagKey2,
                                                      Operation<ToolMaterial> original) {
-        if (i == 32) {
-            return original.call(tagKey, 59, f, g, j, tagKey2);
+
+        if (i == 32) { //gold
+            return original.call(tagKey, 48, f, g, j, tagKey2);
         }
         return original.call(tagKey, i, f, g, j, tagKey2);
     }
