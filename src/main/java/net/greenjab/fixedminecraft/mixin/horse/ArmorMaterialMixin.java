@@ -37,6 +37,8 @@ public class ArmorMaterialMixin {
                                                 @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetId) {
         if (assetId == EquipmentAssetKeys.COPPER)
             return 20;
+        if (assetId == EquipmentAssetKeys.GOLD)
+            return 4;
         return value;
     }
 }

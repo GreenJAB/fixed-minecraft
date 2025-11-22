@@ -3,7 +3,10 @@ package net.greenjab.fixedminecraft.mixin.food;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.component.type.FoodComponent;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,10 +17,12 @@ import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
@@ -42,6 +47,19 @@ public class ItemMixin {
                 if (foodComponent.saturation() / (foodComponent.nutrition() * 2.0f) == 0.15f) {
                     if (Math.random() < 0.15f) {
                         user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0));
+                    }
+                }
+            }
+        }
+    }
+
+    @Inject(method = "inventoryTick", at = @At("HEAD"))
+    private void repairGold(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot, CallbackInfo ci) {
+        if (entity instanceof PlayerEntity || entity instanceof ArmorStandEntity) {
+            if (stack.getComponents().contains(DataComponentTypes.DAMAGE)) {
+                if (stack.isIn(ItemTags.PIGLIN_LOVED)) {
+                    if (world.getTime() % (24000 / stack.getMaxDamage()) == 0) {
+                        stack.setDamage(stack.getDamage() - 1);
                     }
                 }
             }
