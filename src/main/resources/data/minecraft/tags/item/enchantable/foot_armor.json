@@ -1,6 +1,7 @@
 {
     "replace": false,
     "values": [
-        "fixedminecraft:netherite_horse_armor"
+        "fixedminecraft:netherite_horse_armor",
+        "fixedminecraft:chainmail_horse_armor"
     ]
 }
