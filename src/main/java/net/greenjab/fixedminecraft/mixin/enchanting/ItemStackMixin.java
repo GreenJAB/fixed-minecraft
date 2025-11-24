@@ -17,8 +17,11 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -109,6 +112,21 @@ public abstract class ItemStackMixin {
             return TooltipType.ADVANCED;
         }
         return TooltipType.BASIC;
+    }
+
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/MergedComponentMap;size()I"))
+    private void addTagsTooltip(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player,
+                                TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if (player.isCreative()) testTags(stack, textConsumer);
+        stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
+    }
+
+    @Unique
+    private static void testTags(ItemStack stack, Consumer<Text> textConsumer) {
+        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).forEach(tag->{
+            if (stack.isIn(tag)) textConsumer.accept(Text.translatable("item.tags", tag.id().getPath()).formatted(Formatting.DARK_AQUA));
+        });
     }
 
 }

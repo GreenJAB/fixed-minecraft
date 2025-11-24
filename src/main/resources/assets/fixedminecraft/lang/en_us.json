@@ -97,5 +97,6 @@
     "block.fixedminecraft.redstone_lantern": "Redstone Lantern",
     "key.fixedminecraft.hotbar_cycle": "Hotbar Cycle (Hold)",
     "item.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
-    "entity.fixedminecraft.dispenser_minecart": "Dispenser Minecart"
+    "entity.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
+    "item.tags": "#%s"
 }
