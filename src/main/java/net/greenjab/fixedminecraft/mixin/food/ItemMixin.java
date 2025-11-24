@@ -1,10 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ConsumableComponent;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.decoration.ArmorStandEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -15,15 +14,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(Item.class)
 public class ItemMixin {
@@ -59,6 +57,12 @@ public class ItemMixin {
             if (stack.getComponents().contains(DataComponentTypes.DAMAGE)) {
                 if (stack.isIn(ItemTags.PIGLIN_LOVED)) {
                     if (world.getTime() % (24000 / stack.getMaxDamage()) == 0) {
+                        if (entity instanceof PlayerEntity player){
+                            AtomicBoolean isArmor = new AtomicBoolean(false);
+                            player.getArmorItems().forEach(i -> {if (i==stack) isArmor.set(true);
+                            });
+                            if (isArmor.get()) return;
+                        }
                         stack.setDamage(stack.getDamage() - 1);
                     }
                 }
