@@ -87,9 +87,6 @@ public class DispencerMinecartEntity extends StorageMinecartEntity {
                     if (isFlipped()) dir = dir.getOpposite();
                     dispense(serverWorld, Blocks.DISPENSER.getDefaultState().with(DispenserBlock.FACING, dir), pos);
                 }
-            } else {
-                setFlipped(!isFlipped());
-                this.cooldown = 8;
             }
         }
     }

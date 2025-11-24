@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.Entity;
@@ -56,6 +57,7 @@ public class ItemMixin {
             if (stack.getComponents().contains(DataComponentTypes.DAMAGE)) {
                 if (stack.isIn(ItemTags.PIGLIN_LOVED)) {
                     if (world.getTime() % (24000 / stack.getMaxDamage()) == 0) {
+                        if (entity instanceof PlayerEntity player && FixedMinecraft.getArmor(player).contains(stack)) return;
                         stack.setDamage(stack.getDamage() - 1);
                     }
                 }

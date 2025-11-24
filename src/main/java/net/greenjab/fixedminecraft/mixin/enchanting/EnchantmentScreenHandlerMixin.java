@@ -8,6 +8,8 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.EnchantingTableBlock;
 import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
+import net.minecraft.component.ComponentMap;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -30,6 +32,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
+import net.minecraft.util.Util;
 import net.minecraft.util.collection.IndexedIterable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -48,6 +51,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 /** Credits: Laazuli*/
 @Mixin(EnchantmentScreenHandler.class)
@@ -171,7 +175,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 Enchantment enchantment = registryEntry.value();
                 int level = entry.getIntValue();
                 // ensure enchantment fits on item
-                if (!(registryEntry.value()).isAcceptableItem(stack)) {
+                if (!((registryEntry.value()).isAcceptableItem(stack) || stack.isOf(Items.BOOK))) {
                     continue;
                 }
                 // ensure highest level found is applied; thanks to the map's behaviour, no enchantment will appear more than once
@@ -214,18 +218,14 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
 
             }
         }
-
+        if (stack.isOf(Items.BOOK)) {
+            enchantments.replaceAll((e, v) -> enchantments.get(e) / 2);
+        }
         boolean isGold = stack.isIn(ItemTags.PIGLIN_LOVED);
         // wrap in list and return
         List<EnchantmentLevelEntry> enchantmentsResult = new ArrayList<>();
         enchantments.forEach((enchantment, level) -> enchantmentsResult.add(new EnchantmentLevelEntry(enchantment, (isGold&&enchantment.value().getMaxLevel()!=1)?level+1:level)));
         cir.setReturnValue(enchantmentsResult);
-    }
-
-    @Redirect(method = "onContentChanged", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEnchantable()Z"))
-    private boolean noEnchantBook(ItemStack itemStack) {
-        if (itemStack.isOf(Items.BOOK)) return false;
-        return itemStack.isEnchantable();
     }
 
     /**
@@ -366,7 +366,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
                 for (int slot = 0;slot<6;slot++) {
                     ItemStack book = chiseledBookShelfEntity.getStack(slot);
                     if (book.isOf(Items.ENCHANTED_BOOK)) {
-                        book.remove(DataComponentTypes.REPAIR_COST);
+                        book.set(DataComponentTypes.REPAIR_COST, 0);
                     }
                 }
             }

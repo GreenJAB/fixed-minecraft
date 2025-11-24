@@ -75,6 +75,7 @@ public class FishingBobberEntityMixin {
         if (rand>chanceFish) lootPool = 1;
         if (rand>chanceFish+chanceBad) lootPool = 2;
         if (rand>chanceFish+chanceBad+chanceMid) lootPool = 3;
+        if (playerEntity.hasStatusEffect(StatusEffects.CONDUIT_POWER) && lootPool ==1)lootPool=0;
 
         String[] tables = {"fish", "junk", "mid", "treasure"};
 

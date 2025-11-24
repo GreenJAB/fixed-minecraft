@@ -15,14 +15,22 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
 
 @Mixin(MoveItemsTask.class)
 public abstract class MoveItemsTaskMixin {
@@ -99,9 +107,41 @@ public abstract class MoveItemsTaskMixin {
             if (testItem != ItemStack.EMPTY) {
                 return ItemStack.areItemsAndComponentsEqual(chest, testItem);
             }
+        } else if (chest.getComponents().contains(DataComponentTypes.CONTAINER)) {
+            ContainerComponent container = chest.getComponents().get(DataComponentTypes.CONTAINER);
+            for (ItemStack itemStack2 : container.stream().toList()) {
+                if (ItemStack.areItemsEqual(golem, itemStack2)) {
+                    return true;
+                }
+            }
+        } else if (chest.getComponents().contains(DataComponentTypes.BUNDLE_CONTENTS)) {
+            BundleContentsComponent container = chest.getComponents().get(DataComponentTypes.BUNDLE_CONTENTS);
+            for (ItemStack itemStack2 : container.stream().toList()) {
+                if (ItemStack.areItemsEqual(golem, itemStack2)) {
+                    return true;
+                }
+            }
+        } else if (chest.getComponents().contains(DataComponentTypes.CUSTOM_NAME)) {
+            if (chest.isOf(Items.PAPER)||chest.isOf(Items.NAME_TAG)) {
+                String string = chest.getComponents().get(DataComponentTypes.CUSTOM_NAME).getLiteralString();
+                if (string.startsWith("#")) {
+                    string = string.substring(1);
+                    return testTags(golem, string);
+                }
+            }
         }
         return original.call(chest, golem);
     }
 
+    @Unique
+    private static boolean testTags(ItemStack golem, String id) {
+        Predicate<Identifier> predicate;
+        predicate =  idx -> Objects.equals(idx.getPath(), id);
+        AtomicBoolean bool = new AtomicBoolean(false);
+        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).filter( tag -> predicate.test(tag.id())).forEach(tag->{
+                if (golem.isIn(tag)) bool.set(true);
+        });
+        return bool.get();
+    }
 
 }

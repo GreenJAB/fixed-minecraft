@@ -14,8 +14,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,7 +26,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
@@ -84,6 +86,21 @@ public abstract class ItemStackMixin {
             return TooltipType.ADVANCED;
         }
         return TooltipType.BASIC;
+    }
+
+    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/MergedComponentMap;size()I"))
+    private void addTagsTooltip(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player,
+                                TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if (player.isCreative()) testTags(stack, textConsumer);
+        stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
+    }
+
+    @Unique
+    private static void testTags(ItemStack stack, Consumer<Text> textConsumer) {
+        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).forEach(tag->{
+            if (stack.isIn(tag)) textConsumer.accept(Text.translatable("item.tags", tag.id().getPath()).formatted(Formatting.DARK_AQUA));
+        });
     }
 
 }

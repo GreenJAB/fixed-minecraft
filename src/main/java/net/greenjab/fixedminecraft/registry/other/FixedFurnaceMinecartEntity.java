@@ -223,6 +223,10 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         minecart.setVelocity(train.get(train.size()-1).getVelocity().add(0, 0.1, 0));
         minecart.setPosition(minecart2.getEntityPos());
         minecart.setPitch(minecart2.getPitch());
+        if (minecart instanceof DispencerMinecartEntity dispencerMinecartEntity) {
+            float dif = minecart.getYaw()-minecart2.getYaw();
+            if (Math.acos(Math.cos(dif))>Math.PI/2)dispencerMinecartEntity.setFlipped(!dispencerMinecartEntity.isFlipped());
+        }
         minecart.setYaw((minecart2.getYaw() + 360) % 360);
         minecart.age = 0;
         train.add(minecart);
