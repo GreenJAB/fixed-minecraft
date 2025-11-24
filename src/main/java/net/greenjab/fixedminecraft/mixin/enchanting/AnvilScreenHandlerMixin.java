@@ -8,6 +8,7 @@ import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.AnvilBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.component.ComponentType;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -28,6 +29,7 @@ import net.minecraft.screen.slot.ForgingSlotsManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringHelper;
+import net.minecraft.util.Util;
 import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -38,6 +40,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 
 @Mixin(AnvilScreenHandler.class)
@@ -121,7 +128,8 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
         ItemEnchantmentsComponent.Builder builder = new ItemEnchantmentsComponent.Builder(EnchantmentHelper.getEnchantments(outputItemStack));
         this.repairItemUsage = 0;
         if (!secondInputStack.isEmpty()) {
-            boolean book2 = secondInputStack.contains(DataComponentTypes.STORED_ENCHANTMENTS);
+            boolean ebook = secondInputStack.isOf(Items.ENCHANTED_BOOK);
+            boolean book2 = ebook || secondInputStack.isOf(Items.BOOK);
             //2nd slot are ingots
             if (outputItemStack.isDamageable() && firstInputStack.canRepairWith(secondInputStack)) {
                 int k = Math.min(outputItemStack.getDamage(), outputItemStack.getMaxDamage() / 2);
@@ -150,7 +158,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
 
                 if (outputItemStack.isDamageable() && !book2) {
-                    if (!secondInputStack.contains(DataComponentTypes.ENCHANTMENTS)) {
+                    if (EnchantmentHelper.getEnchantments(secondInputStack).isEmpty()) {
                         int kx = firstInputStack.getMaxDamage() - firstInputStack.getDamage();
                         int m = secondInputStack.getMaxDamage() - secondInputStack.getDamage();
                         int n = m + outputItemStack.getMaxDamage() * 12 / 100;
@@ -176,16 +184,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                         RegistryEntry<Enchantment> registryEntry = entry.getKey();
                         int q = builder.getLevel(registryEntry);
                         int r = entry.getIntValue();
-                        r = q == r ? r + 1 : Math.max(r, q);
                         Enchantment enchantment = registryEntry.value();
-                        if (q == r) {
-                            if (r < enchantment.getMaxLevel()) {
-                                r = r + 1;
-                            }
-                        }
-                        else {
-                            r = Math.max(r, q);
-                        }
+                        r = q == r ? r + (ebook&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
+
 
                         boolean canAdd = enchantment.isAcceptableItem(firstInputStack);
                         if (this.player.getAbilities().creativeMode || firstInputStack.isOf(Items.ENCHANTED_BOOK)) {
@@ -274,7 +275,13 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
             }
         }
         if (!newName && outputItemStack.isOf(Items.ENCHANTED_BOOK)) {
-            outputItemStack.remove(DataComponentTypes.REPAIR_COST);
+            outputItemStack.set(DataComponentTypes.REPAIR_COST, 0);
+        }
+        if (ItemStack.areItemsAndComponentsEqual(firstInputStack, outputItemStack)) {
+            this.output.setStack(0, ItemStack.EMPTY);
+            this.levelCost.set(capNum * enchantmentCapacity);
+            ci.cancel();
+            return;
         }
         this.output.setStack(0, outputItemStack);
         ci.cancel();
@@ -348,7 +355,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
                 }
             }
         } else {
-            this.input.setStack(1, ItemStack.EMPTY);
+            ItemStack itemStack = this.input.getStack(1);
+            itemStack.decrement(1);
+            this.input.setStack(1, itemStack);
         }
 
         this.context.run((world, pos) -> {
