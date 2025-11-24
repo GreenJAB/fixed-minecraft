@@ -15,8 +15,11 @@ import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -110,6 +113,21 @@ public abstract class ItemStackMixin {
     @ModifyArg(method = "getTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/ItemStack;appendTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 3), index = 3)
     private TooltipType noEnchantLocationIconOnItems(TooltipType type) {
         return TooltipType.BASIC;
+    }
+
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/MergedComponentMap;size()I"))
+    private void addTagsTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
+                                CallbackInfoReturnable<List<Text>> cir, @Local List<Text> list) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if (player.isCreative()) testTags(stack, list);
+        //stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
+    }
+
+    @Unique
+    private static void testTags(ItemStack stack, List<Text> list) {
+        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).forEach(tag->{
+            if (stack.isIn(tag)) list.add(Text.translatable("item.tags",  tag.id().getPath()).formatted(Formatting.DARK_AQUA));
+        });
     }
 
 }
