@@ -219,7 +219,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
             }
         }
         if (stack.isOf(Items.BOOK)) {
-            enchantments.replaceAll((e, v) -> enchantments.get(e) / 2);
+            enchantments.replaceAll((e, v) -> Math.max(enchantments.get(e) / 2, 1));
         }
         boolean isGold = stack.isIn(ItemTags.PIGLIN_LOVED);
         // wrap in list and return
