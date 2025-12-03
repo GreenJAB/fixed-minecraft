@@ -30,7 +30,6 @@ import java.util.List;
 
 public class FixedMinecraftClient implements ClientModInitializer {
     public static float paleGardenFog = 0f;
-    public static EquipmentModel netheriteModel = createHumanoidAndHorseModel("netherite");
     public static EquipmentModel chainmailModel = createHumanoidAndHorseModel("chainmail");
     public static EquipmentModel copperExposedModel = createHumanoidOnlyModel("copper_exposed");
     public static EquipmentModel copperWeatheredModel = createHumanoidOnlyModel("copper_weathered");

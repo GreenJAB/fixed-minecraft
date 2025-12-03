@@ -49,10 +49,11 @@ public class AbstractDonkeyEntityRendererMixin <T extends AbstractDonkeyEntity> 
     float getArmorValue(ItemStack item) {
         if (item.isOf(Items.LEATHER_HORSE_ARMOR)) return 1f;
         if (item.isOf(ItemRegistry.CHAINMAIL_HORSE_ARMOR)) return 2f;
-        if (item.isOf(Items.IRON_HORSE_ARMOR)) return 3f;
-        if (item.isOf(Items.GOLDEN_HORSE_ARMOR)) return 4f;
-        if (item.isOf(Items.DIAMOND_HORSE_ARMOR)) return 5f;
-        if (item.isOf(ItemRegistry.NETHERITE_HORSE_ARMOR)) return 6f;
+        if (item.isOf(Items.COPPER_HORSE_ARMOR)) return 3f;
+        if (item.isOf(Items.IRON_HORSE_ARMOR)) return 4f;
+        if (item.isOf(Items.GOLDEN_HORSE_ARMOR)) return 5f;
+        if (item.isOf(Items.DIAMOND_HORSE_ARMOR)) return 6f;
+        if (item.isOf(Items.NETHERITE_HORSE_ARMOR)) return 7f;
         return 0f;
     }
 }

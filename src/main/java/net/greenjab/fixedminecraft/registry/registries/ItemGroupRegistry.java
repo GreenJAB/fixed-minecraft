@@ -16,7 +16,6 @@ public class ItemGroupRegistry {
                         entries.add(ItemRegistry.DRAGON_FIREWORK_ROCKET);
                         entries.add(ItemRegistry.MAP_BOOK);
                         entries.add(ItemRegistry.CHAINMAIL_HORSE_ARMOR);
-                        entries.add(ItemRegistry.NETHERITE_HORSE_ARMOR);
 
                         entries.add(ItemRegistry.BROKEN_TOTEM);
                         entries.add(ItemRegistry.ECHO_TOTEM);

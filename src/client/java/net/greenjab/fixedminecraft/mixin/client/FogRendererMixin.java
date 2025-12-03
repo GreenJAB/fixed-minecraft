@@ -24,7 +24,7 @@ public class FogRendererMixin  {
         if (!fogModifier.toString().toLowerCase().contains("atmosphericfogmodifier")) return original;
         int light = world.getLightLevel(LightType.SKY, camera.getBlockPos());
         float l = Math.min(Math.max(0.3f+light/7f, 0.15f), 1);
-        Vector3f c = ColorHelper.toVector(original);
+        Vector3f c = ColorHelper.toRgbVector(original);
         Color fogColor = new Color(c.x * l, c.y * l, c.z * l, 1);
         return fogColor.hashCode();
     }

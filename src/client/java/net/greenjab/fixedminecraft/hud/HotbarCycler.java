@@ -5,7 +5,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerInteractionManager;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Direction;
 import org.lwjgl.glfw.GLFW;
@@ -33,7 +32,7 @@ public class HotbarCycler
             swap(client, 18 + i, i);
             swap(client, (direction == Direction.DOWN ? 27 : 9) + i, i);
         }
-        client.player.playSoundToPlayer(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.UI, 0.5f, 1.5f);
+        client.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1.5f);
     }
 
     public static void shiftSingle(MinecraftClient client, int hotbarSlot, final Direction direction) {
@@ -43,7 +42,7 @@ public class HotbarCycler
         swap(client, (direction == Direction.DOWN ? 9 : 27) + hotbarSlot, hotbarSlot);
         swap(client, 18 + hotbarSlot, hotbarSlot);
         swap(client, (direction == Direction.DOWN ? 27 : 9) + hotbarSlot, hotbarSlot);
-        client.player.playSoundToPlayer(SoundEvents.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 0.5f, 1.8f);
+        client.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1.8f);
     }
 
     public static void swap(MinecraftClient client, int from, int to) {

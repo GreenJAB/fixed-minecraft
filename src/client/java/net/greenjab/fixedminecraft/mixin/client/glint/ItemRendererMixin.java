@@ -89,6 +89,6 @@ public class ItemRendererMixin {
     @Unique
     private static boolean useTransparentGlint(RenderLayer renderLayer) {
         return MinecraftClient.usesImprovedTransparency()
-               && (renderLayer == TexturedRenderLayers.getItemEntityTranslucentCull() || renderLayer == TexturedRenderLayers.method_76545());
+               && (renderLayer == TexturedRenderLayers.getItemTranslucentCull() || renderLayer == TexturedRenderLayers.getBlockTranslucentCull());
     }
 }

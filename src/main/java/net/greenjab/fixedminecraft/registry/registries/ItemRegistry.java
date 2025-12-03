@@ -59,10 +59,6 @@ public class ItemRegistry {
     public static final Item CHAINMAIL_HORSE_ARMOR = register(
             "chainmail_horse_armor", new Item.Settings().horseArmor(ArmorMaterials.CHAIN));
 
-
-    public static final Item NETHERITE_HORSE_ARMOR = register(
-            "netherite_horse_armor",new Item.Settings().horseArmor(ArmorMaterials.NETHERITE).fireproof().rarity(Rarity.RARE));
-
     public static final Item BROKEN_TOTEM = register("broken_totem", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
     public static final Item ECHO_TOTEM = register(
             "echo_totem", TotemItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).component(DataComponentTypes.DEATH_PROTECTION, DeathProtectionComponent.TOTEM_OF_UNDYING));

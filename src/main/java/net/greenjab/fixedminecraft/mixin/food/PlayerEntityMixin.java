@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
-import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -34,9 +33,8 @@ public class PlayerEntityMixin
         if (PE.getEntityWorld().getDifficulty().getId()==0) cir.setReturnValue(true);
     }
 
-    @Redirect(method = "method_76458", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;canSprint()Z"))
-    private boolean staminaCanLunge(HungerManager instance) {
-        PlayerEntity PE = (PlayerEntity)(Object)this;
+    @Redirect(method = "useAttackEnchantmentEffects", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;canSprintOrFly()Z"))
+    private boolean staminaCanLunge(PlayerEntity PE) {
         if (PE.getEntityWorld() instanceof ServerWorld) {
             ItemStack weapon = PE.getWeaponStack();
             if (!weapon.isEmpty()) {

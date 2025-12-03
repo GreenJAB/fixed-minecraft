@@ -26,7 +26,6 @@ public class EquipmentRendererMixin {
     ))
     private EquipmentModel useNewArmorModel(EquipmentModel original, @Local(argsOnly = true) RegistryKey<EquipmentAsset> assetKey, @Local(argsOnly = true)
                                             ItemStack stack, @Local(argsOnly = true) EquipmentModel.LayerType layerType) {
-        if (assetKey.getValue().toString().toLowerCase().contains("netherite")) return FixedMinecraftClient.netheriteModel;
         if (assetKey.getValue().toString().toLowerCase().contains("chainmail")) return FixedMinecraftClient.chainmailModel;
         if (assetKey.getValue().toString().toLowerCase().contains("copper") && (layerType == EquipmentModel.LayerType.HUMANOID||layerType == EquipmentModel.LayerType.HUMANOID_LEGGINGS)) {
             float durability = stack.getDamage() /(stack.getMaxDamage()+0.0f);
