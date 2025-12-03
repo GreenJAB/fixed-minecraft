@@ -115,7 +115,7 @@ public abstract class ItemStackMixin {
         return TooltipType.BASIC;
     }
 
-    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/MergedComponentMap;size()I"))
+    @Inject(method = "getTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/ComponentMapImpl;size()I"))
     private void addTagsTooltip(Item.TooltipContext context, @Nullable PlayerEntity player, TooltipType type,
                                 CallbackInfoReturnable<List<Text>> cir, @Local List<Text> list) {
         ItemStack stack = (ItemStack)(Object)this;
@@ -125,7 +125,7 @@ public abstract class ItemStackMixin {
 
     @Unique
     private static void testTags(ItemStack stack, List<Text> list) {
-        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).forEach(tag->{
+        Registries.ITEM.streamTags().forEach(tag->{
             if (stack.isIn(tag)) list.add(Text.translatable("item.tags",  tag.id().getPath()).formatted(Formatting.DARK_AQUA));
         });
     }
