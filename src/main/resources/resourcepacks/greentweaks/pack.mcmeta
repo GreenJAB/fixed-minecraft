@@ -1,8 +1,8 @@
 {
     "pack": {
-        "pack_format": 69,
-        "min_format": 69,
-        "max_format": 69,
+        "pack_format": 75.0,
+        "min_format": 75.0,
+        "max_format": 75.0,
         "description": "\u00A72Dark UI And Other Less Important Tweaks"
     }
 }
