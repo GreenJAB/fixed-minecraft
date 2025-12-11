@@ -34,6 +34,10 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public static EquipmentModel copperExposedModel = createHumanoidOnlyModel("copper_exposed");
     public static EquipmentModel copperWeatheredModel = createHumanoidOnlyModel("copper_weathered");
     public static EquipmentModel copperOxidizedModel = createHumanoidOnlyModel("copper_oxidized");
+    public static EquipmentModel scuteNautilusArmor = EquipmentModel.builder()
+            .addLayers(EquipmentModel.LayerType.NAUTILUS_BODY, EquipmentModel.Layer.create(Identifier.ofVanilla("armadillo_scute"), false))
+            .addLayers(EquipmentModel.LayerType.NAUTILUS_BODY, EquipmentModel.Layer.create(Identifier.ofVanilla("armadillo_scute_overlay"), true))
+            .build();
     public static SimpleOption<Boolean> newArmorHud = SimpleOption.ofBoolean("options.newArmorHud", true);
     public static SimpleOption<Boolean> fog_21_6 = SimpleOption.ofBoolean("options.fog_21_6", true);
 

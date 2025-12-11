@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:adventure/revaulting",
+  "parent": "minecraft:adventure/spear_many_mobs",
   "criteria": {
     "overoverkill": {
       "conditions": {

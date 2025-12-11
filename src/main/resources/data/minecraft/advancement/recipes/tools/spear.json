@@ -1,0 +1,32 @@
+{
+    "parent": "minecraft:recipes/root",
+    "criteria": {
+        "has_core": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "heavy_core"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "has_the_recipe": {
+            "conditions": {
+                "recipe": "fixedminecraft:spear"
+            },
+            "trigger": "minecraft:recipe_unlocked"
+        }
+    },
+    "requirements": [
+        [
+            "has_the_recipe",
+            "has_core"
+        ]
+    ],
+    "rewards": {
+        "recipes": [
+            "fixedminecraft:spear"
+        ]
+    }
+}

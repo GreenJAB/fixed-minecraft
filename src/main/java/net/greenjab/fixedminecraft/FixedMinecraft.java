@@ -64,6 +64,14 @@ public class FixedMinecraft implements ModInitializer {
                 ResourcePackActivationType.NORMAL
         ));
 
+        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer ->
+                ResourceManagerHelper.registerBuiltinResourcePack(
+                FixedMinecraft.id("removed_features_21_11"),
+                modContainer,
+                Text.of("Removed Features from 1.21.11"),
+                ResourcePackActivationType.DEFAULT_ENABLED
+        ));
+
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 dispatcher.register(CommandManager.literal("mapBookMarker")

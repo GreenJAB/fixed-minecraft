@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:compass"
+    "minecraft:compass",
+    "fixedminecraft:nautilus_armor"
   ]
 }

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:adventure/revaulting",
+  "criteria": {
+    "spear_many_mobs": {
+      "conditions": {
+        "count": 5
+      },
+      "trigger": "minecraft:spear_mobs"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.adventure.spear_many_mobs.description"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "fixedminecraft:spear"
+    },
+    "title": {
+      "translate": "advancements.adventure.spear_many_mobs.title"
+    }
+  },
+  "requirements": [
+    [
+      "spear_many_mobs"
+    ]
+  ],
+    "rewards": {
+        "experience": 1000
+    },
+  "sends_telemetry_event": true
+}

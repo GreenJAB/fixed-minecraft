@@ -30,6 +30,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.MinecartItem;
 import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
+import net.minecraft.item.ToolMaterial;
 import net.minecraft.item.consume.ApplyEffectsConsumeEffect;
 import net.minecraft.item.consume.UseAction;
 import net.minecraft.item.equipment.ArmorMaterials;
@@ -51,17 +52,22 @@ import java.util.function.UnaryOperator;
 public class ItemRegistry {
 
     public static final Item DRAGON_FIREWORK_ROCKET = register(
-            "dragon_firework_rocket", FireworkRocketItem::new, new Item.Settings().useCooldown(1.0F).component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of()))
+            "dragon_firework_rocket", FireworkRocketItem::new, new Item.Settings().useCooldown(1.0F)
+                    .component(DataComponentTypes.FIREWORKS, new FireworksComponent(1, List.of()))
     );
     public static final Item MAP_BOOK = register("map_book", MapBookItem::new, new Item.Settings().maxCount(16));
-    public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC).packetCodec(MapBookAdditionsComponent.PACKET_CODEC).cache());
+    public static final ComponentType<MapBookAdditionsComponent> MAP_BOOK_ADDITIONS = registerComponent("map_book_additions", (builder) -> builder.codec(MapBookAdditionsComponent.CODEC)
+            .packetCodec(MapBookAdditionsComponent.PACKET_CODEC)
+            .cache());
 
     public static final Item CHAINMAIL_HORSE_ARMOR = register(
             "chainmail_horse_armor", new Item.Settings().horseArmor(ArmorMaterials.CHAIN));
 
     public static final Item BROKEN_TOTEM = register("broken_totem", Item::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON));
     public static final Item ECHO_TOTEM = register(
-            "echo_totem", TotemItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).component(DataComponentTypes.DEATH_PROTECTION, DeathProtectionComponent.TOTEM_OF_UNDYING));
+            "echo_totem", TotemItem::new, new Item.Settings().maxCount(1)
+                    .rarity(Rarity.UNCOMMON)
+                    .component(DataComponentTypes.DEATH_PROTECTION, DeathProtectionComponent.TOTEM_OF_UNDYING));
     public static final Item ECHO_FRUIT = register(
             "echo_fruit", EchoFruitItem::new, new Item.Settings().maxCount(1).rarity(Rarity.UNCOMMON).food(FoodComponents.CHORUS_FRUIT));
 
@@ -85,6 +91,16 @@ public class ItemRegistry {
     public static final Item DISPENSER_MINECART = register(
             "dispenser_minecart", settings -> new MinecartItem(OtherRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Settings().maxCount(1)
     );
+
+
+
+    public static final Item SPEAR = register(
+            "spear", new Item.Settings().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F)
+    );
+    public static final Item NAUTILUS_ARMOR = register("nautilus_armor", new Item.Settings().nautilusArmor(ArmorMaterials.ARMADILLO_SCUTE));
+
+
+
 
     public static final ConsumableComponent GLOW_BERRIES_EFFECT = food()
             .consumeEffect(new ApplyEffectsConsumeEffect(new StatusEffectInstance(StatusEffects.GLOWING, 200, 0), 1F))

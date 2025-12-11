@@ -57,6 +57,12 @@ public class ItemGroupRegistry {
                          entries.add(ItemRegistry.AZALEA_SHELF);
 
                          entries.add(ItemRegistry.DISPENSER_MINECART);
+
+
+                         //if (displayContext.enabledFeatures().contains(OtherRegistry.SPEAR_REBALANCE)) {
+                             entries.add(ItemRegistry.SPEAR);
+                             entries.add(ItemRegistry.NAUTILUS_ARMOR);
+                         //}
                     }).build();
 
 
