@@ -110,11 +110,6 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:diamond_block"
-                },
-                {
-                    "type": "minecraft:item",
-                    "name": "minecraft:heavy_core",
-                    "weight": 10
                 }
             ],
             "rolls": 1

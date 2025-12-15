@@ -103,9 +103,11 @@ public abstract class MoveItemsTaskMixin {
             }
         } else if (golem.getComponents().contains(DataComponentTypes.BUNDLE_CONTENTS)) {
             BundleContentsComponent container = golem.getComponents().get(DataComponentTypes.BUNDLE_CONTENTS);
-            ItemStack testItem = container.get(0);
-            if (testItem != ItemStack.EMPTY) {
-                return ItemStack.areItemsAndComponentsEqual(chest, testItem);
+            if (!container.isEmpty()) {
+                ItemStack testItem = container.get(0);
+                if (testItem != ItemStack.EMPTY) {
+                    return ItemStack.areItemsAndComponentsEqual(chest, testItem);
+                }
             }
         } else if (chest.getComponents().contains(DataComponentTypes.CONTAINER)) {
             ContainerComponent container = chest.getComponents().get(DataComponentTypes.CONTAINER);

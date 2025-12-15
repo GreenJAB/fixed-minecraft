@@ -174,10 +174,6 @@
                         }
                     ],
                     "name": "minecraft:diamond_axe"
-                },
-                {
-                    "type": "minecraft:item",
-                    "name": "minecraft:heavy_core"
                 }
             ],
             "rolls": 1

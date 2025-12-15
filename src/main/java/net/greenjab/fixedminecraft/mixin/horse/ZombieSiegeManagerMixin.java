@@ -26,7 +26,7 @@ public abstract class ZombieSiegeManagerMixin  {
         ZombieHorseEntity ZHE = EntityType.ZOMBIE_HORSE.create(world, SpawnReason.EVENT);
         zombieEntity.setStackInHand(Hand.MAIN_HAND, Items.STONE_HOE.getDefaultStack());
         if (ZHE != null && world.random.nextInt(10)==0) {
-            zombieEntity.setStackInHand(Hand.MAIN_HAND, Items.STONE_SWORD.getDefaultStack());
+            zombieEntity.setStackInHand(Hand.MAIN_HAND, Items.IRON_SPEAR.getDefaultStack());
             zombieEntity.equipStack(EquipmentSlot.HEAD, Items.IRON_HELMET.getDefaultStack());
             ZHE.refreshPositionAndAngles(zombieEntity.getX(), zombieEntity.getY(), zombieEntity.getZ(), zombieEntity.getYaw(), 0.0F);
             ZHE.initialize(world, world.getLocalDifficulty(zombieEntity.getBlockPos()), SpawnReason.EVENT, null);
