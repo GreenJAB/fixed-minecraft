@@ -33,6 +33,7 @@ public class TradeOffersMixin {
 
         PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.FISHERMAN).replace(4, new TradeOffers.Factory[]{
                 new TradeOffers.BuyItemFactory(Items.TROPICAL_FISH, 6, 12, 30),
+                new TradeOffers.BuyItemFactory(Items.FERMENTED_SPIDER_EYE, 3, 12, 30),
                 new TradeOffers.BuyItemFactory(Items.PUFFERFISH, 4, 12, 30)});
 
         PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.FISHERMAN).replace(5, new TradeOffers.Factory[]{
