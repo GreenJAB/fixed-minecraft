@@ -119,7 +119,6 @@ public abstract class ItemStackMixin {
                                 TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
         ItemStack stack = (ItemStack)(Object)this;
         if (player.isCreative()) testTags(stack, textConsumer);
-        stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
     }
 
     @Unique
