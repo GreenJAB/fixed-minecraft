@@ -31,6 +31,7 @@
         "MerchantScreenMixin",
         "MinecraftClientMixin",
         "MouseMixin",
+        "PlayerEntityRendererMixin",
         "RecipeBookWidgetMixin",
         "TooltipComponentMixin",
         "VideoOptionsScreenMixin",

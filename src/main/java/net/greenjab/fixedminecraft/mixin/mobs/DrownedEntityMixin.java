@@ -32,6 +32,11 @@ import java.util.Objects;
 @Mixin(DrownedEntity.class)
 public  class DrownedEntityMixin {
 
+    @ModifyArg(method = "initCustomGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/DrownedEntity$TridentAttackGoal;<init>(Lnet/minecraft/entity/ai/RangedAttackMob;DIF)V"), index = 2)
+    private int longerTridenDelay(int i) {
+        return 100;
+    }
+
     @Inject(method = "initEquipment", at = @At(value = "HEAD"), cancellable = true)
     private void drownedGear(Random random, LocalDifficulty localDifficulty, CallbackInfo ci){
         DrownedEntity DE = (DrownedEntity) (Object) this;
