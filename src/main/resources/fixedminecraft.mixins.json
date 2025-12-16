@@ -104,6 +104,7 @@
         "mobs.CreakingEntityMixin",
         "mobs.CreakingHeartBlockMixin",
         "mobs.CreeperEntityMixin",
+        "mobs.DrownedEntityMixin",
         "mobs.DungeonFeatureMixin",
         "mobs.DyeItemMixin",
         "mobs.GameRulesMixin",

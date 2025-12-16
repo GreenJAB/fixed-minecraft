@@ -121,7 +121,6 @@ public abstract class ItemStackMixin {
                                 CallbackInfoReturnable<List<Text>> cir, @Local List<Text> list) {
         ItemStack stack = (ItemStack)(Object)this;
         if (player.isCreative()) testTags(stack, list);
-        //stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
     }
 
     @Unique
