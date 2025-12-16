@@ -95,6 +95,7 @@
         "mobs.BiomeSourceMixin",
         "mobs.CaveSpiderEntityMixin",
         "mobs.CreeperEntityMixin",
+        "mobs.DrownedEntityMixin",
         "mobs.DungeonFeatureMixin",
         "mobs.DyeItemMixin",
         "mobs.GameRulesMixin",
