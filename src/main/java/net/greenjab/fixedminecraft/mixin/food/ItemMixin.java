@@ -59,6 +59,7 @@ public class ItemMixin {
         if (entity instanceof PlayerEntity || entity instanceof ArmorStandEntity) {
             if (stack.getComponents().contains(DataComponentTypes.DAMAGE)) {
                 if (stack.isIn(ItemTags.PIGLIN_LOVED)) {
+                    if (stack.getMaxDamage()==0) return;
                     if (world.getTime() % (24000 / stack.getMaxDamage()) == 0) {
                         if (entity instanceof PlayerEntity player && FixedMinecraft.getArmor(player).contains(stack)) return;
                         stack.setDamage(stack.getDamage() - 1);
