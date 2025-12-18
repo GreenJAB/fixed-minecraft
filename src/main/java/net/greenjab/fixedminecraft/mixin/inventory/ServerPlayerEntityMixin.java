@@ -2,11 +2,14 @@ package net.greenjab.fixedminecraft.mixin.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerEntity.class)
@@ -18,4 +21,19 @@ public class ServerPlayerEntityMixin {
         if (diff == 2) itemEntity.setCovetedItem();
         if (diff < 2) itemEntity.setNeverDespawn();
     }*/
+
+    //copyFrom
+    @Inject(method = "copyFrom", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerEntity;setScore(I)V"))
+    private void keepInventoryCraftingGrid(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        ServerPlayerEntity SPE = (ServerPlayerEntity) (Object)this;
+        RecipeInputInventory craftingGrid = SPE.playerScreenHandler.getCraftingInput();
+        RecipeInputInventory craftingGridOriginal = oldPlayer.playerScreenHandler.getCraftingInput();
+
+        for (int i = 0; i < craftingGridOriginal.size(); i++) {
+            ItemStack itemStack = craftingGridOriginal.getStack(i);
+            if (!itemStack.isEmpty()) {
+                craftingGrid.setStack(i, itemStack);
+            }
+        }
+    }
 }
