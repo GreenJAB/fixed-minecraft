@@ -22,7 +22,7 @@ import java.util.Objects;
 public  class DrownedEntityMixin {
 
     @ModifyArg(method = "initCustomGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/mob/DrownedEntity$TridentAttackGoal;<init>(Lnet/minecraft/entity/ai/RangedAttackMob;DIF)V"), index = 2)
-    private int longerTridenDelay(int i) {
+    private int longerTridentDelay(int i) {
         return 80;
     }
 
