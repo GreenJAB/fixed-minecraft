@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.SellCompassFactory;
 import net.greenjab.fixedminecraft.registry.registries.StatusRegistry;
+import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.item.map.MapDecorationTypes;
@@ -80,6 +83,17 @@ public class TradeOffersMixin {
                 new TradeOffers.Factory[]{
                         new TradeOffers.BuyItemFactory(Items.TURTLE_SCUTE, 4, 12, 30),
                         new TradeOffers.SellDyedArmorFactory(Items.LEATHER_HORSE_ARMOR, 20, 12, 30)
+                });
+
+        PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.FARMER).replace(4,
+                new TradeOffers.Factory[]{
+                        new TradeOffers.SellItemFactory(Blocks.CAKE, 1, 1, 12, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.NIGHT_VISION, 200, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.JUMP_BOOST, 200, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.WEAKNESS, 200, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.BLINDNESS, 200, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.POISON, 200, 15),
+                        new TradeOffers.SellSuspiciousStewFactory(StatusEffects.SATURATION, 200, 15)
                 });
 
         PROFESSION_TO_LEVELED_TRADE.replace(VillagerProfession.ARMORER, REBALANCED_PROFESSION_TO_LEVELED_TRADE.get(VillagerProfession.ARMORER));
