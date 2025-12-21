@@ -112,6 +112,7 @@
         "mobs.DrownedEntityMixin",
         "mobs.DungeonFeatureMixin",
         "mobs.DyeItemMixin",
+        "mobs.EndCityGeneratorMixin",
         "mobs.GameRulesMixin",
         "mobs.LivingEntityMixin",
         "mobs.LlamaEntityMixin",
