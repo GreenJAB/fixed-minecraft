@@ -32,7 +32,7 @@ public class PhantomSpawnerMixin {
     private int phantomSpawnByEffect(ServerStatHandler instance, Stat<?> stat,
                                      @Local ServerPlayerEntity serverPlayerEntity) {
         if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
-        return 720000;
+        return 100000 * (1+serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier());
     }
 
     @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Difficulty;getId()I"))
@@ -41,7 +41,7 @@ public class PhantomSpawnerMixin {
                                      @Local LocalDifficulty localDifficulty,
                                      @Local Random random) {
         if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
-        return instance.getId() + serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier()*2;
+        return instance.getId() + serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier();
     }
 
     @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(III)I", shift = At.Shift.AFTER))
