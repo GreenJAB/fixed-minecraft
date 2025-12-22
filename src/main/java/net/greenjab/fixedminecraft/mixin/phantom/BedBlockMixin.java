@@ -28,7 +28,7 @@ public class BedBlockMixin {
             if (!player.hasStatusEffect(StatusRegistry.INSOMNIA)) {
                 player.sendMessage(Text.translatable("block.minecraft.bed.awake"), true);
                 if (player instanceof ServerPlayerEntity serverPlayerEntity) {
-                    serverPlayerEntity.setSpawnPoint(new ServerPlayerEntity.Respawn(serverPlayerEntity.getWorld().getRegistryKey(), pos, serverPlayerEntity.getYaw(), false), true);
+                    serverPlayerEntity.setSpawnPoint(serverPlayerEntity.getWorld().getRegistryKey(), pos, serverPlayerEntity.getYaw(), false, true);
                 }
 
                 cir.setReturnValue(ActionResult.SUCCESS);

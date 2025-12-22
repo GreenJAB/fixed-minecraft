@@ -24,7 +24,7 @@ public class EndCityGeneratorMixin {
     private void dyeableShulkerEntities(String metadata, BlockPos pos, ServerWorldAccess world, Random random, BlockBox boundingBox,
                                         CallbackInfo ci, @Local ShulkerEntity shulkerEntity) {
         if (random.nextInt(10)==0) {
-            shulkerEntity.setColor(Optional.of(DyeColor.PURPLE));
+            shulkerEntity.setVariant(Optional.of(DyeColor.PURPLE));
         }
     }
 }
