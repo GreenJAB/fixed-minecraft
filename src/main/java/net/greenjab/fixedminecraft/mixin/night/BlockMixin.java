@@ -29,7 +29,7 @@ public class BlockMixin {
     ))
     private static void nightFarming(BlockState state, World world, BlockPos pos, BlockEntity blockEntity, Entity entity, ItemStack tool,
                                      CallbackInfo ci) {
-        if (world instanceof ServerWorld) {
+        if (world instanceof ServerWorld && entity!=null) {
             if ( state == Blocks.WHEAT.getDefaultState().with(CropBlock.AGE, 7) ||
                  state == Blocks.CARROTS.getDefaultState().with(CropBlock.AGE, 7) ||
                  state == Blocks.POTATOES.getDefaultState().with(CropBlock.AGE, 7) ||
