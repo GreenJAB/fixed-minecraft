@@ -117,31 +117,30 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     private void addStuff(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData,
                           CallbackInfoReturnable<EntityData> cir){
         MobEntity LE = (MobEntity)(Object)this;
-        Random random = LE.getEntityWorld().getRandom();
         int y= LE.getBlockPos().getY();
         if (LE instanceof HostileEntity && world.getDimension().hasSkyLight()) {
             addEffect(world, difficulty, LE, y);
-            addModifiers(world, random, LE);
+            addModifiers(world, LE);
 
         }
     }
 
     @Unique
-    private void addModifiers(ServerWorldAccess world, Random random, MobEntity LE) {
+    private void addModifiers(ServerWorldAccess world, MobEntity LE) {
         int i = 0;
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
         if (world.getDifficulty() == Difficulty.HARD) i = 2;
         if (this.getEntityWorld().getBiome(this.getBlockPos()).matchesKey(BiomeKeys.PALE_GARDEN)) i = 3;
-        float h = i*3*gaussian(random);
+        float h = i*3*gaussian();
         increaseHealth(LE, h);
-        increaseSpeed(random, LE, i);
+        increaseSpeed(LE, i);
     }
 
     @Unique
-    private static void increaseSpeed(Random random, MobEntity LE, int i) {
+    private static void increaseSpeed(MobEntity LE, int i) {
         if (LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED)!=null) {
             if (!LE.isBaby()) LE.getAttributeInstance(EntityAttributes.MOVEMENT_SPEED).setBaseValue(
-                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian(random))));
+                    LE.getAttributeBaseValue(EntityAttributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian())));
         }
     }
 
@@ -167,8 +166,8 @@ public abstract class MobEntityMixin <T extends MobEntity> extends LivingEntity 
     }
 
     @Unique
-    private static float gaussian(Random random){
-        return (float)(Math.tan(0.87433408*Math.PI*(random.nextFloat()-0.5f))/10.0f)+0.5f;
+    private static float gaussian(){
+        return (float)(Math.tan(0.87433408*Math.PI*(Math.random()-0.5f))/10.0f)+0.5f;
     }
 
     @Unique

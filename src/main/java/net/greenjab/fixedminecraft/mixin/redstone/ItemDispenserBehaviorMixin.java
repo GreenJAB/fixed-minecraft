@@ -17,6 +17,7 @@ import net.minecraft.world.GameMode;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -24,6 +25,9 @@ import java.util.UUID;
 
 @Mixin(ItemDispenserBehavior.class)
 public abstract class ItemDispenserBehaviorMixin  {
+
+    @Shadow
+    protected abstract void addStackOrSpawn(BlockPointer pointer, ItemStack stack);
 
     @Inject(at = @At("HEAD"), method = "dispenseSilently", cancellable = true)
     public void CauldronMixin(BlockPointer pointer, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
@@ -43,13 +47,20 @@ public abstract class ItemDispenserBehaviorMixin  {
                     return GameMode.SURVIVAL;
                 }
             };
-            cauldron.behaviorMap.map().get(stack.getItem()).interact(blockState, world, pos, p, Hand.MAIN_HAND, stack);
+            p.getInventory().setStack(0, stack);
+            boolean b =cauldron.behaviorMap.map().get(stack.getItem()).interact(blockState, world, pos, p, Hand.MAIN_HAND, stack).isAccepted();
+            if (!b) return;
+
+            if (!(p.getInventory().getStack(1)).isEmpty()) {
+                this.addStackOrSpawn(pointer, p.getInventory().getStack(1));
+            }
+
             if (stack.isIn(ItemTags.DYEABLE)) {
                 stack.remove(DataComponentTypes.DYED_COLOR);
                 cir.setReturnValue(stack);
                 return;
             }
-            cir.setReturnValue(p.getStackInHand(Hand.MAIN_HAND));
+            cir.setReturnValue(p.getInventory().getStack(0));
         }
     }
 
