@@ -138,4 +138,13 @@ public abstract class AbstractMinecartEntityMixin extends VehicleEntity {
         }
         return true;
     }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void removeLeash(CallbackInfo ci) {
+        if (this.getEntityWorld().isClient()) {
+            if (this.age==30) {
+                this.getCommandTags().clear();
+            }
+        }
+    }
 }

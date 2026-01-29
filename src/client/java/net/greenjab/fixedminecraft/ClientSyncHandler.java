@@ -6,10 +6,13 @@ import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
 import net.greenjab.fixedminecraft.network.MapPositionPayload;
 import net.greenjab.fixedminecraft.network.SaturationSyncPayload;
+import net.greenjab.fixedminecraft.network.TrainPayload;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
+import net.greenjab.fixedminecraft.registry.other.FixedFurnaceMinecartEntity;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.map.MapState;
 
 import java.util.ArrayList;
@@ -24,6 +27,7 @@ public class ClientSyncHandler {
         ClientPlayNetworking.registerGlobalReceiver(MapBookOpenPayload.PACKET_ID, ClientSyncHandler::mapBookOpen);
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
         ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
+        ClientPlayNetworking.registerGlobalReceiver(TrainPayload.PACKET_ID, ClientSyncHandler::train);
 
     }
     private static void mapBookOpen(MapBookOpenPayload payload, ClientPlayNetworking.Context context) {
@@ -53,6 +57,18 @@ public class ClientSyncHandler {
                 MapState mapstate = world.getMapState(payload.mapIdComponent());
                 if (mapstate != null) {
                     ((MapStateAccessor)mapstate).fixedminecraft$setPosition(payload.centerX(), payload.centerZ());
+                }
+            }
+        });
+    }
+
+    private static void train(TrainPayload payload, ClientPlayNetworking.Context context) {
+        context.client().execute(()-> {
+            ClientWorld world = context.client().world;
+            if (world != null) {
+                Entity entity = world.getEntity((payload.train().get(0)));
+                if (entity instanceof FixedFurnaceMinecartEntity furnaceMinecart) {
+                    furnaceMinecart.setTrain(payload.train());
                 }
             }
         });

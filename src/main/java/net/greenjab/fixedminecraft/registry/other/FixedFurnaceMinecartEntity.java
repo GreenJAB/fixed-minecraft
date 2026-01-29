@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.registry.other;
 
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.greenjab.fixedminecraft.network.TrainPayload;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -12,7 +14,11 @@ import net.minecraft.entity.vehicle.HopperMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.server.PlayerManager;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -27,6 +33,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +50,40 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
     public FixedFurnaceMinecartEntity(EntityType<? extends FurnaceMinecartEntity> entityType, World world) { super(entityType, world);}
 
     public ArrayList<AbstractMinecartEntity> getTrain() { return train; }
+    public void setTrain(ArrayList<UUID> setTrain) {
+        if (!setTrain.isEmpty()) {
+            train.clear();
+            int i = 1;
+            for (UUID uuid : setTrain) {
+                Entity entity = this.getEntityWorld().getEntity(uuid);
+                if (entity instanceof AbstractMinecartEntity minecart) {
+                    minecart.age = 0;
+                    minecart.getCommandTags().clear();
+                    if (i<setTrain.size()) minecart.getCommandTags().add(setTrain.get(i).toString());
+                    train.add(minecart);
+                }
+                i++;
+            }
+        }
+    }
+
+    public static void sendToAround(PlayerManager playerManager, @Nullable PlayerEntity player, double x, double y, double z, double distance, RegistryKey<World> worldKey, CustomPayload payload) {
+        for (int i = 0; i < playerManager.getPlayerList().size(); i++) {
+            ServerPlayerEntity serverPlayerEntity = playerManager.getPlayerList().get(i);
+            if (serverPlayerEntity != player && serverPlayerEntity.getEntityWorld().getRegistryKey() == worldKey) {
+                double d = x - serverPlayerEntity.getX();
+                double e = y - serverPlayerEntity.getY();
+                double f = z - serverPlayerEntity.getZ();
+                if (d * d + e * e + f * f < distance * distance) {
+                    ServerPlayNetworking.send(serverPlayerEntity, payload);
+                }
+            }
+        }
+    }
 
     @Override
     public void tick() {
-        if (!this.getEntityWorld().isClient()) {
+        if (this.getEntityWorld() instanceof ServerWorld serverWorld) {
             if (!uuids.isEmpty()) {
                 train.clear();
                 train.add(this);
@@ -64,7 +101,9 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                     }
                 }
                 uuids.clear();
+                sendToClient(serverWorld);
             }
+            if (getEntityWorld().getTime()%20==0) sendToClient(serverWorld);
         }
         super.tick();
         if (!this.getEntityWorld().isClient()) {
@@ -162,6 +201,22 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         if (this.isLit() && this.random.nextInt(4) == 0) {
             this.getEntityWorld().addParticleClient(ParticleTypes.LARGE_SMOKE, this.getX(), this.getY() + 0.8, this.getZ(), 0.0, 0.0, 0.0);
         }
+    }
+
+    private void sendToClient(ServerWorld serverWorld) {
+        ArrayList<UUID> trainUuids = new ArrayList<>();
+        for (AbstractMinecartEntity entity : train) trainUuids.add(entity.getUuid());
+        TrainPayload payload = new TrainPayload(trainUuids);
+        sendToAround(serverWorld.getServer()
+                        .getPlayerManager(),
+                null,
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                100,
+                serverWorld.getRegistryKey(),
+                payload
+        );
     }
 
     private void setFakeMinecart(AbstractMinecartEntity fakeMinecart, AbstractMinecartEntity minecart) {
@@ -268,6 +323,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
         for (int i = 1;i<train.size();i++) {
             view.putString("Train"+i, String.valueOf(train.get(i).getUuid()));
         }
+        view.putBoolean("Lit", isLit());
     }
 
     @Override
@@ -282,6 +338,7 @@ public class FixedFurnaceMinecartEntity extends FurnaceMinecartEntity {
                 uuids.add(uuid);
             }
         }
+        setLit(view.getBoolean("Lit", false));
     }
 
 
