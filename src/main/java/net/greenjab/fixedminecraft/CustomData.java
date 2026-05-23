@@ -1,48 +1,48 @@
 package net.greenjab.fixedminecraft;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.scoreboard.ScoreboardCriterion;
-import net.minecraft.scoreboard.ScoreboardDisplaySlot;
-import net.minecraft.text.Text;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.scores.DisplaySlot;
+import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 public class CustomData {
-    public static RegistryKey<Biome> biomeSearch = BiomeKeys.FOREST;
+    public static ResourceKey<Biome> biomeSearch = Biomes.FOREST;
     public static void setData(LivingEntity entity, String name, int data) {
-        if (entity.getEntityWorld().getScoreboard().getNullableObjective(name) == null) {
-            entity.getEntityWorld().getScoreboard().addObjective(
-                    name, ScoreboardCriterion.DUMMY, Text.of(name), ScoreboardCriterion.DUMMY.getDefaultRenderType(), false, null);
+        if (entity.level().getScoreboard().getObjective(name) == null) {
+            entity.level().getScoreboard().addObjective(
+                    name, ObjectiveCriteria.DUMMY, Component.nullToEmpty(name), ObjectiveCriteria.DUMMY.getDefaultRenderType(), false, null);
         }
 
         if(name.contains("airTime")) {
-            if (entity.getEntityWorld()
+            if (entity.level()
                     .getScoreboard()
-                    .getObjectiveForSlot(ScoreboardDisplaySlot.TEAM_AQUA) == null) {
-                entity.getEntityWorld()
+                    .getDisplayObjective(DisplaySlot.TEAM_AQUA) == null) {
+                entity.level()
                         .getScoreboard()
-                        .setObjectiveSlot(ScoreboardDisplaySlot.TEAM_AQUA, entity.getEntityWorld().getScoreboard().getNullableObjective(name));
-            } else if (!entity.getEntityWorld()
+                        .setDisplayObjective(DisplaySlot.TEAM_AQUA, entity.level().getScoreboard().getObjective(name));
+            } else if (!entity.level()
                         .getScoreboard()
-                        .getObjectiveForSlot(ScoreboardDisplaySlot.TEAM_AQUA)
+                        .getDisplayObjective(DisplaySlot.TEAM_AQUA)
                         .getDisplayName()
-                        .getLiteralString().contains(name)) {
+                        .tryCollapseToString().contains(name)) {
 
-                entity.getEntityWorld()
+                entity.level()
                         .getScoreboard()
-                        .setObjectiveSlot(ScoreboardDisplaySlot.TEAM_AQUA, entity.getEntityWorld().getScoreboard().getNullableObjective(name));
+                        .setDisplayObjective(DisplaySlot.TEAM_AQUA, entity.level().getScoreboard().getObjective(name));
             }
         }
 
-        entity.getEntityWorld().getScoreboard().getOrCreateScore(entity, entity.getEntityWorld().getScoreboard().getNullableObjective(name))
-                .setScore(data);
+        entity.level().getScoreboard().getOrCreatePlayerScore(entity, entity.level().getScoreboard().getObjective(name))
+                .set(data);
     }
 
     public static int getData(LivingEntity entity, String name)  {
-        if (entity.getEntityWorld().getScoreboard().getNullableObjective(name) != null) {
-            return entity.getEntityWorld().getScoreboard().getOrCreateScore(entity, entity.getEntityWorld().getScoreboard().getNullableObjective(name))
-                    .getScore();
+        if (entity.level().getScoreboard().getObjective(name) != null) {
+            return entity.level().getScoreboard().getOrCreatePlayerScore(entity, entity.level().getScoreboard().getObjective(name))
+                    .get();
         }
         return 0;
     }

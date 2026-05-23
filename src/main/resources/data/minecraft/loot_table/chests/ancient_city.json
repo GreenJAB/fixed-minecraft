@@ -217,11 +217,11 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": "minecraft:swift_sneak"
+                            "options": "#fixedminecraft:loot/ancient_city"
                         }
                     ],
                     "name": "minecraft:book",
-                    "weight": 3
+                    "weight": 6
                 },
                 {
                     "type": "minecraft:item",
@@ -349,7 +349,7 @@
                         }
                     ],
                     "name": "minecraft:echo_shard",
-                    "weight": 5
+                    "weight": 6
                 },
                 {
                     "type": "minecraft:item",
@@ -401,7 +401,7 @@
                         }
                     ],
                     "name": "minecraft:book",
-                    "weight": 5
+                    "weight": 4
                 },
                 {
                     "type": "minecraft:item",
@@ -479,18 +479,7 @@
             "entries": [
                 {
                     "type": "minecraft:empty",
-                    "weight": 71
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "minecraft:mending"
-                        }
-                    ],
-                    "name": "minecraft:book",
-                    "weight": 4
+                    "weight": 50
                 },
                 {
                     "type": "minecraft:item",
@@ -499,7 +488,8 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:silence_armor_trim_smithing_template"
+                    "name": "minecraft:silence_armor_trim_smithing_template",
+                    "weight": 5
                 }
             ],
             "rolls": 1

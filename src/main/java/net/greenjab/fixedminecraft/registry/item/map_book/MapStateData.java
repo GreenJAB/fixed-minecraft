@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.registry.item.map_book;
 
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.item.map.MapState;
+import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 
 public class MapStateData {
-    public MapIdComponent id;
-    public MapState mapState;
-    public MapStateData(MapIdComponent id, MapState mapState){
+    public MapId id;
+    public MapItemSavedData mapState;
+    public MapStateData(MapId id, MapItemSavedData mapState){
         this.id = id;
         this.mapState = mapState;
     }

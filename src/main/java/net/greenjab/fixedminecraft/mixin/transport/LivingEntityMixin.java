@@ -2,19 +2,19 @@ package net.greenjab.fixedminecraft.mixin.transport;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.CustomData;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,16 +35,16 @@ public abstract class LivingEntityMixin extends Entity {
     private static final float DEG = (float) (Math.PI / 180F);
 
     @Shadow
-    protected int riptideTicks;
+    protected int autoSpinAttackTicks;
 
 
     @Shadow
-    public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
+    public abstract boolean hasEffect(Holder<MobEffect> effect);
 
     @Shadow
-    public abstract @Nullable StatusEffectInstance getStatusEffect(RegistryEntry<StatusEffect> effect);
+    public abstract @Nullable MobEffectInstance getEffect(Holder<MobEffect> effect);
 
-    public LivingEntityMixin(EntityType<?> type, World world) {
+    public LivingEntityMixin(EntityType<?> type, Level world) {
         super(type, world);
     }
 
@@ -54,73 +54,73 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyExpressionValue(
             method = "travelInWater", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"
+            target = "Lnet/minecraft/world/entity/LivingEntity;hasEffect(Lnet/minecraft/core/Holder;)Z"
     )
     )
     private boolean boostWhenRiptide(boolean original) {
-        return original || this.riptideTicks>0;
+        return original || this.autoSpinAttackTicks>0;
     }
 
     /**
      * Applies constant acceleration when using riptide and touching water.
      */
     @Inject(
-            method = "tickMovement", at = @At(
+            method = "aiStep", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/entity/LivingEntity;tickRiptide(Lnet/minecraft/util/math/Box;Lnet/minecraft/util/math/Box;)V"
+            target = "Lnet/minecraft/world/entity/LivingEntity;checkAutoSpinAttack(Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/phys/AABB;)V"
     )
     )
     private void accelerateWhenRiptide(CallbackInfo ci) {
-        if (!isTouchingWater()) return;
-        float f = getYaw();
-        float g = getPitch();
-        float h = -MathHelper.sin(f * DEG) * MathHelper.cos(g * DEG);
-        float k = -MathHelper.sin(g * DEG);
-        float l = MathHelper.cos(f * DEG) * MathHelper.cos(g * DEG);
-        float m = MathHelper.sqrt(h * h + k * k + l * l);
+        if (!isInWater()) return;
+        float f = getYRot();
+        float g = getXRot();
+        float h = -Mth.sin(f * DEG) * Mth.cos(g * DEG);
+        float k = -Mth.sin(g * DEG);
+        float l = Mth.cos(f * DEG) * Mth.cos(g * DEG);
+        float m = Mth.sqrt(h * h + k * k + l * l);
         h *= MODIFIER / m;
         k *= MODIFIER / m;
         l *= MODIFIER / m;
-        addVelocity(h, k, l);
+        push(h, k, l);
     }
 
-    @Redirect(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;hasStatusEffect(Lnet/minecraft/registry/entry/RegistryEntry;)Z"))
-    private boolean cancelElytraInLiquid(LivingEntity instance, RegistryEntry<StatusEffect> effect) {
-        if (instance instanceof PlayerEntity) {
-            return !(!instance.hasStatusEffect(effect) &&
-                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
+    @Redirect(method = "canGlide", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;hasEffect(Lnet/minecraft/core/Holder;)Z"))
+    private boolean cancelElytraInLiquid(LivingEntity instance, Holder<MobEffect> effect) {
+        if (instance instanceof Player) {
+            return !(!instance.hasEffect(effect) &&
+                     (instance.level().getDifficulty().getId()>1?!instance.isInWaterOrRain():!instance.isInWater()) &&
                      !instance.isInLava() &&
                      CustomData.getData(instance, "airTime") > 15);
         } else {
-            return !(!instance.hasStatusEffect(effect) &&
-                     (instance.getEntityWorld().getDifficulty().getId()>1?!instance.isTouchingWaterOrRain():!instance.isTouchingWater()) &&
+            return !(!instance.hasEffect(effect) &&
+                     (instance.level().getDifficulty().getId()>1?!instance.isInWaterOrRain():!instance.isInWater()) &&
                      !instance.isInLava());
         }
     }
 
-    @ModifyConstant(method = "jump", constant = @Constant(doubleValue = 0.2))
+    @ModifyConstant(method = "jumpFromGround", constant = @Constant(doubleValue = 0.2))
     private double speedJump(double constant) {
         float i = 0;
-        if (this.hasStatusEffect(StatusEffects.SPEED)) {
-            i += 1+ this.getStatusEffect(StatusEffects.SPEED).getAmplifier();
+        if (this.hasEffect(MobEffects.SPEED)) {
+            i += 1+ this.getEffect(MobEffects.SPEED).getAmplifier();
         }
-        if (this.hasStatusEffect(StatusEffects.JUMP_BOOST)) {
-            i +=0.5f*( 1+ this.getStatusEffect(StatusEffects.JUMP_BOOST).getAmplifier());
+        if (this.hasEffect(MobEffects.JUMP_BOOST)) {
+            i +=0.5f*( 1+ this.getEffect(MobEffects.JUMP_BOOST).getAmplifier());
         }
         return constant+0.05F*i;
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"))
-    private void cancelElytraOnHit(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir){
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)V"))
+    private void cancelElytraOnHit(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir){
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (LE instanceof PlayerEntity) {
-            if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        if (LE instanceof Player) {
+            if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 CustomData.setData(LE, "airTime", -25);
             }
         }
     }
 
-    @ModifyConstant(method = "getJumpBoostVelocityModifier", constant = @Constant(floatValue = 1.0f))
+    @ModifyConstant(method = "getJumpBoostPower", constant = @Constant(floatValue = 1.0f))
     private float betterJumpBoost(float original){
         return 2.0f;
     }

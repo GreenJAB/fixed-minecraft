@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "group": "banner",
   "key": {
     "#": "minecraft:pink_carpet",

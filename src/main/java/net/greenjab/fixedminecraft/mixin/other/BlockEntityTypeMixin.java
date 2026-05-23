@@ -1,33 +1,36 @@
 package net.greenjab.fixedminecraft.mixin.other;
 
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.HangingSignBlockEntity;
-import net.minecraft.block.entity.ShelfBlockEntity;
-import net.minecraft.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
+import net.minecraft.world.level.block.entity.ShelfBlockEntity;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
-
 @Mixin(BlockEntityType.class)
 public abstract class BlockEntityTypeMixin{
 
     @Shadow
-    private static <T extends BlockEntity> BlockEntityType<T> create(String id, BlockEntityType.BlockEntityFactory<? extends T> factory,
-                                                                     Block... blocks) {
+    private static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntitySupplier<? extends T> factory,
+                                                                       Block... validBlocks) {
         return null;
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntityType;create(Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;[Lnet/minecraft/block/Block;)Lnet/minecraft/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
-           target = "Lnet/minecraft/block/entity/BlockEntityType;DROPPER:Lnet/minecraft/block/entity/BlockEntityType;")))
-    private static BlockEntityType<SignBlockEntity> sign(String id, BlockEntityType.BlockEntityFactory<? extends SignBlockEntity> factory, Block[] blocks) {
-        return create("sign", SignBlockEntity::new,
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;DROPPER:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            opcode = Opcodes.PUTSTATIC
+    )))
+    private static BlockEntityType<SignBlockEntity> sign(String name, BlockEntityType.BlockEntitySupplier<? extends SignBlockEntity> factory, Block[] validBlocks) {
+        return register("sign", SignBlockEntity::new,
                 Blocks.OAK_SIGN,Blocks.SPRUCE_SIGN,Blocks.BIRCH_SIGN,Blocks.ACACIA_SIGN,Blocks.CHERRY_SIGN,
                 Blocks.JUNGLE_SIGN, Blocks.DARK_OAK_SIGN,Blocks.PALE_OAK_SIGN,Blocks.OAK_WALL_SIGN,
                 Blocks.SPRUCE_WALL_SIGN,Blocks.BIRCH_WALL_SIGN,Blocks.ACACIA_WALL_SIGN,Blocks.CHERRY_WALL_SIGN,
@@ -38,10 +41,13 @@ public abstract class BlockEntityTypeMixin{
                 );
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntityType;create(Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;[Lnet/minecraft/block/Block;)Lnet/minecraft/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
-                                target = "Lnet/minecraft/block/entity/BlockEntityType;SIGN:Lnet/minecraft/block/entity/BlockEntityType;")))
-    private static BlockEntityType<SignBlockEntity> hanging_sign(String id, BlockEntityType.BlockEntityFactory<? extends SignBlockEntity> factory, Block[] blocks) {
-        return create("hanging_sign",HangingSignBlockEntity::new,
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;SIGN:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            opcode = Opcodes.PUTSTATIC
+    )))
+    private static BlockEntityType<SignBlockEntity> hanging_sign(String name, BlockEntityType.BlockEntitySupplier<? extends SignBlockEntity> factory, Block[] validBlocks) {
+        return register("hanging_sign",HangingSignBlockEntity::new,
                 Blocks.OAK_HANGING_SIGN,Blocks.SPRUCE_HANGING_SIGN,Blocks.BIRCH_HANGING_SIGN,
                 Blocks.ACACIA_HANGING_SIGN, Blocks.CHERRY_HANGING_SIGN,Blocks.JUNGLE_HANGING_SIGN,
                 Blocks.DARK_OAK_HANGING_SIGN,Blocks.PALE_OAK_HANGING_SIGN,Blocks.CRIMSON_HANGING_SIGN,
@@ -54,10 +60,13 @@ public abstract class BlockEntityTypeMixin{
         );
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/entity/BlockEntityType;create(Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;[Lnet/minecraft/block/Block;)Lnet/minecraft/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(value = "FIELD",
-                target = "Lnet/minecraft/block/entity/BlockEntityType;CHISELED_BOOKSHELF:Lnet/minecraft/block/entity/BlockEntityType;")))
-    private static BlockEntityType<ShelfBlockEntity> shelf(String id, BlockEntityType.BlockEntityFactory<? extends ShelfBlockEntity> factory, Block[] blocks) {
-        return create("shelf", ShelfBlockEntity::new,
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;CHISELED_BOOKSHELF:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
+            opcode = Opcodes.PUTSTATIC
+    )))
+    private static BlockEntityType<ShelfBlockEntity> shelf(String name, BlockEntityType.BlockEntitySupplier<? extends ShelfBlockEntity> factory, Block[] validBlocks) {
+        return register("shelf", ShelfBlockEntity::new,
                 Blocks.OAK_SHELF,Blocks.SPRUCE_SHELF,Blocks.BIRCH_SHELF,
                 Blocks.ACACIA_SHELF, Blocks.CHERRY_SHELF,Blocks.JUNGLE_SHELF,
                 Blocks.DARK_OAK_SHELF,Blocks.PALE_OAK_SHELF,Blocks.CRIMSON_SHELF,

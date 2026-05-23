@@ -1,0 +1,7 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:librarian/4/emerald_and_book_enchanted_book",
+    "minecraft:librarian/4/emerald_writable_book"
+  ]
+}

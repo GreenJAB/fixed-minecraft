@@ -4,33 +4,34 @@ import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.BlockState;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.Items;
-import net.minecraft.item.map.MapState;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,75 +39,75 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class MapBookItem extends Item {
-    public MapBookItem(Settings settings) {
+    public MapBookItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        BlockState blockState = context.getWorld().getBlockState(context.getBlockPos());
+    public @NonNull InteractionResult useOn(UseOnContext context) {
+        BlockState blockState = context.getLevel().getBlockState(context.getClickedPos());
 
-        if (blockState.isIn(BlockTags.BANNERS)) {
-            if (!context.getWorld().isClient()) {
-                MapStateData mapStateData = this.getNearestMap(context.getStack(), context.getWorld(), context.getBlockPos().toCenterPos());
-                MapState mapState = mapStateData.mapState;
-                if (mapState != null && !mapState.addBanner(context.getWorld(), context.getBlockPos())) {
-                    return ActionResult.FAIL;
+        if (blockState.is(BlockTags.BANNERS)) {
+            if (!context.getLevel().isClientSide()) {
+                MapStateData mapStateData = this.getNearestMap(context.getItemInHand(), context.getLevel(), context.getClickedPos().getCenter());
+                MapItemSavedData mapState = mapStateData.mapState;
+                if (mapState != null && !mapState.toggleBanner(context.getLevel(), context.getClickedPos())) {
+                    return InteractionResult.FAIL;
                 }
             }
 
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         } else {
-            return super.useOnBlock(context);
+            return super.useOn(context);
         }
     }
 
     @Override
-    public ActionResult use(World world, PlayerEntity user, Hand hand) {
-        if (world != null && !world.isClient()) {
-            ServerPlayerEntity player = (ServerPlayerEntity) user;
-            ItemStack item = user.getStackInHand(hand);
-            ItemStack otherHand = hand == Hand.MAIN_HAND ? player.getOffHandStack() : player.getMainHandStack();
+    public @NonNull InteractionResult use(@NonNull Level world, @NonNull Player user, @NonNull InteractionHand hand) {
+        if (!world.isClientSide()) {
+            ServerPlayer player = (ServerPlayer) user;
+            ItemStack item = user.getItemInHand(hand);
+            ItemStack otherHand = hand == InteractionHand.MAIN_HAND ? player.getOffhandItem() : player.getMainHandItem();
 
             var openMap = true;
-            if (getNearestMap(item, world, player.getEntityPos())==null || otherHand.isOf(Items.MAP)) {
-                if (addNewMapAtPos(item, (ServerWorld)world, player.getEntityPos(),0)) {
-                    if (otherHand.isOf(Items.MAP) && !player.getAbilities().creativeMode) {
-                        otherHand.decrement(1);
+            if (getNearestMap(item, world, player.position())==null || otherHand.is(Items.MAP)) {
+                if (addNewMapAtPos(item, (ServerLevel)world, player.position(),0)) {
+                    if (otherHand.is(Items.MAP) && !player.hasInfiniteMaterials()) {
+                        otherHand.shrink(1);
                     }
-                    player.getEntityWorld().playSoundFromEntity(
+                    player.level().playSound(
                             null,
                             player,
                             SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                            player.getSoundCategory(),
+                            player.getSoundSource(),
                             1.0f,
                             1.0f
                     );
                     openMap = false;
                 }
-            } else if (otherHand.isOf(Items.SHEARS)) {
-                if (removeMapAtPos(item, (ServerWorld)world, player.getEntityPos(), player)) {
-                    otherHand.damage(1, player);
-                    player.getEntityWorld().playSoundFromEntity(
+            } else if (otherHand.is(Items.SHEARS)) {
+                if (removeMapAtPos(item, (ServerLevel)world, player.position(), player)) {
+                    otherHand.hurtWithoutBreaking(1, player);
+                    player.level().playSound(
                             null,
                             player,
-                            SoundEvents.ENTITY_SHEEP_SHEAR,
-                            player.getSoundCategory(),
+                            SoundEvents.SHEEP_SHEAR,
+                            player.getSoundSource(),
                             1.0f,
                             1.0f
                     );
                     openMap = false;
                 }
-            } else if (otherHand.isOf(Items.FILLED_MAP)) {
-                if (addNewMapID(item, otherHand, (ServerWorld)world)) {
-                    if (!player.getAbilities().creativeMode) {
-                        otherHand.decrement(1);
+            } else if (otherHand.is(Items.FILLED_MAP)) {
+                if (addNewMapID(item, otherHand, (ServerLevel)world)) {
+                    if (!player.hasInfiniteMaterials()) {
+                        otherHand.shrink(1);
                     }
-                    player.getEntityWorld().playSoundFromEntity(
+                    player.level().playSound(
                             null,
                             player,
                             SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                            player.getSoundCategory(),
+                            player.getSoundSource(),
                             1.0f,
                             1.0f
                     );
@@ -114,17 +115,17 @@ public class MapBookItem extends Item {
                 }
             } else {
                 ItemStack hasEmtpyMap = getEmptyMap(user);
-                if (hasEmtpyMap.isOf(Items.MAP)) {
+                if (hasEmtpyMap.is(Items.MAP)) {
                     boolean hotbar = isHotbar(user, hasEmtpyMap);
-                    if (addNewMapAtPos(item, (ServerWorld)world, player.getEntityPos(), hotbar?2:4)) {
-                        if (!player.getAbilities().creativeMode) {
-                            hasEmtpyMap.decrement(1);
+                    if (addNewMapAtPos(item, (ServerLevel)world, player.position(), hotbar?2:4)) {
+                        if (!player.hasInfiniteMaterials()) {
+                            hasEmtpyMap.shrink(1);
                         }
-                        player.getEntityWorld().playSoundFromEntity(
+                        player.level().playSound(
                                 null,
                                 player,
                                 SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT,
-                                player.getSoundCategory(),
+                                player.getSoundSource(),
                                 1.0f,
                                 1.0f
                         );
@@ -138,49 +139,49 @@ public class MapBookItem extends Item {
             if (openMap && this.hasMapBookId(item)) {
                 getMapBookState(item, world).update();
                 mapBookOpen(player, item);
-                player.getEntityWorld().playSoundFromEntity(
+                player.level().playSound(
                         null,
                         player,
-                        SoundEvents.ITEM_BOOK_PAGE_TURN,
-                        player.getSoundCategory(),
+                        SoundEvents.BOOK_PAGE_TURN,
+                        player.getSoundSource(),
                         1.0f,
                         1.0f
                 );
             }
         }
-        return ActionResult.SUCCESS;
+        return InteractionResult.SUCCESS;
     }
 
-    private ItemStack getEmptyMap(PlayerEntity playerEntity) {
-        for (int i = 0;i < playerEntity.getInventory().size(); i++) {
-            ItemStack item = playerEntity.getInventory().getStack(i);
-            if (item.isOf(Items.MAP)) return item;
+    private ItemStack getEmptyMap(Player playerEntity) {
+        for (int i = 0;i < playerEntity.getInventory().getContainerSize(); i++) {
+            ItemStack item = playerEntity.getInventory().getItem(i);
+            if (item.is(Items.MAP)) return item;
         }
         return ItemStack.EMPTY;
     }
-    private boolean isHotbar(PlayerEntity playerEntity, ItemStack stack) {
+    private boolean isHotbar(Player playerEntity, ItemStack stack) {
         for (int i = 0;i < 9; i++) {
-            ItemStack item = playerEntity.getInventory().getStack(i);
+            ItemStack item = playerEntity.getInventory().getItem(i);
             if (item == stack) return true;
         }
         return false;
     }
 
-    private void sendMapUpdates(ServerPlayerEntity player, ItemStack item) {
-        for (MapStateData mapStateData : getMapStates(item, player.getEntityWorld())) {
-            mapStateData.mapState.getPlayerSyncData(player);
-            Packet<?> packet  = mapStateData.mapState.getPlayerMarkerPacket(mapStateData.id, player);
+    private void sendMapUpdates(ServerPlayer player, ItemStack item) {
+        for (MapStateData mapStateData : getMapStates(item, player.level())) {
+            mapStateData.mapState.getHoldingPlayer(player);
+            Packet<?> packet  = mapStateData.mapState.getUpdatePacket(mapStateData.id, player);
             if (packet != null) {
-                player.networkHandler.sendPacket(packet);
+                player.connection.send(packet);
             }
         }
     }
 
     @Override
-    public void inventoryTick(ItemStack stack, ServerWorld world, Entity entity, @Nullable EquipmentSlot slot) {
-        if (world != null && !world.isClient()) {
-            if (stack != null && entity instanceof ServerPlayerEntity player) {
-                stack.set(DataComponentTypes.REPAIR_COST, 3);
+    public void inventoryTick(@NonNull ItemStack stack, @NonNull ServerLevel world, @NonNull Entity entity, @Nullable EquipmentSlot slot) {
+        if (!world.isClientSide()) {
+            if (entity instanceof ServerPlayer player) {
+                stack.set(DataComponents.REPAIR_COST, 3);
                 int id = getMapBookId(stack);
                 if (id != -1) {
                     MapBookState mapBookState = MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);
@@ -192,12 +193,12 @@ public class MapBookItem extends Item {
                 if (!MapBookStateManager.INSTANCE.currentBooks.contains(id)) {
                     MapBookStateManager.INSTANCE.currentBooks.add(id);
                 }
-                if ((slot==EquipmentSlot.MAINHAND||slot==EquipmentSlot.OFFHAND) || ((PlayerEntity) entity).getOffHandStack() == stack) {
-                    for (MapStateData mapStateData : getMapStates(stack, entity.getEntityWorld())) {
-                        mapStateData.mapState.update(player, stack);
+                if ((slot==EquipmentSlot.MAINHAND||slot==EquipmentSlot.OFFHAND) || ((Player) entity).getOffhandItem() == stack) {
+                    for (MapStateData mapStateData : getMapStates(stack, entity.level())) {
+                        mapStateData.mapState.tickCarriedBy(player, stack, null);
                         if (!mapStateData.mapState.locked) {
-                            if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.getEntityPos()) < 128.0) {
-                                ((FilledMapItem)Items.FILLED_MAP ).updateColors(world, entity, mapStateData.mapState);
+                            if (this.getDistanceToEdgeOfMap(mapStateData.mapState, entity.position()) < 128.0) {
+                                ((MapItem)Items.FILLED_MAP ).update(world, entity, mapStateData.mapState);
                             }
                         }
                     }
@@ -207,15 +208,15 @@ public class MapBookItem extends Item {
         }
     }
 
-    public static ArrayList<MapStateData> getMapStates(ItemStack stack, World world) {
+    public static ArrayList<MapStateData> getMapStates(ItemStack stack, Level world) {
         ArrayList<MapStateData> list = new ArrayList<>();
         MapBookState mapBookState = getMapBookState(stack, world);
         if (mapBookState != null) {
             for (int i : mapBookState.mapIDs) {
-                MapState mapState = world.getMapState(new MapIdComponent(i));
+                MapItemSavedData mapState = world.getMapData(new MapId(i));
                 if (mapState != null) {
-                    if (world.getDimensionEntry().getIdAsString().contains(mapState.dimension.getValue().toString())) {
-                        list.add(new MapStateData(new MapIdComponent(i), mapState));
+                    if (world.dimension().identifier().toString().contains(mapState.dimension.identifier().toString())) {
+                        list.add(new MapStateData(new MapId(i), mapState));
                     }
                 }
             }
@@ -223,10 +224,10 @@ public class MapBookItem extends Item {
         return list;
     }
 
-    private static MapBookState getMapBookState(ItemStack stack, World world) {
+    private static MapBookState getMapBookState(ItemStack stack, Level world) {
         int id = getMapBookId(stack);
         if (id == -1) return null;
-        if (world.isClient()) {
+        if (world.isClientSide()) {
             return MapBookStateManager.INSTANCE.getClientMapBookState(id);
         } else if (world.getServer() != null) {
             return MapBookStateManager.INSTANCE.getMapBookState(world.getServer(), id);
@@ -234,7 +235,7 @@ public class MapBookItem extends Item {
         return null;
     }
 
-    public MapStateData getNearestMap(ItemStack stack, World world, Vec3d pos) {
+    public MapStateData getNearestMap(ItemStack stack, Level world, Vec3 pos) {
         double nearestDistance = Double.MAX_VALUE;
         byte nearestScale = 127;
         MapStateData nearestMap = null;
@@ -265,7 +266,7 @@ public class MapBookItem extends Item {
         }
     }
 
-    private double getDistanceToEdgeOfMap(MapState mapState, Vec3d pos) {
+    private double getDistanceToEdgeOfMap(MapItemSavedData mapState, Vec3 pos) {
         return Math.max(
                 Math.abs(pos.x - mapState.centerX),
                 Math.abs(pos.z - mapState.centerZ)
@@ -273,18 +274,17 @@ public class MapBookItem extends Item {
     }
 
     private boolean hasMapBookId(ItemStack stack) {
-        return stack.contains(DataComponentTypes.MAP_ID);
+        return stack.has(DataComponents.MAP_ID);
     }
 
     public static int getMapBookId(ItemStack stack) {
-        MapIdComponent mapIdComponent = stack.getOrDefault(DataComponentTypes.MAP_ID, null);
-        if (mapIdComponent!=null) return mapIdComponent.id();
-        return -1;
+        MapId mapIdComponent = stack.getOrDefault(DataComponents.MAP_ID, new MapId(-1));
+        return mapIdComponent.id();
     }
 
     private int allocateMapBookId(MinecraftServer server) {
 
-        MapBookIdCountsState counts = server.getOverworld().getPersistentStateManager().getOrCreate(
+        MapBookIdCountsState counts = server.getDataStorage().computeIfAbsent(
                 MapBookIdCountsState.persistentStateType
         );
         int i = counts.get();
@@ -293,7 +293,7 @@ public class MapBookItem extends Item {
     }
 
     private void setMapBookId(ItemStack stack, int id) {
-        stack.set(DataComponentTypes.MAP_ID, new MapIdComponent(id));
+        stack.set(DataComponents.MAP_ID, new MapId(id));
     }
 
     private int createMapBookState(ItemStack stack, MinecraftServer server) {
@@ -313,23 +313,23 @@ public class MapBookItem extends Item {
         }
     }
 
-    private boolean addNewMapAtPos(ItemStack item, ServerWorld world, Vec3d pos, int scale) {
+    private boolean addNewMapAtPos(ItemStack item, ServerLevel world, Vec3 pos, int scale) {
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         MapStateData nearestState = this.getNearestMap(item, world, pos);
         if (nearestState != null && nearestState.mapState.scale <= scale
             && !(this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0)) {
             return false;
         } else {
-            ItemStack newMap = FilledMapItem.createMap(
+            ItemStack newMap = MapItem.create(
                     world,
                     (int)Math.floor(pos.x), (int)Math.floor(pos.z), (byte)scale, true, false
             );
-            state.addMapID(newMap.get(DataComponentTypes.MAP_ID).id());
+            state.addMapID(newMap.get(DataComponents.MAP_ID).id());
             return true;
         }
     }
 
-    private boolean removeMapAtPos(ItemStack item, ServerWorld world, Vec3d pos, ServerPlayerEntity player) {
+    private boolean removeMapAtPos(ItemStack item, ServerLevel world, Vec3 pos, ServerPlayer player) {
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         if (state.mapIDs.isEmpty()) return false;
         if (getMapStates(item, world).size()<2) return false;
@@ -338,17 +338,17 @@ public class MapBookItem extends Item {
         if (this.getDistanceToEdgeOfMap(nearestState.mapState, pos) > 0.0) return false;
         if (state.removeMapID(nearestState.id.id())) {
             ItemStack itemStack = new ItemStack(Items.FILLED_MAP);
-            itemStack.set(DataComponentTypes.MAP_ID, nearestState.id);
-            if (!player.getInventory().insertStack(itemStack)) {
-                player.dropItem(itemStack, true);
+            itemStack.set(DataComponents.MAP_ID, nearestState.id);
+            if (!player.getInventory().add(itemStack)) {
+                player.drop(itemStack, true);
             }
         }
         return true;
     }
 
-    private boolean addNewMapID(ItemStack item, ItemStack filledmap, ServerWorld world) {
-        MapIdComponent mapId = filledmap.get(DataComponentTypes.MAP_ID);
-        MapState mapState = world.getMapState(mapId);
+    private boolean addNewMapID(ItemStack item, ItemStack filledmap, ServerLevel world) {
+        MapId mapId = filledmap.get(DataComponents.MAP_ID);
+        MapItemSavedData mapState = world.getMapData(mapId);
         MapBookState state = this.getOrCreateMapBookState(item, world.getServer());
         if (state != null && mapState != null && !mapState.locked) {
             if (!state.mapIDs.contains(mapId.id())) {
@@ -360,12 +360,12 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public Text getName(ItemStack stack) {
-        if (stack != null && !this.hasMapBookId(stack)) {
-            if (stack.contains(ItemRegistry.MAP_BOOK_ADDITIONS)) {
-                return Text.translatable("item.fixedminecraft.map_book_new");
+    public @NonNull Component getName(@NonNull ItemStack stack) {
+        if (!this.hasMapBookId(stack)) {
+            if (stack.has(ItemRegistry.MAP_BOOK_ADDITIONS)) {
+                return Component.translatable("item.fixedminecraft.map_book_new");
             } else {
-                return Text.translatable("item.fixedminecraft.map_book_empty");
+                return Component.translatable("item.fixedminecraft.map_book_empty");
             }
         } else {
             return super.getName(stack);
@@ -373,7 +373,7 @@ public class MapBookItem extends Item {
     }
 
     @Override
-    public void appendTooltip(ItemStack stack, Item.TooltipContext context, TooltipDisplayComponent displayComponent, Consumer<Text> textConsumer, TooltipType type) {
+    public void appendHoverText(ItemStack stack, Item.@NonNull TooltipContext context, @NonNull TooltipDisplay displayComponent, @NonNull Consumer<Component> textConsumer, @NonNull TooltipFlag type) {
         var mapsCount =
                 stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent.DEFAULT).additions().size();
         int id = getMapBookId(stack);
@@ -385,17 +385,16 @@ public class MapBookItem extends Item {
                 mapsCount += mapBookState.mapIDs.size();
             }
 
-            textConsumer.accept(Text.translatable("item.fixedminecraft.map_book_id", (id + 1)).formatted(Formatting.GRAY));
+            textConsumer.accept(Component.translatable("item.fixedminecraft.map_book_id", (id + 1)).withStyle(ChatFormatting.GRAY));
         }
 
         if (mapsCount > 0) {
-            textConsumer.accept(Text.translatable("item.fixedminecraft.map_book_maps", mapsCount).formatted(Formatting.GRAY));
+            textConsumer.accept(Component.translatable("item.fixedminecraft.map_book_maps", mapsCount).withStyle(ChatFormatting.GRAY));
         }
     }
 
-    private void applyAdditions(ItemStack stack, ServerWorld world) {
-        MapBookAdditionsComponent additionsComponent = stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, null) ;//?: return
-        if (additionsComponent == null) return;
+    private void applyAdditions(ItemStack stack, ServerLevel world) {
+        MapBookAdditionsComponent additionsComponent = stack.getOrDefault(ItemRegistry.MAP_BOOK_ADDITIONS, MapBookAdditionsComponent.DEFAULT) ;
         stack.remove(ItemRegistry.MAP_BOOK_ADDITIONS);
 
         List<Integer> additions = additionsComponent.additions();
@@ -404,10 +403,10 @@ public class MapBookItem extends Item {
 
             for (int id : additions) {
                 if (id != -1) {
-                    MapState newState = world.getMapState(new MapIdComponent(id));
+                    MapItemSavedData newState = world.getMapData(new MapId(id));
 
                     state.mapIDs.removeIf( existingID -> {
-                        MapState existingState = world.getMapState(new MapIdComponent(existingID));
+                        MapItemSavedData existingState = world.getMapData(new MapId(existingID));
                         if (existingState == null) return true;
                         assert newState != null;
                         return (mapsAreSameLocation(newState, existingState));
@@ -418,29 +417,29 @@ public class MapBookItem extends Item {
         }
     }
 
-    private static boolean mapsAreSameLocation(MapState mapA, MapState mapB) {
+    private static boolean mapsAreSameLocation(MapItemSavedData mapA, MapItemSavedData mapB) {
         return mapA.scale == mapB.scale && mapA.centerX == mapB.centerX && mapA.centerZ == mapB.centerZ;
     }
 
     @Override
-    public void onCraftByPlayer(ItemStack stack, PlayerEntity player) {
-        super.onCraftByPlayer(stack, player);
-        if (player instanceof ServerPlayerEntity serverPlayerEntity)
+    public void onCraftedBy(@NonNull ItemStack stack, @NonNull Player player) {
+        super.onCraftedBy(stack, player);
+        if (player instanceof ServerPlayer serverPlayerEntity)
             mapBookSync(serverPlayerEntity, stack);
     }
 
     @Override
-    public void onCraft(ItemStack stack, World world) {
-        if (!world.isClient()) {
-            applyAdditions(stack, (ServerWorld)world);
+    public void onCraftedPostProcess(@NonNull ItemStack stack, Level world) {
+        if (!world.isClientSide()) {
+            applyAdditions(stack, (ServerLevel)world);
         }
     }
 
-    private void mapBookOpen(ServerPlayerEntity player, ItemStack itemStack) {
+    private void mapBookOpen(ServerPlayer player, ItemStack itemStack) {
         ServerPlayNetworking.send(player, new MapBookOpenPayload(itemStack));
     }
 
-    private void mapBookSync(ServerPlayerEntity player, ItemStack itemStack) {
+    private void mapBookSync(ServerPlayer player, ItemStack itemStack) {
         MapBookSyncPayload payload = MapBookSyncPayload.of(player, itemStack);
         if (payload != null) {
             ServerPlayNetworking.send(player, payload);

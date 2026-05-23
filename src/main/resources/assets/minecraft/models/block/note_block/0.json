@@ -1,0 +1,47 @@
+{
+	"credit": "Created by Stridey",
+	"parent": "block/block",
+	"textures": {
+		"number": "block/note_block/number_0",
+		"pitch": "block/note_block/pitch_0",
+        "particle": "block/note_block"
+    },
+	"elements": [
+		{
+			"from": [0.4995, 9, 5.0005],
+			"to": [15.5005, 14, 11.0005],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11.5, 8.0005]},
+			"faces": {
+				"east": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#number", "cullface": "east"},
+				"west": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#number", "cullface": "west"}
+			}
+		},
+		{
+			"from": [5, 9, 0.5],
+			"to": [11, 14, 15.501],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 7]},
+			"faces": {
+				"north": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#number", "cullface": "north"},
+				"south": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#number", "cullface": "south"}
+			}
+		},
+		{
+			"from": [5, 2, 0.5],
+			"to": [11, 7, 15.501],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 1, 7]},
+			"faces": {
+				"north": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#pitch", "cullface": "north"},
+				"south": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#pitch", "cullface": "south"}
+			}
+		},
+		{
+			"from": [0.4995, 2, 5.0005],
+			"to": [15.5005, 7, 11.0005],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4.5, 8.0005]},
+			"faces": {
+				"east": {"uv": [0, 1, 15, 14], "texture": "#pitch", "cullface": "east"},
+				"west": {"uv": [0.5, 1.25, 15.5, 13.75], "texture": "#pitch", "cullface": "west"}
+			}
+		}
+	]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_leaves",
+  "textures": {
+    "all": "minecraft:block/acacia_leaves_wavy",
+    "particle": "minecraft:block/acacia_leaves"
+  }
+}

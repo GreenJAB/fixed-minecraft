@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_crop",
+  "textures": {
+    "crop": "minecraft:block/beetroots_stage2_wavy",
+    "particle": "minecraft:block/beetroots_stage2"
+  }
+}

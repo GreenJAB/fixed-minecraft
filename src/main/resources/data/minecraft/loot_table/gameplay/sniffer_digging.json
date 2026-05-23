@@ -7,12 +7,17 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:pitcher_pod",
-                    "weight": 35
+                    "weight": 23
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:torchflower_seeds",
-                    "weight": 35
+                    "weight": 23
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:golden_dandelion",
+                    "weight": 23
                 },
                 {
                     "type": "minecraft:tag",

@@ -1,14 +1,14 @@
 package net.greenjab.fixedminecraft.mixin.other;
 
-import net.minecraft.util.DyeColor;
+import net.minecraft.world.item.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(DyeColor.class)
-public class DyeColorMixin {
+public abstract class DyeColorMixin {
 
-    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/ColorHelper;fullAlpha(I)I", ordinal = 0))
+    @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/ARGB;opaque(I)I", ordinal = 0))
     private int brighterColours(int argb) {
         return switch (argb) {
             case (10141901) -> 65535; //lightblue

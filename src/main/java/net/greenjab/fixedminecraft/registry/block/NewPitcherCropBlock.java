@@ -1,46 +1,47 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FarmlandBlock;
-import net.minecraft.block.PitcherCropBlock;
-import net.minecraft.block.enums.DoubleBlockHalf;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCollisionHandler;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.RavagerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.rule.GameRules;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FarmlandBlock;
+import net.minecraft.world.level.block.PitcherCropBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gamerules.GameRules;
+import org.jspecify.annotations.NonNull;
 
 public class NewPitcherCropBlock extends PitcherCropBlock {
 
-    public static final BooleanProperty FULL = BooleanProperty.of("full");
+    public static final BooleanProperty FULL = BooleanProperty.create("full");
 
-    public NewPitcherCropBlock(Settings settings) {
+    public NewPitcherCropBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(HALF, DoubleBlockHalf.LOWER).with(FULL, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HALF, DoubleBlockHalf.LOWER).setValue(FULL, false));
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        if (state.get(HALF) == DoubleBlockHalf.UPPER && state.get(FULL) && random.nextInt(1) == 0) {
-            BlockState blockState = state.with(FULL, false);
-            world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
-            world.setBlockState(pos.down(), blockState.with(HALF, DoubleBlockHalf.LOWER), Block.NOTIFY_LISTENERS);
-            world.emitGameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Emitter.of(blockState));
-        } else if (state.get(HALF) == DoubleBlockHalf.LOWER) {
+    public void randomTick(BlockState state, @NonNull ServerLevel world, @NonNull BlockPos pos, @NonNull RandomSource random) {
+        if (state.getValue(HALF) == DoubleBlockHalf.UPPER && state.getValue(FULL) && random.nextInt(1) == 0) {
+            BlockState blockState = state.setValue(FULL, false);
+            world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+            world.setBlock(pos.below(), blockState.setValue(HALF, DoubleBlockHalf.LOWER), Block.UPDATE_CLIENTS);
+            world.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(blockState));
+        } else if (state.getValue(HALF) == DoubleBlockHalf.LOWER) {
             float f = getAvailableMoisture(this, world, pos);
             boolean bl = random.nextInt((int)(25.0F / f) + 1) == 0;
             if (bl) {
@@ -50,51 +51,51 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
     }
 
     @Override
-    public boolean hasRandomTicks(BlockState state) {
-        return (state.get(HALF) == DoubleBlockHalf.LOWER && isFullyGrown(state)) ||
-               (state.get(HALF) == DoubleBlockHalf.UPPER && state.get(FULL));
+    public boolean isRandomlyTicking(BlockState state) {
+        return (state.getValue(HALF) == DoubleBlockHalf.LOWER && isMaxAge(state)) ||
+               (state.getValue(HALF) == DoubleBlockHalf.UPPER && state.getValue(FULL));
     }
 
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, EntityCollisionHandler handler, boolean bl) {
-        if (world instanceof ServerWorld serverWorld && entity instanceof RavagerEntity && serverWorld.getGameRules().getValue(GameRules.DO_MOB_GRIEFING)) {
-            serverWorld.breakBlock(pos, true, entity);
+    public void entityInside(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull Entity entity, @NonNull InsideBlockEffectApplier handler, boolean bl) {
+        if (world instanceof ServerLevel serverWorld && entity instanceof Ravager && serverWorld.getGameRules().get(GameRules.MOB_GRIEFING)) {
+            serverWorld.destroyBlock(pos, true, entity);
         }
-        if (entity instanceof LivingEntity livingEntity && state.get(HALF) == DoubleBlockHalf.UPPER && !state.get(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.isInCreativeMode()) {
-            if (world instanceof ServerWorld serverWorld) {
-                livingEntity.damage(serverWorld, world.getDamageSources().sweetBerryBush(), 10.0F);
-                BlockState blockState = state.with(FULL, true);
-                world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
-                world.setBlockState(pos.down(), blockState.with(HALF, DoubleBlockHalf.LOWER), Block.NOTIFY_LISTENERS);
-                world.playSound(null, pos, SoundEvents.ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        if (entity instanceof LivingEntity livingEntity && state.getValue(HALF) == DoubleBlockHalf.UPPER && !state.getValue(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.hasInfiniteMaterials()) {
+            if (world instanceof ServerLevel serverWorld) {
+                livingEntity.hurtServer(serverWorld, world.damageSources().sweetBerryBush(), 10.0F);
+                BlockState blockState = state.setValue(FULL, true);
+                world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+                world.setBlock(pos.below(), blockState.setValue(HALF, DoubleBlockHalf.LOWER), Block.UPDATE_CLIENTS);
+                world.playSound(null, pos, SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FULL);
-        super.appendProperties(builder);
+        super.createBlockStateDefinition(builder);
     }
 
 
 
 
-    private boolean isFullyGrown(BlockState state) {
-        return state.get(AGE) < 4;
+    private boolean isMaxAge(BlockState state) {
+        return state.getValue(AGE) < 4;
     }
-    protected static float getAvailableMoisture(Block block, BlockView world, BlockPos pos) {
+    protected static float getAvailableMoisture(Block block, BlockGetter world, BlockPos pos) {
         float f = 1.0F;
-        BlockPos blockPos = pos.down();
+        BlockPos blockPos = pos.below();
 
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 float g = 0.0F;
-                BlockState blockState = world.getBlockState(blockPos.add(i, 0, j));
-                if (blockState.isOf(Blocks.FARMLAND)) {
+                BlockState blockState = world.getBlockState(blockPos.offset(i, 0, j));
+                if (blockState.is(Blocks.FARMLAND)) {
                     g = 1.0F;
-                    if (blockState.get(FarmlandBlock.MOISTURE) > 0) {
+                    if (blockState.getValue(FarmlandBlock.MOISTURE) > 0) {
                         g = 3.0F;
                     }
                 }
@@ -111,15 +112,15 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
         BlockPos blockPos3 = pos.south();
         BlockPos blockPos4 = pos.west();
         BlockPos blockPos5 = pos.east();
-        boolean bl = world.getBlockState(blockPos4).isOf(block) || world.getBlockState(blockPos5).isOf(block);
-        boolean bl2 = world.getBlockState(blockPos2).isOf(block) || world.getBlockState(blockPos3).isOf(block);
+        boolean bl = world.getBlockState(blockPos4).is(block) || world.getBlockState(blockPos5).is(block);
+        boolean bl2 = world.getBlockState(blockPos2).is(block) || world.getBlockState(blockPos3).is(block);
         if (bl && bl2) {
             f /= 2.0F;
         } else {
-            boolean bl3 = world.getBlockState(blockPos4.north()).isOf(block)
-                          || world.getBlockState(blockPos5.north()).isOf(block)
-                          || world.getBlockState(blockPos5.south()).isOf(block)
-                          || world.getBlockState(blockPos4.south()).isOf(block);
+            boolean bl3 = world.getBlockState(blockPos4.north()).is(block)
+                          || world.getBlockState(blockPos5.north()).is(block)
+                          || world.getBlockState(blockPos5.south()).is(block)
+                          || world.getBlockState(blockPos4.south()).is(block);
             if (bl3) {
                 f /= 2.0F;
             }
@@ -127,32 +128,32 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
 
         return f;
     }
-    private void tryGrow(ServerWorld world, BlockState state, BlockPos pos) {
-        int i = Math.min(state.get(AGE) + 1, 4);
+    private void tryGrow(ServerLevel world, BlockState state, BlockPos pos) {
+        int i = Math.min(state.getValue(AGE) + 1, 4);
         if (this.canGrow(world, pos, state, i)) {
-            BlockState blockState = state.with(AGE, i);
-            world.setBlockState(pos, blockState, Block.NOTIFY_LISTENERS);
-            if (isDoubleTallAtAge(i)) {
-                world.setBlockState(pos.up(), blockState.with(HALF, DoubleBlockHalf.UPPER), Block.NOTIFY_ALL);
+            BlockState blockState = state.setValue(AGE, i);
+            world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+            if (isDouble(i)) {
+                world.setBlock(pos.above(), blockState.setValue(HALF, DoubleBlockHalf.UPPER), Block.UPDATE_ALL);
             }
         }
     }
-    private boolean canGrow(WorldView world, BlockPos pos, BlockState state, int age) {
-        return !this.isFullyGrown(state) && canPlaceAt(world, pos) && (!isDoubleTallAtAge(age) || canGrowAt(world, pos.up()));
+    private boolean canGrow(LevelReader world, BlockPos pos, BlockState state, int age) {
+        return !this.isMaxAge(state) && sufficientLight(world, pos) && (!isDouble(age) || canGrowInto(world, pos.above()));
     }
-    private static boolean isDoubleTallAtAge(int age) {
+    private static boolean isDouble(int age) {
         return age >= 3;
     }
-    private static boolean canGrowAt(WorldView world, BlockPos pos) {
+    private static boolean canGrowInto(LevelReader world, BlockPos pos) {
         BlockState blockState = world.getBlockState(pos);
-        return blockState.isAir() || blockState.isOf(Blocks.PITCHER_CROP);
+        return blockState.isAir() || blockState.is(Blocks.PITCHER_CROP);
     }
 
-    private static boolean canPlaceAt(WorldView world, BlockPos pos) {
+    private static boolean sufficientLight(LevelReader world, BlockPos pos) {
         return hasEnoughLightAt(world, pos);
     }
-    protected static boolean hasEnoughLightAt(WorldView world, BlockPos pos) {
-        return world.getBaseLightLevel(pos, 0) >= 8;
+    protected static boolean hasEnoughLightAt(LevelReader world, BlockPos pos) {
+        return world.getRawBrightness(pos, 0) >= 8;
     }
 
 }

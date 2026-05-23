@@ -6,40 +6,36 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import net.greenjab.fixedminecraft.registry.ModTags;
-import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.DyedColorComponent;
-import net.minecraft.component.type.LodestoneTrackerComponent;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.loot.condition.LootCondition;
-import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.function.ConditionalLootFunction;
-import net.minecraft.loot.function.ExplorationMapLootFunction;
-import net.minecraft.loot.function.LootFunction;
-import net.minecraft.loot.function.LootFunctionType;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.context.ContextParameter;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.context.ContextKey;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.component.LodestoneTracker;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
-public class ExplorationCompassLootFunction extends ConditionalLootFunction {
+public class ExplorationCompassLootFunction extends LootItemConditionalFunction {
     public static final TagKey<Structure> DEFAULT_DESTINATION = ModTags.LODESTONE_COMPASS;
     public static final int DEFAULT_COLOR = 32767;
     public static final int DEFAULT_SEARCH_RADIUS = 50;
     public static final boolean DEFAULT_SKIP_EXISTING_CHUNKS = true;
     public static final MapCodec<ExplorationCompassLootFunction> CODEC = RecordCodecBuilder.mapCodec(
-             instance -> addConditionsField(instance)
+             instance -> commonFields(instance)
                      .and(
                             instance.group(
-                                    TagKey.unprefixedCodec(RegistryKeys.STRUCTURE)
+                                    TagKey.codec(Registries.STRUCTURE)
                                             .optionalFieldOf("destination", DEFAULT_DESTINATION)
                                             .forGetter( function -> function.destination),
                                     Codec.INT.optionalFieldOf("color", DEFAULT_COLOR).forGetter( function -> function.color),
@@ -55,7 +51,7 @@ public class ExplorationCompassLootFunction extends ConditionalLootFunction {
     private final boolean skipExistingChunks;
 
     ExplorationCompassLootFunction(
-            List<LootCondition> conditions,
+            List<LootItemCondition> conditions,
             TagKey<Structure> destination,
             int color,
             int searchRadius,
@@ -69,70 +65,30 @@ public class ExplorationCompassLootFunction extends ConditionalLootFunction {
     }
 
     @Override
-    public LootFunctionType<ExplorationCompassLootFunction> getType() {
-        return OtherRegistry.EXPLORATION_COMPASS;
+    public @NonNull Set<ContextKey<?>> getReferencedContextParams() {
+        return Set.of(LootContextParams.ORIGIN);
     }
 
     @Override
-    public Set<ContextParameter<?>> getAllowedParameters() {
-        return Set.of(LootContextParameters.ORIGIN);
+    public @NonNull MapCodec<? extends LootItemConditionalFunction> codec() {
+        return CODEC;
     }
 
     @Override
-    public ItemStack process(ItemStack stack, LootContext context) {
-        if (stack.isOf(Items.COMPASS)) {
-            Vec3d vec3d = context.get(LootContextParameters.ORIGIN);
+    public @NonNull ItemStack run(ItemStack stack, @NonNull LootContext context) {
+        if (stack.is(Items.COMPASS)) {
+            Vec3 vec3d = context.getOptionalParameter(LootContextParams.ORIGIN);
             if (vec3d != null) {
-                ServerWorld serverWorld = context.getWorld();
-                BlockPos blockPos = serverWorld.locateStructure(this.destination, BlockPos.ofFloored(vec3d), this.searchRadius, this.skipExistingChunks);
+                ServerLevel serverWorld = context.getLevel();
+                BlockPos blockPos = serverWorld.findNearestMapStructure(this.destination, BlockPos.containing(vec3d), this.searchRadius, this.skipExistingChunks);
                 if (blockPos != null) {
-                    ItemStack itemStack = Items.COMPASS.getDefaultStack();
-                    itemStack.set(DataComponentTypes.LODESTONE_TRACKER, new LodestoneTrackerComponent(Optional.of(GlobalPos.create(serverWorld.getRegistryKey(), blockPos.withY(-49))), true));
-                    itemStack.set(DataComponentTypes.DYED_COLOR, new DyedColorComponent(this.color));
+                    ItemStack itemStack = Items.COMPASS.getDefaultInstance();
+                    itemStack.set(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.of(GlobalPos.of(serverWorld.dimension(), blockPos.atY(-49))), true));
+                    itemStack.set(DataComponents.DYED_COLOR, new DyedItemColor(this.color));
                     return itemStack;
                 }
             }
         }
         return stack;
-    }
-
-    public static ExplorationCompassLootFunction.Builder builder() {
-        return new ExplorationCompassLootFunction.Builder();
-    }
-
-    public static class Builder extends ConditionalLootFunction.Builder<ExplorationCompassLootFunction.Builder> {
-        private int color = 32767;
-        private TagKey<Structure> destination = ExplorationMapLootFunction.DEFAULT_DESTINATION;
-        private int searchRadius = 50;
-        private boolean skipExistingChunks = true;
-
-        protected ExplorationCompassLootFunction.Builder getThisBuilder() {
-            return this;
-        }
-
-        public ExplorationCompassLootFunction.Builder withColor(int color) {
-            this.color = color;
-            return this;
-        }
-
-        public ExplorationCompassLootFunction.Builder withDestination(TagKey<Structure> destination) {
-            this.destination = destination;
-            return this;
-        }
-
-        public ExplorationCompassLootFunction.Builder searchRadius(int searchRadius) {
-            this.searchRadius = searchRadius;
-            return this;
-        }
-
-        public ExplorationCompassLootFunction.Builder withSkipExistingChunks(boolean skipExistingChunks) {
-            this.skipExistingChunks = skipExistingChunks;
-            return this;
-        }
-
-        @Override
-        public LootFunction build() {
-            return new ExplorationCompassLootFunction(this.getConditions(), this.destination, this.color, this.searchRadius, this.skipExistingChunks);
-        }
     }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_tinted_cross",
+  "textures": {
+    "cross": "minecraft:block/bamboo_stage0_wavy",
+    "particle": "minecraft:block/bamboo_stage0"
+  }
+}

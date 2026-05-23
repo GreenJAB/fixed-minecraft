@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import net.minecraft.client.gui.screen.advancement.AdvancementsScreen;
+import net.minecraft.client.gui.screens.advancements.AdvancementsScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 
 @Mixin(AdvancementsScreen.class)
-public class AdvancementsScreenMixin {
+public abstract class AdvancementsScreenMixin {
      @Unique
      int newWINDOW_WIDTH = 441;
     @Unique
@@ -17,9 +17,9 @@ public class AdvancementsScreenMixin {
     int newPAGE_WIDTH = 423;
      @Unique
      int newPAGE_HEIGHT = 218;
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 252))
+    @ModifyConstant(method = "extractRenderState", constant = @Constant(intValue = 252))
     private int largerScreenX1(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 140))
+    @ModifyConstant(method = "extractRenderState", constant = @Constant(intValue = 140))
     private int largerScreenY1(int constant) {return newWINDOW_HEIGHT;}
 
     @ModifyConstant(method = "mouseClicked", constant = @Constant(intValue = 252))
@@ -27,18 +27,18 @@ public class AdvancementsScreenMixin {
     @ModifyConstant(method = "mouseClicked", constant = @Constant(intValue = 140))
     private int largerScreenY2(int constant) {return newWINDOW_HEIGHT;}
 
-    @ModifyConstant(method = "drawAdvancementTree", constant = @Constant(intValue = 234))
+    @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 234))
     private int largerScreenX3(int constant) {return newPAGE_WIDTH;}
-    @ModifyConstant(method = "drawAdvancementTree", constant = @Constant(intValue = 113))
+    @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 113))
     private int largerScreenY3(int constant) {return newPAGE_HEIGHT;}
-    @ModifyConstant(method = "drawAdvancementTree", constant = @Constant(intValue = 117))
+    @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 117))
     private int largerScreenX3a(int constant) {return newPAGE_WIDTH/2;}
 
-    @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 252))
+    @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 252))
     private int largerScreenX4(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 140))
+    @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 140))
     private int largerScreenY4(int constant) {return newWINDOW_HEIGHT;}
 
-    @ModifyConstant(method = "drawWindow", constant = @Constant(intValue = 256))
+    @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 256))
     private int largerScreen(int constant) {return 512;}
 }

@@ -1,16 +1,16 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,23 +20,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Optional;
 
 @Mixin(AxeItem.class)
-public class AxeItemMixin {
-    @Inject(method = "tryStrip", at = @At(
+public abstract class AxeItemMixin {
+    @Inject(method = "evaluateNewBlockState", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/item/AxeItem;strip(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/block/BlockState;Lnet/minecraft/sound/SoundEvent;I)V", ordinal = 0
+            target = "Lnet/minecraft/world/item/AxeItem;spawnSoundAndParticle(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/sounds/SoundEvent;I)V", ordinal = 0
     ))
-    private void addScrapedCopper(World world, BlockPos pos, @Nullable PlayerEntity player,
+    private void addScrapedCopper(Level world, BlockPos pos, @Nullable Player player,
                                        BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {
-        if (world instanceof ServerWorld serverWorld && state.isFullCube(world, pos) && world.random.nextFloat()<0.3f) {
+        if (world instanceof ServerLevel serverWorld && state.isCollisionShapeFullBlock(world, pos) && world.getRandom().nextFloat()<0.3f) {
             Identifier lootTableId = FixedMinecraft.id("gameplay/other/scrape");
-            Block.generateBlockInteractLoot(
+            Block.dropFromBlockInteractLootTable(
                     serverWorld,
-                    RegistryKey.of(RegistryKeys.LOOT_TABLE, lootTableId),
+                    ResourceKey.create(Registries.LOOT_TABLE, lootTableId),
                     state,
                     world.getBlockEntity(pos),
                     null,
                     player,
-                     (worldx, stack) -> Block.dropStack(worldx, pos, stack)
+                     (worldx, stack) -> Block.popResource(worldx, pos, stack)
             );
         }
     }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/cave_vines_plant_wavy",
+    "particle": "minecraft:block/cave_vines_plant"
+  }
+}

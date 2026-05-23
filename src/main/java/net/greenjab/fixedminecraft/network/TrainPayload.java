@@ -2,27 +2,29 @@ package net.greenjab.fixedminecraft.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import org.jspecify.annotations.NonNull;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
-public record TrainPayload(ArrayList<UUID> train) implements CustomPayload {
-    public static final Id<TrainPayload> PACKET_ID = new Id<>(FixedMinecraft.id("train"));
+public record TrainPayload(ArrayList<UUID> train) implements CustomPacketPayload {
+    public static final Type<TrainPayload> PACKET_ID = new Type<>(FixedMinecraft.id("train"));
 
-    public static final PacketCodec<RegistryByteBuf, TrainPayload> PACKET_CODEC = PacketCodec.tuple(
+    public static final StreamCodec<RegistryFriendlyByteBuf, TrainPayload> PACKET_CODEC = StreamCodec.composite(
             TrainNetwork.ARRAY_CODEC,
             TrainPayload::train,
             TrainPayload::new
     );
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public @NonNull Type<? extends CustomPacketPayload> type() {
         return PACKET_ID;
     }
 
     public static void register() {
-        PayloadTypeRegistry.playS2C().register(PACKET_ID, PACKET_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(PACKET_ID, PACKET_CODEC);
     }
 }

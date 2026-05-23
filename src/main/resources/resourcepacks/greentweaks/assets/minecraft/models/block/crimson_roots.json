@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/crimson_roots_wavy",
+    "particle": "minecraft:block/crimson_roots"
+  }
+}

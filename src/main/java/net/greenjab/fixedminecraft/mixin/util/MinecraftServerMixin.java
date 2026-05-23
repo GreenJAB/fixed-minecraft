@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 @Mixin(MinecraftServer.class)
 public abstract class MinecraftServerMixin {
-    @Inject(method = "tick", at = @At("RETURN"))
+    @Inject(method = "tickServer", at = @At("RETURN"))
     private void loadWorld(CallbackInfo ci) {
         MinecraftServer SW = (MinecraftServer)(Object) this;
         synchronized (Networking.SERVER_LOCK) {

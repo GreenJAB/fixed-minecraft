@@ -1,22 +1,22 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.decoration.ArmorStandEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.world.World;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,27 +24,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Item.class)
-public class ItemMixin {
+public abstract class ItemMixin {
 
-    @Inject(method = "getMaxUseTime", at = @At("HEAD"), cancellable = true)
-    private void modifyFoodEatTimes(ItemStack stack, LivingEntity user, CallbackInfoReturnable<Integer> cir) {
-        if (stack.getItem().getComponents().contains(DataComponentTypes.FOOD)) {
-            cir.setReturnValue(10 + 6 * stack.getItem().getComponents().get(DataComponentTypes.FOOD).nutrition());
-            if (stack.isIn(ItemTags.PIGLIN_LOVED)) cir.setReturnValue(60);
+    @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
+    private void modifyFoodEatTimes(ItemStack itemStack, LivingEntity user, CallbackInfoReturnable<Integer> cir) {
+        if (itemStack.getItem().components().has(DataComponents.FOOD)) {
+            cir.setReturnValue(10 + 6 * itemStack.getItem().components().get(DataComponents.FOOD).nutrition());
+            if (itemStack.is(ItemTags.PIGLIN_LOVED)) cir.setReturnValue(60);
         }
     }
 
-    @Inject(method = "finishUsing", at = @At("HEAD"))
-    private void rawFoodDebuf(ItemStack itemStack, World world, LivingEntity user, CallbackInfoReturnable<ItemStack> cir) {
-        FoodComponent foodComponent = itemStack.get(DataComponentTypes.FOOD);
-        if (user instanceof ServerPlayerEntity) {
+    @Inject(method = "finishUsingItem", at = @At("HEAD"))
+    private void rawFoodDebuf(ItemStack itemStack, Level level, LivingEntity entity, CallbackInfoReturnable<ItemStack> cir) {
+        FoodProperties foodComponent = itemStack.get(DataComponents.FOOD);
+        if (entity instanceof ServerPlayer) {
             if (foodComponent != null) {
-                if (itemStack.isOf(Items.SWEET_BERRIES)) {
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 200, 0));
+                if (itemStack.is(Items.SWEET_BERRIES)) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 0));
                 } else
                 if (foodComponent.saturation() / (foodComponent.nutrition() * 2.0f) == 0.15f) {
                     if (Math.random() < 0.15f) {
-                        user.addStatusEffect(new StatusEffectInstance(StatusEffects.HUNGER, 600, 0));
+                        entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 0));
                     }
                 }
             }
@@ -52,14 +52,14 @@ public class ItemMixin {
     }
 
     @Inject(method = "inventoryTick", at = @At("HEAD"))
-    private void repairGold(ItemStack stack, ServerWorld world, Entity entity, EquipmentSlot slot, CallbackInfo ci) {
-        if (entity instanceof PlayerEntity || entity instanceof ArmorStandEntity) {
-            if (stack.getComponents().contains(DataComponentTypes.DAMAGE)) {
-                if (stack.isIn(ItemTags.PIGLIN_LOVED)) {
-                    if (stack.getMaxDamage()!=0) {
-                        if (world.getTime() % (24000 / stack.getMaxDamage()) == 0) {
-                            if (entity instanceof PlayerEntity player && FixedMinecraft.getArmor(player).contains(stack)) return;
-                            stack.setDamage(stack.getDamage() - 1);
+    private void repairGold(ItemStack itemStack, ServerLevel level, Entity owner, EquipmentSlot slot, CallbackInfo ci) {
+        if (owner instanceof Player || owner instanceof ArmorStand) {
+            if (itemStack.getComponents().has(DataComponents.DAMAGE)) {
+                if (itemStack.is(ItemTags.PIGLIN_LOVED)) {
+                    if (itemStack.getMaxDamage() != 0) {
+                        if (level.getGameTime() % (24000 / itemStack.getMaxDamage()) == 0) {
+                            if (owner instanceof Player player && FixedMinecraft.getArmor(player).contains(itemStack)) return;
+                            itemStack.setDamageValue(itemStack.getDamageValue() - 1);
                         }
                     }
                 }

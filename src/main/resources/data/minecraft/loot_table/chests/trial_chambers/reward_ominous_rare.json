@@ -84,28 +84,11 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": [
-                                "minecraft:breach",
-                                "minecraft:density"
-                            ]
+                            "options": "#fixedminecraft:loot/trial_chamber"
                         }
                     ],
                     "name": "minecraft:book",
-                    "weight": 2
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "enchantments": {
-                                "minecraft:wind_burst": 1
-                            },
-                            "function": "minecraft:set_enchantments"
-                        }
-                    ],
-                    "name": "minecraft:book",
-                    "weight": 2
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",

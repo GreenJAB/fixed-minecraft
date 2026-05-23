@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/short_dry_grass_wavy",
+    "particle": "minecraft:block/short_dry_grass"
+  }
+}

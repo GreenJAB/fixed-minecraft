@@ -1,0 +1,17 @@
+{
+  "given_item_modifiers": [
+    {
+      "function": "fixedminecraft:wandering_trader_special"
+    }
+  ],
+  "gives": {
+    "count": 1,
+    "id": "minecraft:diamond"
+  },
+  "max_uses": 2.0,
+  "reputation_discount": 0.05,
+  "wants": {
+    "id": "minecraft:emerald",
+    "count": 10
+  }
+}

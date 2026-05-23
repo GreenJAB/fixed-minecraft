@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.netherite;
 
 import net.greenjab.fixedminecraft.registry.ModTags;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,17 +12,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ItemStackMixin {
 
     @Shadow
-    public abstract void setDamage(int damage);
+    public abstract void setDamageValue(int value);
 
     @Shadow
     public abstract int getMaxDamage();
 
-    @Inject(method = "shouldBreak", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "isBroken", at = @At("RETURN"), cancellable = true)
     private void dontBreakNetherite(CallbackInfoReturnable<Boolean> cir) {
        if (cir.getReturnValue()) {
            ItemStack itemStack = (ItemStack) (Object)this;
-           if (itemStack.isIn(ModTags.UNBREAKABLE)) {
-               this.setDamage(this.getMaxDamage()-1);
+           if (itemStack.is(ModTags.UNBREAKABLE)) {
+               this.setDamageValue(this.getMaxDamage()-1);
                cir.setReturnValue(false);
            }
        }

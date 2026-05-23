@@ -2,38 +2,38 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
-import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlocksAttacksComponent;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.DamageUtil;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.TntEntity;
-import net.minecraft.entity.boss.WitherEntity;
-import net.minecraft.entity.conversion.EntityConversionContext;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.mob.PillagerEntity;
-import net.minecraft.entity.mob.VexEntity;
-import net.minecraft.entity.mob.WitherSkeletonEntity;
-import net.minecraft.entity.passive.AllayEntity;
-import net.minecraft.item.FilledMapItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.map.MapState;
-import net.minecraft.registry.tag.DamageTypeTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stats;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEvents;
+import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.CombatRules;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.ConversionParams;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.monster.illager.Pillager;
+import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.MapItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -51,84 +51,71 @@ public abstract class LivingEntityMixin {
     protected boolean dead;
 
     @Shadow
-    private BlockPos lastBlockPos;
+    private BlockPos lastPos;
 
     @Shadow
-    protected abstract void drop(ServerWorld world, DamageSource damageSource);
+    protected abstract void dropAllDeathLoot(ServerLevel level, DamageSource source);
 
-    @Shadow
-    public abstract ItemStack getActiveItem();
-
-    @Inject(method = "damage", at = @At(
+    @Inject(method = "hurtServer", at = @At(
             value = "HEAD"), cancellable = true)
-    private void witherSkeletonIgnoreWither(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void witherSkeletonIgnoreWither(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity LE = (LivingEntity)(Object)this;
-        if (LE instanceof WitherSkeletonEntity) {
-            if (source.getAttacker() instanceof WitherEntity) cir.setReturnValue(false);
+        if (LE instanceof WitherSkeleton) {
+            if (source.getEntity() instanceof WitherBoss) cir.setReturnValue(false);
         }
     }
 
-    @Inject(method = "damage",at = @At( value = "TAIL" ))
-    private void exitVehicleOnDamage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "hurtServer",at = @At( value = "TAIL" ))
+    private void exitVehicleOnDamage(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity entity = ((LivingEntity) (Object) this);
-        if (amount <= 0) return;
-        if (entity.isPlayer()) return;
+        if (damage <= 0) return;
+        if (entity.isAlwaysTicking()) return;
 
         Entity vehicle = entity.getVehicle();
         if (vehicle == null) return;
-        EntityType<?> vehicleType = vehicle.getType();
 
-        if (vehicleType.isIn(ModTags.VEHICLES)) entity.stopRiding();
+        if (vehicle.is(ModTags.VEHICLES)) entity.stopRiding();
     }
 
-    @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;applyDamage(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/damage/DamageSource;F)V"),
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)V"),
             cancellable = true
     )
-    private void cancel0Damage(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
-        BlocksAttacksComponent blocksAttacksComponent = this.getActiveItem().get(DataComponentTypes.BLOCKS_ATTACKS);
-        if (blocksAttacksComponent != null) {
-            if ( blocksAttacksComponent.bypassedBy().map(source::isIn).orElse(false)) {
-                if (modifyAppliedDamage(world, source, amount)<0.05) {
-                    cir.setReturnValue(false);
-                }
-            }
-        } else {
-            if (modifyAppliedDamage(world, source, amount)<0.05) {
-                cir.setReturnValue(false);
-            }
+    private void cancel0Damage(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (modifyAppliedDamage(level, source, damage) < 0.05) {
+            cir.setReturnValue(false);
         }
     }
 
     @Unique
-    protected float modifyAppliedDamage(ServerWorld world, DamageSource source, float amount) {
+    protected float modifyAppliedDamage(ServerLevel world, DamageSource source, float amount) {
         LivingEntity entity = ((LivingEntity) (Object) this);
-        if (source.isIn(DamageTypeTags.BYPASSES_EFFECTS)) {
+        if (source.is(DamageTypeTags.BYPASSES_EFFECTS)) {
             return amount;
         } else {
-            if (entity.hasStatusEffect(StatusEffects.RESISTANCE) && !source.isIn(DamageTypeTags.BYPASSES_RESISTANCE)) {
-                int i = (entity.getStatusEffect(StatusEffects.RESISTANCE).getAmplifier() + 1) * 5;
+            if (entity.hasEffect(MobEffects.RESISTANCE) && !source.is(DamageTypeTags.BYPASSES_RESISTANCE)) {
+                int i = (entity.getEffect(MobEffects.RESISTANCE).getAmplifier() + 1) * 5;
                 int j = 25 - i;
                 float f = amount * (float)j;
                 float g = amount;
                 amount = Math.max(f / 25.0F, 0.0F);
                 float h = g - amount;
                 if (h > 0.0F && h < 3.4028235E37F) {
-                    if (entity instanceof ServerPlayerEntity) {
-                        ((ServerPlayerEntity)entity).increaseStat(Stats.DAMAGE_RESISTED, Math.round(h * 10.0F));
-                    } else if (source.getAttacker() instanceof ServerPlayerEntity) {
-                        ((ServerPlayerEntity)source.getAttacker()).increaseStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(h * 10.0F));
+                    if (entity instanceof ServerPlayer) {
+                        ((ServerPlayer)entity).awardStat(Stats.DAMAGE_RESISTED, Math.round(h * 10.0F));
+                    } else if (source.getEntity() instanceof ServerPlayer) {
+                        ((ServerPlayer)source.getEntity()).awardStat(Stats.DAMAGE_DEALT_RESISTED, Math.round(h * 10.0F));
                     }
                 }
             }
 
             if (amount <= 0.0F) {
                 return 0.0F;
-            } else if (source.isIn(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
+            } else if (source.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
                 return amount;
             } else {
-                float i = EnchantmentHelper.getProtectionAmount(world, entity, source);
+                float i = EnchantmentHelper.getDamageProtection(world, entity, source);
                 if (i > 0) {
-                    amount = DamageUtil.getInflictedDamage(amount, i);
+                    amount = CombatRules.getDamageAfterMagicAbsorb(amount, i);
                 }
 
                 return amount;
@@ -136,30 +123,30 @@ public abstract class LivingEntityMixin {
         }
     }
 
-    @Inject(method = "onDeath", at = @At("HEAD"), cancellable = true)
-    private void renewableEchoShards(DamageSource damageSource, CallbackInfo ci){
+    @Inject(method = "die", at = @At("HEAD"), cancellable = true)
+    private void renewableEchoShards(DamageSource source, CallbackInfo ci){
 
         LivingEntity LE = ((LivingEntity) (Object) this);
         if (!LE.isRemoved() && !this.dead) {
-            if (LE instanceof AllayEntity AE) {
-                if (damageSource.isOf(DamageTypes.SONIC_BOOM)) {
-                    ServerWorld world = (ServerWorld) AE.getEntityWorld();
-                    AE.dropItem(world, Items.ECHO_SHARD);
-                    this.drop(world, damageSource);
+            if (LE instanceof Allay AE) {
+                if (source.is(DamageTypes.SONIC_BOOM)) {
+                    ServerLevel world = (ServerLevel) AE.level();
+                    AE.spawnAtLocation(world, Items.ECHO_SHARD);
+                    this.dropAllDeathLoot(world, source);
 
-                    VexEntity VE = AE.convertTo(
-                            EntityType.VEX, EntityConversionContext.create(AE, true, true), /* method_63655 */ vex -> {
-                                vex.initialize(world, world.getLocalDifficulty(vex.getBlockPos()), SpawnReason.CONVERSION, null);
-                                world.syncWorldEvent(null, WorldEvents.SKELETON_CONVERTS_TO_STRAY, this.lastBlockPos, 0);
+                    Vex VE = AE.convertTo(
+                            EntityType.VEX, ConversionParams.single(AE, true, true), /* method_63655 */ vex -> {
+                                vex.finalizeSpawn(world, world.getCurrentDifficultyAt(vex.blockPosition()), EntitySpawnReason.CONVERSION, null);
+                                world.levelEvent(null, LevelEvent.SOUND_SKELETON_TO_STRAY, this.lastPos, 0);
                             }
                     );
 
                     if (VE != null) {
-                        VE.initialize(
-                                world, world.getLocalDifficulty(VE.getBlockPos()), SpawnReason.CONVERSION, null
+                        VE.finalizeSpawn(
+                                world, world.getCurrentDifficultyAt(VE.blockPosition()), EntitySpawnReason.CONVERSION, null
                         );
                         if (!AE.isSilent()) {
-                            world.syncWorldEvent(null, WorldEvents.ZOMBIE_INFECTS_VILLAGER, AE.getBlockPos(), 0);
+                            world.levelEvent(null, LevelEvent.SOUND_ZOMBIE_INFECTED, AE.blockPosition(), 0);
                         }
                     }
                     AE.discard();
@@ -167,46 +154,46 @@ public abstract class LivingEntityMixin {
                 }
             }
 
-            if (LE instanceof PillagerEntity PE) {
-                if (PE.getCommandTags().contains("map")) {
-                    ServerWorld serverWorld = (ServerWorld) PE.getEntityWorld();
-                    BlockPos blockPos = serverWorld.locateStructure(ModTags.ON_OUTPOST_MAPS, PE.getBlockPos(), 50, true);
+            if (LE instanceof Pillager PE) {
+                if (PE.entityTags().contains("map")) {
+                    ServerLevel serverWorld = (ServerLevel) PE.level();
+                    BlockPos blockPos = serverWorld.findNearestMapStructure(ModTags.ON_OUTPOST_MAPS, PE.blockPosition(), 50, true);
                     if (blockPos != null) {
-                        ItemStack itemStack = FilledMapItem.createMap(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
-                        FilledMapItem.fillExplorationMap(serverWorld, itemStack);
-                        MapState.addDecorationsNbt(itemStack, blockPos, "+", OtherRegistry.PILLAGER_OUTPOST);
-                        itemStack.set(DataComponentTypes.ITEM_NAME, Text.translatable("filled_map.outpost"));
-                        PE.dropItem(itemStack, true, false);
+                        ItemStack itemStack = MapItem.create(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
+                        MapItem.renderBiomePreviewMap(serverWorld, itemStack);
+                        MapItemSavedData.addTargetDecoration(itemStack, blockPos, "+", MapDecorationRegistry.PILLAGER_OUTPOST);
+                        itemStack.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.outpost"));
+                        PE.drop(itemStack, true, false);
                     }
                 }
             }
         }
     }
 
-    @ModifyExpressionValue(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;getExperienceToDrop(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/Entity;)I"))
+    @ModifyExpressionValue(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getExperienceReward(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/Entity;)I"))
     private int bonusXP(int original){
         LivingEntity LE = (LivingEntity) (Object)this;
         float mul = 1;
-        if (LE.getCommandTags().contains("night")) mul*=1.5f;
-        if (LE.getCommandTags().contains("pale")) mul*=1.5f;
-        return (int)(Math.ceil(original*mul));
+        if (LE.entityTags().contains("night")) mul*=1.5f;
+        if (LE.entityTags().contains("pale")) mul*=1.5f;
+        return Mth.ceil(original * mul);
     }
 
-    @ModifyConstant(method = "getAttackDistanceScalingFactor", constant = @Constant(doubleValue = 0.8))
+    @ModifyConstant(method = "getVisibilityPercent", constant = @Constant(doubleValue = 0.8))
     private double moreSneaky(double constant){
         LivingEntity LE = (LivingEntity) (Object)this;
-        if (LE instanceof HostileEntity) return 0.3;
+        if (LE instanceof Monster) return 0.3;
         return constant;
     }
 
-    @Inject(method = "onDeath", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;updateKilledAdvancementCriterion(Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;)V"))
-    private void tntAdvancement(DamageSource damageSource, CallbackInfo ci) {
-        if (damageSource.getSource() instanceof TntEntity) {
-            if ((LivingEntity)(Object)this instanceof HostileEntity) {
-                Entity player = damageSource.getAttacker();
+    @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;awardKillScore(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V"))
+    private void tntAdvancement(DamageSource source, CallbackInfo ci) {
+        if (source.getDirectEntity() instanceof PrimedTnt) {
+            if ((LivingEntity)(Object)this instanceof Monster) {
+                Entity player = source.getEntity();
                 if (player != null) {
-                    if (player instanceof ServerPlayerEntity SPE) {
-                        Criteria.CONSUME_ITEM.trigger(SPE, Items.TNT.getDefaultStack());
+                    if (player instanceof ServerPlayer SPE) {
+                        CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.TNT.getDefaultInstance());
                     }
                 }
             }

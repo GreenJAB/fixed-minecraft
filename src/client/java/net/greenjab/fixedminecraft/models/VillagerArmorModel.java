@@ -1,20 +1,21 @@
 package net.greenjab.fixedminecraft.models;
 
-import net.minecraft.client.model.Dilation;
-import net.minecraft.client.model.ModelData;
-import net.minecraft.client.model.ModelPartData;
-import net.minecraft.client.model.ModelTransform;
-import net.minecraft.client.model.TexturedModelData;
-import net.minecraft.client.render.entity.model.VillagerResemblingModel;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.model.ModelPartBuilder;
-import net.minecraft.client.render.entity.state.EntityRenderState;
-import net.minecraft.client.render.entity.state.VillagerEntityRenderState;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartPose;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
+import net.minecraft.client.model.geom.builders.CubeListBuilder;
+import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.client.model.geom.builders.MeshDefinition;
+import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.npc.VillagerModel;
+import net.minecraft.client.renderer.entity.state.EntityRenderState;
+import net.minecraft.client.renderer.entity.state.VillagerRenderState;
+import net.minecraft.util.Mth;
+import org.jspecify.annotations.NonNull;
 
 /** Credit: Viola-Siemens */
-public class VillagerArmorModel <S extends VillagerEntityRenderState> extends EntityModel<S>  implements HumanoidModel {
+public class VillagerArmorModel <S extends VillagerRenderState> extends EntityModel<S>  implements CustomHumanoidModel {
     protected final ModelPart root;
     protected final ModelPart head;
     protected final ModelPart body;
@@ -32,28 +33,28 @@ public class VillagerArmorModel <S extends VillagerEntityRenderState> extends En
         this.leftLeg = root.getChild("left_leg");
     }
 
-    public static TexturedModelData createBodyLayer(Dilation cubeDeformation) {
-        ModelData modelData = new ModelData();
-        ModelPartData modelPartData = modelData.getRoot();
-        modelPartData.addChild("head",
-                ModelPartBuilder.create().uv(0, 0).cuboid(-4.0F, -9.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
-                ModelTransform.NONE);
-        modelPartData.addChild("body",
-                ModelPartBuilder.create().uv(16, 16).cuboid(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.add(0.2F, 0.0F, 1.0F)),
-                ModelTransform.NONE);
-        modelPartData.addChild("arms",
-                ModelPartBuilder.create()
-                        .uv(40, 16).cuboid(-8.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F))
-                        .uv(40, 16).mirrored().cuboid(4.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.add(-0.25F)),
+    public static LayerDefinition createBodyLayer(CubeDeformation cubeDeformation) {
+        MeshDefinition modelData = new MeshDefinition();
+        PartDefinition modelPartData = modelData.getRoot();
+        modelPartData.addOrReplaceChild("head",
+                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
+                PartPose.ZERO);
+        modelPartData.addOrReplaceChild("body",
+                CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.extend(0.2F, 0.0F, 1.0F)),
+                PartPose.ZERO);
+        modelPartData.addOrReplaceChild("arms",
+                CubeListBuilder.create()
+                        .texOffs(40, 16).addBox(-8.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.extend(-0.25F))
+                        .texOffs(40, 16).mirror().addBox(4.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.extend(-0.25F)),
                 //ModelTransform.origin(0.0F, 2.0F, 0.0F));
-                ModelTransform.rotation(-0.75f, 0, 0).moveOrigin(0.0F, 2.0F, 0.0F));
-        modelPartData.addChild("right_leg",
-                ModelPartBuilder.create().uv(0, 16).cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(0.19F, 0.26F, 0.26F)),
-                ModelTransform.origin(-2.0F, 12.0F, 0.0F));
-        modelPartData.addChild("left_leg",
-                ModelPartBuilder.create().uv(0, 16).mirrored().cuboid(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.add(0.19F,0.26F, 0.26F)),
-                ModelTransform.origin(2.0F, 12.0F, 0.0F));
-        return TexturedModelData.of(modelData, 64, 32);
+                PartPose.rotation(-0.75f, 0, 0).translated(0.0F, 2.0F, 0.0F));
+        modelPartData.addOrReplaceChild("right_leg",
+                CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.extend(0.19F, 0.26F, 0.26F)),
+                PartPose.offset(-2.0F, 12.0F, 0.0F));
+        modelPartData.addOrReplaceChild("left_leg",
+                CubeListBuilder.create().texOffs(0, 16).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.extend(0.19F,0.26F, 0.26F)),
+                PartPose.offset(2.0F, 12.0F, 0.0F));
+        return LayerDefinition.create(modelData, 64, 32);
     }
 
     public void setHeadVisible(boolean visible) {
@@ -85,41 +86,41 @@ public class VillagerArmorModel <S extends VillagerEntityRenderState> extends En
 
     @SuppressWarnings("unused")
     public void copyPropertiesTo(VillagerArmorModel<S> model) {
-        model.head.setTransform(this.head.getTransform());
-        model.body.setTransform(this.body.getTransform());
-        model.arms.setTransform(this.arms.getTransform());
-        model.rightLeg.setTransform(this.rightLeg.getTransform());
-        model.leftLeg.setTransform(this.leftLeg.getTransform());
+        model.head.loadPose(this.head.storePose());
+        model.body.loadPose(this.body.storePose());
+        model.arms.loadPose(this.arms.storePose());
+        model.rightLeg.loadPose(this.rightLeg.storePose());
+        model.leftLeg.loadPose(this.leftLeg.storePose());
     }
 
     @Override
     public <E extends EntityRenderState> void propertiesCopyFrom(EntityModel<E> model) {
-        if(model instanceof VillagerResemblingModel villagerModel) {
-            this.head.setTransform(villagerModel.getHead().getTransform());
+        if(model instanceof VillagerModel villagerModel) {
+            this.head.loadPose(villagerModel.getHead().storePose());
             //System.out.println(this.head.originY);
-            this.head.originY = 1.5f;
-            this.body.setTransform(villagerModel.getRootPart().getChild("body").getTransform());
-            this.arms.setTransform(villagerModel.getRootPart().getChild("arms").getTransform());
-            this.rightLeg.setTransform(villagerModel.getRootPart().getChild("right_leg").getTransform());
-            this.leftLeg.setTransform(villagerModel.getRootPart().getChild("left_leg").getTransform());
+            this.head.y = 1.5f;
+            this.body.loadPose(villagerModel.root().getChild("body").storePose());
+            this.arms.loadPose(villagerModel.root().getChild("arms").storePose());
+            this.rightLeg.loadPose(villagerModel.root().getChild("right_leg").storePose());
+            this.leftLeg.loadPose(villagerModel.root().getChild("left_leg").storePose());
         }
     }
 
     @Override
-    public void setAngles(S state) {
-        super.setAngles(state);
-        this.head.yaw = state.relativeHeadYaw * (float) (Math.PI / 180.0);
-        this.head.pitch = state.pitch * (float) (Math.PI / 180.0);
-        if (state.shaking) {
-            this.head.roll = 0.3F * MathHelper.sin(0.45F * state.age);
-            this.head.pitch = 0.4F;
+    public void setupAnim(@NonNull S state) {
+        super.setupAnim(state);
+        this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
+        this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
+        if (state.isFullyFrozen) {
+            this.head.zRot = 0.3F * Mth.sin(0.45F * state.ageInTicks);
+            this.head.xRot = 0.4F;
         } else {
-            this.head.roll = 0.0F;
+            this.head.zRot = 0.0F;
         }
 
-        this.rightLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F) * 1.4F * state.limbSwingAmplitude * 0.5F;
-        this.leftLeg.pitch = MathHelper.cos(state.limbSwingAnimationProgress * 0.6662F + (float) Math.PI) * 1.4F * state.limbSwingAmplitude * 0.5F;
-        this.rightLeg.yaw = 0.0F;
-        this.leftLeg.yaw = 0.0F;
+        this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed * 0.5F;
+        this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float) Math.PI) * 1.4F * state.walkAnimationSpeed * 0.5F;
+        this.rightLeg.yRot = 0.0F;
+        this.leftLeg.yRot = 0.0F;
     }
 }

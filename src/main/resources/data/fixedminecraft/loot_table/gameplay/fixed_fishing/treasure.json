@@ -42,7 +42,7 @@
                         }
                     ],
                     "name": "minecraft:bow",
-                    "weight": 14
+                    "weight": 12
                 },
                 {
                     "type": "minecraft:item",
@@ -62,7 +62,7 @@
                         }
                     ],
                     "name": "minecraft:fishing_rod",
-                    "weight": 14
+                    "weight": 11
                 },
                 {
                     "type": "minecraft:item",
@@ -110,7 +110,18 @@
                         }
                     ],
                     "name": "minecraft:book",
-                    "weight": 15
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/fishing"
+                        }
+                    ],
+                    "name": "minecraft:book",
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",
@@ -179,7 +190,7 @@
                     "weight": 5
                 }
             ],
-            "rolls": 1
+            "rolls": 10
         }
     ],
     "random_sequence": "fixedminecraft:gameplay/fixed_fishing/treasure"

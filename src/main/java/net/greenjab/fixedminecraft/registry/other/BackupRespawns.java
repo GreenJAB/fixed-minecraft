@@ -2,16 +2,16 @@ package net.greenjab.fixedminecraft.registry.other;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.datafixer.DataFixTypes;
-import net.minecraft.entity.player.PlayerEntity;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateType;
-
+import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackupRespawns extends PersistentState {
+public class BackupRespawns extends SavedData {
     public ArrayList<BackupRespawn> backupRespawns = new ArrayList<>();
 
     public static final Codec<BackupRespawns> CODEC = RecordCodecBuilder.create(
@@ -24,11 +24,11 @@ public class BackupRespawns extends PersistentState {
     }
     public BackupRespawns(ArrayList<BackupRespawn> respawns) {
         this.backupRespawns.addAll(respawns);
-        this.markDirty();
+        this.setDirty();
     }
 
-    public static PersistentStateType<BackupRespawns> createStateType() {
-        return new PersistentStateType<>("playerBackupRespawns", () -> {
+    public static SavedDataType<BackupRespawns> createStateType() {
+        return new SavedDataType<>(FixedMinecraft.id("player_backup_respawns"), () -> {
             throw new IllegalStateException("Should never create an empty map saved data");
         }, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA);
     }
@@ -37,16 +37,16 @@ public class BackupRespawns extends PersistentState {
     public BackupRespawns() {
     }
 
-    public BackupRespawn addPlayer(PlayerEntity player) {
-        BackupRespawn backupRespawn = new BackupRespawn(player.getName().getLiteralString());
+    public BackupRespawn addPlayer(Player player) {
+        BackupRespawn backupRespawn = new BackupRespawn(player.getName().tryCollapseToString());
         backupRespawns.add(backupRespawn);
-        if (backupRespawns.size()>64) backupRespawns.remove(0);
+        if (backupRespawns.size()>64) backupRespawns.removeFirst();
         return backupRespawn;
     }
 
-    public BackupRespawn getPlayer(PlayerEntity player) {
+    public BackupRespawn getPlayer(Player player) {
         for (BackupRespawn backupRespawn : backupRespawns) {
-            String name = player.getName().getLiteralString();
+            String name = player.getName().tryCollapseToString();
             assert name != null;
             if (name.contains(backupRespawn.name) && backupRespawn.name.contains(name)){
                 return backupRespawn;
@@ -56,7 +56,7 @@ public class BackupRespawns extends PersistentState {
     }
 
     public static BackupRespawns getBackupRespawns(MinecraftServer server) {
-        BackupRespawns backupRespawns = server.getOverworld().getPersistentStateManager().get(
+        BackupRespawns backupRespawns = server.getDataStorage().get(
                 createStateType());
         if (backupRespawns!=null) return backupRespawns;
         return putBackupRespawns(server);
@@ -64,7 +64,7 @@ public class BackupRespawns extends PersistentState {
 
     public static BackupRespawns putBackupRespawns(MinecraftServer server) {
         BackupRespawns backupRespawns = new BackupRespawns();
-        server.getOverworld().getPersistentStateManager().set(
+        server.getDataStorage().set(
                 createStateType(), backupRespawns);
         return backupRespawns;
     }

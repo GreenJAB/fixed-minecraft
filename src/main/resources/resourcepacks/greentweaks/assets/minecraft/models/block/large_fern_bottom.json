@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_tinted_cross",
+  "textures": {
+    "cross": "minecraft:block/large_fern_bottom_wavy",
+    "particle": "minecraft:block/large_fern_bottom"
+  }
+}

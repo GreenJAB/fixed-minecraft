@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.BlocksAttacksComponent;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.BlocksAttacks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,35 +21,35 @@ public abstract class LivingEntityMixin
     public abstract boolean isUsingItem();
 
     @Shadow
-    public abstract ItemStack getStackInHand(Hand hand);
+    public abstract ItemStack getItemInHand(InteractionHand hand);
 
     @Shadow
-    public abstract Hand getActiveHand();
+    public abstract InteractionHand getUsedItemHand();
 
     @Shadow
-    public abstract void stopUsingItem();
+    public abstract void releaseUsingItem();
 
-    @Inject(method = "damage", at = @At(value = "INVOKE",
-                                        target = "Lnet/minecraft/entity/damage/DamageSource;isIn(Lnet/minecraft/registry/tag/TagKey;)Z", ordinal = 5
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE",
+                                        target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 5
     ))
-    private void eatCancelling(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    private void eatCancelling(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
         if (this.isUsingItem()) {
-            if (this.getStackInHand(this.getActiveHand()).getComponents().contains(DataComponentTypes.FOOD)) {
+            if (this.getItemInHand(this.getUsedItemHand()).getComponents().has(DataComponents.FOOD)) {
                 LivingEntity LE = (LivingEntity)(Object)this;
-                if (LE.getEntityWorld().getDifficulty().getId()>1) {
-                    if (source.getAttacker()!=null) {
-                        this.stopUsingItem();
+                if (LE.level().getDifficulty().getId()>1) {
+                    if (source.getEntity()!=null) {
+                        this.releaseUsingItem();
                     }
                 }
             }
         }
     }
 
-    @Redirect(method = "getBlockingItem", at = @At(
+    @Redirect(method = "getItemBlockingWith", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/component/type/BlocksAttacksComponent;getBlockDelayTicks()I"
+            target = "Lnet/minecraft/world/item/component/BlocksAttacks;blockDelayTicks()I"
     ))
-    private int noShieldDelay(BlocksAttacksComponent instance){
+    private int noShieldDelay(BlocksAttacks instance){
         return 0;
     }
 }

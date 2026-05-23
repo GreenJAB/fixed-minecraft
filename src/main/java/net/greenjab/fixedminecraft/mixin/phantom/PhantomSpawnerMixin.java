@@ -1,22 +1,20 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.passive.CatEntity;
-import net.minecraft.network.packet.s2c.play.GameStateChangeS2CPacket;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.ServerStatHandler;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
+import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
+import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.ServerStatsCounter;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.spawner.PhantomSpawner;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.animal.feline.Cat;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.level.levelgen.PhantomSpawner;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,43 +24,40 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(PhantomSpawner.class)
-public class PhantomSpawnerMixin {
+public abstract class PhantomSpawnerMixin {
 
-    @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/ServerStatHandler;getStat(Lnet/minecraft/stat/Stat;)I"))
-    private int phantomSpawnByEffect(ServerStatHandler instance, Stat<?> stat,
-                                     @Local ServerPlayerEntity serverPlayerEntity) {
-        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
-        return 100000 * (1+serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier());
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/stats/ServerStatsCounter;getValue(Lnet/minecraft/stats/Stat;)I"))
+    private int phantomSpawnByEffect(ServerStatsCounter instance, Stat<?> stat,
+                                     @Local ServerPlayer player, @Local(argsOnly = true) ServerLevel level) {
+        if (!player.hasEffect(MobEffectRegistry.INSOMNIA)) return 0;
+        List<Cat> list = level.getEntitiesOfClass(Cat.class, player.getBoundingBox().inflate(16.0), EntitySelector.ENTITY_STILL_ALIVE);
+        if  (!list.isEmpty()) return 0;
+        return 100000 * (1 + player.getEffect(MobEffectRegistry.INSOMNIA).getAmplifier());
     }
 
-    @Redirect(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Difficulty;getId()I"))
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Difficulty;getId()I"))
     private int morePhantomsPerlevel(Difficulty instance,
-                                     @Local ServerPlayerEntity serverPlayerEntity,
-                                     @Local LocalDifficulty localDifficulty,
-                                     @Local Random random) {
-        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) return 0;
-        return instance.getId() + serverPlayerEntity.getStatusEffect(OtherRegistry.INSOMNIA).getAmplifier();
+                                     @Local ServerPlayer player) {
+        if (!player.hasEffect(MobEffectRegistry.INSOMNIA)) return 0;
+        return instance.getId() + player.getEffect(MobEffectRegistry.INSOMNIA).getAmplifier();
     }
 
-    @Inject(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(III)I", shift = At.Shift.AFTER))
-    private void giveInsomniaOnNoSleep(ServerWorld world, boolean spawnMonsters, CallbackInfo ci,
-                                       @Local ServerPlayerEntity serverPlayerEntity) {
-        ServerStatHandler serverStatHandler = serverPlayerEntity.getStatHandler();
-        int j = MathHelper.clamp(serverStatHandler.getStat(Stats.CUSTOM.getOrCreateStat(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
-        if (j<72000) return;
-        if (!serverPlayerEntity.hasStatusEffect(OtherRegistry.INSOMNIA)) {
-            serverPlayerEntity.addStatusEffect(new StatusEffectInstance(OtherRegistry.INSOMNIA, -1, 0, true, false, true));
-            serverPlayerEntity.networkHandler.sendPacket(new GameStateChangeS2CPacket(GameStateChangeS2CPacket.ELDER_GUARDIAN_EFFECT, 2f));
-        }
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V"))
+    private void largerPhantoms(ServerLevel level, boolean spawnEnemies, CallbackInfo ci,
+                                @Local ServerPlayer player, @Local Phantom phantom) {
+        phantom.setPhantomSize(player.getRandom().nextInt(player.getEffect(MobEffectRegistry.INSOMNIA).getAmplifier() * 2 + 1));
     }
 
-    @ModifyExpressionValue(method = "spawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/stat/ServerStatHandler;getStat(Lnet/minecraft/stat/Stat;)I"))
-    private int restrictPhantomSpawning(int original, @Local ServerPlayerEntity serverPlayerEntity, @Local(argsOnly = true) ServerWorld world) {
-        List<CatEntity> list = world.getEntitiesByClass(CatEntity.class, serverPlayerEntity.getBoundingBox().expand(16.0), EntityPredicates.VALID_ENTITY);
-        if  (!list.isEmpty()){
-            return 0;
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(III)I", shift = At.Shift.AFTER))
+    private void giveInsomniaOnNoSleep(ServerLevel level, boolean spawnEnemies, CallbackInfo ci,
+                                       @Local ServerPlayer player) {
+        ServerStatsCounter serverStatHandler = player.getStats();
+        int j = Mth.clamp(serverStatHandler.getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST)), 1, Integer.MAX_VALUE);
+        if (j<168000) return;
+        if (!player.hasEffect(MobEffectRegistry.INSOMNIA)) {
+            player.addEffect(new MobEffectInstance(MobEffectRegistry.INSOMNIA, -1, 0, true, false, true));
+            player.connection.send(new ClientboundGameEventPacket(ClientboundGameEventPacket.GUARDIAN_ELDER_EFFECT, 2f));
         }
-        return original;
     }
 
 }

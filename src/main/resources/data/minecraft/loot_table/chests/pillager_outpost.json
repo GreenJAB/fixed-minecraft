@@ -301,17 +301,6 @@
                     ],
                     "name": "minecraft:iron_ingot",
                     "weight": 3
-                },
-                {
-                    "type": "minecraft:item",
-                    "weight": 3,
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#minecraft:on_random_loot"
-                        }
-                    ],
-                    "name": "minecraft:book"
                 }
             ],
             "rolls": {
@@ -344,8 +333,27 @@
             "bonus_rolls": 0,
             "entries": [
                 {
-                    "type": "minecraft:empty",
-                    "weight": 3
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_with_levels",
+                            "levels": 15,
+                            "options": "#minecraft:on_random_loot"
+                        }
+                    ],
+                    "name": "minecraft:book",
+                    "weight": 2
+                },
+                {
+                    "type": "minecraft:item",
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/pillager_outpost"
+                        }
+                    ],
+                    "name": "minecraft:book",
+                    "weight": 2
                 },
                 {
                     "type": "minecraft:item",
@@ -359,27 +367,11 @@
                     "name": "minecraft:sentry_armor_trim_smithing_template"
                 }
             ],
-            "rolls": 1
-        },
-        {
-            "bonus_rolls": 0,
-            "entries": [
-                {
-                    "type": "minecraft:empty"
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "minecraft:quick_charge"
-                        }
-                    ],
-                    "name": "minecraft:book",
-                    "weight": 2
-                }
-            ],
-            "rolls": 1
+            "rolls": {
+                "type": "minecraft:uniform",
+                "min": 1,
+                "max": 3
+            }
         }
     ],
     "random_sequence": "minecraft:chests/pillager_outpost"

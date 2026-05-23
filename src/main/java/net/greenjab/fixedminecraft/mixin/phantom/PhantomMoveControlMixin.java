@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.PhantomEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Phantom;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -10,12 +10,12 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(targets = "net.minecraft.entity.mob.PhantomEntity$PhantomMoveControl")
-class PhantomMoveControlMixin {
+@Mixin(targets = "net.minecraft.world.entity.monster.Phantom$PhantomMoveControl")
+public abstract class PhantomMoveControlMixin {
 
     @Shadow
     @Final
-    PhantomEntity field_7330;
+    Phantom this$0;
 
     @ModifyVariable(method = "tick", at = @At(value = "STORE"), ordinal = 4)
     private double facePlayer(double a){
@@ -24,10 +24,10 @@ class PhantomMoveControlMixin {
 
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 4.0f))
     private float dontTurnAtHighSpeed(float constant){
-        PhantomEntity PE = this.field_7330;
-        LivingEntity Player = PE.getEntityWorld().getClosestPlayer(PE, 10);
+        Phantom PE = this.this$0;
+        LivingEntity Player = PE.level().getNearestPlayer(PE, 10);
         if (Player != null) {
-            if (PE.getVelocity().horizontalLength() > 0.3) {
+            if (PE.getDeltaMovement().horizontalDistance() > 0.3) {
                 return 0;
             }
         }

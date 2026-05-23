@@ -1,0 +1,11 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:librarian/3/ink_sac_emerald",
+    "minecraft:librarian/3/emerald_clock",
+    "minecraft:librarian/3/emerald_compass",
+    "minecraft:librarian/3/emerald_glass",
+    "minecraft:librarian/3/emerald_lantern",
+    "minecraft:librarian/3/emerald_name_tag"
+  ]
+}

@@ -1,24 +1,24 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
-import net.greenjab.fixedminecraft.registry.registries.OtherRegistry;
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BeaconBlockEntity;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.TameableEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Items;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
+import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BeaconBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -32,17 +32,16 @@ import java.util.List;
 import java.util.Map;
 
 @Mixin(BeaconBlockEntity.class)
-public class BeaconBlockEntityMixin {
+public abstract class BeaconBlockEntityMixin {
 
-    @Inject(method = "updateLevel", at = @At("HEAD"), cancellable = true)
-    private static void ModifyBeaconPyramid(World world, int x, int y, int z,
-                                     CallbackInfoReturnable<Integer> cir) {
-
+    @Inject(method = "updateBase", at = @At("HEAD"), cancellable = true)
+    private static void ModifyBeaconPyramid(Level level, int x, int y, int z,
+                                            CallbackInfoReturnable<Integer> cir) {
         int i = 0;
-        Block base = world.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
+        Block base = level.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
         for(int j = 1; j <= 10; i = j++) {
             int k = y - j;
-            if (k < world.getBottomY()) {
+            if (k < level.getMinY()) {
                 break;
             }
 
@@ -50,16 +49,16 @@ public class BeaconBlockEntityMixin {
 
             for(int l = x - j; l <= x + j && bl; ++l) {
                 for(int m = z - j; m <= z + j; ++m) {
-                    if (!world.getBlockState(new BlockPos(l, k, m)).isIn(BlockTags.BEACON_BASE_BLOCKS)) {
+                    if (!level.getBlockState(new BlockPos(l, k, m)).is(BlockTags.BEACON_BASE_BLOCKS)) {
                         bl = false;
                         break;
                     }
-                    if (base.getDefaultState().isIn(BlockTags.COPPER)) {
-                        if (!world.getBlockState(new BlockPos(l, k, m)).isIn(BlockTags.COPPER)) {
+                    if (base.defaultBlockState().is(BlockTags.COPPER)) {
+                        if (!level.getBlockState(new BlockPos(l, k, m)).is(BlockTags.COPPER)) {
                             bl = false;
                             break;
                         }
-                    } else if (!world.getBlockState(new BlockPos(l, k, m)).isOf(base)) {
+                    } else if (!level.getBlockState(new BlockPos(l, k, m)).is(base)) {
                         bl = false;
                         break;
                     }
@@ -76,71 +75,71 @@ public class BeaconBlockEntityMixin {
     }
 
     @Unique
-    private static Map<BlockState, RegistryEntry<StatusEffect>> vanillaEffects = Map.of(
-            Blocks.GOLD_BLOCK.getDefaultState(), StatusEffects.HASTE,
-            Blocks.EMERALD_BLOCK.getDefaultState(), StatusEffects.JUMP_BOOST,
-            Blocks.IRON_BLOCK.getDefaultState(), StatusEffects.STRENGTH,
-            Blocks.DIAMOND_BLOCK.getDefaultState(), StatusEffects.REGENERATION,
-            Blocks.ANCIENT_DEBRIS.getDefaultState(), StatusEffects.RESISTANCE,
-            Blocks.NETHERITE_BLOCK.getDefaultState(), StatusEffects.RESISTANCE);
+    private static Map<BlockState, Holder<MobEffect>> vanillaEffects = Map.of(
+            Blocks.GOLD_BLOCK.defaultBlockState(), MobEffects.HASTE,
+            Blocks.EMERALD_BLOCK.defaultBlockState(), MobEffects.JUMP_BOOST,
+            Blocks.IRON_BLOCK.defaultBlockState(), MobEffects.STRENGTH,
+            Blocks.DIAMOND_BLOCK.defaultBlockState(), MobEffects.REGENERATION,
+            Blocks.ANCIENT_DEBRIS.defaultBlockState(), MobEffects.RESISTANCE,
+            Blocks.NETHERITE_BLOCK.defaultBlockState(), MobEffects.RESISTANCE);
 
     @Unique
-    private static Map<BlockState, RegistryEntry<StatusEffect>> newEffects = Map.of(
-            Blocks.COAL_BLOCK.getDefaultState(), StatusEffects.NIGHT_VISION,
-            Blocks.REDSTONE_BLOCK.getDefaultState(), OtherRegistry.REACH,
-            Blocks.LAPIS_BLOCK.getDefaultState(), StatusEffects.SATURATION,
-            Blocks.QUARTZ_BLOCK.getDefaultState(), StatusEffects.INVISIBILITY);
+    private static Map<BlockState, Holder<MobEffect>> newEffects = Map.of(
+            Blocks.COAL_BLOCK.defaultBlockState(), MobEffects.NIGHT_VISION,
+            Blocks.REDSTONE_BLOCK.defaultBlockState(), MobEffectRegistry.REACH,
+            Blocks.LAPIS_BLOCK.defaultBlockState(), MobEffects.SATURATION,
+            Blocks.QUARTZ_BLOCK.defaultBlockState(), MobEffects.INVISIBILITY);
 
-    @Inject(method = "applyPlayerEffects", at = @At("HEAD"), cancellable = true)
-    private static void ModifyBeaconEffects(World world, BlockPos pos, int beaconLevel, @Nullable RegistryEntry<StatusEffect> primaryEffect,
-                                            @Nullable RegistryEntry<StatusEffect> secondaryEffect, CallbackInfo ci) {
-        BlockState blockState = world.getBlockState(pos.down());
-        primaryEffect = vanillaEffects.get(blockState);
-        if (primaryEffect == null) {
-            primaryEffect = newEffects.get(blockState);
+    @Inject(method = "applyEffects", at = @At("HEAD"), cancellable = true)
+    private static void ModifyBeaconEffects(Level level, BlockPos worldPosition, int levels, @Nullable Holder<MobEffect> primaryPower,
+                                            @Nullable Holder<MobEffect> secondaryPower, CallbackInfo ci) {
+        BlockState blockState = level.getBlockState(worldPosition.below());
+        primaryPower = vanillaEffects.get(blockState);
+        if (primaryPower == null) {
+            primaryPower = newEffects.get(blockState);
         }
-        if (blockState.isIn(BlockTags.COPPER)){
-            primaryEffect = StatusEffects.SPEED;
+        if (blockState.is(BlockTags.COPPER)){
+            primaryPower = MobEffects.SPEED;
         }
-        int statusLevel = beaconLevel >= 3?1:0;
-        if (blockState == Blocks.NETHERITE_BLOCK.getDefaultState()) statusLevel+=2;
+        int statusLevel = levels >= 3?1:0;
+        if (blockState == Blocks.NETHERITE_BLOCK.defaultBlockState()) statusLevel+=2;
 
-        if (!world.isClient() && primaryEffect != null) {
-            double d = (beaconLevel * 20 + 10);
+        if (!level.isClientSide() && primaryPower != null) {
+            double d = (levels * 20 + 10);
 
-            int j = (9 + beaconLevel * 2) * 20;
-            Box box = (new Box(pos)).expand(d).stretch(0.0, world.getHeight(), 0.0);
-            List<PlayerEntity> list = world.getNonSpectatingEntities(PlayerEntity.class, box);
-            Iterator<PlayerEntity> var11 = list.iterator();
-            PlayerEntity playerEntity;
+            int j = (9 + levels * 2) * 20;
+            AABB box = (new AABB(worldPosition)).inflate(d).expandTowards(0.0, level.getHeight(), 0.0);
+            List<Player> list = level.getEntitiesOfClass(Player.class, box);
+            Iterator<Player> var11 = list.iterator();
+            Player playerEntity;
             while(var11.hasNext()) {
                 playerEntity = var11.next();
-                playerEntity.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false, true));
+                playerEntity.addEffect(new MobEffectInstance(primaryPower, j, statusLevel, true, false, true));
 
-               if (statusLevel==1 && blockState == Blocks.DIAMOND_BLOCK.getDefaultState()) {
-                   if (playerEntity instanceof ServerPlayerEntity SPE)
-                       Criteria.CONSUME_ITEM.trigger(SPE, Items.BEACON.getDefaultStack());
+               if (statusLevel==1 && blockState == Blocks.DIAMOND_BLOCK.defaultBlockState()) {
+                   if (playerEntity instanceof ServerPlayer SPE)
+                       CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.BEACON.getDefaultInstance());
                }
             }
 
 
-            List<AbstractHorseEntity> listHorse = world.getNonSpectatingEntities(AbstractHorseEntity.class, box);
-            Iterator<AbstractHorseEntity> var11Horse = listHorse.iterator();
-            AbstractHorseEntity horse;
+            List<AbstractHorse> listHorse = level.getEntitiesOfClass(AbstractHorse.class, box);
+            Iterator<AbstractHorse> var11Horse = listHorse.iterator();
+            AbstractHorse horse;
             while(var11Horse.hasNext()) {
                 horse = var11Horse.next();
-                if (horse.isTame()) {
-                    horse.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
+                if (horse.isTamed()) {
+                    horse.addEffect(new MobEffectInstance(primaryPower, j, statusLevel, true, false));
                 }
             }
 
-            List<TameableEntity> listPet = world.getNonSpectatingEntities(TameableEntity.class, box);
-            Iterator<TameableEntity> var11Pet = listPet.iterator();
-            TameableEntity pet;
+            List<TamableAnimal> listPet = level.getEntitiesOfClass(TamableAnimal.class, box);
+            Iterator<TamableAnimal> var11Pet = listPet.iterator();
+            TamableAnimal pet;
             while(var11Pet.hasNext()) {
                 pet = var11Pet.next();
-                if (pet.isTamed()) {
-                    pet.addStatusEffect(new StatusEffectInstance(primaryEffect, j, statusLevel, true, false));
+                if (pet.isTame()) {
+                    pet.addEffect(new MobEffectInstance(primaryPower, j, statusLevel, true, false));
                 }
             }
         }

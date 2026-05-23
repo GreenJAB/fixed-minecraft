@@ -1,0 +1,7 @@
+{
+    "parent": "block/note_block/0",
+    "textures": {
+        "number": "block/note_block/number_11",
+        "pitch": "block/note_block/pitch_11"
+    }
+}

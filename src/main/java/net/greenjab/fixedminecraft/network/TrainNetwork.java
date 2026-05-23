@@ -1,28 +1,28 @@
 package net.greenjab.fixedminecraft.network;
 
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.encoding.VarInts;
-
 import java.util.ArrayList;
 import java.util.UUID;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.VarInt;
+import net.minecraft.network.codec.StreamCodec;
+import org.jspecify.annotations.NonNull;
 
 public class TrainNetwork {
-    public static final PacketCodec<PacketByteBuf, ArrayList<UUID>> ARRAY_CODEC = new PacketCodec<>() {
-        public ArrayList<UUID> decode(PacketByteBuf byteBuf) {
-            int length = VarInts.read(byteBuf);
+    public static final StreamCodec<FriendlyByteBuf, ArrayList<UUID>> ARRAY_CODEC = new StreamCodec<>() {
+        public @NonNull ArrayList<UUID> decode(@NonNull FriendlyByteBuf byteBuf) {
+            int length = VarInt.read(byteBuf);
             ArrayList<UUID> array = new ArrayList<>();
             for(int j = 0; j < length; j++) {
-                array.add(byteBuf.readUuid());
+                array.add(byteBuf.readUUID());
             }
             return array;
         }
 
-        public void encode(PacketByteBuf byteBuf, ArrayList<UUID> array) {
+        public void encode(@NonNull FriendlyByteBuf byteBuf, ArrayList<UUID> array) {
             ArrayList<UUID> array2 = (ArrayList<UUID>) array.clone();
-            VarInts.write(byteBuf, array.size());
+            VarInt.write(byteBuf, array.size());
             for (int i = 0; i < array.size();i++) {
-                byteBuf.writeUuid(array2.get(i));
+                byteBuf.writeUUID(array2.get(i));
             }
         }
     };

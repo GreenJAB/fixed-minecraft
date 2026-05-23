@@ -1,46 +1,47 @@
 package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AbstractFireBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.NonNull;
 
-public class CopperFireBlock extends AbstractFireBlock {
-    public static final MapCodec<CopperFireBlock> CODEC = createCodec(CopperFireBlock::new);
+public class CopperFireBlock extends BaseFireBlock {
+    public static final MapCodec<CopperFireBlock> CODEC = simpleCodec(CopperFireBlock::new);
 
     @Override
-    public MapCodec<CopperFireBlock> getCodec() {
+    public @NonNull MapCodec<CopperFireBlock> codec() {
         return CODEC;
     }
 
-    public CopperFireBlock(AbstractBlock.Settings settings) {
+    public CopperFireBlock(BlockBehaviour.Properties settings) {
         super(settings, 2.0F);
     }
 
     @Override
-    protected BlockState getStateForNeighborUpdate(
-            BlockState state,
-            WorldView world,
-            ScheduledTickView tickView,
-            BlockPos pos,
-            Direction direction,
-            BlockPos neighborPos,
-            BlockState neighborState,
-            Random random
+    protected @NonNull BlockState updateShape(
+            @NonNull BlockState state,
+            @NonNull LevelReader world,
+            @NonNull ScheduledTickAccess tickView,
+            @NonNull BlockPos pos,
+            @NonNull Direction direction,
+            @NonNull BlockPos neighborPos,
+            @NonNull BlockState neighborState,
+            @NonNull RandomSource random
     ) {
-        return this.canPlaceAt(state, world, pos) ? this.getDefaultState() : Blocks.AIR.getDefaultState();
+        return this.canSurvive(state, world, pos) ? this.defaultBlockState() : Blocks.AIR.defaultBlockState();
     }
 
     @Override
-    protected boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        pos = pos.down();
-        return isCopperBase(world.getBlockState(pos)) && world.getBlockState(pos).isSideSolidFullSquare(world, pos, Direction.UP);
+    protected boolean canSurvive(@NonNull BlockState state, LevelReader world, @NonNull BlockPos pos) {
+        pos = pos.below();
+        return isCopperBase(world.getBlockState(pos)) && world.getBlockState(pos).isFaceSturdy(world, pos, Direction.UP);
     }
 
     public static boolean isCopperBase(BlockState state) {
@@ -48,7 +49,7 @@ public class CopperFireBlock extends AbstractFireBlock {
     }
 
     @Override
-    protected boolean isFlammable(BlockState state) {
+    protected boolean canBurn(@NonNull BlockState state) {
         return true;
     }
 }

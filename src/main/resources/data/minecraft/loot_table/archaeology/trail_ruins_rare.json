@@ -13,7 +13,8 @@
                             "function": "fixedminecraft:exploration_compass"
                         }
                     ]
-                },{
+                },
+                {
                     "type": "minecraft:item",
                     "name": "minecraft:book",
                     "weight": 3,
@@ -22,6 +23,17 @@
                             "function": "minecraft:enchant_with_levels",
                             "levels": 20,
                             "options": "#minecraft:on_random_loot"
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:book",
+                    "weight": 5,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/trail_ruins"
                         }
                     ]
                 },

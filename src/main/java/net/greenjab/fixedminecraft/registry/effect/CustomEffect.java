@@ -1,10 +1,10 @@
 package net.greenjab.fixedminecraft.registry.effect;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class CustomEffect extends StatusEffect {
-    public CustomEffect(StatusEffectCategory category, int color) {
+public class CustomEffect extends MobEffect {
+    public CustomEffect(MobEffectCategory category, int color) {
         super(category, color);
     }
 }

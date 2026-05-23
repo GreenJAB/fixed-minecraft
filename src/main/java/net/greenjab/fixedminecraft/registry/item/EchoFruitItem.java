@@ -1,55 +1,55 @@
 package net.greenjab.fixedminecraft.registry.item;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
-
 import java.util.Optional;
 import java.util.Set;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
 public class EchoFruitItem extends Item {
-    public EchoFruitItem(Settings settings) {
+    public EchoFruitItem(Properties settings) {
         super(settings);
     }
 
     @Override
-    public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
-        super.finishUsing(stack, world, user);
-        if (user instanceof ServerPlayerEntity serverPlayerEntity) {
-            Optional<GlobalPos> deathOpt = serverPlayerEntity.getLastDeathPos();
-            if (!world.isClient() && deathOpt.isPresent()) {
+    public @NonNull ItemStack finishUsingItem(@NonNull ItemStack stack, @NonNull Level world, @NonNull LivingEntity user) {
+        super.finishUsingItem(stack, world, user);
+        if (user instanceof ServerPlayer serverPlayerEntity) {
+            Optional<GlobalPos> deathOpt = serverPlayerEntity.getLastDeathLocation();
+            if (!world.isClientSide() && deathOpt.isPresent()) {
                 GlobalPos deathPos = deathOpt.get();
                 double d = deathPos.pos().getX();
                 double e = deathPos.pos().getY();
                 double f = deathPos.pos().getZ();
-                if (serverPlayerEntity.hasVehicle()) {
+                if (serverPlayerEntity.isPassenger()) {
                     serverPlayerEntity.stopRiding();
                 }
 
-                Vec3d vec3d = serverPlayerEntity.getEntityPos();
-                ServerWorld serverWorld = serverPlayerEntity.getEntityWorld().getServer().getWorld(serverPlayerEntity.getLastDeathPos().get().dimension());
+                Vec3 vec3d = serverPlayerEntity.position();
+                ServerLevel serverWorld = serverPlayerEntity.level().getServer().getLevel(serverPlayerEntity.getLastDeathLocation().get().dimension());
                 if (serverWorld!=null) {
-                    if (serverPlayerEntity.teleport(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYaw(), serverPlayerEntity.getPitch(), true)) {
-                        while (!serverWorld.isSpaceEmpty(serverPlayerEntity) &&
-                               serverPlayerEntity.getY() < serverWorld.getTopYInclusive()) {
-                            serverPlayerEntity.setPosition(serverPlayerEntity.getX(),
+                    if (serverPlayerEntity.teleportTo(serverWorld, d, e, f, Set.of(), serverPlayerEntity.getYRot(), serverPlayerEntity.getXRot(), true)) {
+                        while (!serverWorld.noCollision(serverPlayerEntity) &&
+                               serverPlayerEntity.getY() < serverWorld.getMaxY()) {
+                            serverPlayerEntity.setPos(serverPlayerEntity.getX(),
                                     serverPlayerEntity.getY() + 1.0, serverPlayerEntity.getZ());
                         }
-                        world.emitGameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Emitter.of(serverPlayerEntity));
-                        SoundEvent soundEvent = SoundEvents.ITEM_CHORUS_FRUIT_TELEPORT;
-                        SoundCategory soundCategory = SoundCategory.PLAYERS;
+                        world.gameEvent(GameEvent.TELEPORT, vec3d, GameEvent.Context.of(serverPlayerEntity));
+                        SoundEvent soundEvent = SoundEvents.CHORUS_FRUIT_TELEPORT;
+                        SoundSource soundCategory = SoundSource.PLAYERS;
 
-                        world.playSound(null, vec3d.getX(), vec3d.getY(), vec3d.getZ(), soundEvent, soundCategory);
-                        user.onLanding();
+                        world.playSound(null, vec3d.x(), vec3d.y(), vec3d.z(), soundEvent, soundCategory);
+                        user.resetFallDistance();
                     }
                 }
             }

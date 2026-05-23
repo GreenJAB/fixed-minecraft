@@ -16,7 +16,7 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:name_tag",
-                    "weight": 30
+                    "weight": 10
                 },
                 {
                     "type": "minecraft:item",
@@ -36,15 +36,22 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:iron_pickaxe",
-                    "weight": 5
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/mineshaft"
+                        }
+                    ],
+                    "name": "minecraft:book",
+                    "weight": 15
                 },
                 {
-                    "type": "minecraft:empty",
+                    "type": "minecraft:item",
+                    "name": "minecraft:iron_pickaxe",
                     "weight": 5
                 }
             ],
-            "rolls": 1
+            "rolls": 2
         },
         {
             "bonus_rolls": 0,
@@ -317,26 +324,6 @@
                 }
             ],
             "rolls": 3
-        },
-        {
-            "bonus_rolls": 0,
-            "entries": [
-                {
-                    "type": "minecraft:empty",
-                    "weight": 4
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "minecraft:efficiency"
-                        }
-                    ],
-                    "name": "minecraft:book"
-                }
-            ],
-            "rolls": 1
         }
     ],
     "random_sequence": "minecraft:chests/abandoned_mineshaft"

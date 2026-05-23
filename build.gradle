@@ -38,9 +38,8 @@ repositories {
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(variantOf(libs.yarn.mappings) { classifier("v2") })
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
+    implementation(libs.fabric.loader)
+    implementation(libs.fabric.api)
     vineflowerDecompilerClasspath(libs.vineflower)
 }
 
@@ -64,7 +63,7 @@ yamlang {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    it.options.release = 17
+    it.options.release = 25
 }
 
 java {

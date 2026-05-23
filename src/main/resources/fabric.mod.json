@@ -31,8 +31,8 @@
         }
     ],
     "depends": {
-        "java": ">=17",
-        "minecraft": "1.21.11",
+        "java": ">=25",
+        "minecraft": "26.1.2",
         "fabric-api": ">=${fabric_api}"
     },
     "accessWidener" : "fixedminecraft.accesswidener"

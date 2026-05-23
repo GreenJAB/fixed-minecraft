@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cube_all",
+  "textures": {
+    "all": "minecraft:block/flowering_azalea_leaves_wavy",
+    "particle": "minecraft:block/flowering_azalea_leaves"
+  }
+}

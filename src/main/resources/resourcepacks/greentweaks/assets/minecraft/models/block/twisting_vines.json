@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/twisting_vines_wavy",
+    "particle": "minecraft:block/twisting_vines"
+  }
+}

@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
-import net.minecraft.client.gui.screen.advancement.AdvancementTab;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.gui.screens.advancements.AdvancementTab;
+import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,39 +10,39 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AdvancementTab.class)
-public class AdvancementTabMixin {
+public abstract class AdvancementTabMixin {
     @Unique
     int newPAGE_WIDTH = 423;
     @Unique
     int newPAGE_HEIGHT = 218;
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 117))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 117))
     private int largerScreenX1(int constant) {return newPAGE_WIDTH/2;}
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 56))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 56))
     private int largerScreenY1(int constant) {return newPAGE_HEIGHT/2;}
 
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 234))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 234))
     private int largerScreenX2(int constant) {return newPAGE_WIDTH;}
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 113))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 113))
     private int largerScreenY2(int constant) {return newPAGE_HEIGHT;}
 
-    @ModifyConstant(method = "drawWidgetTooltip", constant = @Constant(intValue = 234))
+    @ModifyConstant(method = "extractTooltips", constant = @Constant(intValue = 234))
     private int largerScreenX3(int constant) {return newPAGE_WIDTH;}
-    @ModifyConstant(method = "drawWidgetTooltip", constant = @Constant(intValue = 113))
+    @ModifyConstant(method = "extractTooltips", constant = @Constant(intValue = 113))
     private int largerScreenY3(int constant) {return newPAGE_HEIGHT;}
 
-    @ModifyConstant(method = "move", constant = @Constant(intValue = 234))
+    @ModifyConstant(method = "scroll", constant = @Constant(intValue = 234))
     private int largerScreenX4(int constant) {return newPAGE_WIDTH;}
-    @ModifyConstant(method = "move", constant = @Constant(intValue = 113))
+    @ModifyConstant(method = "scroll", constant = @Constant(intValue = 113))
     private int largerScreenY4(int constant) {return newPAGE_HEIGHT;}
 
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 15))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 15))
     private int largerScreenX5(int constant) {return 30;}
-    @ModifyConstant(method = "render", constant = @Constant(intValue = 8))
+    @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 8))
     private int largerScreenY5(int constant) {return 16;}
 
-    @Redirect(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;clamp(DDD)D"))
+    @Redirect(method = "scroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(DDD)D"))
     private double largerPan(double value, double min, double max) {
-        return MathHelper.clamp(value, min-50, max+50);
+        return Mth.clamp(value, min - 50, max + 50);
     }
 
 }

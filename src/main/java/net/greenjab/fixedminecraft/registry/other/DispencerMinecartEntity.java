@@ -1,149 +1,151 @@
 package net.greenjab.fixedminecraft.registry.other;
 
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.dispenser.DispenserBehavior;
-import net.minecraft.block.dispenser.EquippableDispenserBehavior;
-import net.minecraft.block.dispenser.ItemDispenserBehavior;
-import net.minecraft.block.entity.DispenserBlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.vehicle.StorageMinecartEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.Generic3x3ContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.storage.ReadView;
-import net.minecraft.storage.WriteView;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPointer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.core.dispenser.DispenseItemBehavior;
+import net.minecraft.core.dispenser.EquipmentDispenseItemBehavior;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DispenserMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.NonNull;
 
-import static net.minecraft.block.DispenserBlock.BEHAVIORS;
+import static net.minecraft.world.level.block.DispenserBlock.DISPENSER_REGISTRY;
 
-public class DispencerMinecartEntity extends StorageMinecartEntity {
-    private static final ItemDispenserBehavior DEFAULT_BEHAVIOR = new ItemDispenserBehavior();
-    private static final TrackedData<Boolean> POWERED = DataTracker.registerData(DispencerMinecartEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private static final TrackedData<Boolean> FLIPPED = DataTracker.registerData(DispencerMinecartEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class DispencerMinecartEntity extends AbstractMinecartContainer {
+    private static final DefaultDispenseItemBehavior DEFAULT_BEHAVIOR = new DefaultDispenseItemBehavior();
+    private static final EntityDataAccessor<Boolean> POWERED = SynchedEntityData.defineId(DispencerMinecartEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> FACING_RIGHT = SynchedEntityData.defineId(DispencerMinecartEntity.class, EntityDataSerializers.BOOLEAN);
 
     private int cooldown = 0;
-    public DispencerMinecartEntity(EntityType<? extends DispencerMinecartEntity> entityType, World world) {
+    public DispencerMinecartEntity(EntityType<? extends DispencerMinecartEntity> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(POWERED, false);
-        builder.add(FLIPPED, false);
+    protected void defineSynchedData(SynchedEntityData.@NonNull Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(POWERED, false);
+        builder.define(FACING_RIGHT, false);
     }
 
     protected boolean isPowered() {
-        return this.dataTracker.get(POWERED);
+        return this.entityData.get(POWERED);
     }
     protected void setPowered(boolean powered) {
-        this.dataTracker.set(POWERED, powered);
+        this.entityData.set(POWERED, powered);
     }
-    protected boolean isFlipped() {
-        return this.dataTracker.get(FLIPPED);
+    protected boolean isFacingRight() {
+        return this.entityData.get(FACING_RIGHT);
     }
-    protected void setFlipped(boolean flipped) {
-        this.dataTracker.set(FLIPPED, flipped);
-    }
-
-    @Override
-    public BlockState getDefaultContainedBlock() {
-        return Blocks.DISPENSER.getDefaultState().with(DispenserBlock.FACING, isFlipped()?Direction.WEST:Direction.EAST).with(DispenserBlock.TRIGGERED, isPowered());
+    protected void setFacingRight(boolean facingRight) {
+        this.entityData.set(FACING_RIGHT, facingRight);
     }
 
     @Override
-    public int size() {
+    public @NonNull BlockState getDefaultDisplayBlockState() {
+        return Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, isFacingRight()?Direction.WEST:Direction.EAST).setValue(DispenserBlock.TRIGGERED, isPowered());
+    }
+
+    @Override
+    public int getContainerSize() {
         return 9;
     }
 
     @Override
-    public void onActivatorRail(ServerWorld serverWorld, int x, int y, int z, boolean bl) {
+    public void activateMinecart(@NonNull ServerLevel serverWorld, int x, int y, int z, boolean bl) {
         if (cooldown==0) {
             if (bl) {
                 BlockPos pos = new BlockPos(x, y, z);
-                if (serverWorld.getBlockState(pos).isOf(Blocks.ACTIVATOR_RAIL)) {
+                if (serverWorld.getBlockState(pos).is(Blocks.ACTIVATOR_RAIL)) {
                     this.cooldown = 8;
-                    Direction dir = Direction.fromHorizontalDegrees(this.getYaw());
+                    Direction dir = Direction.fromYRot(this.getYRot());
                     if (dir.getAxis() == Direction.Axis.Z) dir = dir.getOpposite();
-                    if (isFlipped()) dir = dir.getOpposite();
-                    dispense(serverWorld, Blocks.DISPENSER.getDefaultState().with(DispenserBlock.FACING, dir), pos);
+                    if (isFacingRight()) dir = dir.getOpposite();
+                    dispense(serverWorld, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, dir), pos);
                 }
             }
         }
     }
 
     @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
-        if (player.shouldCancelInteraction()){
-            setFlipped(!isFlipped());
-            return ActionResult.SUCCESS;
+    public @NonNull InteractionResult interact(Player player, @NonNull InteractionHand hand, final @NonNull Vec3 location) {
+        if (player.isSecondaryUseActive()){
+            setFacingRight(!isFacingRight());
+            return InteractionResult.SUCCESS;
         }
-        return super.interact(player, hand);
+        return super.interact(player, hand, location);
     }
 
 
-    protected void dispense(ServerWorld world, BlockState state, BlockPos pos) {
+    protected void dispense(ServerLevel world, BlockState state, BlockPos pos) {
        DispenserBlockEntity dispenserBlockEntity = new DispenserBlockEntity(pos, state);
-        DefaultedList<ItemStack> inv = this.getInventory();
-        DefaultedList<ItemStack> inv2 = DefaultedList.ofSize(9, ItemStack.EMPTY);
+        NonNullList<ItemStack> inv = this.getItemStacks();
+        NonNullList<ItemStack> inv2 = NonNullList.withSize(9, ItemStack.EMPTY);
         for (int slot = 0;slot<9;slot++) {
             inv2.set(slot, inv.get(slot));
         }
-        dispenserBlockEntity.setHeldStacks(inv2);
+        dispenserBlockEntity.setItems(inv2);
 
-        BlockPointer blockPointer = new BlockPointer(world, pos, state, dispenserBlockEntity);
-        int i = dispenserBlockEntity.chooseNonEmptySlot(world.random);
+        BlockSource blockPointer = new BlockSource(world, pos, state, dispenserBlockEntity);
+        int i = dispenserBlockEntity.getRandomSlot(world.getRandom());
         if (i < 0) {
-            world.syncWorldEvent(WorldEvents.DISPENSER_FAILS, pos, 0);
-            world.emitGameEvent(GameEvent.BLOCK_ACTIVATE, pos, GameEvent.Emitter.of(dispenserBlockEntity.getCachedState()));
+            world.levelEvent(LevelEvent.SOUND_DISPENSER_FAIL, pos, 0);
+            world.gameEvent(GameEvent.BLOCK_ACTIVATE, pos, GameEvent.Context.of(dispenserBlockEntity.getBlockState()));
         } else {
-            ItemStack itemStack = dispenserBlockEntity.getStack(i);
-            DispenserBehavior dispenserBehavior = this.getBehaviorForItem(world, itemStack);
-            if (dispenserBehavior != DispenserBehavior.NOOP) {
-                dispenserBlockEntity.setStack(i, dispenserBehavior.dispense(blockPointer, itemStack));
+            ItemStack itemStack = dispenserBlockEntity.getItem(i);
+            DispenseItemBehavior dispenserBehavior = this.getBehaviorForItem(world, itemStack);
+            if (dispenserBehavior != DispenseItemBehavior.NOOP) {
+                dispenserBlockEntity.setItem(i, dispenserBehavior.dispense(blockPointer, itemStack));
             }
         }
 
         for (int slot = 0;slot<9;slot++) {
-            this.setInventoryStack(slot, inv2.get(slot));
+            this.setChestVehicleItem(slot, inv2.get(slot));
         }
     }
-    protected DispenserBehavior getBehaviorForItem(World world, ItemStack stack) {
-        if (!stack.isItemEnabled(world.getEnabledFeatures())) {
+    protected DispenseItemBehavior getBehaviorForItem(Level world, ItemStack stack) {
+        if (!stack.isItemEnabled(world.enabledFeatures())) {
             return DEFAULT_BEHAVIOR;
         } else {
-            DispenserBehavior dispenserBehavior = BEHAVIORS.get(stack.getItem());
+            DispenseItemBehavior dispenserBehavior = DISPENSER_REGISTRY.get(stack.getItem());
             return dispenserBehavior != null ? dispenserBehavior : getBehaviorForItem(stack);
         }
     }
 
-    private static DispenserBehavior getBehaviorForItem(ItemStack stack) {
-        return stack.contains(DataComponentTypes.EQUIPPABLE) ? EquippableDispenserBehavior.INSTANCE : DEFAULT_BEHAVIOR;
+    private static DispenseItemBehavior getBehaviorForItem(ItemStack stack) {
+        return stack.has(DataComponents.EQUIPPABLE) ? EquipmentDispenseItemBehavior.INSTANCE : DEFAULT_BEHAVIOR;
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.getEntityWorld().isClient()) {
+        if (!this.level().isClientSide()) {
             if (this.cooldown > 0) {
                 this.cooldown--;
             }
@@ -152,31 +154,31 @@ public class DispencerMinecartEntity extends StorageMinecartEntity {
     }
 
     @Override
-    protected Item asItem() {
+    protected @NonNull Item getDropItem() {
         return ItemRegistry.DISPENSER_MINECART;
     }
 
     @Override
-    public ItemStack getPickBlockStack() {
+    public @NonNull ItemStack getPickResult() {
         return new ItemStack(ItemRegistry.DISPENSER_MINECART);
     }
 
     @Override
-    protected void writeCustomData(WriteView view) {
-        super.writeCustomData(view);
+    protected void addAdditionalSaveData(@NonNull ValueOutput view) {
+        super.addAdditionalSaveData(view);
         view.putShort("Cooldown", (short)this.cooldown);
-        view.putBoolean("FLipped", isFlipped());
+        view.putBoolean("FacingRight", isFacingRight());
     }
 
     @Override
-    protected void readCustomData(ReadView view) {
-        super.readCustomData(view);
-        this.cooldown = view.getShort("Cooldown", (short)0);
-        setFlipped(view.getBoolean("FLipped", false));
+    protected void readAdditionalSaveData(@NonNull ValueInput view) {
+        super.readAdditionalSaveData(view);
+        this.cooldown = view.getShortOr("Cooldown", (short)0);
+        setFacingRight(view.getBooleanOr("FacingRight", false));
     }
 
     @Override
-    public ScreenHandler getScreenHandler(int syncId, PlayerInventory playerInventory) {
-        return new Generic3x3ContainerScreenHandler(syncId, playerInventory, this);
+    public @NonNull AbstractContainerMenu createMenu(int syncId, @NonNull Inventory playerInventory) {
+        return new DispenserMenu(syncId, playerInventory, this);
     }
 }

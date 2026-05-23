@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:block/cross",
     "textures": {
-        "cross": "minecraft:block/torchflower2"
+        "cross": "minecraft:block/torchflower"
     }
 }

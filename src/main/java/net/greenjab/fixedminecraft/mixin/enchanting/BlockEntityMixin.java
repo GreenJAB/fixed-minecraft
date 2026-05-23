@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,19 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(BlockEntity.class)
 public abstract class BlockEntityMixin {
 
-    @Inject(method = "onBlockReplaced", at = @At(
+    @Inject(method = "preRemoveSideEffects", at = @At(
             value = "HEAD"))
-    private void addNoEnchantTag(BlockPos pos, BlockState oldState, CallbackInfo ci) {
+    private void addNoEnchantTag(BlockPos pos, BlockState state, CallbackInfo ci) {
         BlockEntity blockEntity = (BlockEntity)(Object)this;
-        if (blockEntity instanceof ChiseledBookshelfBlockEntity chiseledBookshelfBlockEntity) {
+        if (blockEntity instanceof ChiseledBookShelfBlockEntity chiseledBookshelfBlockEntity) {
             for (int i = 0; i < 6; i++) {
-                ItemStack book = chiseledBookshelfBlockEntity.getStack(i);
-                if (book.isOf(Items.ENCHANTED_BOOK)) {
-                    book.set(DataComponentTypes.REPAIR_COST, 2);
+                ItemStack book = chiseledBookshelfBlockEntity.getItem(i);
+                if (book.is(Items.ENCHANTED_BOOK)) {
+                    book.set(DataComponents.REPAIR_COST, 2);
                 }
-
             }
         }
     }
-
 }

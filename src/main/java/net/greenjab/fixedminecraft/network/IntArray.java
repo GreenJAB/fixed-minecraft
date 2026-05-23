@@ -1,50 +1,50 @@
 package net.greenjab.fixedminecraft.network;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.encoding.VarInts;
-
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.network.VarInt;
+import net.minecraft.network.codec.StreamCodec;
+import org.jspecify.annotations.NonNull;
 
 public class IntArray {
     //why does this not exist? surely it exists somewhere
-    public static final PacketCodec<ByteBuf, int[]> ARRAY_CODEC = new PacketCodec<>() {
-        public int[] decode(ByteBuf byteBuf) {
-            int length = VarInts.read(byteBuf);
+    public static final StreamCodec<ByteBuf, int[]> ARRAY_CODEC = new StreamCodec<>() {
+        public int @NonNull [] decode(@NonNull ByteBuf byteBuf) {
+            int length = VarInt.read(byteBuf);
 
             int[] array = new int[length];
             for(int j = 0; j < length; j++) {
-                array[j] = VarInts.read(byteBuf);
+                array[j] = VarInt.read(byteBuf);
             }
             return array;
         }
 
-        public void encode(ByteBuf byteBuf, int[] array) {
-            VarInts.write(byteBuf, array.length);
+        public void encode(@NonNull ByteBuf byteBuf, int[] array) {
+            VarInt.write(byteBuf, array.length);
 
             for (int i : array) {
-                VarInts.write(byteBuf, i);
+                VarInt.write(byteBuf, i);
             }
         }
     };
 
-    public static final PacketCodec<ByteBuf, List<Integer>> LIST_CODEC = new PacketCodec<>() {
-        public List<Integer> decode(ByteBuf byteBuf) {
-            int length = VarInts.read(byteBuf);
+    public static final StreamCodec<ByteBuf, List<Integer>> LIST_CODEC = new StreamCodec<>() {
+        public @NonNull List<Integer> decode(@NonNull ByteBuf byteBuf) {
+            int length = VarInt.read(byteBuf);
 
             List<Integer> list = new ArrayList<>(length);
             for(int j = 0; j < length; j++) {
-                list.add(VarInts.read(byteBuf));
+                list.add(VarInt.read(byteBuf));
             }
             return list;
         }
 
-        public void encode(ByteBuf byteBuf, List<Integer> list) {
-            VarInts.write(byteBuf, list.size());
+        public void encode(@NonNull ByteBuf byteBuf, List<Integer> list) {
+            VarInt.write(byteBuf, list.size());
 
             for (int i : list) {
-                VarInts.write(byteBuf, i);
+                VarInt.write(byteBuf, i);
             }
         }
     };

@@ -138,22 +138,6 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": {
-                                "type": "minecraft:uniform",
-                                "min": 20,
-                                "max": 30
-                            },
-                            "options": "#minecraft:on_random_loot"
-                        }
-                    ],
-                    "name": "minecraft:book",
-                    "weight": 15
-                },
-                {
-                    "type": "minecraft:item",
                     "name": "minecraft:golden_apple",
                     "weight": 20
                 },
@@ -268,6 +252,7 @@
                 },
                 {
                     "type": "minecraft:item",
+                    "weight": 2,
                     "functions": [
                         {
                             "add": false,
@@ -282,14 +267,30 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": "minecraft:unbreaking"
+                            "options": "#fixedminecraft:loot/desert_pyramid"
                         }
                     ],
                     "name": "minecraft:book",
                     "weight": 2
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:book",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_with_levels",
+                            "levels": {
+                                "type": "minecraft:uniform",
+                                "min": 20,
+                                "max": 30
+                            },
+                            "options": "#minecraft:on_random_loot"
+                        }
+                    ]
                 }
             ],
-            "rolls": 1
+            "rolls": 2
         }
     ],
     "random_sequence": "minecraft:chests/desert_pyramid"

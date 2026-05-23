@@ -18,16 +18,36 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "name": "minecraft:sniffer_egg"
-                },
-                {
-                    "type": "minecraft:item",
-                    "name": "minecraft:iron_axe"
+                    "name": "minecraft:sniffer_egg",
+                    "weight": 2
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:emerald",
                     "weight": 2
+                },
+                {
+                    "type": "minecraft:item",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/ocean_ruins"
+                        }
+                    ],
+                    "name": "minecraft:book"
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:book",
+                    "weight": 2,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_with_levels",
+                            "levels": 20,
+                            "options": "#minecraft:on_random_loot"
+                        }
+                    ]
                 }
             ],
             "rolls": 1

@@ -1,25 +1,25 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.component.type.NbtComponent;
-import net.minecraft.component.type.TooltipDisplayComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.item.tooltip.TooltipType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.maps.MapId;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -32,17 +32,16 @@ import java.util.function.Consumer;
 public abstract class ItemStackMixin {
 
     @Inject(method = "inventoryTick", at = @At("HEAD"))
-    private void addGreenGlintUpdate(World world, Entity entity, EquipmentSlot slot, CallbackInfo ci) {
+    private void addGreenGlintUpdate(Level level, Entity owner, EquipmentSlot slot, CallbackInfo ci) {
         if (slot == EquipmentSlot.MAINHAND) {
-            if (world.getTime() % 20 == 0) {
+            if (level.getGameTime() % 20 == 0) {
                 ItemStack stack = (ItemStack)(Object)this;
-                if (stack.hasEnchantments()) {
-                    ItemEnchantmentsComponent itemEnchantmentsComponent = stack.getOrDefault(DataComponentTypes.ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT);
-                    //stack.remove(DataComponentTypes.REPAIR_COST);
-                    stack.set(DataComponentTypes.REPAIR_COST, 0);
-                    for (RegistryEntry<Enchantment> enchantment : stack.getEnchantments().getEnchantments()) {
+                if (stack.isEnchanted()) {
+                    ItemEnchantments itemEnchantmentsComponent = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+                    stack.set(DataComponents.REPAIR_COST, 0);
+                    for (Holder<Enchantment> enchantment : stack.getEnchantments().keySet()) {
                         if (itemEnchantmentsComponent.getLevel(enchantment) > enchantment.value().getMaxLevel()) {
-                            stack.set(DataComponentTypes.REPAIR_COST, 1);
+                            stack.set(DataComponents.REPAIR_COST, 1);
                         }
                     }
                 }
@@ -53,52 +52,52 @@ public abstract class ItemStackMixin {
 
     @Unique
     private static void dataFix(ItemStack stack) {
-        NbtComponent nbt = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA);
+        CustomData nbt = stack.getComponents().get(DataComponents.CUSTOM_DATA);
         if (nbt != null) {
-            boolean has = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA).toString().contains("fixedminecraft:map_book");
+            boolean has = stack.getComponents().get(DataComponents.CUSTOM_DATA).toString().contains("fixedminecraft:map_book");
             if (has) {
-                String[] s = stack.getComponents().get(DataComponentTypes.CUSTOM_DATA).toString().split("fixedminecraft:map_book");
+                String[] s = stack.getComponents().get(DataComponents.CUSTOM_DATA).toString().split("fixedminecraft:map_book");
                 s = s[1].split(",");
                 s = s[0].split("}");
                 s = s[0].split(":");
-                stack.remove(DataComponentTypes.CUSTOM_DATA);
+                stack.remove(DataComponents.CUSTOM_DATA);
                 try {
                     int dataFix = Integer.parseInt(s[1]);
-                    stack.set(DataComponentTypes.MAP_ID, new MapIdComponent(dataFix));
+                    stack.set(DataComponents.MAP_ID, new MapId(dataFix));
                 } catch (NumberFormatException ignored) {
                 }
             }
         }
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;appendComponentTooltip(Lnet/minecraft/component/ComponentType;Lnet/minecraft/item/Item$TooltipContext;Lnet/minecraft/component/type/TooltipDisplayComponent;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;)V", ordinal = 0))
-    private void addBaitTooltip(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player,
-                                TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
+    @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;addToTooltip(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V", ordinal = 0))
+    private void addBaitTooltip(Item.TooltipContext context, TooltipDisplay display, Player player,
+                                TooltipFlag tooltipFlag, Consumer<Component> builder, CallbackInfo ci) {
         ItemStack stack = (ItemStack)(Object)this;
-        stack.appendComponentTooltip(ItemRegistry.BAIT_POWER, context, displayComponent, textConsumer, type);
+        stack.addToTooltip(ItemRegistry.BAIT_POWER, context, display, builder, tooltipFlag);
     }
 
 
-    @ModifyArg(method = "appendComponentTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/tooltip/TooltipAppender;appendTooltip(Lnet/minecraft/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/item/tooltip/TooltipType;Lnet/minecraft/component/ComponentsAccess;)V"), index = 2)
-    private TooltipType addEnchantLocationIcon(TooltipType type) {
+    @ModifyArg(method = "addToTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/component/TooltipProvider;addToTooltip(Lnet/minecraft/world/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;Lnet/minecraft/core/component/DataComponentGetter;)V"), index = 2)
+    private TooltipFlag addEnchantLocationIcon(TooltipFlag type) {
         ItemStack stack = (ItemStack)(Object)this;
-        if (stack.isOf(Items.ENCHANTED_BOOK)) {
-            return TooltipType.ADVANCED;
+        if (stack.is(Items.ENCHANTED_BOOK)) {
+            return TooltipFlag.ADVANCED;
         }
-        return TooltipType.BASIC;
+        return TooltipFlag.NORMAL;
     }
 
-    @Inject(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/component/MergedComponentMap;size()I"))
-    private void addTagsTooltip(Item.TooltipContext context, TooltipDisplayComponent displayComponent, PlayerEntity player,
-                                TooltipType type, Consumer<Text> textConsumer, CallbackInfo ci) {
+    @Inject(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/component/PatchedDataComponentMap;size()I"))
+    private void addTagsTooltip(Item.TooltipContext context, TooltipDisplay display, Player player,
+                                TooltipFlag tooltipFlag, Consumer<Component> builder, CallbackInfo ci) {
         ItemStack stack = (ItemStack)(Object)this;
-        if (player.isCreative()) testTags(stack, textConsumer);
+        if (player.isCreative()) testTags(stack, builder);
     }
 
     @Unique
-    private static void testTags(ItemStack stack, Consumer<Text> textConsumer) {
-        Registries.ITEM.streamTags().map(RegistryEntryList.Named::getTag).forEach(tag->{
-            if (stack.isIn(tag)) textConsumer.accept(Text.translatable("item.tags", tag.id().getPath()).formatted(Formatting.DARK_AQUA));
+    private static void testTags(ItemStack stack, Consumer<Component> textConsumer) {
+        BuiltInRegistries.ITEM.getTags().map(HolderSet.Named::key).forEach(tag->{
+            if (stack.is(tag)) textConsumer.accept(Component.translatable("item.tags", tag.location().getPath()).withStyle(ChatFormatting.DARK_AQUA));
         });
     }
 

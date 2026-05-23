@@ -3,14 +3,14 @@ package net.greenjab.fixedminecraft.mixin.minecart;
 import com.google.common.collect.ImmutableBiMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.HoneycombItem;
+import net.minecraft.world.item.HoneycombItem;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(HoneycombItem.class)
-public class HoneycombItemMixin  {
-    @ModifyExpressionValue(method = "method_34723", at = @At(
+public abstract class HoneycombItemMixin  {
+    @ModifyExpressionValue(method = "lambda$static$0", at = @At(
             value = "INVOKE",
             target = "Lcom/google/common/collect/ImmutableBiMap;builder()Lcom/google/common/collect/ImmutableBiMap$Builder;"
     ))

@@ -1,0 +1,1 @@
+#define TEXT_COLOUR__INVENTORY_TEXT 0xbcbcbc

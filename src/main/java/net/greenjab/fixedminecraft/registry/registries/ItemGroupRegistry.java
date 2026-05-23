@@ -1,72 +1,70 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 
 public class ItemGroupRegistry {
 
-    public static final ItemGroup FIXED = FabricItemGroup.builder().displayName(Text.translatable("itemgroup.fixed"))
+    public static final CreativeModeTab FIXED = FabricCreativeModeTab.builder().title(Component.translatable("itemgroup.fixed"))
             .icon( () -> new ItemStack(ItemRegistry.DRAGON_FIREWORK_ROCKET))
-            .entries(
-                     (displayContext, entries) -> {
-                        entries.add(ItemRegistry.DRAGON_FIREWORK_ROCKET);
-                        entries.add(ItemRegistry.MAP_BOOK);
-                        entries.add(ItemRegistry.CHAINMAIL_HORSE_ARMOR);
+            .displayItems(
+                     (_, entries) -> {
+                        entries.accept(ItemRegistry.DRAGON_FIREWORK_ROCKET);
+                        entries.accept(ItemRegistry.MAP_BOOK);
+                        entries.accept(ItemRegistry.CHAINMAIL_HORSE_ARMOR);
 
-                        entries.add(ItemRegistry.BROKEN_TOTEM);
-                        entries.add(ItemRegistry.ECHO_TOTEM);
-                        entries.add(ItemRegistry.ECHO_FRUIT);
+                        entries.accept(ItemRegistry.BROKEN_TOTEM);
+                        entries.accept(ItemRegistry.ECHO_TOTEM);
+                        entries.accept(ItemRegistry.ECHO_FRUIT);
 
-                        entries.add(ItemRegistry.NETHERITE_ANVIL);
-                        entries.add(ItemRegistry.CHIPPED_NETHERITE_ANVIL);
-                        entries.add(ItemRegistry.DAMAGED_NETHERITE_ANVIL);
+                        entries.accept(ItemRegistry.NETHERITE_ANVIL);
+                        entries.accept(ItemRegistry.CHIPPED_NETHERITE_ANVIL);
+                        entries.accept(ItemRegistry.DAMAGED_NETHERITE_ANVIL);
 
-                        entries.add(ItemRegistry.COPPER_RAIL);
-                        entries.add(ItemRegistry.EXPOSED_COPPER_RAIL);
-                        entries.add(ItemRegistry.WEATHERED_COPPER_RAIL);
-                        entries.add(ItemRegistry.OXIDIZED_COPPER_RAIL);
-                        entries.add(ItemRegistry.WAXED_COPPER_RAIL);
-                        entries.add(ItemRegistry.WAXED_EXPOSED_COPPER_RAIL);
-                        entries.add(ItemRegistry.WAXED_WEATHERED_COPPER_RAIL);
-                        entries.add(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
-                        entries.add(ItemRegistry.PATINA);
-                        entries.add(ItemRegistry.REDSTONE_LANTERN);
-
-
-                         entries.add(BlockRegistry.AZALEA_PLANKS);
-                         entries.add(BlockRegistry.AZALEA_LOG);
-                         entries.add(BlockRegistry.STRIPPED_AZALEA_LOG);
-                         entries.add(BlockRegistry.AZALEA_WOOD);
-                         entries.add(BlockRegistry.STRIPPED_AZALEA_WOOD);
-                         entries.add(ItemRegistry.AZALEA_SIGN);
-                         entries.add(ItemRegistry.AZALEA_HANGING_SIGN);
-                         entries.add(BlockRegistry.AZALEA_PRESSURE_PLATE);
-                         entries.add(BlockRegistry.AZALEA_TRAPDOOR);
-                         entries.add(BlockRegistry.AZALEA_BUTTON);
-                         entries.add(BlockRegistry.AZALEA_STAIRS);
-                         entries.add(BlockRegistry.AZALEA_SLAB);
-                         entries.add(BlockRegistry.AZALEA_FENCE_GATE);
-                         entries.add(BlockRegistry.AZALEA_FENCE);
-                         entries.add(BlockRegistry.AZALEA_DOOR);
-                         entries.add(ItemRegistry.AZALEA_BOAT);
-                         entries.add(ItemRegistry.AZALEA_CHEST_BOAT);
-                         entries.add(ItemRegistry.AZALEA_SHELF);
-
-                         entries.add(ItemRegistry.DISPENSER_MINECART);
+                        entries.accept(ItemRegistry.COPPER_RAIL);
+                        entries.accept(ItemRegistry.EXPOSED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.WEATHERED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.OXIDIZED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.WAXED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.WAXED_EXPOSED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.WAXED_WEATHERED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
+                        entries.accept(ItemRegistry.PATINA);
+                        entries.accept(ItemRegistry.REDSTONE_LANTERN);
 
 
-                         //if (displayContext.enabledFeatures().contains(OtherRegistry.SPEAR_REBALANCE)) {
-                             entries.add(ItemRegistry.SPEAR);
-                             entries.add(ItemRegistry.NAUTILUS_ARMOR);
-                         //}
+                         entries.accept(BlockRegistry.AZALEA_PLANKS);
+                         entries.accept(BlockRegistry.AZALEA_LOG);
+                         entries.accept(BlockRegistry.STRIPPED_AZALEA_LOG);
+                         entries.accept(BlockRegistry.AZALEA_WOOD);
+                         entries.accept(BlockRegistry.STRIPPED_AZALEA_WOOD);
+                         entries.accept(ItemRegistry.AZALEA_SIGN);
+                         entries.accept(ItemRegistry.AZALEA_HANGING_SIGN);
+                         entries.accept(BlockRegistry.AZALEA_PRESSURE_PLATE);
+                         entries.accept(BlockRegistry.AZALEA_TRAPDOOR);
+                         entries.accept(BlockRegistry.AZALEA_BUTTON);
+                         entries.accept(BlockRegistry.AZALEA_STAIRS);
+                         entries.accept(BlockRegistry.AZALEA_SLAB);
+                         entries.accept(BlockRegistry.AZALEA_FENCE_GATE);
+                         entries.accept(BlockRegistry.AZALEA_FENCE);
+                         entries.accept(BlockRegistry.AZALEA_DOOR);
+                         entries.accept(ItemRegistry.AZALEA_BOAT);
+                         entries.accept(ItemRegistry.AZALEA_CHEST_BOAT);
+                         entries.accept(ItemRegistry.AZALEA_SHELF);
+
+                         entries.accept(ItemRegistry.DISPENSER_MINECART);
+
+
+                         entries.accept(ItemRegistry.SPEAR);
+                         entries.accept(ItemRegistry.NAUTILUS_ARMOR);
                     }).build();
 
 
     public static void register() {
-        Registry.register(Registries.ITEM_GROUP, "fixed", FIXED);
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, "fixed", FIXED);
     }
 }

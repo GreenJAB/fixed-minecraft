@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:leatherworker/3/emerald_enchanted_dyed_leather_boots",
+    "minecraft:leatherworker/3/emerald_enchanted_dyed_leather_leggings",
+    "minecraft:leatherworker/3/emerald_dyed_leather_horse_armor"
+  ]
+}

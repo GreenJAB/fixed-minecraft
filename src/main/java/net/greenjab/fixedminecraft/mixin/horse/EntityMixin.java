@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.passive.AbstractHorseEntity;
-import net.minecraft.entity.passive.PigEntity;
-import net.minecraft.item.Items;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -16,25 +16,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-    @ModifyVariable(method = "calculateDimensions", at = @At(value = "STORE"), ordinal = 1)
-    private EntityDimensions smallerHorseInBoat(EntityDimensions original){
+    @ModifyVariable(method = "refreshDimensions", at = @At(value = "STORE"), ordinal = 1)
+    private EntityDimensions smallerHorseInBoat(EntityDimensions newDim){
         Entity E = (Entity)(Object)this;
-        if (E instanceof AbstractHorseEntity) {
-            if (E.hasVehicle()) {
-                return EntityDimensions.fixed(original.width() * 0.9f, original.height());
+        if (E instanceof AbstractHorse) {
+            if (E.isPassenger()) {
+                return EntityDimensions.fixed(newDim.width() * 0.9f, newDim.height());
             }
         }
-        return original;
+        return newDim;
     }
 
-    @Inject(method = "onLanding", at = @At("HEAD"))
+    @Inject(method = "resetFallDistance", at = @At("HEAD"))
     private void whenPigsFly(CallbackInfo ci) {
         Entity E = (Entity)(Object)this;
-        if (E instanceof PigEntity PE) {
+        if (E instanceof Pig PE) {
             if (E.fallDistance > 9.5) {
-                if (PE.hasPassengers()) {
-                    if (PE.getControllingPassenger() instanceof ServerPlayerEntity SPE) {
-                        Criteria.CONSUME_ITEM.trigger(SPE, Items.SADDLE.getDefaultStack());
+                if (PE.isVehicle()) {
+                    if (PE.getControllingPassenger() instanceof ServerPlayer SPE) {
+                        CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.SADDLE.getDefaultInstance());
                     }
                 }
             }

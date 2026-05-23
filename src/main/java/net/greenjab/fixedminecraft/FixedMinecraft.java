@@ -14,19 +14,27 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.registries.BiomeAdditions;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
-import net.greenjab.fixedminecraft.registry.registries.GameruleRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.LootTableAdditions;
+import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
+import net.greenjab.fixedminecraft.registry.registries.LootTableRegistry;
+import net.greenjab.fixedminecraft.registry.registries.EntityTypeRegistry;
+import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
+import net.greenjab.fixedminecraft.registry.registries.MemoryRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ParticleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DispenserBlock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +45,6 @@ public class FixedMinecraft implements ModInitializer {
     public static Logger logger = LoggerFactory.getLogger("FixedMinecraft");
     public static MinecraftServer SERVER = null;
 
-    public static boolean netheriteAnvil = false;
     public static HashMap<Item, Integer> ItemCapacities = new HashMap<>();
     public static HashMap<Block, Block> corals = new HashMap<>();
 
@@ -50,9 +57,18 @@ public class FixedMinecraft implements ModInitializer {
         SyncHandler.init();
 
         ItemGroupRegistry.register();
-        GameruleRegistry.register();
+        GameRuleRegistry.registerGameRules();
         BlockRegistry.registerFireBlocks();
+        LootTableRegistry.registerLootTable();
+        MobEffectRegistry.registerMobEffects();
+        ParticleRegistry.registerParticles();
+        MapDecorationRegistry.registerMapDecorations();
+        EntityTypeRegistry.registerEntityTypes();
+        MemoryRegistry.registerMemories();
+        MenuRegistry.registerMenus();
+
         BiomeAdditions.registerBiomeAdds();
+        LootTableAdditions.registerLootTableAdds();
 
 
         DispenserBlock.registerProjectileBehavior(Items.BRICK);
@@ -64,7 +80,7 @@ public class FixedMinecraft implements ModInitializer {
                 ResourceManagerHelper.registerBuiltinResourcePack(
                 FixedMinecraft.id("tiered_crafting"),
                 modContainer,
-                Text.of("Tiered Crafting"),
+                Component.nullToEmpty("fixed.tiered_crafting"),
                 ResourcePackActivationType.NORMAL
         ));
 
@@ -72,21 +88,21 @@ public class FixedMinecraft implements ModInitializer {
                 ResourceManagerHelper.registerBuiltinResourcePack(
                 FixedMinecraft.id("removed_features_21_11"),
                 modContainer,
-                Text.of("Removed Features from 1.21.11"),
+                Component.nullToEmpty("fixed.removed_1.21"),
                 ResourcePackActivationType.DEFAULT_ENABLED
         ));
 
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
-                dispatcher.register(CommandManager.literal("mapBookMarker")
-                        .then(CommandManager.argument("id", IntegerArgumentType.integer())
-                                .then(CommandManager.argument("x", StringArgumentType.string())
-                                        .then(CommandManager.argument("z", StringArgumentType.string())
-                                                .then(CommandManager.argument("dim", StringArgumentType.string())
+                dispatcher.register(Commands.literal("mapBookMarker")
+                        .then(Commands.argument("id", IntegerArgumentType.integer())
+                                .then(Commands.argument("x", StringArgumentType.string())
+                                        .then(Commands.argument("z", StringArgumentType.string())
+                                                .then(Commands.argument("dim", StringArgumentType.string())
                                                         .executes(FixedMinecraft::executeMapBookMarker)))))));
     }
 
-    private static int executeMapBookMarker(CommandContext<ServerCommandSource> context) {
+    private static int executeMapBookMarker(CommandContext<CommandSourceStack> context) {
         int id = IntegerArgumentType.getInteger(context, "id");
         double x = Double.parseDouble(StringArgumentType.getString(context, "x"));
         double z = Double.parseDouble(StringArgumentType.getString(context, "z"));
@@ -97,15 +113,15 @@ public class FixedMinecraft implements ModInitializer {
     }
 
     public static Identifier id(String path) {
-        return Identifier.of(NAMESPACE, path);
+        return Identifier.fromNamespaceAndPath(NAMESPACE, path);
     }
 
     public static ArrayList<ItemStack> getArmor(LivingEntity entity) {
         ArrayList<ItemStack> armor = new ArrayList<>();
-        armor.add(entity.getEquippedStack(EquipmentSlot.FEET));
-        armor.add(entity.getEquippedStack(EquipmentSlot.LEGS));
-        armor.add(entity.getEquippedStack(EquipmentSlot.CHEST));
-        armor.add(entity.getEquippedStack(EquipmentSlot.HEAD));
+        armor.add(entity.getItemBySlot(EquipmentSlot.FEET));
+        armor.add(entity.getItemBySlot(EquipmentSlot.LEGS));
+        armor.add(entity.getItemBySlot(EquipmentSlot.CHEST));
+        armor.add(entity.getItemBySlot(EquipmentSlot.HEAD));
         return armor;
     }
 
@@ -118,3 +134,5 @@ public class FixedMinecraft implements ModInitializer {
         return armor;
     }
 }
+
+//TODO mansion buff???

@@ -336,7 +336,19 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:book",
-                    "weight": 5,
+                    "weight": 7,
+                    "functions": [
+                        {
+                            "function": "minecraft:enchant_randomly",
+                            "options": "#fixedminecraft:loot/end_city",
+                            "conditions": []
+                        }
+                    ]
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:book",
+                    "weight": 7,
                     "functions": [
                         {
                             "function": "minecraft:enchant_with_levels",
@@ -354,7 +366,7 @@
             "rolls": {
                 "type": "minecraft:uniform",
                 "max": 6,
-                "min": 2
+                "min": 3
             }
         },
         {

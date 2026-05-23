@@ -1,28 +1,32 @@
-accessWidener v2 named
+accessWidener v2 official
 
-accessible method net/minecraft/entity/passive/AbstractHorseEntity setHorseFlag (IZ)V
-accessible method net/minecraft/client/render/entity/LivingEntityRenderer addFeature (Lnet/minecraft/client/render/entity/feature/FeatureRenderer;)Z
-accessible field net/minecraft/client/gui/screen/advancement/AdvancementWidget progress Lnet/minecraft/advancement/AdvancementProgress;
+accessible field net/minecraft/world/inventory/CartographyTableMenu lastSoundTime J
+accessible method net/minecraft/world/level/block/Block dropFromBlockInteractLootTable (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/item/ItemInstance;Lnet/minecraft/world/entity/Entity;Ljava/util/function/BiConsumer;)Z
+accessible method net/minecraft/world/entity/monster/Shulker setVariant (Ljava/util/Optional;)V
+accessible class net/minecraft/world/inventory/ArmorSlot
+accessible field net/minecraft/world/entity/LivingEntity equipment Lnet/minecraft/world/entity/EntityEquipment;
+accessible class net/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier
+accessible method net/minecraft/core/cauldron/CauldronInteraction$Dispatcher put (Lnet/minecraft/world/item/Item;Lnet/minecraft/core/cauldron/CauldronInteraction;)V
+accessible class net/minecraft/server/level/ServerPlayer$RespawnPosAngle
+accessible field net/minecraft/world/level/block/AbstractCauldronBlock interactions Lnet/minecraft/core/cauldron/CauldronInteraction$Dispatcher;
+accessible method net/minecraft/world/level/block/entity/DispenserBlockEntity setItems (Lnet/minecraft/core/NonNullList;)V
+accessible method net/minecraft/world/level/block/state/properties/BlockSetType register (Lnet/minecraft/world/level/block/state/properties/BlockSetType;)Lnet/minecraft/world/level/block/state/properties/BlockSetType;
+accessible method net/minecraft/world/level/block/state/properties/WoodType register (Lnet/minecraft/world/level/block/state/properties/WoodType;)Lnet/minecraft/world/level/block/state/properties/WoodType;
+accessible method net/minecraft/world/level/block/FireBlock setFlammable (Lnet/minecraft/world/level/block/Block;II)V
+accessible method net/minecraft/client/renderer/entity/LivingEntityRenderer addLayer (Lnet/minecraft/client/renderer/entity/layers/RenderLayer;)Z
+accessible field net/minecraft/client/gui/screens/advancements/AdvancementWidget progress Lnet/minecraft/advancements/AdvancementProgress;
+accessible class net/minecraft/client/gui/screens/worldselection/CreateWorldScreen$GameTab
+accessible class net/minecraft/client/particle/ElderGuardianParticleGroup$ElderGuardianParticleRenderState
+accessible class net/minecraft/client/Options$OptionAccess
+accessible method net/minecraft/client/renderer/rendertype/RenderType <init> (Ljava/lang/String;Lnet/minecraft/client/renderer/rendertype/RenderSetup;)V
+accessible field net/minecraft/core/cauldron/CauldronInteraction$Dispatcher items Ljava/util/Map;
 accessible field net/minecraft/client/particle/Particle y D
-accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingInventory Lnet/minecraft/inventory/RecipeInputInventory;
-accessible field net/minecraft/screen/AbstractCraftingScreenHandler craftingResultInventory Lnet/minecraft/inventory/CraftingResultInventory;
-accessible field net/minecraft/entity/player/HungerManager exhaustion F
-#accessible method net/minecraft/block/ChiseledBookshelfBlock getSlotForHitPos (Lnet/minecraft/util/hit/BlockHitResult;Lnet/minecraft/block/BlockState;)Ljava/util/OptionalInt;
-accessible class net/minecraft/screen/slot/ArmorSlot
-accessible class net/minecraft/client/gui/screen/world/CreateWorldScreen$GameTab
-accessible method net/minecraft/client/gui/DrawContext drawTexturedQuad (Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/util/Identifier;IIIIFFFFI)V
-accessible class net/minecraft/client/option/GameOptions$OptionVisitor
-accessible field net/minecraft/entity/LivingEntity equipment Lnet/minecraft/entity/EntityEquipment;
-accessible field net/minecraft/screen/CartographyTableScreenHandler lastTakeResultTime J
-accessible class net/minecraft/block/entity/BlockEntityType$BlockEntityFactory
-accessible method net/minecraft/block/BlockSetType register (Lnet/minecraft/block/BlockSetType;)Lnet/minecraft/block/BlockSetType;
-accessible method net/minecraft/block/WoodType register (Lnet/minecraft/block/WoodType;)Lnet/minecraft/block/WoodType;
-accessible field net/minecraft/block/AbstractCauldronBlock behaviorMap Lnet/minecraft/block/cauldron/CauldronBehavior$CauldronBehaviorMap;
-accessible class net/minecraft/server/network/ServerPlayerEntity$RespawnPos
-accessible method net/minecraft/block/Block generateBlockInteractLoot (Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/registry/RegistryKey;Lnet/minecraft/block/BlockState;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/Entity;Ljava/util/function/BiConsumer;)Z
-#accessible field net/minecraft/client/render/MapRenderer decorationsAtlasManager Lnet/minecraft/client/texture/SpriteAtlasTexture;
-accessible class net/minecraft/client/particle/ElderGuardianParticleRenderer$State
-accessible method net/minecraft/entity/mob/ShulkerEntity setColor (Ljava/util/Optional;)V
-accessible method net/minecraft/client/render/RenderLayer <init> (Ljava/lang/String;Lnet/minecraft/client/render/RenderSetup;)V
-accessible method net/minecraft/client/render/RenderLayer of (Ljava/lang/String;Lnet/minecraft/client/render/RenderSetup;)Lnet/minecraft/client/render/RenderLayer;
-accessible method net/minecraft/block/entity/DispenserBlockEntity setHeldStacks (Lnet/minecraft/util/collection/DefaultedList;)V
+accessible method net/minecraft/world/entity/ai/Brain registerMemory (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V
+accessible field net/minecraft/client/model/animal/equine/DonkeyModel DONKEY_TRANSFORMER Lnet/minecraft/client/model/geom/builders/MeshTransformer;
+accessible method net/minecraft/world/entity/npc/villager/AbstractVillager addOffersFromTradeSet (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/resources/ResourceKey;)V
+accessible class net/minecraft/world/entity/monster/Phantom$PhantomCircleAroundAnchorGoal
+accessible class net/minecraft/world/entity/monster/Phantom$PhantomMoveControl
+accessible field net/minecraft/world/item/component/BundleContents$Mutable items Ljava/util/List;
+accessible method net/minecraft/core/particles/SimpleParticleType <init> (Z)V
+accessible class net/minecraft/client/particle/ParticleResources$SpriteParticleRegistration
+accessible field net/minecraft/world/level/storage/loot/BuiltInLootTables LOCATIONS Ljava/util/Set;

@@ -2,10 +2,9 @@ package net.greenjab.fixedminecraft.network;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-
 import java.util.Optional;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
 
 public class MapBookPlayer {
     public String name = "";
@@ -43,32 +42,32 @@ public class MapBookPlayer {
         this(name, x, y.orElse(0.0), z, yaw, dimension);
     }
 
-    public void setPlayer(PlayerEntity player) {
-        this.name = player.getName().getLiteralString();
+    public void setPlayer(Player player) {
+        this.name = player.getName().tryCollapseToString();
         this.x = player.getX();
         this.y = player.getY();
         this.z = player.getZ();
-        this.yaw = player.getYaw();
-        this.dimension = player.getEntityWorld().getDimensionEntry().getIdAsString();
+        this.yaw = player.getYRot();
+        this.dimension = player.level().dimension().identifier().toString();
     }
 
-    void toPacket(PacketByteBuf buf) {
-        buf.writeString(name);
+    void toPacket(FriendlyByteBuf buf) {
+        buf.writeUtf(name);
         buf.writeDouble(x);
         buf.writeDouble(y);
         buf.writeDouble(z);
         buf.writeFloat(yaw);
-        buf.writeString(dimension);
+        buf.writeUtf(dimension);
     }
 
-    static MapBookPlayer fromPacket(PacketByteBuf buf) {
+    static MapBookPlayer fromPacket(FriendlyByteBuf buf) {
         MapBookPlayer p = new MapBookPlayer();
-        p.name = buf.readString();
+        p.name = buf.readUtf();
         p.x = buf.readDouble();
         p.y = buf.readDouble();
         p.z = buf.readDouble();
         p.yaw = buf.readFloat();
-        p.dimension = buf.readString();
+        p.dimension = buf.readUtf();
         return p;
     }
 }

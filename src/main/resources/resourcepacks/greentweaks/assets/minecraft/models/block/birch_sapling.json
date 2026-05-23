@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/birch_sapling_wavy",
+    "particle": "minecraft:block/birch_sapling"
+  }
+}

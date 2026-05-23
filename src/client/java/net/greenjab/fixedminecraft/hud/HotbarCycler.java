@@ -1,55 +1,54 @@
 package net.greenjab.fixedminecraft.hud;
 
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.Direction;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.core.Direction;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.inventory.ContainerInput;
 import org.lwjgl.glfw.GLFW;
 
 public class HotbarCycler
 {
-    private static KeyBinding cycleKeyBinding;
-    public static KeyBinding getCycleKeyBinding() {
+    private static KeyMapping cycleKeyBinding;
+    public static KeyMapping getCycleKeyBinding() {
         return cycleKeyBinding;
     }
 
     public static void register(){
-        cycleKeyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.fixedminecraft.hotbar_cycle",
                 GLFW.GLFW_KEY_LEFT_ALT,
-                KeyBinding.Category.INVENTORY));
+                KeyMapping.Category.INVENTORY));
     }
 
-    public static void shiftRows(MinecraftClient client, final Direction direction) {
-        ClientPlayerInteractionManager interactionManager = client.interactionManager;
-        if (interactionManager == null || client.player == null) return;
+    public static void shiftRows(Minecraft minecraft, final Direction direction) {
+        MultiPlayerGameMode interactionManager = minecraft.gameMode;
+        if (interactionManager == null || minecraft.player == null) return;
 
         for (int i = 0; i < 9; i++) {
-            swap(client, (direction == Direction.DOWN ? 9 : 27) + i, i);
-            swap(client, 18 + i, i);
-            swap(client, (direction == Direction.DOWN ? 27 : 9) + i, i);
+            swap(minecraft, (direction == Direction.DOWN ? 9 : 27) + i, i);
+            swap(minecraft, 18 + i, i);
+            swap(minecraft, (direction == Direction.DOWN ? 27 : 9) + i, i);
         }
-        client.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1.5f);
+        minecraft.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.5f, 1.5f);
     }
 
-    public static void shiftSingle(MinecraftClient client, int hotbarSlot, final Direction direction) {
-        ClientPlayerInteractionManager interactionManager = client.interactionManager;
-        if (interactionManager == null || client.player == null) return;
+    public static void shiftSingle(Minecraft minecraft, int hotbarSlot, final Direction direction) {
+        MultiPlayerGameMode interactionManager = minecraft.gameMode;
+        if (interactionManager == null || minecraft.player == null) return;
 
-        swap(client, (direction == Direction.DOWN ? 9 : 27) + hotbarSlot, hotbarSlot);
-        swap(client, 18 + hotbarSlot, hotbarSlot);
-        swap(client, (direction == Direction.DOWN ? 27 : 9) + hotbarSlot, hotbarSlot);
-        client.player.playSound(SoundEvents.ITEM_BOOK_PAGE_TURN, 0.5f, 1.8f);
+        swap(minecraft, (direction == Direction.DOWN ? 9 : 27) + hotbarSlot, hotbarSlot);
+        swap(minecraft, 18 + hotbarSlot, hotbarSlot);
+        swap(minecraft, (direction == Direction.DOWN ? 27 : 9) + hotbarSlot, hotbarSlot);
+        minecraft.player.playSound(SoundEvents.BOOK_PAGE_TURN, 0.5f, 1.8f);
     }
 
-    public static void swap(MinecraftClient client, int from, int to) {
-        ClientPlayerInteractionManager interactionManager = client.interactionManager;
-
-        if (interactionManager != null && client.player != null && client.player.getInventory() != null) {
-            interactionManager.clickSlot(client.player.playerScreenHandler.syncId, from, to, SlotActionType.SWAP, client.player);
+    public static void swap(Minecraft minecraft, int from, int to) {
+        MultiPlayerGameMode interactionManager = minecraft.gameMode;
+        if (interactionManager != null && minecraft.player != null) {
+            interactionManager.handleContainerInput(minecraft.player.inventoryMenu.containerId, from, to, ContainerInput.SWAP, minecraft.player);
         }
     }
 }

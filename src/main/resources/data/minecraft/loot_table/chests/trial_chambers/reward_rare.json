@@ -133,17 +133,11 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": [
-                                "minecraft:riptide",
-                                "minecraft:loyalty",
-                                "minecraft:channeling",
-                                "minecraft:impaling",
-                                "minecraft:mending"
-                            ]
+                            "options": "#fixedminecraft:loot/trial_chamber"
                         }
                     ],
                     "name": "minecraft:book",
-                    "weight": 2
+                    "weight": 5
                 },
                 {
                     "type": "minecraft:item",

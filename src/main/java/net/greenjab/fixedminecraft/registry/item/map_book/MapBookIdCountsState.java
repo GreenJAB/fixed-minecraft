@@ -2,18 +2,17 @@ package net.greenjab.fixedminecraft.registry.item.map_book;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.datafixer.DataFixTypes;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateType;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
-public class MapBookIdCountsState extends PersistentState {
+public class MapBookIdCountsState extends SavedData {
     public static final Codec<MapBookIdCountsState> CODEC = RecordCodecBuilder.create(
              instance -> instance.group(
                      Codec.INT.optionalFieldOf("fixedminecraft:map_book", -1).forGetter( state -> state.nextMapBookId))
                     .apply(instance, MapBookIdCountsState::new)
     );
-
-    public static String IDCOUNTS_KEY = "fixedminecraft_idcounts";
 
     int nextMapBookId;
     public MapBookIdCountsState() {
@@ -26,11 +25,11 @@ public class MapBookIdCountsState extends PersistentState {
 
     public int get() {
         nextMapBookId++;
-        this.markDirty();
+        this.setDirty();
         return nextMapBookId;
     }
-    public static final PersistentStateType<MapBookIdCountsState> persistentStateType = new PersistentStateType<>(
-            IDCOUNTS_KEY, MapBookIdCountsState::new, CODEC, DataFixTypes.SAVED_DATA_MAP_INDEX
+    public static final SavedDataType<MapBookIdCountsState> persistentStateType = new SavedDataType<>(
+            FixedMinecraft.id("map_book/last_id"), MapBookIdCountsState::new, CODEC, DataFixTypes.SAVED_DATA_MAP_INDEX
     );
 
 }

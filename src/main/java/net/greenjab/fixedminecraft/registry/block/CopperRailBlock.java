@@ -2,59 +2,59 @@ package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.AbstractRailBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Oxidizable;
-import net.minecraft.block.enums.RailShape;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.state.property.Property;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
+import net.minecraft.world.level.block.BaseRailBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.RailShape;
+import org.jspecify.annotations.NonNull;
 
-import static net.minecraft.block.Oxidizable.OxidationLevel.*;
+import static net.minecraft.world.level.block.WeatheringCopper.WeatherState.*;
 
 
-public class CopperRailBlock extends AbstractRailBlock {
-    //public static final MapCodec<CopperRailBlock> CODEC = createCodec(CopperRailBlock::new);
-    public static final EnumProperty<RailShape> SHAPE = Properties.STRAIGHT_RAIL_SHAPE;
+public class CopperRailBlock extends BaseRailBlock {
+    public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
     public static final MapCodec<CopperRailBlock> CODEC = RecordCodecBuilder.mapCodec(
              instance -> instance.group(
-                            Oxidizable.OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(CopperRailBlock::getDegradationLevel), createSettingsCodec()
+                            WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(CopperRailBlock::getDegradationLevel), propertiesCodec()
                     )
                     .apply(instance, CopperRailBlock::new)
     );
-    public final Oxidizable.OxidationLevel oxidationLevel;
-    public CopperRailBlock(Oxidizable.OxidationLevel oxidationLevel, AbstractBlock.Settings settings) {
+    public final WeatheringCopper.WeatherState oxidationLevel;
+    public CopperRailBlock(WeatheringCopper.WeatherState oxidationLevel, BlockBehaviour.Properties settings) {
         super(true, settings);
         this.oxidationLevel = oxidationLevel;
-        this.setDefaultState(
-                this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH).with(WATERLOGGED, false)
+        this.registerDefaultState(
+                this.stateDefinition.any().setValue(SHAPE, RailShape.NORTH_SOUTH).setValue(WATERLOGGED, false)
         );
     }
 
     @Override
-    protected MapCodec<? extends AbstractRailBlock> getCodec() {
+    protected @NonNull MapCodec<? extends BaseRailBlock> codec() {
         return CODEC;
     }
 
 
     @Override
-    public Property<RailShape> getShapeProperty() {
+    public @NonNull Property<RailShape> getShapeProperty() {
         return SHAPE;
     }
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SHAPE, WATERLOGGED);
     }
 
-    public Oxidizable.OxidationLevel getDegradationLevel() { return oxidationLevel; }
+    public WeatheringCopper.WeatherState getDegradationLevel() { return oxidationLevel; }
 
     public static double getMaxVelocity(BlockState state) {
-        Oxidizable.OxidationLevel level = ((CopperRailBlock)state.getBlock()).oxidationLevel;
+        WeatheringCopper.WeatherState level = ((CopperRailBlock)state.getBlock()).oxidationLevel;
         if (level == UNAFFECTED) return 40.0;
         if (level == EXPOSED) return 20.0;
         if (level == WEATHERED) return 10.0;
@@ -63,80 +63,76 @@ public class CopperRailBlock extends AbstractRailBlock {
     }
 
     @Override
-    protected BlockState rotate(BlockState state, BlockRotation rotation) {
+    protected @NonNull BlockState rotate(@NonNull BlockState state, Rotation rotation) {
         return switch (rotation) {
-            case CLOCKWISE_180 -> switch (state.get(SHAPE)) {
-                case ASCENDING_EAST -> state.with(SHAPE, RailShape.ASCENDING_WEST);
-                case ASCENDING_WEST -> state.with(SHAPE, RailShape.ASCENDING_EAST);
-                case ASCENDING_NORTH -> state.with(SHAPE, RailShape.ASCENDING_SOUTH);
-                case ASCENDING_SOUTH -> state.with(SHAPE, RailShape.ASCENDING_NORTH);
-                case SOUTH_EAST -> state.with(SHAPE, RailShape.NORTH_WEST);
-                case SOUTH_WEST -> state.with(SHAPE, RailShape.NORTH_EAST);
-                case NORTH_WEST -> state.with(SHAPE, RailShape.SOUTH_EAST);
-                case NORTH_EAST -> state.with(SHAPE, RailShape.SOUTH_WEST);
-                case NORTH_SOUTH -> state.with(SHAPE, RailShape.NORTH_SOUTH);
-                case EAST_WEST -> state.with(SHAPE, RailShape.EAST_WEST);
+            case CLOCKWISE_180 -> switch (state.getValue(SHAPE)) {
+                case ASCENDING_EAST -> state.setValue(SHAPE, RailShape.ASCENDING_WEST);
+                case ASCENDING_WEST -> state.setValue(SHAPE, RailShape.ASCENDING_EAST);
+                case ASCENDING_NORTH -> state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
+                case ASCENDING_SOUTH -> state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
+                case SOUTH_EAST -> state.setValue(SHAPE, RailShape.NORTH_WEST);
+                case SOUTH_WEST -> state.setValue(SHAPE, RailShape.NORTH_EAST);
+                case NORTH_WEST -> state.setValue(SHAPE, RailShape.SOUTH_EAST);
+                case NORTH_EAST -> state.setValue(SHAPE, RailShape.SOUTH_WEST);
+                case NORTH_SOUTH -> state.setValue(SHAPE, RailShape.NORTH_SOUTH);
+                case EAST_WEST -> state.setValue(SHAPE, RailShape.EAST_WEST);
             };
-            case COUNTERCLOCKWISE_90 -> switch (state.get(SHAPE)) {
-                case ASCENDING_EAST -> state.with(SHAPE, RailShape.ASCENDING_NORTH);
-                case ASCENDING_WEST -> state.with(SHAPE, RailShape.ASCENDING_SOUTH);
-                case ASCENDING_NORTH -> state.with(SHAPE, RailShape.ASCENDING_WEST);
-                case ASCENDING_SOUTH -> state.with(SHAPE, RailShape.ASCENDING_EAST);
-                case SOUTH_EAST -> state.with(SHAPE, RailShape.NORTH_EAST);
-                case SOUTH_WEST -> state.with(SHAPE, RailShape.SOUTH_EAST);
-                case NORTH_WEST -> state.with(SHAPE, RailShape.SOUTH_WEST);
-                case NORTH_EAST -> state.with(SHAPE, RailShape.NORTH_WEST);
-                case NORTH_SOUTH -> state.with(SHAPE, RailShape.EAST_WEST);
-                case EAST_WEST -> state.with(SHAPE, RailShape.NORTH_SOUTH);
+            case COUNTERCLOCKWISE_90 -> switch (state.getValue(SHAPE)) {
+                case ASCENDING_EAST -> state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
+                case ASCENDING_WEST -> state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
+                case ASCENDING_NORTH -> state.setValue(SHAPE, RailShape.ASCENDING_WEST);
+                case ASCENDING_SOUTH -> state.setValue(SHAPE, RailShape.ASCENDING_EAST);
+                case SOUTH_EAST -> state.setValue(SHAPE, RailShape.NORTH_EAST);
+                case SOUTH_WEST -> state.setValue(SHAPE, RailShape.SOUTH_EAST);
+                case NORTH_WEST -> state.setValue(SHAPE, RailShape.SOUTH_WEST);
+                case NORTH_EAST -> state.setValue(SHAPE, RailShape.NORTH_WEST);
+                case NORTH_SOUTH -> state.setValue(SHAPE, RailShape.EAST_WEST);
+                case EAST_WEST -> state.setValue(SHAPE, RailShape.NORTH_SOUTH);
             };
-            case CLOCKWISE_90 -> switch (state.get(SHAPE)) {
-                case ASCENDING_EAST -> state.with(SHAPE, RailShape.ASCENDING_SOUTH);
-                case ASCENDING_WEST -> state.with(SHAPE, RailShape.ASCENDING_NORTH);
-                case ASCENDING_NORTH -> state.with(SHAPE, RailShape.ASCENDING_EAST);
-                case ASCENDING_SOUTH -> state.with(SHAPE, RailShape.ASCENDING_WEST);
-                case SOUTH_EAST -> state.with(SHAPE, RailShape.SOUTH_WEST);
-                case SOUTH_WEST -> state.with(SHAPE, RailShape.NORTH_WEST);
-                case NORTH_WEST -> state.with(SHAPE, RailShape.NORTH_EAST);
-                case NORTH_EAST -> state.with(SHAPE, RailShape.SOUTH_EAST);
-                case NORTH_SOUTH -> state.with(SHAPE, RailShape.EAST_WEST);
-                case EAST_WEST -> state.with(SHAPE, RailShape.NORTH_SOUTH);
+            case CLOCKWISE_90 -> switch (state.getValue(SHAPE)) {
+                case ASCENDING_EAST -> state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
+                case ASCENDING_WEST -> state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
+                case ASCENDING_NORTH -> state.setValue(SHAPE, RailShape.ASCENDING_EAST);
+                case ASCENDING_SOUTH -> state.setValue(SHAPE, RailShape.ASCENDING_WEST);
+                case SOUTH_EAST -> state.setValue(SHAPE, RailShape.SOUTH_WEST);
+                case SOUTH_WEST -> state.setValue(SHAPE, RailShape.NORTH_WEST);
+                case NORTH_WEST -> state.setValue(SHAPE, RailShape.NORTH_EAST);
+                case NORTH_EAST -> state.setValue(SHAPE, RailShape.SOUTH_EAST);
+                case NORTH_SOUTH -> state.setValue(SHAPE, RailShape.EAST_WEST);
+                case EAST_WEST -> state.setValue(SHAPE, RailShape.NORTH_SOUTH);
             };
             default -> state;
         };
     }
 
     @Override
-    protected BlockState mirror(BlockState state, BlockMirror mirror) {
-        RailShape railShape = state.get(SHAPE);
+    protected @NonNull BlockState mirror(BlockState state, Mirror mirror) {
+        RailShape railShape = state.getValue(SHAPE);
         switch (mirror) {
             case LEFT_RIGHT:
                 return switch (railShape) {
-                    case ASCENDING_NORTH -> state.with(SHAPE, RailShape.ASCENDING_SOUTH);
-                    case ASCENDING_SOUTH -> state.with(SHAPE, RailShape.ASCENDING_NORTH);
-                    case SOUTH_EAST -> state.with(SHAPE, RailShape.NORTH_EAST);
-                    case SOUTH_WEST -> state.with(SHAPE, RailShape.NORTH_WEST);
-                    case NORTH_WEST -> state.with(SHAPE, RailShape.SOUTH_WEST);
-                    case NORTH_EAST -> state.with(SHAPE, RailShape.SOUTH_EAST);
+                    case ASCENDING_NORTH -> state.setValue(SHAPE, RailShape.ASCENDING_SOUTH);
+                    case ASCENDING_SOUTH -> state.setValue(SHAPE, RailShape.ASCENDING_NORTH);
+                    case SOUTH_EAST -> state.setValue(SHAPE, RailShape.NORTH_EAST);
+                    case SOUTH_WEST -> state.setValue(SHAPE, RailShape.NORTH_WEST);
+                    case NORTH_WEST -> state.setValue(SHAPE, RailShape.SOUTH_WEST);
+                    case NORTH_EAST -> state.setValue(SHAPE, RailShape.SOUTH_EAST);
                     default -> super.mirror(state, mirror);
                 };
             case FRONT_BACK:
                 switch (railShape) {
                     case ASCENDING_EAST:
-                        return state.with(SHAPE, RailShape.ASCENDING_WEST);
+                        return state.setValue(SHAPE, RailShape.ASCENDING_WEST);
                     case ASCENDING_WEST:
-                        return state.with(SHAPE, RailShape.ASCENDING_EAST);
-                    case ASCENDING_NORTH:
-                    case ASCENDING_SOUTH:
-                    default:
-                        break;
+                        return state.setValue(SHAPE, RailShape.ASCENDING_EAST);
                     case SOUTH_EAST:
-                        return state.with(SHAPE, RailShape.SOUTH_WEST);
+                        return state.setValue(SHAPE, RailShape.SOUTH_WEST);
                     case SOUTH_WEST:
-                        return state.with(SHAPE, RailShape.SOUTH_EAST);
+                        return state.setValue(SHAPE, RailShape.SOUTH_EAST);
                     case NORTH_WEST:
-                        return state.with(SHAPE, RailShape.NORTH_EAST);
+                        return state.setValue(SHAPE, RailShape.NORTH_EAST);
                     case NORTH_EAST:
-                        return state.with(SHAPE, RailShape.NORTH_WEST);
+                        return state.setValue(SHAPE, RailShape.NORTH_WEST);
                 }
         }
 

@@ -2,30 +2,29 @@ package net.greenjab.fixedminecraft.mixin.structure;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.OreFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.function.Function;
+import net.minecraft.core.BlockPos;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.OreFeature;
 
-import static net.minecraft.world.gen.feature.Feature.isExposedToAir;
-
+import static net.minecraft.world.level.levelgen.feature.Feature.isAdjacentToAir;
 
 @Mixin(OreFeature.class)
 public abstract class OreFeatureMixin {
-    @ModifyExpressionValue(method = "shouldPlace", at = @At(
+    @ModifyExpressionValue(method = "canPlaceOre", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/structure/rule/RuleTest;test(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/math/random/Random;)Z"
+            target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTest;test(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/util/RandomSource;)Z"
     ))
-    private static boolean genInTerracotta(boolean original, @Local(argsOnly = true) BlockState blockState, @Local(argsOnly = true) Function<BlockPos, BlockState> posToState, @Local(
-            argsOnly = true
-    ) BlockPos.Mutable pos) {
-        if (blockState.isIn(BlockTags.TERRACOTTA) || blockState == Blocks.SANDSTONE.getDefaultState()) {
-            if (!isExposedToAir(posToState, pos)) {
+    private static boolean genInTerracotta(boolean original, @Local(argsOnly = true) BlockState orePosState,
+                                           @Local(argsOnly = true) Function<BlockPos, BlockState> blockGetter,
+                                           @Local(argsOnly = true) BlockPos.MutableBlockPos orePos) {
+        if (orePosState.is(BlockTags.TERRACOTTA) || orePosState == Blocks.SANDSTONE.defaultBlockState()) {
+            if (!isAdjacentToAir(blockGetter, orePos)) {
                 return true;
             }
         }

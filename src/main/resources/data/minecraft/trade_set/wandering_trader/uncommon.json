@@ -1,0 +1,9 @@
+{
+    "amount": {
+        "type": "minecraft:uniform",
+        "min": 2,
+        "max": 4
+    },
+  "random_sequence": "minecraft:trade_set/wandering_trader/uncommon",
+  "trades": "#minecraft:wandering_trader/uncommon"
+}

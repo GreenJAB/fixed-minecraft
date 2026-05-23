@@ -2,34 +2,41 @@ package net.greenjab.fixedminecraft.registry.block;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Oxidizable;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.WeatheringCopper;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.NonNull;
 
-public class OxidizableRailBlock extends CopperRailBlock implements Oxidizable {
+public class OxidizableRailBlock extends CopperRailBlock implements WeatheringCopper {
     public static final MapCodec<OxidizableRailBlock> CODEC = RecordCodecBuilder.mapCodec(
              instance -> instance.group(
-                            Oxidizable.OxidationLevel.CODEC.fieldOf("weathering_state").forGetter(OxidizableRailBlock::getDegradationLevel), createSettingsCodec()
-                    )
+                             WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(OxidizableRailBlock::getAge), propertiesCodec()
+                     )
                     .apply(instance, OxidizableRailBlock::new)
     );
+    private final WeatheringCopper.WeatherState weatherState;
 
-    public OxidizableRailBlock(OxidationLevel oxidationLevel, Settings settings) {
-        super(oxidationLevel, settings);
+    public OxidizableRailBlock(WeatheringCopper.WeatherState weatherState, Properties settings) {
+        super(weatherState, settings);
+        this.weatherState = weatherState;
     }
 
     @Override
-    public MapCodec<OxidizableRailBlock> getCodec(){ return CODEC;}
+    public @NonNull MapCodec<OxidizableRailBlock> codec(){ return CODEC;}
 
     @Override
-    public boolean hasRandomTicks(BlockState state) {
-        return Oxidizable.getIncreasedOxidationBlock(state.getBlock()).isPresent();
+    public boolean isRandomlyTicking(BlockState state) {
+        return WeatheringCopper.getNext(state.getBlock()).isPresent();
     }
 
     @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-    this.tickDegradation(state, world, pos, random);}
+    protected void randomTick(@NonNull BlockState state, @NonNull ServerLevel world, @NonNull BlockPos pos, @NonNull RandomSource random) {
+    this.changeOverTime(state, world, pos, random);}
 
+    @Override
+    public @NonNull WeatherState getAge() {
+        return this.weatherState;
+    }
 }

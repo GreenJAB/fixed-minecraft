@@ -2,10 +2,10 @@ package net.greenjab.fixedminecraft.render;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.RenderLayers;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
 
 /** Credit: Pepperoni-Jabroni */
 public class EnchantGlint {
@@ -20,53 +20,53 @@ public class EnchantGlint {
         ItemStack target = targetStack.get();
         if (target == null || target.isEmpty())  return false;
 
-        if (target.getComponents().contains(DataComponentTypes.REPAIR_COST)) {
-             return target.getComponents().getOrDefault(DataComponentTypes.REPAIR_COST, 0) ==1;
+        if (target.getComponents().has(DataComponents.REPAIR_COST)) {
+             return target.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) ==1;
         }
         return false;
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getGlint() {
+    public static RenderType getGlint() {
         if (isSuper()) return GlintRenderLayer.glintColor;
-        else return RenderLayers.glint();
+        else return RenderTypes.glint();
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getEntityGlint() {
+    public static RenderType getEntityGlint() {
         if (isSuper()) return GlintRenderLayer.entityGlintColor;
-        else return RenderLayers.entityGlint();
+        else return RenderTypes.entityGlint();
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getGlintTranslucent() {
+    public static RenderType getGlintTranslucent() {
         if (isSuper()) return GlintRenderLayer.translucentGlintColor;
-        else return RenderLayers.glintTranslucent();
+        else return RenderTypes.glintTranslucent();
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getArmorEntityGlint() {
+    public static RenderType getArmorEntityGlint() {
         if (isSuper()) return GlintRenderLayer.armorEntityGlintColor;
-        else return RenderLayers.armorEntityGlint();
+        else return RenderTypes.armorEntityGlint();
     }
 
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getGlint(boolean green) {
+    public static RenderType getGlint(boolean green) {
         if (green) return GlintRenderLayer.glintColor;
-        else return RenderLayers.glint();
+        else return RenderTypes.glint();
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getEntityGlint(boolean green) {
+    public static RenderType getEntityGlint(boolean green) {
         if (green) return GlintRenderLayer.entityGlintColor;
-        else return RenderLayers.entityGlint();
+        else return RenderTypes.entityGlint();
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderLayer getGlintTranslucent(boolean green) {
+    public static RenderType getGlintTranslucent(boolean green) {
         if (green) return GlintRenderLayer.translucentGlintColor;
-        else return RenderLayers.glintTranslucent();
+        else return RenderTypes.glintTranslucent();
     }
 
 }

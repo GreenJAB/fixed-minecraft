@@ -1,24 +1,25 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.ChiseledBookshelfBlockEntity;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,14 +28,14 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.minecraft.item.ItemStack.CODEC;
+import static net.minecraft.world.item.ItemStack.CODEC;
 
-@Mixin(ChiseledBookshelfBlockEntity.class)
+@Mixin(ChiseledBookShelfBlockEntity.class)
 public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
     @Shadow private int lastInteractedSlot;
     @Shadow
     @Final
-    private DefaultedList<ItemStack> heldStacks;
+    private NonNullList<ItemStack> items;
 
     public ChiseledBookshelfBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -42,25 +43,25 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
 
     @Nullable
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return BlockEntityUpdateS2CPacket.create(this);
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registries) {
-        NbtCompound nbtCompound = writeNbt(new NbtCompound(), heldStacks, registries);
-        nbtCompound.putNullable("last_interacted_slot", Codec.INT, lastInteractedSlot);
+    public @NonNull CompoundTag getUpdateTag(HolderLookup.@NonNull Provider registries) {
+        CompoundTag nbtCompound = writeNbt(new CompoundTag(), items, registries);
+        nbtCompound.storeNullable("last_interacted_slot", Codec.INT, lastInteractedSlot);
         return nbtCompound;
     }
 
     @Unique
-    private static NbtCompound writeNbt(NbtCompound nbt, DefaultedList<ItemStack> stacks, RegistryWrapper.WrapperLookup registries) {
-        NbtList nbtList = new NbtList();
+    private static CompoundTag writeNbt(CompoundTag nbt, NonNullList<ItemStack> stacks, HolderLookup.Provider registries) {
+        ListTag nbtList = new ListTag();
 
         for (int i = 0; i < stacks.size(); i++) {
             ItemStack itemStack = stacks.get(i);
             if (!itemStack.isEmpty()) {
-                NbtCompound nbtCompound = new NbtCompound();
+                CompoundTag nbtCompound = new CompoundTag();
                 nbtCompound.putByte("Slot", (byte)i);
                 nbtList.add(toNbt(itemStack, registries, nbtCompound));
             }
@@ -71,22 +72,22 @@ public abstract class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
     }
 
     @Unique
-    private static NbtElement toNbt(ItemStack itemStack, RegistryWrapper.WrapperLookup registries, NbtElement prefix) {
+    private static Tag toNbt(ItemStack itemStack, HolderLookup.Provider registries, Tag prefix) {
         if (itemStack.isEmpty()) {
             throw new IllegalStateException("Cannot encode empty ItemStack");
         } else {
-            return CODEC.encode(itemStack, registries.getOps(NbtOps.INSTANCE), prefix).getOrThrow();
+            return CODEC.encode(itemStack, registries.createSerializationContext(NbtOps.INSTANCE), prefix).getOrThrow();
         }
     }
 
-    @Inject(method = "removeStack(II)Lnet/minecraft/item/ItemStack;", at = @At(
+    @Inject(method = "removeItem(II)Lnet/minecraft/world/item/ItemStack;", at = @At(
             value = "RETURN"
     ), cancellable = true
     )
-    private void addNoEnchantTag(int slot, int amount, CallbackInfoReturnable<ItemStack> cir) {
+    private void addNoEnchantTag(int slot, int count, CallbackInfoReturnable<ItemStack> cir) {
         ItemStack book = cir.getReturnValue();
-        if (book.isOf(Items.ENCHANTED_BOOK)) {
-            book.set(DataComponentTypes.REPAIR_COST, 2);
+        if (book.is(Items.ENCHANTED_BOOK)) {
+            book.set(DataComponents.REPAIR_COST, 2);
         }
         cir.setReturnValue(book);
     }

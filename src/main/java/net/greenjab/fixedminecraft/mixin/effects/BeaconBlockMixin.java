@@ -1,23 +1,23 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
-import net.minecraft.block.BeaconBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeaconBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BeaconBlock.class)
-public class BeaconBlockMixin {
+public abstract class BeaconBlockMixin {
 
-    @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
-    private void removeBeaconUI(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit,
-                                CallbackInfoReturnable<ActionResult> cir) {
-        cir.setReturnValue(ActionResult.FAIL);
+    @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
+    private void removeBeaconUI(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult,
+                                CallbackInfoReturnable<InteractionResult> cir) {
+        cir.setReturnValue(InteractionResult.FAIL);
     }
 }

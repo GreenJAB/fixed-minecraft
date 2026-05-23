@@ -1,0 +1,22 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:player_head",
+                    "functions": [
+                        {
+                            "function": "minecraft:fill_player_head",
+                            "entity": "this"
+                        }
+                    ]
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "minecraft:charged_creeper/player"
+}

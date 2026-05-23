@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.models;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 /** Credit: Viola-Siemens */
 @Environment(EnvType.CLIENT)

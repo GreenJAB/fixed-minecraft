@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:fisherman/4/tropical_fish_emerald",
+    "minecraft:fisherman/4/pufferfish_emerald",
+    "minecraft:fisherman/4/fermented_spider_eye_emerald"
+  ]
+}

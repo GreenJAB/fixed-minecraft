@@ -2,132 +2,133 @@ package net.greenjab.fixedminecraft.registry.block;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.LanternBlock;
-import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
-import net.minecraft.world.block.OrientationHelper;
-import net.minecraft.world.block.WireOrientation;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LanternBlock;
+import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.ExperimentalRedstoneUtils;
+import net.minecraft.world.level.redstone.Orientation;
+import org.jspecify.annotations.NonNull;
 
 public class RedstoneLanternBlock extends LanternBlock {
-    public static final MapCodec<RedstoneLanternBlock> CODEC = createCodec(RedstoneLanternBlock::new);
-    public static final BooleanProperty LIT = Properties.LIT;
-    private static final Map<BlockView, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap<>();
+    public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
+    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    private static final Map<BlockGetter, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap<>();
 
     @Override
-    public MapCodec<? extends RedstoneLanternBlock> getCodec() {
+    public @NonNull MapCodec<? extends RedstoneLanternBlock> codec() {
         return CODEC;
     }
 
-    public RedstoneLanternBlock(Settings settings) {
+    public RedstoneLanternBlock(Properties settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(HANGING, false).with(WATERLOGGED, false).with(LIT, true));
+        this.registerDefaultState(this.stateDefinition.any().setValue(HANGING, false).setValue(WATERLOGGED, false).setValue(LIT, true));
     }
 
     @Override
-    protected void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
+    protected void onPlace(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull BlockState oldState, boolean notify) {
         this.update(world, pos, state);
     }
 
-    private void update(World world, BlockPos pos, BlockState state) {
-        WireOrientation wireOrientation = this.getEmissionOrientation(world, state);
+    private void update(Level world, BlockPos pos, BlockState state) {
+        Orientation wireOrientation = this.getEmissionOrientation(world, state);
 
         for (Direction direction : Direction.values()) {
-            world.updateNeighborsAlways(pos.offset(direction), this, OrientationHelper.withFrontNullable(wireOrientation, direction));
+            world.updateNeighborsAt(pos.relative(direction), this, ExperimentalRedstoneUtils.withFront(wireOrientation, direction));
         }
     }
 
     @Override
-    protected void onStateReplaced(BlockState state, ServerWorld world, BlockPos pos, boolean moved) {
+    protected void affectNeighborsAfterRemoval(@NonNull BlockState state, @NonNull ServerLevel world, @NonNull BlockPos pos, boolean moved) {
         if (!moved) {
             this.update(world, pos, state);
         }
     }
 
     @Override
-    protected int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        return state.get(LIT) && (state.get(HANGING)?Direction.DOWN:Direction.UP) != direction ? 15 : 0;
+    protected int getSignal(BlockState state, @NonNull BlockGetter world, @NonNull BlockPos pos, @NonNull Direction direction) {
+        return state.getValue(LIT) && (state.getValue(HANGING)?Direction.DOWN:Direction.UP) != direction ? 15 : 0;
     }
 
-    protected boolean shouldUnpower(World world, BlockPos pos, BlockState state) {
-        if (state.get(HANGING)) {
-            return world.isEmittingRedstonePower(pos.up(), Direction.UP);
+    protected boolean shouldUnpower(Level world, BlockPos pos, BlockState state) {
+        if (state.getValue(HANGING)) {
+            return world.hasSignal(pos.above(), Direction.UP);
         }
-        return world.isEmittingRedstonePower(pos.down(), Direction.DOWN);
+        return world.hasSignal(pos.below(), Direction.DOWN);
     }
 
     @Override
-    protected void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    protected void tick(@NonNull BlockState state, @NonNull ServerLevel world, @NonNull BlockPos pos, @NonNull RandomSource random) {
         boolean bl = this.shouldUnpower(world, pos, state);
         List<BurnoutEntry> list = BURNOUT_MAP.get(world);
 
-        while (list != null && !list.isEmpty() && world.getTime() - list.get(0).time > 60L) {
-            list.remove(0);
+        while (list != null && !list.isEmpty() && world.getGameTime() - list.getFirst().time > 60L) {
+            list.removeFirst();
         }
 
-        if (state.get(LIT)) {
+        if (state.getValue(LIT)) {
             if (bl) {
-                world.setBlockState(pos, state.with(LIT, false), Block.NOTIFY_ALL);
+                world.setBlock(pos, state.setValue(LIT, false), Block.UPDATE_ALL);
                 if (isBurnedOut(world, pos, true)) {
-                    world.syncWorldEvent(WorldEvents.REDSTONE_TORCH_BURNS_OUT, pos, 0);
-                    world.scheduleBlockTick(pos, world.getBlockState(pos).getBlock(), 160);
+                    world.levelEvent(LevelEvent.REDSTONE_TORCH_BURNOUT, pos, 0);
+                    world.scheduleTick(pos, world.getBlockState(pos).getBlock(), 160);
                 }
             }
         } else if (!bl && !isBurnedOut(world, pos, false)) {
-            world.setBlockState(pos, state.with(LIT, true), Block.NOTIFY_ALL);
+            world.setBlock(pos, state.setValue(LIT, true), Block.UPDATE_ALL);
         }
     }
 
     @Override
-    protected void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, @Nullable WireOrientation wireOrientation, boolean notify) {
-        if (state.get(LIT) == this.shouldUnpower(world, pos, state) && !world.getBlockTickScheduler().isTicking(pos, this)) {
-            world.scheduleBlockTick(pos, this, 2);
+    protected void neighborChanged(BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull Block sourceBlock, @Nullable Orientation wireOrientation, boolean notify) {
+        if (state.getValue(LIT) == this.shouldUnpower(world, pos, state) && !world.getBlockTicks().willTickThisTick(pos, this)) {
+            world.scheduleTick(pos, this, 2);
         }
     }
 
     @Override
-    protected boolean emitsRedstonePower(BlockState state) {
+    protected boolean isSignalSource(@NonNull BlockState state) {
         return true;
     }
 
     @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(LIT)) {
+    public void animateTick(BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull RandomSource random) {
+        if (state.getValue(LIT)) {
             double d = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 0.5;
             double e = pos.getY() + 0.4 + (random.nextDouble() - 0.5) * 0.5;
             double f = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 0.5;
-            world.addParticleClient(DustParticleEffect.DEFAULT, d, e, f, 0.0, 0.0, 0.0);
+            world.addParticle(DustParticleOptions.REDSTONE, d, e, f, 0.0, 0.0, 0.0);
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(HANGING);
         builder.add(LIT);
         builder.add(WATERLOGGED);
     }
 
-    private static boolean isBurnedOut(World world, BlockPos pos, boolean addNew) {
+    private static boolean isBurnedOut(Level world, BlockPos pos, boolean addNew) {
         List<BurnoutEntry> list = BURNOUT_MAP.computeIfAbsent(
-                world, worldx -> Lists.newArrayList()
+                world, _ -> Lists.newArrayList()
         );
         if (addNew) {
-            list.add(new BurnoutEntry(pos.toImmutable(), world.getTime()));
+            list.add(new BurnoutEntry(pos.immutable(), world.getGameTime()));
         }
 
         int i = 0;
@@ -144,9 +145,9 @@ public class RedstoneLanternBlock extends LanternBlock {
     }
 
     @Nullable
-    protected WireOrientation getEmissionOrientation(World world, BlockState state) {
+    protected Orientation getEmissionOrientation(Level world, BlockState state) {
 
-        return OrientationHelper.getEmissionOrientation(world, null, (state.get(HANGING)?Direction.DOWN:Direction.UP));
+        return ExperimentalRedstoneUtils.initialOrientation(world, null, (state.getValue(HANGING)?Direction.DOWN:Direction.UP));
     }
 
     public static class BurnoutEntry {

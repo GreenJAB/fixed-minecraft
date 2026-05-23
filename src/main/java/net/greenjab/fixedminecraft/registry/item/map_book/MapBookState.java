@@ -5,17 +5,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
-import net.minecraft.datafixer.DataFixTypes;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.world.PersistentState;
-import net.minecraft.world.PersistentStateType;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.datafix.DataFixTypes;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.saveddata.SavedDataType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class MapBookState extends PersistentState {
+public class MapBookState extends SavedData {
     public ArrayList<MapBookPlayer> players = new ArrayList<>();
     public ArrayList<Integer> mapIDs = new ArrayList<>();
     public MapBookPlayer marker = new MapBookPlayer();
@@ -29,8 +30,8 @@ public class MapBookState extends PersistentState {
     );
 
 
-    public static PersistentStateType<MapBookState> createStateType(String mapId) {
-        return new PersistentStateType<>(mapId, () -> {
+    public static SavedDataType<MapBookState> createStateType(Identifier mapId) {
+        return new SavedDataType<>(mapId, () -> {
             throw new IllegalStateException("Should never create an empty map saved data");
         }, CODEC, DataFixTypes.SAVED_DATA_MAP_DATA);
     }
@@ -39,7 +40,7 @@ public class MapBookState extends PersistentState {
         this(new ArrayList<>(maps), new ArrayList<>(mapBookPlayers), marker.orElse(new MapBookPlayer()));
     }
 
-    void addPlayer(PlayerEntity player) {
+    void addPlayer(Player player) {
         MapBookPlayer p = new MapBookPlayer();
         p.setPlayer(player);
         players.add(p);
@@ -53,12 +54,12 @@ public class MapBookState extends PersistentState {
         this.players.clear();
         this.players.addAll(players);
         this.marker = marker;
-        this.markDirty();
+        this.setDirty();
     }
 
     public void sendData(MinecraftServer server, int id) {
         for (MapBookPlayer player : players) {
-            ServerPlayerEntity SPE = server.getPlayerManager().getPlayer(player.name);
+            ServerPlayer SPE = server.getPlayerList().getPlayerByName(player.name);
             if (SPE != null) {
                 MapBookSyncPayload payload = new MapBookSyncPayload(id,
                         mapIDs.stream().mapToInt(i -> i).toArray(), (ArrayList<MapBookPlayer>) players.clone(), marker);
@@ -70,7 +71,7 @@ public class MapBookState extends PersistentState {
 
     public void addMapID(int id) {
         mapIDs.add(id);
-        this.markDirty();
+        this.setDirty();
     }
     boolean removeMapID(int id) {
         boolean hasRemoved = false;
@@ -82,7 +83,7 @@ public class MapBookState extends PersistentState {
         mapIDs.clear();
         mapIDs.addAll(temp);
 
-        this.markDirty();
+        this.setDirty();
         return hasRemoved;
     }
 
@@ -96,7 +97,7 @@ public class MapBookState extends PersistentState {
         mapIDs.clear();
         mapIDs.addAll(temp);
 
-        this.markDirty();
+        this.setDirty();
     }
 
     public void setMarker(double x, double z, String dimension) {

@@ -1,18 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.raid.RaiderEntity;
-import net.minecraft.village.raid.Raid;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.raid.Raid;
+import net.minecraft.world.entity.raid.Raider;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(Raid.class)
-public class RaidMixin {
-    @ModifyExpressionValue(method = "spawnNextWave", at = @At(value = "FIELD",
-                                                              target = "Lnet/minecraft/village/raid/Raid$Member;type:Lnet/minecraft/entity/EntityType;", ordinal = 0
+public abstract class RaidMixin {
+    @ModifyExpressionValue(method = "spawnGroup", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/entity/raid/Raid$RaiderType;entityType:Lnet/minecraft/world/entity/EntityType;", ordinal = 0,
+            opcode = Opcodes.GETFIELD
     ))
-    private EntityType<? extends RaiderEntity> replaceWithIllusioner(EntityType<? extends RaiderEntity> original){
+    private EntityType<? extends Raider> replaceWithIllusioner(EntityType<? extends Raider> original){
         if (original == EntityType.EVOKER) {
             if (Math.random()<0.6666) {
                 return EntityType.ILLUSIONER;
@@ -21,10 +24,12 @@ public class RaidMixin {
         return original;
     }
 
-    @ModifyExpressionValue(method = "spawnNextWave", at = @At(value = "FIELD",
-                                                              target = "Lnet/minecraft/entity/EntityType;EVOKER:Lnet/minecraft/entity/EntityType;"
+    @ModifyExpressionValue(method = "spawnGroup", at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/entity/EntityType;EVOKER:Lnet/minecraft/world/entity/EntityType;",
+            opcode = Opcodes.GETSTATIC
     ))
-    private EntityType<? extends RaiderEntity> replaceWithIllusionerRavager(EntityType<? extends RaiderEntity> original){
+    private EntityType<? extends Raider> replaceWithIllusionerRavager(EntityType<? extends Raider> original){
         if (Math.random()<0.6666) {
             return EntityType.ILLUSIONER;
         }

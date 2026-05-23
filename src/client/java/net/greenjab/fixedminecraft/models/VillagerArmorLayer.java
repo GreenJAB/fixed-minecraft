@@ -1,28 +1,29 @@
 package net.greenjab.fixedminecraft.models;
 
-import net.minecraft.client.render.command.OrderedRenderCommandQueue;
-import net.minecraft.client.render.entity.equipment.EquipmentModel;
-import net.minecraft.client.render.entity.equipment.EquipmentRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRenderer;
-import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.EntityModel;
-import net.minecraft.client.render.entity.state.LivingEntityRenderState;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.EquippableComponent;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ItemStack;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.EquipmentLayerRenderer;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.resources.model.EquipmentClientInfo;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.Equippable;
+import org.jspecify.annotations.NonNull;
 
 /** Credit: Viola-Siemens */
-public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRenderState, M extends EntityModel<S>, A extends EntityModel<S> & HumanoidModel> extends FeatureRenderer<S, M> {
+public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRenderState, M extends EntityModel<@NonNull S>, A extends EntityModel<@NonNull S> & CustomHumanoidModel> extends RenderLayer<@NonNull S, M> {
     private final A Model_HEAD;
     private final A Model_CHEST;
     private final A Model_LEGS;
     private final A Model_FEET;
-    private final EquipmentRenderer equipmentRenderer;
+    private final EquipmentLayerRenderer equipmentRenderer;
 
     public VillagerArmorLayer(
-            FeatureRendererContext<S, M> context, A Model_HEAD,A Model_CHEST,A Model_LEGS,A Model_FEET, EquipmentRenderer equipmentRenderer
+            RenderLayerParent<@NonNull S, M> context, A Model_HEAD, A Model_CHEST, A Model_LEGS, A Model_FEET, EquipmentLayerRenderer equipmentRenderer
     ) {
         super(context);
         this.Model_HEAD = Model_HEAD;
@@ -32,7 +33,7 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
         this.equipmentRenderer = equipmentRenderer;
     }
 
-    private static boolean hasModel(EquippableComponent component, EquipmentSlot slot) {
+    private static boolean hasModel(Equippable component, EquipmentSlot slot) {
         return component.assetId().isPresent() && component.slot() == slot;
     }
 
@@ -73,7 +74,7 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
     }
 
     @Override
-    public void render(MatrixStack matrixStack, OrderedRenderCommandQueue entityRenderCommandQueue, int light, S bipedEntityRenderState, float limbAngle, float limbDistance) {
+    public void submit(@NonNull PoseStack matrixStack, @NonNull SubmitNodeCollector entityRenderCommandQueue, int light, @NonNull S bipedEntityRenderState, float limbAngle, float limbDistance) {
 
         this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$chestEquipment(), EquipmentSlot.CHEST, light, bipedEntityRenderState);
         this.renderArmor(matrixStack, entityRenderCommandQueue, bipedEntityRenderState.fixed$legEquipment(), EquipmentSlot.LEGS, light, bipedEntityRenderState);
@@ -82,16 +83,16 @@ public class VillagerArmorLayer<S extends LivingEntityRenderState & HumanoidRend
 
     }
     private void renderArmor(
-            MatrixStack matrices, OrderedRenderCommandQueue entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState
+            PoseStack matrices, SubmitNodeCollector entityRenderCommandQueue, ItemStack stack, EquipmentSlot slot, int light, S bipedEntityRenderState
     ) {
-        EquippableComponent equippableComponent = stack.get(DataComponentTypes.EQUIPPABLE);
+        Equippable equippableComponent = stack.get(DataComponents.EQUIPPABLE);
         if (equippableComponent != null && hasModel(equippableComponent, slot)) {
             A bipedEntityModel = getModel(slot);
-            bipedEntityModel.propertiesCopyFrom(this.getContextModel());
+            bipedEntityModel.propertiesCopyFrom(this.getParentModel());
             this.setVisible(bipedEntityModel, slot);
-            EquipmentModel.LayerType layerType = this.usesInnerModel(slot) ? EquipmentModel.LayerType.HUMANOID_LEGGINGS : EquipmentModel.LayerType.HUMANOID;
+            EquipmentClientInfo.LayerType layerType = this.usesInnerModel(slot) ? EquipmentClientInfo.LayerType.HUMANOID_LEGGINGS : EquipmentClientInfo.LayerType.HUMANOID;
             this.equipmentRenderer
-                    .render(
+                    .renderLayers(
                             layerType,
                             equippableComponent.assetId().orElseThrow(),
                             bipedEntityModel,

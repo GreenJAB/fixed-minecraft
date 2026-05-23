@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:leatherworker/4/emerald_enchanted_dyed_leather_chestplate",
+    "minecraft:leatherworker/4/emerald_enchanted_dyed_leather_helmet",
+    "minecraft:leatherworker/4/rabbit_hide_emerald"
+  ]
+}

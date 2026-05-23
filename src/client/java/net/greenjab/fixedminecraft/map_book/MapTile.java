@@ -1,36 +1,37 @@
 package net.greenjab.fixedminecraft.map_book;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.render.MapRenderState;
-import net.minecraft.component.type.MapIdComponent;
-import net.minecraft.item.map.MapState;
+import net.greenjab.fixedminecraft.screens.MapBookScreen;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.renderer.state.MapRenderState;
+import net.minecraft.world.level.saveddata.maps.MapId;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import org.joml.Matrix3x2fStack;
 
 /** Credit: Nettakrim */
-public class MapTile implements Drawable {
+public class MapTile implements Renderable {
     private final MapBookScreen screen;
-    MapIdComponent id;
-    private final MapState mapState;
+    MapId id;
+    private final MapItemSavedData mapState;
 
     private final MapRenderState mapRenderState = new MapRenderState();
 
-    public MapTile(MapBookScreen screen, MapIdComponent id, MapState mapState, MinecraftClient client) {
+    public MapTile(MapBookScreen screen, MapId id, MapItemSavedData mapState, Minecraft client) {
         this.screen = screen;
         this.id = id;
         this.mapState = mapState;
-        client.getMapRenderer().update(id, mapState, mapRenderState);
+        client.getMapRenderer().extractRenderState(id, mapState, mapRenderState);
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         float mapScale = (float) Math.pow(2, mapState.scale);
         float offset = 64f * mapScale;
 
-        Matrix3x2fStack matrix = context.getMatrices();
+        Matrix3x2fStack matrix = context.pose();
 
-        context.getMatrices().pushMatrix();
+        matrix.pushMatrix();
         //for (int i = 0; i < 4-mapState.scale;i++)context.goUpLayer();
         matrix.translate(screen.x, screen.y);
         matrix.scale(screen.scale, screen.scale);
@@ -38,7 +39,7 @@ public class MapTile implements Drawable {
                 (float) (mapState.centerX - offset + screen.width / 2.0),
                 (float) (mapState.centerZ - offset + screen.height / 2.0));
         matrix.scale(mapScale, mapScale);
-        context.drawMap(mapRenderState);
+        context.map(mapRenderState);
         //for (int i = 0; i < 4-mapState.scale;i++)context.popLayer();
         matrix.popMatrix();
     }
