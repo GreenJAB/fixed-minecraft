@@ -80,6 +80,12 @@
     "filled_map.outpost": "Pillager Outpost Map",
     "filled_map.ruined_portal": "Ruined Portal Map",
     "filled_map.trail_ruins": "Trail Ruins Map",
+    "merchant.level.1": "Novice",
+    "merchant.level.2": "Adept",
+    "merchant.level.3": "Skilled",
+    "merchant.level.4": "Expert",
+    "merchant.level.5": "Master",
+    "merchant.title": "%s %s",
     "dataPack.spear_rebalance.description": "Heavy Core Spear and Scute Nautilus Armour",
     "dataPack.spear_rebalance.name": "1.21.11 Experiments"
 }

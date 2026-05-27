@@ -21,23 +21,14 @@ public abstract class ClientBundleTooltipMixin {
     @Final
     private BundleContents contents;
 
-    @ModifyConstant(method = "extractBundleWithItemsTooltip", constant = @Constant(intValue = 12))
+    @ModifyConstant(method = {"extractBundleWithItemsTooltip", "slotCount"}, constant = @Constant(intValue = 12))
     private static int moreItemsShown(int constant) { return 64;}
 
-    @ModifyConstant(method = "slotCount", constant = @Constant(intValue = 12))
-    private static int moreItemsShown2(int constant) { return 64; }
-
-    @ModifyConstant(method = "extractBundleWithItemsTooltip", constant = @Constant(intValue = 4, ordinal = 0))
+    @ModifyConstant(method = {"extractBundleWithItemsTooltip", "gridSizeY"}, constant = @Constant(intValue = 4, ordinal = 0))
     private int moreItemsPerLine(int constant) { return sizeX(); }
 
-    @ModifyConstant(method = "gridSizeY", constant = @Constant(intValue = 4))
-    private int moreItemsPerLine2(int constant) { return sizeX(); }
-
-    @ModifyConstant(method = "extractBundleWithItemsTooltip", constant = @Constant(intValue = 24))
+    @ModifyConstant(method = {"extractBundleWithItemsTooltip", "itemGridHeight"}, constant = @Constant(intValue = 24))
     private int smallerGaps(int constant) { return 20; }
-
-    @ModifyConstant(method = "itemGridHeight", constant = @Constant(intValue = 24))
-    private int smallerGaps2(int constant) { return 20; }
 
     @ModifyArgs(method = "extractBundleWithItemsTooltip", at = @At( value = "INVOKE",
             target = "Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientBundleTooltip;extractSlot(IIILjava/util/List;ILnet/minecraft/client/gui/Font;Lnet/minecraft/client/gui/GuiGraphicsExtractor;)V"))

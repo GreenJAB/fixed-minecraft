@@ -1,16 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.hud.HotbarCycler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.gui.screens.inventory.MerchantScreen;
 import net.minecraft.core.Direction;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -43,12 +48,12 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
         final Direction direction = Math.signum(scrollY) > 0
                 ? Direction.UP : Direction.DOWN;
         if (menu.getCarried().isEmpty()) {
-            if (HotbarCycler.getCycleKeyBinding().isDown()) {
+            if (InputConstants.isKeyDown(minecraft.getWindow(), HotbarCycler.getCycleKeyBinding().key.getValue())) {
                 if (minecraft.hasShiftDown()) {
                     HotbarCycler.shiftRows(minecraft, direction);
                 }
                 else {
-                    int i = getSlotX();
+                    int i = getSlotX(handledScreen instanceof CreativeModeInventoryScreen);
                     if (i!=-1) {
                         HotbarCycler.shiftSingle(minecraft, i, direction);
                     }
@@ -59,23 +64,38 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Unique
-    private int getSlotX() {
-        if (hoveredSlot != null) {
-            ItemStack holder = hoveredSlot.getItem();
-            ItemStack test = Items.KNOWLEDGE_BOOK.getDefaultInstance();
-            hoveredSlot.set(test);
-            int i = 0;
-            Minecraft minecraft = Minecraft.getInstance();
-            assert minecraft.player != null;
-            for (ItemStack stack : minecraft.player.getInventory().getNonEquipmentItems()) {
-                if (stack == hoveredSlot.getItem()) {
-                    hoveredSlot.set(holder);
-                    return i%9;
-                }
-                i++;
-            }
-            hoveredSlot.set(holder);
+    private int getSlotX(boolean creative) {
+        if (hoveredSlot != null
+            && hoveredSlot.y > (creative?50:80)
+            && hoveredSlot.container == Minecraft.getInstance().player.getInventory()) {
+                return hoveredSlot.getContainerSlot()%9;
         }
         return -1;
+    }
+
+    @ModifyExpressionValue(method = {"extractSlot", "isHovering(Lnet/minecraft/world/inventory/Slot;DD)Z"}, at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/inventory/Slot;y:I",
+            opcode = Opcodes.GETFIELD
+    ))
+    private int villagerArmorYResourcePack(int original, @Local(argsOnly = true) Slot slot){
+        if (((AbstractContainerScreen<?>)(Object)this) instanceof MerchantScreen)
+            if (slot.container instanceof SimpleContainer simpleContainer)
+                if (simpleContainer.getContainerSize()==4)
+                    if (FixedMinecraftClient.usingCustomContainers()) return original - 6;
+        return original;
+    }
+
+    @ModifyExpressionValue(method = {"extractSlotHighlightBack", "extractSlotHighlightFront"}, at = @At(
+            value = "FIELD",
+            target = "Lnet/minecraft/world/inventory/Slot;y:I",
+            opcode = Opcodes.GETFIELD
+    ))
+    private int villagerArmorYResourcePackHoverBack(int original){
+        if (((AbstractContainerScreen<?>)(Object)this) instanceof MerchantScreen)
+            if (hoveredSlot.container instanceof SimpleContainer simpleContainer)
+                if (simpleContainer.getContainerSize()==4)
+                    if (FixedMinecraftClient.usingCustomContainers()) return original - 6;
+        return original;
     }
 }

@@ -23,6 +23,7 @@ import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MemoryRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ParticleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
+import net.greenjab.fixedminecraft.registry.registries.TrimMaterialsRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -66,6 +67,7 @@ public class FixedMinecraft implements ModInitializer {
         EntityTypeRegistry.registerEntityTypes();
         MemoryRegistry.registerMemories();
         MenuRegistry.registerMenus();
+        TrimMaterialsRegistry.registerTrimMaterials();
 
         BiomeAdditions.registerBiomeAdds();
         LootTableAdditions.registerLootTableAdds();
@@ -93,7 +95,7 @@ public class FixedMinecraft implements ModInitializer {
         ));
 
 
-        CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
+        CommandRegistrationCallback.EVENT.register((dispatcher, _, _) ->
                 dispatcher.register(Commands.literal("mapBookMarker")
                         .then(Commands.argument("id", IntegerArgumentType.integer())
                                 .then(Commands.argument("x", StringArgumentType.string())

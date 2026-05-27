@@ -12,7 +12,7 @@
         "AdvancementWidgetMixin",
         "AvatarRendererMixin",
         "ClientTooltipComponentMixin",
-        "CreateWorldScreenMixin",
+        "CreateWorldScreenGameTabMixin",
         "DonkeyRendererMixin",
         "EnderDragonModelMixin",
         "EntityRendererMixin",
@@ -56,7 +56,15 @@
         "villager.ZombieVillagerModelMixin"
     ],
     "mixins": [
+        "AbstractMountInventoryScreenMixin",
+        "AbstractRecipeBookScreenMixin",
+        "AbstractWidgetMixin",
         "ClientBundleTooltipMixin",
-        "particle.FlyTowardsPositionParticleMixin"
+        "ContainerScreenMixin",
+        "CreateWorldScreenMixin",
+        "CreativeModeInventoryScreenMixin",
+        "ShulkerBoxScreenMixin",
+        "particle.FlyTowardsPositionParticleMixin",
+        "villager.CustomContainerTextureMixin"
     ]
 }

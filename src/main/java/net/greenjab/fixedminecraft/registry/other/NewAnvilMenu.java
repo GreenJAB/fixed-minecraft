@@ -333,6 +333,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         this.resultSlots.setItem(0, outputItemStack);
         if (repair) {
             this.text.set(AnvilMsg.REPAIR.id);
+
         } else {
             this.text.set(AnvilMsg.COST.id);
         }
@@ -408,4 +409,5 @@ public class NewAnvilMenu extends ItemCombinerMenu {
             return NONE;
         }
     }
+
 }

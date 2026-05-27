@@ -5,6 +5,7 @@ minecraft = "26.1.2"
 vineflower = "1.11.1"
 fabric-loader = "0.19.2"
 fabric-api = "0.146.1+26.1.2"
+mixson = "2.2.0"
 
 [plugins]
 fabric-loom = { id = "net.fabricmc.fabric-loom", version.ref = "loom" }
@@ -15,4 +16,5 @@ minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft
 vineflower = { group = "org.vineflower", name = "vineflower", version.ref = "vineflower" }
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
+mixson = { group = "maven.modrinth", name = "mixson", version.ref = "mixson" }
 

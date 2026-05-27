@@ -27,6 +27,17 @@ loom {
 }
 
 repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url = "https://api.modrinth.com/maven"
+            }
+        }
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
     maven {
         url "https://maven.solo-studios.ca/releases/"
     }
@@ -41,6 +52,9 @@ dependencies {
     implementation(libs.fabric.loader)
     implementation(libs.fabric.api)
     vineflowerDecompilerClasspath(libs.vineflower)
+
+    implementation (libs.mixson)
+    include (libs.mixson)
 }
 
 fabricApi {

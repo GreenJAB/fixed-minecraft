@@ -2,7 +2,8 @@
 	"credit": "Created by Stridey",
 	"ambientocclusion": false,
 	"textures": {
-		"level": "#level"
+		"level": "#level",
+        "particle": "block/redstone_dust_dot"
 	},
 	"elements": [
 		{

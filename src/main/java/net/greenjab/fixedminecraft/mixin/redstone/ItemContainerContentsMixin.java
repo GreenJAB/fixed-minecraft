@@ -16,7 +16,7 @@ import net.minecraft.world.item.component.ItemContainerContents;
 public abstract class ItemContainerContentsMixin {
 
     @Inject(method = "addToTooltip", at = @At("HEAD"), cancellable = true)
-    private void test(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components, CallbackInfo ci){
+    private void removeTextFromItemContainers(Item.TooltipContext context, Consumer<Component> consumer, TooltipFlag flag, DataComponentGetter components, CallbackInfo ci){
         ci.cancel();
     }
 }

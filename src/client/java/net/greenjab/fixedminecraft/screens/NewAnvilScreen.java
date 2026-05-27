@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.screens;
 
+import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.other.NewAnvilMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -25,7 +26,9 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
     private static final Identifier TEXT_FIELD_SPRITE = Identifier.withDefaultNamespace("container/anvil/text_field");
     private static final Identifier TEXT_FIELD_DISABLED_SPRITE = Identifier.withDefaultNamespace("container/anvil/text_field_disabled");
     private static final Identifier ERROR_SPRITE = Identifier.withDefaultNamespace("container/anvil/error");
+    private static final Identifier NETHERITE_ERROR_SPRITE = Identifier.withDefaultNamespace("container/anvil/netherite_error");
     private static final Identifier ANVIL_LOCATION = Identifier.withDefaultNamespace("textures/gui/container/anvil.png");
+    private static final Identifier NETHERITE_ANVIL_LOCATION = Identifier.withDefaultNamespace("textures/gui/container/netherite_anvil.png");
     private EditBox name;
     private final Player player;
 
@@ -111,22 +114,19 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
             ItemOutput = this.menu.getSlot(2).getItem();
         }
         int capacity = this.menu.getCapacity();
-        int InputCost = 0;
+        int InputCost;
 
         int OutputCost = cost;
 
-        if (ItemInput1 != ItemStack.EMPTY) {
+        if (ItemInput1 != ItemStack.EMPTY && capacity>0) {
             InputCost = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemInput1, false);
             if (!this.menu.getSlot(1).hasItem()) {
                 OutputCost = InputCost;
             }
             if (!ItemOutput.isEmpty()) {
-                if (!ItemOutput.isEnchanted() && !ItemInput1.is(Items.ENCHANTED_BOOK)) {
-                    OutputCost = InputCost;
-                }
-                if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) {
-                    OutputCost = InputCost;
-                }
+                if (!ItemOutput.isEnchanted() && !ItemInput1.is(Items.ENCHANTED_BOOK)) OutputCost = InputCost;
+                if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) OutputCost = InputCost;
+                if (NewAnvilMenu.AnvilMsg.byID(this.menu.getText()) == NewAnvilMenu.AnvilMsg.REPAIR) OutputCost = InputCost;
             }
             graphics.fill(60, 37, barPos(InputCost, capacity), 41, new Color(39, 174, 53).hashCode());
             if (InputCost > capacity) {
@@ -136,29 +136,30 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
                     graphics.fill(60, 37, barPos(InputCost - capacity, capacity), 41, new Color(255, 0, 0).hashCode());
                 }
             }
-        }
-        if (OutputCost!=InputCost) {
-            if (OutputCost > capacity) {
-                graphics.fill(barPos(InputCost, capacity), 37, 168, 41, new Color(0, 255, 0).hashCode());
+            if (OutputCost!=InputCost) {
+                if (OutputCost > capacity) {
+                    graphics.fill(barPos(InputCost, capacity), 37, 168, 41, new Color(0, 255, 0).hashCode());
 
-                if (this.menu.isNetherite()) {
-                    graphics.fill(60, 37, barPos(OutputCost - capacity, capacity), 41, new Color(0, 0, 255).hashCode());
-                    if (OutputCost < InputCost) {
-                        graphics.fill(Math.max(barPos(OutputCost - capacity, capacity), 60), 37, barPos(InputCost - capacity, capacity), 41, new Color(205, 0, 0).hashCode());
+                    if (this.menu.isNetherite()) {
+                        graphics.fill(60, 37, barPos(OutputCost - capacity, capacity), 41, new Color(0, 0, 255).hashCode());
+                        if (OutputCost < InputCost) {
+                            graphics.fill(Math.max(barPos(OutputCost - capacity, capacity), 60), 37, barPos(InputCost - capacity, capacity), 41, new Color(205, 0, 0).hashCode());
+                        }
+                    } else {
+                        graphics.fill(60, 37, barPos(OutputCost - capacity, capacity), 41, new Color(255, 0, 0).hashCode());
                     }
                 } else {
-                    graphics.fill(60, 37, barPos(OutputCost - capacity, capacity), 41, new Color(255, 0, 0).hashCode());
-                }
-            } else {
-                if (OutputCost > InputCost) {
-                    graphics.fill(barPos(InputCost, capacity), 37, barPos(OutputCost, capacity), 41, new Color(0, 255, 0).hashCode());
-                } else {
-                    graphics.fill(60, 37, barPos(InputCost, capacity), 41, new Color(39, 174, 53).hashCode());
-                    if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) OutputCost = 0;
-                    graphics.fill(Math.max(barPos(OutputCost, capacity), 60), 37, barPos(InputCost, capacity), 41, new Color(205, 0, 0).hashCode());
+                    if (OutputCost > InputCost) {
+                        graphics.fill(barPos(InputCost, capacity), 37, barPos(OutputCost, capacity), 41, new Color(0, 255, 0).hashCode());
+                    } else {
+                        graphics.fill(60, 37, barPos(InputCost, capacity), 41, new Color(39, 174, 53).hashCode());
+                        if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) OutputCost = 0;
+                        graphics.fill(Math.max(barPos(OutputCost, capacity), 60), 37, barPos(InputCost, capacity), 41, new Color(205, 0, 0).hashCode());
+                    }
                 }
             }
         }
+
         for (int i = 5; i < capacity; i+=5) {
             graphics.fill(barPos(i, capacity) - 1, 38, barPos(i, capacity), 40, new Color(255, 255, 255).hashCode());
         }
@@ -175,6 +176,7 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
 
             int tx = this.imageWidth - 8 - this.font.width(line) - 2;
             int ty = 69;
+            if (FixedMinecraftClient.usingCustomContainers())ty-=2;
             graphics.fill(tx - 2, ty-2, this.imageWidth - 8, ty+10, 1325400064);
             graphics.text(this.font, line, tx, ty, color);
         }
@@ -183,6 +185,8 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
     @Override
     public void extractBackground(final @NonNull GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
+        graphics.blit(RenderPipelines.GUI_TEXTURED, menu.isNetherite()?NETHERITE_ANVIL_LOCATION:ANVIL_LOCATION, this.leftPos, this.topPos, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
+        this.extractErrorIcon(graphics, this.leftPos, this.topPos);
         graphics.blitSprite(
                 RenderPipelines.GUI_TEXTURED, this.menu.getSlot(0).hasItem() ? TEXT_FIELD_SPRITE : TEXT_FIELD_DISABLED_SPRITE, this.leftPos + 59, this.topPos + 18, 110, 16
         );
@@ -191,7 +195,7 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
     @Override
     protected void extractErrorIcon(final @NonNull GuiGraphicsExtractor graphics, final int xo, final int yo) {
         if ((this.menu.getSlot(0).hasItem() || this.menu.getSlot(1).hasItem()) && !this.menu.getSlot(this.menu.getResultSlot()).hasItem()) {
-            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ERROR_SPRITE, xo + 99, yo + 45, 28, 21);
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, menu.isNetherite()?NETHERITE_ERROR_SPRITE:ERROR_SPRITE, xo + 99, yo + 45, 28, 21);
         }
     }
 

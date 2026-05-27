@@ -97,7 +97,7 @@ public abstract class ItemStackMixin {
     @Unique
     private static void testTags(ItemStack stack, Consumer<Component> textConsumer) {
         BuiltInRegistries.ITEM.getTags().map(HolderSet.Named::key).forEach(tag->{
-            if (stack.is(tag)) textConsumer.accept(Component.translatable("item.tags", tag.location().getPath()).withStyle(ChatFormatting.DARK_AQUA));
+            if (stack.is(tag)) textConsumer.accept(Component.translatable("item.tags", tag.location().toString()).withStyle(ChatFormatting.DARK_AQUA));
         });
     }
 

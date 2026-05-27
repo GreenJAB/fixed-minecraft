@@ -17,15 +17,10 @@ public abstract class AdvancementsScreenMixin {
     int newPAGE_WIDTH = 423;
      @Unique
      int newPAGE_HEIGHT = 218;
-    @ModifyConstant(method = "extractRenderState", constant = @Constant(intValue = 252))
+    @ModifyConstant(method = {"extractRenderState","mouseClicked","extractWindow"}, constant = @Constant(intValue = 252))
     private int largerScreenX1(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = "extractRenderState", constant = @Constant(intValue = 140))
+    @ModifyConstant(method = {"extractRenderState","mouseClicked","extractWindow"}, constant = @Constant(intValue = 140))
     private int largerScreenY1(int constant) {return newWINDOW_HEIGHT;}
-
-    @ModifyConstant(method = "mouseClicked", constant = @Constant(intValue = 252))
-    private int largerScreenX2(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = "mouseClicked", constant = @Constant(intValue = 140))
-    private int largerScreenY2(int constant) {return newWINDOW_HEIGHT;}
 
     @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 234))
     private int largerScreenX3(int constant) {return newPAGE_WIDTH;}
@@ -33,11 +28,6 @@ public abstract class AdvancementsScreenMixin {
     private int largerScreenY3(int constant) {return newPAGE_HEIGHT;}
     @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 117))
     private int largerScreenX3a(int constant) {return newPAGE_WIDTH/2;}
-
-    @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 252))
-    private int largerScreenX4(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 140))
-    private int largerScreenY4(int constant) {return newWINDOW_HEIGHT;}
 
     @ModifyConstant(method = "extractWindow", constant = @Constant(intValue = 256))
     private int largerScreen(int constant) {return 512;}

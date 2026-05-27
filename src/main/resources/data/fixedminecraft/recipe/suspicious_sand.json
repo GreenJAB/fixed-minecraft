@@ -1,0 +1,10 @@
+{
+  "type": "fixedminecraft:suspicious_block",
+  "category": "misc",
+  "inside": "#fixedminecraft:not_in_suspicious_block",
+  "group": "suspicious",
+  "result": {
+    "id": "minecraft:suspicious_sand"
+  },
+  "base": "minecraft:sand"
+}

@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
+import net.greenjab.fixedminecraft.registry.registries.TrimMaterialsRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
@@ -171,4 +172,9 @@ public abstract class ItemsMixin {
     private static Item.Properties fireWorkCooldown(Item.Properties properties) {
         return properties.useCooldown(5);}
 
+    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
+    @At(value = "CONSTANT", args = "stringValue=coal"), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;COAL:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
+    private static Item coalTrimMaterial(String name) {
+        return registerItem("coal", new Item.Properties().trimMaterial(TrimMaterialsRegistry.COAL));}
 }

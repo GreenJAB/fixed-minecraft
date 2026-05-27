@@ -43,10 +43,10 @@ public abstract class MerchantMenuMixin extends AbstractContainerMenu implements
 
     @Unique
     private static final Identifier[] EMPTY_ARMOR_SLOT_TEXTURES = new Identifier[]{
-            Identifier.withDefaultNamespace("container/slot/helmet"),
-            Identifier.withDefaultNamespace("container/slot/chestplate"),
-            Identifier.withDefaultNamespace("container/slot/leggings"),
-            Identifier.withDefaultNamespace("container/slot/boots") };
+            Identifier.withDefaultNamespace("container/slot/helmet_dark"),
+            Identifier.withDefaultNamespace("container/slot/chestplate_dark"),
+            Identifier.withDefaultNamespace("container/slot/leggings_dark"),
+            Identifier.withDefaultNamespace("container/slot/boots_dark") };
 
     @Shadow
     protected abstract void playTradeSound();

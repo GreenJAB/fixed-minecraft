@@ -15,6 +15,7 @@ import net.greenjab.fixedminecraft.screens.NewAnvilScreen;
 import net.greenjab.fixedminecraft.screens.NewEnchantmentScreen;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.greenjab.fixedminecraft.render.ChiseledBookRenderer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
@@ -73,5 +74,9 @@ public class FixedMinecraftClient implements ClientModInitializer {
         return EquipmentClientInfo.builder()
                 .addHumanoidLayers(Identifier.withDefaultNamespace(id))
                 .build();
+    }
+
+    public static boolean usingCustomContainers() {
+        return (Minecraft.getInstance().getResourcePackRepository().getSelectedPacks().stream().anyMatch(pack -> pack.getTitle().getString().toLowerCase().contains("containertest2")));
     }
 }

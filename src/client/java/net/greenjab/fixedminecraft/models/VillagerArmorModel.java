@@ -37,8 +37,8 @@ public class VillagerArmorModel <S extends VillagerRenderState> extends EntityMo
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         modelPartData.addOrReplaceChild("head",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -9.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
-                PartPose.ZERO);
+                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -11.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
+                PartPose.offset(0, 2, 0));
         modelPartData.addOrReplaceChild("body",
                 CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.extend(0.2F, 0.0F, 1.0F)),
                 PartPose.ZERO);
@@ -46,7 +46,6 @@ public class VillagerArmorModel <S extends VillagerRenderState> extends EntityMo
                 CubeListBuilder.create()
                         .texOffs(40, 16).addBox(-8.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.extend(-0.25F))
                         .texOffs(40, 16).mirror().addBox(4.0F, -2.0F, -1.0F, 4.0F, 8.0F, 4.0F, cubeDeformation.extend(-0.25F)),
-                //ModelTransform.origin(0.0F, 2.0F, 0.0F));
                 PartPose.rotation(-0.75f, 0, 0).translated(0.0F, 2.0F, 0.0F));
         modelPartData.addOrReplaceChild("right_leg",
                 CubeListBuilder.create().texOffs(0, 16).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, cubeDeformation.extend(0.19F, 0.26F, 0.26F)),
