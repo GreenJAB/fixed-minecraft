@@ -46,10 +46,10 @@ public abstract class ShulkerBoxScreenMixin {
                 String[] type = BuiltInRegistries.BLOCK.wrapAsHolder(blockState.getBlock()).getRegisteredName().split(":");
                 if (!Objects.equals(type[0], "minecraft")) return;
                 ((CustomContainerTextureHolder) MS).fixedminecraft$setCustomTexture("/" + type[1].split("_")[0]);
+                if (!MS.getTitle().getString().isEmpty())
+                    ((CustomContainerTextureHolder) MS).fixedminecraft$setCustomTexture(((CustomContainerTextureHolder) MS).fixedminecraft$getCustomTexture() + "_label");
             }
         }
-        if (!MS.getTitle().getString().isEmpty())
-            ((CustomContainerTextureHolder) MS).fixedminecraft$setCustomTexture(((CustomContainerTextureHolder) MS).fixedminecraft$getCustomTexture() + "_label");
     }
     @ModifyArg(method = "extractBackground", at = @At(value = "INVOKE",
                                                       target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"

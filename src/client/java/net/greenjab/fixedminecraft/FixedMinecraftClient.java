@@ -77,6 +77,6 @@ public class FixedMinecraftClient implements ClientModInitializer {
     }
 
     public static boolean usingCustomContainers() {
-        return (Minecraft.getInstance().getResourcePackRepository().getSelectedPacks().stream().anyMatch(pack -> pack.getTitle().getString().toLowerCase().contains("containertest2")));
+        return (Minecraft.getInstance().getResourcePackRepository().getSelectedPacks().stream().anyMatch(pack -> pack.getTitle().getString().toLowerCase().contains("recolourful containers")));
     }
 }

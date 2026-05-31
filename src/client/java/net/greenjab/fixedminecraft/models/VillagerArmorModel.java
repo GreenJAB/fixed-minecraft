@@ -37,8 +37,8 @@ public class VillagerArmorModel <S extends VillagerRenderState> extends EntityMo
         MeshDefinition modelData = new MeshDefinition();
         PartDefinition modelPartData = modelData.getRoot();
         modelPartData.addOrReplaceChild("head",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -11.65F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
-                PartPose.offset(0, 2, 0));
+                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -11.5F, -4.0F, 8.0F, 8.0F, 8.0F, cubeDeformation),
+                PartPose.offset(0, 1.85f, 0));
         modelPartData.addOrReplaceChild("body",
                 CubeListBuilder.create().texOffs(16, 16).addBox(-4.0F, 1.0F, -2.0F, 8.0F, 12.0F, 4.0F, cubeDeformation.extend(0.2F, 0.0F, 1.0F)),
                 PartPose.ZERO);
@@ -110,7 +110,7 @@ public class VillagerArmorModel <S extends VillagerRenderState> extends EntityMo
         super.setupAnim(state);
         this.head.yRot = state.yRot * (float) (Math.PI / 180.0);
         this.head.xRot = state.xRot * (float) (Math.PI / 180.0);
-        if (state.isFullyFrozen) {
+        if (state.isUnhappy) {
             this.head.zRot = 0.3F * Mth.sin(0.45F * state.ageInTicks);
             this.head.xRot = 0.4F;
         } else {

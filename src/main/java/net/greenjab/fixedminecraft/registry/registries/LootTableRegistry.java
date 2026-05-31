@@ -14,7 +14,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 public class LootTableRegistry {
 
     public static final ResourceKey<LootTable> SWAMP_HUT = registerLoot_Table("chests/swamp_hut");
+    public static final ResourceKey<LootTable> WOODLAND_MANSION_COMMON = registerLoot_Table("chests/woodland_mansion_common");
+    public static final ResourceKey<LootTable> WOODLAND_MANSION_POT = registerLoot_Table("chests/woodland_mansion_pot");
     public static final ResourceKey<LootTable> SUPER_CHARGED_CREEPER_PLAYER_LOOT_TABLE = registerLoot_Table("gameplay/other/super_charged_creeper_player");
+
     private static ResourceKey<LootTable> registerLoot_Table(String id) {
         return registerLootTable(ResourceKey.create(Registries.LOOT_TABLE, FixedMinecraft.id(id)));
     }

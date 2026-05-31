@@ -33,3 +33,5 @@ accessible field net/minecraft/world/level/storage/loot/BuiltInLootTables LOCATI
 accessible field net/minecraft/world/inventory/MerchantMenu trader Lnet/minecraft/world/item/trading/Merchant;
 accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platform/InputConstants$Key;
 accessible field net/minecraft/world/inventory/AbstractMountInventoryMenu mount Lnet/minecraft/world/entity/LivingEntity;
+accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionPiecePlacer
+accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionGrid

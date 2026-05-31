@@ -1,0 +1,75 @@
+{
+    "type": "minecraft:woodland_mansion",
+    "biomes": "#minecraft:has_structure/woodland_mansion",
+    "spawn_overrides": {
+        "creature": {
+            "bounding_box": "piece",
+            "spawns": [
+                {
+                    "type": "minecraft:vindicator",
+                    "maxCount": 4,
+                    "minCount": 4,
+                    "weight": 100
+                },
+                {
+                    "type": "minecraft:evoker",
+                    "maxCount": 1,
+                    "minCount": 1,
+                    "weight": 50
+                },
+                {
+                    "type": "minecraft:spider",
+                    "maxCount": 2,
+                    "minCount": 2,
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:zombie",
+                    "maxCount": 2,
+                    "minCount": 2,
+                    "weight": 8
+                },
+                {
+                    "type": "minecraft:zombie_villager",
+                    "maxCount": 1,
+                    "minCount": 1,
+                    "weight": 4
+                },
+                {
+                    "type": "minecraft:skeleton",
+                    "maxCount": 1,
+                    "minCount": 1,
+                    "weight": 4
+                },
+                {
+                    "type": "minecraft:enderman",
+                    "maxCount": 4,
+                    "minCount": 1,
+                    "weight": 10
+                },
+                {
+                    "type": "minecraft:witch",
+                    "maxCount": 1,
+                    "minCount": 1,
+                    "weight": 20
+                }
+            ]
+        },
+        "ambient": {
+            "bounding_box": "piece",
+            "spawns": [
+                {
+                    "maxCount": 4,
+                    "minCount": 4,
+                    "type": "minecraft:bat",
+                    "weight": 20
+                }
+            ]
+        },
+        "monster": {
+            "bounding_box": "piece",
+            "spawns": []
+        }
+    },
+    "step": "surface_structures"
+}
