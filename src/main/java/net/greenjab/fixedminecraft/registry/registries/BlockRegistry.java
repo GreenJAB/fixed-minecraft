@@ -115,28 +115,28 @@ public class BlockRegistry {
     );
     public static final Block AZALEA_SIGN = register(
             "azalea_sign",
-            /* method_63365 */ settings -> new StandingSignBlock(AZALEA_WOODTYPE, settings),
+           settings -> new StandingSignBlock(AZALEA_WOODTYPE, settings),
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GREEN).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava()
     );
     public static final Block AZALEA_WALL_SIGN = register(
             "azalea_wall_sign",
-            /* method_63355 */ settings -> new WallSignBlock(AZALEA_WOODTYPE, settings),
+            settings -> new WallSignBlock(AZALEA_WOODTYPE, settings),
             copyLootTable(AZALEA_SIGN).mapColor(MapColor.COLOR_LIGHT_GREEN).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava()
     );
     public static final Block AZALEA_HANGING_SIGN = register(
             "azalea_hanging_sign",
-            /* method_63346 */ settings -> new CeilingHangingSignBlock(AZALEA_WOODTYPE, settings),
+            settings -> new CeilingHangingSignBlock(AZALEA_WOODTYPE, settings),
             BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_LIGHT_GREEN).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava()
     );
     public static final Block AZALEA_WALL_HANGING_SIGN = register(
             "azalea_wall_hanging_sign",
-            /* method_63387 */ settings -> new WallHangingSignBlock(AZALEA_WOODTYPE, settings),
+           settings -> new WallHangingSignBlock(AZALEA_WOODTYPE, settings),
             copyLootTable(AZALEA_HANGING_SIGN).mapColor(MapColor.COLOR_LIGHT_GREEN).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollision().strength(1.0F).ignitedByLava()
     );
 
     public static final Block AZALEA_PRESSURE_PLATE = register(
             "azalea_pressure_plate",
-            /* method_63373 */ settings -> new PressurePlateBlock(AZALEA_BLOCKSETTYPE, settings),
+            settings -> new PressurePlateBlock(AZALEA_BLOCKSETTYPE, settings),
             BlockBehaviour.Properties.of()
                     .mapColor(AZALEA_PLANKS.defaultMapColor())
                     .forceSolidOn()
@@ -148,7 +148,7 @@ public class BlockRegistry {
     );
     public static final Block AZALEA_TRAPDOOR = register(
             "azalea_trapdoor",
-            /* method_63308 */ settings -> new TrapDoorBlock(AZALEA_BLOCKSETTYPE, settings),
+            settings -> new TrapDoorBlock(AZALEA_BLOCKSETTYPE, settings),
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_LIGHT_GREEN)
                     .instrument(NoteBlockInstrument.BASS)
@@ -158,7 +158,7 @@ public class BlockRegistry {
                     .ignitedByLava()
     );
     public static final Block AZALEA_BUTTON = register(
-            "azalea_button", /* method_63251 */ settings -> new ButtonBlock(AZALEA_BLOCKSETTYPE, 30, settings), buttonProperties()
+            "azalea_button",settings -> new ButtonBlock(AZALEA_BLOCKSETTYPE, 30, settings), buttonProperties()
     );
     public static final Block AZALEA_STAIRS = registerOldStairsBlock("azalea_stairs", AZALEA_PLANKS);
     public static final Block AZALEA_SLAB = register(
@@ -168,7 +168,7 @@ public class BlockRegistry {
     );
     public static final Block AZALEA_FENCE_GATE = register(
             "azalea_fence_gate",
-            /* method_63215 */ settings -> new FenceGateBlock(AZALEA_WOODTYPE, settings),
+            settings -> new FenceGateBlock(AZALEA_WOODTYPE, settings),
             BlockBehaviour.Properties.of().mapColor(AZALEA_PLANKS.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).ignitedByLava()
     );
     public static final Block AZALEA_FENCE = register(
@@ -183,7 +183,7 @@ public class BlockRegistry {
     );
     public static final Block AZALEA_DOOR = register(
             "azalea_door",
-            /* method_63207 */ settings -> new DoorBlock(AZALEA_BLOCKSETTYPE, settings),
+            settings -> new DoorBlock(AZALEA_BLOCKSETTYPE, settings),
             BlockBehaviour.Properties.of()
                     .mapColor(AZALEA_PLANKS.defaultMapColor())
                     .instrument(NoteBlockInstrument.BASS)
@@ -212,7 +212,7 @@ public class BlockRegistry {
                     .replaceable()
                     .noCollision()
                     .instabreak()
-                    .lightLevel(/* method_26150 */ state -> 10)
+                    .lightLevel(state -> 10)
                     .sound(SoundType.WOOL)
                     .pushReaction(PushReaction.DESTROY)
     );
@@ -225,7 +225,7 @@ public class BlockRegistry {
                     .forceSolidOn()
                     .strength(3.5F)
                     .sound(SoundType.LANTERN)
-                    .lightLevel(/* method_24419 */ litBlockEmission(10))
+                    .lightLevel(litBlockEmission(10))
                     .noOcclusion()
                     .pushReaction(PushReaction.DESTROY)
     );

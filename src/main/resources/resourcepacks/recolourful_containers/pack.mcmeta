@@ -1,0 +1,61 @@
+{
+    "pack": {
+        "pack_format": 15, 
+        "supported_formats": [0, 99], 
+        "min_format": 0, 
+        "max_format": 99, 
+        "description": "§7Bring §cc§6o§el§2o§9u§5r §7to GUIs!§r\n§3By Vi_Tul"
+    },
+    "language":{
+        "en_us_vanilla":{
+            "name":"English §3(Vanilla+)§r",
+            "region":"US"
+        }
+    },
+    "overlays": {
+        "entries": [
+            {
+                "directory": "1.20.2-1.20.4",
+                "formats": [18, 31], 
+                "min_format": 18, 
+                "max_format": 31 
+            },
+            {
+                "directory": "1.20.5-1.20.6",
+                "formats": [32, 33], 
+                "min_format": 32, 
+                "max_format": 33 
+            },
+            {
+                "directory": "1.21.0-1.21.1",
+                "formats": [34, 41], 
+                "min_format": 34, 
+                "max_format": 41 
+            },
+            {
+                "directory": "-1.21.2_assets",
+                "formats": [42, 99], 
+                "min_format": 42, 
+                "max_format": 99 
+            },
+            {
+                "directory": "1.21.2-1.21.5",
+                "formats": [42, 56], 
+                "min_format": 42, 
+                "max_format": 56 
+            },
+            {
+                "directory": "1.21.6-1.21.11",
+                "formats": [57, 78], 
+                "min_format": 57, 
+                "max_format": 78 
+            },
+            {
+                "directory": "26.1",
+                "formats": [79, 99], 
+                "min_format": 79, 
+                "max_format": 99 
+            }
+        ]
+    }
+}

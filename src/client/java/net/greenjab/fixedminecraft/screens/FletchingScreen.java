@@ -12,7 +12,7 @@ import net.minecraft.world.inventory.Slot;
 import org.jspecify.annotations.NonNull;
 
 public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
-    private static final Identifier ERROR_SPRITE = Identifier.withDefaultNamespace("container/grindstone/error");
+    private static final Identifier ERROR_SPRITE = FixedMinecraft.id("container/fletching/error");
     private static final Identifier FLETCHING_LOCATION = FixedMinecraft.id("textures/gui/container/fletching.png");
     private static final Identifier FLINT_SLOT_SPRITE = FixedMinecraft.id("container/slot/flint");
     private static final Identifier STICK_SLOT_SPRITE = FixedMinecraft.id("container/slot/stick");
@@ -51,7 +51,7 @@ public class FletchingScreen extends AbstractContainerScreen<FletchingMenu> {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, POTION_SLOT_SPRITE, xo + potionSlot.x, yo + potionSlot.y, 16, 16);
         }
 
-        if ((!flintSlot.hasItem() || !stickSlot.hasItem()) || !featherSlot.hasItem()) {
+        if ((flintSlot.hasItem() || stickSlot.hasItem() || featherSlot.hasItem() || potionSlot.hasItem())&&(!flintSlot.hasItem() || !stickSlot.hasItem() || !featherSlot.hasItem())) {
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ERROR_SPRITE, xo + 87, yo + 32, 28, 21);
         }
     }

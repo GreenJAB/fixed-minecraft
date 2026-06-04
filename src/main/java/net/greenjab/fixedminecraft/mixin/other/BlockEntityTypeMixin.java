@@ -2,76 +2,50 @@ package net.greenjab.fixedminecraft.mixin.other;
 
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.HangingSignBlockEntity;
-import net.minecraft.world.level.block.entity.ShelfBlockEntity;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Slice;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Mixin(BlockEntityType.class)
 public abstract class BlockEntityTypeMixin{
 
-    @Shadow
-    private static <T extends BlockEntity> BlockEntityType<T> register(String name, BlockEntityType.BlockEntitySupplier<? extends T> factory,
-                                                                       Block... validBlocks) {
-        return null;
+    @ModifyArg(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice(from =
+    @At(value = "CONSTANT", args = "stringValue=sign"), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;SIGN:Lnet/minecraft/world/level/block/entity/BlockEntityType;", opcode = Opcodes.PUTSTATIC)), index = 2)
+    private static Block[] sign(Block[] validBlocks) {
+        ArrayList<Block> newBlocks = new ArrayList<>(Arrays.asList(validBlocks));
+        newBlocks.add(BlockRegistry.AZALEA_SIGN);
+        newBlocks.add(BlockRegistry.AZALEA_WALL_SIGN);
+        Block[] newBlocksArray = new Block[newBlocks.size()];
+        for (int i = 0;i<newBlocksArray.length;i++) { newBlocksArray[i]=newBlocks.get(i); }
+        return newBlocksArray;
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;DROPPER:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
-            opcode = Opcodes.PUTSTATIC
-    )))
-    private static BlockEntityType<SignBlockEntity> sign(String name, BlockEntityType.BlockEntitySupplier<? extends SignBlockEntity> factory, Block[] validBlocks) {
-        return register("sign", SignBlockEntity::new,
-                Blocks.OAK_SIGN,Blocks.SPRUCE_SIGN,Blocks.BIRCH_SIGN,Blocks.ACACIA_SIGN,Blocks.CHERRY_SIGN,
-                Blocks.JUNGLE_SIGN, Blocks.DARK_OAK_SIGN,Blocks.PALE_OAK_SIGN,Blocks.OAK_WALL_SIGN,
-                Blocks.SPRUCE_WALL_SIGN,Blocks.BIRCH_WALL_SIGN,Blocks.ACACIA_WALL_SIGN,Blocks.CHERRY_WALL_SIGN,
-                Blocks.JUNGLE_WALL_SIGN,Blocks.DARK_OAK_WALL_SIGN,Blocks.PALE_OAK_WALL_SIGN,Blocks.CRIMSON_SIGN,
-                Blocks.CRIMSON_WALL_SIGN,Blocks.WARPED_SIGN,Blocks.WARPED_WALL_SIGN,Blocks.MANGROVE_SIGN,
-                Blocks.MANGROVE_WALL_SIGN,Blocks.BAMBOO_SIGN,Blocks.BAMBOO_WALL_SIGN,
-                BlockRegistry.AZALEA_SIGN, BlockRegistry.AZALEA_WALL_SIGN
-                );
+    @ModifyArg(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice(from =
+    @At(value = "CONSTANT", args = "stringValue=hanging_sign"), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;HANGING_SIGN:Lnet/minecraft/world/level/block/entity/BlockEntityType;", opcode = Opcodes.PUTSTATIC)), index = 2)
+    private static Block[] hanging_sign(Block[] validBlocks) {
+        ArrayList<Block> newBlocks = new ArrayList<>(Arrays.asList(validBlocks));
+        newBlocks.add(BlockRegistry.AZALEA_HANGING_SIGN);
+        newBlocks.add(BlockRegistry.AZALEA_WALL_HANGING_SIGN);
+        Block[] newBlocksArray = new Block[newBlocks.size()];
+        for (int i = 0;i<newBlocksArray.length;i++) { newBlocksArray[i]=newBlocks.get(i); }
+        return newBlocksArray;
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;SIGN:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
-            opcode = Opcodes.PUTSTATIC
-    )))
-    private static BlockEntityType<SignBlockEntity> hanging_sign(String name, BlockEntityType.BlockEntitySupplier<? extends SignBlockEntity> factory, Block[] validBlocks) {
-        return register("hanging_sign",HangingSignBlockEntity::new,
-                Blocks.OAK_HANGING_SIGN,Blocks.SPRUCE_HANGING_SIGN,Blocks.BIRCH_HANGING_SIGN,
-                Blocks.ACACIA_HANGING_SIGN, Blocks.CHERRY_HANGING_SIGN,Blocks.JUNGLE_HANGING_SIGN,
-                Blocks.DARK_OAK_HANGING_SIGN,Blocks.PALE_OAK_HANGING_SIGN,Blocks.CRIMSON_HANGING_SIGN,
-                Blocks.WARPED_HANGING_SIGN,Blocks.MANGROVE_HANGING_SIGN,Blocks.BAMBOO_HANGING_SIGN,
-                Blocks.OAK_WALL_HANGING_SIGN,Blocks.SPRUCE_WALL_HANGING_SIGN,Blocks.BIRCH_WALL_HANGING_SIGN,
-                Blocks.ACACIA_WALL_HANGING_SIGN,Blocks.CHERRY_WALL_HANGING_SIGN,Blocks.JUNGLE_WALL_HANGING_SIGN,
-                Blocks.DARK_OAK_WALL_HANGING_SIGN,Blocks.PALE_OAK_WALL_HANGING_SIGN,Blocks.CRIMSON_WALL_HANGING_SIGN,
-                Blocks.WARPED_WALL_HANGING_SIGN,Blocks.MANGROVE_WALL_HANGING_SIGN,Blocks.BAMBOO_WALL_HANGING_SIGN,
-                BlockRegistry.AZALEA_HANGING_SIGN, BlockRegistry.AZALEA_WALL_HANGING_SIGN
-        );
-    }
-
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice( from = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;CHISELED_BOOKSHELF:Lnet/minecraft/world/level/block/entity/BlockEntityType;",
-            opcode = Opcodes.PUTSTATIC
-    )))
-    private static BlockEntityType<ShelfBlockEntity> shelf(String name, BlockEntityType.BlockEntitySupplier<? extends ShelfBlockEntity> factory, Block[] validBlocks) {
-        return register("shelf", ShelfBlockEntity::new,
-                Blocks.OAK_SHELF,Blocks.SPRUCE_SHELF,Blocks.BIRCH_SHELF,
-                Blocks.ACACIA_SHELF, Blocks.CHERRY_SHELF,Blocks.JUNGLE_SHELF,
-                Blocks.DARK_OAK_SHELF,Blocks.PALE_OAK_SHELF,Blocks.CRIMSON_SHELF,
-                Blocks.WARPED_SHELF,Blocks.MANGROVE_SHELF,Blocks.BAMBOO_SHELF,
-                BlockRegistry.AZALEA_SHELF
-        );
+    @ModifyArg(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;register(Ljava/lang/String;Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;[Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/entity/BlockEntityType;", ordinal = 0), slice = @Slice(from =
+    @At(value = "CONSTANT", args = "stringValue=shelf"), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/entity/BlockEntityType;SHELF:Lnet/minecraft/world/level/block/entity/BlockEntityType;", opcode = Opcodes.PUTSTATIC)), index = 2)
+    private static Block[] shelf(Block[] validBlocks) {
+        ArrayList<Block> newBlocks = new ArrayList<>(Arrays.asList(validBlocks));
+        newBlocks.add(BlockRegistry.AZALEA_SHELF);
+        Block[] newBlocksArray = new Block[newBlocks.size()];
+        for (int i = 0;i<newBlocksArray.length;i++) { newBlocksArray[i]=newBlocks.get(i); }
+        return newBlocksArray;
     }
 }

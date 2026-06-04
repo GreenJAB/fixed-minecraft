@@ -1,0 +1,250 @@
+{
+    "providers": [
+        {"type": "space",
+            "advances": {
+                "\uEB00": -16
+            }
+        },
+        {"type": "space",
+            "advances": {
+                "\uEB01": -8
+            }
+        },
+        {"type": "space",
+            "advances": {
+                "\uEB02": -5
+            }
+        },
+        {"type": "space",
+            "advances": {
+                "\uEB03": -169
+            }
+        },
+        {"type": "space",
+            "advances": {
+                "\uEB04": -1
+            }
+        },
+        {"type": "space",
+            "advances": {
+                "\uEB05": 1
+            }
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/enchant.png",
+            "ascent": 0,
+            "height": 128,
+            "chars": [
+                "\uEC01"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/compas.png",
+            "ascent": 0,
+            "height": 231,
+            "chars": [
+                "\uEC02"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/ender_eye.png",
+            "ascent": 0,
+            "height": 90,
+            "chars": [
+                "\uEC03"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/dropper/dropper.png",
+            "ascent": 0,
+            "height": 231,
+            "chars": [
+                "\uEC04"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/dropper/piston_1.png",
+            "ascent": 0,
+            "height": 128,
+            "chars": [
+                "\uEC05"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/dropper/piston_2.png",
+            "ascent": 0,
+            "height": 48,
+            "chars": [
+                "\uEC06"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/dispenser/dispenser.png",
+            "ascent": 0,
+            "height": 231,
+            "chars": [
+                "\uEC07"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/dispenser/dispenser_bow.png",
+            "ascent": 0,
+            "height": 204,
+            "chars": [
+                "\uEC08"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/smithing.png",
+            "ascent": 0,
+            "height": 252,
+            "chars": [
+                "\uEC10"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/anim/sawblade.png",
+            "ascent": 0,
+            "height": 134,
+            "chars": [
+                "\uEC11"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/minecart.png",
+            "ascent": 21,
+            "height": 96,
+            "chars": [
+                "\uEA00"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/acacia.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA01"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/birch.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA02"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/cherry.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA03"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/dark_oak.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA04"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/jungle.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA05"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/mangrove.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA06"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/oak.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA07"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/pale_oak.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA08"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/spruce.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA09"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/bamboo.png",
+            "ascent": 21,
+            "height": 96,
+            "chars": [
+                "\uEA0A"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/chest_boat/azalea.png",
+            "ascent": 21,
+            "height": 101,
+            "chars": [
+                "\uEA0B"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/hopper_minecart.png",
+            "ascent": 21,
+            "height": 96,
+            "chars": [
+                "\uEA0C"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "minecraft:opti_vi_tul/gui/dispenser_minecart.png",
+            "ascent": 21,
+            "height": 96,
+            "chars": [
+                "\uEA0D"
+            ]
+        }
+    ]
+}

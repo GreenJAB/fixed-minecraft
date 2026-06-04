@@ -9,8 +9,8 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemGroupRegistry {
 
-    public static final CreativeModeTab FIXED = FabricCreativeModeTab.builder().title(Component.translatable("itemgroup.fixed"))
-            .icon( () -> new ItemStack(ItemRegistry.DRAGON_FIREWORK_ROCKET))
+    public static final CreativeModeTab FIXED = FabricCreativeModeTab.builder().title(Component.translatable("itemgroup.fixedminecraft"))
+            .icon( () -> new ItemStack(ItemRegistry.NETHERITE_ANVIL))
             .displayItems(
                      (_, entries) -> {
                         entries.accept(ItemRegistry.DRAGON_FIREWORK_ROCKET);

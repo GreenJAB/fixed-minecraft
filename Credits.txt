@@ -2,25 +2,33 @@ Main Development:
 Green_Jab
 
 Major Dev Contributions:
-Mapbook - Nettakrim
-Terrain - Quidivo
-Enchanting System Setup - Laazuli
-Textures - Eleanor
+Laazuli - Enchanting System Setup
+Nettakrim - Mapbook
+Quidivo - Terrain
 
 Other Dev Contributers:
 KikuGie
 Trigam
+Eleanor - Textures
+SYCHONi DjiNN - Textures
 
 Code from other Mods Used:
-Stamina Rendering - Apple Skin - Squeek502
-Chiseled Bookshelf Rendering - Better Bookshelves - Bawnorton
-Green Glint Rendering - Enchant The Rainbow - Pepperoni-Jabroni
-Villager Armour Rendering - Villager Armor Layer - Viola-Siemens
+Stamina Rendering - Apple Skin - Squeek502: https://modrinth.com/mod/appleskin
+Chiseled Bookshelf Rendering - Better Bookshelves - Bawnorton: https://modrinth.com/mod/betterbookshelves
+Green Glint Rendering - Enchant The Rainbow - Pepperoni-Jabroni: https://modrinth.com/mod/enchant-the-rainbow
+Villager Armour Rendering - Villager Armor Layer - Viola-Siemens: https://modrinth.com/mod/villager-armor-layer/versions
+
+External Textures/Music Used:
+Dragon Fight Boss Music - Resonant Tonality: https://www.youtube.com/watch?v=fzzQg34FQX0
+Vanilla Tweaks Resource Packs: https://vanillatweaks.net/picker/resource-packs/
+Unique Goat Horns - Cubeoidal: https://modrinth.com/resourcepack/unique-goat-horns
+Enchanted Books Re-covered - carl_classic: https://modrinth.com/resourcepack/enchanted-books-re-covered
+Almost Vanilla Potions - Delled: https://modrinth.com/resourcepack/almost-vanilla-potions
+Recolourful Containers - Vi_Tul: https://modrinth.com/resourcepack/recolourful-containers-gui
 
 Other Credits:
-Dragon Fight Boss Music - Resonant Tonality
-Vanilla Tweaks Resource Packs
 Friend and Ideas Discussions: Bricky
+
 
 Language:
 Russian: oleniz

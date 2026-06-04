@@ -39,7 +39,6 @@ public class CustomModelLayers {
         ModelLayerRegistry.registerModelLayer(AZALEA_BOAT, BoatModel::createBoatModel);
         ModelLayerRegistry.registerModelLayer(AZALEA_CHEST_BOAT, BoatModel::createChestBoatModel);
 
-       // ModelLayerRegistry.registerModelLayer(MULE_ARMOR, DonkeyModel.createBodyLayer(0.92F)));
         ModelLayerRegistry.registerModelLayer(MULE_ARMOR, CustomModelLayers::createMuleArmorModel);
 
         EntityRenderers.register(ItemRegistry.AZALEA_BOAT_ENTITY, context -> new BoatRenderer(context, CustomModelLayers.AZALEA_BOAT));

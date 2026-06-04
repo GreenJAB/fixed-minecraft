@@ -82,7 +82,7 @@ public class FixedMinecraft implements ModInitializer {
                 ResourceManagerHelper.registerBuiltinResourcePack(
                 FixedMinecraft.id("tiered_crafting"),
                 modContainer,
-                Component.nullToEmpty("fixed.tiered_crafting"),
+                Component.nullToEmpty("fixedminecraft.tiered_crafting"),
                 ResourcePackActivationType.NORMAL
         ));
 
@@ -90,7 +90,7 @@ public class FixedMinecraft implements ModInitializer {
                 ResourceManagerHelper.registerBuiltinResourcePack(
                 FixedMinecraft.id("removed_features_21_11"),
                 modContainer,
-                Component.nullToEmpty("fixed.removed_1.21"),
+                Component.nullToEmpty("fixedminecraft.removed_1.21"),
                 ResourcePackActivationType.DEFAULT_ENABLED
         ));
 

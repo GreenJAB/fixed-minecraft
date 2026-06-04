@@ -56,13 +56,34 @@ public class FixedMinecraftClient implements ClientModInitializer {
         EntityRendererRegistry.registerEntityRenderer();
         CustomEntityModelLayerRegistry.registerEntityModelLayer();
 
-        FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer ->
-                ResourceManagerHelper.registerBuiltinResourcePack(
-                FixedMinecraft.id( "greentweaks"),
-                modContainer,
-                Component.translatable("fixed.green_tweaks"),
-                ResourcePackActivationType.NORMAL
-        ));
+        FabricLoader.getInstance().getModContainer("fixedminecraft").ifPresent(modContainer -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "green_tweaks"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.green_tweaks"),
+                    ResourcePackActivationType.NORMAL
+            );
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "recolourful_containers"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.recolourful_containers"),
+                    ResourcePackActivationType.NORMAL
+            );
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "re_covered"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.re_covered"),
+                    ResourcePackActivationType.NORMAL
+            );
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "almost_vanilla_potions"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.almost_vanilla_potions"),
+                    ResourcePackActivationType.NORMAL
+            );
+        });
+
+
     }
     private static EquipmentClientInfo createHumanoidAndHorseModel(String id) {
         return EquipmentClientInfo.builder()
@@ -77,6 +98,6 @@ public class FixedMinecraftClient implements ClientModInitializer {
     }
 
     public static boolean usingCustomContainers() {
-        return (Minecraft.getInstance().getResourcePackRepository().getSelectedPacks().stream().anyMatch(pack -> pack.getTitle().getString().toLowerCase().contains("recolourful containers")));
+        return (Minecraft.getInstance().getResourcePackRepository().getSelectedPacks().stream().anyMatch(pack -> pack.location().id().toLowerCase().contains("recolourful_containers")));
     }
 }
