@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerInput;
@@ -43,7 +44,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
             if (bl4) {
                 int max = input.getMaxDamage();
                 ItemStack output = input.copy();
-                output.setDamageValue(input.getDamageValue() + max / 4);
+                output.setDamageValue(input.getDamageValue() + Mth.ceil(max / 4f));
                 if (input.getDamageValue() + max / 4 >= max) {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));
@@ -52,7 +53,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
             } else {
                 int max = additional.getMaxDamage();
                 ItemStack output = additional.copy();
-                output.setDamageValue(additional.getDamageValue() + max / 4);
+                output.setDamageValue(additional.getDamageValue() + Mth.ceil(max / 4f));
                 if (input.getDamageValue() + max / 4 >= max) {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));

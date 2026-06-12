@@ -55,10 +55,8 @@ public abstract class EntityRendererMixin <T extends Entity, S extends EntityRen
                            leashData2.endBlockLight = i;
                            leashData2.startSkyLight = k;
                            leashData2.endSkyLight = l;
-
                    }
                }
-
            }
        }
     }

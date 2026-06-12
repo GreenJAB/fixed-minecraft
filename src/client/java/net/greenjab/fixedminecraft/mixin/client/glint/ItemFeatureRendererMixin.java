@@ -57,5 +57,5 @@ public abstract class ItemFeatureRendererMixin {
     @Unique
     private static boolean useTransparentGlint(RenderType renderType) {
         return Minecraft.useShaderTransparency() && renderType.outputTarget() == OutputTarget.ITEM_ENTITY_TARGET;
-    }//*/
+    }
 }

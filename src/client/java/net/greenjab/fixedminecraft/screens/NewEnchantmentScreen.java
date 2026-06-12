@@ -165,18 +165,7 @@ public class NewEnchantmentScreen extends AbstractContainerScreen< NewEnchantmen
                 if (this.isHovering(60, 16 + 18 * i, 108, 17, mouseX, mouseY) && enchantLevel >= 0) {
                     List<Component> texts = Lists.newArrayList();
 
-                    /*ItemEnchantments enchantments = this.menu.getSlot(i+2).getItem().getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-                    for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
-                        Holder<Enchantment> enchantment = entry.getKey();
-                        texts.add(
-                                Component.translatable("container.enchant.clue", Enchantment.getFullname(enchantment, enchantments.getLevel(enchantment)))
-                                        .withStyle(ChatFormatting.WHITE)
-                        );
-                        break;
-                    }*/
-
                     if (!infiniteMaterials) {
-                        //texts.add(CommonComponents.EMPTY);
                         if (this.minecraft.player.experienceLevel < minLevel) {
                             texts.add(Component.translatable("container.enchant.level.requirement", this.menu.costs[i]).withStyle(ChatFormatting.RED));
                         } else {

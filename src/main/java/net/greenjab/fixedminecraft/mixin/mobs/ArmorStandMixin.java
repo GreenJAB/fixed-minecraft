@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -40,7 +41,7 @@ public abstract class ArmorStandMixin extends LivingEntity {
         if (player.isShiftKeyDown()) {
             EquipmentSlot[] slots = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET, EquipmentSlot.MAINHAND};
             for (EquipmentSlot slot : slots) {
-                if (!this.isDisabled(slot)) {
+                if (!this.isDisabled(slot) && !(player.equipment.get(slot).is(ModTags.UNBREAKABLE) && player.equipment.get(slot).nextDamageWillBreak())) {
                     ArmorStand AS = (ArmorStand) (Object) this;
                     ItemStack tempItem = AS.getItemBySlot(slot);
                     AS.setItemSlot(slot, player.getItemBySlot(slot));

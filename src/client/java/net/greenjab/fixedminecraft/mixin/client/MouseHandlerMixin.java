@@ -24,7 +24,6 @@ public abstract class MouseHandlerMixin {
                                                target = "Lnet/minecraft/world/entity/player/Inventory;setSelectedSlot(I)V"
     ), cancellable = true)
     public void addHotBarScroller(long handle, double xoffset, double yoffset, CallbackInfo ci, @Local Inventory inventory) {
-
         final Direction direction = Math.signum(yoffset) > 0
                 ? Direction.UP : Direction.DOWN;
         if (HotbarCycler.getCycleKeyBinding().isDown()){

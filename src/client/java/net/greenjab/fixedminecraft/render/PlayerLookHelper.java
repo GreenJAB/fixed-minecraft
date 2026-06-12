@@ -104,7 +104,6 @@ public abstract class PlayerLookHelper {
         displayText.add(book.getItemName());
         if (book.has(DataComponents.CUSTOM_NAME) || book.is(Items.WRITTEN_BOOK)) {
             Style s = book.getHoverName().getStyle().withItalic(true).withColor(-1);
-            //s.withItalic(true);
             displayText.add(book.getHoverName().toFlatList(s).getFirst());
         }
         if (book.is(ItemRegistry.MAP_BOOK)) {

@@ -1,15 +1,11 @@
 package net.greenjab.fixedminecraft;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.scores.DisplaySlot;
 import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
 public class CustomData {
-    public static ResourceKey<Biome> biomeSearch = Biomes.FOREST;
     public static void setData(LivingEntity entity, String name, int data) {
         if (entity.level().getScoreboard().getObjective(name) == null) {
             entity.level().getScoreboard().addObjective(

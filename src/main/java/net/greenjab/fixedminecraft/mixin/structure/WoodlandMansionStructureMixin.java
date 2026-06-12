@@ -31,7 +31,7 @@ import java.util.Optional;
 public abstract class WoodlandMansionStructureMixin {
 
     @Inject(method = "afterPlace", at = @At(value = "TAIL"))
-    private void noEmptyChestsInWoodlandMansion(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator,
+    private void placeHallwayDecorations(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator,
                                          RandomSource random, BoundingBox chunkBB, ChunkPos chunkPos, PiecesContainer pieces,
                                          CallbackInfo ci) {
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();

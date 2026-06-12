@@ -92,12 +92,6 @@ public class FixedMinecraftEnchantmentHelper {
         return Math.max(Mth.ceil(power*(isGold?0.5:1)),atLeast1?1:0);
     }
 
-    /**
-     * Counts nearby bookshelves; turned vanilla code snippet into dedicated method
-     * @param world The world the enchanting table is in
-     * @param enchantingTablePosition Its position as a net.minecraft.util.math.BlockPos
-     * @return Bookshelf-count capped to 15
-     */
     public static int countAccessibleBookshelves(Level world, BlockPos enchantingTablePosition) {
         int bookShelfCount = 0;
         for(BlockPos p : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
@@ -109,15 +103,6 @@ public class FixedMinecraftEnchantmentHelper {
         return bookShelfCount;
     }
 
-    /**
-     * Similar to net.minecraft.block.EnchantingTableBlock.canAccessPowerProvider(World w, BlockPos tablePos, BlockPos providerOffset).
-     * Checks whether the enchanting table at the given position can access the given block.
-     * @param world The world the enchanting table is in
-     * @param enchantingTablePosition It's position as a net.minecraft.util.math.BlockPos
-     * @param providerOffset Given provider offset from the enchanting table's position
-     * @param block net.minecraft.block.Block to look for
-     * @return true if block matches and can be accessed, false otherwise
-     */
     public static boolean canAccessBlock(Level world, BlockPos enchantingTablePosition, BlockPos providerOffset, Block block) {
         return world.getBlockState(enchantingTablePosition.offset(providerOffset)).is(block)
                && world.getBlockState(enchantingTablePosition.offset(providerOffset.getX() / 2, providerOffset.getY(), providerOffset.getZ() / 2))

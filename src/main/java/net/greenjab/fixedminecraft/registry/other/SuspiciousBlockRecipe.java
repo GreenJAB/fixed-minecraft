@@ -4,6 +4,7 @@ package net.greenjab.fixedminecraft.registry.other;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -145,5 +146,9 @@ public class SuspiciousBlockRecipe extends NormalCraftingRecipe {
                         new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)
                 )
         );
+    }
+
+    public @NonNull NonNullList<ItemStack> getRemainingItems(final CraftingInput input) {
+        return NonNullList.withSize(input.size(), ItemStack.EMPTY);
     }
 }
