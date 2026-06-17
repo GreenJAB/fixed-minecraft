@@ -19,6 +19,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.AbstractMinecartContainer;
+import net.minecraft.world.entity.vehicle.minecart.NewMinecartBehavior;
+import net.minecraft.world.entity.vehicle.minecart.OldMinecartBehavior;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DispenserMenu;
 import net.minecraft.world.item.Item;
@@ -34,6 +36,8 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
+
+import java.util.Objects;
 
 import static net.minecraft.world.level.block.DispenserBlock.DISPENSER_REGISTRY;
 
@@ -84,7 +88,23 @@ public class DispencerMinecartEntity extends AbstractMinecartContainer {
                 BlockPos pos = new BlockPos(x, y, z);
                 if (serverWorld.getBlockState(pos).is(Blocks.ACTIVATOR_RAIL)) {
                     this.cooldown = 8;
-                    Direction dir = Direction.fromYRot(this.getYRot());
+                    float rotation = this.getYRot();
+                    if (this.getBehavior() instanceof NewMinecartBehavior behavior) {
+                        if (behavior.cartHasPosRotLerp()) {
+                            rotation = behavior.getCartLerpYRot(0);
+                        }
+                    } else if (this.getBehavior() instanceof OldMinecartBehavior behavior) {
+                        Vec3 pos2 = behavior.getPos(x, y, z);
+                        if (pos2 != null) {
+                            Vec3 p0 = behavior.getPosOffs(x, y, z, 0.3F);
+                            Vec3 p1 = behavior.getPosOffs(x, y, z, -0.3F);
+                            p0 = Objects.requireNonNullElse(p0, pos2);
+                            p1 = Objects.requireNonNullElse(p1, pos2);
+                            Vec3 direction = p1.add(-p0.x, -p0.y, -p0.z);
+                            rotation = (float)(Math.atan2(direction.z, direction.x) * 180.0 / Math.PI);
+                        }
+                    }
+                    Direction dir = Direction.fromYRot(rotation);
                     if (dir.getAxis() == Direction.Axis.Z) dir = dir.getOpposite();
                     if (isFacingRight()) dir = dir.getOpposite();
                     dispense(serverWorld, Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, dir), pos);

@@ -43,31 +43,6 @@ public class LootTableAdditions {
 	  });*/
         //FabricLootTableBuilder.modifyPools
 
-        /*
-        ---Ancient City
-        ---Buried Treasure
-        ---Dungeon
-        ---Mineshaft
-        ---Stronghold
-        ---Trial chambers
-        ---Desert pyramid
-        ---Jungle temple
-        ---Igloo
-        ---Pillager outpost
-        ---Swamp hut
-        ???Mansion
-        ---Ruined portal
-        ---Ocean ruins
-        ---Shipwreck
-        ---Bastion
-        ---Fortress
-        ---End city
-
-        ---Fishing
-        ---Trail ruins
-        */
-
-
     }
 
     public static ResourceKey<PlacedFeature> of(String id) {

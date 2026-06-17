@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 public abstract class InventoryMenuMixin {
 
     @ModifyArg(method = "<init>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/InventoryMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;", ordinal = 0), index = 0)
-    private Slot lapiscost(Slot par1, @Local(argsOnly = true) Player owner, @Local(argsOnly = true) Inventory inventory,
+    private Slot bannersOnHead(Slot par1, @Local(argsOnly = true) Player owner, @Local(argsOnly = true) Inventory inventory,
                            @Local int i, @Local EquipmentSlot slot, @Local Identifier emptyIcon) {
         return new ArmorSlot(inventory,owner, slot, 39 - i, 8, 8 + i * 18, emptyIcon) {
             @Override

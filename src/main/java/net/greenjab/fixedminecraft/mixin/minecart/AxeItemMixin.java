@@ -25,15 +25,15 @@ public abstract class AxeItemMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/AxeItem;spawnSoundAndParticle(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/sounds/SoundEvent;I)V", ordinal = 0
     ))
-    private void addScrapedCopper(Level world, BlockPos pos, @Nullable Player player,
-                                       BlockState state, CallbackInfoReturnable<Optional<BlockState>> cir) {
-        if (world instanceof ServerLevel serverWorld && state.isCollisionShapeFullBlock(world, pos) && world.getRandom().nextFloat()<0.3f) {
+    private void addScrapedCopper(Level level, BlockPos pos, @Nullable Player player,
+                                  BlockState oldState, CallbackInfoReturnable<Optional<BlockState>> cir) {
+        if (level instanceof ServerLevel serverWorld && oldState.isCollisionShapeFullBlock(level, pos) && level.getRandom().nextFloat() < 0.3f) {
             Identifier lootTableId = FixedMinecraft.id("gameplay/other/scrape");
             Block.dropFromBlockInteractLootTable(
                     serverWorld,
                     ResourceKey.create(Registries.LOOT_TABLE, lootTableId),
-                    state,
-                    world.getBlockEntity(pos),
+                    oldState,
+                    level.getBlockEntity(pos),
                     null,
                     player,
                      (worldx, stack) -> Block.popResource(worldx, pos, stack)

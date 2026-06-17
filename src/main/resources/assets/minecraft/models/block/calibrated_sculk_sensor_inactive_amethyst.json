@@ -1,0 +1,7 @@
+{
+    "parent": "block/calibrated_sculk_sensor",
+    "textures": {
+        "amethyst": "block/calibrated_sculk_sensor_amethyst",
+        "tendrils": "block/sculk_sensor_tendril_inactive"
+    }
+}

@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;

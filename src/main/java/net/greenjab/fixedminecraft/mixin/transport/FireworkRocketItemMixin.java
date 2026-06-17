@@ -91,7 +91,7 @@ public abstract class FireworkRocketItemMixin {
     }
 
     @Inject(method = "useOn", at = @At("HEAD"),cancellable = true)
-    private void injected(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+    private void cantUseDragonRocketsOnGround(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
         if (context.getItemInHand().getItem().equals(ItemRegistry.DRAGON_FIREWORK_ROCKET)) cir.setReturnValue(InteractionResult.PASS);
     }
 }

@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.villager;
+package net.greenjab.fixedminecraft.mixin.structure;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;

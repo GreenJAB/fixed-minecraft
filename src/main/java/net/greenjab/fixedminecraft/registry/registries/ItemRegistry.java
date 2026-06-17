@@ -84,7 +84,7 @@ public class ItemRegistry {
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
 
     public static final Item PATINA = register("patina", PatinaItem::new, new Item.Properties());
-    public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSOTNE_LANTERN);
+    public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSTONE_LANTERN);
 
     public static final Item DISPENSER_MINECART = register(
             "dispenser_minecart", settings -> new MinecartItem(EntityTypeRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Properties().stacksTo(1)

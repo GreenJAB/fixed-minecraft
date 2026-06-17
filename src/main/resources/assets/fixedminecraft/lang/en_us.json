@@ -120,7 +120,7 @@
     "block.fixedminecraft.redstone_lantern": "Redstone Lantern",
     "key.fixedminecraft.hotbar_cycle": "Hotbar Cycle (Hold)",
     "item.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
-    "entity.fixedminecraft.dispenser_minecart": "Dispenser2 Minecart",
+    "entity.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
     "entity.fixedminecraft.villager.tired": "%s: *Yawn*",
     "entity.fixedminecraft.villager.lonely": "%s: I miss my friends",
     "entity.fixedminecraft.villager.hungry": "%s: I'm a little peckish",

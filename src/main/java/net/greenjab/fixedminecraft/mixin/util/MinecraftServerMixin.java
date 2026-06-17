@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.util;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.enchanting.Networking;
+import net.greenjab.fixedminecraft.network.Networking;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.minecraft.server.MinecraftServer;

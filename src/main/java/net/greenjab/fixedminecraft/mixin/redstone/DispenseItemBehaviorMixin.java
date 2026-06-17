@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,100 +27,93 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gamerules.GameRules;
 import org.jspecify.annotations.NonNull;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.Slice;
 
 import static net.greenjab.fixedminecraft.FixedMinecraft.corals;
 
 @Mixin(DispenseItemBehavior.class)
 public interface DispenseItemBehaviorMixin {
 
-    @ModifyArg(method = "bootStrap", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V", ordinal = 45
-    ), index = 1)
+    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V"), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC),
+            to = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;MINECART:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)), index = 1)
     private static DispenseItemBehavior hydrateCoralDispenser(DispenseItemBehavior behavior) {
 
         return new DefaultDispenseItemBehavior() {
-            private final DefaultDispenseItemBehavior fallbackBehavior = new DefaultDispenseItemBehavior();
+            private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
 
             @Override
-            public @NonNull ItemStack execute(@NonNull BlockSource pointer, @NonNull ItemStack stack) {
-                PotionContents potionContentsComponent = stack.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
-                if (!potionContentsComponent.is(Potions.WATER)) {
-                    return this.fallbackBehavior.dispense(pointer, stack);
+            public @NonNull ItemStack execute(@NonNull BlockSource source, @NonNull ItemStack dispensed) {
+                PotionContents potion = dispensed.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
+                if (!potion.is(Potions.WATER)) {
+                    return this.defaultDispenseItemBehavior.dispense(source, dispensed);
                 } else {
-                    ServerLevel serverWorld = pointer.level();
-                    BlockPos blockPos = pointer.pos();
-                    BlockPos blockPos2 = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
+                    ServerLevel level = source.level();
+                    BlockPos pos = source.pos();
+                    BlockPos target = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
 
                     if (corals.isEmpty()) BlockRegistry.addCoral();
-                    BlockState blockState = serverWorld.getBlockState(blockPos2);
+                    BlockState blockState = level.getBlockState(target);
                     if (!(blockState.is(BlockTags.CONVERTABLE_TO_MUD)|| corals.containsKey(blockState.getBlock()))) {
-                        return this.fallbackBehavior.dispense(pointer, stack);
+                        return this.defaultDispenseItemBehavior.dispense(source, dispensed);
                     } else {
-                        if (!serverWorld.isClientSide()) {
+                        if (!level.isClientSide()) {
+                            RandomSource random = level.getRandom();
                             for (int i = 0; i < 5; i++) {
-                                serverWorld.sendParticles(
-                                        ParticleTypes.SPLASH,
-                                        blockPos.getX() + serverWorld.getRandom().nextDouble(),
-                                        blockPos.getY() + 1,
-                                        blockPos.getZ() + serverWorld.getRandom().nextDouble(),
-                                        1,
-                                        0.0,
-                                        0.0,
-                                        0.0,
-                                        1.0
-                                );
+                                level.sendParticles(ParticleTypes.SPLASH,pos.getX() + random.nextDouble(),pos.getY() + 1,pos.getZ() + random.nextDouble(),1,0.0,0.0,0.0,1.0);
                             }
                         }
 
-                        serverWorld.playSound(null, blockPos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                        serverWorld.gameEvent(null, GameEvent.FLUID_PLACE, blockPos);
+                        level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        level.gameEvent(null, GameEvent.FLUID_PLACE, pos);
                         if (blockState.is(BlockTags.CONVERTABLE_TO_MUD))
-                            serverWorld.setBlockAndUpdate(blockPos2, Blocks.MUD.defaultBlockState());
+                            level.setBlockAndUpdate(target, Blocks.MUD.defaultBlockState());
                         else {
                             if (blockState.getProperties().contains(BlockStateProperties.WATERLOGGED)) {
                                 if (blockState.getProperties().contains(HorizontalDirectionalBlock.FACING))
-                                    serverWorld.setBlockAndUpdate(blockPos2, corals.get(blockState.getBlock()).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED)).setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING)));
-                                else serverWorld.setBlockAndUpdate(blockPos2, corals.get(blockState.getBlock()).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED)));
-                            } else serverWorld.setBlockAndUpdate(blockPos2, corals.get(blockState.getBlock()).defaultBlockState());
+                                    level.setBlockAndUpdate(target, corals.get(blockState.getBlock()).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED)).setValue(HorizontalDirectionalBlock.FACING, blockState.getValue(HorizontalDirectionalBlock.FACING)));
+                                else level.setBlockAndUpdate(target, corals.get(blockState.getBlock()).defaultBlockState().setValue(BlockStateProperties.WATERLOGGED, blockState.getValue(BlockStateProperties.WATERLOGGED)));
+                            } else level.setBlockAndUpdate(target, corals.get(blockState.getBlock()).defaultBlockState());
                         }
-                        return this.consumeWithRemainder(pointer, stack, new ItemStack(Items.GLASS_BOTTLE));
+                        return this.consumeWithRemainder(source, dispensed, new ItemStack(Items.GLASS_BOTTLE));
                     }
                 }
             }
         };
     }
 
-    @ModifyArg(method = "bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V", ordinal = 35), index = 1)
+    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V"), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Blocks;TNT:Lnet/minecraft/world/level/block/Block;",opcode = Opcodes.GETSTATIC),
+            to = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;WITHER_SKELETON_SKULL:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)), index = 1)
     private static DispenseItemBehavior launchTNTaway(DispenseItemBehavior behavior) {
         return new OptionalDispenseItemBehavior() {
             @Override
-            protected @NonNull ItemStack execute(@NonNull BlockSource pointer, @NonNull ItemStack stack) {
-                ServerLevel serverWorld = pointer.level();
-                if (!serverWorld.getGameRules().get(GameRules.TNT_EXPLODES)) {
+            protected @NonNull ItemStack execute(@NonNull BlockSource source, @NonNull ItemStack dispensed) {
+                ServerLevel level = source.level();
+                if (!level.getGameRules().get(GameRules.TNT_EXPLODES)) {
                     this.setSuccess(false);
                 } else {
-                    BlockPos blockPos = pointer.pos().relative(pointer.state().getValue(DispenserBlock.FACING));
-                    PrimedTnt tntEntity = new PrimedTnt(serverWorld, blockPos.getX() + 0.5, blockPos.getY(), blockPos.getZ() + 0.5, null);
-                    Direction dir = pointer.state().getValue(DispenserBlock.FACING);
+                    BlockPos target = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
+                    PrimedTnt tnt = new PrimedTnt(level, target.getX() + 0.5, target.getY(), target.getZ() + 0.5, null);
+                    Direction dir = source.state().getValue(DispenserBlock.FACING);
                     if (dir.getAxis() != Direction.Axis.Y){
                         float dis = dir.toYRot();
 
-                        double d = (dis*(Math.PI)/180f)+(serverWorld.getRandom().nextDouble()*0.4-0.2);
-                        tntEntity.setDeltaMovement(-Math.sin(d) * 0.02, 0.2F, Math.cos(d) * 0.02);
+                        double d = (dis*(Math.PI)/180f)+(level.getRandom().nextDouble() * 0.4 - 0.2);
+                        tnt.setDeltaMovement(-Math.sin(d) * 0.02, 0.2F, Math.cos(d) * 0.02);
                     }
-                    serverWorld.addFreshEntity(tntEntity);
-                    serverWorld.playSound(null, tntEntity.getX(), tntEntity.getY(), tntEntity.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
-                    serverWorld.gameEvent(null, GameEvent.ENTITY_PLACE, blockPos);
-                    stack.shrink(1);
+                    level.addFreshEntity(tnt);
+                    level.playSound(null, tnt.getX(), tnt.getY(), tnt.getZ(), SoundEvents.TNT_PRIMED, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.gameEvent(null, GameEvent.ENTITY_PLACE, target);
+                    dispensed.shrink(1);
                     this.setSuccess(true);
                 }
-                return stack;
+                return dispensed;
             }
         };
     }
-
 }

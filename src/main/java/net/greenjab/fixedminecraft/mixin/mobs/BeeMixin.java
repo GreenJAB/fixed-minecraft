@@ -48,7 +48,7 @@ public abstract class BeeMixin {
                         int z = world.getRandom().nextInt(5) - 2;
                         BlockPos newFlower = pos.offset(x, y, z);
                         if (world.getBlockState(newFlower) == Blocks.AIR.defaultBlockState()) {
-                            if (world.getBlockState(newFlower.below()).is(BlockTags.DIRT)) {
+                            if (world.getBlockState(newFlower.below()).is(BlockTags.SUPPORTS_VEGETATION)) {
                                 if (!tall) {
                                     world.setBlockAndUpdate(newFlower, flower);
                                     i = 10;

@@ -18,7 +18,7 @@ public abstract class ServerExplosionMixin {
     @Shadow @Final private Explosion.BlockInteraction blockInteraction;
 
     @Inject(method = "hurtEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;push(Lnet/minecraft/world/phys/Vec3;)V"))
-    private void setSurroundingMoraine(CallbackInfo ci, @Local Entity entity) {
+    private void gravelToSand(CallbackInfo ci, @Local Entity entity) {
         if (this.blockInteraction == Explosion.BlockInteraction.TRIGGER_BLOCK) {
             if (entity instanceof FallingBlockEntity FBE) {
                 if (FBE.getBlockState().is(Blocks.GRAVEL)) {

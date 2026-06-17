@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
@@ -16,6 +17,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin {
+
+    @ModifyExpressionValue(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 5))
+    private boolean dontSlowdownPhantom(boolean original, @Local(argsOnly = true) DamageSource source) {
+        if (source.getEntity() instanceof Phantom) return true;
+        return original;
+    }
 
     @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;gameEvent(Lnet/minecraft/core/Holder;)V"))
     private void increaseInsomnia(DamageSource source, CallbackInfo ci, @Local Entity sourceEntity) {

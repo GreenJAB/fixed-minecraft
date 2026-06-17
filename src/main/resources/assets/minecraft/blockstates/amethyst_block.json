@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "minecraft:block/amethyst_block"
+    },
+    "lit=true": {
+      "model": "minecraft:block/amethyst_block_lit"
+    }
+  }
+}

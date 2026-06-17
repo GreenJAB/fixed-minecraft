@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.client.fog;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.fog.environment.LavaFogEnvironment;
 import net.minecraft.world.entity.player.Player;

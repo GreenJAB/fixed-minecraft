@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.registry.other;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.Holder;

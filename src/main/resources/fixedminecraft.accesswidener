@@ -35,3 +35,4 @@ accessible field net/minecraft/client/KeyMapping key Lcom/mojang/blaze3d/platfor
 accessible field net/minecraft/world/inventory/AbstractMountInventoryMenu mount Lnet/minecraft/world/entity/LivingEntity;
 accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionPiecePlacer
 accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionGrid
+accessible class net/minecraft/world/level/block/entity/SculkSensorBlockEntity$VibrationUser

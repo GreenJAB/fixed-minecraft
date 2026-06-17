@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;

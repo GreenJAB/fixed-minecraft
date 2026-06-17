@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;

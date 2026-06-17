@@ -1,8 +1,7 @@
-package net.greenjab.fixedminecraft.enchanting;
+package net.greenjab.fixedminecraft;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

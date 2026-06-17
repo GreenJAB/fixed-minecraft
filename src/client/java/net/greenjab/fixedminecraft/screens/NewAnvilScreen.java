@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.screens;
 
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.other.NewAnvilMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;

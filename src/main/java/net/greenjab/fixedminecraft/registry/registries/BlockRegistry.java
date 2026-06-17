@@ -212,12 +212,12 @@ public class BlockRegistry {
                     .replaceable()
                     .noCollision()
                     .instabreak()
-                    .lightLevel(state -> 10)
+                    .lightLevel(_ -> 10)
                     .sound(SoundType.WOOL)
                     .pushReaction(PushReaction.DESTROY)
     );
 
-    public static final Block REDSOTNE_LANTERN = register(
+    public static final Block REDSTONE_LANTERN = register(
             "redstone_lantern",
             RedstoneLanternBlock::new,
             BlockBehaviour.Properties.of()

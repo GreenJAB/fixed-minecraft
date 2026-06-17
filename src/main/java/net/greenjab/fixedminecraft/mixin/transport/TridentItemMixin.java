@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.transport;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import net.greenjab.fixedminecraft.enchanting.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TridentItem;
 import org.spongepowered.asm.mixin.Mixin;
