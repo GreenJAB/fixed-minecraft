@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/axolotl_bucket",
   "textures": {
     "layer0": "minecraft:item/gold_axolotl_bucket"
   }

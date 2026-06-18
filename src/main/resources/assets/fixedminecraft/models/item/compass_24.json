@@ -1,0 +1,7 @@
+{
+  "parent": "fixedminecraft:item/compass",
+  "textures": {
+    "layer0": "fixedminecraft:item/compass",
+    "layer1": "fixedminecraft:item/compass_24"
+  }
+}

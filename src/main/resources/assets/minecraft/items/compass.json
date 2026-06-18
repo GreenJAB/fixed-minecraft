@@ -12,7 +12,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_16",
+                                    "model": "fixedminecraft:item/compass_16",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -29,7 +29,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_17",
+                                    "model": "fixedminecraft:item/compass_17",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -46,7 +46,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_18",
+                                    "model": "fixedminecraft:item/compass_18",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -63,7 +63,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_19",
+                                    "model": "fixedminecraft:item/compass_19",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -80,7 +80,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_20",
+                                    "model": "fixedminecraft:item/compass_20",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -97,7 +97,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_21",
+                                    "model": "fixedminecraft:item/compass_21",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -114,7 +114,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_22",
+                                    "model": "fixedminecraft:item/compass_22",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -131,7 +131,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_23",
+                                    "model": "fixedminecraft:item/compass_23",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -148,7 +148,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_24",
+                                    "model": "fixedminecraft:item/compass_24",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -165,7 +165,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_25",
+                                    "model": "fixedminecraft:item/compass_25",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -182,7 +182,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_26",
+                                    "model": "fixedminecraft:item/compass_26",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -199,7 +199,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_27",
+                                    "model": "fixedminecraft:item/compass_27",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -216,7 +216,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_28",
+                                    "model": "fixedminecraft:item/compass_28",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -233,7 +233,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_29",
+                                    "model": "fixedminecraft:item/compass_29",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -250,7 +250,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_30",
+                                    "model": "fixedminecraft:item/compass_30",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -267,7 +267,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_31",
+                                    "model": "fixedminecraft:item/compass_31",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -284,7 +284,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_00",
+                                    "model": "fixedminecraft:item/compass_00",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -301,7 +301,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_01",
+                                    "model": "fixedminecraft:item/compass_01",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -318,7 +318,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_02",
+                                    "model": "fixedminecraft:item/compass_02",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -335,7 +335,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_03",
+                                    "model": "fixedminecraft:item/compass_03",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -352,7 +352,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_04",
+                                    "model": "fixedminecraft:item/compass_04",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -369,7 +369,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_05",
+                                    "model": "fixedminecraft:item/compass_05",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -386,7 +386,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_06",
+                                    "model": "fixedminecraft:item/compass_06",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -403,7 +403,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_07",
+                                    "model": "fixedminecraft:item/compass_07",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -420,7 +420,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_08",
+                                    "model": "fixedminecraft:item/compass_08",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -437,7 +437,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_09",
+                                    "model": "fixedminecraft:item/compass_09",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -454,7 +454,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_10",
+                                    "model": "fixedminecraft:item/compass_10",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -471,7 +471,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_11",
+                                    "model": "fixedminecraft:item/compass_11",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -488,7 +488,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_12",
+                                    "model": "fixedminecraft:item/compass_12",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -505,7 +505,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_13",
+                                    "model": "fixedminecraft:item/compass_13",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -522,7 +522,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_14",
+                                    "model": "fixedminecraft:item/compass_14",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -539,7 +539,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_15",
+                                    "model": "fixedminecraft:item/compass_15",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -556,7 +556,7 @@
                             {
                                 "model": {
                                     "type": "minecraft:model",
-                                    "model": "minecraft:item/compass_16",
+                                    "model": "fixedminecraft:item/compass_16",
                                     "tints": [
                                         {
                                             "type": "minecraft:constant",
@@ -584,7 +584,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_16",
+                            "model": "fixedminecraft:item/compass_16",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -601,7 +601,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_17",
+                            "model": "fixedminecraft:item/compass_17",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -618,7 +618,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_18",
+                            "model": "fixedminecraft:item/compass_18",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -635,7 +635,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_19",
+                            "model": "fixedminecraft:item/compass_19",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -652,7 +652,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_20",
+                            "model": "fixedminecraft:item/compass_20",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -669,7 +669,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_21",
+                            "model": "fixedminecraft:item/compass_21",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -686,7 +686,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_22",
+                            "model": "fixedminecraft:item/compass_22",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -703,7 +703,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_23",
+                            "model": "fixedminecraft:item/compass_23",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -720,7 +720,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_24",
+                            "model": "fixedminecraft:item/compass_24",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -737,7 +737,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_25",
+                            "model": "fixedminecraft:item/compass_25",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -754,7 +754,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_26",
+                            "model": "fixedminecraft:item/compass_26",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -771,7 +771,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_27",
+                            "model": "fixedminecraft:item/compass_27",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -788,7 +788,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_28",
+                            "model": "fixedminecraft:item/compass_28",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -805,7 +805,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_29",
+                            "model": "fixedminecraft:item/compass_29",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -822,7 +822,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_30",
+                            "model": "fixedminecraft:item/compass_30",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -839,7 +839,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_31",
+                            "model": "fixedminecraft:item/compass_31",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -856,7 +856,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_00",
+                            "model": "fixedminecraft:item/compass_00",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -873,7 +873,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_01",
+                            "model": "fixedminecraft:item/compass_01",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -890,7 +890,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_02",
+                            "model": "fixedminecraft:item/compass_02",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -907,7 +907,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_03",
+                            "model": "fixedminecraft:item/compass_03",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -924,7 +924,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_04",
+                            "model": "fixedminecraft:item/compass_04",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -941,7 +941,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_05",
+                            "model": "fixedminecraft:item/compass_05",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -958,7 +958,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_06",
+                            "model": "fixedminecraft:item/compass_06",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -975,7 +975,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_07",
+                            "model": "fixedminecraft:item/compass_07",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -992,7 +992,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_08",
+                            "model": "fixedminecraft:item/compass_08",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1009,7 +1009,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_09",
+                            "model": "fixedminecraft:item/compass_09",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1026,7 +1026,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_10",
+                            "model": "fixedminecraft:item/compass_10",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1043,7 +1043,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_11",
+                            "model": "fixedminecraft:item/compass_11",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1060,7 +1060,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_12",
+                            "model": "fixedminecraft:item/compass_12",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1077,7 +1077,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_13",
+                            "model": "fixedminecraft:item/compass_13",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1094,7 +1094,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_14",
+                            "model": "fixedminecraft:item/compass_14",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1111,7 +1111,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_15",
+                            "model": "fixedminecraft:item/compass_15",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1128,7 +1128,7 @@
                     {
                         "model": {
                             "type": "minecraft:model",
-                            "model": "minecraft:item/compass_16",
+                            "model": "fixedminecraft:item/compass_16",
                             "tints": [
                                 {
                                     "type": "minecraft:constant",
@@ -1155,7 +1155,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_16",
+                        "model": "fixedminecraft:item/compass_16",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1172,7 +1172,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_17",
+                        "model": "fixedminecraft:item/compass_17",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1189,7 +1189,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_18",
+                        "model": "fixedminecraft:item/compass_18",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1206,7 +1206,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_19",
+                        "model": "fixedminecraft:item/compass_19",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1223,7 +1223,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_20",
+                        "model": "fixedminecraft:item/compass_20",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1240,7 +1240,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_21",
+                        "model": "fixedminecraft:item/compass_21",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1257,7 +1257,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_22",
+                        "model": "fixedminecraft:item/compass_22",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1274,7 +1274,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_23",
+                        "model": "fixedminecraft:item/compass_23",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1291,7 +1291,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_24",
+                        "model": "fixedminecraft:item/compass_24",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1308,7 +1308,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_25",
+                        "model": "fixedminecraft:item/compass_25",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1325,7 +1325,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_26",
+                        "model": "fixedminecraft:item/compass_26",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1342,7 +1342,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_27",
+                        "model": "fixedminecraft:item/compass_27",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1359,7 +1359,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_28",
+                        "model": "fixedminecraft:item/compass_28",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1376,7 +1376,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_29",
+                        "model": "fixedminecraft:item/compass_29",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1393,7 +1393,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_30",
+                        "model": "fixedminecraft:item/compass_30",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1410,7 +1410,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_31",
+                        "model": "fixedminecraft:item/compass_31",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1427,7 +1427,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_00",
+                        "model": "fixedminecraft:item/compass_00",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1444,7 +1444,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_01",
+                        "model": "fixedminecraft:item/compass_01",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1461,7 +1461,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_02",
+                        "model": "fixedminecraft:item/compass_02",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1478,7 +1478,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_03",
+                        "model": "fixedminecraft:item/compass_03",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1495,7 +1495,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_04",
+                        "model": "fixedminecraft:item/compass_04",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1512,7 +1512,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_05",
+                        "model": "fixedminecraft:item/compass_05",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1529,7 +1529,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_06",
+                        "model": "fixedminecraft:item/compass_06",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1546,7 +1546,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_07",
+                        "model": "fixedminecraft:item/compass_07",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1563,7 +1563,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_08",
+                        "model": "fixedminecraft:item/compass_08",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1580,7 +1580,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_09",
+                        "model": "fixedminecraft:item/compass_09",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1597,7 +1597,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_10",
+                        "model": "fixedminecraft:item/compass_10",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1614,7 +1614,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_11",
+                        "model": "fixedminecraft:item/compass_11",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1631,7 +1631,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_12",
+                        "model": "fixedminecraft:item/compass_12",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1648,7 +1648,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_13",
+                        "model": "fixedminecraft:item/compass_13",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1665,7 +1665,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_14",
+                        "model": "fixedminecraft:item/compass_14",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1682,7 +1682,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_15",
+                        "model": "fixedminecraft:item/compass_15",
                         "tints": [
                             {
                                 "type": "minecraft:constant",
@@ -1699,7 +1699,7 @@
                 {
                     "model": {
                         "type": "minecraft:model",
-                        "model": "minecraft:item/compass_16",
+                        "model": "fixedminecraft:item/compass_16",
                         "tints": [
                             {
                                 "type": "minecraft:constant",

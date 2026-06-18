@@ -190,7 +190,7 @@
                     "weight": 5
                 }
             ],
-            "rolls": 10
+            "rolls": 1
         }
     ],
     "random_sequence": "fixedminecraft:gameplay/fixed_fishing/treasure"

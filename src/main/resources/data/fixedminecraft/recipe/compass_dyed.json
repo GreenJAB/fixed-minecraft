@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:crafting_dye",
+  "category": "misc",
+  "dye": "#minecraft:dyes",
+  "result": {
+    "id": "minecraft:compass"
+  },
+  "target": "minecraft:compass"
+}

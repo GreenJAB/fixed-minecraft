@@ -31,7 +31,7 @@ public abstract class OptionsMixin {
             ? Component.translatable("options.chunkFade.none")
             : Component.translatable("options.chunkFade.seconds", String.format(Locale.ROOT, "%.2f", value)),
             new OptionInstance.IntRange(0, 40)
-                    .xmap(/* method_76249 */ ticks -> ticks / 20.0, /* method_76255 */ seconds -> (int)(seconds * 20.0), true),
+                    .xmap(/* method_76249 */ ticks -> ticks / 20.0, seconds -> (int)(seconds * 20.0), true),
             Codec.doubleRange(0.0, 2.0),
             0.0,
             _ -> {}

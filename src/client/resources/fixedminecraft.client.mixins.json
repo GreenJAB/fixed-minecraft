@@ -65,6 +65,6 @@
         "CreativeModeInventoryScreenMixin",
         "ShulkerBoxScreenMixin",
         "particle.FlyTowardsPositionParticleMixin",
-        "villager.CustomContainerTextureMixin"
+      "CustomContainerTextureMixin"
     ]
 }
