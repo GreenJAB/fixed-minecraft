@@ -63,8 +63,9 @@
         "ContainerScreenMixin",
         "CreateWorldScreenMixin",
         "CreativeModeInventoryScreenMixin",
+        "CustomContainerTextureMixin",
+        "DonkeyRenderStateMixin",
         "ShulkerBoxScreenMixin",
-        "particle.FlyTowardsPositionParticleMixin",
-      "CustomContainerTextureMixin"
+        "particle.FlyTowardsPositionParticleMixin"
     ]
 }
