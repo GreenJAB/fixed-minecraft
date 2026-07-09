@@ -8,8 +8,16 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.item.ItemStack;
@@ -26,7 +34,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(FishingHook.class)
 public abstract class FishingHookMixin {
@@ -48,10 +61,10 @@ public abstract class FishingHookMixin {
         ItemStack bait = getBait(playerEntity);
         int luck = this.luck;
 
-        Level world = FBE.level();
+        Level level = FBE.level();
         if (playerEntity.hasEffect(MobEffects.CONDUIT_POWER))luck += 2;
-        if (world.getBrightness(LightLayer.SKY, FBE.blockPosition())>10) {
-            if (world.isRaining())luck+=2;
+        if (level.getBrightness(LightLayer.SKY, FBE.blockPosition()) > 10) {
+            if (level.isRaining())luck+=2;
         }
 
         int baitpower = 0;
@@ -60,10 +73,53 @@ public abstract class FishingHookMixin {
         if (playerEntity.hasEffect(MobEffects.LUCK))
             baitpower += (playerEntity.getEffect(MobEffects.LUCK).getAmplifier()+1);
 
-        MoonPhase moonPhase = (world).environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, playerEntity.blockPosition());
-        if (world.isDarkOutside() && moonPhase.index() == 0 && world.getBrightness(LightLayer.SKY, FBE.blockPosition())>10) baitpower++;
+        MoonPhase moonPhase = (level).environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, playerEntity.blockPosition());
+        if (level.isDarkOutside() && moonPhase.index() == 0 && level.getBrightness(LightLayer.SKY, FBE.blockPosition()) > 10) baitpower++;
 
         //https://www.desmos.com/calculator/xgxywuavpe
+
+        if (level.getRandom().nextInt(100)<this.luck*5) {
+            List<String> fish = List.of("cod", "salmon", "tropical_fish");
+            List<String> common = List.of("squid", "glow_squid", "tadpole");
+            List<String> rare = List.of("turtle", "dolphin", "axolotl", "nautilus");
+            List<String> common_hostile = List.of( "pufferfish", "drowned");
+            List<String> rare_hostile = List.of( "zombie_nautilus", "guardian");
+            List<String> legendary_hostile = List.of("elder_guardian");
+
+            ArrayList<String> mobs = new ArrayList<>(fish);
+            int fishLevel = level.getRandom().nextInt(baitpower+1);
+            if (fishLevel>=1) mobs.addAll(common);
+            if (fishLevel>=2) mobs.addAll(rare);
+            if (level.getDifficulty() != Difficulty.PEACEFUL && !playerEntity.hasEffect(MobEffects.CONDUIT_POWER)) {
+                if (fishLevel>=1) mobs.addAll(common_hostile);
+                if (fishLevel>=2) mobs.addAll(rare_hostile);
+                if (fishLevel>=3) mobs.addAll(legendary_hostile);
+            }
+
+            LivingEntity entity = (LivingEntity) EntityType.byString(mobs.get(level.getRandom().nextInt(mobs.size()))).orElse(EntityType.COD).create(level.getChunkAt(FBE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
+            if (entity != null) {
+                if (entity instanceof Mob mob) mob.finalizeSpawn((ServerLevel)level, ((ServerLevel)level).getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
+                entity.snapTo(FBE.getX(), FBE.getY(), FBE.getZ(), 0, 0.0F);
+                level.addFreshEntity(entity);
+
+                ItemEntity fakeItem = new ItemEntity(level, FBE.getX(), FBE.getY(), FBE.getZ(), Items.AIR.getDefaultInstance());
+                if (fakeItem != null) {
+                    fakeItem.snapTo(FBE.getX(), FBE.getY(), FBE.getZ(), 0, 0.0F);
+                    double xa = FBE.getOwner().getX() - FBE.getX();
+                    double ya = FBE.getOwner().getY() - FBE.getY()+0.5;
+                    double za = FBE.getOwner().getZ() - FBE.getZ();
+                    double speed = 0.1;
+                    fakeItem.setDeltaMovement(xa * speed, ya * speed + Math.sqrt(Math.sqrt(xa * xa + ya * ya + za * za)) * 0.08, za * speed);
+                    level.addFreshEntity(fakeItem);
+                    fakeItem.age = 6000-13;
+                    fakeItem.setNeverPickUp();
+                    entity.startRiding(fakeItem);
+                    fakeItem.needsSync = true;
+                }
+                if (!playerEntity.hasInfiniteMaterials()) bait.shrink(1);
+                return ItemStack.EMPTY;
+            }
+        }
 
         int chanceGood = Math.min(luck * baitpower + 3 * baitpower,100);
         int chanceFish = Math.max(40-chanceGood, 0);
@@ -106,5 +162,27 @@ public abstract class FishingHookMixin {
             if (item.getComponents().has(ItemRegistry.BAIT_POWER)) return item;
         }
         return ItemStack.EMPTY;
+    }
+
+    @Inject(method = "pullEntity", at = @At(value = "HEAD"), cancellable = true)
+    private void pullEntityBetter(Entity entity, CallbackInfo ci) {
+        if (entity instanceof Shulker) return;
+        if (!(entity instanceof LivingEntity || entity instanceof ItemEntity)) return;
+        FishingHook FBE = (FishingHook)(Object)this;
+        Level level = FBE.level();
+        ItemEntity fakeItem = new ItemEntity(level, FBE.getX(), entity.getY()+1, FBE.getZ(), Items.AIR.getDefaultInstance());
+        if (fakeItem != null) {
+            double xa = FBE.getOwner().getX() - FBE.getX();
+            double ya = FBE.getOwner().getY() - (entity.getY()+1)+0.5;
+            double za = FBE.getOwner().getZ() - FBE.getZ();
+            double speed = 0.1;
+            fakeItem.setDeltaMovement(xa * speed, ya * speed + Math.sqrt(Math.sqrt(xa * xa + ya * ya + za * za)) * 0.08, za * speed);
+            level.addFreshEntity(fakeItem);
+            fakeItem.age = 6000-13;
+            fakeItem.setNeverPickUp();
+            entity.startRiding(fakeItem);
+            fakeItem.needsSync = true;
+            ci.cancel();
+        }
     }
 }

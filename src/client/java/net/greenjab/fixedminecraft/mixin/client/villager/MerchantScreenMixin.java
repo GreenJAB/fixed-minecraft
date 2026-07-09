@@ -92,4 +92,19 @@ public abstract class MerchantScreenMixin {
             return Identifier.withDefaultNamespace("textures/gui/container/villager" + ((CustomContainerTextureHolder) MS).fixedminecraft$getCustomTexture() + ".png");
         return texture;
     }
+
+    @Inject(method = "extractBackground", at = @At(value = "TAIL"))
+    private void animatedEyes(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci,
+                              @Local(ordinal = 2) int xo,
+                              @Local(ordinal = 3) int yo) {
+        if (FixedMinecraftClient.usingCustomContainers()) {
+            String type = "villager";
+            MerchantScreen MS = (MerchantScreen) (Object)this;
+            if (!((CustomContainerTextureHolder) MS).fixedminecraft$getCustomTexture().isEmpty()) {
+                String[] s = ((CustomContainerTextureHolder) MS).fixedminecraft$getCustomTexture().split("/");
+                type = s[s.length-1];
+            }
+            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.parse("container/villager/animated/"+type), xo + 116, yo + 49, 12, 5);
+        }
+    }
 }

@@ -62,7 +62,7 @@
                             "entries": [
                                 {
                                     "type": "minecraft:loot_table",
-                                    "value": "fixedminecraft:gameplay/archaeology/bundle"
+                                    "value": "jabsfixedworldandui:gameplay/archaeology/bundle"
                                 }
                             ]
                         }

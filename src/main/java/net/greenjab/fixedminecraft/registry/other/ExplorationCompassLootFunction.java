@@ -21,6 +21,7 @@ import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.phys.Vec3;
@@ -90,5 +91,47 @@ public class ExplorationCompassLootFunction extends LootItemConditionalFunction 
             }
         }
         return stack;
+    }
+
+    public static class Builder extends LootItemConditionalFunction.Builder<ExplorationCompassLootFunction.Builder> {
+        private TagKey<Structure> destination;
+        private int color;
+        private int searchRadius;
+        private boolean skipExistingChunks;
+
+        public Builder() {
+            this.destination = DEFAULT_DESTINATION;
+            this.color = DEFAULT_COLOR;
+            this.searchRadius = DEFAULT_SEARCH_RADIUS;
+            this.skipExistingChunks = DEFAULT_SKIP_EXISTING_CHUNKS;
+        }
+
+        protected ExplorationCompassLootFunction.@NonNull Builder getThis() {
+            return this;
+        }
+
+        public ExplorationCompassLootFunction.Builder setDestination(final TagKey<Structure> destination) {
+            this.destination = destination;
+            return this;
+        }
+
+        public ExplorationCompassLootFunction.Builder setColor(final int color) {
+            this.color = color;
+            return this;
+        }
+
+        public ExplorationCompassLootFunction.Builder setSearchRadius(final int searchRadius) {
+            this.searchRadius = searchRadius;
+            return this;
+        }
+
+        public ExplorationCompassLootFunction.Builder skipExistingChunks() {
+            this.skipExistingChunks = true;
+            return this;
+        }
+
+        public @NonNull LootItemFunction build() {
+            return new ExplorationCompassLootFunction(this.getConditions(), this.destination, this.color, this.searchRadius, this.skipExistingChunks);
+        }
     }
 }

@@ -27,17 +27,6 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "weight": 2,
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/ocean_ruins"
-                        }
-                    ],
-                    "name": "minecraft:book"
-                },
-                {
-                    "type": "minecraft:item",
                     "name": "minecraft:book",
                     "weight": 2,
                     "functions": [

@@ -1,51 +1,224 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.advancements.criterion.EntityTypePredicate;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.network.chat.Component;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.StructureTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
+import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
+import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
+import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
+import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+
+import static net.greenjab.fixedminecraft.registry.ModTags.*;
 
 public class LootTableAdditions {
 
     public static void registerLootTableAdds() {
         System.out.println("register LootTableAdds");
 
-        LootTableEvents.MODIFY.register((key, tableBuilder, source, holder) -> {
+        LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
+            HolderLookup.RegistryLookup<Enchantment> enchantments = holder.lookupOrThrow(Registries.ENCHANTMENT);
+
+            if (key==BuiltInLootTables.ABANDONED_MINESHAFT) {
+                tableBuilder.pool(bookPool(enchantments, ABANDONED_MINESHAFT_EBOOKS).build());
+            } else if (key==BuiltInLootTables.ANCIENT_CITY) {
+                tableBuilder.pool(bookPool(enchantments, ANCIENT_CITY_EBOOKS).build());
+            } else if (key==BuiltInLootTables.BASTION_TREASURE) {
+                tableBuilder.pool(bookPoolPlus(enchantments, BASTION_TREASURE_EBOOKS, 1, 20).build());
+            } else if (key==BuiltInLootTables.BURIED_TREASURE) {
+                tableBuilder.pool(bookPoolPlus(enchantments, BURIED_TREASURE_EBOOKS, 3, 20).build());
+            } else if (key==BuiltInLootTables.DESERT_PYRAMID) {
+                tableBuilder.pool(bookPool(enchantments, DESERT_PYRAMID_EBOOKS).build());
+            } else if (key==BuiltInLootTables.END_CITY_TREASURE) {
+                tableBuilder.pool(bookPoolPlus(enchantments, END_CITY_TREASURE_EBOOKS, 1, 30).build());
+            } else if (key==BuiltInLootTables.IGLOO_CHEST) {
+                tableBuilder.pool(bookPoolPlus(enchantments, IGLOO_CHEST_EBOOKS, 3, 15).build());
+            } else if (key==BuiltInLootTables.JUNGLE_TEMPLE) {
+                tableBuilder.pool(bookPool2(enchantments, JUNGLE_TEMPLE_EBOOKS).build());
+            } else if (key==BuiltInLootTables.NETHER_BRIDGE) {
+                tableBuilder.pool(bookPoolPlus(enchantments, NETHER_BRIDGE_EBOOKS, 1, 15).build());
+            } else if (key==BuiltInLootTables.PILLAGER_OUTPOST) {
+                tableBuilder.pool(bookPool2(enchantments, PILLAGER_OUTPOST_EBOOKS).build());
+            } else if (key==BuiltInLootTables.RUINED_PORTAL) {
+                tableBuilder.pool(bookPoolPlus(enchantments, RUINED_PORTAL_EBOOKS, 10).build());
+            } else if (key==BuiltInLootTables.SHIPWRECK_TREASURE) {
+                tableBuilder.pool(bookPoolPlus(enchantments, SHIPWRECK_TREASURE_EBOOKS, 15).build());
+            } else if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
+                tableBuilder.pool(bookPool2(enchantments, SIMPLE_DUNGEON_EBOOKS).build());
+            } else if (key==BuiltInLootTables.STRONGHOLD_LIBRARY) {
+                tableBuilder.pool(bookPool(enchantments, STRONGHOLD_LIBRARY_EBOOKS).build());
+            } else if (key==BuiltInLootTables.UNDERWATER_RUIN_BIG) {
+                tableBuilder.pool(bookPool2(enchantments, UNDERWATER_RUIN_BIG_EBOOKS).build());
+            } else if (key==BuiltInLootTables.WOODLAND_MANSION) {
+                tableBuilder.pool(bookPool(enchantments, WOODLAND_MANSION_EBOOKS).build());
+
+            } else if (key==BuiltInLootTables.FISHING_TREASURE) {
+                tableBuilder.modifyPools(builder -> builder
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
+                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(FISHING_TREASURE_EBOOKS)))));
+            } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
+                tableBuilder.modifyPools(builder -> builder
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(4)
+                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(TRAIL_RUINS_EBOOKS))))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(2)
+                                .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(20))
+                                        .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map(named -> named)))));
+            }
+
+            //trial chamber vaults need to be overriden to remove the existing 'specific' ebooks
+            /* else if (key==BuiltInLootTables.TRIAL_CHAMBERS) {
+                tableBuilder.modifyPools(builder ->builder
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(4)
+                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(TRAIL_RUINS_EBOOKS))))
+                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(2)
+                                .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(20))
+                                        .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map( named -> named)))));
+            }*/
+
+            //code for if I need to add to an existing table that has multiple pools
+            /*if (key==BuiltInLootTables.BASTION_BRIDGE) {
+                tableBuilder.modifyPools(builder -> {
+                    ImmutableList<LootPoolEntryContainer> i = builder.entries.build();
+                    for (LootPoolEntryContainer item : i) {
+                        if (item instanceof LootItem lootItem){
+                            if (lootItem.item.value() == Items.LODESTONE){
+                                builder.add(
+                                        LootItem.lootTableItem(Items.BOOK)
+                                                .setWeight(1)
+                                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(TRAIL_RUINS_EBOOKS)))
+                                );
+                                break;
+                            }
+                        }
+
+                    }
+                });
+            }*/
+        });
+
+
+        LootTableEvents.MODIFY.register((key, tableBuilder, _, _) -> {
+            if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(2))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_TRIAL_CHAMBERS_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.TRIAL_CHAMBERS).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.trial_chambers"), SetNameFunction.Target.ITEM_NAME))).build());
+            } else if (key==BuiltInLootTables.PILLAGER_OUTPOST) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MAP).setWeight(5)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_WOODLAND_EXPLORER_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.WOODLAND_MANSION).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.mansion"), SetNameFunction.Target.ITEM_NAME)))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_DESERT_VILLAGE_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.DESERT_VILLAGE).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.village_desert"), SetNameFunction.Target.ITEM_NAME)))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_PLAINS_VILLAGE_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.PLAINS_VILLAGE).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.village_plains"), SetNameFunction.Target.ITEM_NAME)))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_SAVANNA_VILLAGE_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.SAVANNA_VILLAGE).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.village_savanna"), SetNameFunction.Target.ITEM_NAME)))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_SNOWY_VILLAGE_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.SNOWY_VILLAGE).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.village_snowy"), SetNameFunction.Target.ITEM_NAME)))
+                        .add(LootItem.lootTableItem(Items.MAP)
+                                .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_TAIGA_VILLAGE_MAPS)
+                                        .setMapDecoration(MapDecorationTypes.TAIGA_VILLAGE).setSkipKnownStructures(false).setZoom((byte)2))
+                                .apply(SetNameFunction.setName(Component.translatable("filled_map.village_taiga"), SetNameFunction.Target.ITEM_NAME))).build());
+            } else if (key==BuiltInLootTables.BURIED_TREASURE) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.MAP)
+                        .apply(new ExplorationMapFunction.Builder().setDestination(StructureTags.ON_OCEAN_EXPLORER_MAPS)
+                                .setMapDecoration(MapDecorationTypes.OCEAN_MONUMENT).setSkipKnownStructures(false).setZoom((byte)2))
+                        .apply(SetNameFunction.setName(Component.translatable("filled_map.monument"), SetNameFunction.Target.ITEM_NAME))).build());
+            } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
+                tableBuilder.modifyPools(builder ->
+                        builder.add(LootItem.lootTableItem(Items.COMPASS).apply(new ExplorationCompassLootFunction.Builder())));
+            }
+        });
+
+        LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
             if (key==BuiltInLootTables.CHARGED_CREEPER) {
                 LootItemCondition.Builder predicate = LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PLAYER)));
                 LootPool.Builder poolBuilder = LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.SUPER_CHARGED_CREEPER_PLAYER_LOOT_TABLE).when(predicate));
                 tableBuilder.pool(poolBuilder.build());
+            } else if (key==EntityType.CREEPER.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_PIGSTEP))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PIGLIN))).build());
+
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.SHULKER))).build());
+            } else if (key==EntityType.SNIFFER.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_RELIC))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+            } else if (key==EntityType.WARDEN.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_5))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+            } else if (key==EntityType.ELDER_GUARDIAN.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(2))
+                        .add(LootItem.lootTableItem(Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE))
+                        .add(LootItem.lootTableItem(Items.AIR))
+                        .build());
             }
         });
 
-        /*LootTableEvents.MODIFY.register((key, tableBuilder, source, holder) -> {
-            HolderLookup.RegistryLookup<Enchantment> enchantments = holder.lookupOrThrow(Registries.ENCHANTMENT);
-	      if (key==BuiltInLootTables.IGLOO_CHEST) {
-	          LootPool.Builder pool = LootPool.lootPool()
-                      .add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
-                              .apply(new EnchantWithLevelsFunction.Builder(UniformGenerator.between(5.0F, 19.0F))))
-                      .add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
-                              .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(ModTags.IGLOO_EBOOKS))))
-                      .setRolls(UniformGenerator.between(1.0F, 2.0F));
-	          tableBuilder.withPool(pool);
-	      }
-	  });*/
-        //FabricLootTableBuilder.modifyPools
-
     }
 
-    public static ResourceKey<PlacedFeature> of(String id) {
-        return ResourceKey.create(Registries.PLACED_FEATURE, FixedMinecraft.id(id));
+    private static LootPool.Builder bookPoolPlus(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag, int level){
+        return bookPoolPlus(enchantments, tag, 2, level);
     }
+
+    private static LootPool.Builder bookPoolPlus(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag, int rolls, int level){
+        return bookPool(enchantments, tag, rolls).add(LootItem.lootTableItem(Items.BOOK).setWeight(1)
+                .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(level))
+                        .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map( named -> named))));
+    }
+
+    private static LootPool.Builder bookPool(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag){
+        return bookPool(enchantments, tag, 1);
+    }
+
+    private static LootPool.Builder bookPool2(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag){
+        return bookPool(enchantments, tag, 2);
+    }
+
+    private static LootPool.Builder bookPool(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag, int rolls){
+        return LootPool.lootPool().setRolls(ConstantValue.exactly(rolls))
+                .add(LootItem.lootTableItem(Items.BOOK)
+                        .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(tag))).setWeight(1))
+                .add(LootItem.lootTableItem(Items.AIR).setWeight(1));
+    }
+
 }

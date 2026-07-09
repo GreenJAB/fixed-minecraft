@@ -35,7 +35,8 @@ public class ItemGroupRegistry {
                         entries.accept(ItemRegistry.WAXED_OXIDIZED_COPPER_RAIL);
                         entries.accept(ItemRegistry.PATINA);
                         entries.accept(ItemRegistry.REDSTONE_LANTERN);
-
+                         entries.accept(ItemRegistry.DISPENSER_MINECART);
+                         entries.accept(ItemRegistry.GOLDEN_FERMENTED_SPIDER_EYE);
 
                          entries.accept(BlockRegistry.AZALEA_PLANKS);
                          entries.accept(BlockRegistry.AZALEA_LOG);
@@ -56,10 +57,8 @@ public class ItemGroupRegistry {
                          entries.accept(ItemRegistry.AZALEA_CHEST_BOAT);
                          entries.accept(ItemRegistry.AZALEA_SHELF);
 
-                         entries.accept(ItemRegistry.DISPENSER_MINECART);
-
-
                          entries.accept(ItemRegistry.SPEAR);
+                         entries.accept(ItemRegistry.ILLUSIONER_SPAWN_EGG);
                          entries.accept(ItemRegistry.NAUTILUS_ARMOR);
                     }).build();
 

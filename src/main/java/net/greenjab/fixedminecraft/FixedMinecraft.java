@@ -78,18 +78,11 @@ public class FixedMinecraft implements ModInitializer {
         DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT);
 
-        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> {
-            ResourceManagerHelper.registerBuiltinResourcePack(
-                FixedMinecraft.id("tiered_crafting"),
-                modContainer,
-                Component.nullToEmpty("fixedminecraft.tiered_crafting"),
-                ResourcePackActivationType.NORMAL);
-            ResourceManagerHelper.registerBuiltinResourcePack(
-                    FixedMinecraft.id("removed_features_21_11"),
-                    modContainer,
-                    Component.nullToEmpty("fixedminecraft.removed_1.21"),
-                    ResourcePackActivationType.DEFAULT_ENABLED);
-                }
+        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> ResourceManagerHelper.registerBuiltinResourcePack(
+            FixedMinecraft.id("tiered_crafting"),
+            modContainer,
+            Component.nullToEmpty("fixedminecraft.tiered_crafting"),
+            ResourcePackActivationType.NORMAL)
         );
 
 

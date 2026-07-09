@@ -66,6 +66,7 @@
     "item.minecraft.glistering_melon_slice":"Glitrande vassmelonbåt \u00a7f(\ueff4)",
     "item.minecraft.firework_star.shape.burst": "Kube",
     "enchantment.minecraft.bane_of_arthropods": "Virvellausbane",
+    "enchantment.minecraft.protection": "Slagvern",
     "item.minecraft.tipped_arrow.effect.blindness": "Blendepil",
     "item.minecraft.lingering_potion.effect.blindness": "Vedvarende blendebrygg",
     "item.minecraft.potion.effect.blindness": "Blendebrygg",
@@ -74,5 +75,17 @@
     "advancements.husbandry.plant_any_sniffer_seed.description": "Plant alle moldnasefrøa",
     "advancements.adventure.very_very_frightening.description": "Slå ein creeper med lyn",
     "advancements.adventure.kill_all_mobs.title": "Utrydning!",
-    "advancements.adventure.read_power_from_chiseled_bookshelf.description": "Plasser ei galdrebok i ei forma bokhylle for å oppgradere eit galdrebord"
+    "advancements.adventure.read_power_from_chiseled_bookshelf.description": "Plasser ei galdrebok i ei forma bokhylle for å oppgradere eit galdrebord",
+    "advancements.nether.create_full_beacon.description": "Plasser ein varde på toppen av ei 3 blokker høg diamantpyramide",
+    "filled_map.outpost": "Oppdagarkart over plyndrarutpost",
+    "filled_map.ruined_portal": "Oppdagarkart over sundbroten portal",
+    "filled_map.trail_ruins": "Oppdagarkart over landevegsruinar",
+    "merchant.level.1": "Næming",
+    "merchant.level.2": "Lærling",
+    "merchant.level.3": "Svein",
+    "merchant.level.4": "Fagmann",
+    "merchant.level.5": "Meister",
+    "merchant.title": "%s %s",
+    "dataPack.spear_rebalance.description": "Spjut med tung kjerne og perlebåtskalrustning med skjelpaddeskjel",
+    "dataPack.spear_rebalance.name": "1.21.11 eksperiment"
 }

@@ -21,8 +21,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+
 import java.util.function.Function;
 
 @Mixin(Items.class)
@@ -177,4 +180,11 @@ public abstract class ItemsMixin {
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;COAL:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
     private static Item coalTrimMaterial(String name) {
         return registerItem("coal", new Item.Properties().trimMaterial(TrimMaterialsRegistry.COAL));}
+
+    @ModifyArgs(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;spear(Lnet/minecraft/world/item/ToolMaterial;FFFFFFFFF)Lnet/minecraft/world/item/Item$Properties;"))
+    private static void holdSpearsOutForever(Args args) {
+        args.set(4, (float)args.get(4)+32000);
+        args.set(6, (float)args.get(6)+32000);
+        args.set(8, (float)args.get(8)+32000);
+    }
 }

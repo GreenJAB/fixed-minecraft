@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ThrownTrident.class)
@@ -73,5 +74,18 @@ public abstract class ThrownTridentMixin {
         ThrownTrident TE = (ThrownTrident) (Object)this;
         if (TE.entityTags().contains("void")) return 5;
         return original;
+    }
+
+    @ModifyExpressionValue(method = "getLoyaltyFromItem", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getTridentReturnToOwnerAcceleration(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/Entity;)I"))
+    private int allHaveLoyalty(int original) {
+        return original+1;
+    }
+
+    @ModifyArg(method = "tick", at = @At(value = "INVOKE",
+              target = "Lnet/minecraft/world/phys/Vec3;scale(D)Lnet/minecraft/world/phys/Vec3;", ordinal = 1))
+    private double slowNoLoyalty(double scale, @Local int loyalty) {
+        if (loyalty == 1) return 0.025;
+        return 0.05 * (double)(loyalty-1);
     }
 }

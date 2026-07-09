@@ -78,5 +78,14 @@
     "advancements.adventure.read_power_from_chiseled_bookshelf.description": "Use Galed Books in a Graven Bookshelf to Better a Galdercraft Bench",
     "advancements.nether.create_full_beacon.description": "Lay a Beacon on top of a 3 clot tall Kingstone Clot Threehirn Build",
     "filled_map.outpost": "Harrier Litetor Draught",
-    "filled_map.ruined_portal": "Broken Ingang Map"
+    "filled_map.ruined_portal": "Fored Ingang Draught",
+    "filled_map.trail_ruins": "Fored Loast Draught",
+    "merchant.level.1": "Greenhorn",
+    "merchant.level.2": "Adept",
+    "merchant.level.3": "Arade",
+    "merchant.level.4": "Very Arade",
+    "merchant.level.5": "Maister",
+    "merchant.title": "%s %s",
+    "dataPack.spear_rebalance.description": "Heavy Heart Spear and Shale Shipperfish Borrow",
+    "dataPack.spear_rebalance.name": "1.21.11 Fands"
 }

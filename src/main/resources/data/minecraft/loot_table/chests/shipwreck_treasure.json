@@ -2,7 +2,7 @@
     "type": "minecraft:chest",
     "pools": [
         {
-            "bonus_rolls": 0.0,
+            "bonus_rolls": 0,
             "entries": [
                 {
                     "type": "minecraft:item",
@@ -11,8 +11,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 5.0,
-                                "min": 1.0
+                                "max": 5,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -27,8 +27,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 5.0,
-                                "min": 1.0
+                                "max": 5,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -43,8 +43,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 5.0,
-                                "min": 1.0
+                                "max": 5,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -65,12 +65,12 @@
             ],
             "rolls": {
                 "type": "minecraft:uniform",
-                "max": 6.0,
-                "min": 3.0
+                "max": 6,
+                "min": 3
             }
         },
         {
-            "bonus_rolls": 0.0,
+            "bonus_rolls": 0,
             "entries": [
                 {
                     "type": "minecraft:item",
@@ -79,8 +79,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 10.0,
-                                "min": 1.0
+                                "max": 10,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -95,8 +95,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 10.0,
-                                "min": 1.0
+                                "max": 10,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -111,8 +111,8 @@
                             "add": false,
                             "count": {
                                 "type": "minecraft:uniform",
-                                "max": 10.0,
-                                "min": 1.0
+                                "max": 10,
+                                "min": 1
                             },
                             "function": "minecraft:set_count"
                         }
@@ -123,8 +123,8 @@
             ],
             "rolls": {
                 "type": "minecraft:uniform",
-                "max": 5.0,
-                "min": 2.0
+                "max": 5,
+                "min": 2
             }
         },
         {
@@ -144,17 +144,6 @@
                         }
                     ],
                     "name": "minecraft:coast_armor_trim_smithing_template"
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/shipwreck"
-                        }
-                    ],
-                    "name": "minecraft:book",
-                    "weight": 2
                 },
                 {
                     "type": "minecraft:item",
@@ -178,64 +167,6 @@
                 "min": 2,
                 "max": 3
             }
-        },
-        {
-            "bonus_rolls": 0.0,
-            "entries": [
-                {
-                    "type": "minecraft:empty",
-                    "weight": 148
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": 1.0,
-                            "function": "minecraft:set_count"
-                        }
-                    ],
-                    "name": "minecraft:copper_nautilus_armor",
-                    "weight": 20
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": 1.0,
-                            "function": "minecraft:set_count"
-                        }
-                    ],
-                    "name": "minecraft:iron_nautilus_armor",
-                    "weight": 10
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": 1.0,
-                            "function": "minecraft:set_count"
-                        }
-                    ],
-                    "name": "minecraft:golden_nautilus_armor",
-                    "weight": 5
-                },
-                {
-                    "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": 1.0,
-                            "function": "minecraft:set_count"
-                        }
-                    ],
-                    "name": "minecraft:diamond_nautilus_armor",
-                    "weight": 2
-                }
-            ],
-            "rolls": 1.0
         }
     ],
     "random_sequence": "minecraft:chests/shipwreck_treasure"

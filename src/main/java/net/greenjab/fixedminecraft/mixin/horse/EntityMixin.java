@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
 import net.minecraft.world.entity.animal.pig.Pig;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Items;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,6 +23,12 @@ public abstract class EntityMixin {
         if (E instanceof AbstractHorse) {
             if (E.isPassenger()) {
                 return EntityDimensions.fixed(newDim.width() * 0.9f, newDim.height());
+            }
+        } else if (E instanceof ItemEntity) {
+            Entity e2 = E.getFirstPassenger();
+            if (e2!=null) {
+                EntityDimensions ed = e2.getDimensions(e2.getPose());
+                return EntityDimensions.fixed(ed.width(), 0.1f);
             }
         }
         return newDim;

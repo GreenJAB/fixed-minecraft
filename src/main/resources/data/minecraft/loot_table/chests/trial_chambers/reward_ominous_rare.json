@@ -84,7 +84,7 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/trial_chamber"
+                            "options": "#fixedminecraft:other/trial_chamber"
                         }
                     ],
                     "name": "minecraft:book",

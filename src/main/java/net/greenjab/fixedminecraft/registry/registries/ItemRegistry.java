@@ -33,6 +33,7 @@ import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.Consumable;
@@ -93,6 +94,7 @@ public class ItemRegistry {
     public static final Item SPEAR = register(
             "spear", new Item.Properties().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F)
     );
+    public static final Item ILLUSIONER_SPAWN_EGG = registerSpawnEgg(EntityType.ILLUSIONER);
     public static final Item NAUTILUS_ARMOR = register("nautilus_armor", new Item.Properties().nautilusArmor(ArmorMaterials.ARMADILLO_SCUTE));
 
 
@@ -110,6 +112,8 @@ public class ItemRegistry {
     public static final Holder<Potion> LEVITATION = register("levitation", new Potion("levitation", new MobEffectInstance(MobEffects.LEVITATION, 1200)));
 
     public static final DataComponentType<BaitComponent> BAIT_POWER = registerComponent("bait_power", (builder) -> builder.persistent(BaitComponent.CODEC).networkSynchronized(BaitComponent.PACKET_CODEC).cacheEncoding());
+    public static final Item GOLDEN_FERMENTED_SPIDER_EYE = register("golden_fermented_spider_eye", new Item.Properties().component(BAIT_POWER, new BaitComponent(3)));
+
 
     public static Item register(String id, Item.Properties settings) {
         return register(keyOf(id), Item::new, settings);
@@ -154,6 +158,9 @@ public class ItemRegistry {
 
     private static Holder<Potion> register(String name, Potion potion) {
         return Registry.registerForHolder(BuiltInRegistries.POTION, FixedMinecraft.id(name), potion);
+    }
+    private static Item registerSpawnEgg(EntityType<?> type) {
+        return register(ResourceKey.create(Registries.ITEM, EntityType.getKey(type).withSuffix("_spawn_egg")), SpawnEggItem::new, new Item.Properties().spawnEgg(type));
     }
 
     public static final Item AZALEA_PLANKS = register(BlockRegistry.AZALEA_PLANKS);

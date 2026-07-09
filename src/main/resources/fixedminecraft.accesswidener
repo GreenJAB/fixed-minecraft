@@ -36,3 +36,4 @@ accessible field net/minecraft/world/inventory/AbstractMountInventoryMenu mount 
 accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionPiecePlacer
 accessible class net/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$MansionGrid
 accessible class net/minecraft/world/level/block/entity/SculkSensorBlockEntity$VibrationUser
+accessible field net/minecraft/world/entity/item/ItemEntity age I

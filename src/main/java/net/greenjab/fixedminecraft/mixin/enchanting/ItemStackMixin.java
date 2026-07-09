@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -92,6 +93,11 @@ public abstract class ItemStackMixin {
                                 TooltipFlag tooltipFlag, Consumer<Component> builder, CallbackInfo ci) {
         ItemStack stack = (ItemStack)(Object)this;
         if (player.isCreative()) testTags(stack, builder);
+    }
+
+    @ModifyExpressionValue(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
+    private boolean alwaysShowMaxDurability(boolean original) {
+        return true;
     }
 
     @Unique

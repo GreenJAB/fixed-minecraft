@@ -147,17 +147,6 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "weight": 2,
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/nether_fortress"
-                        }
-                    ],
-                    "name": "minecraft:book"
-                },
-                {
-                    "type": "minecraft:item",
                     "name": "minecraft:book",
                     "weight": 2,
                     "functions": [

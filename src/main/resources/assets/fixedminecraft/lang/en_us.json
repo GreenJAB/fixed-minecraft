@@ -4,7 +4,6 @@
     "fixedminecraft.almost_vanilla_potions": "Almost Vanilla Potions",
     "fixedminecraft.recolourful_containers": "Recolourful Containers",
     "fixedminecraft.tiered_crafting": "Tiered Crafting",
-    "fixedminecraft.removed_1.21": "Removed Features from 1.21.11",
     "itemgroup.fixedminecraft": "Fixed",
     "item.fixedminecraft.dragon_firework_rocket": "Dragon Firework Rocket",
     "item.fixedminecraft.chainmail_horse_armor": "Chainmail Horse Armor",
@@ -93,6 +92,7 @@
     "world.moon.first_quarter": "First Quarter ⛏",
     "world.moon.waxing_gibbous": "Waxing Gibbous",
     "component.fixedminecraft.bait": "Bait Level: %s",
+    "item.fixedminecraft.golden_fermented_spider_eye": "Golden Fermented Spider Eye",
     "item.fixedminecraft.azalea_boat": "Azalea Boat",
     "item.fixedminecraft.azalea_chest_boat": "Azalea Boat with Chest",
     "entity.fixedminecraft.azalea_boat": "Azalea Boat",
@@ -140,6 +140,6 @@
     "entity.fixedminecraft.villager.failed_UI": "Error, Close and Reopen Villager UI",
     "trim_material.fixedminecraft.coal": "Coal Material",
     "item.tags": "#%s",
-    "item.fixedminecraft.spear": "Spear",
+    "item.fixedminecraft.spear": "Heavy Spear",
     "item.fixedminecraft.nautilus_armor": "Nautilus Armor"
 }

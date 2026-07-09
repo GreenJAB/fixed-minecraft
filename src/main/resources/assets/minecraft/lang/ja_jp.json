@@ -80,6 +80,12 @@
     "filled_map.outpost": "ピリジャーの前哨基地の地図",
     "filled_map.ruined_portal": "荒廃したポータルの地図",
     "filled_map.trail_ruins": "旅路の遺跡の地図",
+    "merchant.level.1": "新米",
+    "merchant.level.2": "中堅",
+    "merchant.level.3": "一人前",
+    "merchant.level.4": "熟練者",
+    "merchant.level.5": "達人",
+    "merchant.title": "%s %s",
     "dataPack.spear_rebalance.description": "ヘビーコアの槍およびウロコ/オウムガイの殻の装備",
     "dataPack.spear_rebalance.name": "1.21.11 試験的要素"
 }

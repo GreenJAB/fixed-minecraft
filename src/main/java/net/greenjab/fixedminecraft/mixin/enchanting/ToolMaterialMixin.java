@@ -21,7 +21,7 @@ public abstract class ToolMaterialMixin {
             return original.call(incorrectBlocksForDrops, 48, speed, attackDamageBonus, enchantmentValue, repairItems);
         }
         if (durability == 190) { //copper
-            return original.call(incorrectBlocksForDrops, 750, 4.0f, attackDamageBonus, enchantmentValue, repairItems);
+            return original.call(incorrectBlocksForDrops, 500, 4.0f, attackDamageBonus, enchantmentValue, repairItems);
         }
         return original.call(incorrectBlocksForDrops, durability, speed, attackDamageBonus, enchantmentValue, repairItems);
     }

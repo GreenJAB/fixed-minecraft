@@ -156,7 +156,7 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/swamp_hut"
+                            "options": "#fixedminecraft:chest/swamp_hut"
                         }
                     ]
                 }
