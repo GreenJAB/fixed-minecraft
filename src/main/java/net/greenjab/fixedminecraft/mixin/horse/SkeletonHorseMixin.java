@@ -1,12 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.Objects;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntUnaryOperator;
@@ -31,18 +31,16 @@ public abstract class SkeletonHorseMixin {
         attrribute.setBaseValue(getChildMovementSpeedBonus(random::nextDouble));
     }
 
-    @Unique
-    private float getChildHealthBonus(IntUnaryOperator randomIntGetter) {
+    @Unique private float getChildHealthBonus(IntUnaryOperator randomIntGetter) {
         return 15.0F + (float)randomIntGetter.applyAsInt(8) + (float)randomIntGetter.applyAsInt(9);
     }
 
-    @Unique
-    private double getChildMovementSpeedBonus(DoubleSupplier randomDoubleGetter) {
+    @Unique private double getChildMovementSpeedBonus(DoubleSupplier randomDoubleGetter) {
         return (0.44999998807907104 + randomDoubleGetter.getAsDouble() * 0.3 + randomDoubleGetter.getAsDouble() * 0.3 + randomDoubleGetter.getAsDouble() * 0.3) * 0.25;
     }
 
-    @Redirect(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/SkeletonHorse;isTamed()Z"))
-    private boolean allowRiding(SkeletonHorse instance){
+    @WrapOperation(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/SkeletonHorse;isTamed()Z"))
+    private boolean allowRiding(SkeletonHorse instance, Operation<Boolean> original){
         return true;
     }
 }

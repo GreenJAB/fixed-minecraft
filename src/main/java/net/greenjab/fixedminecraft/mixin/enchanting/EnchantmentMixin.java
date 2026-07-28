@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
@@ -30,7 +31,7 @@ public abstract class EnchantmentMixin {
         Enchantment enchantment = (Enchantment)(Object)this;
         if (stack.getComponents().has(DataComponents.EQUIPPABLE)) {
             if (stack.getComponents().get(DataComponents.EQUIPPABLE).equipSound() == SoundEvents.HORSE_ARMOR) {
-                cir.setReturnValue(enchantment.canEnchant(Items.DIAMOND_BOOTS.getDefaultInstance()) && !enchantment.canEnchant(Items.FLINT_AND_STEEL.getDefaultInstance()));
+                cir.setReturnValue(enchantment.canEnchant(Items.DIAMOND_BOOTS.getDefaultInstance()));
                 cir.cancel();
             }
         }
@@ -66,8 +67,11 @@ public abstract class EnchantmentMixin {
             if (!weapon.isEmpty()) {
                 int lungeLevel = FixedMinecraftEnchantmentHelper.enchantLevel(weapon, "lunge");
                 if (lungeLevel > 0) {
-                    float stamina = PE.getFoodData().getSaturationLevel();
-                    if (stamina < lungeLevel * 2) ci.cancel();
+                    if (FixedMinecraft.gameRules.use_stamina) {
+                        if (PE.getFoodData().getSaturationLevel() < lungeLevel * 2) ci.cancel();
+                    } else {
+                        if (PE.getFoodData().getFoodLevel() <= 6) ci.cancel();
+                    }
                 }
             }
         }

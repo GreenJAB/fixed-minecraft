@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry.block;
 
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -58,17 +59,18 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
 
 
     @Override
-    public void entityInside(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull Entity entity, @NonNull InsideBlockEffectApplier handler, boolean bl) {
-        if (world instanceof ServerLevel serverWorld && entity instanceof Ravager && serverWorld.getGameRules().get(GameRules.MOB_GRIEFING)) {
-            serverWorld.destroyBlock(pos, true, entity);
-        }
-        if (entity instanceof LivingEntity livingEntity && state.getValue(HALF) == DoubleBlockHalf.UPPER && !state.getValue(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.hasInfiniteMaterials()) {
-            if (world instanceof ServerLevel serverWorld) {
-                livingEntity.hurtServer(serverWorld, world.damageSources().sweetBerryBush(), 10.0F);
+    public void entityInside(@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos, @NonNull Entity entity, @NonNull InsideBlockEffectApplier handler, boolean bl) {
+        if (level instanceof ServerLevel serverLevel) {
+            if ( entity instanceof Ravager && serverLevel.getGameRules().get(GameRules.MOB_GRIEFING)) {
+                serverLevel.destroyBlock(pos, true, entity);
+            }
+            if (!serverLevel.getGameRules().get(GameRuleRegistry.HOSTILE_SNIFFER_PLANTS)) return;
+            if (entity instanceof LivingEntity livingEntity && state.getValue(HALF) == DoubleBlockHalf.UPPER && !state.getValue(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.hasInfiniteMaterials()) {
+                livingEntity.hurtServer(serverLevel, level.damageSources().sweetBerryBush(), 10.0F);
                 BlockState blockState = state.setValue(FULL, true);
-                world.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
-                world.setBlock(pos.below(), blockState.setValue(HALF, DoubleBlockHalf.LOWER), Block.UPDATE_CLIENTS);
-                world.playSound(null, pos, SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.setBlock(pos, blockState, Block.UPDATE_CLIENTS);
+                level.setBlock(pos.below(), blockState.setValue(HALF, DoubleBlockHalf.LOWER), Block.UPDATE_CLIENTS);
+                level.playSound(null, pos, SoundEvents.PLAYER_HURT_SWEET_BERRY_BUSH, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
     }

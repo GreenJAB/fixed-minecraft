@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -67,6 +68,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "hurtServer",at = @At( value = "TAIL" ))
     private void exitVehicleOnDamage(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (!level.getGameRules().get(GameRuleRegistry.MOBS_LEAVE_VEHICLES_WHEN_ATTACKED)) return;
         LivingEntity entity = ((LivingEntity) (Object) this);
         if (damage <= 0) return;
         if (entity.isAlwaysTicking()) return;

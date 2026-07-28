@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
@@ -22,7 +24,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
@@ -41,47 +42,47 @@ public abstract class ItemsMixin {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
+    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
     @At(value = "CONSTANT", args = "stringValue=brick"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BRICK:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item throwableBrick(String name) {
+    private static Item throwableBrick(String name, Operation<Item> original) {
         return registerItem("brick", NewBrickItem::new, new Item.Properties().useCooldown(1));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=nether_brick"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;NETHER_BRICK:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item throwableNetherBrick(String name) {
+    private static Item throwableNetherBrick(String name, Operation<Item> original) {
         return registerItem("nether_brick", NewBrickItem::new, new Item.Properties().useCooldown(1));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=resin_brick"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;RESIN_BRICK:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item throwableResinBrick(String name, Item.Properties properties) {
+    private static Item throwableResinBrick(String name, Item.Properties properties, Operation<Item> original) {
         return registerItem("resin_brick", NewBrickItem::new, new Item.Properties().useCooldown(1).trimMaterial(TrimMaterials.RESIN));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=totem_of_undying"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;TOTEM_OF_UNDYING:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item useableTotem(String name, Item.Properties properties) {
+    private static Item useableTotem(String name, Item.Properties properties, Operation<Item> original) {
         return registerItem("totem_of_undying", NewTotemItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).component(DataComponents.DEATH_PROTECTION, DeathProtection.TOTEM_OF_UNDYING));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=phantom_membrane"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;PHANTOM_MEMBRANE:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item edibleMembrane(String name) {
+    private static Item edibleMembrane(String name, Operation<Item> original) {
         return registerItem("phantom_membrane", NewPhantomMembraneItem::new, new Item.Properties().stacksTo(64).food(Foods.CHORUS_FRUIT));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=glistering_melon_slice"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;GLISTERING_MELON_SLICE:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item edibleGoldMelon(String name) {
+    private static Item edibleGoldMelon(String name, Operation<Item> original) {
         return registerItem("glistering_melon_slice", NewGlisteringMelonSliceItem::new, new Item.Properties().food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.8F).build()));}
 
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;food(Lnet/minecraft/world/food/FoodProperties;)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;food(Lnet/minecraft/world/food/FoodProperties;)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=glow_berries"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;GLOW_BERRIES:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item.Properties glowingGlowBerries(Item.Properties instance, FoodProperties foodProperties) {
+    private static Item.Properties glowingGlowBerries(Item.Properties instance, FoodProperties foodProperties,Operation<Item.Properties> original) {
         return instance.food(Foods.HONEY_BOTTLE, ItemRegistry.GLOW_BERRIES_EFFECT);}
 
     @ModifyArg(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
@@ -108,23 +109,23 @@ public abstract class ItemsMixin {
     private static int stackedSuspiciousSoup(int max) {
         return 16;}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=potion"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static int stackedPotions(int max) {
-        return 16;}
+    private static Item.Properties stackedPotions(Item.Properties instance, int max, Operation<Item.Properties> original) {
+        return original.call(instance, 16);}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=splash_potion"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;SPLASH_POTION:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static int stackedSplashPotions(int max) {
-        return 16;}
+    private static Item.Properties stackedSplashPotions(Item.Properties instance, int max, Operation<Item.Properties> original) {
+        return original.call(instance, 16).useCooldown(3);}
 
-    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=lingering_potion"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;LINGERING_POTION:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static int stackedLingeringPotions(int max) {
-        return 16;}
+    private static Item.Properties stackedLingeringPotions(Item.Properties instance, int max, Operation<Item.Properties> original) {
+        return original.call(instance, 16).useCooldown(3);}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=saddle"), to =
@@ -163,10 +164,10 @@ public abstract class ItemsMixin {
     private static Item.Properties spiderEyeBait(Item.Properties properties) {
         return properties.component(ItemRegistry.BAIT_POWER, new BaitComponent(1));}
 
-    @Redirect(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=fermented_spider_eye"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;FERMENTED_SPIDER_EYE:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item fermentedSpiderEyeBait(String name) {
+    private static Item fermentedSpiderEyeBait(String name, Operation<Item> original) {
         return registerItem("fermented_spider_eye", new Item.Properties().component(ItemRegistry.BAIT_POWER, new BaitComponent(2)));}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
@@ -175,10 +176,10 @@ public abstract class ItemsMixin {
     private static Item.Properties fireWorkCooldown(Item.Properties properties) {
         return properties.useCooldown(5);}
 
-    @Redirect(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
+    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
     @At(value = "CONSTANT", args = "stringValue=coal"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;COAL:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item coalTrimMaterial(String name) {
+    private static Item coalTrimMaterial(String name, Operation<Item> original) {
         return registerItem("coal", new Item.Properties().trimMaterial(TrimMaterialsRegistry.COAL));}
 
     @ModifyArgs(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;spear(Lnet/minecraft/world/item/ToolMaterial;FFFFFFFFF)Lnet/minecraft/world/item/Item$Properties;"))

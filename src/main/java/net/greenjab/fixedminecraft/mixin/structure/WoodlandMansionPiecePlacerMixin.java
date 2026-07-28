@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Rotation;
@@ -30,8 +31,9 @@ public abstract class WoodlandMansionPiecePlacerMixin {
     @Inject(method = "createMansion", at = @At(value = "INVOKE",
                                                target = "Lnet/minecraft/world/level/levelgen/structure/structures/WoodlandMansionPieces$SimpleGrid;get(II)I", ordinal =1
     ))
-    private void noEmptyChestsInWoodlandMansion(BlockPos origin, Rotation rotation, List<WoodlandMansionPieces.WoodlandMansionPiece> pieces,
+    private void woodlandMansionDeco(BlockPos origin, Rotation rotation, List<WoodlandMansionPieces.WoodlandMansionPiece> pieces,
                                                 WoodlandMansionPieces.MansionGrid mansion, CallbackInfo ci, @Local(ordinal = 2) BlockPos pos) {
+        if (!FixedMinecraft.isChangesEnabled("structures")) return;
         Vector3i rot = rotation.rotation().rotate(new Vector3i(6, 0, 6));
         System.out.println(rotation.rotation() + ", " + rot);
         if (this.random.nextInt(3)==0) pieces.add(new WoodlandMansionPieces.WoodlandMansionPiece(this.structureTemplateManager, "decorations/deco", pos, Rotation.getRandom(this.random)));

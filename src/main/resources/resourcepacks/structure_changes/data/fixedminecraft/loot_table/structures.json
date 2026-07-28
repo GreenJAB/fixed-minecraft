@@ -1,0 +1,6 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+    ],
+    "random_sequence": "fixedminecraft:structures"
+}

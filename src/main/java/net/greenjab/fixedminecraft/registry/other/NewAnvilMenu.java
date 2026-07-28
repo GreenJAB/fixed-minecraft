@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.registry.other;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -134,19 +136,19 @@ public class NewAnvilMenu extends ItemCombinerMenu {
             this.inputSlots.setItem(1, itemStack);
         }
 
-        this.access.execute((world, pos) -> {
-            BlockState blockState = world.getBlockState(pos);
+        this.access.execute((level, pos) -> {
+            BlockState blockState = level.getBlockState(pos);
             if (!player.hasInfiniteMaterials() && blockState.is(BlockTags.ANVIL) && player.getRandom().nextFloat()*100 < finalbreakChance) {
                 BlockState blockState2 = AnvilBlock.damage(blockState);
                 if (blockState2 == null) {
-                    world.removeBlock(pos, false);
-                    world.levelEvent(LevelEvent.SOUND_ANVIL_BROKEN, pos, 0);
+                    level.removeBlock(pos, false);
+                    level.levelEvent(LevelEvent.SOUND_ANVIL_BROKEN, pos, 0);
                 } else {
-                    world.setBlock(pos, blockState2, Block.UPDATE_CLIENTS);
-                    world.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
+                    level.setBlock(pos, blockState2, Block.UPDATE_CLIENTS);
+                    level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
                 }
             } else {
-                world.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
+                level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
             }
 
         });
@@ -217,8 +219,8 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 }
 
                 if (outputItemStack.isDamageableItem() && !book2) {
-                    if (EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack).isEmpty()) {
-                        if (firstInputStack.getDamageValue() == 0) {
+                    if (EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack).isEmpty() || FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
+                        if (firstInputStack.getDamageValue() == 0 && !FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
                             this.text.set(AnvilMsg.FIXED.id);
                             return;
                         }
@@ -241,102 +243,77 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                     }
                 }
 
-                if (book2) {
-                    ItemEnchantments itemEnchantmentsComponent = EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack);
-                    boolean hasGoodEnchant = false;
-                    boolean hasBadEnchant = false;
+                ItemEnchantments itemEnchantmentsComponent = EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack);
+                boolean hasGoodEnchant = false;
+                boolean hasBadEnchant = false;
 
-                    for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantmentsComponent.entrySet()) {
-                        Holder<Enchantment> registryEntry = entry.getKey();
-                        int q = builder.getLevel(registryEntry);
-                        int r = entry.getIntValue();
-                        Enchantment enchantment = registryEntry.value();
-                        r = q == r ? r + (ebook&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
+                for (Object2IntMap.Entry<Holder<Enchantment>> entry : itemEnchantmentsComponent.entrySet()) {
+                    Holder<Enchantment> registryEntry = entry.getKey();
+                    int q = builder.getLevel(registryEntry);
+                    int r = entry.getIntValue();
+                    Enchantment enchantment = registryEntry.value();
+                    r = q == r ? r + (ebook&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
 
-                        boolean canAdd = enchantment.canEnchant(firstInputStack);
-                        if (this.player.hasInfiniteMaterials() || firstInputStack.is(Items.ENCHANTED_BOOK)) {
-                            canAdd = true;
-                        }
+                    boolean canAdd = enchantment.canEnchant(firstInputStack);
+                    if (this.player.hasInfiniteMaterials() || firstInputStack.is(Items.ENCHANTED_BOOK)) {
+                        canAdd = true;
+                    }
 
-                        for (Holder<Enchantment> registryEntry2 : builder.keySet()) {
-                            if (!registryEntry2.equals(registryEntry) && !Enchantment.areCompatible(registryEntry, registryEntry2)) {
-                                canAdd = false;
-                            }
-                        }
-
-                        if (!canAdd) hasBadEnchant = true;
-                        else {
-                            hasGoodEnchant = true;
-                            builder.set(registryEntry, r);
+                    for (Holder<Enchantment> registryEntry2 : builder.keySet()) {
+                        if (!registryEntry2.equals(registryEntry) && !Enchantment.areCompatible(registryEntry, registryEntry2)) {
+                            canAdd = false;
                         }
                     }
 
-                    if (hasBadEnchant && !hasGoodEnchant) {
-                        this.text.set(AnvilMsg.ENCHANT.id);
+                    if (!canAdd) hasBadEnchant = true;
+                    else {
+                        hasGoodEnchant = true;
+                        builder.set(registryEntry, r);
+                    }
+                }
+
+                if (hasBadEnchant && !hasGoodEnchant) {
+                    this.text.set(AnvilMsg.ENCHANT.id);
+                    return;
+                }
+            }
+        }
+        EnchantmentHelper.setEnchantments(outputItemStack, builder.toImmutable());
+        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
+        if (repair) this.cost.set(Mth.ceil(enchantmentPower / 2.0f));
+        else this.cost.set(enchantmentPower);
+
+        boolean isSuper = false;
+        if (!outputItemStack.is(ItemTags.PIGLIN_LOVED) && outputItemStack.getComponents().has(DataComponents.REPAIR_COST))
+            isSuper = outputItemStack.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) == 1;
+
+        boolean over = !this.player.hasInfiniteMaterials() && (isSuper || ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0));
+        if (over) {
+            if (!isNetherite()) {
+                this.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.text.set(isSuper?AnvilMsg.SUPER.id:AnvilMsg.OVER.id);
+                return;
+            }
+            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
+                ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(outputItemStack);
+                for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
+                    Holder<Enchantment> registryEntry = entry.getKey();
+                    if (registryEntry.getRegisteredName().toLowerCase().contains("mending")) {
+                        this.resultSlots.setItem(0, ItemStack.EMPTY);
+                        this.text.set(AnvilMsg.MENDING.id);
                         return;
                     }
                 }
             }
         }
-        EnchantmentHelper.setEnchantments(outputItemStack, builder.toImmutable());
-        if (isNetherite()) {
-            ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(outputItemStack);
-            for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
-                Holder<Enchantment> registryEntry = entry.getKey();
-                if (registryEntry.getRegisteredName().toLowerCase().contains("mending")) {
-                    builder.set(registryEntry, 0);
-                    EnchantmentHelper.setEnchantments(outputItemStack, builder.toImmutable());
-                }
-            }
-            if (secondInputStack.is(Items.ENCHANTED_BOOK)) {
-                ItemEnchantments bookEnchants = EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack);
-                if (bookEnchants.keySet().size() == 1) {
-                    for (Object2IntMap.Entry<Holder<Enchantment>> entry : bookEnchants.entrySet()) {
-                        Holder<Enchantment> registryEntry = entry.getKey();
-                        if (registryEntry.getRegisteredName().toLowerCase().contains("mending")) {
-                            this.text.set(AnvilMsg.MENDING.id);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
-        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
-        if (repair) this.cost.set(Mth.ceil(enchantmentPower / 2.0f));
-        else this.cost.set(enchantmentPower);
-
-        if (!isNetherite()) {
-            if (!this.player.hasInfiniteMaterials()) {
-                boolean isSuper = false;
-                if (outputItemStack.getComponents().has(DataComponents.REPAIR_COST)) {
-                    isSuper = outputItemStack.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) ==1;
-                }
-
-                if (outputItemStack.is(ItemTags.PIGLIN_LOVED)) {
-                    isSuper = false;
-                }
-
-                if ((enchantmentPower < 1 || this.capacity.get() < enchantmentPower) && this.capacity.get() != 0 || isSuper) {
-                    this.resultSlots.setItem(0, ItemStack.EMPTY);
-                    this.text.set(isSuper?AnvilMsg.SUPER.id:AnvilMsg.OVER.id);
-                    return;
-                }
-            }
-        }
-        if (!newName && outputItemStack.is(Items.ENCHANTED_BOOK)) {
-            outputItemStack.set(DataComponents.REPAIR_COST, 0);
-        }
+        if (!newName && outputItemStack.is(Items.ENCHANTED_BOOK)) outputItemStack.set(DataComponents.REPAIR_COST, 0);
         if (ItemStack.isSameItemSameComponents(firstInputStack, outputItemStack)) {
             this.text.set(AnvilMsg.CHANGE.id);
             return;
         }
         this.resultSlots.setItem(0, outputItemStack);
-        if (repair) {
-            this.text.set(AnvilMsg.REPAIR.id);
-
-        } else {
-            this.text.set(AnvilMsg.COST.id);
-        }
+        if (repair) this.text.set(AnvilMsg.REPAIR.id);
+        else this.text.set(AnvilMsg.COST.id);
     }
 
 

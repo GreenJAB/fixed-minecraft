@@ -1,8 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.CustomData;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
@@ -20,26 +23,26 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LocalPlayer.class)
 public abstract class LocalPlayerMixin {
 
-    @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;tryToStartFallFlying()Z"))
-    private boolean failRealTest(LocalPlayer instance) {
-        return false;
+    @WrapOperation(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;tryToStartFallFlying()Z"))
+    private boolean failRealTest(LocalPlayer instance, Operation<Boolean> original) {
+        if (FixedMinecraft.gameRules.elytra_deployment_ticks != 0) return false;
+        return original.call(instance);
     }
 
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isFallFlying()Z"))
     private void addMyTest(CallbackInfo ci) {
         LocalPlayer CPE = (LocalPlayer)(Object)this;
-        if (CPE.input.keyPresses.jump()) {
+        if (CPE.input.keyPresses.jump() && FixedMinecraft.gameRules.elytra_deployment_ticks!=0) {
             if (!CPE.onClimbable() && !CPE.onGround() && !CPE.isPassenger() && !CPE.hasEffect(MobEffects.LEVITATION) &&
-                (CPE.level().getDifficulty().getId()>1?!CPE.isInWaterOrRain():!CPE.isInWater()) &&
+                (FixedMinecraft.gameRules.elytra_fly_in_rain==0?!CPE.isInWaterOrRain():!CPE.isInWater()) &&
                 !CPE.isInLava() &&
-                CustomData.getData(CPE, "airTime") > 15) {
+                CustomData.getData(CPE, "airTime") > FixedMinecraft.gameRules.elytra_deployment_ticks) {
                 if (CPE.tryToStartFallFlying()) {
                     CPE.connection.send(new ServerboundPlayerCommandPacket(CPE, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
                 }

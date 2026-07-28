@@ -1,6 +1,10 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -22,39 +26,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WitherBoss.class)
 public abstract class WitherBossMixin {
 
-    @Redirect(method = "customServerAiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;heal(F)V", ordinal = 1))
-    private void dontHealPastHalfHealth(WitherBoss instance, float v){
-        instance.heal(1.0f);
-        if (instance.entityTags().contains("phase2")) {
-            if (instance.getHealth() > instance.getMaxHealth() / 2.0F) {
-                instance.setHealth(instance.getMaxHealth() / 2.0F);
-            }
-        }
-   }
+    @WrapOperation(method = "customServerAiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;heal(F)V", ordinal = 1))
+    private void dontHealPastHalfHealth(WitherBoss instance, float v, Operation<Void> original){
+        original.call(instance,1.0f);
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT)) return;
+        if (instance.entityTags().contains("phase2") && instance.getHealth() > instance.getMaxHealth() / 2.0F)
+            instance.setHealth(instance.getMaxHealth() / 2.0F);
+    }
 
     @Inject(method = "customServerAiStep", at = @At(value = "HEAD"))
     private void noclipBelowHalfHealth(CallbackInfo ci){
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT)) return;
         WitherBoss WE = (WitherBoss) (Object)this;
         if (WE.isPowered() && WE.getInvulnerableTicks() <=0) {
             WE.noPhysics=true;
             if (!WE.entityTags().contains("phase2")) {
                 WE.addTag("phase2");
-                WE.level().explode(
-                        WE, WE.getX(), WE.getY(), WE.getZ(), 5, Level.ExplosionInteraction.MOB
-                );
+                WE.level().explode(WE, WE.getX(), WE.getY(), WE.getZ(), 5, Level.ExplosionInteraction.MOB);
                 for (int i = 0;i<3;i++) {
                     WitherSkeleton WSE = EntityType.WITHER_SKELETON.create(WE.level().getChunkAt(WE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
                     assert WSE != null;
@@ -66,26 +61,25 @@ public abstract class WitherBossMixin {
                     WE.level().addFreshEntity(WSE);
                 }
             }
-
         }
     }
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"), index = 0)
     private Vec3 floatUpInBlocks(Vec3 vec3d) {
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT)) return vec3d;
         WitherBoss WE = (WitherBoss) (Object)this;
         Level world = WE.level();
         BlockPos blockpos = WE.blockPosition();
         ChunkPos chunk = world.getChunkAt(blockpos).getPos();
         BlockGetter blockView = world.getChunkForCollisions(chunk.x(), chunk.z());
-        if (world.getBlockState(blockpos).isRedstoneConductor(blockView, blockpos) && !world.getBlockState(blockpos.above()).is(Blocks.BEDROCK)) {
+        if (world.getBlockState(blockpos).isRedstoneConductor(blockView, blockpos) && !world.getBlockState(blockpos.above()).is(Blocks.BEDROCK))
             return vec3d.add(0, 0.05 - vec3d.y * 0.6F, 0);
-        } else {
-            return vec3d;
-        }
+        else return vec3d;
     }
 
     @ModifyVariable(method = "aiStep", at = @At(value = "STORE"), ordinal = 1)
     private Vec3 strafePlayer(Vec3 delta, @Local Entity entity) {
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT)) return delta;
         WitherBoss WE = (WitherBoss) (Object)this;
         double r = 6;
         double dx = WE.getX()- entity.getX();
@@ -100,19 +94,20 @@ public abstract class WitherBossMixin {
 
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 9.0))
     private double dontStop(double v){
-        return 0;
+        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT) ?0:v;
     }
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 0.3, ordinal = 1))
     private double moveSlower1(double v){
-        return v*(((WitherBoss) (Object)this).isPowered()?0.9:0.5);
+        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT) ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
     }
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 0.3, ordinal = 2))
     private double moveSlower2(double v){
-        return v*(((WitherBoss) (Object)this).isPowered()?0.9:0.5);
+        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT) ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
     }
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;setYRot(F)V"), index = 0)
     private float facePlayer(float v){
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_WITHER_FIGHT)) return v;
         WitherBoss WE = (WitherBoss) (Object)this;
         if (!WE.level().isClientSide()){
             if (WE.getAlternativeTarget(0) > 0) {
@@ -122,11 +117,9 @@ public abstract class WitherBossMixin {
                     double dz = entity.getZ()-WE.getZ();
                     return (float) Mth.atan2(dz, dx) * (180.0F / (float)Math.PI) - 90.0F;
                 }
-            } else {
-                return v;
-            }
+            } else return v;
         }
-         return WE.yBodyRot;
+        return WE.yBodyRot;
     }
 
     @Inject(method = "hurtServer", at = @At(value = "HEAD"))

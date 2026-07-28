@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.raid;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
@@ -16,11 +18,8 @@ public abstract class RaidMixin {
             opcode = Opcodes.GETFIELD
     ))
     private EntityType<? extends Raider> replaceWithIllusioner(EntityType<? extends Raider> original){
-        if (original == EntityType.EVOKER) {
-            if (Math.random()<0.6666) {
-                return EntityType.ILLUSIONER;
-            }
-        }
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS)) return original;
+        if (original == EntityType.EVOKER && Math.random()<0.6666) return EntityType.ILLUSIONER;
         return original;
     }
 
@@ -30,9 +29,8 @@ public abstract class RaidMixin {
             opcode = Opcodes.GETSTATIC
     ))
     private EntityType<? extends Raider> replaceWithIllusionerRavager(EntityType<? extends Raider> original){
-        if (Math.random()<0.6666) {
-            return EntityType.ILLUSIONER;
-        }
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS)) return original;
+        if (Math.random()<0.6666) return EntityType.ILLUSIONER;
         return original;
     }
 }

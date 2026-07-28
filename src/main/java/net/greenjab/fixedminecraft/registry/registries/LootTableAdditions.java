@@ -11,6 +11,7 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.storage.loot.functions.SetNameFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import org.jspecify.annotations.NonNull;
 
 import static net.greenjab.fixedminecraft.registry.ModTags.*;
 
@@ -41,6 +44,11 @@ public class LootTableAdditions {
                 tableBuilder.pool(bookPool(enchantments, ABANDONED_MINESHAFT_EBOOKS).build());
             } else if (key==BuiltInLootTables.ANCIENT_CITY) {
                 tableBuilder.pool(bookPool(enchantments, ANCIENT_CITY_EBOOKS).build());
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(5))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_HELMET))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_CHESTPLATE))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_BOOTS))
+                        .build());
             } else if (key==BuiltInLootTables.BASTION_TREASURE) {
                 tableBuilder.pool(bookPoolPlus(enchantments, BASTION_TREASURE_EBOOKS, 1, 20).build());
             } else if (key==BuiltInLootTables.BURIED_TREASURE) {
@@ -159,6 +167,39 @@ public class LootTableAdditions {
             }
         });
 
+        LootTableEvents.MODIFY.register((key, tableBuilder, source, holder) -> {
+            HolderLookup.RegistryLookup<Enchantment> enchantments = holder.lookupOrThrow(Registries.ENCHANTMENT);
+            if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(16))
+                        .add(enchantedArmor(enchantments, Items.LEATHER_HORSE_ARMOR, 20, 3))
+                        .add(enchantedArmor(enchantments, ItemRegistry.CHAINMAIL_HORSE_ARMOR, 20, 3))
+                        .add(enchantedArmor(enchantments, Items.COPPER_HORSE_ARMOR, 20, 3))
+                        .add(enchantedArmor(enchantments, Items.IRON_HORSE_ARMOR, 20, 2))
+                        .add(enchantedArmor(enchantments, Items.GOLDEN_HORSE_ARMOR, 20, 2))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_HORSE_ARMOR, 20, 1))
+                        .build());
+            } else if (key==BuiltInLootTables.DESERT_PYRAMID) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(25))
+                        .add(enchantedArmor(enchantments, Items.LEATHER_HORSE_ARMOR, 10, 3))
+                        .add(enchantedArmor(enchantments, ItemRegistry.CHAINMAIL_HORSE_ARMOR, 10, 3))
+                        .add(enchantedArmor(enchantments, Items.COPPER_HORSE_ARMOR, 10, 3))
+                        .add(enchantedArmor(enchantments, Items.IRON_HORSE_ARMOR, 10, 2))
+                        .add(enchantedArmor(enchantments, Items.GOLDEN_HORSE_ARMOR, 10, 2))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_HORSE_ARMOR, 10, 1))
+                        .build());
+            } else if (key==BuiltInLootTables.END_CITY_TREASURE) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(8))
+                        .add(enchantedArmor(enchantments, Items.IRON_HORSE_ARMOR, 30, 1))
+                        .add(enchantedArmor(enchantments, Items.GOLDEN_HORSE_ARMOR, 30, 1))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_HORSE_ARMOR, 30, 2))
+                        .build());
+            } else if (key==BuiltInLootTables.ANCIENT_CITY) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(4))
+                        .add(enchantedArmor(enchantments, Items.DIAMOND_HORSE_ARMOR, 30, 1))
+                        .build());
+            }
+        });
+
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
             if (key==BuiltInLootTables.CHARGED_CREEPER) {
                 LootItemCondition.Builder predicate = LootItemEntityPropertyCondition.hasProperties(
@@ -193,7 +234,15 @@ public class LootTableAdditions {
                         .build());
             }
         });
+    }
 
+    private static LootPoolSingletonContainer.@NonNull Builder<?> enchantedArmor(HolderLookup.RegistryLookup<Enchantment> enchantments, Item armor, int level, int weight) {
+        return LootItem.lootTableItem(armor).setWeight(weight)
+                .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(level))
+                        .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map(named -> named)));
+    }
+    private static LootPoolSingletonContainer.@NonNull Builder<?> enchantedArmor(HolderLookup.RegistryLookup<Enchantment> enchantments, Item armor) {
+        return enchantedArmor(enchantments, armor, 30, 1);
     }
 
     private static LootPool.Builder bookPoolPlus(HolderLookup.RegistryLookup<Enchantment> enchantments, TagKey<Enchantment> tag, int level){

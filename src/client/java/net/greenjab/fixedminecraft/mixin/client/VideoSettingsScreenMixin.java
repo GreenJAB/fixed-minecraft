@@ -14,10 +14,11 @@ public abstract class VideoSettingsScreenMixin {
 
     @Inject(method = "displayOptions", at = @At("RETURN"), cancellable = true)
     private static void armorHudOption(Options options, CallbackInfoReturnable<OptionInstance<?>[]> cir){
-        cir.setReturnValue(new OptionInstance[]{
-                options.framerateLimit(), options.enableVsync(), options.inactivityFpsLimit(), options.guiScale(), options.fullscreen(), options.gamma(),
-                FixedMinecraftClient.newArmorHud,
-                FixedMinecraftClient.fog_21_6
-        });
+        OptionInstance<?>[] oldOptions = cir.getReturnValue();
+        OptionInstance<?>[] newOptions = new OptionInstance[cir.getReturnValue().length+2];
+        System.arraycopy(oldOptions, 0, newOptions, 0, oldOptions.length);
+        newOptions[oldOptions.length]=FixedMinecraftClient.itemArmorHud;
+        newOptions[oldOptions.length+1]=FixedMinecraftClient.jabsFixedFog;
+        cir.setReturnValue(newOptions);
     }
 }

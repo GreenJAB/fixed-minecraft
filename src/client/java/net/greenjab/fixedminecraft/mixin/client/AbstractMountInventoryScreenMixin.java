@@ -10,7 +10,9 @@ import net.minecraft.world.entity.animal.equine.Donkey;
 import net.minecraft.world.entity.animal.equine.Horse;
 import net.minecraft.world.entity.animal.equine.Llama;
 import net.minecraft.world.entity.animal.equine.Mule;
+import net.minecraft.world.entity.animal.equine.SkeletonHorse;
 import net.minecraft.world.entity.animal.equine.TraderLlama;
+import net.minecraft.world.entity.animal.equine.ZombieHorse;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,13 +30,13 @@ public abstract class AbstractMountInventoryScreenMixin {
 
         LivingEntity entity = AMIS.getMenu().mount;
         if (entity != null) {
-            if (entity instanceof Horse) {
+            if (entity instanceof Horse || entity instanceof ZombieHorse) {
                 ((CustomContainerTextureHolder) AMIS).fixedminecraft$setCustomTexture("/horse");
             } else if (entity instanceof Mule) {
                     ((CustomContainerTextureHolder) AMIS).fixedminecraft$setCustomTexture("/mule");
             } else if (entity instanceof Donkey) {
                 ((CustomContainerTextureHolder) AMIS).fixedminecraft$setCustomTexture("/donkey");
-            } else if (entity instanceof Camel) {
+            } else if (entity instanceof Camel || entity instanceof SkeletonHorse) {
                 ((CustomContainerTextureHolder) AMIS).fixedminecraft$setCustomTexture("/camel");
             } else if (entity instanceof Llama || entity instanceof TraderLlama) {
                 ((CustomContainerTextureHolder) AMIS).fixedminecraft$setCustomTexture("/llama");

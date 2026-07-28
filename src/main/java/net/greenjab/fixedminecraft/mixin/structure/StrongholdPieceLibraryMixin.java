@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderSet;
@@ -41,6 +42,8 @@ public abstract class StrongholdPieceLibraryMixin extends StructurePiece {
     @Inject(method = "postProcess", at = @At(value = "TAIL"))
     private void EnchantingTableSetpiece(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator,
                                          RandomSource random, BoundingBox chunkBB, ChunkPos chunkPos, BlockPos referencePos, CallbackInfo ci) {
+
+        if (!FixedMinecraft.isChangesEnabled("structures")) return;
 
         this.generateAirBox(level, chunkBB, 9,1, 5, 11, 3,9);
         this.placeBlock(level, Blocks.OBSIDIAN.defaultBlockState(), 10, 0, 7, chunkBB);

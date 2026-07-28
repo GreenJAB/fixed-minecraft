@@ -1,22 +1,21 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.monster.Creeper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(Creeper.class)
 public abstract class CreeperMixin {
 
-    @Redirect(method = "spawnLingeringCloud", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
-    private void notInfiniteEffect(AreaEffectCloud areaEffectCloudEntity, MobEffectInstance effect){
-        if (effect.getDuration() == -1) {
-            effect = new MobEffectInstance(effect.getEffect(), 20 * 300, effect.getAmplifier());
-        }
-        areaEffectCloudEntity.addEffect(effect);
+    @WrapOperation(method = "spawnLingeringCloud", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;)V"))
+    private void notInfiniteEffect(AreaEffectCloud instance, MobEffectInstance effect, Operation<Void> original){
+        if (effect.getDuration() == -1) effect = new MobEffectInstance(effect.getEffect(), 20 * 300, effect.getAmplifier());
+        original.call(instance, effect);
     }
 
     @ModifyArg(method = "spawnLingeringCloud", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;setRadiusOnUse(F)V"))

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
@@ -29,6 +30,9 @@ public abstract class SnowAndFreezeFeatureMixin {
                                  @Local(ordinal = 0)BlockPos.MutableBlockPos topPos,
                                  @Local(ordinal = 1)BlockPos.MutableBlockPos belowPos,
                                  @Local Biome biome) {
+
+        if (!FixedMinecraft.isChangesEnabled("terrain")) return;
+
         for (int i = 1; i < 16; i++) {
 
             BlockPos mutable = topPos.below(i);

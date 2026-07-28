@@ -28,7 +28,8 @@ public class ModTags {
     public static final TagKey<Item> STAINED_GLASS = TagKey.create(Registries.ITEM, FixedMinecraft.id("stained_glass"));
     public static final TagKey<Item> STAINED_GLASS_PANE = TagKey.create(Registries.ITEM, FixedMinecraft.id("stained_glass_pane"));
     public static final TagKey<Item> COPPER_ARMOR = TagKey.create(Registries.ITEM, FixedMinecraft.id("copper_armor"));
-
+    public static final TagKey<Item> VANILLA_NAUTILUS_ARMOR = TagKey.create(Registries.ITEM, FixedMinecraft.id("vanilla_nautilus_armor"));
+    public static final TagKey<Item> HAS_WAYPOINTS = TagKey.create(Registries.ITEM, FixedMinecraft.id("has_waypoints"));
 
     public static final ResourceKey<TradeSet> WANDERING_TRADER_SPECIAL = TradeSets.resourceKey("wandering_trader/special");
 

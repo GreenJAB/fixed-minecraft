@@ -84,7 +84,7 @@ public class ExplorationCompassLootFunction extends LootItemConditionalFunction 
                 BlockPos blockPos = serverWorld.findNearestMapStructure(this.destination, BlockPos.containing(vec3d), this.searchRadius, this.skipExistingChunks);
                 if (blockPos != null) {
                     ItemStack itemStack = Items.COMPASS.getDefaultInstance();
-                    itemStack.set(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.of(GlobalPos.of(serverWorld.dimension(), blockPos.atY(-49))), true));
+                    itemStack.set(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.of(GlobalPos.of(serverWorld.dimension(), blockPos.atY(-49))), false));
                     itemStack.set(DataComponents.DYED_COLOR, new DyedItemColor(this.color));
                     return itemStack;
                 }

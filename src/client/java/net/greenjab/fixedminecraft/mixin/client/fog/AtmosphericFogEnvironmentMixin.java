@@ -22,16 +22,13 @@ import static org.joml.Math.lerp;
 @Mixin(AtmosphericFogEnvironment.class)
 public abstract class AtmosphericFogEnvironmentMixin {
 
-    @Shadow
-    private float rainFogMultiplier;
+    @Shadow private float rainFogMultiplier;
 
     @Inject(method = "setupFog", at = @At(value = "TAIL"))
-    private void revertAndPaleFog(FogData fog, Camera camera, ClientLevel level, float renderDistance, DeltaTracker deltaTracker,
-                                  CallbackInfo ci){
-        if (FixedMinecraftClient.fog_21_6.get()) {
-            fog.environmentalEnd = lerp(renderDistance, 1024.0F, this.rainFogMultiplier) + -256.0F * this.rainFogMultiplier;
-            fog.environmentalStart = lerp(renderDistance-Math.min(64f, renderDistance / 2), this.rainFogMultiplier * -160.0F, this.rainFogMultiplier);
-        }
+    private void revertAndPaleFog(FogData fog, Camera camera, ClientLevel level, float renderDistance, DeltaTracker deltaTracker, CallbackInfo ci){
+        if (!FixedMinecraftClient.jabsFixedFog.get()) return;
+        fog.environmentalEnd = lerp(renderDistance, 1024.0F, this.rainFogMultiplier) + -256.0F * this.rainFogMultiplier;
+        fog.environmentalStart = lerp(renderDistance-Math.min(64f, renderDistance / 2), this.rainFogMultiplier * -160.0F, this.rainFogMultiplier);
 
         Entity entity = camera.entity();
         float palefog = FixedMinecraftClient.paleGardenFog;
@@ -61,6 +58,5 @@ public abstract class AtmosphericFogEnvironmentMixin {
             fog.skyEnd = lerp(renderDistance, fog.environmentalEnd, newFog);
             fog.cloudEnd = lerp(Minecraft.getInstance().options.cloudRange().get() * 16, fog.environmentalEnd, newFog);
         }
-
     }
 }

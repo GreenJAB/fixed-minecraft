@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
@@ -26,10 +28,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,28 +40,20 @@ import java.util.Optional;
 @Mixin(MapItemSavedData.class)
 public abstract class MapItemSavedDataMixin implements MapStateAccessor {
 
-    @Shadow
-    @Final
-    private Map<String, MapBanner> bannerMarkers;
+    @Shadow @Final private Map<String, MapBanner> bannerMarkers;
 
-    @Final @Shadow @Mutable
-    public int centerX;
+    @Final @Shadow @Mutable public int centerX;
 
-    @Final @Shadow @Mutable
-    public int centerZ;
+    @Final @Shadow @Mutable public int centerZ;
 
-    @Shadow
-    @Final
-    private boolean unlimitedTracking;
+    @Shadow @Final private boolean unlimitedTracking;
 
-    @Override
-    public void fixedminecraft$setPosition(int centerX, int centerZ) {
+    @Override public void fixedminecraft$setPosition(int centerX, int centerZ) {
         this.centerX = centerX;
         this.centerZ = centerZ;
     }
 
-    @Unique
-    private static HashMap<Holder<MapDecorationType>, Integer> decoToColor;
+    @Unique private static HashMap<Holder<MapDecorationType>, Integer> decoToColor;
 
     static {
         decoToColor = new HashMap<>();
@@ -99,18 +91,15 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
         }
     }
 
-    @Redirect(method = "addDecoration", at = @At(
-            value = "NEW",
-            target = "(Lnet/minecraft/core/Holder;BBBLjava/util/Optional;)Lnet/minecraft/world/level/saveddata/maps/MapDecoration;"
-    ))
+    @WrapOperation(method = "addDecoration", at = @At(value = "NEW", target = "(Lnet/minecraft/core/Holder;BBBLjava/util/Optional;)Lnet/minecraft/world/level/saveddata/maps/MapDecoration;"))
     private MapDecoration mapTypeAsCustomName(Holder<MapDecorationType> registryEntry, byte x, byte z, byte rot, Optional<Component> optional,
-                                              @Local(argsOnly = true) Holder<MapDecorationType> type,
+                                              Operation<MapDecoration> original, @Local(argsOnly = true) Holder<MapDecorationType> type,
                                               @Local(argsOnly = true) Component name) {
         if (name != null) {
             if (Objects.requireNonNull(name.tryCollapseToString()).charAt(0) == '¶') {
                 String[] s = name.tryCollapseToString().split("¶");
                 type = getMapType(s[1]);
-                return new MapDecoration(type, x, z, rot, Optional.empty());
+                return original.call(type, x, z, rot, Optional.empty());
             }
 
             if (Objects.requireNonNull(name.tryCollapseToString()).charAt(0) == '[') {
@@ -119,21 +108,19 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
                     String[] s2 = s[1].split("]");
                     Holder<MapDecorationType> type2 = getMapTypeLimited(s2[0]);
                     if (type2 != null) {
-                        if (s2.length == 1) {
-                            return new MapDecoration(type2, x, z, rot, Optional.empty());
-                        } else if (s2.length == 2) {
+                        if (s2.length == 1) return original.call(type2, x, z, rot, Optional.empty());
+                        else if (s2.length == 2) {
                             if (s2[1].charAt(0) == ' ') s2[1] = s2[1].substring(1);
-                            return new MapDecoration(type2, x, z, rot, Optional.of(Component.nullToEmpty(s2[1])));
+                            return original.call(type2, x, z, rot, Optional.of(Component.nullToEmpty(s2[1])));
                         }
                     }
                 }
             }
         }
-        return new MapDecoration(type, x, z, rot, optional);
+        return original.call(type, x, z, rot, optional);
     }
 
-    @ModifyExpressionValue(method = "checkBanners", at = @At(value = "INVOKE",
-                                                             target = "Lnet/minecraft/world/level/saveddata/maps/MapBanner;equals(Ljava/lang/Object;)Z"))
+    @ModifyExpressionValue(method = "checkBanners", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/saveddata/maps/MapBanner;equals(Ljava/lang/Object;)Z"))
     private boolean noRemoveCustomIconBanner(boolean original, @Local(ordinal = 1) MapBanner current){
         if (current!=null) {
             if (current.pos().getY() == -32768) return true;
@@ -165,13 +152,11 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
         cir.cancel();
     }
 
-    @Unique
-    private static boolean isInBounds(float dx, float dz) {
+    @Unique private static boolean isInBounds(float dx, float dz) {
         return dx >= -63.0F && dz >= -63.0F && dx <= 63.0F && dz <= 63.0F;
     }
 
-    @Unique
-    private static final String[] updateNames = {"player", "frame", "red_marker", "blue_marker", "target_x", "target_point",
+    @Unique private static final String[] updateNames = {"player", "frame", "red_marker", "blue_marker", "target_x", "target_point",
             "player_off_map", "player_off_limits", "woodland_mansion", "ocean_monument", "white_banner", "orange_banner", "magenta_banner",
             "light_blue_banner", "light_blue_banner", "lime_banner", "pink_banner", "gray_banner", "light_gray_banner",
             "cyan_banner", "purple_banner", "blue_banner", "brown_banner", "green_banner", "red_banner", "black_banner",
@@ -199,70 +184,70 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
         cir.setReturnValue(newBanners);
     }
 
-    @Unique
-    private Holder<MapDecorationType> getMapType(String type) {
-        if (type.contains("woodland_mansion")) return MapDecorationTypes.WOODLAND_MANSION;
-        if (type.contains("ocean_monument")) return MapDecorationTypes.OCEAN_MONUMENT;
-        if (type.contains("desert_village")) return MapDecorationTypes.DESERT_VILLAGE;
-        if (type.contains("plains_village")) return MapDecorationTypes.PLAINS_VILLAGE;
-        if (type.contains("savanna_village")) return MapDecorationTypes.SAVANNA_VILLAGE;
-        if (type.contains("snowy_village")) return MapDecorationTypes.SNOWY_VILLAGE;
-        if (type.contains("taiga_village")) return MapDecorationTypes.TAIGA_VILLAGE;
-        if (type.contains("jungle_temple")) return MapDecorationTypes.JUNGLE_TEMPLE;
-        if (type.contains("swamp_hut")) return MapDecorationTypes.SWAMP_HUT;
-        if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
-        if (type.contains("red_x")) return MapDecorationTypes.RED_X;
-
-        if (type.contains("white_banner")) return MapDecorationTypes.WHITE_BANNER;
-        if (type.contains("orange_banner")) return MapDecorationTypes.ORANGE_BANNER;
-        if (type.contains("magenta_banner")) return MapDecorationTypes.MAGENTA_BANNER;
-        if (type.contains("light_blue_banner")) return MapDecorationTypes.LIGHT_BLUE_BANNER;
-        if (type.contains("yellow_banner")) return MapDecorationTypes.YELLOW_BANNER;
-        if (type.contains("lime_banner")) return MapDecorationTypes.LIME_BANNER;
-        if (type.contains("pink_banner")) return MapDecorationTypes.PINK_BANNER;
-        if (type.contains("gray_banner")) return MapDecorationTypes.GRAY_BANNER;
-        if (type.contains("light_gray_banner")) return MapDecorationTypes.LIGHT_GRAY_BANNER;
-        if (type.contains("cyan_banner")) return MapDecorationTypes.CYAN_BANNER;
-        if (type.contains("purple_banner")) return MapDecorationTypes.PURPLE_BANNER;
-        if (type.contains("blue_banner")) return MapDecorationTypes.BLUE_BANNER;
-        if (type.contains("brown_banner")) return MapDecorationTypes.BROWN_BANNER;
-        if (type.contains("green_banner")) return MapDecorationTypes.GREEN_BANNER;
-        if (type.contains("red_banner")) return MapDecorationTypes.RED_BANNER;
-
-        if (type.contains("player")) return MapDecorationTypes.PLAYER;
-        if (type.contains("frame")) return MapDecorationTypes.FRAME;
-        if (type.contains("red_marker")) return MapDecorationTypes.RED_MARKER;
-        if (type.contains("blue_marker")) return MapDecorationTypes.BLUE_MARKER;
-        if (type.contains("target_x")) return MapDecorationTypes.TARGET_X;
-        if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
-        if (type.contains("player_off_map")) return MapDecorationTypes.PLAYER_OFF_MAP;
-        if (type.contains("player_off_limits")) return MapDecorationTypes.PLAYER_OFF_LIMITS;
-
-        if (type.contains("outpost")) return MapDecorationRegistry.PILLAGER_OUTPOST;
-        if (type.contains("portal")) return MapDecorationRegistry.RUINED_PORTAL;
-        if (type.contains("trail_ruins")) return MapDecorationRegistry.TRAIL_RUINS;
-
-        return MapDecorationTypes.BLACK_BANNER;
+    @Unique private Holder<MapDecorationType> getMapType(String type) {
+        Holder<MapDecorationType> limited = getMapTypeLimited(type);
+        if (limited!=null) return limited;
+        return switch (type.toLowerCase()) {
+            case "woodland_mansion" -> MapDecorationTypes.WOODLAND_MANSION;
+            case "ocean_monument" -> MapDecorationTypes.OCEAN_MONUMENT;
+            case "desert_village" -> MapDecorationTypes.DESERT_VILLAGE;
+            case "plains_village" -> MapDecorationTypes.PLAINS_VILLAGE;
+            case "savanna_village" -> MapDecorationTypes.SAVANNA_VILLAGE;
+            case "snowy_village" -> MapDecorationTypes.SNOWY_VILLAGE;
+            case "taiga_village" -> MapDecorationTypes.TAIGA_VILLAGE;
+            case "jungle_temple" -> MapDecorationTypes.JUNGLE_TEMPLE;
+            case "swamp_hut" -> MapDecorationTypes.SWAMP_HUT;
+            case "trial_chambers" -> MapDecorationTypes.TRIAL_CHAMBERS;
+            case "red_x" -> MapDecorationTypes.RED_X;
+            case "white_banner" -> MapDecorationTypes.WHITE_BANNER;
+            case "orange_banner" -> MapDecorationTypes.ORANGE_BANNER;
+            case "magenta_banner" -> MapDecorationTypes.MAGENTA_BANNER;
+            case "light_blue_banner" -> MapDecorationTypes.LIGHT_BLUE_BANNER;
+            case "yellow_banner" -> MapDecorationTypes.YELLOW_BANNER;
+            case "lime_banner" -> MapDecorationTypes.LIME_BANNER;
+            case "pink_banner" -> MapDecorationTypes.PINK_BANNER;
+            case "gray_banner" -> MapDecorationTypes.GRAY_BANNER;
+            case "light_gray_banner" -> MapDecorationTypes.LIGHT_GRAY_BANNER;
+            case "cyan_banner" -> MapDecorationTypes.CYAN_BANNER;
+            case "purple_banner" -> MapDecorationTypes.PURPLE_BANNER;
+            case "blue_banner" -> MapDecorationTypes.BLUE_BANNER;
+            case "brown_banner" -> MapDecorationTypes.BROWN_BANNER;
+            case "green_banner" -> MapDecorationTypes.GREEN_BANNER;
+            case "red_banner" -> MapDecorationTypes.RED_BANNER;
+            case "player" -> MapDecorationTypes.PLAYER;
+            case "frame" -> MapDecorationTypes.FRAME;
+            case "red_marker" -> MapDecorationTypes.RED_MARKER;
+            case "blue_marker" -> MapDecorationTypes.BLUE_MARKER;
+            case "target_x" -> MapDecorationTypes.TARGET_X;
+            case "target_point" -> MapDecorationTypes.TARGET_POINT;
+            case "player_off_map" -> MapDecorationTypes.PLAYER_OFF_MAP;
+            case "player_off_limits" -> MapDecorationTypes.PLAYER_OFF_LIMITS;
+            case "outpost" -> MapDecorationRegistry.PILLAGER_OUTPOST;
+            case "portal" -> MapDecorationRegistry.RUINED_PORTAL;
+            case "trail_ruins" -> MapDecorationRegistry.TRAIL_RUINS;
+            default -> MapDecorationTypes.BLACK_BANNER;
+        };
     }
 
     @Unique
     private Holder<MapDecorationType> getMapTypeLimited(String type) {
-        if (type.contains("woodland_mansion")) return MapDecorationTypes.WOODLAND_MANSION;
-        if (type.contains("ocean_monument")) return MapDecorationTypes.OCEAN_MONUMENT;
-        if (type.contains("desert_village")) return MapDecorationTypes.DESERT_VILLAGE;
-        if (type.contains("plains_village")) return MapDecorationTypes.PLAINS_VILLAGE;
-        if (type.contains("savanna_village")) return MapDecorationTypes.SAVANNA_VILLAGE;
-        if (type.contains("snowy_village")) return MapDecorationTypes.SNOWY_VILLAGE;
-        if (type.contains("taiga_village")) return MapDecorationTypes.TAIGA_VILLAGE;
-        if (type.contains("jungle_temple")) return MapDecorationTypes.JUNGLE_TEMPLE;
-        if (type.contains("swamp_hut")) return MapDecorationTypes.SWAMP_HUT;
-        if (type.contains("trial_chambers")) return MapDecorationTypes.TRIAL_CHAMBERS;
-        if (type.contains("red_x")) return MapDecorationTypes.RED_X;
-        if (type.contains("target_point")) return MapDecorationTypes.TARGET_POINT;
-        if (type.contains("outpost")) return MapDecorationRegistry.PILLAGER_OUTPOST;
-        if (type.contains("portal")) return MapDecorationRegistry.RUINED_PORTAL;
-        if (type.contains("trail_ruins")) return MapDecorationRegistry.TRAIL_RUINS;
-
-        return null;
+        return switch (type.toLowerCase()) {
+            case "woodland","mansion" -> MapDecorationTypes.WOODLAND_MANSION;
+            case "ocean","monument" -> MapDecorationTypes.OCEAN_MONUMENT;
+            case "plains","village" -> MapDecorationTypes.PLAINS_VILLAGE;
+            case "desert" -> MapDecorationTypes.DESERT_VILLAGE;
+            case "savanna" -> MapDecorationTypes.SAVANNA_VILLAGE;
+            case "snow" -> MapDecorationTypes.SNOWY_VILLAGE;
+            case "taiga" -> MapDecorationTypes.TAIGA_VILLAGE;
+            case "jungle" -> MapDecorationTypes.JUNGLE_TEMPLE;
+            case "swamp","hut" -> MapDecorationTypes.SWAMP_HUT;
+            case "trial","chambers" -> MapDecorationTypes.TRIAL_CHAMBERS;
+            case "x" -> MapDecorationTypes.RED_X;
+            case "target" -> MapDecorationTypes.TARGET_POINT;
+            case "pillager","outpost" -> MapDecorationRegistry.PILLAGER_OUTPOST;
+            case "portal" -> MapDecorationRegistry.RUINED_PORTAL;
+            case "trail","ruins" -> MapDecorationRegistry.TRAIL_RUINS;
+            default -> null;
+        };
     }
 }

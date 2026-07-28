@@ -13,7 +13,7 @@
     "legacy_random_source": true,
     "noise": {
         "height": 256,
-        "min_y": 0,
+        "min_y": -64,
         "size_horizontal": 2,
         "size_vertical": 1
     },
@@ -44,9 +44,9 @@
                                 "argument1": {
                                     "type": "minecraft:y_clamped_gradient",
                                     "from_value": 0.0,
-                                    "from_y": 4,
+                                    "from_y": -60,
                                     "to_value": 1.0,
-                                    "to_y": 32
+                                    "to_y": -32
                                 },
                                 "argument2": {
                                     "type": "minecraft:add",

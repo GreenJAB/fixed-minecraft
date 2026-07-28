@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.greenjab.fixedminecraft.network.GameRuleStatus;
 import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
@@ -26,16 +27,18 @@ import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
 import net.greenjab.fixedminecraft.registry.registries.TrimMaterialsRegistry;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.storage.loot.LootTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +48,8 @@ import java.util.HashMap;
 public class FixedMinecraft implements ModInitializer {
     public static Logger logger = LoggerFactory.getLogger("FixedMinecraft");
     public static MinecraftServer SERVER = null;
+    public static GameRuleStatus gameRules = new GameRuleStatus();
 
-    public static HashMap<Item, Integer> ItemCapacities = new HashMap<>();
     public static HashMap<Block, Block> corals = new HashMap<>();
 
     public static final String MOD_NAME = "Fixed Minecraft";
@@ -78,12 +81,28 @@ public class FixedMinecraft implements ModInitializer {
         DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT);
 
-        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> ResourceManagerHelper.registerBuiltinResourcePack(
-            FixedMinecraft.id("tiered_crafting"),
-            modContainer,
-            Component.nullToEmpty("fixedminecraft.tiered_crafting"),
-            ResourcePackActivationType.NORMAL)
-        );
+        FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> {
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id("tiered_crafting"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.tiered_crafting"),
+                    ResourcePackActivationType.NORMAL);
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id("harder_eye_of_ender"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.harder_eye_of_ender"),
+                    ResourcePackActivationType.NORMAL);
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id("terrain_changes"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.terrain_changes"),
+                    ResourcePackActivationType.DEFAULT_ENABLED);
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id("structure_changes"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.structure_changes"),
+                    ResourcePackActivationType.DEFAULT_ENABLED);
+        });
 
 
 
@@ -126,5 +145,11 @@ public class FixedMinecraft implements ModInitializer {
         armor.add(entity.equipment.get(EquipmentSlot.CHEST));
         armor.add(entity.equipment.get(EquipmentSlot.HEAD));
         return armor;
+    }
+
+    public static boolean isChangesEnabled(String pack){
+        if (SERVER==null) return false;
+        return FixedMinecraft.SERVER.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, FixedMinecraft.id(pack))) !=
+               LootTable.EMPTY;
     }
 }

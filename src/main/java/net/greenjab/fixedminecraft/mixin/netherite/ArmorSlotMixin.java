@@ -11,12 +11,9 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(ArmorSlot.class)
 public abstract class ArmorSlotMixin {
 
-    @ModifyExpressionValue(method = "mayPickup", at = @At(value = "INVOKE",
-           target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;has(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/component/DataComponentType;)Z"
-    ))
+    @ModifyExpressionValue(method = "mayPickup", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;has(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/component/DataComponentType;)Z"))
     private boolean noNetheriteHarvest(boolean original, @Local ItemStack itemStack) {
-        if (original)
-            if (itemStack.is(ModTags.UNBREAKABLE) && itemStack.nextDamageWillBreak()) return false;
+        if (original) if (itemStack.is(ModTags.UNBREAKABLE) && itemStack.nextDamageWillBreak()) return false;
         return original;
     }
 }

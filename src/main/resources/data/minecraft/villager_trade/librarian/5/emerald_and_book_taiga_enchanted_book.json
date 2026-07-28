@@ -7,7 +7,8 @@
     {
       "function": "fixedminecraft:librarian_book",
       "master": true,
-      "options": "#minecraft:trades/taiga_common"
+      "options": "#minecraft:trades/taiga_common",
+      "all_options": "#minecraft:tradeable"
     },
     {
       "function": "minecraft:filtered",

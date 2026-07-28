@@ -23,6 +23,7 @@ public abstract class ClientLevelMixin {
     @Inject(method = "doAnimateTick", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/level/block/state/BlockState;isCollisionShapeFullBlock(Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)Z"))
     private void voidParticles(int xt, int yt, int zt, int r, RandomSource animateRandom, Block markerParticleTarget,
                                BlockPos.MutableBlockPos pos, CallbackInfo ci, @Local BlockState state) {
+        if (!FixedMinecraftClient.jabsFixedFog.get()) return;
         ClientLevel CL = (ClientLevel) (Object)this;
         if (!state.isCollisionShapeFullBlock(CL, pos)) {
             if (CL.getRandom().nextFloat() < (2*Math.max(FixedMinecraftClient.voidFog, FixedMinecraftClient.paleGardenFog)-0.5) && voidParticle.canSpawn(CL.getRandom())) {

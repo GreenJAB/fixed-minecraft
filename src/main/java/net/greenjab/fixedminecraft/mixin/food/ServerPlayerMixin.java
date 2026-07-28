@@ -1,7 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -12,7 +13,6 @@ import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @Mixin(ServerPlayer.class)
@@ -30,35 +30,12 @@ public abstract class ServerPlayerMixin extends Entity
         SyncHandler.onPlayerUpdate(player);
     }
 
-    @ModifyConstant(method = "checkMovementStatistics", constant = @Constant(floatValue = 0.1f))
-    public float armorDrainsStamina(float constant) {
-        int weight = 0;
-        ServerPlayer player = (ServerPlayer) (Object) this;
-        for (ItemStack item : FixedMinecraft.getArmor(player)) {
-            String s = item.getItemName().toString();
-            if (s.contains("iron")||s.contains("gold")) weight+=1;
-            if (s.contains("diamond")||s.contains("netherite")) weight+=2;
-        }
-        int diff = this.level().getDifficulty().getId();
-        float multiplier = (diff*weight)/48.0f;
-        return 0.1f*(multiplier+1.0f);
-    }
-
     @ModifyConstant(method = "checkMovementStatistics", constant = @Constant(floatValue = 0.01f, ordinal = 0))
     public float swimDrainsStamina(float constant) {
         ServerPlayer player = (ServerPlayer) (Object) this;
-        if (player.isAutoSpinAttack()) {
-            return 0;
-        }
-        int weight = 0;
-        for (ItemStack item : FixedMinecraft.getArmor(player)) {
-            String s = item.getItemName().toString();
-            if (s.contains("iron")||s.contains("gold")) weight+=1;
-            if (s.contains("diamond")||s.contains("netherite")) weight+=2;
-        }
-        int diff = this.level().getDifficulty().getId();
-        float multiplier = (diff*weight)/48.0f;
-        return 0.06f*(multiplier+1.0f);
+        if (player.isAutoSpinAttack()) return 0;
+        if (player.hasEffect(MobEffects.DOLPHINS_GRACE)) return 0;
+        return 0.06f;
     }
 
     @ModifyConstant(method = "checkMovementStatistics", constant = @Constant(floatValue = 0.01f, ordinal = 2))
@@ -68,6 +45,7 @@ public abstract class ServerPlayerMixin extends Entity
 
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private void shieldDrainsStamina(CallbackInfo ci) {
+        if (!FixedMinecraft.gameRules.use_stamina) return;
         ServerPlayer SPE = (ServerPlayer) (Object)this;
         if (SPE.isBlocking()) SPE.causeFoodExhaustion(0.03f);
     }
@@ -75,5 +53,11 @@ public abstract class ServerPlayerMixin extends Entity
     @ModifyConstant(method = "jumpFromGround", constant = @Constant(floatValue = 0.05f))
     private float noStaminaNormalJump(float constant) {
         return 0;
+    }
+
+    @Inject(method = "swing", at = @At("TAIL"))
+    private void missCooldown(InteractionHand hand, CallbackInfo ci) {
+        ServerPlayer player = (ServerPlayer) (Object) this;
+        if (player.getLastHurtMobTimestamp() != this.tickCount) player.attackStrengthTicker = (int)(player.getCurrentItemAttackStrengthDelay()/2.0);
     }
 }

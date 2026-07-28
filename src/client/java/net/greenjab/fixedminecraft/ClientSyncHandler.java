@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.greenjab.fixedminecraft.network.GameRulePayload;
 import net.greenjab.fixedminecraft.screens.MapBookScreen;
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
@@ -28,17 +29,20 @@ import java.util.ArrayList;
 /** Credit: Nettakrim, Squeek502, Bawnorton */
 public class ClientSyncHandler {
     public static void init() {
+        ClientPlayNetworking.registerGlobalReceiver(GameRulePayload.PACKET_ID, ClientSyncHandler::gamerule);
         ClientPlayNetworking.registerGlobalReceiver(SaturationSyncPayload.ID, (payload, context) ->
-                context.client().execute(() ->
-                        context.client().player.getFoodData().setSaturation(payload.getSaturation())));
-
+                context.client().execute(() -> context.client().player.getFoodData().setSaturation(payload.getSaturation())));
         ClientPlayNetworking.registerGlobalReceiver(MapBookOpenPayload.PACKET_ID, ClientSyncHandler::mapBookOpen);
         ClientPlayNetworking.registerGlobalReceiver(MapBookSyncPayload.PACKET_ID, ClientSyncHandler::mapBookSync);
         ClientPlayNetworking.registerGlobalReceiver(MapPositionPayload.PACKET_ID, ClientSyncHandler::mapPosition);
         ClientPlayNetworking.registerGlobalReceiver(TrainPayload.PACKET_ID, ClientSyncHandler::train);
         ClientPlayNetworking.registerGlobalReceiver(VillagerNeedsPayload.PACKET_ID, ClientSyncHandler::villagerNeed);
-
     }
+
+    private static void gamerule(GameRulePayload payload, ClientPlayNetworking.Context context) {
+        context.client().execute(()-> FixedMinecraft.gameRules = payload.rules());
+    }
+
     private static void mapBookOpen(MapBookOpenPayload payload, ClientPlayNetworking.Context context) {
         context.client().execute(() -> context.client().setScreen(new MapBookScreen(payload.itemStack())));
     }
@@ -77,7 +81,7 @@ public class ClientSyncHandler {
             if (level != null) {
                 Entity entity = level.getEntity((payload.train().getFirst()));
                 if (entity instanceof FixedFurnaceMinecartEntity furnaceMinecart) {
-                    furnaceMinecart.setTrain(payload.train());
+                    furnaceMinecart.setTrainClient(payload.train());
                 }
             }
         });

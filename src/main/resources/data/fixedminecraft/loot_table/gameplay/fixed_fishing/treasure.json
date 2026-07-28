@@ -117,7 +117,7 @@
                     "functions": [
                         {
                             "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:loot/fishing"
+                            "options": "#fixedminecraft:other/fishing_treasure"
                         }
                     ],
                     "name": "minecraft:book",

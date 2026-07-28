@@ -59,10 +59,10 @@ public class HUDOverlayHandler {
             else if (effectiveSaturationOfBar > .25) u = 1f * iconSize;
 
             context.blit(RenderPipelines.GUI_TEXTURED, FixedMinecraft.id("textures/gui/sprites/stamina.png"), x, y, u, 0, iconSize, iconSize, 36, 18,  ARGB.white(1F));
-            if ((saturationLevel <=6 && saturationLevel>0) || Minecraft.getInstance().player.hasEffect(MobEffects.HUNGER))
+            if ((FixedMinecraft.gameRules.use_stamina && saturationLevel <=6 && saturationLevel>0) || Minecraft.getInstance().player.hasEffect(MobEffects.HUNGER))
                 context.blit(RenderPipelines.GUI_TEXTURED, FixedMinecraft.id("textures/gui/sprites/stamina.png"), x, y, u, iconSize, iconSize, iconSize, 36, 18,  ARGB.white((float) (Math.sin(ticks/6f) + 1) / 2f));
         }
-        if (saturationLevel <=0) {
+        if (FixedMinecraft.gameRules.use_stamina &&saturationLevel <=0) {
             for (int i = 0; i < 10; i++) {
                 IntPoint offset = foodBarOffsets.get(i);
                 if (offset == null) continue;

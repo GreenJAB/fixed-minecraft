@@ -3,7 +3,7 @@
   "category": "misc",
   "dye": "#minecraft:dyes",
   "result": {
-    "id": "jabsfixedtransport:nautilus_armor"
+    "id": "fixedminecraft:nautilus_armor"
   },
-  "target": "jabsfixedtransport:nautilus_armor"
+  "target": "fixedminecraft:nautilus_armor"
 }

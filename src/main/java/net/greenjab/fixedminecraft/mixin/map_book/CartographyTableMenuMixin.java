@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.map_book;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookIdCountsState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
@@ -30,16 +32,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.function.BiConsumer;
 
 @Mixin(CartographyTableMenu.class)
 public abstract class CartographyTableMenuMixin {
 
-    @Shadow
-    @Final
-    private ResultContainer resultContainer;
+    @Shadow @Final private ResultContainer resultContainer;
 
     @ModifyArg(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V",
                at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/CartographyTableMenu;addSlot(Lnet/minecraft/world/inventory/Slot;)Lnet/minecraft/world/inventory/Slot;", ordinal = 1), index = 0)
@@ -58,34 +57,25 @@ public abstract class CartographyTableMenuMixin {
     private Slot MapBookCraft(Slot par1, @Local(argsOnly = true) ContainerLevelAccess access){
         CartographyTableMenu CTSH = (CartographyTableMenu)(Object)this;
         return new Slot(this.resultContainer, 2, 145, 39) {
-            @Override
-            public boolean mayPlace(@NonNull ItemStack stack) {
+            @Override public boolean mayPlace(@NonNull ItemStack stack) {
                 return false;
             }
 
-            @Override
-            public void onTake(@NonNull Player player, @NonNull ItemStack stack) {
+            @Override public void onTake(@NonNull Player player, @NonNull ItemStack stack) {
                 if (player instanceof ServerPlayer) {
-                    if (CTSH.slots.get(0).getItem().is(Items.FILLED_MAP)) {
-                        if (CTSH.slots.get(1).getItem().is(Items.BOOK)) {
-                            if (stack.is(ItemRegistry.MAP_BOOK)) {
-                                int i = createMapBookState(stack, player.level().getServer());
-                                MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.level().getServer(), i);
-                                if (state != null) {
-                                    state.addMapID(CTSH.slots.getFirst().getItem().get(DataComponents.MAP_ID).id());
-                                }
-                            }
-                        }
+                    if (CTSH.slots.get(0).getItem().is(Items.FILLED_MAP) && CTSH.slots.get(1).getItem().is(Items.BOOK) && stack.is(ItemRegistry.MAP_BOOK)) {
+                        int i = createMapBookState(stack, player.level().getServer());
+                        MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.level().getServer(), i);
+                        if (state != null) state.addMapID(CTSH.slots.getFirst().getItem().get(DataComponents.MAP_ID).id());
                     }
                 }
-
                 CTSH.slots.get(0).remove(1);
                 CTSH.slots.get(1).remove(1);
                 stack.getItem().onCraftedBy(stack, player);
-                access.execute( (world, pos) -> {
-                    long l = world.getGameTime();
+                access.execute( (level, pos) -> {
+                    long l = level.getGameTime();
                     if (CTSH.lastSoundTime != l) {
-                        world.playSound(null, pos, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                        level.playSound(null, pos, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.BLOCKS, 1.0F, 1.0F);
                         CTSH.lastSoundTime = l;
                     }
                 });
@@ -94,24 +84,20 @@ public abstract class CartographyTableMenuMixin {
         };
     }
 
-    @Redirect(method = "setupResultSlot", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/inventory/ContainerLevelAccess;execute(Ljava/util/function/BiConsumer;)V"
-    ))
-    private void cartogrophyTableMapBook(ContainerLevelAccess instance, BiConsumer<Level, BlockPos> action,
+    @WrapOperation(method = "setupResultSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ContainerLevelAccess;execute(Ljava/util/function/BiConsumer;)V"))
+    private void cartographyTableMapBook(ContainerLevelAccess instance, BiConsumer<Level, BlockPos> action, Operation<Void> original,
                                          @Local(argsOnly = true, ordinal = 0) ItemStack mapStack,
                                          @Local(argsOnly = true, ordinal = 1) ItemStack additionalStack,
                                          @Local(argsOnly = true, ordinal = 2) ItemStack resultStack) {
         CartographyTableMenu CTSH = (CartographyTableMenu)(Object)this;
-        instance.execute((world, _) -> {
-
+        instance.execute((level, _) -> {
             if (mapStack.is(ItemRegistry.MAP_BOOK)) {
                 if (additionalStack.is(Items.BOOK)) {
                     this.resultContainer.setItem(2, mapStack.copyWithCount(2));
                     CTSH.broadcastChanges();
                 }
             } else {
-                MapItemSavedData mapState = MapItem.getSavedData(mapStack, world);
+                MapItemSavedData mapState = MapItem.getSavedData(mapStack, level);
                 if (mapState != null) {
                     ItemStack itemStack4;
                     if (additionalStack.is(Items.PAPER) && !mapState.locked && mapState.scale < 4) {
@@ -148,49 +134,35 @@ public abstract class CartographyTableMenuMixin {
         });
     }
 
-    @Redirect(method = "quickMoveStack",
-              at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z", ordinal = 0))
-    private boolean bookQuickMove(ItemStack instance, Object o){
-        return instance.is(Items.PAPER) || instance.is(Items.BOOK);
+    @WrapOperation(method = "quickMoveStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Ljava/lang/Object;)Z", ordinal = 0))
+    private boolean bookQuickMove(ItemStack instance, Object o, Operation<Boolean> original){
+        return original.call(instance, Items.PAPER) || original.call(instance, Items.BOOK);
     }
 
-    @Redirect(method = "quickMoveStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"))
-    private ItemStack quickMapBookCraft(Slot instance, @Local(argsOnly = true) Player player) {
-        ItemStack stack = instance.getItem();
+    @WrapOperation(method = "quickMoveStack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"))
+    private ItemStack quickMapBookCraft(Slot instance, Operation<ItemStack> original, @Local(argsOnly = true) Player player) {
+        ItemStack stack = original.call(instance);
         CartographyTableMenu CTSH = (CartographyTableMenu)(Object)this;
         if (player instanceof ServerPlayer) {
-            if (CTSH.slots.get(0).getItem().is(Items.FILLED_MAP)) {
-                if (CTSH.slots.get(1).getItem().is(Items.BOOK)) {
-                    if (stack.is(ItemRegistry.MAP_BOOK)) {
-                        if (Math.min(CTSH.slots.get(0).getItem().getCount(), CTSH.slots.get(1).getItem().getCount())==1) {
-                            int i = createMapBookState(stack, player.level().getServer());
-                            MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.level().getServer(), i);
-                            if (state != null) {
-                                state.addMapID(CTSH.slots.getFirst().getItem().get(DataComponents.MAP_ID).id());
-                            }
-                        }else{
-                            return ItemStack.EMPTY;
-                        }
-                    }
-                }
+            if (CTSH.slots.get(0).getItem().is(Items.FILLED_MAP) && CTSH.slots.get(1).getItem().is(Items.BOOK) && stack.is(ItemRegistry.MAP_BOOK)) {
+                if (Math.min(CTSH.slots.get(0).getItem().getCount(), CTSH.slots.get(1).getItem().getCount())==1) {
+                    int i = createMapBookState(stack, player.level().getServer());
+                    MapBookState state = MapBookStateManager.INSTANCE.getMapBookState(player.level().getServer(), i);
+                    if (state != null) state.addMapID(CTSH.slots.getFirst().getItem().get(DataComponents.MAP_ID).id());
+                } else return ItemStack.EMPTY;
             }
         }
         return stack;
     }
 
-    @Unique
-    private int allocateMapBookId(MinecraftServer server) {
-
-        MapBookIdCountsState counts = server.getDataStorage().computeIfAbsent(
-                MapBookIdCountsState.persistentStateType
-        );
+    @Unique private int allocateMapBookId(MinecraftServer server) {
+        MapBookIdCountsState counts = server.getDataStorage().computeIfAbsent(MapBookIdCountsState.persistentStateType);
         int i = counts.get();
         MapBookStateManager.INSTANCE.putMapBookState(server, i, new MapBookState());
         return i;
     }
 
-    @Unique
-    private int createMapBookState(ItemStack stack, MinecraftServer server) {
+    @Unique private int createMapBookState(ItemStack stack, MinecraftServer server) {
         int i = this.allocateMapBookId(server);
         stack.set(DataComponents.MAP_ID, new MapId(i));
         return i;

@@ -1,7 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
-import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.CustomData;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -15,24 +17,21 @@ import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(FoodData.class)
 public abstract class FoodDataMixin {
 
-    @Shadow
-    private float exhaustionLevel;
+    @Shadow private float exhaustionLevel;
 
-    @Shadow
-    private float saturationLevel;
+    @Shadow private float saturationLevel;
 
-    @Shadow
-    private int foodLevel;
+    @Shadow private int foodLevel;
 
     @Inject(method = "add", at = @At("HEAD"), cancellable = true)
     private void dontCapSaturation(int food, float saturation, CallbackInfo ci) {
+        if (!FixedMinecraft.gameRules.use_stamina) return;
         FoodData instance = (FoodData) (Object)this;
         instance.setFoodLevel(Mth.clamp(food + instance.getFoodLevel(), 0, 20));
         instance.setSaturation(Mth.clamp(instance.getSaturationLevel() + saturation, 0, 20.0f));
@@ -41,14 +40,7 @@ public abstract class FoodDataMixin {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void HungerToSaturation(ServerPlayer player, CallbackInfo ci) {
-
-        int airTime = CustomData.getData(player, "airTime");// player.getEntityWorld().getScoreboard().getOrCreateScore(player, player.getEntityWorld().getScoreboard().getNullableObjective("airTime")).getScore();//.getNullableObjective("airTime").getScoreboard().get
-        if (player.onGround()|| player.isPassenger() || player.onClimbable() || player.isInWater()) airTime=0;
-        else if (player.getAbilities().flying) airTime = 10;
-        else airTime++;
-        if (player.isAutoSpinAttack()) airTime =20;
-        CustomData.setData(player, "airTime", airTime);
-
+        if (!FixedMinecraft.gameRules.use_stamina) return;
         float lastExhaustion = CustomData.getData(player, "lastExhaustion")/1000.0f;
         int ticksSinceLastExhaustion = CustomData.getData(player, "ticksSinceLastExhaustion");
         float saturationSinceLastHunger = CustomData.getData(player, "saturationSinceLastHunger")/1000.0f;
@@ -62,9 +54,7 @@ public abstract class FoodDataMixin {
             ticksSinceLastExhaustion = 0;
             lastExhaustion = this.exhaustionLevel;
         }
-        if (player.hurtTime>0) {
-            ticksSinceLastExhaustion = 0;
-        }
+        if (player.hurtTime>0) ticksSinceLastExhaustion = 0;
         if (this.saturationLevel < this.foodLevel) {
             if (ticksSinceLastExhaustion == staminaPause) {
                 float h = 0.03f + this.saturationLevel / 100.0f;
@@ -98,42 +88,49 @@ public abstract class FoodDataMixin {
 
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 4.0f))
     private float lessExhastion(float value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         return 0.5f;
     }
     @ModifyConstant(method = "tick", constant = @Constant(floatValue = 1.0f, ordinal = 0))
     private float lessStaminaCost(float value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         return 0.5f;
     }
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 20))
     private int noQuickHeal(int value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         return 20000;
     }
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 18))
     private int dontNeedHungerToHeal(int value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         return 0;
     }
     @ModifyConstant(method = "tick", constant = @Constant(intValue = 80))
     private int fasterHeal(int value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         FoodData HM = (FoodData) (Object)this;
         if (HM.getFoodLevel()==0) return 80;
         return 20;
     }
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isHurt()Z"))
-    private boolean needSaturationToHeal(ServerPlayer instance) {
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;isHurt()Z"))
+    private boolean needSaturationToHeal(ServerPlayer instance, Operation<Boolean> original) {
+        if (!FixedMinecraft.gameRules.use_stamina) return original.call(instance);
         FoodData HM = (FoodData) (Object)this;
         if (instance.hurtTime>0) return false;
-        return instance.isHurt() && (instance.getHealth() <= instance.getMaxHealth()-1) && HM.getSaturationLevel()>3 &&
+        return original.call(instance) && (instance.getHealth() <= instance.getMaxHealth()-1) && HM.getSaturationLevel()>3 &&
                (HM.getSaturationLevel()>=HM.getFoodLevel() || instance.isShiftKeyDown());
     }
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/food/FoodData;addExhaustion(F)V"), index = 0)
     private float healFromHunger(float value) {
+        if (!FixedMinecraft.gameRules.use_stamina) return value;
         return 3;
     }
 
     @Inject(method = "hasEnoughFood", at = @At("HEAD"), cancellable = true)
     private void cancelSprintAt0Saturation(CallbackInfoReturnable<Boolean> cir) {
+        if (!FixedMinecraft.gameRules.use_stamina) return;
         FoodData HM = (FoodData) (Object)this;
         cir.setReturnValue(HM.getSaturationLevel() > 0.0F);
     }
-
 }

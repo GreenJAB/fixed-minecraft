@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.LootTableRegistry;
 import net.minecraft.IdentifierException;
 import net.minecraft.core.BlockPos;
@@ -34,6 +35,8 @@ public abstract class WoodlandMansionStructureMixin {
     private void placeHallwayDecorations(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator,
                                          RandomSource random, BoundingBox chunkBB, ChunkPos chunkPos, PiecesContainer pieces,
                                          CallbackInfo ci) {
+        if (!FixedMinecraft.isChangesEnabled("structures")) return;
+
         BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
         BoundingBox boundingBox = pieces.calculateBoundingBox();
 

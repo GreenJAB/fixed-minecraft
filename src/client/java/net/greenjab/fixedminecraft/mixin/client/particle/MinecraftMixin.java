@@ -19,18 +19,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
-    @Shadow
-    @Nullable
-    public LocalPlayer player;
-
-    @Shadow
-    @Nullable
-    public ClientLevel level;
+    @Shadow @Nullable public LocalPlayer player;
+    @Shadow @Nullable public ClientLevel level;
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/ClientLevel;animateTick(III)V"))
     public void addWaxParticles(CallbackInfo ci) {
@@ -56,13 +50,5 @@ public abstract class MinecraftMixin {
                 ParticleUtils.spawnParticleOnFace(level, pos, direction, ParticleTypes.HAPPY_VILLAGER, new Vec3(0, 0, 0), 0.55);
             }
         }
-    }
-
-    @Inject(method = "startAttack", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;resetAttackStrengthTicker()V"
-    ))
-    private void reducedCooldownIfMiss(CallbackInfoReturnable<Boolean> cir){
-        //TODO miss faster reset
     }
 }

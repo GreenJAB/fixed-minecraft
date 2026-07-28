@@ -31,17 +31,21 @@ import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.MinecartItem;
+import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluids;
+
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -84,12 +88,14 @@ public class ItemRegistry {
     public static final Item WAXED_WEATHERED_COPPER_RAIL = register(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL);
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
 
+    public static final Item ALLAY_BUCKET = register("allay_bucket", settings ->
+                    new MobBucketItem(EntityType.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),
+            new Item.Properties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY));
     public static final Item PATINA = register("patina", PatinaItem::new, new Item.Properties());
     public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSTONE_LANTERN);
 
-    public static final Item DISPENSER_MINECART = register(
-            "dispenser_minecart", settings -> new MinecartItem(EntityTypeRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Properties().stacksTo(1)
-    );
+    public static final Item DISPENSER_MINECART = register("dispenser_minecart", settings ->
+            new MinecartItem(EntityTypeRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Properties().stacksTo(1));
 
     public static final Item SPEAR = register(
             "spear", new Item.Properties().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F)

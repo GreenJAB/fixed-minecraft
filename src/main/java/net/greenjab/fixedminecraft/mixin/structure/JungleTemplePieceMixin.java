@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -43,6 +44,9 @@ public abstract class JungleTemplePieceMixin extends ScatteredFeaturePiece {
     ), cancellable = true)
     private void betterRedstone(WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator,
                                 RandomSource random, BoundingBox chunkBB, ChunkPos chunkPos, BlockPos referencePos, CallbackInfo ci) {
+
+        if (!FixedMinecraft.isChangesEnabled("structures")) return;
+
         this.placeBlock(level, Blocks.REDSTONE_WALL_TORCH.defaultBlockState().setValue(RedstoneTorchBlock.LIT, true).setValue(WallTorchBlock.FACING, Direction.EAST), 8, -1, 10, chunkBB);
         this.placeBlock(level, Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), 8, -3, 11, chunkBB);
         this.placeBlock(level, Blocks.CHISELED_STONE_BRICKS.defaultBlockState(), 9, -3, 11, chunkBB);

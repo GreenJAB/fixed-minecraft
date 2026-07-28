@@ -19,7 +19,6 @@ import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -37,16 +36,12 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
         double u =40;
         if (state.getBlock() instanceof BaseRailBlock) {
             u = 8.0;
-            if (state.getBlock() instanceof CopperRailBlock) {
-                u = CopperRailBlock.getMaxVelocity(state);
-            }
+            if (state.getBlock() instanceof CopperRailBlock) u = CopperRailBlock.getMaxVelocity(state);
         }
         if (this.minecart.isInWater()) u /= 2.0;
         u /= 20.0;
-        u = Math.max(u, velocity.horizontalDistance()*.9);
-        if (state.getBlock() instanceof PoweredRailBlock && !(this.minecart instanceof MinecartFurnace)) {
-            u = 8.0/20.0;
-        }
+        u = Math.max(u, velocity.horizontalDistance()*0.9);
+        if (state.getBlock() instanceof PoweredRailBlock && !(this.minecart instanceof MinecartFurnace)) u = 8.0/20.0;
         cir.setReturnValue(u);
         cir.cancel();
     }
@@ -70,36 +65,32 @@ public abstract class NewMinecartBehaviorMixin extends MinecartBehavior {
             this.minecart.removeTag("trainMove");
             this.minecart.removeTag("trainTP");
         }
-        if (this.minecart.entityTags().contains("trainMove")) {
-            ci.cancel();
-        }
+        if (this.minecart.entityTags().contains("trainMove")) ci.cancel();
     }
 
     @ModifyExpressionValue(method = "moveAlongTrack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior;calculateTrackSpeed(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/entity/vehicle/minecart/NewMinecartBehavior$TrackIteration;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/state/properties/RailShape;)Lnet/minecraft/world/phys/Vec3;"))
     private Vec3 skipPowerRailSlowdown(Vec3 original) {
-        if (this.minecart.noPhysics || this.minecart.entityTags().contains("train")) {
-            return this.getDeltaMovement().horizontal();
-        }
+        if (this.minecart.noPhysics || this.minecart.entityTags().contains("train")) return this.getDeltaMovement().horizontal();
         return original;
     }
 
     @Inject(method = "moveAlongTrack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Ljava/lang/Object;)Z"))
     private void powerRailFurnaceMinecart(ServerLevel level, CallbackInfo ci, @Local BlockState currentState) {
         if (this.minecart instanceof FixedFurnaceMinecartEntity fixedFurnaceMinecartEntity) {
-            if (currentState.is(Blocks.POWERED_RAIL)) {
+            if (currentState.is(Blocks.POWERED_RAIL))
                 fixedFurnaceMinecartEntity.powerRailSetLit = currentState.getValue(PoweredRailBlock.POWERED)?1:-1;
-            }
         }
     }
     @Inject(method = "getSlowdownFactor", at = @At("HEAD"), cancellable = true)
-    private void consistantSpeeds(CallbackInfoReturnable<Double> cir){
-        if (this.minecart.tickCount<0 || this.minecart.entityTags().contains("train")) {
-            cir.setReturnValue(0.975);
+    private void consistentSpeeds(CallbackInfoReturnable<Double> cir){
+        if (this.minecart.tickCount<0 || this.minecart.entityTags().contains("train") || this.minecart.entityTags().contains("trainTP")) {
+            cir.setReturnValue(1.0);
             cir.cancel();
         }
     }
-    @Redirect(method = "pushEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/AbstractMinecart;isVehicle()Z"))
-    private boolean test(AbstractMinecart instance){
-        return false;
+    @ModifyExpressionValue(method = "pushEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/vehicle/minecart/AbstractMinecart;isVehicle()Z"))
+    private boolean dontPush(boolean original){
+        if (this.minecart.entityTags().contains("train")) return false;
+        return original;
     }
 }

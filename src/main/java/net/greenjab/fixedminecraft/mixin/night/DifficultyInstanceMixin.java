@@ -1,11 +1,11 @@
 package net.greenjab.fixedminecraft.mixin.night;
 
-import net.minecraft.util.Mth;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.DifficultyInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(DifficultyInstance.class)
 public abstract class DifficultyInstanceMixin {
@@ -15,9 +15,8 @@ public abstract class DifficultyInstanceMixin {
         return 1 - moonBrightness;
     }
 
-    @Redirect(method = "calculateDifficulty",at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2))
-    private float moonMoreEffect(float value, float min, float max) {
-        return Mth.clamp(value * 3, min, max * 3);
+    @WrapOperation(method = "calculateDifficulty", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(FFF)F", ordinal = 2))
+    private float moonMoreEffect(float value, float min, float max, Operation<Float> original) {
+        return original.call(value * 3, min, max * 3);
     }
-
 }

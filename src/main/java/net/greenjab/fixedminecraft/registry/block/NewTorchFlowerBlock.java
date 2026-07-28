@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.registry.block;
 
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,8 +26,9 @@ public class NewTorchFlowerBlock extends FlowerBlock {
 
     @Override
     protected void entityInside(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull Entity entity, @NonNull InsideBlockEffectApplier handler, boolean bl) {
-        if (entity instanceof LivingEntity && entity.getType() != EntityType.SNIFFER ) {
-            if (world instanceof ServerLevel) {
+        if (world instanceof ServerLevel serverLevel) {
+            if (!serverLevel.getGameRules().get(GameRuleRegistry.HOSTILE_SNIFFER_PLANTS)) return;
+            if (entity instanceof LivingEntity && entity.getType() != EntityType.SNIFFER ) {
                 entity.setRemainingFireTicks(100);
             }
         }

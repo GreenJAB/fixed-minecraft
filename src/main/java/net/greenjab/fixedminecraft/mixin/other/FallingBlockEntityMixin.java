@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.other;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.block.NewSnowBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -15,14 +17,12 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FallingBlockEntity.class)
 public abstract class FallingBlockEntityMixin {
 
-    @Shadow
-    private BlockState blockState;
+    @Shadow private BlockState blockState;
 
     @Inject(method = "setHurtsEntities", at = @At(value = "HEAD"), cancellable = true)
     private void changeToGravelCancel(float damagePerDistance, int damageMax, CallbackInfo ci) {
@@ -61,17 +61,14 @@ public abstract class FallingBlockEntityMixin {
     private void fallingSnow3(CallbackInfo ci) {
         if (tryFallingSnow()) ci.cancel();}
 
-    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;canBeReplaced(Lnet/minecraft/world/item/context/BlockPlaceContext;)Z"))
-    private boolean fallingSnow4(BlockState instance, BlockPlaceContext itemPlacementContext) {
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;canBeReplaced(Lnet/minecraft/world/item/context/BlockPlaceContext;)Z"))
+    private boolean fallingSnow4(BlockState instance, BlockPlaceContext blockPlaceContext, Operation<Boolean> original) {
         FallingBlockEntity FBE = (FallingBlockEntity)(Object)this;
-        if ((instance.is(Blocks.SNOW) && FBE.level().getBlockState(itemPlacementContext.getClickedPos()).is(Blocks.SNOW))) {
-            return false;
-        }
-        return instance.canBeReplaced(itemPlacementContext);
+        if ((instance.is(Blocks.SNOW) && FBE.level().getBlockState(blockPlaceContext.getClickedPos()).is(Blocks.SNOW))) return false;
+        return original.call(instance, blockPlaceContext);
     }
 
-    @Unique
-    private boolean tryFallingSnow() {
+    @Unique private boolean tryFallingSnow() {
         FallingBlockEntity FBE = (FallingBlockEntity)(Object)this;
         if (FBE.getBlockState().is(Blocks.SNOW)) {
             Block block = this.blockState.getBlock();

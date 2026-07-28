@@ -97,7 +97,8 @@ public abstract class ItemStackMixin {
 
     @ModifyExpressionValue(method = "addDetailsToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamaged()Z"))
     private boolean alwaysShowMaxDurability(boolean original) {
-        return true;
+        ItemStack stack = (ItemStack)(Object)this;
+        return stack.isDamageableItem();
     }
 
     @Unique

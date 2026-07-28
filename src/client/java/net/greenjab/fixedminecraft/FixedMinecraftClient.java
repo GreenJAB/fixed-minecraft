@@ -19,23 +19,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.item.properties.conditional.ConditionalItemModelProperties;
-import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
 
 public class FixedMinecraftClient implements ClientModInitializer {
     public static float paleGardenFog = 0f;
     public static float voidFog = 0f;
-    public static EquipmentClientInfo chainmailModel = createHumanoidAndHorseModel("chainmail");
-    public static EquipmentClientInfo copperExposedModel = createHumanoidOnlyModel("copper_exposed");
-    public static EquipmentClientInfo copperWeatheredModel = createHumanoidOnlyModel("copper_weathered");
-    public static EquipmentClientInfo copperOxidizedModel = createHumanoidOnlyModel("copper_oxidized");
-    public static EquipmentClientInfo scuteNautilusArmor = EquipmentClientInfo.builder()
-            .addLayers(EquipmentClientInfo.LayerType.NAUTILUS_BODY, EquipmentClientInfo.Layer.onlyIfDyed(Identifier.withDefaultNamespace("armadillo_scute"), false))
-            .addLayers(EquipmentClientInfo.LayerType.NAUTILUS_BODY, EquipmentClientInfo.Layer.onlyIfDyed(Identifier.withDefaultNamespace("armadillo_scute_overlay"), true))
-            .build();
-    public static OptionInstance<Boolean> newArmorHud = OptionInstance.createBoolean("options.newArmorHud", true);
-    public static OptionInstance<Boolean> fog_21_6 = OptionInstance.createBoolean("options.fog_21_6", true);
+
+    public static OptionInstance<Boolean> itemArmorHud = OptionInstance.createBoolean("options.itemArmorHud", true);
+    public static OptionInstance<Boolean> jabsFixedFog = OptionInstance.createBoolean("options.jabsFixedFog", true);
 
     @Override
     public void onInitializeClient() {
@@ -82,19 +73,6 @@ public class FixedMinecraftClient implements ClientModInitializer {
                     ResourcePackActivationType.NORMAL
             );
         });
-
-
-    }
-    private static EquipmentClientInfo createHumanoidAndHorseModel(String id) {
-        return EquipmentClientInfo.builder()
-                .addHumanoidLayers(Identifier.withDefaultNamespace(id))
-                .addLayers(EquipmentClientInfo.LayerType.HORSE_BODY, EquipmentClientInfo.Layer.leatherDyeable(Identifier.withDefaultNamespace(id), false))
-                .build();
-    }
-    private static EquipmentClientInfo createHumanoidOnlyModel(String id) {
-        return EquipmentClientInfo.builder()
-                .addHumanoidLayers(Identifier.withDefaultNamespace(id))
-                .build();
     }
 
     public static boolean usingCustomContainers() {

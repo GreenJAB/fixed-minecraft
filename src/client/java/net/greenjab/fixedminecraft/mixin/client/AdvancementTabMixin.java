@@ -1,13 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.gui.screens.advancements.AdvancementTab;
-import net.minecraft.util.Mth;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(AdvancementTab.class)
 public abstract class AdvancementTabMixin {
@@ -30,9 +30,9 @@ public abstract class AdvancementTabMixin {
     @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 8))
     private int largerScreenY5(int constant) {return 16;}
 
-    @Redirect(method = "scroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(DDD)D"))
-    private double largerPan(double value, double min, double max) {
-        return Mth.clamp(value, min - 50, max + 50);
+    @WrapOperation(method = "scroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Mth;clamp(DDD)D"))
+    private double largerPan(double value, double min, double max, Operation<Double> original) {
+        return original.call(value, min - 50, max + 50);
     }
 
 }

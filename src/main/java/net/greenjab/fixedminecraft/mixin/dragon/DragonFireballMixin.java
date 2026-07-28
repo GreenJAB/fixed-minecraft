@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.hurtingprojectile.DragonFireball;
@@ -18,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DragonFireballMixin {
 
     @Inject(method = "onHit", at = @At("HEAD"), cancellable = true)
-    private void checkForDragonFight(CallbackInfo ci, @Local(argsOnly = true) HitResult hitResult) {
+    private void dontHitItself(CallbackInfo ci, @Local(argsOnly = true) HitResult hitResult) {
         if (hitResult.getType()==HitResult.Type.ENTITY) {
             if (((EntityHitResult) hitResult).getEntity().getType() == EntityType.ENDER_DRAGON) {
                 ci.cancel();
@@ -26,10 +28,9 @@ public abstract class DragonFireballMixin {
         }
     }
 
-    @Inject(method = "onHit", at= @At(value = "INVOKE",
-                                            target = "Lnet/minecraft/world/entity/AreaEffectCloud;<init>(Lnet/minecraft/world/level/Level;DDD)V"
-    ))
+    @Inject(method = "onHit", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;<init>(Lnet/minecraft/world/level/Level;DDD)V"))
     private void explodeOnImpact(HitResult hitResult, CallbackInfo ci) {
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
         DragonFireball DFE = (DragonFireball)(Object)this;
         ServerLevel world = (ServerLevel) DFE.level();
         int explosionPower = (DFE.level().getDifficulty().getId()+1)/2;

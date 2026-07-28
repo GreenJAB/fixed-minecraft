@@ -44,9 +44,7 @@ import java.util.List;
 @Mixin(FishingHook.class)
 public abstract class FishingHookMixin {
 
-    @Shadow
-    @Final
-    private int luck;
+    @Shadow @Final private int luck;
 
     @ModifyArg(method = "retrieve", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/level/storage/loot/LootParams$Builder;withLuck(F)Lnet/minecraft/world/level/storage/loot/LootParams$Builder;"))
     private float oneItem(float luck) {
@@ -78,7 +76,7 @@ public abstract class FishingHookMixin {
 
         //https://www.desmos.com/calculator/xgxywuavpe
 
-        if (level.getRandom().nextInt(100)<this.luck*5) {
+        if (level.getRandom().nextInt(100) < this.luck * 5) {
             List<String> fish = List.of("cod", "salmon", "tropical_fish");
             List<String> common = List.of("squid", "glow_squid", "tadpole");
             List<String> rare = List.of("turtle", "dolphin", "axolotl", "nautilus");
@@ -151,8 +149,7 @@ public abstract class FishingHookMixin {
 
     }
 
-    @Unique
-    private ItemStack getBait(Player playerEntity) {
+    @Unique private ItemStack getBait(Player playerEntity) {
         ItemStack[] items = {playerEntity.getMainHandItem(), playerEntity.getOffhandItem()};
         for (ItemStack item : items) {
             if (item.getComponents().has(ItemRegistry.BAIT_POWER)) return item;

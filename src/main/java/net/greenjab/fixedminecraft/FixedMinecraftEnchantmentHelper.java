@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft;
 
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -27,6 +28,8 @@ import java.util.*;
 
 public class FixedMinecraftEnchantmentHelper {
 
+    public static HashMap<Item, Integer> ItemCapacities = new HashMap<>();
+    private static int lastCapacity = 0;
     public static final int POWER_WHEN_MAX_LEVEL = 12;
 
     public static int getEnchantmentPower(Holder<Enchantment> enchantment, int level) {
@@ -44,14 +47,18 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        if (!FixedMinecraft.ItemCapacities.containsKey(item))
+        if (lastCapacity != FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE)) {
+            lastCapacity = FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE);
+            ItemCapacities = new HashMap<>(Map.of());
+        }
+        if (!ItemCapacities.containsKey(item))
             if (FixedMinecraft.SERVER!=null) {
                 HashMap<Item, Integer> map = new HashMap<>(Map.of());
-                map.putAll(FixedMinecraft.ItemCapacities);
+                map.putAll(ItemCapacities);
                 map.put(item, getNewEnchantmentCapacity(itemStack));
-                FixedMinecraft.ItemCapacities = map;
+                ItemCapacities = map;
             }
-        return FixedMinecraft.ItemCapacities.getOrDefault(item, 0);
+        return ItemCapacities.getOrDefault(item, 0);
     }
 
     public static int getNewEnchantmentCapacity(ItemStack itemStack) {
@@ -63,7 +70,7 @@ public class FixedMinecraftEnchantmentHelper {
             power += FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantmentLevelEntry.enchantment(), enchantmentLevelEntry.level());
         }
         boolean isGold = itemStack.is(ItemTags.PIGLIN_LOVED);
-        return Math.min(Mth.ceil(power*(isGold?0.75f:0.54f)), 50);
+        return Math.min(Mth.ceil(power*(isGold?1f:FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE)/100f)), 50);
     }
 
     public static List<EnchantmentInstance> getPossibleEntries(ItemStack stack) {
@@ -113,6 +120,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static ItemStack applySuperEnchants(ItemStack IS, RandomSource random, boolean pale) {
+        if (FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.SUPER_ENCHANT_CHANCE) == 0) return IS;
         if (!IS.is(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultInstance();
             ItemEnchantments map = EnchantmentHelper.getEnchantmentsForCrafting(IS);
@@ -124,7 +132,7 @@ public class FixedMinecraftEnchantmentHelper {
                 Enchantment e = registryEntry.value();
                 int i = entry.getIntValue();
                 if (e.getMaxLevel() != 1) {
-                    if (random.nextFloat() < (pale?0.15f:0.05f)) {
+                    if (random.nextFloat() < FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.SUPER_ENCHANT_CHANCE)/100.0+(pale?0.10:0)) {
                         i = e.getMaxLevel() + 1;
                         isSuper = true;
                     }
@@ -134,19 +142,13 @@ public class FixedMinecraftEnchantmentHelper {
 
             if (isSuper) {
                 IS2.set(DataComponents.REPAIR_COST, 1);
-                ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(IS2);
-                for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
-                    Holder<Enchantment> registryEntry = entry.getKey();
-                    if (registryEntry.equals(Enchantments.MENDING)) {
-                        builder.set(registryEntry, 0);
-                    }
+                if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
+                    builder.removeIf(e -> e.is(Enchantments.MENDING));
                 }
             }
             EnchantmentHelper.setEnchantments(IS2, builder.toImmutable());
             return IS2;
-        } else {
-            return IS;
-        }
+        } else return IS;
     }
 
     public static int enchantLevel(ItemStack stack, String name) {

@@ -1,15 +1,15 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonHoldingPatternPhase;
-import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -27,6 +27,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @ModifyConstant(method = "findNewTarget", constant = @Constant(intValue = 2))
     private int moreAttacks(int constant, @Local int crystals){
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return constant;
         return 1 - crystals + (6 - 2 * this.dragon.level().getDifficulty().getId());
     }
 
@@ -37,6 +38,7 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
 
     @Inject(method = "strafePlayer", at = @At(value = "HEAD"), cancellable = true)
     private void chargeAtPlayer(CallbackInfo ci, @Local(argsOnly = true) Player playerNearestToEgg) {
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
         if (playerNearestToEgg.position().distanceToSqr(new Vec3(0, 0, 0)) > 150 * 150) {
             ci.cancel();
         } else {
@@ -48,10 +50,5 @@ public abstract class DragonHoldingPatternPhaseMixin extends AbstractDragonPhase
                 ci.cancel();
             }
         }
-    }
-
-    @Override
-    public @NonNull EnderDragonPhase<? extends DragonPhaseInstance> getPhase() {
-        return EnderDragonPhase.HOLDING_PATTERN;
     }
 }

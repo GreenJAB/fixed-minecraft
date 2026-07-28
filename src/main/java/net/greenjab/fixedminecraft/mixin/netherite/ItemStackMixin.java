@@ -11,11 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public abstract class ItemStackMixin {
 
-    @Shadow
-    public abstract void setDamageValue(int value);
-
-    @Shadow
-    public abstract int getMaxDamage();
+    @Shadow public abstract void setDamageValue(int value);
+    @Shadow public abstract int getMaxDamage();
 
     @Inject(method = "isBroken", at = @At("RETURN"), cancellable = true)
     private void dontBreakNetherite(CallbackInfoReturnable<Boolean> cir) {
@@ -27,5 +24,4 @@ public abstract class ItemStackMixin {
            }
        }
    }
-
 }

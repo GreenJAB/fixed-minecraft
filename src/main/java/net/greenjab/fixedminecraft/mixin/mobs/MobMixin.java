@@ -1,10 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.mobs.ArmorTrimmer;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -38,7 +41,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -54,6 +56,7 @@ public abstract class MobMixin<T extends Mob> extends LivingEntity {
 
     @Inject(method = "populateDefaultEquipmentSlots", at = @At(value = "HEAD"),cancellable = true)
     private void Armor(RandomSource random, DifficultyInstance difficulty, CallbackInfo ci) {
+        if (this.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().get(GameRuleRegistry.STRONGER_MOBS)) return;
         int y= this.blockPosition().getY();
         boolean pale = this.level().getBiome(this.blockPosition()).is(Biomes.PALE_GARDEN);
         float f = this.level().getDifficulty() == Difficulty.HARD ? 0.175F : 0.075F;
@@ -90,45 +93,35 @@ public abstract class MobMixin<T extends Mob> extends LivingEntity {
         ci.cancel();
     }
 
-    @Redirect(method = "dropCustomDeathLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"))
-    private boolean copperDurability(ItemStack instance) {
-        if (instance.is(ModTags.COPPER_ARMOR)) {
-            return false;
-        }
-        return instance.isDamageableItem();
+    @WrapOperation(method = "dropCustomDeathLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z"))
+    private boolean copperDurability(ItemStack instance, Operation<Boolean> original) {
+        if (instance.is(ModTags.COPPER_ARMOR)) return false;
+        return original.call(instance);
     }
 
-    @ModifyVariable(
-            method = "enchantSpawnedEquipment(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/util/RandomSource;FLnet/minecraft/world/DifficultyInstance;)V",
-            at = @At(value = "HEAD", ordinal = 0),
-            argsOnly = true
-    )
-    private float applySuperEnchantArmor(
-            float chance) {
+    @ModifyVariable(method = "enchantSpawnedEquipment(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/util/RandomSource;FLnet/minecraft/world/DifficultyInstance;)V", at = @At(value = "HEAD", ordinal = 0), argsOnly = true)
+    private float applySuperEnchantArmor(float chance) {
         return chance * (this.level().getBiome(this.blockPosition()).is(Biomes.PALE_GARDEN)?1.5f:1);
     }
 
-    @ModifyArg(method = "enchantSpawnedEquipment(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/util/RandomSource;FLnet/minecraft/world/DifficultyInstance;)V", at = @At(value = "INVOKE",
-                                                                                                                                                                                                                target = "Lnet/minecraft/world/entity/Mob;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V"), index = 1)
-    private ItemStack applySuperEnchantArmor(
-            ItemStack stack) {
+    @ModifyArg(method = "enchantSpawnedEquipment(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/util/RandomSource;FLnet/minecraft/world/DifficultyInstance;)V",
+               at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Mob;setItemSlot(Lnet/minecraft/world/entity/EquipmentSlot;Lnet/minecraft/world/item/ItemStack;)V"), index = 1)
+    private ItemStack applySuperEnchantArmor(ItemStack stack) {
         return FixedMinecraftEnchantmentHelper.applySuperEnchants(stack, random, this.level().getBiome(this.blockPosition()).is(Biomes.PALE_GARDEN));
     }
 
     @Inject(method = "finalizeSpawn", at=@At(value = "HEAD"))
-    private void addStuff(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData,
-                          CallbackInfoReturnable<SpawnGroupData> cir){
+    private void addStuff(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir){
+        if (!level.getLevel().getGameRules().get(GameRuleRegistry.STRONGER_MOBS)) return;
         Mob LE = (Mob)(Object)this;
         int y= LE.blockPosition().getY();
         if (LE instanceof Monster && level.dimensionType().hasSkyLight()) {
             addEffect(level, difficulty, LE, y);
             addModifiers(level, LE);
-
         }
     }
 
-    @Unique
-    private void addModifiers(ServerLevelAccessor world, Mob LE) {
+    @Unique private void addModifiers(ServerLevelAccessor world, Mob LE) {
         int i = 0;
         if (world.getDifficulty() == Difficulty.NORMAL) i = 1;
         if (world.getDifficulty() == Difficulty.HARD) i = 2;
@@ -138,24 +131,20 @@ public abstract class MobMixin<T extends Mob> extends LivingEntity {
         increaseSpeed(LE, i);
     }
 
-    @Unique
-    private static void increaseSpeed(Mob LE, int i) {
+    @Unique private static void increaseSpeed(Mob LE, int i) {
         if (LE.getAttribute(Attributes.MOVEMENT_SPEED)!=null) {
             if (!LE.isBaby()) LE.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(
                     LE.getAttributeBaseValue(Attributes.MOVEMENT_SPEED) * (1 + (i * 0.15f * gaussian())));
         }
     }
 
-    @Unique
-    private static void increaseHealth(Mob LE, float h) {
+    @Unique private static void increaseHealth(Mob LE, float h) {
         if (LE.getAttribute(Attributes.MAX_HEALTH)!=null) {
-            LE.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                    LE.getAttributeBaseValue(Attributes.MAX_HEALTH) + h);
+            LE.getAttribute(Attributes.MAX_HEALTH).setBaseValue(LE.getAttributeBaseValue(Attributes.MAX_HEALTH) + h);
             LE.setHealth(LE.getHealth() + h);
         }
     }
-    @Unique
-    private void addEffect(ServerLevelAccessor world, DifficultyInstance localDifficulty, Mob LE, int y){
+    @Unique private void addEffect(ServerLevelAccessor world, DifficultyInstance localDifficulty, Mob LE, int y){
         if (random.nextFloat() < 0.2f * localDifficulty.getSpecialMultiplier()) {
             boolean pale = this.level().getBiome(this.blockPosition()).is(Biomes.PALE_GARDEN);
             if ((world.getBrightness(LightLayer.SKY, LE.blockPosition()) < 7 ||pale)  && !(LE instanceof Spider)) {
@@ -167,63 +156,41 @@ public abstract class MobMixin<T extends Mob> extends LivingEntity {
         }
     }
 
-    @Unique
-    private static float gaussian(){
+    @Unique private static float gaussian(){
         return (float)(Math.tan(0.87433408*Math.PI*(Math.random()-0.5f))/10.0f)+0.5f;
     }
 
-    @Unique
-    public MobEffectInstance getEffect(RandomSource random, LivingEntity LE) {
+    @Unique public MobEffectInstance getEffect(RandomSource random, LivingEntity LE) {
         int l = 6;
         if (LE instanceof Creeper) l+=5 ;
         if (LE instanceof Skeleton) l+=3;
         int i = random.nextInt(l);
-
-        if (i == 0) {
-            return new MobEffectInstance(MobEffects.SPEED, -1, 0);
-        } else if (i == 1) {
-            return new MobEffectInstance(MobEffects.STRENGTH, -1, 0);
-        } else if (i == 2) {
-            return new MobEffectInstance(MobEffects.JUMP_BOOST, -1, 1);
-        } else if (i == 3) {
-            return new MobEffectInstance(MobEffects.SLOW_FALLING, -1, 0);
-        } else if (i == 4) {
-            return new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0);
-        } else if (i == 5) {
-            return new MobEffectInstance(MobEffects.ABSORPTION, -1, 0);
-        } else if (i == 6) {
-            return new MobEffectInstance(MobEffects.NAUSEA, -1, 0);
-        } else if (i == 7) {
-            return new MobEffectInstance(MobEffects.MINING_FATIGUE, -1, 0);
-        } else if (i == 8) {
-            return new MobEffectInstance(MobEffects.WEAKNESS, -1, 0);
-        } else if (i == 9) {
-            return new MobEffectInstance(MobEffects.REGENERATION, -1, 0);
-        } else if (i == 10) {
-            return new MobEffectInstance(MobEffects.LUCK, -1, 0);
-        }
+        if (i == 0) return new MobEffectInstance(MobEffects.SPEED, -1, 0);
+        else if (i == 1) return new MobEffectInstance(MobEffects.STRENGTH, -1, 0);
+        else if (i == 2) return new MobEffectInstance(MobEffects.JUMP_BOOST, -1, 1);
+        else if (i == 3) return new MobEffectInstance(MobEffects.SLOW_FALLING, -1, 0);
+        else if (i == 4) return new MobEffectInstance(MobEffects.FIRE_RESISTANCE, -1, 0);
+        else if (i == 5) return new MobEffectInstance(MobEffects.ABSORPTION, -1, 0);
+        else if (i == 6) return new MobEffectInstance(MobEffects.NAUSEA, -1, 0);
+        else if (i == 7) return new MobEffectInstance(MobEffects.MINING_FATIGUE, -1, 0);
+        else if (i == 8) return new MobEffectInstance(MobEffects.WEAKNESS, -1, 0);
+        else if (i == 9) return new MobEffectInstance(MobEffects.REGENERATION, -1, 0);
+        else if (i == 10) return new MobEffectInstance(MobEffects.LUCK, -1, 0);
         return new MobEffectInstance(MobEffects.ABSORPTION, -1, 0);
     }
 
     @Inject(method = "convertTo(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/entity/ConversionParams;Lnet/minecraft/world/entity/EntitySpawnReason;Lnet/minecraft/world/entity/ConversionParams$AfterConversion;)Lnet/minecraft/world/entity/Mob;", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/ConversionType;convert(Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/ConversionParams;)V"
-    ))
+            value = "INVOKE", target = "Lnet/minecraft/world/entity/ConversionType;convert(Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/Mob;Lnet/minecraft/world/entity/ConversionParams;)V"))
     private void removeIronGolemTagOnConversion(EntityType<T> entityType, ConversionParams params, EntitySpawnReason spawnReason,
                                                 ConversionParams.AfterConversion<T> afterConversion, CallbackInfoReturnable<T> cir){
         Mob ME = (Mob)(Object)this;
         ME.removeTag("iron_golem");
     }
 
-    @ModifyExpressionValue(method = "aiStep", at = @At(
-            value = "FIELD",
-            target = "Lnet/minecraft/world/level/gamerules/GameRules;MOB_GRIEFING:Lnet/minecraft/world/level/gamerules/GameRule;",
-            opcode = Opcodes.GETSTATIC
-    ))
+    @ModifyExpressionValue(method = "aiStep", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/gamerules/GameRules;MOB_GRIEFING:Lnet/minecraft/world/level/gamerules/GameRule;", opcode = Opcodes.GETSTATIC))
     public GameRule<Boolean> passiveMobGriefing(GameRule<Boolean> original) {
         Mob mob = (Mob)(Object)this;
-        if (mob.getType().isAllowedInPeaceful())
-            return GameRuleRegistry.PEACEFUL_MOB_GRIEFING;
+        if (mob.getType().isAllowedInPeaceful()) return GameRuleRegistry.PEACEFUL_MOB_GRIEFING;
         return original;
     }
 

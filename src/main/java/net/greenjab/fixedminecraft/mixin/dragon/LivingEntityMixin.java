@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -17,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
 
     @ModifyExpressionValue(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 5))
-    private boolean dontSlowdownEnderDragon(boolean original) {
+    private boolean dontSlowdownEnderDragon(boolean original, @Local(argsOnly = true) ServerLevel level) {
+        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return original;
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof EnderDragon) return true;
         return original;
@@ -25,6 +28,7 @@ public abstract class LivingEntityMixin {
 
     @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;resolveMobResponsibleForDamage(Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private void aggroEndermenToPlayer(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof Endermite) {
             Entity entity = source.getEntity();

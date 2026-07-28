@@ -18,6 +18,7 @@ public class SyncHandler
         MapPositionRequestPayload.register();
         TrainPayload.register();
         VillagerNeedsPayload.register();
+        GameRulePayload.register();
     }
 
     private static final Map<UUID, Float> lastSaturationLevels = new HashMap<>();

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -25,6 +26,8 @@ public abstract class ServerLevelMixin {
                                  @Local(ordinal = 1)BlockPos topPos,
                                  @Local(ordinal = 2)BlockPos belowPos,
                                  @Local Biome biome) {
+
+        if (!FixedMinecraft.isChangesEnabled("terrain")) return;
 
         ServerLevel world = (ServerLevel) (Object)this;
 

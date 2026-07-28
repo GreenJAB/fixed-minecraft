@@ -27,15 +27,9 @@ public abstract class SculkSensorBlockEntityMixin {
     private void setAmethystBlockAlreadyResonated(ServerLevel level, BlockPos pos, Holder<GameEvent> event,
                                                   GameEvent.@Nullable Context context, CallbackInfoReturnable<Boolean> cir) {
         BlockState sculkState = level.getBlockState(this.blockPos);
-        if (sculkState.is(Blocks.CALIBRATED_SCULK_SENSOR)) {
-            if (sculkState.getValue(AmethystSculkSensorAccessor.AMETHYST)) {
-                if (context != null && context.affectedState() != null){
-                    if (context.affectedState().is(Blocks.AMETHYST_BLOCK)) {
-                        return;
-                    }
-                }
-                cir.setReturnValue(false);
-            }
+        if (sculkState.is(Blocks.CALIBRATED_SCULK_SENSOR) && sculkState.getValue(AmethystSculkSensorAccessor.AMETHYST)) {
+            if (context != null && context.affectedState() != null && context.affectedState().is(Blocks.AMETHYST_BLOCK)) return;
+            cir.setReturnValue(false);
         }
     }
 }

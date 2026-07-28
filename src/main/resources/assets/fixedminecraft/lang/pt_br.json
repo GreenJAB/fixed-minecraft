@@ -26,7 +26,7 @@
     "block.minecraft.bed.awake": "Você não pode dormir, não está cansado",
 
     "container.fletching": "Fabricação de Flechas",
-    "itemgroup.fixed": "Fixed",
+    "itemgroup.fixedminecraft": "Fixed",
 
     "effect.fixedminecraft.awkward": "Sem Efeitos",
     "effect.fixedminecraft.reach": "Alcance",
@@ -73,16 +73,16 @@
 
     "filled_map.explorer": "Mapa do Explorador de %s",
 
-    "options.newArmorHud": "Mostrar Armadura no HUD",
-    "options.fog_21_6": "Desativar Névoa da 1.21.6",
+    "options.itemArmorHud": "Mostrar Armadura no HUD",
+    "options.jabsFixedFog": "Desativar Névoa da 1.21.6",
 
-    "world.moon.full_moon": "Lua Cheia \uD83C\uDFA3",
+    "world.moon.full_moon": "Lua Cheia",
     "world.moon.waning_gibbous": "Minguante Gibosa",
-    "world.moon.third_quarter": "Quarto Minguante \uD83D\uDE9C",
+    "world.moon.third_quarter": "Quarto Minguante",
     "world.moon.waning_crescent": "Minguante Crescente",
-    "world.moon.new_moon": "Lua Nova \u2694",
+    "world.moon.new_moon": "Lua Nova",
     "world.moon.waxing_crescent": "Crescente",
-    "world.moon.first_quarter": "Quarto Crescente \u26CF",
+    "world.moon.first_quarter": "Quarto Crescente",
     "world.moon.waxing_gibbous": "Crescente Gibosa",
 
     "component.fixedminecraft.bait": "Nível de Isca: %s",

@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.registry.other;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;
@@ -40,21 +41,24 @@ import java.util.stream.Stream;
 public class LibrarianBookLootFunction extends LootItemConditionalFunction {
     private final boolean master;
     private final Optional<HolderSet<Enchantment>> options;
+    private final Optional<HolderSet<Enchantment>> all_options;
     public static final MapCodec<LibrarianBookLootFunction> CODEC = RecordCodecBuilder.mapCodec(
             i -> commonFields(i)
                     .and(
                             i.group(
                                     RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("options").forGetter( f -> f.options),
+                                    RegistryCodecs.homogeneousList(Registries.ENCHANTMENT).optionalFieldOf("all_options").forGetter( f -> f.all_options),
                                     Codec.BOOL.optionalFieldOf("master", false).forGetter( f -> f.master)
                             )
                     ).apply(i, LibrarianBookLootFunction::new)
     );
 
-    private LibrarianBookLootFunction(final List<LootItemCondition> predicates,
-                                      final Optional<HolderSet<Enchantment>> options, final boolean master) {
+    private LibrarianBookLootFunction(final List<LootItemCondition> predicates, final Optional<HolderSet<Enchantment>> options,
+                                      final Optional<HolderSet<Enchantment>> all_options, final boolean master) {
         super(predicates);
         this.master = master;
         this.options = options;
+        this.all_options = all_options;
     }
 
     @Override
@@ -69,29 +73,27 @@ public class LibrarianBookLootFunction extends LootItemConditionalFunction {
 
     @Override
     public @NonNull ItemStack run(final @NonNull ItemStack itemStack, final @NonNull LootContext context) {
-        return !master ? firstBook(context) : masterBook(context);
+        if (context.getLevel().getGameRules().get(GameRuleRegistry.VILLAGERS_BIOME_ENCHANTED_BOOKS))
+            return !master ? firstBook(context, options) : masterBook(context, options);
+        else return !master ? firstBook(context, all_options) : masterBook(context, all_options);
     }
 
     @Unique
-    private ItemStack firstBook(LootContext context) {
+    private ItemStack firstBook(LootContext context, Optional<HolderSet<Enchantment>> option) {
         RandomSource rn = context.getRandom();
 
-        Stream<Holder<Enchantment>> compatibleEnchantmentsStream = (this.options
-                .map(HolderSet::stream)
-                .orElseGet( () -> context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements().map(Function.identity())));
+        Stream<Holder<Enchantment>> compatibleEnchantmentsStream = (option.map(HolderSet::stream).orElseGet(
+                () -> context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements().map(Function.identity())));
         List<Holder<Enchantment>> compatibleEnchantments = compatibleEnchantmentsStream.toList();
         Optional<Holder<Enchantment>> optional = Util.getRandomSafe(compatibleEnchantments, rn);
 
-        int i = 0;
-        while (i < 10) {
-            i++;
-            if (optional.isPresent()) {
-                Holder<Enchantment> registryEntry = optional.get();
-                Enchantment enchantment = registryEntry.value();
-                if (enchantment.getMaxLevel() != 1 || registryEntry.is(EnchantmentTags.CURSE)) {
-                    i=10;
-                } else {
-                    optional = Util.getRandomSafe(compatibleEnchantments, rn);
+        if (option == options) {
+            for (int i = 0; i < 10; i++) {
+                if (optional.isPresent()) {
+                    Holder<Enchantment> registryEntry = optional.get();
+                    Enchantment enchantment = registryEntry.value();
+                    if (enchantment.getMaxLevel() != 1 || registryEntry.is(EnchantmentTags.CURSE)) i = 10;
+                    else optional = Util.getRandomSafe(compatibleEnchantments, rn);
                 }
             }
         }
@@ -104,36 +106,31 @@ public class LibrarianBookLootFunction extends LootItemConditionalFunction {
             int midLevel = Mth.ceil(maxLevel / 2.0);
             int level = maxLevel==1?1:UniformInt.of(1,midLevel).sample(rn);
             itemStack = EnchantmentHelper.createBook(new EnchantmentInstance(registryEntry, level));
-            if (context.hasParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED)) {
+            if (context.hasParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED))
                 itemStack.set(DataComponents.ADDITIONAL_TRADE_COST, 2 + rn.nextInt(5 + level * 10) + 3 * level);
-            }
         }
-
         return itemStack;
     }
 
     @Unique
-    private ItemStack masterBook(LootContext context) {
+    private ItemStack masterBook(LootContext context, Optional<HolderSet<Enchantment>> option) {
         RandomSource rn = context.getRandom();
 
-        Stream<Holder<Enchantment>> compatibleEnchantmentsStream = (this.options
-                .map(HolderSet::stream)
-                .orElseGet( () -> context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements().map(Function.identity())));
+        Stream<Holder<Enchantment>> compatibleEnchantmentsStream = (option.map(HolderSet::stream).orElseGet(
+                () -> context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements().map(Function.identity())));
         List<Holder<Enchantment>> compatibleEnchantments = compatibleEnchantmentsStream.toList();
         Optional<Holder<Enchantment>> optional = Util.getRandomSafe(compatibleEnchantments, rn);
 
         HashMap<Holder<Enchantment>, Float> possibleEnchantCount = new HashMap<>();
         compatibleEnchantments.forEach(enchant -> possibleEnchantCount.put(enchant, 0.1f));
-        List<Villager> list = context.getLevel().getEntitiesOfClass(Villager.class, AABB.unitCubeFromLowerCorner(context.getOptionalParameter(LootContextParams.ORIGIN)).inflate(32), EntitySelector.LIVING_ENTITY_STILL_ALIVE);
+        List<Villager> list = context.getLevel().getEntitiesOfClass(Villager.class, AABB.unitCubeFromLowerCorner(
+                context.getOptionalParameter(LootContextParams.ORIGIN)).inflate(32), EntitySelector.LIVING_ENTITY_STILL_ALIVE);
         for (Villager villager2 : list) {
-            if (villager2.getVillagerData()
-                    .profession().is(VillagerProfession.LIBRARIAN)) {
+            if (villager2.getVillagerData().profession().is(VillagerProfession.LIBRARIAN)) {
                 ItemStack eBook = getBook(villager2);
                 if (eBook.is(Items.ENCHANTED_BOOK)) {
                     for (Holder<Enchantment> e : EnchantmentHelper.getEnchantmentsForCrafting(eBook).keySet()) {
-                        if (possibleEnchantCount.containsKey(e)) {
-                            possibleEnchantCount.put(e, possibleEnchantCount.get(e) + 1);
-                        }
+                        if (possibleEnchantCount.containsKey(e)) possibleEnchantCount.put(e, possibleEnchantCount.get(e) + 1);
                     }
                 }
             }
@@ -161,11 +158,9 @@ public class LibrarianBookLootFunction extends LootItemConditionalFunction {
             int midLevel =  Mth.ceil(maxLevel / 2.0);
             int level = maxLevel == 1 ? 1 : UniformInt.of(midLevel+1,maxLevel).sample(rn);
             itemStack = EnchantmentHelper.createBook(new EnchantmentInstance(registryEntry, level));
-            if (context.hasParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED)) {
+            if (context.hasParameter(LootContextParams.ADDITIONAL_COST_COMPONENT_ALLOWED))
                 itemStack.set(DataComponents.ADDITIONAL_TRADE_COST, 2 + rn.nextInt(5 + level * 10) + 3 * level);
-            }
         }
-
         return itemStack;
     }
 

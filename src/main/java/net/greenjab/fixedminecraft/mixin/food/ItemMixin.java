@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.food;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -53,6 +54,7 @@ public abstract class ItemMixin {
 
     @Inject(method = "inventoryTick", at = @At("HEAD"))
     private void repairGold(ItemStack itemStack, ServerLevel level, Entity owner, EquipmentSlot slot, CallbackInfo ci) {
+        if (!level.getGameRules().get(GameRuleRegistry.GOLD_GEAR_AUTO_REPAIRS)) return;
         if (owner instanceof Player || owner instanceof ArmorStand) {
             if (itemStack.getComponents().has(DataComponents.DAMAGE)) {
                 if (itemStack.is(ItemTags.PIGLIN_LOVED)) {

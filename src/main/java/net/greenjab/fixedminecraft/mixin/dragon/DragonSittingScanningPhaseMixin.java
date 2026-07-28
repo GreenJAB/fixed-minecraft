@@ -1,17 +1,17 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonSittingPhase;
-import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingScanningPhase;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.phys.Vec3;
-import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -40,11 +40,13 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
 
     @ModifyConstant(method = "<init>", constant = @Constant(doubleValue = 20))
     private double longerSight(double constant){
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return constant;
         return 150;
     }
 
     @Inject(method = "doServerTick", at = @At("HEAD"),cancellable = true)
     private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerLevel level) {
+        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
         this.scanningTime++;
         LivingEntity livingEntity = level.getNearestPlayer(this.scanTargeting, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (livingEntity != null) {
@@ -55,9 +57,7 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
                 Vec3 vec3d2 = new Vec3(
                          Mth.sin(this.dragon.getYRot() * (float) (Math.PI / 180.0)),
                         0.0,
-                        (-Mth.cos(this.dragon.getYRot() * (float) (Math.PI / 180.0)))
-                )
-                        .normalize();
+                        (-Mth.cos(this.dragon.getYRot() * (float) (Math.PI / 180.0)))).normalize();
                 float f = (float)vec3d2.dot(vec3d);
                 float g = (float)(Math.acos(f) * 180.0F / (float)Math.PI);
 
@@ -75,8 +75,6 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
                     this.dragon.yRotA += (float)h * (0.05F / (i / j));
                     this.dragon.setYRot(this.dragon.getYRot() + this.dragon.yRotA);
                 }
-
-
             }
         } else if (this.scanningTime >= 100) {
             livingEntity = level.getNearestPlayer(CHARGE_TARGETING, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
@@ -87,10 +85,5 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
             }
         }
         ci.cancel();
-    }
-
-    @Override
-    public @NonNull EnderDragonPhase<? extends DragonPhaseInstance> getPhase() {
-        return EnderDragonPhase.SITTING_SCANNING;
     }
 }

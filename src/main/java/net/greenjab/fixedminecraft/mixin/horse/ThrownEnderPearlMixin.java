@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.horse;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalBooleanRef;
 import org.jetbrains.annotations.Nullable;
@@ -7,9 +9,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import java.util.Objects;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerLevel;
@@ -30,10 +30,8 @@ import net.minecraft.world.phys.Vec3;
 
 @Mixin(ThrownEnderpearl.class)
 public abstract class ThrownEnderPearlMixin extends ThrowableItemProjectile {
-    @Unique
-    @Nullable
-    private LivingEntity vehicle = null;
 
+    @Unique @Nullable private LivingEntity vehicle = null;
     public ThrownEnderPearlMixin(EntityType<? extends ThrowableItemProjectile> entityType, Level world) {
         super(entityType, world);
     }
@@ -54,30 +52,19 @@ public abstract class ThrownEnderPearlMixin extends ThrowableItemProjectile {
             }
         }
     }
-    /**
-     * Teleports the player vehicle to the destination if it matches the saved one.
-     *
-     */
-    @Redirect(
-            method = "onHit", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/server/level/ServerPlayer;teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;"
-    ))
-    private ServerPlayer teleportWithVehicle(ServerPlayer serverPlayerEntity, TeleportTransition transition,
-                                                   @Share("passed")
-                                     LocalBooleanRef ref) {
+
+    @WrapOperation(method = "onHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayer;teleport(Lnet/minecraft/world/level/portal/TeleportTransition;)Lnet/minecraft/server/level/ServerPlayer;"))
+    private ServerPlayer teleportWithVehicle(ServerPlayer serverPlayerEntity, TeleportTransition transition, Operation<ServerPlayer> original,
+                                             @Share("passed") LocalBooleanRef ref) {
         CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayerEntity, Items.ENDER_PEARL.getDefaultInstance());
         if (serverPlayerEntity.isPassenger() ) {
             LivingEntity currentVehicle = rootVehicle(serverPlayerEntity);
             if (currentVehicle != null && currentVehicle.equals(vehicle)) {
-                vehicle.teleport(
-                        new TeleportTransition((ServerLevel) this.level(), this.oldPosition(), Vec3.ZERO, 0.0F, 0.0F, Relative.union(Relative.ROTATION, Relative.DELTA), TeleportTransition.DO_NOTHING)
-                );
+                vehicle.teleport(new TeleportTransition((ServerLevel) this.level(), this.oldPosition(), Vec3.ZERO, 0.0F, 0.0F, Relative.union(Relative.ROTATION, Relative.DELTA), TeleportTransition.DO_NOTHING));
                 assert vehicle != null;
                 vehicle.addTag("tp");
 
-                if (vehicle instanceof PathfinderMob pathAwareEntity)
-                    pathAwareEntity.getNavigation().stop();
+                if (vehicle instanceof PathfinderMob pathAwareEntity) pathAwareEntity.getNavigation().stop();
 
                 vehicle.resetFallDistance();
                 ThrownEnderpearl EPE = (ThrownEnderpearl) (Object) this;
@@ -86,11 +73,8 @@ public abstract class ThrownEnderPearlMixin extends ThrowableItemProjectile {
                 }
                 ref.set(true);
 
-                ServerPlayer serverPlayerEntity2 = serverPlayerEntity.teleport(
-                        new TeleportTransition((ServerLevel)this.level(), this.oldPosition(), Vec3.ZERO, 0.0F, 0.0F, Relative.union(Relative.ROTATION, Relative.DELTA), TeleportTransition.DO_NOTHING)
-                );
-                assert serverPlayerEntity2 != null;
-                serverPlayerEntity2.startRiding(vehicle);
+                ServerPlayer serverPlayerEntity2 = original.call(serverPlayerEntity, transition);
+                if (serverPlayerEntity2!=null) serverPlayerEntity2.startRiding(vehicle);
                 return serverPlayerEntity2;
             }
         }
@@ -100,12 +84,7 @@ public abstract class ThrownEnderPearlMixin extends ThrowableItemProjectile {
         );
     }
 
-    /**
-     * Recursively gets the bottommost vehicle.
-     */
-    @Unique
-    @Nullable
-    private LivingEntity rootVehicle(Entity entity) {
+    @Unique @Nullable private LivingEntity rootVehicle(Entity entity) {
         if (!entity.isPassenger()) return null;
         if (!(entity.getVehicle() instanceof LivingEntity veh)) return null;
         LivingEntity subVehicle = rootVehicle(veh);

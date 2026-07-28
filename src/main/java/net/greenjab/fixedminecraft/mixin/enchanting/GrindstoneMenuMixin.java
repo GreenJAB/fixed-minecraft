@@ -3,6 +3,8 @@ package net.greenjab.fixedminecraft.mixin.enchanting;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -16,10 +18,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ItemLore;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collections;
@@ -27,19 +27,16 @@ import java.util.Collections;
 @Mixin(GrindstoneMenu.class)
 public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
 
-    @Shadow
-    protected abstract ItemStack computeResult(ItemStack input, ItemStack additional);
-
-    public GrindstoneMenuMixin(
-            @Nullable MenuType<?> type, int syncId) {
+    public GrindstoneMenuMixin(@Nullable MenuType<?> type, int syncId) {
         super(type, syncId);
     }
 
-    @Redirect(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/GrindstoneMenu;computeResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))
-    private ItemStack damageGrindstonedItem(GrindstoneMenu instance, ItemStack input, ItemStack additional) {
+    @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/GrindstoneMenu;computeResult(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)Lnet/minecraft/world/item/ItemStack;"))
+    private ItemStack damageGrindstonedItem(GrindstoneMenu instance, ItemStack input, ItemStack additional, Operation<ItemStack> original) {
+        ItemStack originalItem = original.call(instance, input, additional);
         if (input.isEmpty() || additional.isEmpty()) {
-            ItemStack original = computeResult(input, additional);
-            if (original.is(Items.BOOK) || original.is(Items.ENCHANTED_BOOK)) return original;
+            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM)) return originalItem;
+            if (originalItem.is(Items.BOOK) || originalItem.is(Items.ENCHANTED_BOOK)) return originalItem;
             boolean bl4 = !input.isEmpty();
             if (bl4) {
                 int max = input.getMaxDamage();
@@ -49,7 +46,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));
                 }
-                return computeResult(output, additional);
+                return original.call(instance,output, additional);
             } else {
                 int max = additional.getMaxDamage();
                 ItemStack output = additional.copy();
@@ -58,15 +55,12 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));
                 }
-                return computeResult(input, output);
+                return original.call(instance,input, output);
             }
-        } else {
-            return computeResult(input, additional);
-        }
+        } return originalItem;
     }
 
-    @Inject(method = "removeNonCursesFrom", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"),
-            cancellable = true)
+    @Inject(method = "removeNonCursesFrom", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/ItemStack;set(Lnet/minecraft/core/component/DataComponentType;Ljava/lang/Object;)Ljava/lang/Object;"), cancellable = true)
     private void dontModifyRepairCost(ItemStack item, CallbackInfoReturnable<ItemStack> cir) {
         cir.setReturnValue(item);
     }
@@ -77,14 +71,11 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
         return true;
     }
 
-    @Inject(method = "quickMoveStack", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/inventory/Slot;onQuickCraft(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V"),
-            cancellable = true
-    )
+    @Inject(method = "quickMoveStack", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/inventory/Slot;onQuickCraft(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V"), cancellable = true)
     private void destroy0DurabilityItem2(Player player, int slotIndex, CallbackInfoReturnable<ItemStack> cir, @Local(ordinal = 1) ItemStack item) {
         if (item.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) == 5){
             this.clicked(2, 1, ContainerInput.PICKUP, player);
             cir.setReturnValue(ItemStack.EMPTY);
         }
     }
-
 }
