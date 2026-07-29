@@ -149,7 +149,7 @@
     "item.fixedminecraft.nautilus_armor": "Nautilus Armor",
 
 
-    "gamerule.category.fixedminecraft.aaa_fixedminecraft": "Jabs Fixed Minecraft",
+    "gamerule.category.fixedminecraft.aaa_jabsfixedenchanting": "Jabs Fixed Enchanting",
     "gamerule.fixedminecraft.villagers_biome_enchanted_books": "Librarians sell Enchanted Books based on Biome",
     "gamerule.fixedminecraft.super_enchant_chance": "Super Enchant Chance",
     "gamerule.fixedminecraft.super_enchant_chance.description": "Chance for an Enchant on Looted Gear to be over the Normal Limit, Values over 0 also let Gold Gear Enchant over the Normal Limit",
@@ -162,6 +162,7 @@
     "gamerule.fixedminecraft.enchant_capacity_percentage": "Enchant Capacity Percentage",
     "gamerule.fixedminecraft.enchant_capacity_percentage.description": "Rather than the anvil cap of 40, capacity is a percentage of how many enchants an item could have, capped at 50 Levels",
 
+    "gamerule.category.fixedminecraft.aab_jabsfixedtransport": "Jabs Fixed Transport",
     "gamerule.fixedminecraft.ice_melt_in_nether": "Ice melts in the Nether",
     "gamerule.fixedminecraft.ice_melt_in_nether.description": "This is to limit Ice Boat highways, note ice will not melt next ot crying obsidian regardless",
     "gamerule.fixedminecraft.remove_vanilla_nautilus_rmour": "Remove the Uncraftable-Tiered Nautilus amour",
@@ -177,6 +178,7 @@
     "gamerule.fixedminecraft.elytra_hit_cancel_ticks": "Elytra hit cancel ticks",
     "gamerule.fixedminecraft.elytra_hit_cancel_ticks.description": "Time after getting hit elytra is disabled for. Setting to 0 disables",
 
+    "gamerule.category.fixedminecraft.aac_jabsfixedcombat": "Jabs Fixed Combat",
     "gamerule.fixedminecraft.require_totem_use": "Require Totem Use",
     "gamerule.fixedminecraft.require_totem_use.description": "Need to actively hold up a Totem of Undying for it to function",
     "gamerule.fixedminecraft.raid_replace_evokers_with_illusioners": "Replace Evokers in raids with Illusioners",
@@ -199,6 +201,7 @@
     "gamerule.fixedminecraft.dragon_world_border_before_kill": "End World Border before Dragon Killed",
     "gamerule.fixedminecraft.dragon_world_border_before_kill.description": "Have the World Border around the main End Island until the Ender Dragon has been killed",
 
+    "gamerule.category.fixedminecraft.aad_jabsfixedmobsandblocks": "Jabs Fixed Mobs and Blocks",
     "gamerule.fixedminecraft.peaceful_mob_griefing": "Allow Peaceful Mob actions",
     "gamerule.fixedminecraft.peaceful_mob_griefing.description": "Split from hostile mob griefing to allow events like villagers picking up food",
     "gamerule.fixedminecraft.nights_until_insomnia": "Nights Until Insomnia",

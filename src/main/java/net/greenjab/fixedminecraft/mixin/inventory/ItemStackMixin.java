@@ -1,4 +1,4 @@
-package net.greenjab.fixedminecraft.mixin.redstone;
+package net.greenjab.fixedminecraft.mixin.inventory;
 
 import net.greenjab.fixedminecraft.registry.other.ContainerTooltipData;
 import net.minecraft.core.component.DataComponents;

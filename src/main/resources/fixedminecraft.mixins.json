@@ -195,7 +195,7 @@
         "redstone.DispenseItemBehaviorMixin",
         "redstone.DoorBlockMixin",
         "redstone.ItemContainerContentsMixin",
-        "redstone.ItemStackMixin",
+        "inventory.ItemStackMixin",
         "redstone.NoteBlockMixin",
         "redstone.SculkSensorBlockEntityMixin",
         "redstone.SculkSensorBlockMixin",

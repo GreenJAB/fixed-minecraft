@@ -11,7 +11,7 @@ public abstract class OceanMonumentPieceBuildingMixin {
 
     @ModifyConstant(method = "<init>(Lnet/minecraft/util/RandomSource;IILnet/minecraft/core/Direction;)V", constant = @Constant(intValue = 39))
     private static int lowerMonument(int x) {
-        if (FixedMinecraft.isChangesEnabled("terrain")) return x - 25;
+        if (FixedMinecraft.isChangesEnabled("terrain")) return x - 17;
         return x;
     }
 }

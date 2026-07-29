@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BucketItem.class)
 public abstract class BucketItemMixin {
 
-    @Inject(method = "use", at = @At(value = "FIELD", target = "Lnet/minecraft/world/InteractionResult;FAIL:Lnet/minecraft/world/InteractionResult$Fail;", ordinal = 1, opcode = Opcodes.GETSTATIC), cancellable = true)
+    @Inject(method = "use", at = @At(value = "FIELD", target = "Lnet/minecraft/world/level/material/Fluids;EMPTY:Lnet/minecraft/world/level/material/Fluid;", ordinal = 1, opcode = Opcodes.GETSTATIC), cancellable = true)
     public void bucket(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir, @Local(ordinal = 0) ItemStack itemStack, @Local(ordinal = 1) BlockPos directionOffsetPos) {
         if (itemStack.is(ItemRegistry.ALLAY_BUCKET)) {
             if (level instanceof ServerLevel && itemStack.getItem() instanceof MobBucketItem bucketItem) {

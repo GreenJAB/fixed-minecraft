@@ -35,7 +35,6 @@ public abstract class WoodlandMansionPiecePlacerMixin {
                                                 WoodlandMansionPieces.MansionGrid mansion, CallbackInfo ci, @Local(ordinal = 2) BlockPos pos) {
         if (!FixedMinecraft.isChangesEnabled("structures")) return;
         Vector3i rot = rotation.rotation().rotate(new Vector3i(6, 0, 6));
-        System.out.println(rotation.rotation() + ", " + rot);
         if (this.random.nextInt(3)==0) pieces.add(new WoodlandMansionPieces.WoodlandMansionPiece(this.structureTemplateManager, "decorations/deco", pos, Rotation.getRandom(this.random)));
         if (this.random.nextInt(3)==0) pieces.add(new WoodlandMansionPieces.WoodlandMansionPiece(this.structureTemplateManager, "decorations/deco", pos.offset(rot.x, 0, 0), Rotation.getRandom(this.random)));
         if (this.random.nextInt(3)==0) pieces.add(new WoodlandMansionPieces.WoodlandMansionPiece(this.structureTemplateManager, "decorations/deco", pos.offset(rot.x, 0, rot.z), Rotation.getRandom(this.random)));

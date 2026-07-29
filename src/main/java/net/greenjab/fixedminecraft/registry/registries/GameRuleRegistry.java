@@ -17,7 +17,10 @@ import java.util.function.ToIntFunction;
 
 public class GameRuleRegistry {
 
-    public static final GameRuleCategory FIXEDMINECRAFT = GameRuleCategory.register(FixedMinecraft.id("aaa_fixedminecraft"));
+    public static final GameRuleCategory JABSFIXEDENCHANTING = GameRuleCategory.register(FixedMinecraft.id("aaa_jabsfixedenchanting"));
+    public static final GameRuleCategory JABSFIXEDTRANSPORT = GameRuleCategory.register(FixedMinecraft.id("aab_jabsfixedtransport"));
+    public static final GameRuleCategory JABSFIXEDCOMBAT = GameRuleCategory.register(FixedMinecraft.id("aac_jabsfixedcombat"));
+    public static final GameRuleCategory JABSFIXEDMOBSANDBLOCKS = GameRuleCategory.register(FixedMinecraft.id("aad_jabsfixedmobsandblocks"));
 
     public static GameRule<Integer> ENCHANT_CAPACITY_PERCENTAGE;
     public static GameRule<Integer> SUPER_ENCHANT_CHANCE;
@@ -66,79 +69,65 @@ public class GameRuleRegistry {
 
     public static void registerGameRules() {
         System.out.println("register GameRules");
-        ENCHANT_CAPACITY_PERCENTAGE = registerInteger("enchant_capacity_percentage", 54, 1, 100);
-        SUPER_ENCHANT_CHANCE = registerInteger("super_enchant_chance", 5, 0, 100);
-        COMBINE_ENCHANTED_ITEMS = registerBoolean("combine_enchanted_items", false);
-        MENDING_ON_OP_ITEMS = registerBoolean("mending_on_op_items", false);
-        VILLAGERS_BIOME_ENCHANTED_BOOKS = registerBoolean("villagers_biome_enchanted_books", true);
-        GRINDSTONE_DAMAGES_ITEM = registerBoolean("grindstone_damages_item", true);
-        GOLD_GEAR_AUTO_REPAIRS = registerBoolean("gold_gear_auto_repairs", true);
+        ENCHANT_CAPACITY_PERCENTAGE = registerInteger("enchant_capacity_percentage", JABSFIXEDENCHANTING, 54, 1, 100);
+        SUPER_ENCHANT_CHANCE = registerInteger("super_enchant_chance", JABSFIXEDENCHANTING, 5, 0, 100);
+        COMBINE_ENCHANTED_ITEMS = registerBoolean("combine_enchanted_items", JABSFIXEDENCHANTING, false);
+        MENDING_ON_OP_ITEMS = registerBoolean("mending_on_op_items", JABSFIXEDENCHANTING, false);
+        VILLAGERS_BIOME_ENCHANTED_BOOKS = registerBoolean("villagers_biome_enchanted_books", JABSFIXEDENCHANTING, true);
+        GRINDSTONE_DAMAGES_ITEM = registerBoolean("grindstone_damages_item", JABSFIXEDENCHANTING, true);
+        GOLD_GEAR_AUTO_REPAIRS = registerBoolean("gold_gear_auto_repairs", JABSFIXEDENCHANTING, true);
 
-        ICE_MELT_IN_NETHER = registerBoolean("ice_melt_in_nether", true);
-        REMOVE_VANILLA_NAUTILUS_ARMOUR = registerBoolean("remove_vanilla_nautilus_rmour", true);
-        ELYTRA_DRAG = registerBoolean("elytra_drag", false);
-        ELYTRA_FLY_IN_RAIN = registerInteger("elytra_fly_in_rain", 0, 0, 2);
-        ELYTRA_FIREWORK_NERF = registerInteger("elytra_firework_nerf", 1, 0, 2);
-        ELYTRA_DEPLOYMENT_TICKS = registerInteger("elytra_deployment_ticks", 15, 0, Integer.MAX_VALUE);
-        ELYTRA_HIT_CANCEL_TICKS = registerInteger("elytra_hit_cancel_ticks", 40, 0, Integer.MAX_VALUE);
+        ICE_MELT_IN_NETHER = registerBoolean("ice_melt_in_nether", JABSFIXEDTRANSPORT, true);
+        REMOVE_VANILLA_NAUTILUS_ARMOUR = registerBoolean("remove_vanilla_nautilus_rmour", JABSFIXEDTRANSPORT, true);
+        ELYTRA_DRAG = registerBoolean("elytra_drag", JABSFIXEDTRANSPORT, false);
+        ELYTRA_FLY_IN_RAIN = registerInteger("elytra_fly_in_rain", JABSFIXEDTRANSPORT, 0, 0, 2);
+        ELYTRA_FIREWORK_NERF = registerInteger("elytra_firework_nerf", JABSFIXEDTRANSPORT, 1, 0, 2);
+        ELYTRA_DEPLOYMENT_TICKS = registerInteger("elytra_deployment_ticks", JABSFIXEDTRANSPORT, 15, 0, Integer.MAX_VALUE);
+        ELYTRA_HIT_CANCEL_TICKS = registerInteger("elytra_hit_cancel_ticks", JABSFIXEDTRANSPORT, 40, 0, Integer.MAX_VALUE);
 
-        REQUIRE_TOTEM_USE = registerBoolean("require_totem_use", false);
-        RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS = registerBoolean("raid_replace_evokers_with_illusioners", true);
-        NERF_VANILLA_SPEARS = registerBoolean("nerf_vanilla_spears", true);
-        SPEARS_ONLY_HORIZONTAL = registerBoolean("spears_only_horizontal", true);
-        STAMINA_DRAIN_SPEED = registerInteger("stamina_drain_speed", 100, 0, 1000);
-        EAT_HIT_CANCELLING = registerBoolean("eat_hit_cancelling", true);
-        RESPAWN_WITH_LESS_HEALTH = registerBoolean("respawn_with_less_health", true);
-        STRONGER_MOBS = registerBoolean("stronger_mobs", true);
-        MOBS_LEAVE_VEHICLES_WHEN_ATTACKED = registerBoolean("mobs_leave_vehicles_when_attacked", true);
-        BETTER_WITHER_FIGHT = registerBoolean("better_wither_fight", true);
-        BETTER_DRAGON_FIGHT = registerBoolean("better_dragon_fight", true);
-        DRAGON_WORLD_BORDER_BEFORE_KILL = registerBoolean("dragon_world_border_before_kill", true);
+        REQUIRE_TOTEM_USE = registerBoolean("require_totem_use", JABSFIXEDCOMBAT, false);
+        RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS = registerBoolean("raid_replace_evokers_with_illusioners", JABSFIXEDCOMBAT, true);
+        NERF_VANILLA_SPEARS = registerBoolean("nerf_vanilla_spears", JABSFIXEDCOMBAT, true);
+        SPEARS_ONLY_HORIZONTAL = registerBoolean("spears_only_horizontal", JABSFIXEDCOMBAT, true);
+        STAMINA_DRAIN_SPEED = registerInteger("stamina_drain_speed", JABSFIXEDCOMBAT, 100, 0, 1000);
+        EAT_HIT_CANCELLING = registerBoolean("eat_hit_cancelling", JABSFIXEDCOMBAT, true);
+        RESPAWN_WITH_LESS_HEALTH = registerBoolean("respawn_with_less_health", JABSFIXEDCOMBAT, true);
+        ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", JABSFIXEDCOMBAT, 30, 0, 30);
+        STRONGER_MOBS = registerBoolean("stronger_mobs", JABSFIXEDCOMBAT, true);
+        MOBS_LEAVE_VEHICLES_WHEN_ATTACKED = registerBoolean("mobs_leave_vehicles_when_attacked", JABSFIXEDCOMBAT, true);
+        BETTER_WITHER_FIGHT = registerBoolean("better_wither_fight", JABSFIXEDCOMBAT, true);
+        BETTER_DRAGON_FIGHT = registerBoolean("better_dragon_fight", JABSFIXEDCOMBAT, true);
+        DRAGON_WORLD_BORDER_BEFORE_KILL = registerBoolean("dragon_world_border_before_kill", JABSFIXEDCOMBAT, true);
 
-        PEACEFUL_MOB_GRIEFING = registerBoolean2("peaceful_mob_griefing", GameRuleCategory.MOBS, true);
-        NIGHTS_UNTIL_INSOMNIA = registerInteger("nights_until_insomnia", 7, 0, Integer.MAX_VALUE);
-        INSOMNIA_SLEEP_REQUIREMENT = registerBoolean("insomnia_sleep_requirement", false);
-        VILLAGERS_NEED_SLEEP = registerBoolean("villagers_need_sleep", true);
-        VILLAGERS_NEED_FOOD = registerBoolean("villagers_need_food", true);
-        VILLAGERS_NEED_SUNLIGHT = registerBoolean("villagers_need_sunlight", true);
-        VILLAGERS_NEED_FRIENDS = registerBoolean("villagers_need_friends", true);
-        VILLAGERS_NEED_SPACE = registerBoolean("villagers_need_space", true);
-        VILLAGERS_TRADE_AT_NIGHT = registerBoolean("villagers_trade_at_night", true);
-        VILLAGERS_STRONGER_DEMAND = registerBoolean("villagers_stronger_demand", true);
-        VILLAGERS_NITWITIFY_ON_ZOMBIFICATION = registerBoolean("villagers_nitwitify_on_zombification", true);
-        ONE_IRON_GOLEM_PER_MOB = registerBoolean("one_iron_golem_per_mob", true);
-        HOSTILE_SNIFFER_PLANTS = registerBoolean("hostile_sniffer_plants", true);
-
-        ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", 30, 0, 30);
+        PEACEFUL_MOB_GRIEFING = registerBoolean("peaceful_mob_griefing", GameRuleCategory.MOBS, true);
+        NIGHTS_UNTIL_INSOMNIA = registerInteger("nights_until_insomnia", JABSFIXEDMOBSANDBLOCKS, 7, 0, Integer.MAX_VALUE);
+        INSOMNIA_SLEEP_REQUIREMENT = registerBoolean("insomnia_sleep_requirement", JABSFIXEDMOBSANDBLOCKS, false);
+        VILLAGERS_NEED_SLEEP = registerBoolean("villagers_need_sleep", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_NEED_FOOD = registerBoolean("villagers_need_food", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_NEED_SUNLIGHT = registerBoolean("villagers_need_sunlight", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_NEED_FRIENDS = registerBoolean("villagers_need_friends", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_NEED_SPACE = registerBoolean("villagers_need_space", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_TRADE_AT_NIGHT = registerBoolean("villagers_trade_at_night", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_STRONGER_DEMAND = registerBoolean("villagers_stronger_demand", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_NITWITIFY_ON_ZOMBIFICATION = registerBoolean("villagers_nitwitify_on_zombification", JABSFIXEDMOBSANDBLOCKS, true);
+        ONE_IRON_GOLEM_PER_MOB = registerBoolean("one_iron_golem_per_mob", JABSFIXEDMOBSANDBLOCKS, true);
+        HOSTILE_SNIFFER_PLANTS = registerBoolean("hostile_sniffer_plants", JABSFIXEDMOBSANDBLOCKS, true);
     }
 
-    private static GameRule<Boolean> registerBoolean(String name, boolean defaultValue) {
-        return register(name, GameRuleType.BOOL, BoolArgumentType.bool(), Codec.BOOL, defaultValue,
+    private static GameRule<Boolean> registerBoolean(String name, GameRuleCategory category, boolean defaultValue) {
+        return register(name, category, GameRuleType.BOOL, BoolArgumentType.bool(), Codec.BOOL, defaultValue,
                 FeatureFlagSet.of(), GameRuleTypeVisitor::visitBoolean,value -> value ? 1 : 0);
     }
 
     private static GameRule<Integer> registerInteger(
-            final String id, final int defaultValue, final int min, final int max) {
-        return register(id, GameRuleType.INT, IntegerArgumentType.integer(min, max), Codec.intRange(min, max),
+            final String id, GameRuleCategory category, final int defaultValue, final int min, final int max) {
+        return register(id, category, GameRuleType.INT, IntegerArgumentType.integer(min, max), Codec.intRange(min, max),
                 defaultValue, FeatureFlagSet.of(), GameRuleTypeVisitor::visitInteger, i -> i);
     }
 
-    private static <T> GameRule<T> register(String name, GameRuleType type,
+    private static <T> GameRule<T> register(String name, GameRuleCategory category, GameRuleType type,
                                             ArgumentType<T> argumentType, Codec<T> codec, T defaultValue, FeatureFlagSet requiredFeatures,
                                             GameRules.VisitorCaller<T> acceptor, ToIntFunction<T> commandResultSupplier) {
-        return Registry.register(
-                BuiltInRegistries.GAME_RULE, FixedMinecraft.id(name),
-                new GameRule<>(GameRuleRegistry.FIXEDMINECRAFT, type, argumentType, acceptor, codec, commandResultSupplier, defaultValue, requiredFeatures));
-    }
-
-    private static GameRule<Boolean> registerBoolean2(String name, GameRuleCategory category, boolean defaultValue) {
-        return register2(name, category, GameRuleType.BOOL, BoolArgumentType.bool(), Codec.BOOL, defaultValue,
-                FeatureFlagSet.of(), GameRuleTypeVisitor::visitBoolean,value -> value ? 1 : 0);
-    }
-
-    private static <T> GameRule<T> register2( String name, GameRuleCategory category, GameRuleType type,
-                                              ArgumentType<T> argumentType, Codec<T> codec, T defaultValue,  FeatureFlagSet requiredFeatures,
-                                              GameRules.VisitorCaller<T> acceptor, ToIntFunction<T> commandResultSupplier) {
         return Registry.register(
                 BuiltInRegistries.GAME_RULE, FixedMinecraft.id(name),
                 new GameRule<>(category, type, argumentType, acceptor, codec, commandResultSupplier, defaultValue, requiredFeatures));

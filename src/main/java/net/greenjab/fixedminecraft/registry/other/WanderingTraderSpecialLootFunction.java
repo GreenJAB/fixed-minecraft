@@ -101,6 +101,7 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
             ProfileResolver lv = minecraftServer.services().profileResolver();
             Optional<GameProfile> optional;
             int who = minecraftServer.overworld().getRandom().nextInt(3);
+            who = 0;
             switch (who) {
                 case 0:
                     //mod maker
