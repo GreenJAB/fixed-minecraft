@@ -43,8 +43,11 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> NERF_VANILLA_SPEARS;
     public static GameRule<Boolean> SPEARS_ONLY_HORIZONTAL;
     public static GameRule<Integer> STAMINA_DRAIN_SPEED;
+    public static GameRule<Boolean> EAT_DURATION_PROPORTIONAL_TO_FOOD;
     public static GameRule<Boolean> EAT_HIT_CANCELLING;
     public static GameRule<Boolean> RESPAWN_WITH_LESS_HEALTH;
+    public static GameRule<Boolean> PARTIAL_KEEP_INVENTORY;
+    public static GameRule<Integer> ITEM_DEATH_DESPAWN_TIME;
     public static GameRule<Boolean> STRONGER_MOBS;
     public static GameRule<Boolean> MOBS_LEAVE_VEHICLES_WHEN_ATTACKED;
     public static GameRule<Boolean> BETTER_WITHER_FIGHT;
@@ -65,7 +68,6 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> ONE_IRON_GOLEM_PER_MOB;
     public static GameRule<Boolean> HOSTILE_SNIFFER_PLANTS;
 
-    public static GameRule<Integer> ITEM_DEATH_DESPAWN_TIME;
 
     public static void registerGameRules() {
         System.out.println("register GameRules");
@@ -90,8 +92,10 @@ public class GameRuleRegistry {
         NERF_VANILLA_SPEARS = registerBoolean("nerf_vanilla_spears", JABSFIXEDCOMBAT, true);
         SPEARS_ONLY_HORIZONTAL = registerBoolean("spears_only_horizontal", JABSFIXEDCOMBAT, true);
         STAMINA_DRAIN_SPEED = registerInteger("stamina_drain_speed", JABSFIXEDCOMBAT, 100, 0, 1000);
+        EAT_DURATION_PROPORTIONAL_TO_FOOD = registerBoolean("eat_duration_proportional_to_food", JABSFIXEDCOMBAT, true);
         EAT_HIT_CANCELLING = registerBoolean("eat_hit_cancelling", JABSFIXEDCOMBAT, true);
         RESPAWN_WITH_LESS_HEALTH = registerBoolean("respawn_with_less_health", JABSFIXEDCOMBAT, true);
+        PARTIAL_KEEP_INVENTORY = registerBoolean("partial_keep_inventory", JABSFIXEDCOMBAT, false);
         ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", JABSFIXEDCOMBAT, 30, 0, 30);
         STRONGER_MOBS = registerBoolean("stronger_mobs", JABSFIXEDCOMBAT, true);
         MOBS_LEAVE_VEHICLES_WHEN_ATTACKED = registerBoolean("mobs_leave_vehicles_when_attacked", JABSFIXEDCOMBAT, true);

@@ -1,0 +1,25 @@
+{
+    "values": [
+        "#fixedminecraft:unbreakable",
+        "minecraft:ancient_debris",
+        "minecraft:netherite_scrap",
+        "minecraft:netherite_ingot",
+        "minecraft:netherite_upgrade_smithing_template",
+        "minecraft:nether_star",
+        "minecraft:beacon",
+        "minecraft:ender_eye",
+        "minecraft:ender_chest",
+        "minecraft:dragon_egg",
+        "minecraft:trident",
+        "minecraft:heavy_core",
+        "minecraft:mace",
+        "fixedminecraft:spear",
+        "minecraft:echo_shard",
+        "minecraft:recovery_compass",
+        "fixedminecraft:echo_fruit",
+        "fixedminecraft:echo_totem",
+        "minecraft:totem_of_undying",
+        "fixedminecraft:broken_totem",
+        "fixedminecraft:map_book"
+    ]
+}

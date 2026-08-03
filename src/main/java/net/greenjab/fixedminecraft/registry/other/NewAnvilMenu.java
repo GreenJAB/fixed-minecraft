@@ -12,7 +12,6 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringUtil;
 import net.minecraft.world.entity.player.Inventory;
@@ -91,25 +90,13 @@ public class NewAnvilMenu extends ItemCombinerMenu {
             player.giveExperienceLevels(-this.cost.get());
         }
 
-        int superEnchants = 0;
-        ItemEnchantments map = EnchantmentHelper.getEnchantmentsForCrafting(carried);
-        for (Holder<Enchantment> enchantment : map.keySet()) {
-            int l1 = map.getLevel(enchantment);
-            boolean isGold = carried.is(ItemTags.PIGLIN_LOVED);
-            if (l1 > enchantment.value().getMaxLevel() && !isGold) {
-                superEnchants++;
-            }
-        }
-
-        int breakChance = 0;
+        int finalbreakChance;
         if (isNetherite()) {
             int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(carried);
             int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(carried, false);
-            if (current > cap) {
-                breakChance = 10;
-            }
-        }
-        final int finalbreakChance = breakChance + 5*superEnchants;
+            if (current > cap) finalbreakChance = 12;
+            else finalbreakChance = 0;
+        } else finalbreakChance = 12;
 
         ItemStack itemStack = this.inputSlots.getItem(1);
         if (this.repairItemUsage > 0) {
@@ -122,13 +109,9 @@ public class NewAnvilMenu extends ItemCombinerMenu {
             if (player instanceof ServerPlayer SPE) {
                 CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.ANVIL.getDefaultInstance());
                 if (isNetherite()) {
-                    boolean isSuper = false;
-                    if (carried.getComponents().has(DataComponents.REPAIR_COST)) {
-                        isSuper = carried.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) == 1;
-                    }
-                    if (isSuper) {
-                        CriteriaTriggers.CONSUME_ITEM.trigger(SPE, ItemRegistry.NETHERITE_ANVIL.getDefaultInstance());
-                    }
+                    int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(carried);
+                    int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(carried, false);
+                    if (current > cap) CriteriaTriggers.CONSUME_ITEM.trigger(SPE, ItemRegistry.NETHERITE_ANVIL.getDefaultInstance());
                 }
             }
         } else {
@@ -157,84 +140,85 @@ public class NewAnvilMenu extends ItemCombinerMenu {
 
     @Override
     public void createResult() {
-        ItemStack firstInputStack = this.inputSlots.getItem(0);
-        ItemStack secondInputStack = this.inputSlots.getItem(1);
-        ItemStack outputItemStack = firstInputStack.copy();
+        ItemStack input = this.inputSlots.getItem(0);
+        ItemStack addition = this.inputSlots.getItem(1);
+        ItemStack result = input.copy();
 
-        this.capacity.set(FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(outputItemStack));
+        this.capacity.set(FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(result));
 
         this.cost.set(0);
         this.text.set(AnvilMsg.NONE.id);
         this.resultSlots.setItem(0, ItemStack.EMPTY);
-        if (firstInputStack.isEmpty()) return;
+        if (input.isEmpty()) return;
 
         boolean newName = false;
         boolean repair = false;
         if (this.itemName != null && !StringUtil.isBlank(this.itemName)) {
-            if (!this.itemName.equals(firstInputStack.getHoverName().getString())) {
+            if (!this.itemName.equals(input.getHoverName().getString())) {
                 newName = true;
-                outputItemStack.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
+                result.set(DataComponents.CUSTOM_NAME, Component.literal(this.itemName));
             }
-        } else if (firstInputStack.has(DataComponents.CUSTOM_NAME)) {
+        } else if (input.has(DataComponents.CUSTOM_NAME)) {
             newName = true;
-            outputItemStack.remove(DataComponents.CUSTOM_NAME);
+            result.remove(DataComponents.CUSTOM_NAME);
         }
 
-        if (secondInputStack.isEmpty()) {
+        if (addition.isEmpty()) {
             if (newName) {
-                this.resultSlots.setItem(0, outputItemStack);
+                this.resultSlots.setItem(0, result);
                 this.text.set(AnvilMsg.NAME.id);
                 this.cost.set(1);
             }
             return;
         }
 
-        if (!EnchantmentHelper.canStoreEnchantments(firstInputStack)) return;
+        if (!EnchantmentHelper.canStoreEnchantments(input)) return;
 
-        ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(outputItemStack));
+        ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(result));
         this.repairItemUsage = 0;
-        if (!secondInputStack.isEmpty()) {
-            boolean ebook = secondInputStack.is(Items.ENCHANTED_BOOK);
-            boolean book2 = ebook || secondInputStack.is(Items.BOOK);
+        if (!addition.isEmpty()) {
+            if (input.is(Items.BOOK)) {
+                this.text.set(AnvilMsg.COMBINE.id);
+                return;
+            }
+            boolean book = addition.is(Items.ENCHANTED_BOOK) || addition.is(Items.BOOK);
             //2nd slot are ingots
-            if (outputItemStack.isDamageableItem() && firstInputStack.isValidRepairItem(secondInputStack)) {
-                if (firstInputStack.getDamageValue() == 0) {
+            if (result.isDamageableItem() && input.isValidRepairItem(addition)) {
+                if (input.getDamageValue() == 0) {
                     this.text.set(AnvilMsg.FIXED.id);
                     return;
                 }
-                int k = Math.min(outputItemStack.getDamageValue(), outputItemStack.getMaxDamage() / 2);
-                int m;
-                for (m = 0; k > 0 && m < secondInputStack.getCount(); m++) {
-                    int n = outputItemStack.getDamageValue() - k;
-                    outputItemStack.setDamageValue(n);
-                    k = Math.min(outputItemStack.getDamageValue(), outputItemStack.getMaxDamage() / 2);
+                int repairAmount = Math.min(result.getDamageValue(), result.getMaxDamage() / 2);
+                int count;
+                for (count = 0; repairAmount > 0 && count < addition.getCount(); count++) {
+                    int resultDamage = result.getDamageValue() - repairAmount;
+                    result.setDamageValue(resultDamage);
+                    repairAmount = Math.min(result.getDamageValue(), result.getMaxDamage() / 2);
                 }
                 repair = true;
-                this.repairItemUsage = m;
+                this.repairItemUsage = count;
             } else {
                 //2nd slot isnt usable
-                if (!book2 && (!outputItemStack.is(secondInputStack.getItem()) || !outputItemStack.isDamageableItem())) {
+                if (!book && (!result.is(addition.getItem()) || !result.isDamageableItem())) {
                     this.text.set(AnvilMsg.COMBINE.id);
                     return;
                 }
 
-                if (outputItemStack.isDamageableItem() && !book2) {
-                    if (EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack).isEmpty() || FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
-                        if (firstInputStack.getDamageValue() == 0 && !FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
+                if (result.isDamageableItem() && !book) {
+                    if (EnchantmentHelper.getEnchantmentsForCrafting(addition).isEmpty() || FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
+                        if (input.getDamageValue() == 0 && !FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
                             this.text.set(AnvilMsg.FIXED.id);
                             return;
                         }
-                        int kx = firstInputStack.getMaxDamage() - firstInputStack.getDamageValue();
-                        int m = secondInputStack.getMaxDamage() - secondInputStack.getDamageValue();
-                        int n = m + outputItemStack.getMaxDamage() * 12 / 100;
-                        int o = kx + n;
-                        int p = outputItemStack.getMaxDamage() - o;
-                        if (p < 0) {
-                            p = 0;
-                        }
+                        int remaining1 = input.getMaxDamage() - input.getDamageValue();
+                        int remaining2 = addition.getMaxDamage() - addition.getDamageValue();
+                        int additional = remaining2 + result.getMaxDamage() * 12 / 100;
+                        int remaining = remaining1 + additional;
+                        int resultDamage = result.getMaxDamage() - remaining;
+                        if (resultDamage < 0) resultDamage = 0;
 
-                        if (p < outputItemStack.getDamageValue()) {
-                            outputItemStack.setDamageValue(p);
+                        if (resultDamage < result.getDamageValue()) {
+                            result.setDamageValue(resultDamage);
                             repair = true;
                         }
                     } else {
@@ -243,7 +227,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                     }
                 }
 
-                ItemEnchantments itemEnchantmentsComponent = EnchantmentHelper.getEnchantmentsForCrafting(secondInputStack);
+                ItemEnchantments itemEnchantmentsComponent = EnchantmentHelper.getEnchantmentsForCrafting(addition);
                 boolean hasGoodEnchant = false;
                 boolean hasBadEnchant = false;
 
@@ -252,10 +236,10 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                     int q = builder.getLevel(registryEntry);
                     int r = entry.getIntValue();
                     Enchantment enchantment = registryEntry.value();
-                    r = q == r ? r + (ebook&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
+                    r = q == r ? r + (book&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
 
-                    boolean canAdd = enchantment.canEnchant(firstInputStack);
-                    if (this.player.hasInfiniteMaterials() || firstInputStack.is(Items.ENCHANTED_BOOK)) {
+                    boolean canAdd = enchantment.canEnchant(input);
+                    if (this.player.hasInfiniteMaterials() || input.is(Items.ENCHANTED_BOOK)) {
                         canAdd = true;
                     }
 
@@ -278,24 +262,14 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 }
             }
         }
-        EnchantmentHelper.setEnchantments(outputItemStack, builder.toImmutable());
-        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(outputItemStack, true);
+        EnchantmentHelper.setEnchantments(result, builder.toImmutable());
+        int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(result, true);
         if (repair) this.cost.set(Mth.ceil(enchantmentPower / 2.0f));
         else this.cost.set(enchantmentPower);
 
-        boolean isSuper = false;
-        if (!outputItemStack.is(ItemTags.PIGLIN_LOVED) && outputItemStack.getComponents().has(DataComponents.REPAIR_COST))
-            isSuper = outputItemStack.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) == 1;
-
-        boolean over = !this.player.hasInfiniteMaterials() && (isSuper || ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0));
-        if (over) {
-            if (!isNetherite()) {
-                this.resultSlots.setItem(0, ItemStack.EMPTY);
-                this.text.set(isSuper?AnvilMsg.SUPER.id:AnvilMsg.OVER.id);
-                return;
-            }
-            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
-                ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(outputItemStack);
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
+            if (!this.player.hasInfiniteMaterials() && ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0)) {
+                ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(result);
                 for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
                     Holder<Enchantment> registryEntry = entry.getKey();
                     if (registryEntry.getRegisteredName().toLowerCase().contains("mending")) {
@@ -306,12 +280,12 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 }
             }
         }
-        if (!newName && outputItemStack.is(Items.ENCHANTED_BOOK)) outputItemStack.set(DataComponents.REPAIR_COST, 0);
-        if (ItemStack.isSameItemSameComponents(firstInputStack, outputItemStack)) {
+        if (!newName && result.is(Items.ENCHANTED_BOOK)) result.set(DataComponents.REPAIR_COST, 0);
+        if (ItemStack.isSameItemSameComponents(input, result)) {
             this.text.set(AnvilMsg.CHANGE.id);
             return;
         }
-        this.resultSlots.setItem(0, outputItemStack);
+        this.resultSlots.setItem(0, result);
         if (repair) this.text.set(AnvilMsg.REPAIR.id);
         else this.text.set(AnvilMsg.COST.id);
     }
@@ -363,12 +337,11 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         COMBINE(2, "combine", false),
         ENCHANT(3, "enchant", false),
         MENDING(4, "mending", false),
-        SUPER(5, "super", false),
-        OVER(6, "over", false),
-        CHANGE(7, "change", false),
-        NAME(8, "name", true),
-        REPAIR(9, "repair", true),
-        COST(10, "cost", true);
+        OVER(5, "over", false),
+        CHANGE(6, "change", false),
+        NAME(7, "name", true),
+        REPAIR(8, "repair", true),
+        COST(9, "cost", true);
 
         public final int id;
         public final String lang;

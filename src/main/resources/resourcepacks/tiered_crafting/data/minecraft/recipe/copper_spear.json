@@ -3,16 +3,15 @@
   "category": "equipment",
   "key": {
     "#": "minecraft:stick",
-    "X": "#minecraft:gold_tool_materials",
-    "P": "minecraft:iron_hoe"
+    "X": "#minecraft:copper_tool_materials",
+    "S": "minecraft:stone_spear"
   },
   "pattern": [
-    "XX",
-    "P#",
-    " #"
+    " SX",
+    " # ",
+    "#  "
   ],
   "result": {
-    "count": 1,
-    "id": "minecraft:golden_hoe"
+    "id": "minecraft:copper_spear"
   }
 }

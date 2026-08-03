@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.item.PatinaItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookAdditionsComponent;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
@@ -98,7 +99,7 @@ public class ItemRegistry {
             new MinecartItem(EntityTypeRegistry.DISPENCER_MINECART_ENTITY_TYPE, settings), new Item.Properties().stacksTo(1));
 
     public static final Item SPEAR = register(
-            "spear", new Item.Properties().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F)
+            "spear", new Item.Properties().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F).repairable(ModTags.BREEZE_ROD)
     );
     public static final Item ILLUSIONER_SPAWN_EGG = registerSpawnEgg(EntityType.ILLUSIONER);
     public static final Item NAUTILUS_ARMOR = register("nautilus_armor", new Item.Properties().nautilusArmor(ArmorMaterials.ARMADILLO_SCUTE));

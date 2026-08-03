@@ -3,14 +3,16 @@
   "category": "equipment",
   "key": {
     "X": "minecraft:gold_ingot",
-    "P": "minecraft:iron_boots"
+    "L": "minecraft:leather",
+    "H": "minecraft:iron_horse_armor"
   },
   "pattern": [
-    "X X",
-    "XPX"
+    "XHX",
+    "XLX",
+    "X X"
   ],
   "result": {
     "count": 1,
-    "id": "minecraft:golden_boots"
+    "id": "minecraft:golden_horse_armor"
   }
 }

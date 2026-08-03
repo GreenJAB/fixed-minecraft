@@ -23,8 +23,10 @@ public class ModTags {
     public static final TagKey<Structure> ON_RUINED_PORTAL_MAPS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("on_ruined_portal_maps"));
     public static final TagKey<Structure> ON_OUTPOST_MAPS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("on_outpost_maps"));
 
-    public static final TagKey<Item> STRINGTAG = TagKey.create(Registries.ITEM, FixedMinecraft.id("string"));
+    public static final TagKey<Item> STRING = TagKey.create(Registries.ITEM, FixedMinecraft.id("string"));
+    public static final TagKey<Item> BREEZE_ROD = TagKey.create(Registries.ITEM, FixedMinecraft.id("breeze_rod"));
     public static final TagKey<Item> UNBREAKABLE = TagKey.create(Registries.ITEM, FixedMinecraft.id("unbreakable"));
+    public static final TagKey<Item> PARTIAL_KEEP_INVENTORY = TagKey.create(Registries.ITEM, FixedMinecraft.id("partial_keep_inventory"));
     public static final TagKey<Item> STAINED_GLASS = TagKey.create(Registries.ITEM, FixedMinecraft.id("stained_glass"));
     public static final TagKey<Item> STAINED_GLASS_PANE = TagKey.create(Registries.ITEM, FixedMinecraft.id("stained_glass_pane"));
     public static final TagKey<Item> COPPER_ARMOR = TagKey.create(Registries.ITEM, FixedMinecraft.id("copper_armor"));

@@ -7,11 +7,13 @@ import net.greenjab.fixedminecraft.registry.other.BaitComponent;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.TrimMaterialsRegistry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.component.DamageResistant;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.greenjab.fixedminecraft.registry.item.NewBrickItem;
@@ -144,19 +146,19 @@ public abstract class ItemsMixin {
     @At(value = "CONSTANT", args = "stringValue=bow"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BOW:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)), index = 2)
     private static Item.Properties repairableBow(Item.Properties properties) {
-        return properties.repairable(ModTags.STRINGTAG);}
+        return properties.repairable(ModTags.STRING);}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=crossbow"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;CROSSBOW:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)), index = 2)
     private static Item.Properties repairableCrossBow(Item.Properties properties) {
-        return properties.repairable(ModTags.STRINGTAG);}
+        return properties.repairable(ModTags.STRING);}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=fishing_rod"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;FISHING_ROD:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)), index = 2)
     private static Item.Properties repairableFishingRod(Item.Properties properties) {
-        return properties.repairable(ModTags.STRINGTAG);}
+        return properties.repairable(ModTags.STRING);}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=spider_eye"), to =
@@ -188,4 +190,14 @@ public abstract class ItemsMixin {
         args.set(6, (float)args.get(6)+32000);
         args.set(8, (float)args.get(8)+32000);
     }
+
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;fireResistant()Lnet/minecraft/world/item/Item$Properties;"))
+    private static Item.Properties blastProofNetherite(Item.Properties instance, Operation<Item.Properties> original) {
+        return original.call(instance).delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION)));}
+
+    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @At(value = "CONSTANT", args = "stringValue=blaze_rod"), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BLAZE_ROD:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
+    private static Item fireProofBlazeRod(String name, Operation<Item> original) {
+        return registerItem(name, new Item.Properties().fireResistant());}
 }

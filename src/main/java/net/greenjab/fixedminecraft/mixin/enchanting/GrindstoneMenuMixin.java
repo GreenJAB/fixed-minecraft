@@ -36,13 +36,13 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
         ItemStack originalItem = original.call(instance, input, additional);
         if (input.isEmpty() || additional.isEmpty()) {
             if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM)) return originalItem;
-            if (originalItem.is(Items.BOOK) || originalItem.is(Items.ENCHANTED_BOOK)) return originalItem;
+            boolean book = (originalItem.is(Items.BOOK) || originalItem.is(Items.ENCHANTED_BOOK));
             boolean bl4 = !input.isEmpty();
             if (bl4) {
                 int max = input.getMaxDamage();
                 ItemStack output = input.copy();
                 output.setDamageValue(input.getDamageValue() + Mth.ceil(max / 4f));
-                if (input.getDamageValue() + max / 4 >= max) {
+                if (book || input.getDamageValue() + max / 4 >= max) {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));
                 }
@@ -51,7 +51,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
                 int max = additional.getMaxDamage();
                 ItemStack output = additional.copy();
                 output.setDamageValue(additional.getDamageValue() + Mth.ceil(max / 4f));
-                if (input.getDamageValue() + max / 4 >= max) {
+                if (book || input.getDamageValue() + max / 4 >= max) {
                     output.set(DataComponents.REPAIR_COST, 5);
                     output.set(DataComponents.LORE, new ItemLore(Collections.singletonList(Component.translatable("container.grindstone.break_item"))));
                 }

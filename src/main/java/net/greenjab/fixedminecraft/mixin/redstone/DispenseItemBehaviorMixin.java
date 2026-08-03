@@ -1,6 +1,9 @@
 package net.greenjab.fixedminecraft.mixin.redstone;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -15,10 +18,14 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.item.PrimedTnt;
+import net.minecraft.world.item.DispensibleContainerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -38,9 +45,8 @@ import static net.greenjab.fixedminecraft.FixedMinecraft.corals;
 @Mixin(DispenseItemBehavior.class)
 public interface DispenseItemBehaviorMixin {
 
-    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V"), slice = @Slice(
-            from = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC),
-            to = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;MINECART:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)), index = 1)
+    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V", ordinal = 0), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;POTION:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)), index = 1)
     private static DispenseItemBehavior hydrateCoralDispenser(DispenseItemBehavior behavior) {
 
         return new DefaultDispenseItemBehavior() {
@@ -86,9 +92,8 @@ public interface DispenseItemBehaviorMixin {
         };
     }
 
-    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V"), slice = @Slice(
-            from = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Blocks;TNT:Lnet/minecraft/world/level/block/Block;",opcode = Opcodes.GETSTATIC),
-            to = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;WITHER_SKELETON_SKULL:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)), index = 1)
+    @ModifyArg(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V", ordinal = 0), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/world/level/block/Blocks;TNT:Lnet/minecraft/world/level/block/Block;",opcode = Opcodes.GETSTATIC)), index = 1)
     private static DispenseItemBehavior launchTNTaway(DispenseItemBehavior behavior) {
         return new OptionalDispenseItemBehavior() {
             @Override
@@ -115,5 +120,31 @@ public interface DispenseItemBehaviorMixin {
                 return dispensed;
             }
         };
+    }
+
+    @WrapOperation(method="bootStrap", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/DispenserBlock;registerBehavior(Lnet/minecraft/world/level/ItemLike;Lnet/minecraft/core/dispenser/DispenseItemBehavior;)V", ordinal = 0), slice = @Slice(
+            from = @At(value = "FIELD", target = "Lnet/minecraft/world/item/Items;PUFFERFISH_BUCKET:Lnet/minecraft/world/item/Item;",opcode = Opcodes.GETSTATIC)))
+    private static void allayBucket(ItemLike item, DispenseItemBehavior behavior, Operation<Void> original) {
+        original.call(item, behavior);
+
+        DispenseItemBehavior filledBucketBehavior = new DefaultDispenseItemBehavior() /* DispenseItemBehavior$3 */ {
+            private final DefaultDispenseItemBehavior defaultDispenseItemBehavior = new DefaultDispenseItemBehavior();
+
+            @Override
+            public @NonNull ItemStack execute(final BlockSource source, final ItemStack dispensed) {
+                DispensibleContainerItem bucket = (DispensibleContainerItem)dispensed.getItem();
+                BlockPos target = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
+                Level level = source.level();
+                BlockState blockState = level.getBlockState(target);
+                if (blockState.getCollisionShape(level, target).isEmpty()) {
+                    if (level instanceof ServerLevel serverLevel && bucket instanceof MobBucketItem bucketItem) {
+                        bucketItem.spawn(serverLevel, dispensed, target);
+                        return this.consumeWithRemainder(source, dispensed, new ItemStack(Items.BUCKET));
+                    }
+                }
+                return this.defaultDispenseItemBehavior.dispense(source, dispensed);
+            }
+        };
+        original.call(ItemRegistry.ALLAY_BUCKET, filledBucketBehavior);
     }
 }
