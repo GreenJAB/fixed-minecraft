@@ -30,7 +30,7 @@ public abstract class DragonFireballMixin {
 
     @Inject(method = "onHit", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;<init>(Lnet/minecraft/world/level/Level;DDD)V"))
     private void explodeOnImpact(HitResult hitResult, CallbackInfo ci) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         DragonFireball DFE = (DragonFireball)(Object)this;
         ServerLevel world = (ServerLevel) DFE.level();
         int explosionPower = (DFE.level().getDifficulty().getId()+1)/2;

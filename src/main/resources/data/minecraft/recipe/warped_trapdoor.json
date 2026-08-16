@@ -3,10 +3,10 @@
     "category": "redstone",
     "group": "wooden_trapdoor",
     "pattern": [
-        "__"
+        "##"
     ],
     "key": {
-        "_": "minecraft:warped_slab"
+        "#": "minecraft:warped_slab"
     },
     "result": {
         "count": 2,

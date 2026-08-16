@@ -12,7 +12,7 @@ public abstract class DragonSittingAttackingPhaseMixin {
 
     @ModifyConstant(method = "doServerTick", constant = @Constant(intValue = 40))
     private int fasterBreath(int constant){
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return constant;
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return constant;
         return 15;
     }
 }

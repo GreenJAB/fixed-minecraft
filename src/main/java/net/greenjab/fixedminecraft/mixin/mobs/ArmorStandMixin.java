@@ -59,7 +59,7 @@ public abstract class ArmorStandMixin extends LivingEntity {
             if (this.showArms()) {
                 this.setShowArms(false);
                 if (!player.hasInfiniteMaterials()) this.spawnAtLocation((ServerLevel) player.level(), Items.STICK);
-                if (!player.hasInfiniteMaterials()) itemStack.hurtWithoutBreaking(1, player);
+                if (!player.hasInfiniteMaterials()) itemStack.hurtAndBreak(1, player, hand);
                 ItemStack[] items = {this.getMainHandItem(), this.getOffhandItem()};
                 for (ItemStack stack : items) {
                     if (!stack.isEmpty()) {

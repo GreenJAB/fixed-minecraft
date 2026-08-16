@@ -5,6 +5,7 @@ import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.gamerules.GameRule;
 import org.jspecify.annotations.NonNull;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,6 +35,9 @@ import java.util.Optional;
 
 @Mixin(Allay.class)
 public abstract class AllayMixin extends PathfinderMob implements Bucketable {
+    @Shadow
+    protected abstract void dropEquipment(ServerLevel level);
+
     public AllayMixin(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
     }
@@ -57,8 +62,10 @@ public abstract class AllayMixin extends PathfinderMob implements Bucketable {
             ItemStack result = ItemUtils.createFilledResult(itemStack, player, bucket, false);
             player.setItemInHand(hand, result);
             Level level = pickupEntity.level();
-            if (!level.isClientSide()) CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, bucket);
-            pickupEntity.drop(pickupEntity.getMainHandItem(), false, false);
+            if (!level.isClientSide()) {
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer) player, bucket);
+                ((Allay) pickupEntity).dropEquipment((ServerLevel)level);
+            }
             pickupEntity.discard();
             return Optional.of(InteractionResult.SUCCESS);
         } else return Optional.empty();

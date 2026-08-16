@@ -40,13 +40,13 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
 
     @ModifyConstant(method = "<init>", constant = @Constant(doubleValue = 20))
     private double longerSight(double constant){
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return constant;
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return constant;
         return 150;
     }
 
     @Inject(method = "doServerTick", at = @At("HEAD"),cancellable = true)
     private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerLevel level) {
-        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         this.scanningTime++;
         LivingEntity livingEntity = level.getNearestPlayer(this.scanTargeting, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (livingEntity != null) {

@@ -2,6 +2,8 @@ package net.greenjab.fixedminecraft.mixin.villager;
 
 import com.google.common.collect.ImmutableMap;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.greenjab.fixedminecraft.FixedMinecraft;
@@ -38,6 +40,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -57,9 +60,12 @@ public abstract class VillagerMixin extends AbstractVillager {
     @Shadow public abstract VillagerData getVillagerData();
     @Shadow private int foodLevel;
     @Shadow protected abstract void eatUntilFull();
+    @Shadow private boolean increaseProfessionLevelOnUpdate;
+    @Shadow protected abstract void increaseMerchantCareer(ServerLevel level);
+    @Shadow protected abstract boolean shouldIncreaseLevel();
 
-    public VillagerMixin(EntityType<? extends VillagerMixin> entityType, Level world) {
-        super(entityType, world);
+    public VillagerMixin(EntityType<? extends VillagerMixin> entityType, Level level) {
+        super(entityType, level);
     }
 
     @ModifyExpressionValue(method = "makeBrain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/Brain$Provider;makeBrain(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/entity/ai/Brain$Packed;)Lnet/minecraft/world/entity/ai/Brain;"))
@@ -305,17 +311,32 @@ public abstract class VillagerMixin extends AbstractVillager {
 
     @Inject(method = "die", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/AbstractVillager;die(Lnet/minecraft/world/damagesource/DamageSource;)V"))
     private void dropArmor(DamageSource source, CallbackInfo ci) {
-        if (this.level() instanceof ServerLevel serverWorld) {
-            for (ItemStack itemStack : FixedMinecraft.getArmor(this)) this.spawnAtLocation(serverWorld, itemStack);
+        if (this.level() instanceof ServerLevel serverLevel) {
+            for (ItemStack itemStack : FixedMinecraft.getArmor(this)) this.spawnAtLocation(serverLevel, itemStack);
             for (int i = 0; i < 4; i++) {
                 this.setItemSlot(EQUIPMENT_SLOT_ORDER[i], ItemStack.EMPTY);
                 i++;
             }
             for(int i = 0; i < this.getInventory().getContainerSize(); ++i) {
                 ItemStack itemStack = this.getInventory().getItem(i);
-                if (!itemStack.isEmpty()) this.spawnAtLocation(serverWorld, itemStack);
+                if (!itemStack.isEmpty()) this.spawnAtLocation(serverLevel, itemStack);
             }
             this.getInventory().clearContent();
+        }
+    }
+
+    @WrapOperation(method = "customServerAiStep", at =
+    @At(value = "FIELD", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseProfessionLevelOnUpdate:Z", opcode = Opcodes.GETFIELD))
+    private boolean noAutoLevelUp(Villager instance, Operation<Boolean> original) {
+        if (this.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT)) return original.call(instance);
+        return false;
+    }
+
+    @Inject(method = "shouldRestock", at = @At(value = "HEAD"))
+    private void levelUpOnRestock(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
+        if (!level.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT) && this.shouldIncreaseLevel()) {
+            this.increaseMerchantCareer(level);
+            this.increaseProfessionLevelOnUpdate = false;
         }
     }
 }

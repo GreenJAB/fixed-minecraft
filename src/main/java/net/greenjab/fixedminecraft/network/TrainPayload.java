@@ -14,7 +14,7 @@ public record TrainPayload(ArrayList<UUID> train) implements CustomPacketPayload
     public static final Type<TrainPayload> PACKET_ID = new Type<>(FixedMinecraft.id("train"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, TrainPayload> PACKET_CODEC = StreamCodec.composite(
-            TrainNetwork.ARRAY_CODEC,
+            UUIDNetwork.ARRAY_CODEC,
             TrainPayload::train,
             TrainPayload::new
     );

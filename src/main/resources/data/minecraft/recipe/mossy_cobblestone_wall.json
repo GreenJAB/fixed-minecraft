@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": "minecraft:mossy_cobblestone"
+  },
+  "pattern": [
+    "#",
+    "#"
+  ],
+  "result": {
+    "count": 2,
+    "id": "minecraft:mossy_cobblestone_wall"
+  }
+}

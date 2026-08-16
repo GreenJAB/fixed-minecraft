@@ -3,6 +3,8 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.greenjab.fixedminecraft.network.HorseDismountPayload;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -33,18 +35,20 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import java.util.Collection;
 import java.util.Map;
 
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseMixin extends Animal {
+    @Shadow
+    protected float playerJumpPendingScale;
     @Unique
     private static final Map<Item, Float> rageChance = new Object2FloatArrayMap<>();
 
@@ -76,6 +80,15 @@ public abstract class AbstractHorseMixin extends Animal {
         ItemStack armor = equipment.get(EquipmentSlot.BODY);
         float chance = rageChance.getOrDefault(armor.getItem(), 0F);
         if (Math.random() <= chance) ci.cancel();
+    }
+
+    @Inject(method = "tickRidden", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;onGround()Z"))
+    private void leaveBoat(CallbackInfo ci) {
+        if (this.playerJumpPendingScale > 0.0F && !this.isJumping()) {
+            this.stopRiding();
+            HorseDismountPayload payload = new HorseDismountPayload(this.uuid);
+            ClientPlayNetworking.send(payload);
+        }
     }
 
     @ModifyArg(method = "setOffspringAttribute", at = @At(value = "INVOKE",

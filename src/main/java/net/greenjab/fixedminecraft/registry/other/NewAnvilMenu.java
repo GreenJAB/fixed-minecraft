@@ -46,7 +46,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
     private static final int RESULT_SLOT_X_PLACEMENT = 134;
     private static final int SLOT_Y_PLACEMENT = 47;
 
-    private int repairItemUsage;
+    private boolean repairItem;
 
     public NewAnvilMenu(final int containerId, final Inventory inventory) {
         this(containerId, inventory, ContainerLevelAccess.NULL, false);
@@ -91,7 +91,9 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         }
 
         int finalbreakChance;
-        if (isNetherite()) {
+        if (this.inputSlots.getItem(1).isEmpty()) {
+            finalbreakChance = 0;
+        } else if (isNetherite()) {
             int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(carried);
             int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(carried, false);
             if (current > cap) finalbreakChance = 12;
@@ -99,9 +101,9 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         } else finalbreakChance = 12;
 
         ItemStack itemStack = this.inputSlots.getItem(1);
-        if (this.repairItemUsage > 0) {
-            if (!itemStack.isEmpty() && itemStack.getCount() > this.repairItemUsage) {
-                itemStack.shrink(this.repairItemUsage);
+        if (this.repairItem) {
+            if (!itemStack.isEmpty()) {
+                itemStack.shrink(1);
                 this.inputSlots.setItem(1, itemStack);
             } else {
                 this.inputSlots.setItem(1, ItemStack.EMPTY);
@@ -175,7 +177,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         if (!EnchantmentHelper.canStoreEnchantments(input)) return;
 
         ItemEnchantments.Mutable builder = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(result));
-        this.repairItemUsage = 0;
+        this.repairItem = false;
         if (!addition.isEmpty()) {
             if (input.is(Items.BOOK)) {
                 this.text.set(AnvilMsg.COMBINE.id);
@@ -188,15 +190,9 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                     this.text.set(AnvilMsg.FIXED.id);
                     return;
                 }
-                int repairAmount = Math.min(result.getDamageValue(), result.getMaxDamage() / 2);
-                int count;
-                for (count = 0; repairAmount > 0 && count < addition.getCount(); count++) {
-                    int resultDamage = result.getDamageValue() - repairAmount;
-                    result.setDamageValue(resultDamage);
-                    repairAmount = Math.min(result.getDamageValue(), result.getMaxDamage() / 2);
-                }
                 repair = true;
-                this.repairItemUsage = count;
+                result.setDamageValue(0);
+                this.repairItem = true;
             } else {
                 //2nd slot isnt usable
                 if (!book && (!result.is(addition.getItem()) || !result.isDamageableItem())) {
@@ -267,8 +263,15 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         if (repair) this.cost.set(Mth.ceil(enchantmentPower / 2.0f));
         else this.cost.set(enchantmentPower);
 
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
-            if (!this.player.hasInfiniteMaterials() && ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0)) {
+
+        if (!this.player.hasInfiniteMaterials() && ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0)) {
+            if (!isNetherite()) {
+                this.resultSlots.setItem(0, ItemStack.EMPTY);
+                this.text.set(AnvilMsg.OVER.id);
+                return;
+            }
+
+            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
                 ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(result);
                 for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
                     Holder<Enchantment> registryEntry = entry.getKey();
@@ -280,6 +283,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 }
             }
         }
+
         if (!newName && result.is(Items.ENCHANTED_BOOK)) result.set(DataComponents.REPAIR_COST, 0);
         if (ItemStack.isSameItemSameComponents(input, result)) {
             this.text.set(AnvilMsg.CHANGE.id);

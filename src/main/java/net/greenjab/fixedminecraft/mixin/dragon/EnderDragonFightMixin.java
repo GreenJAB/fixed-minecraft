@@ -111,7 +111,7 @@ public abstract class EnderDragonFightMixin {
             }
         }
         this.dragonEvent.setColor(BossEvent.BossBarColor.PINK);
-        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         if (this.dragonUUID!=null) {
             if (this.level.getEntity(this.dragonUUID)!=null) {
                 if (this.level.getEntity(this.dragonUUID).entityTags().contains("omen")) {
@@ -198,7 +198,7 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "createNewDragon", at= @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntity(Lnet/minecraft/world/entity/Entity;)Z"))
     private void spawnOmenDragon(CallbackInfoReturnable<EnderDragon> cir, @Local EnderDragon dragon){
-        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         Player playerEntity = this.level.getNearestPlayer(TargetingConditions.forCombat().range(150), dragon, dragon.getX(), dragon.getY(), dragon.getZ());
         if (playerEntity != null) {
             if (playerEntity.hasEffect(MobEffects.BAD_OMEN)) {
@@ -212,7 +212,7 @@ public abstract class EnderDragonFightMixin {
 
     @Inject(method = "setDragonKilled", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/dimension/end/EnderDragonFight;spawnExitPortal(Z)V"))
     private void spawnElytraItem(EnderDragon dragon, CallbackInfo ci) {
-        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         if (dragon.entityTags().contains("omen")) {
             ItemEntity itemEntity = new ItemEntity(dragon.level(), 0, dragon.getY()-2, 0, Items.ELYTRA.getDefaultInstance());
             itemEntity.snapTo(0.5f, dragon.getY(), 0.5f, 0.0F, 0);

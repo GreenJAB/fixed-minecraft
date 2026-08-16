@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.animal.feline.Cat;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.level.levelgen.PhantomSpawner;
@@ -30,6 +31,7 @@ public abstract class PhantomSpawnerMixin {
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/stats/ServerStatsCounter;getValue(Lnet/minecraft/stats/Stat;)I"))
     private int phantomSpawnByEffect(ServerStatsCounter instance, Stat<?> stat, Operation<Integer> original, @Local ServerPlayer player, @Local(argsOnly = true) ServerLevel level) {
+        if (!player.level().getChunkSource().getLastSpawnState().canSpawnForCategoryLocal(MobCategory.MONSTER, player.chunkPosition())) return 0;
         if (!player.hasEffect(MobEffectRegistry.INSOMNIA)) return 0;
         List<Cat> list = level.getEntitiesOfClass(Cat.class, player.getBoundingBox().inflate(16.0), EntitySelector.ENTITY_STILL_ALIVE);
         if  (!list.isEmpty()) return 0;

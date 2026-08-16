@@ -1,5 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
+import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -18,6 +20,7 @@ public abstract class BeaconBlockMixin {
     @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
     private void removeBeaconUI(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult,
                                 CallbackInfoReturnable<InteractionResult> cir) {
+        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_BEACON)) return;
         cir.setReturnValue(InteractionResult.FAIL);
     }
 }

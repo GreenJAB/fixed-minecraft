@@ -105,23 +105,9 @@ public abstract class TransportItemsBetweenContainersMixin {
         } else if (b.getComponents().has(DataComponents.BUNDLE_CONTENTS)) {
             BundleContents container = b.getComponents().get(DataComponents.BUNDLE_CONTENTS);
             if (!container.isEmpty()) {
-                ItemStack testItem = container.items().getFirst().create();
+                ItemStack testItem = container.items().getLast().create();
                 if (testItem != ItemStack.EMPTY) {
                     return ItemStack.isSameItemSameComponents(a, testItem);
-                }
-            }
-        } else if (a.getComponents().has(DataComponents.CONTAINER)) {
-            ItemContainerContents container = a.getComponents().get(DataComponents.CONTAINER);
-            for (ItemStack itemStack2 : container.allItemsCopyStream().toList()) {
-                if (ItemStack.isSameItem(b, itemStack2)) {
-                    return true;
-                }
-            }
-        } else if (a.getComponents().has(DataComponents.BUNDLE_CONTENTS)) {
-            BundleContents container = a.getComponents().get(DataComponents.BUNDLE_CONTENTS);
-            for (ItemStack itemStack2 : container.itemCopyStream().toList()) {
-                if (ItemStack.isSameItem(b, itemStack2)) {
-                    return true;
                 }
             }
         } else if (a.getComponents().has(DataComponents.CUSTOM_NAME)) {

@@ -68,9 +68,12 @@ public abstract class FoodDataMixin {
         }
 
         if (player.hasEffect(MobEffects.SATURATION)) {
-            if (player.getEffect(MobEffects.SATURATION).getAmplifier() > 0 && this.saturationLevel <= 1) {
-                this.saturationLevel = 1;
-                this.exhaustionLevel = 0;
+            if (player.getEffect(MobEffects.SATURATION).getAmplifier() > 0) {
+                if (this.foodLevel <= 1) this.foodLevel = 1;
+                if (this.saturationLevel <= 1) {
+                    this.saturationLevel = 1;
+                    this.exhaustionLevel = 0;
+                }
             }
         }
 

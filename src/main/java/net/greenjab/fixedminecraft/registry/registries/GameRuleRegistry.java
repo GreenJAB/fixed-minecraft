@@ -30,13 +30,16 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> GRINDSTONE_DAMAGES_ITEM;
     public static GameRule<Boolean> GOLD_GEAR_AUTO_REPAIRS;
 
-    public static GameRule<Boolean> ICE_MELT_IN_NETHER;
-    public static GameRule<Boolean> REMOVE_VANILLA_NAUTILUS_ARMOUR;
+    public static GameRule<Integer> TRAIN_MAX_LENGTH;
+    public static GameRule<Boolean> TRAIN_CHUNK_LOADING;
     public static GameRule<Boolean> ELYTRA_DRAG;
     public static GameRule<Integer> ELYTRA_FLY_IN_RAIN;
     public static GameRule<Integer> ELYTRA_FIREWORK_NERF;
     public static GameRule<Integer> ELYTRA_DEPLOYMENT_TICKS;
     public static GameRule<Integer> ELYTRA_HIT_CANCEL_TICKS;
+    public static GameRule<Boolean> ICE_MELT_IN_NETHER;
+    public static GameRule<Boolean> GLOBAL_PLAYER_LOCATOR_BAR;
+    public static GameRule<Boolean> REMOVE_VANILLA_NAUTILUS_ARMOUR;
 
     public static GameRule<Boolean> REQUIRE_TOTEM_USE;
     public static GameRule<Boolean> RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS;
@@ -50,13 +53,15 @@ public class GameRuleRegistry {
     public static GameRule<Integer> ITEM_DEATH_DESPAWN_TIME;
     public static GameRule<Boolean> STRONGER_MOBS;
     public static GameRule<Boolean> MOBS_LEAVE_VEHICLES_WHEN_ATTACKED;
-    public static GameRule<Boolean> BETTER_WITHER_FIGHT;
-    public static GameRule<Boolean> BETTER_DRAGON_FIGHT;
+    public static GameRule<Integer> NIGHTS_UNTIL_INSOMNIA;
+    public static GameRule<Boolean> SAFE_SLEEP_REQUIREMENT;
+    public static GameRule<Boolean> INSOMNIA_SLEEP_REQUIREMENT;
+    public static GameRule<Boolean> MODIFIED_WITHER_FIGHT;
+    public static GameRule<Boolean> MODIFIED_BEACON;
+    public static GameRule<Boolean> MODIFIED_DRAGON_FIGHT;
     public static GameRule<Boolean> DRAGON_WORLD_BORDER_BEFORE_KILL;
 
     public static GameRule<Boolean> PEACEFUL_MOB_GRIEFING;
-    public static GameRule<Integer> NIGHTS_UNTIL_INSOMNIA;
-    public static GameRule<Boolean> INSOMNIA_SLEEP_REQUIREMENT;
     public static GameRule<Boolean> VILLAGERS_NEED_SLEEP;
     public static GameRule<Boolean> VILLAGERS_NEED_FOOD;
     public static GameRule<Boolean> VILLAGERS_NEED_SUNLIGHT;
@@ -79,13 +84,16 @@ public class GameRuleRegistry {
         GRINDSTONE_DAMAGES_ITEM = registerBoolean("grindstone_damages_item", JABSFIXEDENCHANTING, true);
         GOLD_GEAR_AUTO_REPAIRS = registerBoolean("gold_gear_auto_repairs", JABSFIXEDENCHANTING, true);
 
-        ICE_MELT_IN_NETHER = registerBoolean("ice_melt_in_nether", JABSFIXEDTRANSPORT, true);
-        REMOVE_VANILLA_NAUTILUS_ARMOUR = registerBoolean("remove_vanilla_nautilus_rmour", JABSFIXEDTRANSPORT, true);
+        TRAIN_MAX_LENGTH = registerInteger("train_max_length", JABSFIXEDTRANSPORT, 100, 1, 100);
+        TRAIN_CHUNK_LOADING = registerBoolean("train_chunk_loading", JABSFIXEDTRANSPORT, true);
         ELYTRA_DRAG = registerBoolean("elytra_drag", JABSFIXEDTRANSPORT, false);
         ELYTRA_FLY_IN_RAIN = registerInteger("elytra_fly_in_rain", JABSFIXEDTRANSPORT, 0, 0, 2);
         ELYTRA_FIREWORK_NERF = registerInteger("elytra_firework_nerf", JABSFIXEDTRANSPORT, 1, 0, 2);
         ELYTRA_DEPLOYMENT_TICKS = registerInteger("elytra_deployment_ticks", JABSFIXEDTRANSPORT, 15, 0, Integer.MAX_VALUE);
         ELYTRA_HIT_CANCEL_TICKS = registerInteger("elytra_hit_cancel_ticks", JABSFIXEDTRANSPORT, 40, 0, Integer.MAX_VALUE);
+        ICE_MELT_IN_NETHER = registerBoolean("ice_melt_in_nether", JABSFIXEDTRANSPORT, true);
+        GLOBAL_PLAYER_LOCATOR_BAR = registerBoolean("global_player_locator_bar", JABSFIXEDTRANSPORT, false);
+        REMOVE_VANILLA_NAUTILUS_ARMOUR = registerBoolean("remove_vanilla_nautilus_armour", JABSFIXEDTRANSPORT, true);
 
         REQUIRE_TOTEM_USE = registerBoolean("require_totem_use", JABSFIXEDCOMBAT, false);
         RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS = registerBoolean("raid_replace_evokers_with_illusioners", JABSFIXEDCOMBAT, true);
@@ -99,13 +107,15 @@ public class GameRuleRegistry {
         ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", JABSFIXEDCOMBAT, 30, 0, 30);
         STRONGER_MOBS = registerBoolean("stronger_mobs", JABSFIXEDCOMBAT, true);
         MOBS_LEAVE_VEHICLES_WHEN_ATTACKED = registerBoolean("mobs_leave_vehicles_when_attacked", JABSFIXEDCOMBAT, true);
-        BETTER_WITHER_FIGHT = registerBoolean("better_wither_fight", JABSFIXEDCOMBAT, true);
-        BETTER_DRAGON_FIGHT = registerBoolean("better_dragon_fight", JABSFIXEDCOMBAT, true);
+        NIGHTS_UNTIL_INSOMNIA = registerInteger("nights_until_insomnia", JABSFIXEDCOMBAT, 7, 0, Integer.MAX_VALUE);
+        SAFE_SLEEP_REQUIREMENT = registerBoolean("safe_sleep_requirement", JABSFIXEDCOMBAT, true);
+        INSOMNIA_SLEEP_REQUIREMENT = registerBoolean("insomnia_sleep_requirement", JABSFIXEDCOMBAT, false);
+        MODIFIED_WITHER_FIGHT = registerBoolean("modified_wither_fight", JABSFIXEDCOMBAT, true);
+        MODIFIED_BEACON = registerBoolean("modified_beacon", JABSFIXEDCOMBAT, true);
+        MODIFIED_DRAGON_FIGHT = registerBoolean("modified_dragon_fight", JABSFIXEDCOMBAT, true);
         DRAGON_WORLD_BORDER_BEFORE_KILL = registerBoolean("dragon_world_border_before_kill", JABSFIXEDCOMBAT, true);
 
         PEACEFUL_MOB_GRIEFING = registerBoolean("peaceful_mob_griefing", GameRuleCategory.MOBS, true);
-        NIGHTS_UNTIL_INSOMNIA = registerInteger("nights_until_insomnia", JABSFIXEDMOBSANDBLOCKS, 7, 0, Integer.MAX_VALUE);
-        INSOMNIA_SLEEP_REQUIREMENT = registerBoolean("insomnia_sleep_requirement", JABSFIXEDMOBSANDBLOCKS, false);
         VILLAGERS_NEED_SLEEP = registerBoolean("villagers_need_sleep", JABSFIXEDMOBSANDBLOCKS, true);
         VILLAGERS_NEED_FOOD = registerBoolean("villagers_need_food", JABSFIXEDMOBSANDBLOCKS, true);
         VILLAGERS_NEED_SUNLIGHT = registerBoolean("villagers_need_sunlight", JABSFIXEDMOBSANDBLOCKS, true);

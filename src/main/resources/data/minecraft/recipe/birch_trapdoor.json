@@ -3,11 +3,10 @@
     "category": "redstone",
     "group": "wooden_trapdoor",
     "pattern": [
-        "_I_"
+        "##"
     ],
     "key": {
-        "_": "minecraft:birch_slab",
-        "I": "minecraft:iron_nugget"
+        "#": "minecraft:birch_slab"
     },
     "result": {
         "count": 2,

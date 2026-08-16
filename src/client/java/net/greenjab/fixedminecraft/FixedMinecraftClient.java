@@ -27,6 +27,7 @@ public class FixedMinecraftClient implements ClientModInitializer {
 
     public static OptionInstance<Boolean> itemArmorHud = OptionInstance.createBoolean("options.itemArmorHud", true);
     public static OptionInstance<Boolean> jabsFixedFog = OptionInstance.createBoolean("options.jabsFixedFog", true);
+    public static OptionInstance<Boolean> villagersSpeak = OptionInstance.createBoolean("options.chat.villagersSpeak", true);
 
     @Override
     public void onInitializeClient() {

@@ -1,0 +1,8 @@
+{
+    "type": "minecraft:stonecutting",
+    "ingredient": "minecraft:waxed_oxidized_copper",
+    "result": {
+        "id": "minecraft:waxed_oxidized_lightning_rod",
+        "count": 3
+    }
+}

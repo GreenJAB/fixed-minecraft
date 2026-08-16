@@ -45,7 +45,7 @@ public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonSitti
 
     @Inject(method = "doServerTick", at = @At("HEAD"),cancellable = true)
     private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerLevel level) {
-        if (!level.getGameRules().get(GameRuleRegistry.BETTER_DRAGON_FIGHT)) return;
+        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
         this.flameTicks++;
 
         TargetingConditions CLOSE_PLAYER_PREDICATE;

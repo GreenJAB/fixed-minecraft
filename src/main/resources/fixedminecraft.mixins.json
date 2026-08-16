@@ -51,6 +51,7 @@
         "enchanting.ItemStackMixin",
         "enchanting.PlayerMixin",
         "enchanting.ProjectileUtilMixin",
+        "enchanting.SculkBlockMixin",
         "enchanting.ServerGamePacketListenerImplMixin",
         "enchanting.ThrownTridentMixin",
         "enchanting.ToolMaterialMixin",
@@ -78,12 +79,14 @@
         "horse.SkeletonHorseMixin",
         "horse.ThrownEnderPearlMixin",
         "horse.VillageSiegeMixin",
+        "horse.WaterAvoidingRandomStrollGoalMixin",
         "horse.ZombieHorseMixin",
         "inventory.BundleContentsMixin",
         "inventory.BundleContentsMutableMixin",
         "inventory.CraftingInventoryAccessor",
         "inventory.InventoryMenuMixin",
         "inventory.InventoryMixin",
+        "inventory.ItemStackMixin",
         "inventory.PlayerMixin",
         "inventory.ProjectileWeaponItemMixin",
         "inventory.ServerPlayerMixin",
@@ -195,7 +198,6 @@
         "redstone.DispenseItemBehaviorMixin",
         "redstone.DoorBlockMixin",
         "redstone.ItemContainerContentsMixin",
-        "inventory.ItemStackMixin",
         "redstone.NoteBlockMixin",
         "redstone.SculkSensorBlockEntityMixin",
         "redstone.SculkSensorBlockMixin",
@@ -234,7 +236,8 @@
         "villager.WanderingTraderSpawnerMixin",
         "wolves.InstrumentItemMixin",
         "wolves.OwnerHurtTargetGoalMixin",
-        "wolves.TameableEntityMixin"
+        "wolves.TameableEntityMixin",
+        "wolves.AnimalMixin"
     ],
     "injectors": {
         "defaultRequire": 1

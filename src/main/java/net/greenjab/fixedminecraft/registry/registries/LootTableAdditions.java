@@ -1,9 +1,11 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.advancements.criterion.EntityTypePredicate;
+import net.minecraft.advancements.criterion.LocationPredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.maps.MapDecorationTypes;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -49,6 +52,7 @@ public class LootTableAdditions {
                         .add(enchantedArmor(enchantments, Items.DIAMOND_CHESTPLATE))
                         .add(enchantedArmor(enchantments, Items.DIAMOND_BOOTS))
                         .build());
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.ECHO_SHARD)).build());
             } else if (key==BuiltInLootTables.BASTION_TREASURE) {
                 tableBuilder.pool(bookPoolPlus(enchantments, BASTION_TREASURE_EBOOKS, 1, 20).build());
             } else if (key==BuiltInLootTables.BURIED_TREASURE) {
@@ -164,6 +168,9 @@ public class LootTableAdditions {
             } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(Items.COMPASS).apply(new ExplorationCompassLootFunction.Builder())));
+            } else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
+                tableBuilder.modifyPools(builder ->
+                        builder.add(LootItem.lootTableItem(Items.MAP).apply(new ExplorationMapFunction.Builder().setDestination(ModTags.ON_TRAIL_RUIN_MAPS).setMapDecoration(MapDecorationRegistry.TRAIL_RUINS))));
             }
         });
 
@@ -211,21 +218,19 @@ public class LootTableAdditions {
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_PIGSTEP))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PIGLIN))).build());
-
-                tableBuilder.pool(LootPool.lootPool()
-                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
-                        .when(LootItemEntityPropertyCondition.hasProperties(
-                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.SHULKER))).build());
             } else if (key==EntityType.SNIFFER.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_RELIC))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+            } else if (key==EntityType.SHULKER.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().located(LocationPredicate.Builder.inDimension(Level.OVERWORLD)).of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
             } else if (key==EntityType.WARDEN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
-                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_5))
-                        .when(LootItemEntityPropertyCondition.hasProperties(
-                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_5)).build());
             } else if (key==EntityType.ELDER_GUARDIAN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(2))

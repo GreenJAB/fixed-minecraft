@@ -6,7 +6,7 @@
     "#": "fixedminecraft:azalea_planks"
   },
   "pattern": [
-    "##"
+    "###"
   ],
   "result": {
       "count": 2,

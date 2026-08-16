@@ -8,6 +8,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.gamerules.GameRules;
 
 public class GameRuleStatus {
+    public boolean global_locator_bar;
     public boolean elytra_drag;
     public int elytra_fly_in_rain;
     public int elytra_firework_nerf;
@@ -20,6 +21,7 @@ public class GameRuleStatus {
     }
 
     public void updateRules(GameRules rules) {
+        this.global_locator_bar = rules.get(GameRuleRegistry.GLOBAL_PLAYER_LOCATOR_BAR);
         this.elytra_drag = rules.get(GameRuleRegistry.ELYTRA_DRAG);
         this.elytra_fly_in_rain = rules.get(GameRuleRegistry.ELYTRA_FLY_IN_RAIN);
         this.elytra_firework_nerf = rules.get(GameRuleRegistry.ELYTRA_FIREWORK_NERF);
@@ -30,6 +32,7 @@ public class GameRuleStatus {
     }
 
     void toPacket(FriendlyByteBuf buf) {
+        buf.writeBoolean(global_locator_bar);
         buf.writeBoolean(elytra_drag);
         buf.writeInt(elytra_fly_in_rain);
         buf.writeInt(elytra_firework_nerf);
@@ -41,6 +44,7 @@ public class GameRuleStatus {
 
     static GameRuleStatus fromPacket(FriendlyByteBuf buf) {
         GameRuleStatus p = new GameRuleStatus();
+        p.global_locator_bar = buf.readBoolean();
         p.elytra_drag = buf.readBoolean();
         p.elytra_fly_in_rain = buf.readInt();
         p.elytra_firework_nerf = buf.readInt();

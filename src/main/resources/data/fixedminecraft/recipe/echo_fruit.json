@@ -2,9 +2,9 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "EEE",
+        " E ",
         "ECE",
-        "EEE"
+        " E "
     ],
     "key": {
         "E": "minecraft:echo_shard",

@@ -1,0 +1,15 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "group": "wooden_slab",
+    "key": {
+        "#": "minecraft:spruce_planks"
+    },
+    "pattern": [
+        "##"
+    ],
+    "result": {
+        "count": 4,
+        "id": "minecraft:spruce_slab"
+    }
+}

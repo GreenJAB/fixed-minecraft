@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
 import com.mojang.blaze3d.platform.Window;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.screens.MapBookScreen;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
@@ -213,52 +214,54 @@ public abstract class LocatorBarRendererMixin {
                 }
             }
 
+            if (!FixedMinecraft.gameRules.global_locator_bar) {
+                MapBookPlayer p = new MapBookPlayer();
+                p.setPlayer(thisPlayer);
+                ArrayList<MapBookPlayer> mp = mps.players;
+                if (mp != null) {
+                    try {
+                        for (MapBookPlayer player : mp) {
+                            if (player.dimension.contains(p.dimension)) {
+                                if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
+                                    Vec3 c = minecraft.gameRenderer.getMainCamera().position();
 
-            MapBookPlayer p = new MapBookPlayer();
-            p.setPlayer(thisPlayer);
-            ArrayList<MapBookPlayer> mp = mps.players;
-            if (mp != null) {
-                try {
-                    for (MapBookPlayer player : mp) {
-                        if (player.dimension.contains(p.dimension)) {
-                            if (!(player.name.contains(p.name) && p.name.contains(player.name))) {
-                                Vec3 c = minecraft.gameRenderer.getMainCamera().position();
+                                    double x = player.x;
+                                    double y = player.y;
+                                    double z = player.z;
 
-                                double x = player.x;
-                                double y = player.y;
-                                double z = player.z;
+                                    double dd = Math.sqrt((x - c.x) * (x - c.x) + (y - c.y) * (y - c.y) + (z - c.z) * (z - c.z));
+                                    double a = getAngle(c, x, z, minecraft);
+                                    if (!(a <= -61.0) && !(a > 60.0)) {
+                                        int k = Mth.ceil((graphics.guiWidth() - 9) / 2.0F);
+                                        int m = (int) (a * 173.0 / 2.0 / 60.0);
 
-                                double dd = Math.sqrt((x-c.x)*(x-c.x)+(y-c.y)*(y-c.y)+(z-c.z)*(z-c.z));
-                                double a = getAngle(c, x, z, minecraft);
-                                if (!(a <= -61.0) && !(a > 60.0)) {
-                                    int k = Mth.ceil((graphics.guiWidth() - 9) / 2.0F);
-                                    int m = (int) (a * 173.0 / 2.0 / 60.0);
+                                        int color = MapBookScreen.getColor(player, minecraft);
+                                        WaypointStyle waypointStyle = minecraft.getWaypointStyles().get(WaypointStyleAssets.DEFAULT);
+                                        Identifier identifier = waypointStyle.sprite((float) dd);
+                                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier,
+                                                k + m, top - 2, 9, 9, color);
+                                        int n = aboveOrBelow(c, x, y, z, minecraft);
 
-                                    int color = MapBookScreen.getColor(player, minecraft);
-                                    WaypointStyle waypointStyle = minecraft.getWaypointStyles().get(WaypointStyleAssets.DEFAULT);
-                                    Identifier identifier = waypointStyle.sprite((float) dd);
-                                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier,
-                                            k + m, top - 2, 9, 9, color);
-                                    int n = aboveOrBelow(c, x, y, z, minecraft);
+                                        if (n != 0) {
+                                            byte o;
+                                            Identifier identifier2;
+                                            if (n == -1) {
+                                                o = 6;
+                                                identifier2 = LOCATOR_BAR_ARROW_DOWN;
+                                            }
+                                            else {
+                                                o = -6;
+                                                identifier2 = LOCATOR_BAR_ARROW_UP;
+                                            }
 
-                                    if (n != 0) {
-                                        byte o;
-                                        Identifier identifier2;
-                                        if (n == -1) {
-                                            o = 6;
-                                            identifier2 = LOCATOR_BAR_ARROW_DOWN;
-                                        } else {
-                                            o = -6;
-                                            identifier2 = LOCATOR_BAR_ARROW_UP;
+                                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier2, k + m + 1, top + o, 7, 5);
                                         }
-
-                                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier2, k + m + 1, top + o, 7, 5);
                                     }
                                 }
                             }
                         }
+                    } catch (ConcurrentModificationException ignored) {
                     }
-                } catch (ConcurrentModificationException ignored) {
                 }
             }
         }

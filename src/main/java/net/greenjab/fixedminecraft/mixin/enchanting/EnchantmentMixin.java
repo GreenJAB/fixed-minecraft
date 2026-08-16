@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
@@ -67,6 +68,7 @@ public abstract class EnchantmentMixin {
             if (!weapon.isEmpty()) {
                 int lungeLevel = FixedMinecraftEnchantmentHelper.enchantLevel(weapon, "lunge");
                 if (lungeLevel > 0) {
+                    if (PE.hasEffect(MobEffects.SATURATION)) return;
                     if (FixedMinecraft.gameRules.use_stamina) {
                         if (PE.getFoodData().getSaturationLevel() < lungeLevel * 2) ci.cancel();
                     } else {

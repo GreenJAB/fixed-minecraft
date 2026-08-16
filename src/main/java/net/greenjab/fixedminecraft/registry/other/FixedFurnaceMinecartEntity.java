@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.registry.other;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.greenjab.fixedminecraft.network.TrainPayload;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -17,10 +18,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.minecart.MinecartChest;
-import net.minecraft.world.entity.vehicle.minecart.MinecartFurnace;
-import net.minecraft.world.entity.vehicle.minecart.MinecartHopper;
+import net.minecraft.world.entity.vehicle.minecart.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
@@ -44,13 +42,19 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
     private int fuel;
     public int powerRailSetLit = 0;
 
-    public FixedFurnaceMinecartEntity(EntityType<? extends MinecartFurnace> entityType, Level world) { super(entityType, world);}
+    public FixedFurnaceMinecartEntity(EntityType<? extends MinecartFurnace> entityType, Level level) { super(entityType, level);}
 
     public ArrayList<AbstractMinecart> getTrain() { return train; }
 
     @Override
     public void tick() {
-        if (this.level() instanceof ServerLevel level && !uuids.isEmpty()) loadTrain(level);
+        if (this.level() instanceof ServerLevel level) {
+            if (!uuids.isEmpty()) loadTrain(level);
+            if (this.hasFuel() && level.getGameRules().get(GameRuleRegistry.TRAIN_CHUNK_LOADING)) {
+                level.resetEmptyTime();
+                level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(this.blockPosition()), 3);
+            }
+        }
         boolean wasOnRail = this.isOnRails();
         super.tick();
         if (this.level() instanceof ServerLevel level) {
@@ -69,6 +73,8 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
             setFakeMinecart(fakeMinecart, this);
             for (int i = 1; i< train.size(); i++) {
                 AbstractMinecart minecart = train.get(i);
+                if (i % 20 ==0 && this.hasFuel() && level.getGameRules().get(GameRuleRegistry.TRAIN_CHUNK_LOADING))
+                        level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, ChunkPos.containing(minecart.blockPosition()), 2);
                 AbstractMinecart prevMinecart = train.get(i - 1);
                 minecart.removeTag("trainMove");
                 minecart.setOnRails(BaseRailBlock.isRail(this.level().getBlockState(minecart.getCurrentBlockPosOrRailBelow())));
@@ -121,21 +127,21 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
         fakeMinecart.setDeltaMovement(new Vec3(-1.5f, 0, 0).yRot((float) (fakeMinecart.getYRot()*Math.PI/180f)));
     }
 
-    private void addGoodMinecarts(ServerLevel world, AbstractMinecart fakeMinecart) {
-        if (train.size()<100) {
+    private void addGoodMinecarts(ServerLevel level, AbstractMinecart fakeMinecart) {
+        if (train.size()<level.getGameRules().get(GameRuleRegistry.TRAIN_MAX_LENGTH)) {
             AbstractMinecart lastMinecart = train.getLast();
             if (lastMinecart.isOnRails()) {
-                List<AbstractMinecart> list = world.getEntitiesOfClass(AbstractMinecart.class, lastMinecart.getBoundingBox().deflate(0.2),
+                List<AbstractMinecart> list = level.getEntitiesOfClass(AbstractMinecart.class, lastMinecart.getBoundingBox().deflate(0.2),
                         entity -> !(entity instanceof MinecartFurnace) && !entity.entityTags().contains("train"));
                 if (list.isEmpty()) {
                     setFakeMinecart(fakeMinecart, lastMinecart);
-                    fakeMinecart.getBehavior().moveAlongTrack(world);
-                    list = world.getEntitiesOfClass(AbstractMinecart.class, fakeMinecart.getBoundingBox().deflate(0.2),
+                    fakeMinecart.getBehavior().moveAlongTrack(level);
+                    list = level.getEntitiesOfClass(AbstractMinecart.class, fakeMinecart.getBoundingBox().deflate(0.2),
                             entity -> !(entity instanceof MinecartFurnace) && !entity.entityTags().contains("train"));
                     if (!list.isEmpty() && BaseRailBlock.isRail(this.level().getBlockState(list.getFirst().getCurrentBlockPosOrRailBelow()))) addMinecart(list.getFirst(), fakeMinecart);
                 } else {
                     for (AbstractMinecart minecart : list) {
-                        if (train.size()<100 && BaseRailBlock.isRail(this.level().getBlockState(minecart.getCurrentBlockPosOrRailBelow()))) addMinecart(minecart, lastMinecart);
+                        if (train.size()<level.getGameRules().get(GameRuleRegistry.TRAIN_MAX_LENGTH) && BaseRailBlock.isRail(this.level().getBlockState(minecart.getCurrentBlockPosOrRailBelow()))) addMinecart(minecart, lastMinecart);
                     }
                 }
             }
@@ -156,7 +162,7 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
         minecart.level().playSound(minecart, minecart.blockPosition(), SoundEvents.UI_BUTTON_CLICK.value(), SoundSource.BLOCKS, 1.0F, 1.0F);
     }
 
-    private void disconnectBadMinecarts(ServerLevel world) {
+    private void disconnectBadMinecarts(ServerLevel level) {
         if (this.tickCount<50)return;
         for (int i = 1; i< train.size(); i++) {
             if (train.get(i) == null || train.get(i).isRemoved()  || (train.get(i).onGround()&&train.get(i).getDeltaMovement().horizontalDistance()<0.01) || !train.get(i).entityTags().contains("train")) {
@@ -164,7 +170,7 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
                     train.get(i).removeTag("train");
                     train.get(i).removeTag("trainMove");
                     train.get(i).tickCount=-50;
-                    world.playSound(train.get(i), train.get(i).blockPosition(), SoundEvents.BAMBOO_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    level.playSound(train.get(i), train.get(i).blockPosition(), SoundEvents.BAMBOO_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
                     train.remove(i);
                 }
             }
@@ -199,7 +205,7 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
         return vec3d;
     }
 
-    private void loadTrain(ServerLevel serverWorld) {
+    private void loadTrain(ServerLevel level) {
         train.clear();
         train.add(this);
         for (UUID uuid : uuids) {
@@ -213,7 +219,7 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
             }
         }
         uuids.clear();
-        sendToClient(serverWorld);
+        sendToClient(level);
     }
 
     public void setTrainClient(ArrayList<UUID> setTrain) {
@@ -233,17 +239,17 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
         }
     }
 
-    private void sendToClient(ServerLevel serverWorld) {
+    private void sendToClient(ServerLevel level) {
         ArrayList<UUID> trainUuids = new ArrayList<>();
         for (AbstractMinecart entity : train) trainUuids.add(entity.getUUID());
         TrainPayload payload = new TrainPayload(trainUuids);
-        sendToAround(serverWorld.getServer().getPlayerList(), null, this.getX(), this.getY(), this.getZ(), 100, serverWorld.dimension(), payload);
+        sendToAround(level.getServer().getPlayerList(), null, this.getX(), this.getY(), this.getZ(), 100, level.dimension(), payload);
     }
 
-    public static void sendToAround(PlayerList playerManager, @Nullable Player player, double x, double y, double z, double distance, ResourceKey<Level> worldKey, CustomPacketPayload payload) {
+    public static void sendToAround(PlayerList playerManager, @Nullable Player player, double x, double y, double z, double distance, ResourceKey<Level> levelKey, CustomPacketPayload payload) {
         for (int i = 0; i < playerManager.getPlayers().size(); i++) {
             ServerPlayer serverPlayerEntity = playerManager.getPlayers().get(i);
-            if (serverPlayerEntity != player && serverPlayerEntity.level().dimension() == worldKey) {
+            if (serverPlayerEntity != player && serverPlayerEntity.level().dimension() == levelKey) {
                 double d = x - serverPlayerEntity.getX();
                 double e = y - serverPlayerEntity.getY();
                 double f = z - serverPlayerEntity.getZ();
@@ -308,9 +314,9 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
     }
     @Override
     public Entity teleport(@NonNull TeleportTransition teleportTarget) {
-        if (this.level() instanceof ServerLevel serverWorld) {
-            serverWorld.resetEmptyTime();
-            serverWorld.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(this.blockPosition().getX(), this.blockPosition().getZ()), 3);
+        if (this.level() instanceof ServerLevel level) {
+            level.resetEmptyTime();
+            level.getChunkSource().addTicketWithRadius(TicketType.PORTAL, new ChunkPos(this.blockPosition().getX(), this.blockPosition().getZ()), 3);
         }
         for (AbstractMinecart minecart : train) {
             if (minecart!=null) {

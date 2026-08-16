@@ -22,6 +22,7 @@ public class ModTags {
     public static final TagKey<Structure> LODESTONE_COMPASS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("lodestone_compass"));
     public static final TagKey<Structure> ON_RUINED_PORTAL_MAPS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("on_ruined_portal_maps"));
     public static final TagKey<Structure> ON_OUTPOST_MAPS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("on_outpost_maps"));
+    public static final TagKey<Structure> ON_TRAIL_RUIN_MAPS = TagKey.create(Registries.STRUCTURE, FixedMinecraft.id("on_trail_ruin_maps"));
 
     public static final TagKey<Item> STRING = TagKey.create(Registries.ITEM, FixedMinecraft.id("string"));
     public static final TagKey<Item> BREEZE_ROD = TagKey.create(Registries.ITEM, FixedMinecraft.id("breeze_rod"));

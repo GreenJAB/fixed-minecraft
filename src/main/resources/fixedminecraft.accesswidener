@@ -40,3 +40,5 @@ accessible field net/minecraft/world/entity/item/ItemEntity age I
 accessible method net/minecraft/world/item/MobBucketItem spawn (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/core/BlockPos;)V
 accessible field net/minecraft/world/entity/LivingEntity attackStrengthTicker I
 accessible field net/minecraft/world/item/enchantment/ItemEnchantments$Mutable enchantments Lit/unimi/dsi/fastutil/objects/Object2IntOpenHashMap;
+accessible method net/minecraft/world/entity/animal/allay/Allay dropEquipment (Lnet/minecraft/server/level/ServerLevel;)V
+accessible method net/minecraft/world/level/NaturalSpawner$SpawnState canSpawnForCategoryLocal (Lnet/minecraft/world/entity/MobCategory;Lnet/minecraft/world/level/ChunkPos;)Z

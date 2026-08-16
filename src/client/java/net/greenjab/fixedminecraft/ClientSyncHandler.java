@@ -23,7 +23,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
-
 import java.util.ArrayList;
 
 /** Credit: Nettakrim, Squeek502, Bawnorton */
@@ -93,8 +92,7 @@ public class ClientSyncHandler {
             if (level != null) {
                 Entity entity = level.getEntity((payload.villager()));
                 if (entity instanceof Villager villager) {
-                    RandomSource random = villager.getRandom();
-                    Minecraft.getInstance().player.sendSystemMessage(Component.translatable("entity.fixedminecraft.villager."+payload.need(), villager.getName()));
+                    if (FixedMinecraftClient.villagersSpeak.get()) Minecraft.getInstance().player.sendSystemMessage(Component.translatable("entity.fixedminecraft.villager."+payload.need(), villager.getName()));
 
                     SimpleParticleType particle = switch (payload.need()) {
                         case "hungry","very_hungry" -> ParticleRegistry.VILLAGER_HUNGRY;
@@ -107,6 +105,7 @@ public class ClientSyncHandler {
                     };
                     if (particle != null) {
                         Vec3 d = Minecraft.getInstance().player.position().subtract(villager.position()).horizontal().normalize();
+                        RandomSource random = villager.getRandom();
                         level.addAlwaysVisibleParticle(
                                 particle,
                                 true,

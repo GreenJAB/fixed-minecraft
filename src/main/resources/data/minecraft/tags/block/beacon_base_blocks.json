@@ -6,6 +6,9 @@
     "minecraft:lapis_block",
     "minecraft:ancient_debris",
     "minecraft:quartz_block",
-    "#minecraft:copper"
+    "#minecraft:copper",
+    "minecraft:glowstone",
+    "minecraft:amethyst_block",
+    "minecraft:obsidian"
   ]
 }

@@ -15,12 +15,9 @@ public abstract class ToolMaterialMixin {
             method = "<clinit>",
             at = @At(value = "NEW",target = "(Lnet/minecraft/tags/TagKey;IFFILnet/minecraft/tags/TagKey;)Lnet/minecraft/world/item/ToolMaterial;")
             )
-    private static ToolMaterial goldToolsLastLonger(TagKey<Block> incorrectBlocksForDrops, int durability, float speed, float attackDamageBonus, int enchantmentValue, TagKey<Block> repairItems,
+    private static ToolMaterial copperToolsLastLonger(TagKey<Block> incorrectBlocksForDrops, int durability, float speed, float attackDamageBonus, int enchantmentValue, TagKey<Block> repairItems,
                                                     Operation<ToolMaterial> original) {
-        if (durability == 32) { //gold
-            return original.call(incorrectBlocksForDrops, 48, speed, attackDamageBonus, enchantmentValue, repairItems);
-        }
-        if (durability == 190) { //copper
+        if (durability == 190) {
             return original.call(incorrectBlocksForDrops, 500, 4.0f, attackDamageBonus, enchantmentValue, repairItems);
         }
         return original.call(incorrectBlocksForDrops, durability, speed, attackDamageBonus, enchantmentValue, repairItems);
