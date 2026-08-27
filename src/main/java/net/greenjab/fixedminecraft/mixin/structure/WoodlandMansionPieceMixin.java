@@ -6,6 +6,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.animal.chicken.Chicken;
+import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -36,6 +38,26 @@ public abstract class WoodlandMansionPieceMixin {
                 mob.finalizeSpawn(level, level.getCurrentDifficultyAt(mob.blockPosition()), EntitySpawnReason.STRUCTURE, null);
                 level.addFreshEntityWithPassengers(mob);
                 level.setBlock(position, Blocks.AIR.defaultBlockState(), 2);
+                ci.cancel();
+            }
+        } else if (markerId.startsWith("Chicken")) {
+            Chicken chicken = EntityType.CHICKEN.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            if (chicken != null) {
+                chicken.setChickenJockey(true);
+                chicken.setPersistenceRequired();
+                chicken.snapTo(position, 0.0F, 0.0F);
+                chicken.finalizeSpawn(level, level.getCurrentDifficultyAt(chicken.blockPosition()), EntitySpawnReason.STRUCTURE, null);
+                level.addFreshEntityWithPassengers(chicken);
+                level.setBlock(position, Blocks.AIR.defaultBlockState(), 2);
+                Zombie jockey = EntityType.ZOMBIE.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+                if (jockey != null) {
+                    jockey.setBaby(true);
+                    jockey.setPersistenceRequired();
+                    jockey.snapTo(position, 0.0F, 0.0F);
+                    jockey.finalizeSpawn(level, level.getCurrentDifficultyAt(jockey.blockPosition()), EntitySpawnReason.STRUCTURE, null);
+                    level.addFreshEntityWithPassengers(jockey);
+                    jockey.startRiding(chicken, true, false);
+                }
                 ci.cancel();
             }
         }

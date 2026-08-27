@@ -184,7 +184,7 @@ public abstract class LivingEntityMixin {
     @ModifyConstant(method = "getVisibilityPercent", constant = @Constant(doubleValue = 0.8))
     private double moreSneaky(double constant){
         LivingEntity LE = (LivingEntity) (Object)this;
-        if (LE instanceof Monster) return 0.3;
+        if (LE instanceof Monster) return 0.2;
         return constant;
     }
 

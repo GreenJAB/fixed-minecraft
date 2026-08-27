@@ -3,8 +3,6 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.greenjab.fixedminecraft.network.HorseDismountPayload;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -35,7 +33,6 @@ import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -47,15 +44,8 @@ import java.util.Map;
 
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseMixin extends Animal {
-    @Shadow
-    protected float playerJumpPendingScale;
-    @Unique
-    private static final Map<Item, Float> rageChance = new Object2FloatArrayMap<>();
-
-    @Unique
-    private static final Map<
-            Holder<MobEffect>,
-            String> effectModififers = new Object2ObjectArrayMap<>();
+    @Unique private static final Map<Item, Float> rageChance = new Object2FloatArrayMap<>();
+    @Unique private static final Map<Holder<MobEffect>, String> effectModififers = new Object2ObjectArrayMap<>();
 
     static {
         rageChance.put(Items.NETHERITE_HORSE_ARMOR, 1F);
@@ -82,31 +72,17 @@ public abstract class AbstractHorseMixin extends Animal {
         if (Math.random() <= chance) ci.cancel();
     }
 
-    @Inject(method = "tickRidden", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;onGround()Z"))
-    private void leaveBoat(CallbackInfo ci) {
-        if (this.playerJumpPendingScale > 0.0F && !this.isJumping()) {
-            this.stopRiding();
-            HorseDismountPayload payload = new HorseDismountPayload(this.uuid);
-            ClientPlayNetworking.send(payload);
-        }
-    }
-
-    @ModifyArg(method = "setOffspringAttribute", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;createOffspringAttribute(DDDDLnet/minecraft/util/RandomSource;)D"
-    ), index = 0)
-    private double modifyBaseAttributeParent1(double original,
-                                              @Local(argsOnly = true) Holder<Attribute> attribute) {
+    @ModifyArg(method = "setOffspringAttribute", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;createOffspringAttribute(DDDDLnet/minecraft/util/RandomSource;)D"), index = 0)
+    private double modifyBaseAttributeParent1(double original, @Local(argsOnly = true) Holder<Attribute> attribute) {
         AgeableMob PE = this;
         return modifyAttribute(original, attribute.value(), PE.getActiveEffects());
     }
 
-    @ModifyArg(method = "setOffspringAttribute", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;createOffspringAttribute(DDDDLnet/minecraft/util/RandomSource;)D"
-    ), index = 1)
-    private double modifyBaseAttributeParent2(double original,
-                                              @Local(argsOnly = true) Holder<Attribute> attribute,
-                                              @Local(argsOnly = true)
-                                              AgeableMob partner) {
+    @ModifyArg(method = "setOffspringAttribute", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/equine/AbstractHorse;createOffspringAttribute(DDDDLnet/minecraft/util/RandomSource;)D"), index = 1)
+    private double modifyBaseAttributeParent2(double original, @Local(argsOnly = true) Holder<Attribute> attribute,
+                                              @Local(argsOnly = true) AgeableMob partner) {
         return modifyAttribute(original, attribute.value(), partner.getActiveEffects());
     }
 
@@ -123,7 +99,6 @@ public abstract class AbstractHorseMixin extends Animal {
                 return original + d;
             }
         }
-
         return original;
     }
 
@@ -171,7 +146,7 @@ public abstract class AbstractHorseMixin extends Animal {
         }
         AHE.refreshDimensions();
 
-        if (AHE.entityTags().contains("locate") && AHE.tickCount>20 * 60 * 5) {
+        if (AHE.entityTags().contains("locate") && AHE.tickCount>20 * 60 * 10) {
             AHE.getAttributes().getInstance(Attributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(0);
             AHE.removeTag("locate");
         }

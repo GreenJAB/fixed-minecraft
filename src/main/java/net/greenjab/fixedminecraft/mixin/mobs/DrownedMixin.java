@@ -41,7 +41,7 @@ public abstract class DrownedMixin {
             if (DE.level().getDifficulty() == Difficulty.HARD) diff = 0.1f;
             if (DE.level().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
             if (random.nextFloat() < diff) {
-                int i = random.nextInt(5);
+                int i = random.nextInt(6);
                 ItemStack item =new ItemStack(getEquipmentForHand(i));
                 item.setDamageValue((int) (random.nextFloat()*item.getMaxDamage()));
                 DE.setItemSlot(EquipmentSlot.MAINHAND, item);
@@ -73,6 +73,7 @@ public abstract class DrownedMixin {
             case 2 -> Items.COPPER_SHOVEL;
             case 3 -> Items.COPPER_PICKAXE;
             case 4 -> Items.COPPER_HOE;
+            case 5 -> Items.COPPER_SPEAR;
             default -> Items.AIR;
         };
     }

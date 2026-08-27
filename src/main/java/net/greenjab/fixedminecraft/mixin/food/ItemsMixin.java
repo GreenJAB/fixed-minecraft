@@ -28,23 +28,20 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-
 import java.util.function.Function;
 
 @Mixin(Items.class)
 public abstract class ItemsMixin {
 
-    @Shadow
-    private static Item registerItem(String name, Function<Item.Properties, Item> itemFactory, Item.Properties properties) {
+    @Shadow private static Item registerItem(String name, Function<Item.Properties, Item> itemFactory, Item.Properties properties) {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 
-    @Shadow
-    private static Item registerItem(String name, Item.Properties properties) {
+    @Shadow private static Item registerItem(String name, Item.Properties properties) {
         throw new UnsupportedOperationException("Implemented via mixin");
     }
 
-    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
+    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;"), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=brick"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BRICK:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
     private static Item throwableBrick(String name, Operation<Item> original) {

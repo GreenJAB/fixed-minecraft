@@ -18,25 +18,16 @@ public abstract class MonsterRoomFeatureMixin {
     private EntityType<?> biomeVariant(EntityType<?> original, @Local BlockPos origin, @Local WorldGenLevel level) {
         Holder<Biome> biome =  level.getBiome(origin);
         if (original == EntityType.ZOMBIE) {
-            if (biome.is(BiomeTags.HAS_DESERT_PYRAMID)) {
-                return EntityType.HUSK;
-            }
-            if (biome.is(BiomeTags.IS_OCEAN)) {
-                return EntityType.DROWNED;
-            }
+            if (biome.is(BiomeTags.HAS_DESERT_PYRAMID)) return EntityType.HUSK;
+            else if (biome.is(BiomeTags.IS_OCEAN)) return EntityType.DROWNED;
         }
         if (original == EntityType.SKELETON) {
-            if (biome.is(BiomeTags.SPAWNS_SNOW_FOXES)) {
-                return EntityType.STRAY;
-            }
-            if (biome.is(BiomeTags.HAS_SWAMP_HUT)) {
-                return EntityType.BOGGED;
-            }
+            if (biome.is(BiomeTags.SPAWNS_SNOW_FOXES)) return EntityType.STRAY;
+            else if (biome.is(BiomeTags.HAS_SWAMP_HUT)) return EntityType.BOGGED;
+            else if (biome.is(BiomeTags.HAS_DESERT_PYRAMID)) return EntityType.PARCHED;
         }
         if (original == EntityType.SPIDER) {
-            if (biome.is(BiomeTags.IS_MOUNTAIN)) {
-                return EntityType.CAVE_SPIDER;
-            }
+            if (biome.is(BiomeTags.IS_MOUNTAIN)) return EntityType.CAVE_SPIDER;
         }
         return original;
     }

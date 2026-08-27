@@ -82,7 +82,7 @@ public abstract class ZombieMixin extends Monster {
         if (this.level().getDifficulty() == Difficulty.NORMAL) diff = 0.03f;
         if (this.level().getBiome(this.blockPosition()).is(Biomes.PALE_GARDEN)) diff*=2;
         if (random.nextFloat() < diff) {
-            int i = random.nextInt(5);
+            int i = random.nextInt(6);
             int j = random.nextInt(2);
             if (random.nextFloat() < 2*diff)  j++;
             if (random.nextFloat() < diff)  j++;
@@ -124,6 +124,12 @@ public abstract class ZombieMixin extends Monster {
                 else if (equipmentLevel == 2) return Items.IRON_HOE;
                 else if (equipmentLevel == 3) return Items.DIAMOND_HOE;
                 else if (equipmentLevel == -1) return Items.GOLDEN_HOE;
+            case 5:
+                if (equipmentLevel == 0) return Items.WOODEN_SPEAR;
+                else if (equipmentLevel == 1) return Items.STONE_SPEAR;
+                else if (equipmentLevel == 2) return Items.IRON_SPEAR;
+                else if (equipmentLevel == 3) return Items.DIAMOND_SPEAR;
+                else if (equipmentLevel == -1) return Items.GOLDEN_SPEAR;
             default:
                 return Items.AIR;
         }

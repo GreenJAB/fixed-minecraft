@@ -32,7 +32,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import org.jspecify.annotations.NonNull;
-
 import static net.greenjab.fixedminecraft.registry.ModTags.*;
 
 public class LootTableAdditions {
@@ -94,38 +93,7 @@ public class LootTableAdditions {
                                 .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(20))
                                         .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map(named -> named)))));
             }
-
-            //trial chamber vaults need to be overriden to remove the existing 'specific' ebooks
-            /* else if (key==BuiltInLootTables.TRIAL_CHAMBERS) {
-                tableBuilder.modifyPools(builder ->builder
-                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(4)
-                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(TRAIL_RUINS_EBOOKS))))
-                        .add(LootItem.lootTableItem(Items.BOOK).setWeight(2)
-                                .apply(new EnchantWithLevelsFunction.Builder(ConstantValue.exactly(20))
-                                        .withOptions(enchantments.get(EnchantmentTags.ON_RANDOM_LOOT).map( named -> named)))));
-            }*/
-
-            //code for if I need to add to an existing table that has multiple pools
-            /*if (key==BuiltInLootTables.BASTION_BRIDGE) {
-                tableBuilder.modifyPools(builder -> {
-                    ImmutableList<LootPoolEntryContainer> i = builder.entries.build();
-                    for (LootPoolEntryContainer item : i) {
-                        if (item instanceof LootItem lootItem){
-                            if (lootItem.item.value() == Items.LODESTONE){
-                                builder.add(
-                                        LootItem.lootTableItem(Items.BOOK)
-                                                .setWeight(1)
-                                                .apply(new EnchantRandomlyFunction.Builder().withOneOf(enchantments.getOrThrow(TRAIL_RUINS_EBOOKS)))
-                                );
-                                break;
-                            }
-                        }
-
-                    }
-                });
-            }*/
         });
-
 
         LootTableEvents.MODIFY.register((key, tableBuilder, _, _) -> {
             if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
@@ -218,25 +186,38 @@ public class LootTableAdditions {
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_PIGSTEP))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PIGLIN))).build());
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().located(LocationPredicate.Builder.inDimension(Level.END)))).build());
             } else if (key==EntityType.SNIFFER.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_RELIC))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
-            } else if (key==EntityType.SHULKER.getDefaultLootTable().get()) {
-                tableBuilder.pool(LootPool.lootPool()
-                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
-                        .when(LootItemEntityPropertyCondition.hasProperties(
-                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().located(LocationPredicate.Builder.inDimension(Level.OVERWORLD)).of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+            } else if (key==BuiltInLootTables.SNIFFER_DIGGING) {
+                tableBuilder.modifyPools(builder ->
+                        builder.add(LootItem.lootTableItem(Items.GOLDEN_DANDELION))
+                                .add(NestedLootTable.lootTableReference(LootTableRegistry.SNIFFER_EXTRA)));
             } else if (key==EntityType.WARDEN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_5)).build());
+            } else if (key==BuiltInLootTables.SPAWNER_TRIAL_CHAMBER_CONSUMABLES) {
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_CREATOR))
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_CREATOR_MUSIC_BOX))
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_PRECIPICE))
+                        .add(LootItem.lootTableItem(Items.AIR).setWeight(3))
+                        .build());
             } else if (key==EntityType.ELDER_GUARDIAN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(2))
                         .add(LootItem.lootTableItem(Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE))
                         .add(LootItem.lootTableItem(Items.AIR))
                         .build());
+            } else if (key== EntityType.GOAT.getDefaultLootTable().get()) {
+                LootPool.Builder poolBuilder = LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.GOAT_MUTTON));
+                tableBuilder.pool(poolBuilder.build());
             }
         });
     }

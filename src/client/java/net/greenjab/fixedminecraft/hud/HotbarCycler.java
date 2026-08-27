@@ -19,7 +19,7 @@ public class HotbarCycler
     public static void register(){
         cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.fixedminecraft.hotbar_cycle",
-                GLFW.GLFW_KEY_LEFT_ALT,
+                GLFW.GLFW_KEY_C,
                 KeyMapping.Category.INVENTORY));
     }
 

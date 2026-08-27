@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:entity",
+    "pools": [
+        {
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:tag",
+                    "name": "fixedminecraft:sniffer_extra",
+                    "expand": true
+                }
+            ],
+            "rolls": 1
+        }
+    ],
+    "random_sequence": "fixedminecraft:gameplay/other/sniffer_extra"
+}

@@ -6,8 +6,16 @@
       {
         "threshold": 0,
         "model": {
-          "type": "minecraft:model",
-          "model": "minecraft:item/netherite_sword"
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/netherite_sword"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/netherite_sword_blocking"
+          }
         }
       },
       {

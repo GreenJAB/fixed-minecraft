@@ -1,36 +1,68 @@
 {
-    "model": {
-        "type": "minecraft:range_dispatch",
-        "property": "minecraft:damage",
-        "entries": [
-            {
-                "threshold": 0,
-                "model": {
-                    "type": "minecraft:model",
-                    "model": "minecraft:item/copper_sword"
-                }
-            },
-            {
-                "threshold": 0.25,
-                "model": {
-                    "type": "minecraft:model",
-                    "model": "minecraft:item/copper_sword_exposed"
-                }
-            },
-            {
-                "threshold": 0.5,
-                "model": {
-                    "type": "minecraft:model",
-                    "model": "minecraft:item/copper_sword_weathered"
-                }
-            },
-            {
-                "threshold": 0.75,
-                "model": {
-                    "type": "minecraft:model",
-                    "model": "minecraft:item/copper_sword_oxidized"
-                }
-            }
-        ]
-    }
+  "model": {
+    "type": "minecraft:range_dispatch",
+    "property": "minecraft:damage",
+    "entries": [
+      {
+        "threshold": 0,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_blocking"
+          }
+        }
+      },
+      {
+        "threshold": 0.25,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_exposed"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_exposed_blocking"
+          }
+        }
+      },
+      {
+        "threshold": 0.5,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_weathered"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_weathered_blocking"
+          }
+        }
+      },
+      {
+        "threshold": 0.75,
+        "model": {
+          "type": "minecraft:condition",
+          "property": "minecraft:using_item",
+          "on_false": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_oxidized"
+          },
+          "on_true": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/copper_sword_oxidized_blocking"
+          }
+        }
+      }
+    ]
+  }
 }

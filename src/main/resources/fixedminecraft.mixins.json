@@ -227,6 +227,7 @@
         "util.MinecraftServerMixin",
         "villager.EquipmentDispenseItemBehaviorMixin",
         "villager.GolemSensorMixin",
+        "villager.GossipTypeMixin",
         "villager.HarvestFarmlandMixin",
         "villager.MerchantMenuMixin",
         "villager.MerchantOfferMixin",
@@ -234,10 +235,10 @@
         "villager.VillagerMixin",
         "villager.WanderingTraderMixin",
         "villager.WanderingTraderSpawnerMixin",
+        "wolves.AnimalMixin",
         "wolves.InstrumentItemMixin",
         "wolves.OwnerHurtTargetGoalMixin",
-        "wolves.TameableEntityMixin",
-        "wolves.AnimalMixin"
+        "wolves.TameableEntityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

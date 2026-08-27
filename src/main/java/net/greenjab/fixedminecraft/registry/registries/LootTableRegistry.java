@@ -17,6 +17,8 @@ public class LootTableRegistry {
     public static final ResourceKey<LootTable> WOODLAND_MANSION_COMMON = registerLoot_Table("chests/woodland_mansion_common");
     public static final ResourceKey<LootTable> WOODLAND_MANSION_POT = registerLoot_Table("chests/woodland_mansion_pot");
     public static final ResourceKey<LootTable> SUPER_CHARGED_CREEPER_PLAYER_LOOT_TABLE = registerLoot_Table("gameplay/other/super_charged_creeper_player");
+    public static final ResourceKey<LootTable> SNIFFER_EXTRA = registerLoot_Table("gameplay/other/sniffer_extra");
+    public static final ResourceKey<LootTable> GOAT_MUTTON = registerLoot_Table("entity/goat_mutton");
 
     private static ResourceKey<LootTable> registerLoot_Table(String id) {
         return registerLootTable(ResourceKey.create(Registries.LOOT_TABLE, FixedMinecraft.id(id)));

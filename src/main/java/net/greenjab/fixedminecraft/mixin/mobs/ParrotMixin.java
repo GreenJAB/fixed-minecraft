@@ -19,7 +19,7 @@ public abstract class ParrotMixin {
        ItemStack itemStack = player.getItemInHand(hand);
        Parrot PE = (Parrot)(Object)this;
        if (itemStack.isEmpty()) {
-           if (PE.isFlying() && PE.isTame() && PE.isOwnedBy(player)) {
+           if (player.isCrouching() && PE.isTame() && PE.isOwnedBy(player)) {
                if (!player.level().isClientSide()) {
                    if (PE.setEntityOnShoulder((ServerPlayer) player)) {
                        cir.setReturnValue(InteractionResult.SUCCESS);

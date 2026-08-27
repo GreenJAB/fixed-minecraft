@@ -14,13 +14,13 @@ public abstract class WaterAvoidingRandomStrollGoalMixin extends RandomStrollGoa
 
     @Override
     public boolean canUse() {
-        if (this.mob.entityTags().contains("locate")) return false;
+        if (this.mob.entityTags().contains("locate") && this.mob.tickCount>20 * 60 * 5) return false;
         return super.canUse();
     }
 
     @Override
     public boolean canContinueToUse() {
-        if (this.mob.entityTags().contains("locate")) return false;
+        if (this.mob.entityTags().contains("locate") && this.mob.tickCount>20 * 60 * 5) return false;
         return super.canContinueToUse();
     }
 }

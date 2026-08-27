@@ -68,9 +68,7 @@ public abstract class FishingHookMixin {
         int baitpower = 0;
         if (bait!=ItemStack.EMPTY) baitpower = bait.getComponents().get(ItemRegistry.BAIT_POWER).level();
 
-        if (playerEntity.hasEffect(MobEffects.LUCK))
-            baitpower += (playerEntity.getEffect(MobEffects.LUCK).getAmplifier()+1);
-
+        if (playerEntity.hasEffect(MobEffects.LUCK)) baitpower += (playerEntity.getEffect(MobEffects.LUCK).getAmplifier()+1);
         MoonPhase moonPhase = (level).environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, playerEntity.blockPosition());
         if (level.isDarkOutside() && moonPhase.index() == 0 && level.getBrightness(LightLayer.SKY, FBE.blockPosition()) > 10) baitpower++;
 

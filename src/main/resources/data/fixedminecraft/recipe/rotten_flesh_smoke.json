@@ -2,7 +2,7 @@
     "type": "minecraft:smoking",
     "ingredient": "minecraft:rotten_flesh",
     "result": {
-        "id": "minecraft:leather"
+        "id": "minecraft:rabbit_hide"
     },
     "experience": 0.1,
     "cookingtime": 100,

@@ -12,14 +12,13 @@ import java.util.List;
 
 @Mixin(BundleContents.Mutable.class)
 public abstract class BundleContentsMutableMixin {
-    @Shadow
-    @Final
-    public List<ItemStack> items;
+
+    @Shadow @Final public List<ItemStack> items;
 
     @ModifyExpressionValue(method = "tryInsert", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;copyWithCount(I)Lnet/minecraft/world/item/ItemStack;"))
     private ItemStack getArrowFromBundle(ItemStack original) {
        while (original.count()>original.getMaxStackSize()) {
-           this.items.add(0, original.copyWithCount(original.getMaxStackSize()));
+           this.items.addFirst(original.copyWithCount(original.getMaxStackSize()));
            original = original.copyWithCount(original.count()-original.getMaxStackSize());
        }
        return original;

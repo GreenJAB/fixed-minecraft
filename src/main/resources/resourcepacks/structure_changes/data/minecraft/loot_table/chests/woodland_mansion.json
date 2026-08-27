@@ -246,6 +246,21 @@
             }
           ],
           "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:diamond_sword",
+          "functions": [
+            {
+              "function": "minecraft:enchant_with_levels",
+              "levels": {
+                "max": 30,
+                "min": 20
+              },
+              "options": "#minecraft:in_enchanting_table"
+            }
+          ],
+          "weight": 1
         }
       ]
     },

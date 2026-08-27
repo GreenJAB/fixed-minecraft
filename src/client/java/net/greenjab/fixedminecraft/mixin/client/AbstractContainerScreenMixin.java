@@ -27,13 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu> {
 
-    @Shadow
-    @Final
-    protected T menu;
-
-    @Shadow
-    @Nullable
-    protected Slot hoveredSlot;
+    @Shadow @Final protected T menu;
+    @Shadow @Nullable protected Slot hoveredSlot;
 
     @Inject(method = "mouseScrolled", at = @At(value = "HEAD"), cancellable = true)
     public void addHotBarScoller(double x, double y, double scrollX, double scrollY,

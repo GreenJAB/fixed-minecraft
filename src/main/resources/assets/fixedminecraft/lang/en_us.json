@@ -82,6 +82,8 @@
     "options.jabsFixedFog" : "Jabs Fixed Fog",
     "options.jabsFixedFog.tooltip" : "Disables 1.21.6 Fog that makes everything gray. Adds Pale Garden and Void fog",
     "options.chat.villagersSpeak" : "Villagers Speak",
+    "world.light": "Sky %s, Block: %s",
+    "world.day": "Day: %s",
     "world.moon.null": "",
     "world.moon.full_moon": "Full Moon",
     "world.moon.fish": " \uD83C\uDFA3",

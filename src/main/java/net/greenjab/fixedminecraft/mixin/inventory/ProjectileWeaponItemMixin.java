@@ -19,7 +19,7 @@ import java.util.function.Predicate;
 public abstract class ProjectileWeaponItemMixin {
 
     @Inject(method = "draw", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z", ordinal = 1))
-    private static void test(ItemStack weapon, ItemStack projectile, LivingEntity shooter,
+    private static void drawFromBundle(ItemStack weapon, ItemStack projectile, LivingEntity shooter,
                              CallbackInfoReturnable<List<ItemStack>> cir,
                              @Local(ordinal = 3) ItemStack drawnStack,
                              @Local(ordinal = 1) int i) {

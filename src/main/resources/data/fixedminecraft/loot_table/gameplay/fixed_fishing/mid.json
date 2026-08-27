@@ -28,7 +28,12 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:name_tag",
-                    "weight": 5
+                    "weight": 2
+                },
+                {
+                    "type": "minecraft:item",
+                    "name": "minecraft:saddle",
+                    "weight": 2
                 },
                 {
                     "type": "minecraft:item",
