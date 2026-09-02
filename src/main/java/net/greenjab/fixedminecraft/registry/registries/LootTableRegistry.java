@@ -16,7 +16,9 @@ public class LootTableRegistry {
     public static final ResourceKey<LootTable> SWAMP_HUT = registerLoot_Table("chests/swamp_hut");
     public static final ResourceKey<LootTable> WOODLAND_MANSION_COMMON = registerLoot_Table("chests/woodland_mansion_common");
     public static final ResourceKey<LootTable> WOODLAND_MANSION_POT = registerLoot_Table("chests/woodland_mansion_pot");
-    public static final ResourceKey<LootTable> SUPER_CHARGED_CREEPER_PLAYER_LOOT_TABLE = registerLoot_Table("gameplay/other/super_charged_creeper_player");
+    public static final ResourceKey<LootTable> CHARGED_CREEPER_PLAYER_LOOT_TABLE = registerLoot_Table("gameplay/charged_creeper/player");
+    public static final ResourceKey<LootTable> CHARGED_CREEPER_ZOMBIE_TABLE = registerLoot_Table("gameplay/charged_creeper/zombie");
+    public static final ResourceKey<LootTable> CHARGED_CREEPER_SKELETON_TABLE = registerLoot_Table("gameplay/charged_creeper/skeleton");
     public static final ResourceKey<LootTable> SNIFFER_EXTRA = registerLoot_Table("gameplay/other/sniffer_extra");
     public static final ResourceKey<LootTable> GOAT_MUTTON = registerLoot_Table("entity/goat_mutton");
 

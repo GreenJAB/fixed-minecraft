@@ -1,0 +1,22 @@
+Programmer Art Continuation Project 
+Base v2.1.3
+Beta-Fied v1.4.1
+Alpha-Fied 1.3.5
+
+CREDITS:
+
+mzovistired/mzov/jen - Lead Artist, made most original textures across all variants. (over 500!)
+
+Webaccount284 - New skins updated to fit og artstyle, most of the Bedrock Port.
+
+Vanilla Tweaks: https://vanillatweaks.net/ - A few tweaks were used to restore certain models and ui elements. (mostly on beta and alpha addons.)
+
+Dangeresque486 - Classic "Full Block" chest models used in the Beta-Fied Add-On. (https://modrinth.com/resourcepack/classic-full-block-chest)
+
+Calimarri - Classic bright blue water in the Beta-Fied Add-On. Lhttps://modrinth.com/resourcepack/pre-1.13-water
+
+SOCIALS:
+
+Follow me on Bluesky for drawings and Project updates and other art stuff! https://bsky.app/profile/mzovjn.bsky.social
+
+Hop on the discord for support, WIP builds, and bedrock tests! https://discord.gg/sSmGMDSrGG (Permanent Invite)

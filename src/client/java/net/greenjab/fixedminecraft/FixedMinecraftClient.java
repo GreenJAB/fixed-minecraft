@@ -73,6 +73,12 @@ public class FixedMinecraftClient implements ClientModInitializer {
                     Component.translatable("fixedminecraft.almost_vanilla_potions"),
                     ResourcePackActivationType.NORMAL
             );
+            ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "fixed_pacp"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.fixed_pacp"),
+                    ResourcePackActivationType.NORMAL
+            );
         });
     }
 

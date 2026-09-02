@@ -137,6 +137,7 @@
         "mobs.PiglinMixin",
         "mobs.ServerPlayerMixin",
         "mobs.SnowGolemMixin",
+        "mobs.TargetGoalMixin",
         "mobs.WitherBossMixin",
         "mobs.ZombieMixin",
         "netherite.ArmorSlotMixin",

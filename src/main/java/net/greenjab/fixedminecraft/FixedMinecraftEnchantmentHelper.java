@@ -47,17 +47,18 @@ public class FixedMinecraftEnchantmentHelper {
 
     public static int getEnchantmentCapacity(ItemStack itemStack) {
         Item item = itemStack.getItem();
-        if (lastCapacity != FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE)) {
-            lastCapacity = FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE);
-            ItemCapacities = new HashMap<>(Map.of());
-        }
-        if (!ItemCapacities.containsKey(item))
-            if (FixedMinecraft.SERVER!=null) {
+        if (FixedMinecraft.SERVER != null) {
+            if (lastCapacity != FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE)) {
+                lastCapacity = FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.ENCHANT_CAPACITY_PERCENTAGE);
+                ItemCapacities = new HashMap<>(Map.of());
+            }
+            if (!ItemCapacities.containsKey(item)) {
                 HashMap<Item, Integer> map = new HashMap<>(Map.of());
                 map.putAll(ItemCapacities);
                 map.put(item, getNewEnchantmentCapacity(itemStack));
                 ItemCapacities = map;
             }
+        }
         return ItemCapacities.getOrDefault(item, 0);
     }
 
@@ -120,7 +121,7 @@ public class FixedMinecraftEnchantmentHelper {
     }
 
     public static ItemStack applySuperEnchants(ItemStack IS, RandomSource random, boolean pale) {
-        if (FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.SUPER_ENCHANT_CHANCE) == 0) return IS;
+        if (FixedMinecraft.SERVER==null||FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.SUPER_ENCHANT_CHANCE) == 0) return IS;
         if (!IS.is(Items.ENCHANTED_BOOK)) {
             ItemStack IS2 = IS.getItem().getDefaultInstance();
             ItemEnchantments map = EnchantmentHelper.getEnchantmentsForCrafting(IS);
