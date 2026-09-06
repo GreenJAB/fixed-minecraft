@@ -16,7 +16,7 @@ public abstract class FoodsMixin {
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void ModifyStamina(CallbackInfo ci) {
         //bad food
-        ROTTEN_FLESH = new FoodProperties.Builder().nutrition(4).saturationModifier(0.1F).build();
+        ROTTEN_FLESH = new FoodProperties.Builder().nutrition(40).saturationModifier(0.1F).build();
         SPIDER_EYE = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.1F).build();
         POISONOUS_POTATO = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.1F).build();
         PUFFERFISH = (new FoodProperties.Builder()).nutrition(1).saturationModifier(0.1F).build();

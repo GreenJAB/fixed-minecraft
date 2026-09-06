@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -43,7 +42,7 @@ public abstract class BeaconBlockEntityMixin {
 
     @Inject(method = "updateBase", at = @At("HEAD"), cancellable = true)
     private static void PyramidNeedsToBeSameMaterial(Level level, int x, int y, int z, CallbackInfoReturnable<Integer> cir) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_BEACON)) return;
+        if (!FixedMinecraft.gameRules.modified_beacon) return;
         int i = 0;
         Block base = level.getBlockState(new BlockPos(x, y - 1, z)).getBlock();
         for(int j = 1; j <= 10; i = j++) {
@@ -91,7 +90,7 @@ public abstract class BeaconBlockEntityMixin {
     @Inject(method = "applyEffects", at = @At("HEAD"), cancellable = true)
     private static void ModifyBeaconEffects(Level level, BlockPos worldPosition, int levels, @Nullable Holder<MobEffect> primaryPower,
                                             @Nullable Holder<MobEffect> secondaryPower, CallbackInfo ci) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_BEACON)) return;
+        if (!FixedMinecraft.gameRules.modified_beacon) return;
         BlockState blockState = level.getBlockState(worldPosition.below());
         primaryPower = vanillaEffects.get(blockState);
         if (primaryPower == null) {

@@ -16,11 +16,21 @@ public class HotbarCycler
         return cycleKeyBinding;
     }
 
+    private static KeyMapping fontLegendKeyBinding;
+    public static KeyMapping getFontLegendKeyBinding() {
+        return fontLegendKeyBinding;
+    }
+
     public static void register(){
         cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.fixedminecraft.hotbar_cycle",
                 GLFW.GLFW_KEY_C,
                 KeyMapping.Category.INVENTORY));
+
+        fontLegendKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
+                "key.fixedminecraft.font_legend",
+                GLFW.GLFW_KEY_LEFT_ALT,
+                KeyMapping.Category.MISC));
     }
 
     public static void shiftRows(Minecraft minecraft, final Direction direction) {

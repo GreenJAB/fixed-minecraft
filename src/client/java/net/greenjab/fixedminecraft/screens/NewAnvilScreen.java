@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.screens;
 
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
-import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.other.NewAnvilMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.EditBox;
@@ -10,8 +9,10 @@ import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.protocol.game.ServerboundRenameItemPacket;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -53,6 +54,11 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
         this.name.setValue("");
         this.addRenderableWidget(this.name);
         this.name.setEditable(this.menu.getSlot(0).hasItem());
+        this.name.addFormatter(this::formatChat);
+    }
+
+    private FormattedCharSequence formatChat(final String text, final int offset) {
+        return FormattedCharSequence.forward(text, Style.EMPTY);
     }
 
     @Override
@@ -102,8 +108,6 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
     @Override
     protected void extractLabels(final @NonNull GuiGraphicsExtractor graphics, final int xm, final int ym) {
         super.extractLabels(graphics, xm, ym);
-        int cost = this.menu.getCost();
-
 
         ItemStack ItemInput1 = ItemStack.EMPTY;
         ItemStack ItemOutput = ItemStack.EMPTY;
@@ -116,16 +120,16 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
         int capacity = this.menu.getCapacity();
         int InputCost;
 
-        int OutputCost = cost;
+        int OutputCost = this.menu.getCost();
 
         if (ItemInput1 != ItemStack.EMPTY && capacity>0) {
-            InputCost = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemInput1, false);
+            InputCost = this.menu.getInCap();
             if (!this.menu.getSlot(1).hasItem()) {
                 OutputCost = InputCost;
             }
             if (!ItemOutput.isEmpty()) {
                 if (!ItemOutput.isEnchanted() && !ItemInput1.is(Items.ENCHANTED_BOOK)) OutputCost = InputCost;
-                if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) OutputCost = InputCost;
+                if (this.menu.getOutCap() == 0) OutputCost = InputCost;
                 if (NewAnvilMenu.AnvilMsg.byID(this.menu.getText()) == NewAnvilMenu.AnvilMsg.REPAIR) OutputCost = InputCost;
             }
             graphics.fill(60, 37, barPos(InputCost, capacity), 41, new Color(39, 174, 53).hashCode());
@@ -153,7 +157,7 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
                         graphics.fill(barPos(InputCost, capacity), 37, barPos(OutputCost, capacity), 41, new Color(0, 255, 0).hashCode());
                     } else {
                         graphics.fill(60, 37, barPos(InputCost, capacity), 41, new Color(39, 174, 53).hashCode());
-                        if (FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(ItemOutput, false) == 0) OutputCost = 0;
+                        if (this.menu.getOutCap() == 0) OutputCost = 0;
                         graphics.fill(Math.max(barPos(OutputCost, capacity), 60), 37, barPos(InputCost, capacity), 41, new Color(205, 0, 0).hashCode());
                     }
                 }
@@ -164,11 +168,10 @@ public class NewAnvilScreen extends ItemCombinerScreen<NewAnvilMenu> {
             graphics.fill(barPos(i, capacity) - 1, 38, barPos(i, capacity), 40, new Color(255, 255, 255).hashCode());
         }
 
-
         if (this.menu.getText() > 0) {
             int color = -40864;
             NewAnvilMenu.AnvilMsg msg = NewAnvilMenu.AnvilMsg.byID(this.menu.getText());
-            Component line = msg.includeCost?Component.translatable("container.anvil."+msg.lang, cost):
+            Component line = msg.includeCost?Component.translatable("container.anvil."+msg.lang, this.menu.getCost()):
                     Component.translatable("container.anvil."+msg.lang);
             if (this.menu.getSlot(2).hasItem()&&this.menu.getSlot(2).mayPickup(this.player)) {
                 color = -8323296;

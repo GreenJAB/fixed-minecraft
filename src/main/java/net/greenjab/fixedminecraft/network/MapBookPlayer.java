@@ -43,7 +43,7 @@ public class MapBookPlayer {
     }
 
     public void setPlayer(Player player) {
-        this.name = player.getName().tryCollapseToString();
+        this.name = player.getName().getString();
         this.x = player.getX();
         this.y = player.getY();
         this.z = player.getZ();

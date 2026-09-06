@@ -23,7 +23,7 @@ public class CustomData {
                         .getScoreboard()
                         .getDisplayObjective(DisplaySlot.TEAM_AQUA)
                         .getDisplayName()
-                        .tryCollapseToString().contains(name)) {
+                        .getString().contains(name)) {
 
                 entity.level()
                         .getScoreboard()

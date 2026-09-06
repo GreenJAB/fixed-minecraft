@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
@@ -35,7 +34,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
     private ItemStack damageGrindstonedItem(GrindstoneMenu instance, ItemStack input, ItemStack additional, Operation<ItemStack> original) {
         ItemStack originalItem = original.call(instance, input, additional);
         if (input.isEmpty() || additional.isEmpty()) {
-            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM)) return originalItem;
+            if (!FixedMinecraft.gameRules.grinstone_damage) return originalItem;
             boolean book = (originalItem.is(Items.BOOK) || originalItem.is(Items.ENCHANTED_BOOK));
             boolean bl4 = !input.isEmpty();
             if (bl4) {

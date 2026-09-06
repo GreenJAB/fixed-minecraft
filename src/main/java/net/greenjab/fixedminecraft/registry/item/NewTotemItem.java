@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.registry.item;
 
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
-import net.minecraft.server.level.ServerLevel;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -29,11 +28,9 @@ public class NewTotemItem extends Item {
     }
     @Override
     public @NonNull InteractionResult use(@NonNull Level world, @NonNull Player user, @NonNull InteractionHand hand)  {
-        if (world instanceof ServerLevel serverWorld) {
-            if (serverWorld.getGameRules().get(GameRuleRegistry.REQUIRE_TOTEM_USE)) {
-                user.playSound(SoundEvents.SPYGLASS_USE, 1.0f, 1.0f);
-                return ItemUtils.startUsingInstantly(world, user, hand);
-            }
+        if (FixedMinecraft.gameRules.use_totem) {
+            user.playSound(SoundEvents.SPYGLASS_USE, 1.0f, 1.0f);
+            return ItemUtils.startUsingInstantly(world, user, hand);
         }
         return InteractionResult.PASS;
     }

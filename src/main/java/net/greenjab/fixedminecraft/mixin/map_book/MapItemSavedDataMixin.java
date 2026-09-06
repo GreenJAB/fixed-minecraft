@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.MapItemColor;
@@ -34,18 +35,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(MapItemSavedData.class)
 public abstract class MapItemSavedDataMixin implements MapStateAccessor {
 
     @Shadow @Final private Map<String, MapBanner> bannerMarkers;
-
     @Final @Shadow @Mutable public int centerX;
-
     @Final @Shadow @Mutable public int centerZ;
-
     @Shadow @Final private boolean unlimitedTracking;
 
     @Override public void fixedminecraft$setPosition(int centerX, int centerZ) {
@@ -53,7 +50,7 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
         this.centerZ = centerZ;
     }
 
-    @Unique private static HashMap<Holder<MapDecorationType>, Integer> decoToColor;
+    @Unique private static final HashMap<Holder<MapDecorationType>, Integer> decoToColor;
 
     static {
         decoToColor = new HashMap<>();
@@ -96,22 +93,28 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
                                               Operation<MapDecoration> original, @Local(argsOnly = true) Holder<MapDecorationType> type,
                                               @Local(argsOnly = true) Component name) {
         if (name != null) {
-            if (Objects.requireNonNull(name.tryCollapseToString()).charAt(0) == '¶') {
-                String[] s = name.tryCollapseToString().split("¶");
+            String n = name.getString();
+            if (n.charAt(0) == '¶') {
+                String[] s = n.split("¶");
                 type = getMapType(s[1]);
                 return original.call(type, x, z, rot, Optional.empty());
             }
-
-            if (Objects.requireNonNull(name.tryCollapseToString()).charAt(0) == '[') {
-                String[] s = name.tryCollapseToString().split("\\[");
+            if (n.contains("[")) {
+                String[] s = n.split("\\[");
                 if (s.length == 2) {
                     String[] s2 = s[1].split("]");
                     Holder<MapDecorationType> type2 = getMapTypeLimited(s2[0]);
                     if (type2 != null) {
-                        if (s2.length == 1) return original.call(type2, x, z, rot, Optional.empty());
-                        else if (s2.length == 2) {
-                            if (s2[1].charAt(0) == ' ') s2[1] = s2[1].substring(1);
-                            return original.call(type2, x, z, rot, Optional.of(Component.nullToEmpty(s2[1])));
+                        String ss = ("["+s2[0]+"]");
+                        if (name.getSiblings().isEmpty()) {
+                            String com = n.replace(ss, "").stripLeading().stripTrailing();
+                            if (com.isEmpty()) return original.call(type2, x, z, rot, Optional.empty());
+                            return original.call(type2, x, z, rot, Optional.of(Component.literal(com).withStyle(name.getStyle())));
+                        } else {
+                            MutableComponent newCom = Component.literal("");
+                            name.getSiblings().forEach(com->newCom.append(Component.literal(com.getString().replace(ss, "")).withStyle(com.getStyle())));
+                            if (newCom.getString().isEmpty()) return original.call(type2, x, z, rot, Optional.empty());
+                            return original.call(type2, x, z, rot, Optional.of(newCom));
                         }
                     }
                 }

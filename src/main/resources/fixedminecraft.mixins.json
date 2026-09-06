@@ -226,6 +226,8 @@
         "transport.LootPoolMixin",
         "transport.TridentItemMixin",
         "util.MinecraftServerMixin",
+        "util.StringDecomposerMixin",
+        "util.StringUtilMixin",
         "villager.EquipmentDispenseItemBehaviorMixin",
         "villager.GolemSensorMixin",
         "villager.GossipTypeMixin",

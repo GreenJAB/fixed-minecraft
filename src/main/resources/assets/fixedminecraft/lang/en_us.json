@@ -127,6 +127,7 @@
     "item.fixedminecraft.patina": "Patina",
     "block.fixedminecraft.redstone_lantern": "Redstone Lantern",
     "key.fixedminecraft.hotbar_cycle": "Hotbar Cycle (Hold)",
+    "key.fixedminecraft.font_legend": "Font Legend",
     "item.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
     "entity.fixedminecraft.dispenser_minecart": "Dispenser Minecart",
     "entity.fixedminecraft.villager.tired": "%s: *Yawn*",

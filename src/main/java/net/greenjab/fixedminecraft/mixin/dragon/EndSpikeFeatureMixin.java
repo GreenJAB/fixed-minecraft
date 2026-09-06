@@ -31,7 +31,7 @@ public abstract class EndSpikeFeatureMixin {
 
     @ModifyArg(method = "placeSpike", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/feature/EndSpikeFeature;setBlock(Lnet/minecraft/world/level/LevelWriter;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V", ordinal = 2), index = 2)
     private BlockState removeBowCheese2(BlockState blockState, @Local(ordinal = 4)int dx, @Local(ordinal = 5)int dz, @Local(ordinal = 6)int dy) {
-        if (dy == -1 && Math.abs(dx) != Math.abs(dz) || Math.abs(dx) == 1) return Blocks.OBSIDIAN.defaultBlockState();
+        if (dy == -1 && (Math.abs(dx) != Math.abs(dz) || Math.abs(dx) == 1)) return Blocks.OBSIDIAN.defaultBlockState();
         if (dy == 4) return Blocks.IRON_TRAPDOOR.defaultBlockState();
         return blockState;
     }

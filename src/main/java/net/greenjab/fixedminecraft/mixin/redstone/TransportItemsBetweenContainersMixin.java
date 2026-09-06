@@ -112,7 +112,7 @@ public abstract class TransportItemsBetweenContainersMixin {
             }
         } else if (a.getComponents().has(DataComponents.CUSTOM_NAME)) {
             if (a.is(Items.PAPER) || a.is(Items.NAME_TAG)) {
-                String string = a.getComponents().get(DataComponents.CUSTOM_NAME).tryCollapseToString();
+                String string = a.getComponents().get(DataComponents.CUSTOM_NAME).getString();
                 if (string.startsWith("#")) {
                     string = string.substring(1);
                     return testTags(b, string);

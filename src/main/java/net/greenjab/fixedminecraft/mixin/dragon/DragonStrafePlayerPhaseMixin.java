@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -56,7 +55,7 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
 
     @Inject(method = "doServerTick", at = @At(value = "HEAD"), cancellable = true)
     private void checkForDragonFight(CallbackInfo ci) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
+        if (!FixedMinecraft.gameRules.modified_dragon) return;
         if (this.attackTarget == null || this.fireballCharge < -100) {
             LOGGER.warn("Skipping player strafe phase because no player was found");
             this.dragon.getPhaseManager().setPhase(EnderDragonPhase.HOLDING_PATTERN);

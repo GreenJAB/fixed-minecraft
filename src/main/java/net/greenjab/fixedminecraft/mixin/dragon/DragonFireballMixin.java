@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.projectile.hurtingprojectile.DragonFireball;
@@ -30,7 +29,7 @@ public abstract class DragonFireballMixin {
 
     @Inject(method = "onHit", at= @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/AreaEffectCloud;<init>(Lnet/minecraft/world/level/Level;DDD)V"))
     private void explodeOnImpact(HitResult hitResult, CallbackInfo ci) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
+        if (!FixedMinecraft.gameRules.modified_dragon) return;
         DragonFireball DFE = (DragonFireball)(Object)this;
         ServerLevel world = (ServerLevel) DFE.level();
         int explosionPower = (DFE.level().getDifficulty().getId()+1)/2;

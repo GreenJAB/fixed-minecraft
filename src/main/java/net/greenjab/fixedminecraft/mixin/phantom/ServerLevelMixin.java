@@ -56,43 +56,47 @@ public abstract class ServerLevelMixin {
         if (level.getDifficulty() == Difficulty.PEACEFUL) return willSkipNight.get();
         if (willSkipNight.get()) {
             players.stream().filter(Player::isSleepingLongEnough).forEach(player -> {
-                int x = Mth.floor(player.getX());
-                int y = Mth.floor(player.getY());
-                int z = Mth.floor(player.getZ());
-                Zombie zombie = EntityType.ZOMBIE.create(level, EntitySpawnReason.TRIGGERED);
-                if (zombie != null) {
-                    zombie.setTarget(player);
-                    int i = 0;
-                    if (level.getBrightness(LightLayer.BLOCK, player.blockPosition())==0 ) {
-                        zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(zombie.blockPosition()), EntitySpawnReason.TRIGGERED, null);
-                        level.addFreshEntityWithPassengers(zombie);
-                        zombie.setPos(player.position());
-                        willSkipNight.set(false);
-                        player.stopSleeping();
-                        i = 500;
-                    }
-                    for (; i < 500; i++) {
-                        int xt = x + Mth.nextInt(player.getRandom(), 7, 32) * Mth.nextInt(player.getRandom(), -1, 1);
-                        int yt = y + Mth.nextInt(player.getRandom(), 7, 16) * Mth.nextInt(player.getRandom(), -1, 1);
-                        int zt = z + Mth.nextInt(player.getRandom(), 7, 32) * Mth.nextInt(player.getRandom(), -1, 1);
-                        BlockPos spawnPos = new BlockPos(xt, yt, zt);
-                        if (SpawnPlacements.isSpawnPositionOk(EntityType.ZOMBIE, level, spawnPos)
-                            && SpawnPlacements.checkSpawnRules(EntityType.ZOMBIE, level, EntitySpawnReason.TRIGGERED, spawnPos, level.getRandom())) {
-                            zombie.setPos(xt, yt, zt);
-                            zombie.setOnGround(true);
-                            if (!level.hasNearbyAlivePlayer(xt, yt, zt, 7.0) && level.isUnobstructed(zombie) && level.noCollision(zombie) &&
-                                !level.containsAnyLiquid(zombie.getBoundingBox())) {
-                                Path path = zombie.getNavigation().createPath(x, y, z, 1);
-                                if (path != null) {
-                                    Vec3 v = path.getEndNode().asVec3();
-                                    System.out.println(v.distanceToSqr(player.position()));
-                                    if (v.distanceToSqr(player.position())<2.5) {
-                                        zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(zombie.blockPosition()), EntitySpawnReason.TRIGGERED, null);
-                                        level.addFreshEntityWithPassengers(zombie);
-                                        zombie.setPos(path.getEndNode().asVec3());
-                                        willSkipNight.set(false);
-                                        player.stopSleeping();
-                                        i = 500;
+                if (!player.isCreative()) {
+                    int x = Mth.floor(player.getX());
+                    int y = Mth.floor(player.getY());
+                    int z = Mth.floor(player.getZ());
+                    Zombie zombie = EntityType.ZOMBIE.create(level, EntitySpawnReason.TRIGGERED);
+                    if (zombie != null) {
+                        zombie.setTarget(player);
+                        int i = 0;
+                        if (level.getBrightness(LightLayer.BLOCK, player.blockPosition()) == 0) {
+                            zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(zombie.blockPosition()), EntitySpawnReason.TRIGGERED, null);
+                            level.addFreshEntityWithPassengers(zombie);
+                            zombie.setPos(player.position());
+                            willSkipNight.set(false);
+                            player.stopSleeping();
+                            i = 500;
+                        }
+                        for (; i < 500; i++) {
+                            int xt = x + Mth.nextInt(player.getRandom(), 7, 32) * Mth.nextInt(player.getRandom(), -1, 1);
+                            int yt = y + Mth.nextInt(player.getRandom(), 7, 16) * Mth.nextInt(player.getRandom(), -1, 1);
+                            int zt = z + Mth.nextInt(player.getRandom(), 7, 32) * Mth.nextInt(player.getRandom(), -1, 1);
+                            BlockPos spawnPos = new BlockPos(xt, yt, zt);
+                            if (SpawnPlacements.isSpawnPositionOk(EntityType.ZOMBIE, level, spawnPos)
+                                &&
+                                SpawnPlacements.checkSpawnRules(EntityType.ZOMBIE, level, EntitySpawnReason.TRIGGERED, spawnPos, level.getRandom())) {
+                                zombie.setPos(xt, yt, zt);
+                                zombie.setOnGround(true);
+                                if (!level.hasNearbyAlivePlayer(xt, yt, zt, 7.0) && level.isUnobstructed(zombie) &&
+                                    level.noCollision(zombie) &&
+                                    !level.containsAnyLiquid(zombie.getBoundingBox())) {
+                                    Path path = zombie.getNavigation().createPath(x, y, z, 1);
+                                    if (path != null) {
+                                        Vec3 v = path.getEndNode().asVec3();
+                                        System.out.println(v.distanceToSqr(player.position()));
+                                        if (v.distanceToSqr(player.position()) < 2.5) {
+                                            zombie.finalizeSpawn(level, level.getCurrentDifficultyAt(zombie.blockPosition()), EntitySpawnReason.TRIGGERED, null);
+                                            level.addFreshEntityWithPassengers(zombie);
+                                            zombie.setPos(path.getEndNode().asVec3());
+                                            willSkipNight.set(false);
+                                            player.stopSleeping();
+                                            i = 500;
+                                        }
                                     }
                                 }
                             }

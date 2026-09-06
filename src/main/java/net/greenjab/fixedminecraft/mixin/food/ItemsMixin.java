@@ -82,7 +82,7 @@ public abstract class ItemsMixin {
     @At(value = "CONSTANT", args = "stringValue=glow_berries"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;GLOW_BERRIES:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
     private static Item.Properties glowingGlowBerries(Item.Properties instance, FoodProperties foodProperties,Operation<Item.Properties> original) {
-        return instance.food(Foods.HONEY_BOTTLE, ItemRegistry.GLOW_BERRIES_EFFECT);}
+        return instance.food(Foods.GLOW_BERRIES, ItemRegistry.GLOW_BERRIES_EFFECT);}
 
     @ModifyArg(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;stacksTo(I)Lnet/minecraft/world/item/Item$Properties;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=rabbit_stew"), to =

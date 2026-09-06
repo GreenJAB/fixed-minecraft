@@ -92,7 +92,7 @@ public abstract class ItemMixin {
             else if (off.getItem() instanceof ProjectileWeaponItem || (off.getItem() instanceof FireworkRocketItem && player.isFallFlying())
                      || off.getItem() instanceof WindChargeItem || off.getItem() instanceof ThrowablePotionItem
                      || off.getItem() instanceof TridentItem || off.getItem() instanceof FishingRodItem) cir.setReturnValue(InteractionResult.PASS);
-            else if (off.getItem() instanceof NewTotemItem && FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.REQUIRE_TOTEM_USE)) cir.setReturnValue(InteractionResult.PASS);
+            else if (off.getItem() instanceof NewTotemItem && FixedMinecraft.gameRules.use_totem) cir.setReturnValue(InteractionResult.PASS);
 
         }
     }

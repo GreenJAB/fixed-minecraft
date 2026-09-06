@@ -44,3 +44,4 @@ accessible method net/minecraft/world/entity/animal/allay/Allay dropEquipment (L
 accessible method net/minecraft/world/level/NaturalSpawner$SpawnState canSpawnForCategoryLocal (Lnet/minecraft/world/entity/MobCategory;Lnet/minecraft/world/level/ChunkPos;)Z
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityRight (Lnet/minecraft/nbt/CompoundTag;)V
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityLeft (Lnet/minecraft/nbt/CompoundTag;)V
+accessible class net/minecraft/client/StringSplitter$LineBreakFinder

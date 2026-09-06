@@ -143,7 +143,7 @@ public class FixedMinecraftEnchantmentHelper {
 
             if (isSuper) {
                 IS2.set(DataComponents.REPAIR_COST, 1);
-                if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
+                if (!FixedMinecraft.gameRules.mending_on_op) {
                     builder.removeIf(e -> e.is(Enchantments.MENDING));
                 }
             }

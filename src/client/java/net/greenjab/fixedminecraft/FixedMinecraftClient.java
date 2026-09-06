@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Component;
 public class FixedMinecraftClient implements ClientModInitializer {
     public static float paleGardenFog = 0f;
     public static float voidFog = 0f;
+    public static boolean fontLegend = false;
 
     public static OptionInstance<Boolean> itemArmorHud = OptionInstance.createBoolean("options.itemArmorHud", true);
     public static OptionInstance<Boolean> jabsFixedFog = OptionInstance.createBoolean("options.jabsFixedFog", true);

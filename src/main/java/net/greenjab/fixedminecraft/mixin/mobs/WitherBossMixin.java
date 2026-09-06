@@ -4,7 +4,6 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -36,14 +35,14 @@ public abstract class WitherBossMixin {
     @WrapOperation(method = "customServerAiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;heal(F)V", ordinal = 1))
     private void dontHealPastHalfHealth(WitherBoss instance, float v, Operation<Void> original){
         original.call(instance,1.0f);
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT)) return;
+        if (!FixedMinecraft.gameRules.modified_wither) return;
         if (instance.entityTags().contains("phase2") && instance.getHealth() > instance.getMaxHealth() / 2.0F)
             instance.setHealth(instance.getMaxHealth() / 2.0F);
     }
 
     @Inject(method = "customServerAiStep", at = @At(value = "HEAD"))
     private void noclipBelowHalfHealth(CallbackInfo ci){
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT)) return;
+        if (!FixedMinecraft.gameRules.modified_wither) return;
         WitherBoss WE = (WitherBoss) (Object)this;
         if (WE.isPowered() && WE.getInvulnerableTicks() <=0) {
             WE.noPhysics=true;
@@ -66,7 +65,7 @@ public abstract class WitherBossMixin {
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;setDeltaMovement(Lnet/minecraft/world/phys/Vec3;)V"), index = 0)
     private Vec3 floatUpInBlocks(Vec3 vec3d) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT)) return vec3d;
+        if (!FixedMinecraft.gameRules.modified_wither) return vec3d;
         WitherBoss WE = (WitherBoss) (Object)this;
         Level world = WE.level();
         BlockPos blockpos = WE.blockPosition();
@@ -79,7 +78,7 @@ public abstract class WitherBossMixin {
 
     @ModifyVariable(method = "aiStep", at = @At(value = "STORE"), ordinal = 1)
     private Vec3 strafePlayer(Vec3 delta, @Local Entity entity) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT)) return delta;
+        if (!FixedMinecraft.gameRules.modified_wither) return delta;
         WitherBoss WE = (WitherBoss) (Object)this;
         double r = 6;
         double dx = WE.getX()- entity.getX();
@@ -94,20 +93,20 @@ public abstract class WitherBossMixin {
 
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 9.0))
     private double dontStop(double v){
-        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT) ?0:v;
+        return FixedMinecraft.gameRules.modified_wither ?0:v;
     }
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 0.3, ordinal = 1))
     private double moveSlower1(double v){
-        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT) ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
+        return FixedMinecraft.gameRules.modified_wither ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
     }
     @ModifyConstant(method = "aiStep", constant = @Constant(doubleValue = 0.3, ordinal = 2))
     private double moveSlower2(double v){
-        return FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT) ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
+        return FixedMinecraft.gameRules.modified_wither ? v * (((WitherBoss) (Object)this).isPowered()?0.9:0.5):v;
     }
 
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/wither/WitherBoss;setYRot(F)V"), index = 0)
     private float facePlayer(float v){
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_WITHER_FIGHT)) return v;
+        if (!FixedMinecraft.gameRules.modified_wither) return v;
         WitherBoss WE = (WitherBoss) (Object)this;
         if (!WE.level().isClientSide()){
             if (WE.getAlternativeTarget(0) > 0) {

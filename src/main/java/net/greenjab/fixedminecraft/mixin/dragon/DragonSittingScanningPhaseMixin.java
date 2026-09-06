@@ -2,7 +2,6 @@ package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -40,13 +39,13 @@ public abstract class DragonSittingScanningPhaseMixin extends AbstractDragonSitt
 
     @ModifyConstant(method = "<init>", constant = @Constant(doubleValue = 20))
     private double longerSight(double constant){
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return constant;
+        if (!FixedMinecraft.gameRules.modified_dragon) return constant;
         return 150;
     }
 
     @Inject(method = "doServerTick", at = @At("HEAD"),cancellable = true)
     private void redoTick(CallbackInfo ci, @Local(argsOnly = true) ServerLevel level) {
-        if (!level.getGameRules().get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT)) return;
+        if (!FixedMinecraft.gameRules.modified_dragon) return;
         this.scanningTime++;
         LivingEntity livingEntity = level.getNearestPlayer(this.scanTargeting, this.dragon, this.dragon.getX(), this.dragon.getY(), this.dragon.getZ());
         if (livingEntity != null) {

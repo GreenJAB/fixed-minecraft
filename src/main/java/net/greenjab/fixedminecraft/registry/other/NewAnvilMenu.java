@@ -3,7 +3,6 @@ package net.greenjab.fixedminecraft.registry.other;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
-import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -39,6 +38,8 @@ public class NewAnvilMenu extends ItemCombinerMenu {
     private String itemName;
     private final DataSlot cost = DataSlot.standalone();
     private final DataSlot capacity = DataSlot.standalone();
+    private final DataSlot in_cap = DataSlot.standalone();
+    private final DataSlot out_cap = DataSlot.standalone();
     private final DataSlot netherite = DataSlot.standalone();
     private final DataSlot text = DataSlot.standalone();
     private static final int INPUT_SLOT_X_PLACEMENT = 27;
@@ -56,6 +57,8 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         super(MenuRegistry.NEW_ANVIL_SCREEN_HANDLER, containerId, inventory, access, createInputSlotDefinitions());
         this.addDataSlot(this.cost);
         this.addDataSlot(this.capacity);
+        this.addDataSlot(this.in_cap);
+        this.addDataSlot(this.out_cap);
         this.addDataSlot(this.netherite).set(netherite?1:0);
         this.addDataSlot(this.text).set(0);
     }
@@ -146,12 +149,17 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         ItemStack addition = this.inputSlots.getItem(1);
         ItemStack result = input.copy();
 
-        this.capacity.set(FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(result));
-
         this.cost.set(0);
+        if (FixedMinecraft.SERVER != null) this.capacity.set(0);
+        this.in_cap.set(0);
+        this.out_cap.set(0);
         this.text.set(AnvilMsg.NONE.id);
         this.resultSlots.setItem(0, ItemStack.EMPTY);
         if (input.isEmpty()) return;
+
+        if (FixedMinecraft.SERVER != null) this.capacity.set(FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(input));
+        this.in_cap.set(FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(input, false));
+        this.out_cap.set(this.in_cap.get());
 
         boolean newName = false;
         boolean repair = false;
@@ -201,8 +209,8 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 }
 
                 if (result.isDamageableItem() && !book) {
-                    if (EnchantmentHelper.getEnchantmentsForCrafting(addition).isEmpty() || FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
-                        if (input.getDamageValue() == 0 && !FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS)) {
+                    if (EnchantmentHelper.getEnchantmentsForCrafting(addition).isEmpty() || FixedMinecraft.gameRules.combine_items) {
+                        if (input.getDamageValue() == 0 && !FixedMinecraft.gameRules.combine_items) {
                             this.text.set(AnvilMsg.FIXED.id);
                             return;
                         }
@@ -262,7 +270,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         int enchantmentPower = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(result, true);
         if (repair) this.cost.set(Mth.ceil(enchantmentPower / 2.0f));
         else this.cost.set(enchantmentPower);
-
+        this.out_cap.set(enchantmentPower);
 
         if (!this.player.hasInfiniteMaterials() && ((enchantmentPower < 1 || enchantmentPower > this.capacity.get()) && this.capacity.get() != 0)) {
             if (!isNetherite()) {
@@ -271,7 +279,7 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                 return;
             }
 
-            if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.MENDING_ON_OP_ITEMS)) {
+            if (!FixedMinecraft.gameRules.mending_on_op) {
                 ItemEnchantments outputEnchants = EnchantmentHelper.getEnchantmentsForCrafting(result);
                 for (Object2IntMap.Entry<Holder<Enchantment>> entry : outputEnchants.entrySet()) {
                     Holder<Enchantment> registryEntry = entry.getKey();
@@ -321,18 +329,12 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         return filteredName.length() <= 50 ? filteredName : null;
     }
 
-    public int getCost() {
-        return this.cost.get();
-    }
-    public int getCapacity() {
-        return this.capacity.get();
-    }
-    public boolean isNetherite() {
-        return this.netherite.get()==1;
-    }
-    public int getText() {
-        return this.text.get();
-    }
+    public int getCost() {return this.cost.get();}
+    public int getInCap() {return this.in_cap.get();}
+    public int getOutCap() {return this.out_cap.get();}
+    public int getCapacity() {return this.capacity.get();}
+    public boolean isNetherite() {return this.netherite.get()==1;}
+    public int getText() {return this.text.get();}
 
     public enum AnvilMsg {
 

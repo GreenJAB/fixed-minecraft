@@ -38,7 +38,7 @@ public class BackupRespawns extends SavedData {
     }
 
     public BackupRespawn addPlayer(Player player) {
-        BackupRespawn backupRespawn = new BackupRespawn(player.getName().tryCollapseToString());
+        BackupRespawn backupRespawn = new BackupRespawn(player.getName().getString());
         backupRespawns.add(backupRespawn);
         if (backupRespawns.size()>64) backupRespawns.removeFirst();
         return backupRespawn;
@@ -46,8 +46,7 @@ public class BackupRespawns extends SavedData {
 
     public BackupRespawn getPlayer(Player player) {
         for (BackupRespawn backupRespawn : backupRespawns) {
-            String name = player.getName().tryCollapseToString();
-            assert name != null;
+            String name = player.getName().getString();
             if (name.contains(backupRespawn.name) && backupRespawn.name.contains(name)){
                 return backupRespawn;
             }
