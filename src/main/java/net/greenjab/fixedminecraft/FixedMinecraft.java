@@ -46,13 +46,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FixedMinecraft implements ModInitializer {
-    public static Logger logger = LoggerFactory.getLogger("FixedMinecraft");
+    public static Logger logger = LoggerFactory.getLogger("JabsFixedMinecraft");
     public static MinecraftServer SERVER = null;
     public static GameRuleStatus gameRules = new GameRuleStatus();
 
     public static HashMap<Block, Block> corals = new HashMap<>();
 
-    public static final String MOD_NAME = "Fixed Minecraft";
+    public static final String MOD_NAME = "Jab's Fixed Minecraft";
     public static final String NAMESPACE = "fixedminecraft";
 
     @Override public void onInitialize() {

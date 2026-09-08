@@ -206,7 +206,7 @@ public abstract class LivingEntityMixin {
         }
 
         int light = Math.max(LE.level().getBrightness(LightLayer.SKY, LE.blockPosition()), LE.level().getBrightness(LightLayer.BLOCK, LE.blockPosition()));
-        visibilityPercent*=(1-2*(15-light));
+        visibilityPercent*=(1-0.02*(15-light));
 
         cir.setReturnValue(visibilityPercent);
     }
