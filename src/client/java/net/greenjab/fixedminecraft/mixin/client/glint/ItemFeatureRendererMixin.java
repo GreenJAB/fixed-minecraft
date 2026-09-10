@@ -24,7 +24,7 @@ public abstract class ItemFeatureRendererMixin {
     }
 
     @ModifyArg(method = "getFoilBuffer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/feature/ItemFeatureRenderer;getVertexBuilder(Lnet/minecraft/client/renderer/rendertype/RenderType;)Lcom/mojang/blaze3d/vertex/VertexConsumer;"))
-    private static RenderType getGlintTranslucent(RenderType par1, @Local(argsOnly = true) RenderType renderType, @Local PoseStack.@Nullable Pose foilDecalPose) {
+    private static RenderType getGlintTranslucent(RenderType par1, @Local(argsOnly = true) RenderType renderType, @Local(argsOnly = true) PoseStack.@Nullable Pose foilDecalPose) {
         boolean green = foilDecalPose != null;
         if (useTransparentGlint(renderType)) return EnchantGlint.getGlintTranslucent(green);
         else return EnchantGlint.getGlint(green);

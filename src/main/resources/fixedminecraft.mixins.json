@@ -113,7 +113,6 @@
         "mobs.AllayMixin",
         "mobs.ArmorStandMixin",
         "mobs.BeeMixin",
-        "mobs.BucketItemMixin",
         "mobs.CaveSpiderMixin",
         "mobs.CreakingHeartBlockEntityMixin",
         "mobs.CreakingHeartBlockMixin",
