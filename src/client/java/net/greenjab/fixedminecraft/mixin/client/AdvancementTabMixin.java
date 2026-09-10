@@ -20,9 +20,9 @@ public abstract class AdvancementTabMixin {
     @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 56))
     private int largerScreenY1(int constant) {return newPAGE_HEIGHT/2;}
 
-    @ModifyConstant(method = {"extractContents", "extractTooltips", "scroll", "canScrollHorizontally"}, constant = @Constant(intValue = 234))
+    @ModifyConstant(method = {"tick","extractContents", "extractTooltips", "scroll", "canScrollHorizontally"}, constant = @Constant(intValue = 234))
     private int largerScreenX2(int constant) {return newPAGE_WIDTH;}
-    @ModifyConstant(method = {"extractContents", "extractTooltips", "scroll", "canScrollVertically"}, constant = @Constant(intValue = 113))
+    @ModifyConstant(method = {"tick","extractContents", "extractTooltips", "scroll", "canScrollVertically"}, constant = @Constant(intValue = 113))
     private int largerScreenY2(int constant) {return newPAGE_HEIGHT;}
 
     @ModifyConstant(method = "extractContents", constant = @Constant(intValue = 15))

@@ -16,7 +16,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.saveddata.maps.MapId;
@@ -46,7 +46,7 @@ public abstract class PlayerLookHelper {
         // Get block entity from world if null
         assert minecraft.level != null;
         if (blockEntity == null) {
-            Optional<ChiseledBookShelfBlockEntity> blockEntityOptional = minecraft.level.getBlockEntity(hit.getBlockPos(), BlockEntityType.CHISELED_BOOKSHELF);
+            Optional<ChiseledBookShelfBlockEntity> blockEntityOptional = minecraft.level.getBlockEntity(hit.getBlockPos(), BlockEntityTypes.CHISELED_BOOKSHELF);
             if (blockEntityOptional.isEmpty()) return book;
             blockEntity = blockEntityOptional.get();
         } else if (!hit.getBlockPos().equals(blockEntity.getBlockPos())) return book;

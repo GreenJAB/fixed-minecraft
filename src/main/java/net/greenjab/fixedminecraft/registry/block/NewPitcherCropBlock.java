@@ -7,7 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Ravager;
@@ -65,7 +65,7 @@ public class NewPitcherCropBlock extends PitcherCropBlock {
                 serverLevel.destroyBlock(pos, true, entity);
             }
             if (!serverLevel.getGameRules().get(GameRuleRegistry.HOSTILE_SNIFFER_PLANTS)) return;
-            if (entity instanceof LivingEntity livingEntity && state.getValue(HALF) == DoubleBlockHalf.UPPER && !state.getValue(FULL) && entity.getType() != EntityType.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.hasInfiniteMaterials()) {
+            if (entity instanceof LivingEntity livingEntity && state.getValue(HALF) == DoubleBlockHalf.UPPER && !state.getValue(FULL) && entity.getType() != EntityTypes.SNIFFER && livingEntity.hurtTime == 0 && !livingEntity.hasInfiniteMaterials()) {
                 livingEntity.hurtServer(serverLevel, level.damageSources().sweetBerryBush(), 10.0F);
                 BlockState blockState = state.setValue(FULL, true);
                 level.setBlock(pos, blockState, Block.UPDATE_CLIENTS);

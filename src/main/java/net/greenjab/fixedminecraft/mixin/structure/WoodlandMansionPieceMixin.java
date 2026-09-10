@@ -4,7 +4,7 @@ import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.animal.chicken.Chicken;
 import net.minecraft.world.entity.monster.zombie.Zombie;
@@ -27,11 +27,11 @@ public abstract class WoodlandMansionPieceMixin {
         if (markerId.startsWith("Illager")) {
             Mob mob;
             int i = random.nextInt(20);
-            if (i < 1) mob = EntityType.EVOKER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
-            else if (i < 4) mob = EntityType.WITCH.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
-            else if (i < 8) mob = EntityType.ILLUSIONER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
-            else if (i < 12) mob = EntityType.VINDICATOR.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
-            else mob = EntityType.PILLAGER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            if (i < 1) mob = EntityTypes.EVOKER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            else if (i < 4) mob = EntityTypes.WITCH.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            else if (i < 8) mob = EntityTypes.ILLUSIONER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            else if (i < 12) mob = EntityTypes.VINDICATOR.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            else mob = EntityTypes.PILLAGER.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
             if (mob != null) {
                 mob.setPersistenceRequired();
                 mob.snapTo(position, 0.0F, 0.0F);
@@ -41,7 +41,7 @@ public abstract class WoodlandMansionPieceMixin {
                 ci.cancel();
             }
         } else if (markerId.startsWith("Chicken")) {
-            Chicken chicken = EntityType.CHICKEN.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+            Chicken chicken = EntityTypes.CHICKEN.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
             if (chicken != null) {
                 chicken.setChickenJockey(true);
                 chicken.setPersistenceRequired();
@@ -49,7 +49,7 @@ public abstract class WoodlandMansionPieceMixin {
                 chicken.finalizeSpawn(level, level.getCurrentDifficultyAt(chicken.blockPosition()), EntitySpawnReason.STRUCTURE, null);
                 level.addFreshEntityWithPassengers(chicken);
                 level.setBlock(position, Blocks.AIR.defaultBlockState(), 2);
-                Zombie jockey = EntityType.ZOMBIE.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
+                Zombie jockey = EntityTypes.ZOMBIE.create(level.getLevel(), EntitySpawnReason.STRUCTURE);
                 if (jockey != null) {
                     jockey.setBaby(true);
                     jockey.setPersistenceRequired();

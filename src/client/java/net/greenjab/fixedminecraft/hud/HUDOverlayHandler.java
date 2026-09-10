@@ -32,12 +32,12 @@ public class HUDOverlayHandler {
         int top = mc.getWindow().getGuiScaledHeight() - FOOD_BAR_HEIGHT;
         int right = mc.getWindow().getGuiScaledWidth() / 2 + 91;
 
-        generateBarOffsets(top, right, mc.gui.getGuiTicks(), player);
+        generateBarOffsets(top, right, mc.gui.hud.getGuiTicks(), player);
 
         HUDOverlayEvent.Saturation saturationRenderEvent = new HUDOverlayEvent.Saturation(stats.getSaturationLevel(), right, top, context);
 
         if (!saturationRenderEvent.isCanceled) {
-            drawSaturationOverlay(saturationRenderEvent, mc.gui.getGuiTicks());
+            drawSaturationOverlay(saturationRenderEvent, mc.gui.hud.getGuiTicks());
         }
 
     }

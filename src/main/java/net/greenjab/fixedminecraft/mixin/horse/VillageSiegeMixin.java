@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.village.VillageSiege;
 import net.minecraft.world.entity.animal.equine.ZombieHorse;
@@ -23,7 +23,7 @@ public abstract class VillageSiegeMixin {
             target = "Lnet/minecraft/server/level/ServerLevel;addFreshEntityWithPassengers(Lnet/minecraft/world/entity/Entity;)V", shift = At.Shift.AFTER
     ))
     private void zombieHorse(ServerLevel level, CallbackInfo ci, @Local Zombie zombie){
-        ZombieHorse ZHE = EntityType.ZOMBIE_HORSE.create(level, EntitySpawnReason.EVENT);
+        ZombieHorse ZHE = EntityTypes.ZOMBIE_HORSE.create(level, EntitySpawnReason.EVENT);
         zombie.setItemInHand(InteractionHand.MAIN_HAND, Items.STONE_HOE.getDefaultInstance());
         if (ZHE != null && level.getRandom().nextInt(10) == 0) {
             zombie.setItemInHand(InteractionHand.MAIN_HAND, Items.IRON_SPEAR.getDefaultInstance());

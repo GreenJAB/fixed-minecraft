@@ -6,7 +6,6 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateData;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -29,6 +28,7 @@ import net.minecraft.world.level.saveddata.maps.MapId;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
+import net.minecraft.world.scores.TeamColor;
 import org.joml.Matrix3x2fStack;
 import org.jspecify.annotations.NonNull;
 
@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Objects;
+import java.util.Optional;
 
 /** Credit: Nettakrim */
 public class MapBookScreen extends Screen {
@@ -242,10 +243,9 @@ public class MapBookScreen extends Screen {
             if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
                 Team team = playerListEntry.getTeam();
                 if (team != null) {
-                    ChatFormatting formatting = team.getColor();
-                    if (formatting.isColor()) {
-                        assert formatting.getColor() != null;
-                        color = (new Color(formatting.getColor()).hashCode());
+                    Optional<TeamColor> formatting = team.getColor();
+                    if (formatting.isPresent()) {
+                        color = (formatting.get()).hashCode();
                     }
                 }
             }

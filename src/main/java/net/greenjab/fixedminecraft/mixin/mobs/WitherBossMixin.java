@@ -12,7 +12,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
@@ -50,7 +50,7 @@ public abstract class WitherBossMixin {
                 WE.addTag("phase2");
                 WE.level().explode(WE, WE.getX(), WE.getY(), WE.getZ(), 5, Level.ExplosionInteraction.MOB);
                 for (int i = 0;i<3;i++) {
-                    WitherSkeleton WSE = EntityType.WITHER_SKELETON.create(WE.level().getChunkAt(WE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
+                    WitherSkeleton WSE = EntityTypes.WITHER_SKELETON.create(WE.level().getChunkAt(WE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
                     assert WSE != null;
                     WSE.snapTo(WE.getX(), WE.getY(), WE.getZ(), 0.0F, 0.0F);
                     WSE.setDeltaMovement(Math.cos(i*120*Math.PI/180.0), 0, Math.sin(i*120*Math.PI/180.0));

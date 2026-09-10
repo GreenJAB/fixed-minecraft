@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/wavy_flowerbed_2",
+  "textures": {
+    "flowerbed": "minecraft:block/wildflowers_wavy",
+    "stem": "minecraft:block/wildflowers_stem_wavy",
+    "particle": "minecraft:block/wildflowers"
+  }
+}

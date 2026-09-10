@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.minecart;
 
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.player.Player;

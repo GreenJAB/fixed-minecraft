@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundInitializeBorderPacket;
@@ -16,7 +16,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
@@ -45,39 +45,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 @Mixin(EnderDragonFight.class)
 public abstract class EnderDragonFightMixin {
 
-    @Shadow
-    private ServerLevel level;
-
-    @Shadow
-    private @Nullable BlockPos exitPortalLocation;
-
-    @Shadow
-    private boolean hasPreviouslyKilledDragon;
-
-    @Shadow
-    private boolean dragonKilled;
-
-    @Shadow
-    private @Nullable DragonRespawnStage respawnStage;
-
-    @Shadow
-    private int respawnTime;
-
-    @Shadow
-    private @Nullable List<EntityReference<EndCrystal>> respawnCrystals;
-
-    @Shadow
-    private ServerBossEvent dragonEvent;
-
-    @Shadow
-    private @Nullable UUID dragonUUID;
-
-    @Shadow
-    private BlockPos origin;
+    @Shadow private ServerLevel level;
+    @Shadow private @Nullable BlockPos exitPortalLocation;
+    @Shadow private boolean hasPreviouslyKilledDragon;
+    @Shadow private boolean dragonKilled;
+    @Shadow private @Nullable DragonRespawnStage respawnStage;
+    @Shadow private int respawnTime;
+    @Shadow private @Nullable List<EntityReference<EndCrystal>> respawnCrystals;
+    @Shadow private ServerBossEvent dragonEvent;
+    @Shadow private @Nullable UUID dragonUUID;
+    @Shadow private BlockPos origin;
 
     @Inject(method = "tryRespawn()V", at = @At(value = "FIELD",
                                                   target = "Lnet/minecraft/world/level/dimension/end/EnderDragonFight;exitPortalLocation:Lnet/minecraft/core/BlockPos;", ordinal = 0, opcode = Opcodes.GETFIELD), cancellable = true)
@@ -156,10 +139,10 @@ public abstract class EnderDragonFightMixin {
         return null;
     }
 
-    @WrapOperation(method = "onCrystalDestroyed", at = @At(value = "INVOKE", target = "Ljava/util/List;contains(Ljava/lang/Object;)Z"))
-    private boolean crystalFixer(List<EndCrystal> instance, Object o, Operation<Boolean> original){
-        if (instance == null || instance.isEmpty()) return false;
-        return original.call(instance, o);
+    @WrapOperation(method = "onCrystalDestroyed", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;anyMatch(Ljava/util/function/Predicate;)Z"))
+    private <T> boolean crystalFixer(Stream<EntityReference<EndCrystal>> instance, Predicate<? super T> predicate, Operation<Boolean> original){
+        if (instance == null || instance.findAny().isEmpty()) return false;
+        return original.call(instance, predicate);
     }
 
     @Inject(method = "spawnExitPortal", at = @At(value = "TAIL"))
@@ -172,7 +155,7 @@ public abstract class EnderDragonFightMixin {
             BlockPos b = blockPos.above(1);
             for (Direction d : Direction.values()) {
                 if (d.getAxis().isHorizontal()) {
-                    EndCrystal endCrystalEntity = EntityType.END_CRYSTAL.create(this.level.getChunkAt(b.relative(d, 3)).getLevel(), EntitySpawnReason.CHUNK_GENERATION);
+                    EndCrystal endCrystalEntity = EntityTypes.END_CRYSTAL.create(this.level.getChunkAt(b.relative(d, 3)).getLevel(), EntitySpawnReason.CHUNK_GENERATION);
                     if (endCrystalEntity != null) {
                         endCrystalEntity.snapTo(b.relative(d, 3).getX()+0.5, b.getY(), b.relative(d, 3).getZ() + 0.5, 0, 0.0F);
                         endCrystalEntity.setInvulnerable(true);

@@ -6,7 +6,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -90,7 +90,7 @@ public abstract class DragonStrafePlayerPhaseMixin extends AbstractDragonPhaseIn
                             if (!this.dragon.isSilent())
                                 this.dragon.level().levelEvent(null, LevelEvent.SOUND_DRAGON_FIREBALL, this.dragon.blockPosition(), 0);
                             BlockPos b = this.dragon.getSubEntities()[5].blockPosition();
-                            Endermite endermiteEntity = EntityType.ENDERMITE.create(this.dragon.level().getChunkAt(b).getLevel(), EntitySpawnReason.MOB_SUMMONED);
+                            Endermite endermiteEntity = EntityTypes.ENDERMITE.create(this.dragon.level().getChunkAt(b).getLevel(), EntitySpawnReason.MOB_SUMMONED);
                             if (endermiteEntity != null) {
                                 endermiteEntity.snapTo(b.getX()-this.dragon.getDeltaMovement().x(), b.above().getY(), b.getZ()-this.dragon.getDeltaMovement().z(), 0, 0.0F);
                                 endermiteEntity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, -1));

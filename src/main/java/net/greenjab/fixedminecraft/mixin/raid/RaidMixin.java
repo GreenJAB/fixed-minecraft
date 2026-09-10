@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.raid.Raid;
 import net.minecraft.world.entity.raid.Raider;
 import org.objectweb.asm.Opcodes;
@@ -19,18 +20,18 @@ public abstract class RaidMixin {
     ))
     private EntityType<? extends Raider> replaceWithIllusioner(EntityType<? extends Raider> original){
         if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS)) return original;
-        if (original == EntityType.EVOKER && Math.random()<0.6666) return EntityType.ILLUSIONER;
+        if (original == EntityTypes.EVOKER && Math.random() < 0.6666) return EntityTypes.ILLUSIONER;
         return original;
     }
 
     @ModifyExpressionValue(method = "spawnGroup", at = @At(
             value = "FIELD",
-            target = "Lnet/minecraft/world/entity/EntityType;EVOKER:Lnet/minecraft/world/entity/EntityType;",
+            target = "Lnet/minecraft/world/entity/EntityTypes;EVOKER:Lnet/minecraft/world/entity/EntityType;",
             opcode = Opcodes.GETSTATIC
     ))
     private EntityType<? extends Raider> replaceWithIllusionerRavager(EntityType<? extends Raider> original){
         if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.RAID_REPLACE_EVOKERS_WITH_ILLUSIONERS)) return original;
-        if (Math.random()<0.6666) return EntityType.ILLUSIONER;
+        if (Math.random()<0.6666) return EntityTypes.ILLUSIONER;
         return original;
     }
 }

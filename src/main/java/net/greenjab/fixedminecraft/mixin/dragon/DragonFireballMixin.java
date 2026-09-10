@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.dragon;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.projectile.hurtingprojectile.DragonFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
@@ -21,7 +21,7 @@ public abstract class DragonFireballMixin {
     @Inject(method = "onHit", at = @At("HEAD"), cancellable = true)
     private void dontHitItself(CallbackInfo ci, @Local(argsOnly = true) HitResult hitResult) {
         if (hitResult.getType()==HitResult.Type.ENTITY) {
-            if (((EntityHitResult) hitResult).getEntity().getType() == EntityType.ENDER_DRAGON) {
+            if (((EntityHitResult) hitResult).getEntity().getType() == EntityTypes.ENDER_DRAGON) {
                 ci.cancel();
             }
         }

@@ -2,7 +2,7 @@ package net.greenjab.fixedminecraft.mixin.transport;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,7 +13,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
@@ -48,7 +48,7 @@ public abstract class FireworkRocketItemMixin {
                 if (level instanceof ServerLevel serverLevel) {
                     if (player.dropAllLeashConnections(null))
                         level.playSound(null, player, SoundEvents.LEAD_BREAK, SoundSource.NEUTRAL, 1.0F, 1.0F);
-                    LivingEntity Null = EntityType.PIG.create(level, EntitySpawnReason.TRIGGERED);
+                    LivingEntity Null = EntityTypes.PIG.create(level, EntitySpawnReason.TRIGGERED);
                     if (Null != null) {
                         Null.snapTo(player.getX(), player.getY(), player.getZ(), 0, 0.0F);
                         Projectile.spawnProjectile(new FireworkRocketEntity(level, itemStack, Null), serverLevel, itemStack);

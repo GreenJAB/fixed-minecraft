@@ -10,6 +10,7 @@ import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntitySpawnRequest;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
@@ -94,7 +95,7 @@ public abstract class BlockBehaviourMixin {
                     EntityType.create(
                                     TagValueInput.create(reporterx.forChild( () -> ".shoulder"), serverLevel.registryAccess(), tag),
                                     serverLevel,
-                                    EntitySpawnReason.LOAD
+                                    new EntitySpawnRequest(EntitySpawnReason.LOAD, false)
                             )
                             .ifPresent(entity -> {
                                 if (entity instanceof TamableAnimal tamed) {

@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.minecart.*;
 import net.minecraft.world.item.ItemStack;
@@ -64,7 +65,7 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
                 this.getBehavior().moveAlongTrack(level);
                 this.setDeltaMovement(v);
             }
-            AbstractMinecart fakeMinecart = new MinecartChest(EntityType.CHEST_MINECART, level);
+            AbstractMinecart fakeMinecart = new MinecartChest(EntityTypes.CHEST_MINECART, level);
             fakeMinecart.noPhysics = true;
             fakeMinecart.addTag("train");
             if (train.isEmpty()) train.add(this);

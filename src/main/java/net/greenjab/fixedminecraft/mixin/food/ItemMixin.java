@@ -23,7 +23,6 @@ import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.ThrowablePotionItem;
 import net.minecraft.world.item.TridentItem;
@@ -52,9 +51,6 @@ public abstract class ItemMixin {
         FoodProperties foodComponent = itemStack.get(DataComponents.FOOD);
         if (entity instanceof ServerPlayer) {
             if (foodComponent != null) {
-                if (itemStack.is(Items.SWEET_BERRIES)) {
-                    entity.addEffect(new MobEffectInstance(MobEffects.SPEED, 200, 0));
-                } else
                 if (foodComponent.saturation() / (foodComponent.nutrition() * 2.0f) == 0.15f) {
                     if (Math.random() < 0.15f) {
                         entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 600, 0));

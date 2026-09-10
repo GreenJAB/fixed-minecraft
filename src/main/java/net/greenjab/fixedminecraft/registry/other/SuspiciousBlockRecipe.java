@@ -27,7 +27,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.ShapelessCraftingRecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
 import org.jspecify.annotations.NonNull;
 import java.util.List;
 import java.util.stream.Stream;
@@ -120,7 +120,7 @@ public class SuspiciousBlockRecipe extends NormalCraftingRecipe {
             CompoundTag tag = new CompoundTag();
             RegistryOps<Tag> ops = FixedMinecraft.SERVER.reloadableRegistries().lookup().createSerializationContext(NbtOps.INSTANCE);
             tag.store("item", ItemStack.CODEC, ops, insideStack);
-            result.set(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(BlockEntityType.BRUSHABLE_BLOCK, tag));
+            result.set(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(BlockEntityTypes.BRUSHABLE_BLOCK, tag));
             return result;
         } else {
             return ItemStack.EMPTY;

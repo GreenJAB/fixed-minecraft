@@ -17,9 +17,9 @@ public abstract class AdvancementsScreenMixin {
     int newPAGE_WIDTH = 423;
      @Unique
      int newPAGE_HEIGHT = 218;
-    @ModifyConstant(method = {"extractRenderState","mouseClicked","extractWindow"}, constant = @Constant(intValue = 252))
+    @ModifyConstant(method = {"repositionElements","mouseClicked","extractWindow"}, constant = @Constant(intValue = 252))
     private int largerScreenX1(int constant) {return newWINDOW_WIDTH;}
-    @ModifyConstant(method = {"extractRenderState","mouseClicked","extractWindow"}, constant = @Constant(intValue = 140))
+    @ModifyConstant(method = {"repositionElements","mouseClicked","extractWindow"}, constant = @Constant(intValue = 140))
     private int largerScreenY1(int constant) {return newWINDOW_HEIGHT;}
 
     @ModifyConstant(method = "extractInside", constant = @Constant(intValue = 234))

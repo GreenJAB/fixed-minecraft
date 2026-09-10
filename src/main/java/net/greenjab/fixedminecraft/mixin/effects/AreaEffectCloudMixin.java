@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.monster.cubemob.SulfurCube;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -60,6 +61,9 @@ public abstract class AreaEffectCloudMixin {
 
     @WrapOperation(method = "serverTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z"))
     private boolean lingerAddition(LivingEntity instance, MobEffectInstance newEffect, Entity source, Operation<Boolean> original) {
+        if (instance instanceof SulfurCube) {
+            return original.call(instance, new MobEffectInstance(newEffect.getEffect(), -1, newEffect.getAmplifier(), true, false, newEffect.showIcon()), source);
+        }
         if (instance.hasEffect(newEffect.getEffect())) {
             MobEffectInstance current = instance.getEffect(newEffect.getEffect());
             if (current!=null && current.getAmplifier() == newEffect.getAmplifier()) {

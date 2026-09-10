@@ -17,7 +17,7 @@ import java.util.Map;
 @Mixin(LayerDefinitions.class)
 public abstract class LayerDefinitionsMixin {
 
-    @Inject(method = "createRoots", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/blockentity/StandingSignRenderer;createSignLayer(Z)Lnet/minecraft/client/model/geom/builders/LayerDefinition;", ordinal = 0))
+    @Inject(method = "createRoots", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/object/cart/MinecartModel;createBodyLayer()Lnet/minecraft/client/model/geom/builders/LayerDefinition;", ordinal = 0))
     private static void addDispenserMinecartModel(CallbackInfoReturnable<Map<ModelLayerLocation, LayerDefinition>> cir,
                                                   @Local ImmutableMap.Builder<ModelLayerLocation, LayerDefinition> result) {
         result.put(CustomEntityModelLayerRegistry.DISPENSER_MINECART, MinecartModel.createBodyLayer());

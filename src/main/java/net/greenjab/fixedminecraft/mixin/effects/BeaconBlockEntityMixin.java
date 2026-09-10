@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
@@ -139,7 +139,7 @@ public abstract class BeaconBlockEntityMixin {
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;getBlock()Lnet/minecraft/world/level/block/Block;"))
     private static Block noBeam(BlockState instance, Operation<Block> original) {
-        if (instance.is(Blocks.TINTED_GLASS)) return Blocks.WHITE_STAINED_GLASS;
+        if (instance.is(Blocks.TINTED_GLASS)) return Blocks.STAINED_GLASS.white();
         return original.call(instance);
     }
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/DyeColor;getTextureDiffuseColor()I"))

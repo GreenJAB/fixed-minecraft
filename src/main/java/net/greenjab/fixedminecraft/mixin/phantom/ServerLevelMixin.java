@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +14,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.zombie.Zombie;
@@ -42,7 +42,7 @@ public abstract class ServerLevelMixin {
             player.removeEffect(MobEffectRegistry.INSOMNIA);
             player.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (i+1)*12*60*20, i, true, false, true));
             if (i == 4) {
-                CriteriaTriggers.CONSUME_ITEM.trigger(player, Items.RED_BED.getDefaultInstance());
+                CriteriaTriggers.CONSUME_ITEM.trigger(player, Items.BED.red().getDefaultInstance());
             }
             player.heal(10);
         });
@@ -60,7 +60,7 @@ public abstract class ServerLevelMixin {
                     int x = Mth.floor(player.getX());
                     int y = Mth.floor(player.getY());
                     int z = Mth.floor(player.getZ());
-                    Zombie zombie = EntityType.ZOMBIE.create(level, EntitySpawnReason.TRIGGERED);
+                    Zombie zombie = EntityTypes.ZOMBIE.create(level, EntitySpawnReason.TRIGGERED);
                     if (zombie != null) {
                         zombie.setTarget(player);
                         int i = 0;
@@ -77,9 +77,9 @@ public abstract class ServerLevelMixin {
                             int yt = y + Mth.nextInt(player.getRandom(), 7, 16) * Mth.nextInt(player.getRandom(), -1, 1);
                             int zt = z + Mth.nextInt(player.getRandom(), 7, 32) * Mth.nextInt(player.getRandom(), -1, 1);
                             BlockPos spawnPos = new BlockPos(xt, yt, zt);
-                            if (SpawnPlacements.isSpawnPositionOk(EntityType.ZOMBIE, level, spawnPos)
+                            if (SpawnPlacements.isSpawnPositionOk(EntityTypes.ZOMBIE, level, spawnPos)
                                 &&
-                                SpawnPlacements.checkSpawnRules(EntityType.ZOMBIE, level, EntitySpawnReason.TRIGGERED, spawnPos, level.getRandom())) {
+                                SpawnPlacements.checkSpawnRules(EntityTypes.ZOMBIE, level, EntitySpawnReason.TRIGGERED, spawnPos, level.getRandom())) {
                                 zombie.setPos(xt, yt, zt);
                                 zombie.setOnGround(true);
                                 if (!level.hasNearbyAlivePlayer(xt, yt, zt, 7.0) && level.isUnobstructed(zombie) &&

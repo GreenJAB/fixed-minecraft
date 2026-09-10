@@ -10,7 +10,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -28,7 +28,7 @@ public class NewTorchFlowerBlock extends FlowerBlock {
     protected void entityInside(@NonNull BlockState state, @NonNull Level world, @NonNull BlockPos pos, @NonNull Entity entity, @NonNull InsideBlockEffectApplier handler, boolean bl) {
         if (world instanceof ServerLevel serverLevel) {
             if (!serverLevel.getGameRules().get(GameRuleRegistry.HOSTILE_SNIFFER_PLANTS)) return;
-            if (entity instanceof LivingEntity && entity.getType() != EntityType.SNIFFER ) {
+            if (entity instanceof LivingEntity && entity.getType() != EntityTypes.SNIFFER ) {
                 entity.setRemainingFireTicks(100);
             }
         }

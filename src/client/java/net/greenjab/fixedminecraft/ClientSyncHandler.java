@@ -43,7 +43,7 @@ public class ClientSyncHandler {
     }
 
     private static void mapBookOpen(MapBookOpenPayload payload, ClientPlayNetworking.Context context) {
-        context.client().execute(() -> context.client().setScreen(new MapBookScreen(payload.itemStack())));
+        context.client().execute(() -> context.client().setScreenAndShow(new MapBookScreen(payload.itemStack())));
     }
 
     private static void mapBookSync(MapBookSyncPayload payload, ClientPlayNetworking.Context context) {

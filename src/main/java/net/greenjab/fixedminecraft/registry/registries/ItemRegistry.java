@@ -21,6 +21,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.vehicle.boat.Boat;
 import net.minecraft.world.entity.vehicle.boat.ChestBoat;
@@ -92,7 +93,7 @@ public class ItemRegistry {
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
 
     public static final Item ALLAY_BUCKET = register("allay_bucket", settings ->
-                    new MobBucketItem(EntityType.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),
+                    new MobBucketItem(EntityTypes.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),
             new Item.Properties().stacksTo(1).component(DataComponents.BUCKET_ENTITY_DATA, CustomData.EMPTY));
     public static final Item PATINA = register("patina", PatinaItem::new, new Item.Properties());
     public static final Item REDSTONE_LANTERN = register(BlockRegistry.REDSTONE_LANTERN);
@@ -103,7 +104,7 @@ public class ItemRegistry {
     public static final Item SPEAR = register(
             "spear", new Item.Properties().rarity(Rarity.EPIC).spear(ToolMaterial.DIAMOND, 1.05F, 1.075F, 0.5F, 3.0F, 7.5F, 4.0F, 5.1F, 10.0F, 4.6F).repairable(ModTags.BREEZE_ROD)
     );
-    public static final Item ILLUSIONER_SPAWN_EGG = registerSpawnEgg(EntityType.ILLUSIONER);
+    public static final Item ILLUSIONER_SPAWN_EGG = registerSpawnEgg(EntityTypes.ILLUSIONER);
     public static final Item NAUTILUS_ARMOR = register("nautilus_armor", new Item.Properties().nautilusArmor(ArmorMaterials.ARMADILLO_SCUTE));
 
 
@@ -111,6 +112,8 @@ public class ItemRegistry {
     public static final Consumable GLOW_BERRIES_EFFECT = food()
             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0), 1F))
             .build();
+    public static final Consumable SWEET_BERRIES_EFFECT = food().onConsume(new ApplyStatusEffectsConsumeEffect(
+            new MobEffectInstance(MobEffects.SPEED, 200, 0), 1F)).build();
 
     public static Consumable.Builder food() {
         return Consumable.builder().consumeSeconds(1.6F).animation(ItemUseAnimation.EAT).sound(SoundEvents.GENERIC_EAT).hasConsumeParticles(true);

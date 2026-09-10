@@ -5,7 +5,7 @@ import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;

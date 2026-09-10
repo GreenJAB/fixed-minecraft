@@ -10,7 +10,6 @@ import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.network.VillagerNeedsPayload;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MemoryRegistry;
-import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -19,6 +18,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.Brain;
@@ -28,7 +28,6 @@ import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerData;
 import net.minecraft.world.entity.npc.villager.VillagerProfession;
-import net.minecraft.world.entity.npc.villager.VillagerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.item.Item;
@@ -116,7 +115,7 @@ public abstract class VillagerMixin extends AbstractVillager {
             if (source.isPassenger()) {
                 Entity vehicle = source.getVehicle();
                 assert vehicle != null;
-                if (vehicle.getType() == EntityType.CAMEL) {
+                if (vehicle.getType() == EntityTypes.CAMEL) {
                     List<Entity> passengers = vehicle.getPassengers();
                     if (passengers.size() == 1) this.startRiding(vehicle);
                 }
@@ -142,8 +141,8 @@ public abstract class VillagerMixin extends AbstractVillager {
         return true;
     }
 
-    @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/Holder;)V", at = @At("TAIL"))
-    private void startWithFood(EntityType<? extends Villager> entityType, Level level, Holder<VillagerType> type, CallbackInfo ci){
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void startWithFood(EntityType<? extends Villager> entityType, Level level, CallbackInfo ci){
         foodLevel = 10;
     }
 

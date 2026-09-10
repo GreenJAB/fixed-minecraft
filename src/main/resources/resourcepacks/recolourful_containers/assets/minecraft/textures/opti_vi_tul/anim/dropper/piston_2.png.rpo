@@ -1,0 +1,4 @@
+{
+    condition: "animations.dropper",
+    fallback: "assets/minecraft/textures/opti_vi_tul/anim/dropper/piston_2_empty.png"
+}

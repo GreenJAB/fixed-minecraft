@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
@@ -14,6 +15,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -40,6 +42,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Mixin(FishingHook.class)
 public abstract class FishingHookMixin {
@@ -92,7 +95,7 @@ public abstract class FishingHookMixin {
                 if (fishLevel>=3) mobs.addAll(legendary_hostile);
             }
 
-            LivingEntity entity = (LivingEntity) EntityType.byString(mobs.get(level.getRandom().nextInt(mobs.size()))).orElse(EntityType.COD).create(level.getChunkAt(FBE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
+            LivingEntity entity = (LivingEntity) byString(mobs.get(level.getRandom().nextInt(mobs.size()))).orElse(EntityTypes.COD).create(level.getChunkAt(FBE.blockPosition()).getLevel(), EntitySpawnReason.MOB_SUMMONED);
             if (entity != null) {
                 if (entity instanceof Mob mob) mob.finalizeSpawn((ServerLevel)level, ((ServerLevel)level).getCurrentDifficultyAt(entity.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
                 entity.snapTo(FBE.getX(), FBE.getY(), FBE.getZ(), 0, 0.0F);
@@ -145,6 +148,10 @@ public abstract class FishingHookMixin {
         if (!playerEntity.hasInfiniteMaterials()) bait.shrink(1);
         return loot;
 
+    }
+
+    @Unique private static Optional<EntityType<?>> byString(final String id) {
+        return BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.tryParse(id));
     }
 
     @Unique private ItemStack getBait(Player playerEntity) {

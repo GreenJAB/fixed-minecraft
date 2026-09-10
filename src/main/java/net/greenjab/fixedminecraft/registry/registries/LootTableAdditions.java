@@ -3,16 +3,16 @@ package net.greenjab.fixedminecraft.registry.registries;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
-import net.minecraft.advancements.criterion.EntityPredicate;
-import net.minecraft.advancements.criterion.EntityTypePredicate;
-import net.minecraft.advancements.criterion.LocationPredicate;
+import net.minecraft.advancements.predicates.LocationPredicate;
+import net.minecraft.advancements.predicates.entity.EntityPredicate;
+import net.minecraft.advancements.predicates.entity.EntityTypePredicate;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.StructureTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -177,38 +177,38 @@ public class LootTableAdditions {
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
             if (key==BuiltInLootTables.CHARGED_CREEPER) {
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_PLAYER_LOOT_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PLAYER))))).build());
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.PLAYER))))).build());
 
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_ZOMBIE_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.DROWNED))))).build());
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.DROWNED))))).build());
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_ZOMBIE_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.HUSK))))).build());
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.HUSK))))).build());
 
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_SKELETON_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.BOGGED))))).build());
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.BOGGED))))).build());
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_SKELETON_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.STRAY))))).build());
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.STRAY))))).build());
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.CHARGED_CREEPER_SKELETON_TABLE).when(LootItemEntityPropertyCondition.hasProperties(
-                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PARCHED))))).build());
-            } else if (key==EntityType.CREEPER.getDefaultLootTable().get()) {
+                        LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.PARCHED))))).build());
+            } else if (key == EntityTypes.CREEPER.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_PIGSTEP))
                         .when(LootItemEntityPropertyCondition.hasProperties(
-                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.PIGLIN))).build());
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.PIGLIN))).build());
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().located(LocationPredicate.Builder.inDimension(Level.END)))).build());
-            } else if (key==EntityType.SNIFFER.getDefaultLootTable().get()) {
+            } else if (key==EntityTypes.SNIFFER.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_RELIC))
                         .when(LootItemEntityPropertyCondition.hasProperties(
-                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityType.CREEPER))).build());
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.CREEPER))).build());
             } else if (key==BuiltInLootTables.SNIFFER_DIGGING) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(Items.GOLDEN_DANDELION))
                                 .add(NestedLootTable.lootTableReference(LootTableRegistry.SNIFFER_EXTRA)));
-            } else if (key==EntityType.WARDEN.getDefaultLootTable().get()) {
+            } else if (key==EntityTypes.WARDEN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_5)).build());
             } else if (key==BuiltInLootTables.SPAWNER_TRIAL_CHAMBER_CONSUMABLES) {
@@ -218,13 +218,13 @@ public class LootTableAdditions {
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_PRECIPICE))
                         .add(LootItem.lootTableItem(Items.AIR).setWeight(3))
                         .build());
-            } else if (key==EntityType.ELDER_GUARDIAN.getDefaultLootTable().get()) {
+            } else if (key==EntityTypes.ELDER_GUARDIAN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.ENCHANTED_GOLDEN_APPLE).setWeight(2))
                         .add(LootItem.lootTableItem(Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE))
                         .add(LootItem.lootTableItem(Items.AIR))
                         .build());
-            } else if (key== EntityType.GOAT.getDefaultLootTable().get()) {
+            } else if (key== EntityTypes.GOAT.getDefaultLootTable().get()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.GOAT_MUTTON));
                 tableBuilder.pool(poolBuilder.build());
             }

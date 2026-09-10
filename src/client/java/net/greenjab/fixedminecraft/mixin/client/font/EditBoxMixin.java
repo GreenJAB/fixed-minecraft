@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class EditBoxMixin {
     @WrapOperation(method = "applyFormat", at =
     @At(value = "INVOKE", target = "Lnet/minecraft/util/FormattedCharSequence;forward(Ljava/lang/String;Lnet/minecraft/network/chat/Style;)Lnet/minecraft/util/FormattedCharSequence;"))
-    private FormattedCharSequence nameNotCentered(String plainText, Style style, Operation<FormattedCharSequence> original) {
+    private FormattedCharSequence useFormatedText(String plainText, Style style, Operation<FormattedCharSequence> original) {
         return Component.literal(plainText).getVisualOrderText();
     }
 }

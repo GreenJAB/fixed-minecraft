@@ -8,7 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BiomeTags;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -60,10 +60,10 @@ public class BiomeAdditions {
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.MUSHROOM_FIELDS), GenerationStep.Decoration.VEGETAL_DECORATION, of("mushrooms_extra2"));
 
 
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.MONSTER, EntityType.ENDERMAN, 100, 1, 4);
-        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_MOUNTAIN), MobCategory.MONSTER, EntityType.CAVE_SPIDER, 50, 1, 1);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SAVANNA), MobCategory.CREATURE, EntityType.LLAMA, 10, 4, 4);
-        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DARK_FOREST), MobCategory.CREATURE, EntityType.ALLAY, 1, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DESERT), MobCategory.MONSTER, EntityTypes.ENDERMAN, 100, 1, 4);
+        BiomeModifications.addSpawn(BiomeSelectors.tag(BiomeTags.IS_MOUNTAIN), MobCategory.MONSTER, EntityTypes.CAVE_SPIDER, 50, 1, 1);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.SAVANNA), MobCategory.CREATURE, EntityTypes.LLAMA, 10, 4, 4);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(Biomes.DARK_FOREST), MobCategory.CREATURE, EntityTypes.ALLAY, 1, 1, 1);
     }
 
     public static ResourceKey<PlacedFeature> of(String id) {

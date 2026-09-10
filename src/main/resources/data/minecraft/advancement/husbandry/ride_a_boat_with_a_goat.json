@@ -9,9 +9,9 @@
                         "entity": "this",
                         "predicate": {
                             "vehicle": {
-                                "type": "#minecraft:boat",
+                                "minecraft:entity_type": "#minecraft:boat",
                                 "passenger": {
-                                    "type": "minecraft:goat"
+                                    "minecraft:entity_type": "minecraft:goat"
                                 }
                             }
                         }

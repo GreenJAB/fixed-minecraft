@@ -1,7 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.phantom;
 
 import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -23,7 +23,7 @@ public abstract class PlayerMixin {
         PE.removeEffect(MobEffectRegistry.INSOMNIA);
         PE.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, (i+1)*12*60*20, i, true, false, true));
         if (PE instanceof ServerPlayer SPE && i == 4) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.RED_BED.getDefaultInstance());
+            CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.BED.red().getDefaultInstance());
         }
         PE.heal(10);
     }

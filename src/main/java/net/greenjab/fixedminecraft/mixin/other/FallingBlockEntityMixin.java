@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.block.NewSnowBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -37,7 +37,7 @@ public abstract class FallingBlockEntityMixin {
         FallingBlockEntity FBE = (FallingBlockEntity)(Object)this;
         if (FBE.entityTags().contains("convert")) {
             Level world = FBE.level();
-            FallingBlockEntity fallingBlockEntity = EntityType.FALLING_BLOCK.create(FBE.level().getChunkAt(FBE.blockPosition()).getLevel(), EntitySpawnReason.CONVERSION);
+            FallingBlockEntity fallingBlockEntity = EntityTypes.FALLING_BLOCK.create(FBE.level().getChunkAt(FBE.blockPosition()).getLevel(), EntitySpawnReason.CONVERSION);
             if (fallingBlockEntity != null) {
                 fallingBlockEntity.snapTo(FBE.getX(), FBE.getY(), FBE.getZ(), 0.0F, 0.0F);
                 fallingBlockEntity.setDeltaMovement(FBE.getDeltaMovement().x, FBE.getDeltaMovement().y, FBE.getDeltaMovement().z);

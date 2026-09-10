@@ -1,6 +1,5 @@
-#version 150
+#version 330
 
-#moj_import <fog.glsl>
 #moj_import <dynamictransforms.glsl>
 #moj_import <projection.glsl>
 
@@ -17,10 +16,10 @@ out vec2 texCoord0;
 out vec4 vertexColor;
 
 void main() {
-    Data data = position_tex(ProjMat, GameTime, Sampler0, Position, UV0);
+Data data = position_tex(ProjMat, GameTime, Sampler0, Position, UV0);
 
-    gl_Position = ProjMat * ModelViewMat * vec4(data.position, 1.0);
+gl_Position = ProjMat * ModelViewMat * vec4(data.position, 1.0);
 
-    texCoord0 = data.uv0;
-    vertexColor = Color;
+texCoord0 = data.uv0;
+vertexColor = Color;
 }

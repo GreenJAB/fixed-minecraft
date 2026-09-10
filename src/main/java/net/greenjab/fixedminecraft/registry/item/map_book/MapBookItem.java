@@ -49,7 +49,7 @@ public class MapBookItem extends Item {
 
         if (blockState.is(BlockTags.BANNERS)) {
             if (!context.getLevel().isClientSide()) {
-                MapStateData mapStateData = this.getNearestMap(context.getItemInHand(), context.getLevel(), context.getClickedPos().getCenter());
+                MapStateData mapStateData = this.getNearestMap(context.getItemInHand(), context.getLevel(), Vec3.atCenterOf(context.getClickedPos()));
                 MapItemSavedData mapState = mapStateData.mapState;
                 if (mapState != null && !mapState.toggleBanner(context.getLevel(), context.getClickedPos())) {
                     return InteractionResult.FAIL;

@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +14,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.animal.Bucketable;
+import net.minecraft.world.entity.Bucketable;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -36,7 +36,7 @@ import java.util.Optional;
 @Mixin(Allay.class)
 public abstract class AllayMixin extends PathfinderMob implements Bucketable {
     @Shadow
-    protected abstract void dropEquipment(ServerLevel level);
+    public abstract void dropEquipment(@NonNull ServerLevel level);
 
     public AllayMixin(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
