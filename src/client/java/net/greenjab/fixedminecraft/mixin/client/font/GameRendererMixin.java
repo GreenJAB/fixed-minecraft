@@ -28,7 +28,7 @@ public abstract class GameRendererMixin {
         if (FixedMinecraftClient.fontLegend) {
             if (minecraft.screen instanceof BookEditScreen || minecraft.screen instanceof BookSignScreen ||
                 minecraft.screen instanceof AbstractSignEditScreen || String.valueOf(minecraft.screen.getTitle()).contains("anvil"))
-                graphics.blit(RenderPipelines.GUI_TEXTURED, Identifier.withDefaultNamespace("textures/gui/container/anvil_text_guide.png"), graphics.guiWidth()-156, 10, 0, 0, 146, 180, 146, 180);
+                graphics.blit(RenderPipelines.GUI_TEXTURED, Identifier.withDefaultNamespace("textures/gui/container/anvil_text_guide.png"), 10, 10, 0, 0, 146, 180, 146, 180);
         }
     }
 }
