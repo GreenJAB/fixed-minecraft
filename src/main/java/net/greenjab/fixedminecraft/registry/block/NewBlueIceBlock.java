@@ -1,13 +1,12 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.attribute.EnvironmentAttributes;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
@@ -16,16 +15,10 @@ import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public class NewBlueIceBlock extends HalfTransparentBlock {
-    public static final MapCodec<NewBlueIceBlock> CODEC = simpleCodec(NewBlueIceBlock::new);
-
-    @Override
-    public @NonNull MapCodec<? extends NewBlueIceBlock> codec() {
-        return CODEC;
-    }
 
     public NewBlueIceBlock(BlockBehaviour.Properties settings) {
         super(settings);
@@ -35,10 +28,11 @@ public class NewBlueIceBlock extends HalfTransparentBlock {
         return Blocks.PACKED_ICE.defaultBlockState();
     }
 
+    //TODO test break blue ice in nether
     @Override
-    public void playerDestroy(@NonNull Level level, @NonNull Player player, @NonNull BlockPos pos, @NonNull BlockState state, @Nullable BlockEntity blockEntity, @NonNull ItemStack tool) {
-        super.playerDestroy(level, player, pos, state, blockEntity, tool);
-        if (!EnchantmentHelper.hasTag(tool, EnchantmentTags.PREVENTS_ICE_MELTING)) {
+    public void playerDestroy(final @NonNull ServerLevel level,final @NonNull ServerPlayer player, final @NonNull BlockPos pos, final @NonNull BlockState state, final @Nullable BlockEntity blockEntity, final @NonNull ItemStack destroyedWith) {
+        super.playerDestroy(level, player, pos, state, blockEntity, destroyedWith);
+        if (!EnchantmentHelper.hasTag(destroyedWith, EnchantmentTags.PREVENTS_ICE_MELTING)) {
             if (level.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos)) {
                 level.removeBlock(pos, false);
             }

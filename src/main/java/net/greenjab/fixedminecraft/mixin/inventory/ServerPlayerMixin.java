@@ -7,6 +7,7 @@ import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Prediction;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
@@ -29,8 +30,11 @@ public abstract class ServerPlayerMixin extends Player{
 
     @Shadow public abstract @NonNull ServerLevel level();
 
-    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "RETURN"))
-    private void onGroundForLonger(ItemStack itemStack, boolean randomly, boolean thrownFromHand, CallbackInfoReturnable<ItemEntity> cir, @Local ItemEntity entity) {
+    //TODO test items on ground
+    @Inject(method = "drop(Lnet/minecraft/world/item/ItemStack;ZLnet/minecraft/util/Prediction;)Lnet/minecraft/world/entity/item/ItemEntity;", at = @At(value = "RETURN"))
+    private void onGroundForLonger(ItemStack itemStack, boolean thrownFromHand, Prediction prediction,
+                                   CallbackInfoReturnable<ItemEntity> cir,
+                                   @Local ItemEntity entity) {
         if (!thrownFromHand && entity != null) {
             int ticks = this.level().getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
             if (ticks == 0) entity.setUnlimitedLifetime();

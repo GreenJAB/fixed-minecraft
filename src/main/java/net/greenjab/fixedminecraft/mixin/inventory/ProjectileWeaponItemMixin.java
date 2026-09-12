@@ -35,7 +35,7 @@ public abstract class ProjectileWeaponItemMixin {
                            for (int k = 0; k < bundleComponent.size();k++) {
                                ItemStack bundleStack = bundleComponent.items().get(k).create();
                                if (supportedProjectiles.test(bundleStack)) {
-                                   BundleContents.Mutable contents = new BundleContents.Mutable(bundleComponent);
+                                   BundleContents.Mutable contents = bundleComponent.asMutable();
                                    ItemStack removedStack = contents.items.remove(k);
                                    ItemStack mergedStack = removedStack.copyWithCount(projectile.getCount());
                                    if (!mergedStack.isEmpty()) contents.items.addFirst(mergedStack);

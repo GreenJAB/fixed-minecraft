@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.food;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.item.component.SwingAnimation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -55,8 +56,8 @@ public abstract class ServerPlayerMixin extends Entity
         return 0;
     }
 
-    @Inject(method = "swing", at = @At("TAIL"))
-    private void missCooldown(InteractionHand hand, CallbackInfo ci) {
+    @Inject(method = "swingAndResetAttackStrength", at = @At("TAIL"))
+    private void missCooldown(InteractionHand hand, SwingAnimation animation, boolean sendToSwingingEntity, CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
         if (player.getLastHurtMobTimestamp() != this.tickCount) player.attackStrengthTicker = (int)(player.getCurrentItemAttackStrengthDelay()/2.0);
     }

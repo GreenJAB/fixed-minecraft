@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -26,14 +25,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class NewSnowBlock extends FallingBlock {
-    public static final MapCodec<NewSnowBlock> CODEC = simpleCodec(NewSnowBlock::new);
     public static final IntegerProperty LAYERS = BlockStateProperties.LAYERS;
     private static final VoxelShape[] SHAPES_BY_LAYERS = Block.boxes(8, layers -> Block.column(16.0, 0.0, layers * 2));
-
-    @Override
-    public @NonNull MapCodec<NewSnowBlock> codec() {
-        return CODEC;
-    }
 
     public NewSnowBlock(BlockBehaviour.Properties settings) {
         super(settings);

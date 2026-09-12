@@ -60,7 +60,6 @@ public abstract class VillagerMixin extends AbstractVillager {
     @Shadow public abstract VillagerData getVillagerData();
     @Shadow private int foodLevel;
     @Shadow protected abstract void eatUntilFull();
-    @Shadow private boolean increaseProfessionLevelOnUpdate;
     @Shadow protected abstract void increaseMerchantCareer(ServerLevel level);
     @Shadow protected abstract boolean shouldIncreaseLevel();
 
@@ -337,18 +336,16 @@ public abstract class VillagerMixin extends AbstractVillager {
         }
     }
 
-    @WrapOperation(method = "customServerAiStep", at =
-    @At(value = "FIELD", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseProfessionLevelOnUpdate:Z", opcode = Opcodes.GETFIELD))
-    private boolean noAutoLevelUp(Villager instance, Operation<Boolean> original) {
-        if (this.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT)) return original.call(instance);
-        return false;
+    @WrapOperation(method = "rewardTradeXp", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V", opcode = Opcodes.GETFIELD))
+    private void noAutoLevelUp(Villager instance, ServerLevel level, Operation<Void> original) {
     }
 
     @Inject(method = "shouldRestock", at = @At(value = "HEAD"))
     private void levelUpOnRestock(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
         if (!level.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT) && this.shouldIncreaseLevel()) {
             this.increaseMerchantCareer(level);
-            this.increaseProfessionLevelOnUpdate = false;
         }
     }
+    //TODO test villager increase level
 }

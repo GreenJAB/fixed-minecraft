@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:interpolated",
+    "input": {
+        "type": "minecraft:max",
+        "left": {
+            "type": "minecraft:noise",
+            "noise": "fixedminecraft:overworld/amplified",
+            "xz_scale": 0.25,
+            "y_scale": 0,
+            "shift_x": 0,
+            "shift_y": 1024,
+            "shift_z": 0
+        },
+        "right": {
+            "type": "minecraft:noise",
+            "noise": "fixedminecraft:overworld/amplified",
+            "xz_scale": 0.25,
+            "y_scale": 0,
+            "shift_x": 0,
+            "shift_y": 0,
+            "shift_z": 0
+        }
+    },
+    "cell_size_xz": 4,
+    "cell_size_y": 4
+}

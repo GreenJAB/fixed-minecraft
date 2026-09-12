@@ -52,7 +52,7 @@ public abstract class BlocksMixin {
     @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;SNOW:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;SNOW:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)))
     private static Block snow(BlockItemId id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties, Operation<Block> original) {
-        return register(id, NewSnowBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).replaceable().forceSolidOff().randomTicks().strength(0.1F).requiresCorrectToolForDrops().sound(SoundType.SNOW).isViewBlocking((state, _, _) -> state.getValue(SnowLayerBlock.LAYERS) >= 8).pushReaction(PushReaction.DESTROY));}
+        return register(id, NewSnowBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).replaceable().forceSolidOff().randomTicks().strength(0.1F).requiresCorrectToolForDrops().sound(SoundType.SNOW).isViewBlocking( (state, _, _, _) -> state.getValue(SnowLayerBlock.LAYERS) >= 8).pushReaction(PushReaction.POPPED));}
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Lnet/minecraft/references/BlockItemId;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;AMETHYST_BLOCK:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
@@ -67,7 +67,7 @@ public abstract class BlocksMixin {
         return register(id, new_properties -> new NewTorchFlowerBlock(MobEffects.NIGHT_VISION, 5.0F, new_properties),
                 BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).noCollision().instabreak()
                         .sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)
-                        .pushReaction(PushReaction.DESTROY).lightLevel(_ -> 13));}
+                        .pushReaction(PushReaction.POPPED).lightLevel(_ -> 13));}
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Lnet/minecraft/references/BlockItemId;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;PITCHER_CROP:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
@@ -75,7 +75,7 @@ public abstract class BlocksMixin {
     private static Block newPitcherCrop(BlockItemId id, Function<BlockBehaviour.Properties, Block> factory, BlockBehaviour.Properties properties, Operation<Block> original) {
         return register(id, NewPitcherCropBlock::new,
                 BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_CYAN).noCollision().instabreak()
-                        .randomTicks().sound(SoundType.CROP).pushReaction(PushReaction.DESTROY));}
+                        .randomTicks().sound(SoundType.CROP).pushReaction(PushReaction.POPPED));}
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Lnet/minecraft/references/BlockItemId;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;PITCHER_PLANT:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
@@ -84,7 +84,7 @@ public abstract class BlocksMixin {
                                        Operation<Block> original) {
         return register(id, NewPitcherPlantBlock::new,
                 BlockBehaviour.Properties.of().mapColor(DyeColor.CYAN).noCollision().instabreak().sound(SoundType.CROP)
-                        .offsetType(BlockBehaviour.OffsetType.XZ).ignitedByLava().pushReaction(PushReaction.DESTROY));}
+                        .offsetType(BlockBehaviour.OffsetType.XZ).ignitedByLava().pushReaction(PushReaction.POPPED));}
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Lnet/minecraft/references/BlockItemId;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;FLETCHING_TABLE:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =

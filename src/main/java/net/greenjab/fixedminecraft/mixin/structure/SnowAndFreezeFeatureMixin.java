@@ -4,29 +4,28 @@ import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowyBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.feature.SnowAndFreezeFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-
 @Mixin(SnowAndFreezeFeature.class)
 public abstract class SnowAndFreezeFeatureMixin {
-    @Inject(method = "place(Lnet/minecraft/world/level/levelgen/feature/FeaturePlaceContext;)Z", at = @At(
+    @Inject(method = "place", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/biome/Biome;shouldFreeze(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z"
-    ))
-    private void snowUnderLeaves(FeaturePlaceContext<NoneFeatureConfiguration> context, CallbackInfoReturnable<Boolean> cir,
-                                 @Local WorldGenLevel level,
+    ))//TODO test snowUnderLeaves
+    private void snowUnderLeaves(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin,
+                                 CallbackInfoReturnable<Boolean> cir,
                                  @Local(ordinal = 0)BlockPos.MutableBlockPos topPos,
                                  @Local(ordinal = 1)BlockPos.MutableBlockPos belowPos,
                                  @Local Biome biome) {

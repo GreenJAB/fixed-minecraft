@@ -9,7 +9,6 @@ import net.minecraft.world.item.equipment.ArmorType;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.equipment.trim.MaterialAssetGroup;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.ramixin.mixson.Mixson;
 import net.ramixin.mixson.enums.ErrorPolicy;
@@ -23,11 +22,6 @@ import java.util.Map;
 public class TrimMaterialsRegistry {
 
     public static final ResourceKey<TrimMaterial> COAL = registryKey("coal");
-
-    public static final MaterialAssetGroup COAL_ASSET = create("coal");
-    public static MaterialAssetGroup create(final String base) {
-        return new MaterialAssetGroup(new MaterialAssetGroup.AssetInfo(base), Map.of());
-    }
 
     private static ResourceKey<TrimMaterial> registryKey(final String id) {
         return ResourceKey.create(Registries.TRIM_MATERIAL, FixedMinecraft.id(id));

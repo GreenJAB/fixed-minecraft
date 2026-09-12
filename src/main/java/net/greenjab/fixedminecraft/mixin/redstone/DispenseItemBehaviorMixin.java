@@ -64,7 +64,7 @@ public interface DispenseItemBehaviorMixin {
 
                     if (corals.isEmpty()) BlockRegistry.addCoral();
                     BlockState blockState = level.getBlockState(target);
-                    if (!(blockState.is(BlockTags.CONVERTABLE_TO_MUD)|| corals.containsKey(blockState.getBlock()))) {
+                    if (!(blockState.is(BlockTags.CONVERTIBLE_TO_MUD)|| corals.containsKey(blockState.getBlock()))) {
                         return this.defaultDispenseItemBehavior.dispense(source, dispensed);
                     } else {
                         if (!level.isClientSide()) {
@@ -76,7 +76,7 @@ public interface DispenseItemBehaviorMixin {
 
                         level.playSound(null, pos, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                         level.gameEvent(null, GameEvent.FLUID_PLACE, pos);
-                        if (blockState.is(BlockTags.CONVERTABLE_TO_MUD))
+                        if (blockState.is(BlockTags.CONVERTIBLE_TO_MUD))
                             level.setBlockAndUpdate(target, Blocks.MUD.defaultBlockState());
                         else {
                             if (blockState.getProperties().contains(BlockStateProperties.WATERLOGGED)) {

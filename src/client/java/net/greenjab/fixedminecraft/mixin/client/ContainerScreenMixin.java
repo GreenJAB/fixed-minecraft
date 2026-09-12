@@ -70,7 +70,7 @@ public abstract class ContainerScreenMixin {
         }
     }
     @ModifyArg(method = "extractBackground", at = @At(value = "INVOKE",
-                                                      target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/blaze3d/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"
+                                                      target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;blit(Lcom/mojang/renderpearl/api/pipeline/RenderPipeline;Lnet/minecraft/resources/Identifier;IIFFIIII)V"
     ), index = 1)
     private Identifier useCustomChestUI(Identifier texture) {
         ContainerScreen MS = (ContainerScreen) (Object)this;

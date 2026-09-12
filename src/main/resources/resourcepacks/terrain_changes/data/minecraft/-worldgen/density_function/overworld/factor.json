@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:flat_cache",
+  "input": {
+    "type": "minecraft:cache_2d",
+    "input": {
+      "type": "minecraft:add",
+      "left": 10,
+      "right": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:blend_alpha"
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": -10,
+          "right": "fixedminecraft:overworld/combined_factor"
+        }
+      }
+    }
+  }
+}

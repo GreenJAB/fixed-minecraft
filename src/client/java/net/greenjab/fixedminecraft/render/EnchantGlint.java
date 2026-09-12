@@ -26,27 +26,32 @@ public class EnchantGlint {
         return false;
     }
 
-    @Environment(EnvType.CLIENT)
+    /*@Environment(EnvType.CLIENT)
     public static RenderType getEntityGlint() {
         if (isSuper()) return GlintRenderLayer.entityGlintColor;
         else return RenderTypes.entityGlint();
-    }
+    }*/
 
     @Environment(EnvType.CLIENT)
     public static RenderType getArmorEntityGlint() {
         if (isSuper()) return GlintRenderLayer.armorEntityGlintColor;
-        else return RenderTypes.armorEntityGlint();
+        else return RenderTypes.trimmedArmorGlint();
     }
 
     @Environment(EnvType.CLIENT)
+    public static RenderType getGlint() {
+        return GlintRenderLayer.glintColor;
+    }
+
+    /*@Environment(EnvType.CLIENT)
     public static RenderType getGlint(boolean green) {
         if (green) return GlintRenderLayer.glintColor;
         else return RenderTypes.glint();
-    }
+    }*/
 
-    @Environment(EnvType.CLIENT)
+    /*@Environment(EnvType.CLIENT)
     public static RenderType getGlintTranslucent(boolean green) {
         if (green) return GlintRenderLayer.translucentGlintColor;
         else return RenderTypes.glintTranslucent();
-    }
+    }*/
 }

@@ -16,7 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
-import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
@@ -28,7 +27,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -38,7 +36,7 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
                     .apply(i, WanderingTraderSpecialLootFunction::new)
     );
 
-    private WanderingTraderSpecialLootFunction(final List<LootItemCondition> predicates) {
+    private WanderingTraderSpecialLootFunction(final Optional<Holder<LootItemCondition>> predicates) {
         super(predicates);
     }
 
@@ -138,7 +136,7 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
 
         Predicate<Holder<Biome>> predicate =entry -> entry.is(biomeSearch);
 
-        Pair<BlockPos, Holder<Biome>> pair = level.findClosestBiome3d(predicate, BlockPos.containing(context.getOptionalParameter(LootContextParams.ORIGIN)), 6400, 32, 64);
+        Pair<BlockPos, Holder<Biome>> pair = level.findClosestBiome3d(predicate, BlockPos.containing(context.getOptional(LootContextParams.ORIGIN)), 6400, 32, 64);
         if (pair != null) {
             BlockPos blockPos = pair.getFirst();
             ItemStack itemStack = MapItem.create(level, blockPos.getX(), blockPos.getZ(), (byte) 2, true, true);
@@ -152,8 +150,8 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
             MapItemSavedData m = MapItem.getSavedData(itemStack, level);
             assert m != null;
             m.toggleBanner(level, new BlockPos(blockPos.getX(), -1000 - map, blockPos.getZ()));
-            itemStack.set(DataComponents.MAP_COLOR, new MapItemColor(colour[map]));
-
+            //itemStack.set(DataComponents.MAP_COLOR, new MapItemColor(colour[map]));
+//TODO test wandering trader map
             return itemStack;
         }
         return Items.MAP.getDefaultInstance();

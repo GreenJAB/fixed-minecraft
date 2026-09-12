@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,16 +23,10 @@ import org.jspecify.annotations.NonNull;
 
 public class NewAmethystBlock extends AmethystBlock {
     public static final BooleanProperty LIT  = RedstoneTorchBlock.LIT;
-    public static final MapCodec<NewAmethystBlock> CODEC = simpleCodec(NewAmethystBlock::new);
     public static final int[] RESONATION_NOTE_PITCHES = {0, 0, 2, 4, 6, 7, 9, 10, 12, 14, 16, 18, 19, 21, 22, 24};
 
     public NewAmethystBlock(Properties settings) {
         super(settings);
-    }
-
-    @Override
-    public @NonNull MapCodec<NewAmethystBlock> codec()  {
-        return CODEC;
     }
 
     @Override

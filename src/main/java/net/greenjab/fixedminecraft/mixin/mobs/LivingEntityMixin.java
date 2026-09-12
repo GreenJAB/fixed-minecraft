@@ -25,6 +25,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Vex;
@@ -160,7 +161,9 @@ public abstract class LivingEntityMixin {
                         MapItem.renderBiomePreviewMap(serverWorld, itemStack);
                         MapItemSavedData.addTargetDecoration(itemStack, blockPos, "+", MapDecorationRegistry.PILLAGER_OUTPOST);
                         itemStack.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.outpost"));
-                        PE.drop(itemStack, true, false);
+                        ItemEntity drop = PE.createItemStackToDrop(itemStack, false, true);
+                        if (drop != null) PE.level().addFreshEntity(drop);
+                        //TODO test pillager drop map
                     }
                 }
             }
@@ -177,7 +180,7 @@ public abstract class LivingEntityMixin {
     }
 
     @Inject(method = "getVisibilityPercent", at = @At(value = "HEAD"), cancellable = true)
-    private void moreSneaky(Entity targetingEntity, CallbackInfoReturnable<Double> cir){
+    private void moreSneaky(ServerLevel serverLevel, Entity targetingEntity, CallbackInfoReturnable<Double> cir){
         LivingEntity LE = (LivingEntity) (Object)this;
         double visibilityPercent = 1.0;
         if (LE.isDiscrete()) visibilityPercent *= 0.25;

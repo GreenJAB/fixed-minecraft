@@ -153,3 +153,5 @@ public class FixedMinecraft implements ModInitializer {
                LootTable.EMPTY;
     }
 }
+//TODO test floating island (ores specifically)
+//TODO test amplified (if can find)

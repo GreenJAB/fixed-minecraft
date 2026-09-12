@@ -24,7 +24,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,10 +37,10 @@ public abstract class ZombieMixin extends Monster {
         super(entityType, level);
     }
 
-    @Inject(method = "tick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/entity/monster/zombie/Zombie;conversionTime:I", ordinal = 0, opcode = Opcodes.GETFIELD))
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ConversionTracker;tick()V", ordinal = 0))
     private void sand(CallbackInfo ci){
         Zombie ZE = (Zombie)(Object)this;
-        if (ZE instanceof Husk && ZE.level().getRandom().nextInt(30)==0){
+        if (ZE instanceof Husk && ZE.drowningTracker.isConverting() && ZE.level().getRandom().nextInt(30)==0){
             if (!this.level().isClientSide() && this.isAlive()){
                 this.playSound(SoundEvents.SAND_BREAK, 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 this.spawnAtLocation((ServerLevel) this.level(), Items.SAND);

@@ -39,7 +39,7 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 
 @Mixin(BlockBehaviour.class)
 public abstract class BlockBehaviourMixin {
-    @Inject(method = "onExplosionHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
+    @Inject(method = "onExplosionHit", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
     private void oreDrops(BlockState state, ServerLevel level, BlockPos pos, Explosion explosion,
                           BiConsumer<ItemStack, BlockPos> onHit, CallbackInfo ci){
         if (state.is(ModTags.ORES)){

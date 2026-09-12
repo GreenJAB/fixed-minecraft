@@ -8,6 +8,7 @@ import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.greenjab.fixedminecraft.registry.item.EchoFruitItem;
 import net.greenjab.fixedminecraft.registry.item.NewTotemItem;
 import net.greenjab.fixedminecraft.registry.other.BaitComponent;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
@@ -33,11 +34,12 @@ import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemUseAnimation;
+import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.MobBucketItem;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.SignItem;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.StandingAndWallBlockItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.Consumable;
@@ -45,6 +47,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.DamageResistant;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.component.Fireworks;
+import net.minecraft.world.item.component.MapDecorations;
 import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.level.block.Block;
@@ -91,6 +94,8 @@ public class ItemRegistry {
     public static final Item WAXED_EXPOSED_COPPER_RAIL = register(BlockRegistry.WAXED_EXPOSED_COPPER_RAIL);
     public static final Item WAXED_WEATHERED_COPPER_RAIL = register(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL);
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
+
+    public static final Item TRAIL_RUIN_MONUMENT_MAP = register("trial_ruin_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
 
     public static final Item ALLAY_BUCKET = register("allay_bucket", settings ->
                     new MobBucketItem(EntityTypes.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),
@@ -191,7 +196,7 @@ public class ItemRegistry {
     public static final Item AZALEA_SHELF = register(BlockRegistry.AZALEA_SHELF);
 
     public static final Item AZALEA_SIGN = register(
-            BlockRegistry.AZALEA_SIGN, (block, settings) -> new SignItem(block, BlockRegistry.AZALEA_WALL_SIGN, settings), new Item.Properties().stacksTo(16)
+            BlockRegistry.AZALEA_SIGN, (block, settings) -> new StandingAndWallBlockItem(block, BlockRegistry.AZALEA_WALL_SIGN, Direction.DOWN, settings), new Item.Properties().stacksTo(16)
     );
     public static final Item AZALEA_HANGING_SIGN = register(
             BlockRegistry.AZALEA_HANGING_SIGN,

@@ -53,7 +53,7 @@ public abstract class InventoryMixin {
             assert bundleComponent!=null;
             for (int i = 0; i < bundleComponent.size();i++) {
                 ItemStack bundleStack = bundleComponent.items().get(i).create();
-                BundleContents.Mutable builder = new BundleContents.Mutable(bundleComponent);
+                BundleContents.Mutable builder = bundleComponent.asMutable();
                 if (ItemStack.isSameItemSameComponents(bundleStack, item)) {
                     builder.tryInsert(item);
                     bundle.set(DataComponents.BUNDLE_CONTENTS, builder.toImmutable());

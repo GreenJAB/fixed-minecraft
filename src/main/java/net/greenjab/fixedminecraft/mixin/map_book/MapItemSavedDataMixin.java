@@ -7,14 +7,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapStateAccessor;
 import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.maps.MapBanner;
 import net.minecraft.world.level.saveddata.maps.MapDecoration;
@@ -29,7 +24,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,8 +59,8 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
         decoToColor.put(MapDecorationRegistry.PILLAGER_OUTPOST, 10373376);
         decoToColor.put(MapDecorationRegistry.RUINED_PORTAL, 11796480);
     }
-
-    @Inject(method = "addTargetDecoration", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/saveddata/maps/MapDecorationType;hasMapColor()Z"), cancellable = true)
+    //TODO map deco to banner
+    /*@Inject(method = "addTargetDecoration", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/saveddata/maps/MapDecorationType;hasMapColor()Z"), cancellable = true)
     private static void addColorToBlandMaps(ItemStack itemStack, BlockPos position, String key, Holder<MapDecorationType> decorationType,
                                             CallbackInfo ci){
         if (decoToColor.containsKey(decorationType)){
@@ -86,7 +80,7 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
                 this.bannerMarkers.put(mapBannerMarker.getId(), mapBannerMarker);
             }
         }
-    }
+    }*/
 
     @WrapOperation(method = "addDecoration", at = @At(value = "NEW", target = "(Lnet/minecraft/core/Holder;BBBLjava/util/Optional;)Lnet/minecraft/world/level/saveddata/maps/MapDecoration;"))
     private MapDecoration mapTypeAsCustomName(Holder<MapDecorationType> registryEntry, byte x, byte z, byte rot, Optional<Component> optional,

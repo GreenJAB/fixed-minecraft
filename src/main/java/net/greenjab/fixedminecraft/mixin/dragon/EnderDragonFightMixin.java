@@ -29,7 +29,6 @@ import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.level.dimension.end.DragonRespawnStage;
 import net.minecraft.world.level.dimension.end.EnderDragonFight;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.feature.EndPodiumFeature;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -158,7 +157,7 @@ public abstract class EnderDragonFightMixin {
                     EndCrystal endCrystalEntity = EntityTypes.END_CRYSTAL.create(this.level.getChunkAt(b.relative(d, 3)).getLevel(), EntitySpawnReason.CHUNK_GENERATION);
                     if (endCrystalEntity != null) {
                         endCrystalEntity.snapTo(b.relative(d, 3).getX()+0.5, b.getY(), b.relative(d, 3).getZ() + 0.5, 0, 0.0F);
-                        endCrystalEntity.setInvulnerable(true);
+                        endCrystalEntity.setPermanentlyInvulnerable(true);
                         endCrystalEntity.setShowBottom(false);
                         this.level.addFreshEntity(endCrystalEntity);
                     }
@@ -202,7 +201,8 @@ public abstract class EnderDragonFightMixin {
             itemEntity.snapTo(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
             itemEntity.setDeltaMovement(new Vec3(0, 0, 0));
             dragon.level().addFreshEntity(itemEntity);
-            this.level.setBlockAndUpdate(this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, EndPodiumFeature.getLocation(this.origin)), Blocks.DRAGON_EGG.defaultBlockState());
+            //TODO test omen elytra
+            this.level.setBlockAndUpdate(this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, this.origin), Blocks.DRAGON_EGG.defaultBlockState());
         }
 
         for (ServerPlayer serverPlayerEntity : (this.level)

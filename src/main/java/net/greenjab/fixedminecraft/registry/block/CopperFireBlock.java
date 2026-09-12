@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -13,12 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
 
 public class CopperFireBlock extends BaseFireBlock {
-    public static final MapCodec<CopperFireBlock> CODEC = simpleCodec(CopperFireBlock::new);
-
-    @Override
-    public @NonNull MapCodec<CopperFireBlock> codec() {
-        return CODEC;
-    }
 
     public CopperFireBlock(BlockBehaviour.Properties settings) {
         super(settings, 2.0F);

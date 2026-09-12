@@ -6,6 +6,7 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.ItemStackWithSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -61,8 +62,10 @@ public abstract class PlayerMixin {
         if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             Player PE = (Player) (Object) this;
             for (ItemStack itemStack : PE.inventoryMenu.getCraftSlots().getItems()) {
-                PE.drop(itemStack, false);
-            }
+                ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
+                if (drop != null) PE.level().addFreshEntity(drop);
+            }//TODO test drop crafting grid
+            PE.inventoryMenu.getCraftSlots().clearContent();
         }
     }
 

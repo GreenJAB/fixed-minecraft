@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -50,7 +51,8 @@ public abstract class LivingEntityMixin  {
                 user.setItemInHand(hand, broken);
             } else {
                 if (!user.getInventory().add(broken)) {
-                    user.drop(broken, true);
+                    ItemEntity drop = user.createItemStackToDrop(broken, false, true);
+                    if (drop != null) user.level().addFreshEntity(drop);
                 }
             }
         }

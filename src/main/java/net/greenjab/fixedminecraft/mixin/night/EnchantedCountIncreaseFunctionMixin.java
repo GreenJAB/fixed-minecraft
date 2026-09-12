@@ -22,7 +22,7 @@ public abstract class EnchantedCountIncreaseFunctionMixin {
             target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;getEnchantmentLevel(Lnet/minecraft/core/Holder;Lnet/minecraft/world/entity/LivingEntity;)I"
     ))
     private int moonLooting(int original, @Local(argsOnly = true) LootContext context) {
-        Entity entity = context.getOptionalParameter(LootContextParams.ATTACKING_ENTITY);
+        Entity entity = context.getOptional(LootContextParams.ATTACKING_ENTITY);
         ServerLevel world = context.getLevel();
         if (entity instanceof Player) {
             if (world.getBrightness(LightLayer.SKY, entity.blockPosition()) > 10) {

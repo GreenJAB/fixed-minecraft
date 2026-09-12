@@ -4,6 +4,7 @@ import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -104,7 +105,10 @@ public class FletchingMenu extends AbstractContainerMenu {
             else slot.setChanged();
             if (stack.getCount() == clicked.getCount()) return ItemStack.EMPTY;
             slot.onTake(player, stack);
-            if (slotIndex == 0) player.drop(stack, false);
+            if (slotIndex == 0) {
+                ItemEntity drop = player.createItemStackToDrop(stack, false, false);
+                if (drop != null) player.level().addFreshEntity(drop);
+            }
         }
         return clicked;
     }

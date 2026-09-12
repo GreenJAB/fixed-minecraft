@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:simple_block",
+    "config": {
+        "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+                "id": "minecraft:pale_moss_carpet",
+                "properties": {
+                    "bottom": "true",
+                    "east": "none",
+                    "north": "none",
+                    "south": "none",
+                    "west": "none"
+                }
+            }
+        }
+    }
+}

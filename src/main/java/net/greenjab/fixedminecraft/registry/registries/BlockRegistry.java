@@ -1,6 +1,6 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.block.CopperFireBlock;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
@@ -53,7 +53,7 @@ public class BlockRegistry {
             BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK)
                     .strength(5.0F, 1200.0F)
                     .sound(SoundType.ANVIL)
-                    .pushReaction(PushReaction.BLOCK)
+                    .pushReaction(PushReaction.IMMOVEABLE)
     );
     public static final Block CHIPPED_NETHERITE_ANVIL = register(
             "chipped_netherite_anvil",
@@ -61,7 +61,7 @@ public class BlockRegistry {
             BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK)
                     .strength(5.0F, 1200.0F)
                     .sound(SoundType.ANVIL)
-                    .pushReaction(PushReaction.BLOCK)
+                    .pushReaction(PushReaction.IMMOVEABLE)
     );
     public static final Block DAMAGED_NETHERITE_ANVIL = register(
             "damaged_netherite_anvil",
@@ -69,7 +69,7 @@ public class BlockRegistry {
             BlockBehaviour.Properties.ofFullCopy(Blocks.NETHERITE_BLOCK)
                     .strength(5.0F, 1200.0F)
                     .sound(SoundType.ANVIL)
-                    .pushReaction(PushReaction.BLOCK)
+                    .pushReaction(PushReaction.IMMOVEABLE)
     );
 
     public static final Block COPPER_RAIL = register("copper_rail", settings -> new OxidizableRailBlock(WeatheringCopper.WeatherState.UNAFFECTED, settings),
@@ -144,7 +144,7 @@ public class BlockRegistry {
                     .noCollision()
                     .strength(0.5F)
                     .ignitedByLava()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
     );
     public static final Block AZALEA_TRAPDOOR = register(
             "azalea_trapdoor",
@@ -190,7 +190,7 @@ public class BlockRegistry {
                     .strength(3.0F)
                     .noOcclusion()
                     .ignitedByLava()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block AZALEA_SHELF = register(
@@ -214,7 +214,7 @@ public class BlockRegistry {
                     .instabreak()
                     .lightLevel(_ -> 10)
                     .sound(SoundType.WOOL)
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block REDSTONE_LANTERN = register(
@@ -227,7 +227,7 @@ public class BlockRegistry {
                     .sound(SoundType.LANTERN)
                     .lightLevel(litBlockEmission(10))
                     .noOcclusion()
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static void registerFireBlocks() {
@@ -242,8 +242,9 @@ public class BlockRegistry {
         fireBlock.setFlammable(STRIPPED_AZALEA_LOG, 5, 5);
         fireBlock.setFlammable(STRIPPED_AZALEA_LOG, 5, 5);
 
-        StrippableBlockRegistry.register(AZALEA_LOG, STRIPPED_AZALEA_LOG);
-        StrippableBlockRegistry.register(AZALEA_WOOD, STRIPPED_AZALEA_WOOD);
+        //StrippableBlockRegistry.register(AZALEA_LOG, STRIPPED_AZALEA_LOG);
+        //StrippableBlockRegistry.register(AZALEA_WOOD, STRIPPED_AZALEA_WOOD);
+        //TODO stip azalea
     }
 
     private static Block register(String id, BlockBehaviour.Properties settings) {

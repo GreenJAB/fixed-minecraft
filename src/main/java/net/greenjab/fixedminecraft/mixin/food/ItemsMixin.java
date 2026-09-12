@@ -182,11 +182,11 @@ public abstract class ItemsMixin {
     private static Item.Properties fireWorkCooldown(Item.Properties properties) {
         return properties.useCooldown(5);}
 
-    @WrapOperation(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/item/Item;"), slice = @Slice( from =
+    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/ItemIds;COAL:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC), to =
-    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;COAL:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item coalTrimMaterial(ResourceKey<Item> id, Operation<Item> original) {
-        return registerItem(id, new Item.Properties().trimMaterial(TrimMaterialsRegistry.COAL));}
+    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;COAL:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)), index = 1)
+    private static Item.Properties coalTrimMaterial(Item.Properties properties) {
+        return properties.trimMaterial(TrimMaterialsRegistry.COAL);}
 
     @ModifyArgs(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;spear(Lnet/minecraft/world/item/ToolMaterial;FFFFFFFFF)Lnet/minecraft/world/item/Item$Properties;"))
     private static void holdSpearsOutForever(Args args) {
@@ -199,9 +199,9 @@ public abstract class ItemsMixin {
     private static Item.Properties blastProofNetherite(Item.Properties instance, Operation<Item.Properties> original) {
         return original.call(instance).delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION)));}
 
-    @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
+    @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/ItemIds;BLAZE_ROD:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC), to =
-    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BLAZE_ROD:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)))
-    private static Item fireProofBlazeRod(ResourceKey<Item> id, Operation<Item> original) {
-        return registerItem(id, new Item.Properties().fireResistant());}
+    @At(value = "FIELD",target = "Lnet/minecraft/world/item/Items;BLAZE_ROD:Lnet/minecraft/world/item/Item;", opcode = Opcodes.PUTSTATIC)), index = 1)
+    private static Item.Properties fireProofBlazeRod(Item.Properties properties) {
+        return properties.fireResistant();}
 }

@@ -1,0 +1,43 @@
+{
+  "type": "minecraft:flat_cache",
+  "input": {
+    "type": "minecraft:cache_2d",
+    "input": {
+      "type": "minecraft:add",
+      "left": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:blend_offset"
+        },
+        "right": {
+          "type": "minecraft:add",
+          "left": 1,
+          "right": {
+            "type": "minecraft:mul",
+            "left": -1,
+            "right": {
+              "type": "minecraft:cache_once",
+              "argument": {
+                "type": "minecraft:blend_alpha"
+              }
+            }
+          }
+        }
+      },
+      "right": {
+        "type": "minecraft:mul",
+        "left": {
+          "type": "minecraft:add",
+          "left": -0.5037500262260437,
+          "right": "fixedminecraft:overworld/combined_offset"
+        },
+        "right": {
+          "type": "minecraft:cache_once",
+          "argument": {
+            "type": "minecraft:blend_alpha"
+          }
+        }
+      }
+    }
+  }
+}

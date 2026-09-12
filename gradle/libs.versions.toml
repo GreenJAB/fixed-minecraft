@@ -1,10 +1,10 @@
 [versions]
 loom = "1.17-SNAPSHOT"
 yamlang = "1.4.1"
-minecraft = "26.2"
-vineflower = "1.11.1"
-fabric-loader = "0.19.3"
-fabric-api = "0.154.2+26.2"
+minecraft = "26.3-rc-1"
+vineflower = "1.12.0"
+fabric-loader = "0.19.5"
+fabric-api = "0.160.3+26.3"
 mixson = "2.2.0"
 
 [plugins]

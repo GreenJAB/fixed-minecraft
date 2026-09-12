@@ -43,7 +43,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
         final Direction direction = Math.signum(scrollY) > 0
                 ? Direction.UP : Direction.DOWN;
         if (menu.getCarried().isEmpty()) {
-            if (InputConstants.isKeyDown(minecraft.getWindow(), HotbarCycler.getCycleKeyBinding().key.getValue())) {
+            if (InputConstants.isKeyDown(HotbarCycler.getCycleKeyBinding().key.getValue())) {
                 if (minecraft.hasShiftDown()) {
                     HotbarCycler.shiftRows(minecraft, direction);
                 }

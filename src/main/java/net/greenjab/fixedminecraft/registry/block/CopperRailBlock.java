@@ -1,7 +1,5 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.block.BaseRailBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -18,15 +16,10 @@ import org.jspecify.annotations.NonNull;
 
 import static net.minecraft.world.level.block.WeatheringCopper.WeatherState.*;
 
-
+//TODO test copper rails oxidisation
 public class CopperRailBlock extends BaseRailBlock {
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
-    public static final MapCodec<CopperRailBlock> CODEC = RecordCodecBuilder.mapCodec(
-             instance -> instance.group(
-                            WeatheringCopper.WeatherState.CODEC.fieldOf("weathering_state").forGetter(CopperRailBlock::getDegradationLevel), propertiesCodec()
-                    )
-                    .apply(instance, CopperRailBlock::new)
-    );
+
     public final WeatheringCopper.WeatherState oxidationLevel;
     public CopperRailBlock(WeatheringCopper.WeatherState oxidationLevel, BlockBehaviour.Properties settings) {
         super(true, settings);
@@ -37,12 +30,6 @@ public class CopperRailBlock extends BaseRailBlock {
     }
 
     @Override
-    protected @NonNull MapCodec<? extends BaseRailBlock> codec() {
-        return CODEC;
-    }
-
-
-    @Override
     public @NonNull Property<RailShape> getShapeProperty() {
         return SHAPE;
     }
@@ -50,8 +37,6 @@ public class CopperRailBlock extends BaseRailBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(SHAPE, WATERLOGGED);
     }
-
-    public WeatheringCopper.WeatherState getDegradationLevel() { return oxidationLevel; }
 
     public static double getMaxVelocity(BlockState state) {
         WeatheringCopper.WeatherState level = ((CopperRailBlock)state.getBlock()).oxidationLevel;

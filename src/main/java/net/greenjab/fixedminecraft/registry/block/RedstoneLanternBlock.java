@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.registry.block;
 
 import com.google.common.collect.Lists;
-import com.mojang.serialization.MapCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -26,14 +25,8 @@ import net.minecraft.world.level.redstone.Orientation;
 import org.jspecify.annotations.NonNull;
 
 public class RedstoneLanternBlock extends LanternBlock {
-    public static final MapCodec<RedstoneLanternBlock> CODEC = simpleCodec(RedstoneLanternBlock::new);
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private static final Map<BlockGetter, List<BurnoutEntry>> BURNOUT_MAP = new WeakHashMap<>();
-
-    @Override
-    public @NonNull MapCodec<? extends RedstoneLanternBlock> codec() {
-        return CODEC;
-    }
 
     public RedstoneLanternBlock(Properties settings) {
         super(settings);

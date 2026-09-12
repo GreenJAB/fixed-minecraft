@@ -1,7 +1,7 @@
 accessWidener v2 official
 
 accessible field net/minecraft/world/inventory/CartographyTableMenu lastSoundTime J
-accessible method net/minecraft/world/level/block/Block dropFromBlockInteractLootTable (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/item/ItemInstance;Lnet/minecraft/world/entity/Entity;Ljava/util/function/BiConsumer;)Z
+#accessible method net/minecraft/world/level/block/Block dropFromBlockInteractLootTable (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/item/ItemInstance;Lnet/minecraft/world/entity/Entity;Ljava/util/function/BiConsumer;)Z
 accessible method net/minecraft/world/entity/monster/Shulker setVariant (Ljava/util/Optional;)V
 accessible class net/minecraft/world/inventory/ArmorSlot
 accessible field net/minecraft/world/entity/LivingEntity equipment Lnet/minecraft/world/entity/EntityEquipment;
@@ -26,7 +26,7 @@ accessible field net/minecraft/client/model/animal/equine/DonkeyModel DONKEY_TRA
 accessible method net/minecraft/world/entity/npc/villager/AbstractVillager addOffersFromTradeSet (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/resources/ResourceKey;)V
 accessible class net/minecraft/world/entity/monster/Phantom$PhantomCircleAroundAnchorGoal
 accessible class net/minecraft/world/entity/monster/Phantom$PhantomMoveControl
-accessible field net/minecraft/world/item/component/BundleContents$Mutable items Ljava/util/List;
+accessible field net/minecraft/world/item/component/SimpleMutableContainer items Ljava/util/List;
 accessible method net/minecraft/core/particles/SimpleParticleType <init> (Z)V
 accessible class net/minecraft/client/particle/ParticleResources$SpriteParticleRegistration
 accessible field net/minecraft/world/level/storage/loot/BuiltInLootTables LOCATIONS Ljava/util/Set;
@@ -45,3 +45,4 @@ accessible method net/minecraft/world/level/NaturalSpawner$SpawnState canSpawnFo
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityRight (Lnet/minecraft/nbt/CompoundTag;)V
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityLeft (Lnet/minecraft/nbt/CompoundTag;)V
 accessible class net/minecraft/client/StringSplitter$LineBreakFinder
+accessible field net/minecraft/world/entity/monster/zombie/Zombie drowningTracker Lnet/minecraft/world/entity/ConversionTracker;

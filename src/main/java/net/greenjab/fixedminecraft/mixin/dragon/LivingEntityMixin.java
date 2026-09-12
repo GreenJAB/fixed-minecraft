@@ -1,14 +1,13 @@
 package net.greenjab.fixedminecraft.mixin.dragon;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-import net.minecraft.world.entity.monster.EnderMan;
+import net.minecraft.world.entity.monster.Enderman;
 import net.minecraft.world.entity.monster.Endermite;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin {
 
     @ModifyExpressionValue(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 5))
-    private boolean dontSlowdownEnderDragon(boolean original, @Local(argsOnly = true) ServerLevel level) {
+    private boolean dontSlowdownEnderDragon(boolean original) {
         if (!FixedMinecraft.gameRules.modified_dragon) return original;
         LivingEntity LE = (LivingEntity)(Object)this;
         if (LE instanceof EnderDragon) return true;
@@ -33,7 +32,7 @@ public abstract class LivingEntityMixin {
         if (LE instanceof Endermite) {
             Entity entity = source.getEntity();
             if (entity!=null) {
-                if (entity instanceof EnderMan endermanEntity){
+                if (entity instanceof Enderman endermanEntity){
                     LivingEntity livingEntity = endermanEntity.level().getNearestPlayer(
                             endermanEntity.getX(), endermanEntity.getY(), endermanEntity.getZ(), 100.0,true);
                     endermanEntity.setTarget(livingEntity);

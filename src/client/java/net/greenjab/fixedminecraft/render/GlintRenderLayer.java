@@ -4,7 +4,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.LayeringTransform;
-import net.minecraft.client.renderer.rendertype.OutputTarget;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.rendertype.TextureTransform;
@@ -44,9 +43,10 @@ public abstract class GlintRenderLayer extends RenderType {
             RenderSetup.builder(RenderPipelines.GLINT)
                     .withTexture("Sampler0", item_texture)
                     .setTextureTransform(TextureTransform.GLINT_TEXTURING)
-                    .setOutputTarget(OutputTarget.ITEM_ENTITY_TARGET)
+                    .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
                     .createRenderSetup()
     );
+    //TODO TEST ENCHANT GLINT FOR THE Xth TIME
 
     public GlintRenderLayer(String name, RenderSetup renderSetup) {
         super(name, renderSetup);

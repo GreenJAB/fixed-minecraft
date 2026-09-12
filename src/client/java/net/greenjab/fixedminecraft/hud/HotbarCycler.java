@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.hud;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -7,7 +8,6 @@ import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.ContainerInput;
-import org.lwjgl.glfw.GLFW;
 
 public class HotbarCycler
 {
@@ -20,17 +20,13 @@ public class HotbarCycler
     public static KeyMapping getFontLegendKeyBinding() {
         return fontLegendKeyBinding;
     }
-
+    //TODO test custom keybinds
     public static void register(){
-        cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.fixedminecraft.hotbar_cycle",
-                GLFW.GLFW_KEY_C,
-                KeyMapping.Category.INVENTORY));
+        cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.fixedminecraft.hotbar_cycle",
+                InputConstants.Type.KEYBOARD, InputConstants.KEY_C, KeyMapping.Category.INVENTORY));
 
-        fontLegendKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
-                "key.fixedminecraft.font_legend",
-                GLFW.GLFW_KEY_LEFT_ALT,
-                KeyMapping.Category.MISC));
+        fontLegendKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.fixedminecraft.font_legend",
+                InputConstants.Type.KEYBOARD, InputConstants.KEY_LALT, KeyMapping.Category.MISC));
     }
 
     public static void shiftRows(Minecraft minecraft, final Direction direction) {

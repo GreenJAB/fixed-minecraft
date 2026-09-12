@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -287,7 +288,8 @@ public class MapBookItem extends Item {
         if (state.removeMapID(nearestState.id.id())) {
             ItemStack itemStack = new ItemStack(Items.FILLED_MAP);
             itemStack.set(DataComponents.MAP_ID, nearestState.id);
-            if (!player.getInventory().add(itemStack)) player.drop(itemStack, true);
+            ItemEntity drop = player.createItemStackToDrop(itemStack, false, true);
+            if (drop != null) player.level().addFreshEntity(drop);
         }
         return true;
     }

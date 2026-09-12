@@ -19,7 +19,7 @@ public abstract class ApplyBonusCountMixin {
 
     @ModifyVariable(method = "run", at = @At("STORE"), ordinal = 0)
     private int nightFortune(int level, @Local(argsOnly = true) LootContext context) {
-        Entity entity = context.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        Entity entity = context.getOptional(LootContextParams.THIS_ENTITY);
         if (entity!=null) {
             Level world = entity.level();
             if (entity instanceof ServerPlayer) {
