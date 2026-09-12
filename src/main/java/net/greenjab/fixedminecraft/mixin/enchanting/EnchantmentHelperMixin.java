@@ -66,11 +66,13 @@ public abstract class EnchantmentHelperMixin {
                                             CallbackInfoReturnable<Float> cir) {
         float i = cir.getReturnValueF();
         if (victim instanceof AbstractHorse) i*=2;
+        /*
         if (source.is(DamageTypeTags.IS_FIRE)) return;
         if (source.is(DamageTypeTags.IS_FALL)) return;
         if (source.is(DamageTypeTags.IS_EXPLOSION)) return;
         if (source.is(DamageTypeTags.IS_PROJECTILE)) return;
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
+         */
         for (ItemStack equipment : FixedMinecraft.getArmor(victim)) {
             if (equipment.getItem().toString().toLowerCase().contains("chainmail")) i++;
         }

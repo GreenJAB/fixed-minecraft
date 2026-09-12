@@ -1,0 +1,12 @@
+{
+    "type": "minecraft:simple_block",
+    "to_place": {
+        "type": "minecraft:simple",
+        "state": {
+            "id": "minecraft:snow",
+            "properties": {
+                "layers": "1"
+            }
+        }
+    }
+}

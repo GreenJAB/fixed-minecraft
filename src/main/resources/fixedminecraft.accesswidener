@@ -23,7 +23,7 @@ accessible field net/minecraft/core/cauldron/CauldronInteraction$Dispatcher item
 accessible field net/minecraft/client/particle/Particle y D
 accessible method net/minecraft/world/entity/ai/Brain registerMemory (Lnet/minecraft/world/entity/ai/memory/MemoryModuleType;)V
 accessible field net/minecraft/client/model/animal/equine/DonkeyModel DONKEY_TRANSFORMER Lnet/minecraft/client/model/geom/builders/MeshTransformer;
-accessible method net/minecraft/world/entity/npc/villager/AbstractVillager addOffersFromTradeSet (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/resources/ResourceKey;)V
+# accessible method net/minecraft/world/entity/npc/villager/AbstractVillager addOffersFromTradeSet (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/item/trading/MerchantOffers;Lnet/minecraft/resources/ResourceKey;)V
 accessible class net/minecraft/world/entity/monster/Phantom$PhantomCircleAroundAnchorGoal
 accessible class net/minecraft/world/entity/monster/Phantom$PhantomMoveControl
 accessible field net/minecraft/world/item/component/SimpleMutableContainer items Ljava/util/List;
