@@ -128,12 +128,14 @@ public class LootTableAdditions {
             } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(Items.COMPASS).apply(new ExplorationCompassLootFunction.Builder())));
-            } else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
+            } /*
+            else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(ItemRegistry.TRAIL_RUIN_MONUMENT_MAP).setWeight(5)
                                 .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(ModTags.ON_TRAIL_RUIN_MAPS))
                                         .setMapDecoration(MapDecorationRegistry.TRAIL_RUINS).setSearchRadius(100).setSkipKnownStructures(true))).build());
             }
+            */
         });
 
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
@@ -169,8 +171,9 @@ public class LootTableAdditions {
             }
         });
 
+        /*
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
-            HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
+            // HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
             if (key==BuiltInLootTables.CHARGED_CREEPER) {
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(lootTables.getOrThrow(LootTableRegistry.CHARGED_CREEPER_PLAYER_LOOT_TABLE)).when(LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.PLAYER))))).build());
@@ -225,6 +228,8 @@ public class LootTableAdditions {
                 tableBuilder.pool(poolBuilder.build());
             }
         });
+
+         */
     }
 
     private static UniformContainerBase.Builder<?> enchantedArmor(HolderLookup.RegistryLookup<Enchantment> enchantments, Item armor, int level, int weight) {
