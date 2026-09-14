@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:copper_rail"
+        "recipes": "fixedminecraft:copper_rail"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

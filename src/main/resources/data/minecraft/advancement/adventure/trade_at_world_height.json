@@ -3,9 +3,9 @@
     "criteria": {
         "trade_at_world_height": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "location": {
@@ -17,7 +17,7 @@
                             }
                         }
                     }
-                ]
+
             },
             "trigger": "minecraft:villager_trade"
         }

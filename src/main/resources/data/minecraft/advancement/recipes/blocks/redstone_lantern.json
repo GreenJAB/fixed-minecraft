@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:redstone_lantern"
+        "recipes": "fixedminecraft:redstone_lantern"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

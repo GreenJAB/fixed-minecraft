@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:fixed_totem"
+        "recipes": "fixedminecraft:fixed_totem"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -124,12 +124,21 @@ public class ItemRegistry {
         return Consumable.builder().consumeSeconds(1.6F).animation(ItemUseAnimation.EAT).sound(SoundEvents.GENERIC_EAT).hasConsumeParticles(true);
     }
 
-    /** This is used, IntelliJ just doesn't realise */
-    public static final Holder<Potion> BLINDNESS = register("blindness", new Potion("blindness", new MobEffectInstance(MobEffects.BLINDNESS, 800)));
-    public static final Holder<Potion> LEVITATION = register("levitation", new Potion("levitation", new MobEffectInstance(MobEffects.LEVITATION, 1200)));
+
+
 
     public static final DataComponentType<BaitComponent> BAIT_POWER = registerComponent("bait_power", (builder) -> builder.persistent(BaitComponent.CODEC).networkSynchronized(BaitComponent.PACKET_CODEC).cacheEncoding());
     public static final Item GOLDEN_FERMENTED_SPIDER_EYE = register("golden_fermented_spider_eye", new Item.Properties().component(BAIT_POWER, new BaitComponent(3)));
+
+    /** This is used, IntelliJ just doesn't realise */
+    public static Holder<Potion> BLINDNESS;
+    public static Holder<Potion> LEVITATION;
+
+    public static void registerItemAdds() {
+        BLINDNESS = register("blindness", new Potion("blindness", new MobEffectInstance(MobEffects.BLINDNESS, 800)));
+        LEVITATION = register("levitation", new Potion("levitation", new MobEffectInstance(MobEffects.LEVITATION, 1200)));
+    }
+
 
 
     public static Item register(String id, Item.Properties settings) {

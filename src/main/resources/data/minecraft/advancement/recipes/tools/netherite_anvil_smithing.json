@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:netherite_anvil_smithing"
+        "recipes": "fixedminecraft:netherite_anvil_smithing"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

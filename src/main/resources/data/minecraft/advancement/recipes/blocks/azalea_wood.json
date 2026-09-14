@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_wood"
+        "recipes": "fixedminecraft:azalea_wood"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

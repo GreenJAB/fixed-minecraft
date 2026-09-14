@@ -3,15 +3,13 @@
     "criteria": {
         "warden": {
             "conditions": {
-                "entity": [
-                    {
-                        "condition": "minecraft:entity_properties",
-                        "entity": "this",
-                        "predicate": {
-                            "minecraft:entity_type": "minecraft:warden"
-                        }
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:warden"
                     }
-                ]
+                }
             },
             "trigger": "minecraft:player_killed_entity"
         }

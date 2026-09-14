@@ -5,7 +5,11 @@
             "trigger": "minecraft:tick",
             "conditions": {
                 "player": {
-                    "nbt": "{XpLevel:100}"
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:nbt": "{XpLevel:100}"
+                    }
                 }
             }
         }

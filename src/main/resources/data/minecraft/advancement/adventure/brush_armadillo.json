@@ -1,43 +1,37 @@
 {
-  "parent": "minecraft:adventure/salvage_sherd",
-  "criteria": {
-    "brush_armadillo": {
-      "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "minecraft:armadillo"
-            }
-          }
-        ],
-        "item": {
-          "items": "minecraft:brush"
+    "parent": "minecraft:adventure/salvage_sherd",
+    "criteria": {
+        "brush_armadillo": {
+            "conditions": {
+                "entity": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:entity_type": "minecraft:armadillo"
+                    }
+                },
+                "item": {
+                    "items": "minecraft:brush"
+                }
+            },
+            "trigger": "minecraft:player_interacted_with_entity"
         }
-      },
-      "trigger": "minecraft:player_interacted_with_entity"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "advancements.adventure.brush_armadillo.description"
     },
-    "icon": {
-      "count": 1,
-      "id": "minecraft:armadillo_scute"
+    "display": {
+        "description": {
+            "translate": "advancements.adventure.brush_armadillo.description"
+        },
+        "icon": {
+            "id": "minecraft:armadillo_scute"
+        },
+        "title": {
+            "translate": "advancements.adventure.brush_armadillo.title"
+        }
     },
-    "title": {
-      "translate": "advancements.adventure.brush_armadillo.title"
-    }
-  },
-  "requirements": [
-    [
-      "brush_armadillo"
-    ]
-  ],
-    "rewards": {
-        "experience": 150
-    },
-  "sends_telemetry_event": true
+    "requirements": [
+        [
+            "brush_armadillo"
+        ]
+    ],
+    "sends_telemetry_event": true
 }

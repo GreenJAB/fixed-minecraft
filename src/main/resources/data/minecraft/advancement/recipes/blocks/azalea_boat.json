@@ -3,7 +3,7 @@
   "criteria": {
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_boat"
+        "recipes": "fixedminecraft:azalea_boat"
       },
       "trigger": "minecraft:recipe_unlocked"
     },

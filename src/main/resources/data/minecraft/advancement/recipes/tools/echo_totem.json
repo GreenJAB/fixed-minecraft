@@ -27,7 +27,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:echo_totem"
+        "recipes": "fixedminecraft:echo_totem"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

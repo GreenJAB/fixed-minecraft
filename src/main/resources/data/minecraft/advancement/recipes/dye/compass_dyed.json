@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "jabsfixedtransport:compass_dyed"
+        "recipes": "jabsfixedtransport:compass_dyed"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

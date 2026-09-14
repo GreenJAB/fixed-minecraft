@@ -3,13 +3,13 @@
   "input": {
     "item": "minecraft:potion",
     "potion_contents": {
-      "potions": "minecraft:levitation"
+      "potions": "fixedminecraft:levitation"
     }
   },
   "output": {
     "components": {
       "minecraft:potion_contents": {
-        "potion": "minecraft:levitation"
+        "potion": "fixedminecraft:levitation"
       }
     },
     "id": "minecraft:splash_potion"

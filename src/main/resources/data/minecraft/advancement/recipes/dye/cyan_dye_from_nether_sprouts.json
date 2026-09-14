@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:cyan_dye_from_nether_sprouts"
+                "recipes": "fixedminecraft:cyan_dye_from_nether_sprouts"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

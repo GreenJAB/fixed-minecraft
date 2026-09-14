@@ -27,7 +27,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:echo_fruit"
+        "recipes": "fixedminecraft:echo_fruit"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

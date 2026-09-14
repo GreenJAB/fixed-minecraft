@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:rooted_dirt"
+        "recipes": "fixedminecraft:rooted_dirt"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

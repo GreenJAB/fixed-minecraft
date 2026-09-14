@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:dragon_firework_rocket"
+        "recipes": "fixedminecraft:dragon_firework_rocket"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

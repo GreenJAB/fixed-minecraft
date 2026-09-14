@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:cyan_dye_from_warped_roots"
+                "recipes": "fixedminecraft:cyan_dye_from_warped_roots"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

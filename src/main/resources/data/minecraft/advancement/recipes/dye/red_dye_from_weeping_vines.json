@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:red_dye_from_weeping_vines"
+                "recipes": "fixedminecraft:red_dye_from_weeping_vines"
             },
             "trigger": "minecraft:recipe_unlocked"
         }
