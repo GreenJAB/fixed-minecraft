@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_trapdoor"
+        "recipes": "fixedminecraft:azalea_trapdoor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

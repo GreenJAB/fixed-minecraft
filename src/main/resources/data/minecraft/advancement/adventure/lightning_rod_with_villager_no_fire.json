@@ -3,18 +3,16 @@
     "criteria": {
         "lightning_rod_with_villager_no_fire": {
             "conditions": {
-                "bystander": [
+                "bystander":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "minecraft:entity_type": "minecraft:villager"
                         }
-                    }
-                ],
-                "lightning": [
-                    {
-                        "condition": "minecraft:entity_properties",
+                    },
+                "lightning": {
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "minecraft:distance": {
@@ -27,7 +25,6 @@
                             }
                         }
                     }
-                ]
             },
             "trigger": "minecraft:lightning_strike"
         }

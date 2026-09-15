@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_sign"
+        "recipes": "fixedminecraft:azalea_sign"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

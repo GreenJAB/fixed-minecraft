@@ -3,9 +3,9 @@
     "criteria": {
         "walk_on_powder_snow_with_leather_boots": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "equipment": {
@@ -24,7 +24,7 @@
                             }
                         }
                     }
-                ]
+
             },
             "trigger": "minecraft:location"
         }

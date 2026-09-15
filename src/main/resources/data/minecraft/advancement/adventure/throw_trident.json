@@ -9,10 +9,6 @@
                             "minecraft:entity_type": "minecraft:trident"
                         },
                         "tags": [
-                            {
-                                "expected": true,
-                                "id": "minecraft:is_projectile"
-                            }
                         ]
                     }
                 }

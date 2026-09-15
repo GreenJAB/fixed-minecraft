@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:waxed_weathered_copper_rail"
+        "recipes": "fixedminecraft:waxed_weathered_copper_rail"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

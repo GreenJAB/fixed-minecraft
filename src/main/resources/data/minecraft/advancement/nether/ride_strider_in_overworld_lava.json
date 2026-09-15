@@ -1,14 +1,27 @@
 {
     "parent": "minecraft:end/root",
     "criteria": {
-        "arbalistic": {
+        "ride_entity_distance": {
             "conditions": {
-                "fired_from_weapon": {
-                    "items": "minecraft:crossbow"
+                "distance": {
+                    "horizontal": {
+                        "min": 50.0
+                    }
                 },
-                "unique_entity_types": 5
+                "player": {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "minecraft:location": {
+                            "dimension": "minecraft:overworld"
+                        },
+                        "minecraft:vehicle": {
+                            "minecraft:entity_type": "minecraft:strider"
+                        }
+                    }
+                }
             },
-            "trigger": "minecraft:killed_by_arrow"
+            "trigger": "minecraft:ride_entity_in_lava"
         }
     },
     "display": {
@@ -16,7 +29,6 @@
             "translate": "advancements.nether.ride_strider_in_overworld_lava.description"
         },
         "icon": {
-            "count": 1,
             "id": "minecraft:warped_fungus_on_a_stick"
         },
         "title": {
@@ -25,7 +37,7 @@
     },
     "requirements": [
         [
-            "arbalistic"
+            "ride_entity_distance"
         ]
     ],
     "sends_telemetry_event": true

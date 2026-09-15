@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:red_dye_from_redstone"
+                "recipes": "fixedminecraft:red_dye_from_redstone"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

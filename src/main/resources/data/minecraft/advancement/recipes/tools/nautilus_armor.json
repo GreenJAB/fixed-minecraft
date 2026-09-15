@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:nautilus_armor"
+                "recipes": "fixedminecraft:nautilus_armor"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

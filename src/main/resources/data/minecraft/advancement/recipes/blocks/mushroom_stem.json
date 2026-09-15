@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:mushroom_stem"
+                "recipes": "fixedminecraft:mushroom_stem"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:chainmail_horse_armor"
+        "recipes": "fixedminecraft:chainmail_horse_armor"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

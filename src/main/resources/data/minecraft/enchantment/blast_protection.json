@@ -18,14 +18,6 @@
           "type": "minecraft:damage_source_properties",
           "predicate": {
             "tags": [
-              {
-                "expected": true,
-                "id": "#minecraft:is_explosion"
-              },
-              {
-                "expected": false,
-                "id": "#minecraft:bypasses_invulnerability"
-              }
             ]
           }
         }

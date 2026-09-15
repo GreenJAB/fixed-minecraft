@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:spear"
+                "recipes": "fixedminecraft:spear"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

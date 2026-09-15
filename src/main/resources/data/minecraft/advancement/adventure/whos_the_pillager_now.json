@@ -7,15 +7,13 @@
                     "items": "minecraft:crossbow"
                 },
                 "victims": [
-                    [
-                        {
-                            "condition": "minecraft:entity_properties",
-                            "entity": "this",
-                            "predicate": {
-                                "minecraft:entity_type": "minecraft:pillager"
-                            }
+                    {
+                        "type": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "minecraft:entity_type": "minecraft:pillager"
                         }
-                    ]
+                    }
                 ]
             },
             "trigger": "minecraft:killed_by_arrow"
@@ -26,7 +24,6 @@
             "translate": "advancements.adventure.whos_the_pillager_now.description"
         },
         "icon": {
-            "count": 1,
             "id": "minecraft:crossbow"
         },
         "title": {

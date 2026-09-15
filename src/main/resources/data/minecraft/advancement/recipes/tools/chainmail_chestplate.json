@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:chainmail_chestplate"
+                "recipes": "fixedminecraft:chainmail_chestplate"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

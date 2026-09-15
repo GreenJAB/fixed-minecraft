@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:calcite"
+                "recipes": "fixedminecraft:calcite"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:rotten_flesh_regular"
+                "recipes": "fixedminecraft:rotten_flesh_regular"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

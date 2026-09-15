@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:golden_fermented_spider_eye"
+                "recipes": "fixedminecraft:golden_fermented_spider_eye"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

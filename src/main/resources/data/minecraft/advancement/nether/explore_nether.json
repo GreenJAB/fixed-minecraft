@@ -3,25 +3,25 @@
     "criteria": {
         "minecraft:basalt_deltas": {
             "conditions": {
-                "player": [
-                    {
-                        "condition": "minecraft:entity_properties",
-                        "entity": "this",
-                        "predicate": {
-                            "location": {
-                                "biomes": "minecraft:basalt_deltas"
-                            }
+                "player":
+                {
+                    "type": "minecraft:entity_properties",
+                    "entity": "this",
+                    "predicate": {
+                        "location": {
+                            "biomes": "minecraft:basalt_deltas"
                         }
                     }
-                ]
+                }
+
             },
             "trigger": "minecraft:location"
         },
         "minecraft:crimson_forest": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "location": {
@@ -29,15 +29,14 @@
                             }
                         }
                     }
-                ]
             },
             "trigger": "minecraft:location"
         },
         "minecraft:nether_wastes": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "location": {
@@ -45,15 +44,14 @@
                             }
                         }
                     }
-                ]
             },
             "trigger": "minecraft:location"
         },
         "minecraft:soul_sand_valley": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "location": {
@@ -61,15 +59,13 @@
                             }
                         }
                     }
-                ]
             },
             "trigger": "minecraft:location"
         },
         "minecraft:warped_forest": {
             "conditions": {
-                "player": [
-                    {
-                        "condition": "minecraft:entity_properties",
+                "player": {
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "location": {
@@ -77,7 +73,6 @@
                             }
                         }
                     }
-                ]
             },
             "trigger": "minecraft:location"
         }

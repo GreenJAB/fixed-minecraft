@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:dispenser_minecart"
+        "recipes": "fixedminecraft:dispenser_minecart"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

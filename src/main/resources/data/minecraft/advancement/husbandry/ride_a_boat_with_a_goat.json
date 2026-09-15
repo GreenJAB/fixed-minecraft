@@ -3,9 +3,9 @@
     "criteria": {
         "ride_a_boat_with_a_goat": {
             "conditions": {
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "vehicle": {
@@ -16,7 +16,7 @@
                             }
                         }
                     }
-                ]
+
             },
             "trigger": "minecraft:started_riding"
         }

@@ -12,9 +12,9 @@ public abstract class LootPoolMixin {
 
     @ModifyExpressionValue(method = "addRandomItems", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/level/storage/loot/providers/number/NumberProvider;getInt(Lnet/minecraft/world/level/storage/loot/LootContext;)I"
+            target = "Lnet/minecraft/world/level/storage/loot/providers/number/ints/ContextIntProvider;getInt(Lnet/minecraft/world/level/storage/loot/LootContext;)I"
     ))
     private int stillLucky(int original, @Local(argsOnly = true) LootContext context) {
-        return original + (int)context.getLuck();
+        return original + (int) context.getLuck();
     }
 }

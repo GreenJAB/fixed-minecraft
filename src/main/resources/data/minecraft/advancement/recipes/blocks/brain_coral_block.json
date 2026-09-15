@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:brain_coral_block"
+                "recipes": "fixedminecraft:brain_coral_block"
             },
             "trigger": "minecraft:recipe_unlocked"
         }
