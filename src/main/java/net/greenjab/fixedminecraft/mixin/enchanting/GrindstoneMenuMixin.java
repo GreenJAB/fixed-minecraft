@@ -34,7 +34,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
     private ItemStack damageGrindstonedItem(GrindstoneMenu instance, ItemStack input, ItemStack additional, Operation<ItemStack> original) {
         ItemStack originalItem = original.call(instance, input, additional);
         if (input.isEmpty() || additional.isEmpty()) {
-            if (!FixedMinecraft.gameRules.grinstone_damage) return originalItem;
+            if (!FixedMinecraft.gameRules.grindstone_damage) return originalItem;
             boolean book = (originalItem.is(Items.BOOK) || originalItem.is(Items.ENCHANTED_BOOK));
             boolean bl4 = !input.isEmpty();
             if (bl4) {
