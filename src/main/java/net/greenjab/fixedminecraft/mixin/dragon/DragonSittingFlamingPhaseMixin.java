@@ -10,8 +10,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
@@ -19,6 +17,8 @@ import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonSittingP
 import net.minecraft.world.entity.boss.enderdragon.phases.DragonSittingFlamingPhase;
 import net.minecraft.world.entity.boss.enderdragon.phases.EnderDragonPhase;
 import net.minecraft.world.entity.projectile.hurtingprojectile.DragonFireball;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
@@ -28,8 +28,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 @Mixin(DragonSittingFlamingPhase.class)
 public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonSittingPhase {
@@ -102,9 +100,7 @@ public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonSitti
                     mutable.set(d, h, e);
                 }
                 if (this.dragon.entityTags().contains("omen")) {
-                    List<Entity> entities = this.dragon.level()
-                            .getEntities(this.dragon, this.dragon.head.getBoundingBox().inflate(2.0, 3.0, 2.0).move(0.0, -1.0, 0.0), EntitySelector.NO_CREATIVE_OR_SPECTATOR);
-                    for (Entity ee : entities) ee.setRemainingFireTicks(300);
+                    createFire(this.dragon.level(), (int)d, (int)h, (int)e);
                 }
 
                 h = (Mth.floor(h) + 1);
@@ -142,6 +138,21 @@ public abstract class DragonSittingFlamingPhaseMixin extends AbstractDragonSitti
             }
         }
         ci.cancel();
+    }
+
+    @Unique
+    private void createFire(Level level, int x, int y, int z) {
+        BlockPos.MutableBlockPos pos = new BlockPos(x, y, z).mutable();
+        for (int xx = -3; xx <= 3; xx++) {
+            for (int yy = -3; yy <= 3; yy++) {
+                for (int zz = -3; zz <= 3; zz++) {
+                    pos.set(x+xx, y+yy, z+zz);
+                    if (level.getRandom().nextInt(3) == 0 && level.getBlockState(pos).isAir() && level.getBlockState(pos.below()).isSolidRender()) {
+                        level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
+                    }
+                }
+            }
+        }
     }
 
     @Unique

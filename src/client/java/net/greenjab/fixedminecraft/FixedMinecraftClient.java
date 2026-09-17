@@ -57,6 +57,12 @@ public class FixedMinecraftClient implements ClientModInitializer {
                     ResourcePackActivationType.NORMAL
             );
             ResourceManagerHelper.registerBuiltinResourcePack(
+                    FixedMinecraft.id( "wavy"),
+                    modContainer,
+                    Component.translatable("fixedminecraft.wavy"),
+                    ResourcePackActivationType.NORMAL
+            );
+            ResourceManagerHelper.registerBuiltinResourcePack(
                     FixedMinecraft.id( "recolourful_containers"),
                     modContainer,
                     Component.translatable("fixedminecraft.recolourful_containers"),
