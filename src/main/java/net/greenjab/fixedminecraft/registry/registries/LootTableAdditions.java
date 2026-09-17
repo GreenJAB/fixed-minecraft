@@ -198,6 +198,10 @@ public class LootTableAdditions {
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_OTHERSIDE))
                         .when(LootItemEntityPropertyCondition.hasProperties(
                                 LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().located(LocationPredicate.Builder.inDimension(Level.END)))).build());
+                tableBuilder.pool(LootPool.lootPool()
+                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_BOUNCE))
+                        .when(LootItemEntityPropertyCondition.hasProperties(
+                                LootContext.EntityTarget.ATTACKER, EntityPredicate.Builder.entity().of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.SULFUR_CUBE))).build());
             } else if (key==EntityTypes.SNIFFER.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_RELIC))
