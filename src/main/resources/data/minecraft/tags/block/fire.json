@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "fixedminecraft:copper_fire"
+    "fixedminecraft:copper_fire",
+    "fixedminecraft:end_fire"
   ]
 }
