@@ -1,5 +1,5 @@
 {
-  "given_item_modifiers": [
+  "given_item_modifier": [
     {
       "effects": [
         {
@@ -27,7 +27,7 @@
           "duration": 10.0
         }
       ],
-      "function": "minecraft:set_stew_effect"
+      "type": "minecraft:set_stew_effect"
     }
   ],
   "gives": {

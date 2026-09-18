@@ -1,0 +1,19 @@
+{
+    "type": "minecraft:woodland_mansion",
+    "biomes": "#minecraft:has_structure/woodland_mansion",
+    "spawn_overrides": {
+        "creature": {
+            "bounding_box": "full",
+            "spawns": []
+        },
+        "ambient": {
+            "bounding_box": "full",
+            "spawns": []
+        },
+        "monster": {
+            "bounding_box": "full",
+            "spawns": []
+        }
+    },
+    "step": "surface_structures"
+}

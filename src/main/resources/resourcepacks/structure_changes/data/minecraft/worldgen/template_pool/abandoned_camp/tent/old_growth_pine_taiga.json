@@ -1,0 +1,95 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_1",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_2",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_3",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_4",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_5",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_6",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_7",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_8",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_9",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/old_growth_pine_taiga/tent_old_growth_pine_taiga_10",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

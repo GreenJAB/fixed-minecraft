@@ -3,16 +3,16 @@
     "count": 3.0,
     "id": "minecraft:diamond"
   },
-  "given_item_modifiers": [
+  "given_item_modifier": [
     {
       "add": false,
       "enchantments": {
         "minecraft:protection": 1.0
       },
-      "function": "minecraft:set_enchantments"
+      "type": "minecraft:set_enchantments"
     },
     {
-      "function": "minecraft:filtered",
+      "type": "minecraft:filtered",
       "item_filter": {
         "items": "minecraft:diamond_leggings",
         "predicates": {
@@ -24,7 +24,7 @@
         }
       },
       "on_fail": {
-        "function": "minecraft:discard"
+        "type": "minecraft:discard"
       }
     }
   ],

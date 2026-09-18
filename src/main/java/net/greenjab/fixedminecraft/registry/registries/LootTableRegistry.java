@@ -21,6 +21,7 @@ public class LootTableRegistry {
     public static final ResourceKey<LootTable> CHARGED_CREEPER_SKELETON_TABLE = registerLoot_Table("gameplay/charged_creeper/skeleton");
     public static final ResourceKey<LootTable> SNIFFER_EXTRA = registerLoot_Table("gameplay/other/sniffer_extra");
     public static final ResourceKey<LootTable> GOAT_MUTTON = registerLoot_Table("entity/goat_mutton");
+    public static final ResourceKey<LootTable> TRAIL_RUINS_MAP = registerLoot_Table("map/trail_ruins");
 
     private static ResourceKey<LootTable> registerLoot_Table(String id) {
         return registerLootTable(ResourceKey.create(Registries.LOOT_TABLE, FixedMinecraft.id(id)));

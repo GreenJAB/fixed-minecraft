@@ -50,12 +50,6 @@ public abstract class EquipmentLayerRendererMixin {
         return original;
     }
 
-    @WrapOperation(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;trimmedArmorGlint()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
-    private RenderType getGlintTrident(Operation<RenderType> original) {
-        return EnchantGlint.getArmorEntityGlint();
-    }
-
     @Unique private static EquipmentClientInfo createHumanoidAndHorseModel(String id) {
         return EquipmentClientInfo.builder().addHumanoidLayers(Identifier.withDefaultNamespace(id))
                 .addLayers(EquipmentClientInfo.LayerType.HORSE_BODY, EquipmentClientInfo.Layer.leatherDyeable(Identifier.withDefaultNamespace(id), false)).build();
@@ -63,8 +57,20 @@ public abstract class EquipmentLayerRendererMixin {
 
     @Inject(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V", at = @At("HEAD"))
     private <S> void setEnchantGlintItemStack(EquipmentClientInfo.LayerType layerType, ResourceKey<EquipmentAsset> equipmentAssetId, Model<? super S> model,
-                              S state, ItemStack itemStack, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords,
-                              @Nullable Identifier playerTextureOverride, int outlineColor, int order, CallbackInfo ci) {
+                                              S state, ItemStack itemStack, PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords,
+                                              @Nullable Identifier playerTextureOverride, int outlineColor, int order, CallbackInfo ci) {
         EnchantGlint.setTargetStack(itemStack);
+    }
+
+    @WrapOperation(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;armorCutoutNoCullGlint(Lnet/minecraft/resources/Identifier;)Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType getGlintTrident(Identifier texture, Operation<RenderType> original) {
+        return EnchantGlint.getArmorEntityGlint(texture);
+    }
+
+    @WrapOperation(method = "renderLayers(Lnet/minecraft/client/resources/model/EquipmentClientInfo$LayerType;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/client/model/Model;Ljava/lang/Object;Lnet/minecraft/world/item/ItemStack;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/SubmitNodeCollector;ILnet/minecraft/resources/Identifier;II)V", at =
+    @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/rendertype/RenderTypes;trimmedArmorGlint()Lnet/minecraft/client/renderer/rendertype/RenderType;"))
+    private RenderType getGlintTrimmedTrident(Operation<RenderType> original) {
+        return EnchantGlint.getTrimmedArmorEntityGlint();
     }
 }

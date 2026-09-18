@@ -20,7 +20,7 @@ vec2 getCorner(sampler2D Sampler0, vec2 texCoord0) {
         if (c.r == 4.0) return vec2(1.0, 1.0);
     }
 
-    return corners[gl_VertexID % 4];
+    return corners[gl_VertexIndex % 4];
 }
 
 

@@ -79,7 +79,7 @@ public abstract class ItemStackMixin {
     }
 
 
-    @ModifyArg(method = "addToTooltip", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/component/TooltipProvider;addToTooltip(Lnet/minecraft/world/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;Lnet/minecraft/core/component/DataComponentGetter;)V"), index = 2)
+    @ModifyArg(method = "addToTooltip(Lnet/minecraft/core/component/DataComponentType;Lnet/minecraft/world/item/component/TooltipProvider$Getter;Lnet/minecraft/world/item/Item$TooltipContext;Lnet/minecraft/world/item/component/TooltipDisplay;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;)V", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/component/TooltipProvider;addToTooltip(Lnet/minecraft/world/item/Item$TooltipContext;Ljava/util/function/Consumer;Lnet/minecraft/world/item/TooltipFlag;Lnet/minecraft/core/component/DataComponentGetter;)V"), index = 2)
     private TooltipFlag addEnchantLocationIcon(TooltipFlag type) {
         ItemStack stack = (ItemStack)(Object)this;
         if (stack.is(Items.ENCHANTED_BOOK)) {

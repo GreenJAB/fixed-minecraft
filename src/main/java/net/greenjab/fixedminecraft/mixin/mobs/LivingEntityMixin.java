@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.mobs;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MapDecorationRegistry;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -157,13 +158,13 @@ public abstract class LivingEntityMixin {
                     ServerLevel serverWorld = (ServerLevel) PE.level();
                     BlockPos blockPos = serverWorld.findNearestMapStructure(ModTags.ON_OUTPOST_MAPS, PE.blockPosition(), 50, true);
                     if (blockPos != null) {
-                        ItemStack itemStack = MapItem.create(serverWorld, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
+                        ItemStack itemStack = new ItemStack(ItemRegistry.PILLAGER_OUTPOST_MAP);
+                        MapItem.applyNewSavedData(serverWorld, itemStack, blockPos.getX(), blockPos.getZ(), (byte)2, true, true);
                         MapItem.renderBiomePreviewMap(serverWorld, itemStack);
                         MapItemSavedData.addTargetDecoration(itemStack, blockPos, "+", MapDecorationRegistry.PILLAGER_OUTPOST);
                         itemStack.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.outpost"));
                         ItemEntity drop = PE.createItemStackToDrop(itemStack, false, true);
                         if (drop != null) PE.level().addFreshEntity(drop);
-                        //TODO test pillager drop map
                     }
                 }
             }

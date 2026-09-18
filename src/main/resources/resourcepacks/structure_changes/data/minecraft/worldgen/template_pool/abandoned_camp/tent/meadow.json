@@ -1,0 +1,95 @@
+{
+  "elements": [
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_1",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_2",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_3",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_4",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_5",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_6",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_7",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_8",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_9",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    },
+    {
+      "element": {
+        "element_type": "minecraft:legacy_single_pool_element",
+        "location": "minecraft:abandoned_camp/tent/meadow/tent_meadow_10",
+        "processors": "minecraft:coloured_wool",
+        "projection": "rigid"
+      },
+      "weight": 1
+    }
+  ],
+  "fallback": "minecraft:empty"
+}

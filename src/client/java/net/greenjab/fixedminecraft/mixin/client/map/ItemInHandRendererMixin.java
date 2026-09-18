@@ -21,7 +21,7 @@ public abstract class ItemInHandRendererMixin {
     @Shadow private float mainHandHeight;
     @Shadow private float offHandHeight;
     @Shadow private ItemStack offHandItem;
-    //TODO test holding maps/in boats
+
     @ModifyVariable(at = @At(value = "HEAD"), method = "extractMapRenderState", argsOnly = true)
     private ItemStack sneakySwap(ItemStack itemStack) {
         if (itemStack.getItem() instanceof MapBookItem mapBookItem) {

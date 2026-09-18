@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:cache",
+    "input": {
+        "type": "minecraft:slice",
+        "axis": "y",
+        "coordinate": 0,
+        "input": {
+            "type": "minecraft:add",
+            "left": 10,
+            "right": {
+                "type": "minecraft:mul",
+                "left": {
+                    "type": "minecraft:blend_alpha"
+                },
+                "right": {
+                    "type": "minecraft:add",
+                    "left": -10,
+                    "right": "fixedminecraft:overworld/combined_factor"
+                }
+            }
+        }
+    }
+}

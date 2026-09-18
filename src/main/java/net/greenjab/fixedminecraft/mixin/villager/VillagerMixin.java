@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -40,7 +41,6 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -50,6 +50,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Mixin(Villager.class)
@@ -62,6 +63,12 @@ public abstract class VillagerMixin extends AbstractVillager {
     @Shadow protected abstract void eatUntilFull();
     @Shadow protected abstract void increaseMerchantCareer(ServerLevel level);
     @Shadow protected abstract boolean shouldIncreaseLevel();
+
+    @Shadow
+    protected abstract boolean hungry();
+
+    @Shadow
+    protected abstract int countFoodPointsInInventory();
 
     public VillagerMixin(EntityType<? extends VillagerMixin> entityType, Level level) {
         super(entityType, level);
@@ -145,13 +152,10 @@ public abstract class VillagerMixin extends AbstractVillager {
         foodLevel = 10;
     }
 
-    @ModifyExpressionValue(method = "<clinit>", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/ImmutableMap;of(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Lcom/google/common/collect/ImmutableMap;", ordinal = 0))
-    private static ImmutableMap<Object, Object> betterFoodPoints(ImmutableMap<Item, Integer> original){
-        return ImmutableMap.builder().put(Items.APPLE, 4).put(Items.MELON_SLICE, 2).put(Items.SWEET_BERRIES, 2).put(Items.GLOW_BERRIES, 2)
-                .put(Items.CARROT, 3).put(Items.POTATO, 2).put(Items.BAKED_POTATO, 5).put(Items.BEETROOT, 2).put(Items.DRIED_KELP, 1)
-                .put(Items.BREAD, 5).put(Items.COOKIE, 2).put(Items.PUMPKIN_PIE, 8).put(Items.MUSHROOM_STEW, 6).put(Items.BEETROOT_SOUP, 6)
-                .put(Items.HONEY_BOTTLE, 3).build();
-    }
+    @Unique private static final Map<Object, Object> FOOD_POINTS = ImmutableMap.builder().put(Items.APPLE, 4).put(Items.MELON_SLICE, 2).put(Items.SWEET_BERRIES, 2).put(Items.GLOW_BERRIES, 2)
+            .put(Items.CARROT, 3).put(Items.POTATO, 2).put(Items.BAKED_POTATO, 5).put(Items.BEETROOT, 2).put(Items.DRIED_KELP, 1)
+            .put(Items.BREAD, 5).put(Items.COOKIE, 2).put(Items.PUMPKIN_PIE, 8).put(Items.MUSHROOM_STEW, 6).put(Items.BEETROOT_SOUP, 6)
+            .put(Items.HONEY_BOTTLE, 3).build();
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void saveCustomData(ValueOutput output, CallbackInfo ci) {
@@ -337,7 +341,7 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     @WrapOperation(method = "rewardTradeXp", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V", opcode = Opcodes.GETFIELD))
+    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V"))
     private void noAutoLevelUp(Villager instance, ServerLevel level, Operation<Void> original) {
     }
 
@@ -347,5 +351,33 @@ public abstract class VillagerMixin extends AbstractVillager {
             this.increaseMerchantCareer(level);
         }
     }
-    //TODO test villager increase level
+
+    @Inject(method = "countFoodPointsInInventory", at = @At("HEAD"), cancellable = true)
+    private void revertToOldVersion(CallbackInfoReturnable<Integer> cir) {
+        SimpleContainer inventory = this.getInventory();
+        cir.setReturnValue(FOOD_POINTS.entrySet().stream().mapToInt((entry) -> inventory.countItem((Item)entry.getKey()) * (Integer)entry.getValue()).sum());
+    }
+
+    @Inject(method = "eatUntilFull", at = @At("HEAD"), cancellable = true)
+    private void revertToOldVersion2(CallbackInfo ci) {
+        if (this.hungry() && this.countFoodPointsInInventory() != 0) {
+            for(int slot = 0; slot < this.getInventory().getContainerSize(); ++slot) {
+                ItemStack itemStack = this.getInventory().getItem(slot);
+                if (!itemStack.isEmpty()) {
+                    Integer value = (Integer)FOOD_POINTS.get(itemStack.getItem());
+                    if (value != null) {
+                        int itemCount = itemStack.getCount();
+
+                        for(int count = itemCount; count > 0; --count) {
+                            this.foodLevel += value;
+                            this.getInventory().removeItem(slot, 1);
+                            if (!this.hungry()) {
+                                ci.cancel();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -17,7 +17,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -44,7 +43,6 @@ import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.item.component.DamageResistant;
 import net.minecraft.world.item.component.DeathProtection;
 import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.item.component.MapDecorations;
@@ -95,7 +93,9 @@ public class ItemRegistry {
     public static final Item WAXED_WEATHERED_COPPER_RAIL = register(BlockRegistry.WAXED_WEATHERED_COPPER_RAIL);
     public static final Item WAXED_OXIDIZED_COPPER_RAIL = register(BlockRegistry.WAXED_OXIDIZED_COPPER_RAIL);
 
-    public static final Item TRAIL_RUIN_MONUMENT_MAP = register("trial_ruin_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
+    public static final Item TRAIL_RUIN_MONUMENT_MAP = register("trail_ruins_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
+    public static final Item RUINED_PORTAL__MAP = register("ruined_portal_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
+    public static final Item PILLAGER_OUTPOST_MAP = register("pillager_outpost_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
 
     public static final Item ALLAY_BUCKET = register("allay_bucket", settings ->
                     new MobBucketItem(EntityTypes.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),

@@ -6,41 +6,35 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 4,
-                                "min": 2
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "min": 2,
+                            "max": 4
                         }
-                    ],
+                    },
                     "name": "minecraft:emerald",
                     "weight": 3
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "damage": {
-                                "type": "minecraft:uniform",
-                                "max": 1,
-                                "min": 0.5
-                            },
-                            "function": "minecraft:set_damage"
+                    "modifier": {
+                        "type": "minecraft:set_damage",
+                        "damage": {
+                            "type": "minecraft:uniform",
+                            "max": 1,
+                            "min": 0.5
                         }
-                    ],
+                    },
                     "name": "minecraft:shield",
                     "weight": 3
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 15,
@@ -54,9 +48,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 20,
@@ -70,9 +64,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 10,
@@ -86,9 +80,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 10,
@@ -102,25 +96,22 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 2,
-                                "min": 1
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "min": 1,
+                            "max": 2
                         }
-                    ],
+                    },
                     "name": "minecraft:golden_carrot",
                     "weight": 2
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": 25,
                             "options": "#minecraft:on_random_loot"
                         }
@@ -130,9 +121,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_randomly",
+                            "type": "minecraft:enchant_randomly",
                             "options": "#fixedminecraft:other/trial_chamber"
                         }
                     ],
@@ -141,9 +132,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 15,
@@ -156,9 +147,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 15,

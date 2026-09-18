@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.At;
 @Mixin(MonsterRoomFeature.class)
 public abstract class MonsterRoomFeatureMixin {
     @ModifyExpressionValue(method = "place", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/levelgen/feature/MonsterRoomFeature;randomEntityId(Lnet/minecraft/util/RandomSource;)Lnet/minecraft/world/entity/EntityType;"))
-    private EntityType<?> biomeVariant(EntityType<?> original, @Local BlockPos origin, @Local WorldGenLevel level) {
+    private EntityType<?> biomeVariant(EntityType<?> original, @Local(argsOnly = true) BlockPos origin, @Local(argsOnly = true) WorldGenLevel level) {
         Holder<Biome> biome =  level.getBiome(origin);
         if (original == EntityTypes.ZOMBIE) {
             if (biome.is(BiomeTags.HAS_DESERT_PYRAMID)) return EntityTypes.HUSK;

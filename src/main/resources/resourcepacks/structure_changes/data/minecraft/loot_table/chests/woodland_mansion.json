@@ -42,59 +42,49 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:emerald",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 5,
-                "min": 4
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 30,
+              "min": 20
+            },
+            "options": "#minecraft:in_enchanting_table"
+          },
           "weight": 7
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 2,
-                "max": 5
-              },
-              "add": false
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 2,
+                  "max": 5
+              }
+          },
           "name": "minecraft:gold_ingot",
           "weight": 5
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:iron_ingot",
-          "functions": [
-            {
-              "add": false,
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "max": 4,
-                "min": 3
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 3,
+                  "max": 4
+              }
+          },
           "weight": 5
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": 2
-            }
-          ],
+          },
           "name": "minecraft:diamond",
           "weight": 2
         }
@@ -115,17 +105,14 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "max": 4,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 1,
+                  "max": 4
+              }
+          },
           "name": "minecraft:wheat",
           "weight": 20
         },
@@ -136,49 +123,40 @@
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "max": 4,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 1,
+                  "max": 4
+              }
+          },
           "name": "minecraft:redstone",
           "weight": 15
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "max": 4,
-                "min": 1
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 1,
+                  "max": 4
+              }
+          },
           "name": "minecraft:coal",
           "weight": 15
         },
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
+          "modifier": {
+            "type": "minecraft:set_count",
               "count": {
-                "type": "minecraft:uniform",
-                "max": 4,
-                "min": 2
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
+                  "type": "minecraft:uniform",
+                  "min": 2,
+                  "max": 4
+              }
+          },
           "name": "minecraft:resin_clump",
           "weight": 50
         }
@@ -205,61 +183,57 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:crossbow",
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": {
-                "max": 30,
-                "min": 20
-              },
-              "options": "#minecraft:in_enchanting_table"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 30,
+              "min": 20
+            },
+            "options": "#minecraft:in_enchanting_table"
+          },
           "weight": 6
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:iron_axe",
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": {
-                "max": 30,
-                "min": 20
-              },
-              "options": "#minecraft:in_enchanting_table"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 30,
+              "min": 20
+            },
+            "options": "#minecraft:in_enchanting_table"
+          },
           "weight": 4
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond_axe",
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": {
-                "max": 30,
-                "min": 20
-              },
-              "options": "#minecraft:in_enchanting_table"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 30,
+              "min": 20
+            },
+            "options": "#minecraft:in_enchanting_table"
+          },
           "weight": 2
         },
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond_sword",
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": {
-                "max": 30,
-                "min": 20
-              },
-              "options": "#minecraft:in_enchanting_table"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": {
+              "type": "minecraft:uniform",
+              "max": 30,
+              "min": 20
+            },
+            "options": "#minecraft:in_enchanting_table"
+          },
           "weight": 1
         }
       ]
@@ -285,13 +259,11 @@
           "type": "minecraft:item",
           "name": "minecraft:book",
           "weight": 2,
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": 25,
-              "options": "#minecraft:on_random_loot"
-            }
-          ]
+          "modifier": {
+            "type": "minecraft:enchant_with_levels",
+            "levels": 25,
+            "options": "#minecraft:on_random_loot"
+          }
         },
         {
           "type": "minecraft:empty",

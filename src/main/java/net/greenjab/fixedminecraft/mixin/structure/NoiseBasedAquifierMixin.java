@@ -1,10 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.structure;
 
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.Aquifer;
-import net.minecraft.world.level.levelgen.NoiseChunk;
-import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import net.minecraft.world.level.levelgen.densityfunction.DensitySamplerSet;
 import net.minecraft.world.level.levelgen.densityfunction.DensityVolume;
@@ -49,22 +46,6 @@ public abstract class NoiseBasedAquifierMixin {
             SURFACE_SAMPLING_OFFSETS_IN_CHUNKS = SURFACE_SAMPLING_OFFSETS_IN_CHUNKS_PRE_1_19_3;
         }
     }
-
-    /*
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void disableSkipSamplingAboveY(
-            NoiseChunk noiseChunk,
-            ChunkPos pos,
-            NoiseRouter router,
-            PositionalRandomFactory positionalRandomFactory,
-            int minBlockY,
-            int yBlockSize,
-            Aquifer.FluidPicker globalFluidPicker,
-            CallbackInfo ci
-    ) {
-        if (FixedMinecraft.isChangesEnabled("terrain")) this.skipSamplingAboveY = Integer.MAX_VALUE;
-    }
-     */
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void disableSkipSamplingAboveY(

@@ -2,41 +2,33 @@
   "additional_wants": {
     "id": "minecraft:compass"
   },
-  "given_item_modifiers": [
+  "given_item_modifier": [
     {
+      "type": "minecraft:exploration_map",
       "decoration": "minecraft:ruined_portal",
-      "destination": "fixedminecraft:on_ruined_portal_maps",
-      "function": "minecraft:exploration_map",
+      "destination": "#minecraft:ruined_portal",
       "search_radius": 100
     },
     {
-      "function": "minecraft:set_name",
-      "name": {
-        "translate": "filled_map.ruined_portal"
-      },
-      "target": "item_name"
-    },
-    {
-      "function": "minecraft:filtered",
+      "type": "minecraft:filtered",
       "item_filter": {
-        "items": "minecraft:filled_map",
         "predicates": {
           "minecraft:map_id": {}
         }
       },
       "on_fail": {
-        "function": "minecraft:discard"
+        "type": "minecraft:discard"
       }
     }
   ],
   "gives": {
-    "id": "minecraft:map"
+    "id": "fixedminecraft:ruined_portal_map"
   },
-  "max_uses": 12.0,
+  "max_uses": 12,
   "reputation_discount": 0.2,
   "wants": {
-    "count": 13.0,
+    "count": 12,
     "id": "minecraft:emerald"
   },
-  "xp": 10.0
+  "xp": 10
 }

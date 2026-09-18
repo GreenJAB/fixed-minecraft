@@ -8,18 +8,17 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:tipped_arrow",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:set_count",
+                            "type": "minecraft:set_count",
                             "count": {
                                 "type": "minecraft:uniform",
-                                "min": 4,
-                                "max": 7
-                            },
-                            "add": false
+                                "max": 7.0,
+                                "min": 4.0
+                            }
                         },
                         {
-                            "function": "minecraft:set_potion",
+                            "type": "minecraft:set_potion",
                             "id": "fixedminecraft:blindness"
                         }
                     ]

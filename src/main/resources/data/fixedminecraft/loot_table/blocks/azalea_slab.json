@@ -6,9 +6,8 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "modifier": [
             {
-              "add": false,
               "conditions": [
                 {
                   "block": "fixedminecraft:azalea_slab",
@@ -19,10 +18,10 @@
                 }
               ],
               "count": 2.0,
-              "function": "minecraft:set_count"
+              "type": "minecraft:set_count"
             },
             {
-              "function": "minecraft:explosion_decay"
+              "type": "minecraft:explosion_decay"
             }
           ],
           "name": "fixedminecraft:azalea_slab"

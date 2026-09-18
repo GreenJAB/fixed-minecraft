@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ServerExplosionMixin {
     @Shadow @Final private Explosion.BlockInteraction blockInteraction;
 
-    @Inject(method = "hurtEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;push(Lnet/minecraft/world/phys/Vec3;)V"))
+    @Inject(method = "hurtEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;pushFromExplosion(Lnet/minecraft/world/phys/Vec3;)V"))
     private void gravelToSand(CallbackInfo ci, @Local Entity entity) {
         if (this.blockInteraction == Explosion.BlockInteraction.TRIGGER_BLOCK) {
             if (entity instanceof FallingBlockEntity FBE) {
