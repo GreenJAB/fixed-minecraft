@@ -37,7 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
-//TODO test libraians
+
 public class LibrarianBookLootFunction extends LootItemConditionalFunction {
     private final boolean master;
     private final Optional<HolderSet<Enchantment>> options;

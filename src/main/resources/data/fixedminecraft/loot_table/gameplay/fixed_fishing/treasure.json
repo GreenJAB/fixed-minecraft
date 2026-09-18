@@ -26,19 +26,19 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": 30
-                        },
-                        {
-                            "function": "minecraft:set_damage",
-                            "add": false,
+                            "type": "minecraft:set_damage",
                             "damage": {
                                 "type": "minecraft:uniform",
                                 "max": 0.25,
-                                "min": 0
+                                "min": 0.0
                             }
+                        },
+                        {
+                            "type": "minecraft:enchant_with_levels",
+                            "levels": 30,
+                            "options": "#minecraft:on_random_loot"
                         }
                     ],
                     "name": "minecraft:bow",
@@ -46,19 +46,19 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": 30
-                        },
-                        {
-                            "function": "minecraft:set_damage",
-                            "add": false,
+                            "type": "minecraft:set_damage",
                             "damage": {
                                 "type": "minecraft:uniform",
                                 "max": 0.25,
-                                "min": 0
+                                "min": 0.0
                             }
+                        },
+                        {
+                            "type": "minecraft:enchant_with_levels",
+                            "levels": 30,
+                            "options": "#minecraft:on_random_loot"
                         }
                     ],
                     "name": "minecraft:fishing_rod",
@@ -66,35 +66,32 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "damage": {
-                                "type": "minecraft:uniform",
-                                "max": 0.25,
-                                "min": 0
-                            },
-                            "function": "minecraft:set_damage"
+                    "modifier": {
+                        "type": "minecraft:set_damage",
+                        "damage": {
+                            "type": "minecraft:uniform",
+                            "max": 0.25,
+                            "min": 0.0
                         }
-                    ],
+                    },
                     "name": "minecraft:trident",
                     "weight": 8
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": 30
-                        },
-                        {
-                            "function": "minecraft:set_damage",
-                            "add": false,
+                            "type": "minecraft:set_damage",
                             "damage": {
                                 "type": "minecraft:uniform",
                                 "max": 0.25,
-                                "min": 0
+                                "min": 0.0
                             }
+                        },
+                        {
+                            "type": "minecraft:enchant_with_levels",
+                            "levels": 30,
+                            "options": "#minecraft:on_random_loot"
                         }
                     ],
                     "name": "minecraft:trident",
@@ -102,90 +99,74 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": 30,
-                            "options": "#minecraft:on_random_loot"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:enchant_with_levels",
+                        "levels": 30,
+                        "options": "#minecraft:on_random_loot"
+                    },
                     "name": "minecraft:book",
                     "weight": 10
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:other/fishing_treasure"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:enchant_randomly",
+                        "options": "#fixedminecraft:other/fishing_treasure"
+                    },
                     "name": "minecraft:book",
                     "weight": 10
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:luck"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:luck"
+                    },
                     "name": "minecraft:potion",
                     "weight": 2
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:strength"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:strength"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:night_vision"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:night_vision"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:swiftness"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:swiftness"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:leaping"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:leaping"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:invisibility"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:invisibility"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 }

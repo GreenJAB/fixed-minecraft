@@ -1,5 +1,9 @@
 bool textColour_ingui(mat4 projectionMat) {
+    #if !defined(IS_GUI)
     return projectionMat[2][3] == 0.0;
+    #else
+    return true;
+    #endif
 }
 int textColour_toint(vec3 col) {
   ivec3 icol = ivec3(col*255);

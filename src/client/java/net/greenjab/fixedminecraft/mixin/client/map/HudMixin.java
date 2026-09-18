@@ -30,7 +30,7 @@ public abstract class HudMixin {
          });
 
          return hasWaypoint.get() ||
-                player.getMainHandItem().getItem().components().has(DataComponents.MAP_ID) ||
-                player.getOffhandItem().getItem().components().has(DataComponents.MAP_ID);
+                player.getMainHandItem().getComponents().has(DataComponents.MAP_ID) ||
+                player.getOffhandItem().getComponents().has(DataComponents.MAP_ID);
      }
 }

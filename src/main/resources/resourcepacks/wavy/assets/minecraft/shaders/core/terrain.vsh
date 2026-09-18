@@ -1,27 +1,41 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:fog.glsl>
-#moj_import <minecraft:globals.glsl>
-#moj_import <minecraft:chunksection.glsl>
-#moj_import <minecraft:projection.glsl>
-#moj_import <minecraft:sample_lightmap.glsl>
+#include <minecraft:fog.glsl>
+#include <minecraft:globals.glsl>
+#include <minecraft:projection.glsl>
+#include <minecraft:sample_lightmap.glsl>
+#include <minecraft:terrainglobals.glsl>
+#ifndef MULTIDRAW_TERRAIN
+    #include <minecraft:chunksection.glsl>
+#endif
 
-#moj_import <fixedminecraft:wavy_core/config.glsl>
-#moj_import <fixedminecraft:wavy_core/util.glsl>
-#moj_import <fixedminecraft:wavy_core/main.vsh>
+#include <fixedminecraft:wavy_core/config.glsl>
+#include <fixedminecraft:wavy_core/wavy_leaves.glsl>
+#include <fixedminecraft:wavy_core/wavy_plants.glsl>
+#include <fixedminecraft:wavy_core/wavy_water.glsl>
+#include <fixedminecraft:wavy_core/util.glsl>
+#include <fixedminecraft:wavy_core/main_vsh.glsl>
 
-in vec3 Position;
-in vec4 Color;
-in vec2 UV0;
-in ivec2 UV2;
+layout(location = 0) in vec3 Position;
+layout(location = 1) in vec4 Color;
+layout(location = 2) in vec2 UV0;
+layout(location = 3) in ivec2 UV2;
+#ifdef MULTIDRAW_TERRAIN
+layout(location = 4) in ivec3 ChunkPosition;
+layout(location = 5) in float ChunkVisibility;
+#endif
 
 uniform sampler2D Sampler0;
+#ifndef OIT_ALPHA_ONLY
 uniform sampler2D Sampler2;
+#endif
 
-out float sphericalVertexDistance;
-out float cylindricalVertexDistance;
-out vec4 vertexColor;
-out vec2 texCoord0;
+layout(location = 0) out float sphericalVertexDistance;
+layout(location = 1) out float cylindricalVertexDistance;
+layout(location = 2) out vec4 vertexColor;
+layout(location = 3) out vec2 texCoord0;
+layout(location = 4) out float chunkVisibility;
 
 void main() {
     vec4 wavyCore_colour = Color;
@@ -38,6 +52,14 @@ void main() {
 
     sphericalVertexDistance = fog_spherical_distance(pos);
     cylindricalVertexDistance = fog_cylindrical_distance(pos);
+    #ifndef OIT_ALPHA_ONLY
     vertexColor = wavyCore_colour * sample_lightmap(Sampler2, UV2);
+    #else
+    vertexColor = wavyCore_colour;
+    #endif
     texCoord0 = UV0;
+
+    const float chunkFullyVisibleRange = 16.0;
+    float dist = length(pos);
+    chunkVisibility = mix(1.0, ChunkVisibility, clamp((dist - chunkFullyVisibleRange) / chunkFullyVisibleRange, 0.0, 1.0));
 }

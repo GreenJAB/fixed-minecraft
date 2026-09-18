@@ -1,7 +1,11 @@
 #define TWINKLE_SPEED 500
 #define BRIGHTNESS_MODIFIER 1.3
 
+#if defined(VT_WAVY_STARS__VARYING_STARID_LOCATION)
+layout(location = VT_WAVY_STARS__VARYING_STARID_LOCATION) flat in int twinklingStars_starID;
+#else
 flat in int twinklingStars_starID;
+#endif
 
 float twinklingStars_calcStarTwinkle(float time) {
     float curve = min((-30.0 * abs(sin(time))) + 30.0, 1.0);

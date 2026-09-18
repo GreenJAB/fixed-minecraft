@@ -228,7 +228,7 @@ public class BlockRegistry {
                     .instabreak()
                     .lightLevel(_ -> 10)
                     .sound(SoundType.WOOL)
-                    .pushReaction(PushReaction.DESTROY)
+                    .pushReaction(PushReaction.POPPED)
     );
 
     public static final Block REDSTONE_LANTERN = register(

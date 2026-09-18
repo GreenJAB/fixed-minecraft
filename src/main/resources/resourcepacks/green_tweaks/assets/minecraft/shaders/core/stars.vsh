@@ -1,12 +1,15 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:projection.glsl>
-#moj_import <fixedminecraft:twinkling_stars/stars.vsh>
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:projection.glsl>
 
-in vec3 Position;
+#define VT_WAVY_STARS__VARYING_STARID_LOCATION 0
+#include <fixedminecraft:twinkling_stars/stars_vsh.glsl>
+
+layout(location = 0) in vec3 Position;
 
 void main() {
     gl_Position = ProjMat * ModelViewMat * vec4(Position, 1.0);
-    twinklingStars_main();
+    twinklingStars_main(gl_VertexIndex);
 }

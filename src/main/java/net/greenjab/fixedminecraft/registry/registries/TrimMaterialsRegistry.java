@@ -131,7 +131,7 @@ public class TrimMaterialsRegistry {
                             if (permutations == null || permutations.isEmpty()) return;
 
                             String trimName = TrimMaterialsRegistry.COAL.identifier().getPath();
-                            permutations.addProperty(trimName, FixedMinecraft.id("trims/color_palettes/" + trimName).toString());
+                            permutations.addProperty(trimName, FixedMinecraft.id("trim/" + trimName).toString());
 
                             break;
                         }

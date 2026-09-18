@@ -1,6 +1,5 @@
 package net.greenjab.fixedminecraft.registry.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -14,12 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.NonNull;
 
 public class EndFireBlock extends BaseFireBlock {
-    public static final MapCodec<EndFireBlock> CODEC = simpleCodec(EndFireBlock::new);
-
-    @Override
-    public @NonNull MapCodec<EndFireBlock> codec() {
-        return CODEC;
-    }
 
     public EndFireBlock(Properties settings) {
         super(settings, 2.0F);

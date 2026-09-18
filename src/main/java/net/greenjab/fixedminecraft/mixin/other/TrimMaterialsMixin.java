@@ -11,6 +11,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -18,11 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TrimMaterials.class)
 public abstract class TrimMaterialsMixin {
 
-   /* @Shadow
-    private static void register(BootstrapContext<TrimMaterial> context, ResourceKey<TrimMaterial> registryKey, Style hoverTextStyle, TrimMaterials.Palette assets) {
-        throw new UnsupportedOperationException("Implemented via mixin");
-    }*/
-    //TODO test coal trim
+    @Unique
     private static void register(
             final BootstrapContext<TrimMaterial> context, final ResourceKey<TrimMaterial> registryKey, final Style hoverTextStyle, final Identifier palette
     ) {

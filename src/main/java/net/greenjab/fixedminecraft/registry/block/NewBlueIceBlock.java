@@ -28,7 +28,6 @@ public class NewBlueIceBlock extends HalfTransparentBlock {
         return Blocks.PACKED_ICE.defaultBlockState();
     }
 
-    //TODO test break blue ice in nether
     @Override
     public void playerDestroy(final @NonNull ServerLevel level,final @NonNull ServerPlayer player, final @NonNull BlockPos pos, final @NonNull BlockState state, final @Nullable BlockEntity blockEntity, final @NonNull ItemStack destroyedWith) {
         super.playerDestroy(level, player, pos, state, blockEntity, destroyedWith);

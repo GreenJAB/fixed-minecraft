@@ -6,49 +6,40 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 3,
-                                "min": 1
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "max": 3.0,
+                            "min": 1.0
                         }
-                    ],
+                    },
                     "name": "minecraft:diamond",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 5,
-                                "min": 1
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "max": 5.0,
+                            "min": 1.0
                         }
-                    ],
+                    },
                     "name": "minecraft:iron_ingot",
                     "weight": 5
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 3,
-                                "min": 1
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "max": 3.0,
+                            "min": 1.0
                         }
-                    ],
+                    },
                     "name": "minecraft:gold_ingot",
                     "weight": 15
                 },
@@ -69,17 +60,14 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 7,
-                                "min": 3
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "max": 7.0,
+                            "min": 3.0
                         }
-                    ],
+                    },
                     "name": "minecraft:nether_wart",
                     "weight": 5
                 },
@@ -105,17 +93,14 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "max": 4,
-                                "min": 2
-                            },
-                            "function": "minecraft:set_count"
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "max": 4.0,
+                            "min": 2.0
                         }
-                    ],
+                    },
                     "name": "minecraft:obsidian",
                     "weight": 2
                 }
@@ -136,22 +121,19 @@
                 {
                     "type": "minecraft:item",
                     "weight": 3,
-                    "functions": [
-                        {
-                            "add": false,
-                            "count": 2,
-                            "function": "minecraft:set_count"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 2
+                    },
                     "name": "minecraft:rib_armor_trim_smithing_template"
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:book",
                     "weight": 2,
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": 30,
                             "options": "#minecraft:on_random_loot"
                         }

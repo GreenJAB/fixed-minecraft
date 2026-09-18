@@ -1,10 +1,13 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
-#moj_import <minecraft:dynamictransforms.glsl>
-#moj_import <minecraft:globals.glsl>
-#moj_import <fixedminecraft:twinkling_stars/stars.fsh>
+#include <minecraft:dynamictransforms.glsl>
+#include <minecraft:globals.glsl>
 
-out vec4 fragColor;
+#define VT_WAVY_STARS__VARYING_STARID_LOCATION 0
+#include <fixedminecraft:twinkling_stars/stars_fsh.glsl>
+
+layout(location = 0) out vec4 fragColor;
 
 void main() {
     fragColor = twinklingStars_modifyColour(ColorModulator, GameTime);

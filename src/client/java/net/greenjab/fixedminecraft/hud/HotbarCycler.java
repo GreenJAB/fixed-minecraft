@@ -20,7 +20,6 @@ public class HotbarCycler
     public static KeyMapping getFontLegendKeyBinding() {
         return fontLegendKeyBinding;
     }
-    //TODO test custom keybinds
     public static void register(){
         cycleKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.fixedminecraft.hotbar_cycle",
                 InputConstants.Type.KEYBOARD, InputConstants.KEY_C, KeyMapping.Category.INVENTORY));

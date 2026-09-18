@@ -23,7 +23,7 @@ public abstract class SnowAndFreezeFeatureMixin {
     @Inject(method = "place", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/biome/Biome;shouldFreeze(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Z)Z"
-    ))//TODO test snowUnderLeaves
+    ))
     private void snowUnderLeaves(WorldGenLevel level, ChunkGenerator chunkGenerator, RandomSource random, BlockPos origin,
                                  CallbackInfoReturnable<Boolean> cir,
                                  @Local(ordinal = 0)BlockPos.MutableBlockPos topPos,

@@ -32,14 +32,13 @@
                         {
                             "type": "minecraft:item",
                             "name": "minecraft:obsidian",
-                            "functions": [
+                            "modifier": [
                                 {
-                                    "function": "minecraft:set_count",
-                                    "count": 8,
-                                    "add": false
+                                    "type": "minecraft:set_count",
+                                    "count": 8
                                 },
                                 {
-                                    "function": "minecraft:explosion_decay"
+                                    "type": "minecraft:explosion_decay"
                                 }
                             ]
                         }

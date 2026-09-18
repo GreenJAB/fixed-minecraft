@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
@@ -32,7 +31,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyC
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import static net.greenjab.fixedminecraft.registry.ModTags.*;
-//TODO test ALL loot tables
+
 public class LootTableAdditions {
 
     public static void registerLootTableAdds() {
@@ -136,6 +135,7 @@ public class LootTableAdditions {
                                         .setMapDecoration(MapDecorationRegistry.TRAIL_RUINS).setSearchRadius(100).setSkipKnownStructures(true))).build());
             }
             */
+            //TODO ModTags.ON_TRAIL_RUIN_MAPS is broken?
         });
 
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
@@ -171,9 +171,9 @@ public class LootTableAdditions {
             }
         });
 
-        /*
+
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
-            // HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
+             HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
             if (key==BuiltInLootTables.CHARGED_CREEPER) {
                 tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(lootTables.getOrThrow(LootTableRegistry.CHARGED_CREEPER_PLAYER_LOOT_TABLE)).when(LootItemEntityPropertyCondition.hasProperties(
                         LootContext.EntityTarget.THIS, EntityPredicate.Builder.entity().entityType(EntityTypePredicate.of(holder.lookupOrThrow(Registries.ENTITY_TYPE), EntityTypes.PLAYER))))).build());
@@ -233,7 +233,7 @@ public class LootTableAdditions {
             }
         });
 
-         */
+
     }
 
     private static UniformContainerBase.Builder<?> enchantedArmor(HolderLookup.RegistryLookup<Enchantment> enchantments, Item armor, int level, int weight) {
