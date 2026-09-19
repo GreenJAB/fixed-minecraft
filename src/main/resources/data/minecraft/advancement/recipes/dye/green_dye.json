@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:green_dye"
+        "recipes": "fixedminecraft:green_dye"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

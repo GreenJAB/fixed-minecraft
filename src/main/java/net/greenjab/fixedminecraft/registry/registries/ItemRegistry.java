@@ -81,9 +81,9 @@ public class ItemRegistry {
     public static final Item ECHO_FRUIT = register(
             "echo_fruit", EchoFruitItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).food(Foods.CHORUS_FRUIT));
 
-    public static final Item NETHERITE_ANVIL = register(BlockRegistry.NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
-    public static final Item CHIPPED_NETHERITE_ANVIL = register(BlockRegistry.CHIPPED_NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
-    public static final Item DAMAGED_NETHERITE_ANVIL = register(BlockRegistry.DAMAGED_NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
+    public static final Item NETHERITE_ANVIL = register(BlockRegistry.NETHERITE_ANVIL, new Item.Properties().fireResistant());
+    public static final Item CHIPPED_NETHERITE_ANVIL = register(BlockRegistry.CHIPPED_NETHERITE_ANVIL, new Item.Properties().fireResistant());
+    public static final Item DAMAGED_NETHERITE_ANVIL = register(BlockRegistry.DAMAGED_NETHERITE_ANVIL, new Item.Properties().fireResistant());
 
     public static final Item COPPER_RAIL = register(BlockRegistry.COPPER_RAIL);
     public static final Item EXPOSED_COPPER_RAIL = register(BlockRegistry.EXPOSED_COPPER_RAIL);
@@ -124,12 +124,21 @@ public class ItemRegistry {
         return Consumable.builder().consumeSeconds(1.6F).animation(ItemUseAnimation.EAT).sound(SoundEvents.GENERIC_EAT).hasConsumeParticles(true);
     }
 
-    /** This is used, IntelliJ just doesn't realise */
-    public static final Holder<Potion> BLINDNESS = register("blindness", new Potion("blindness", new MobEffectInstance(MobEffects.BLINDNESS, 800)));
-    public static final Holder<Potion> LEVITATION = register("levitation", new Potion("levitation", new MobEffectInstance(MobEffects.LEVITATION, 1200)));
+
+
 
     public static final DataComponentType<BaitComponent> BAIT_POWER = registerComponent("bait_power", (builder) -> builder.persistent(BaitComponent.CODEC).networkSynchronized(BaitComponent.PACKET_CODEC).cacheEncoding());
     public static final Item GOLDEN_FERMENTED_SPIDER_EYE = register("golden_fermented_spider_eye", new Item.Properties().component(BAIT_POWER, new BaitComponent(3)));
+
+    /** This is used, IntelliJ just doesn't realise */
+    public static Holder<Potion> BLINDNESS;
+    public static Holder<Potion> LEVITATION;
+
+    public static void registerItemAdds() {
+        BLINDNESS = register("blindness", new Potion("blindness", new MobEffectInstance(MobEffects.BLINDNESS, 800)));
+        LEVITATION = register("levitation", new Potion("levitation", new MobEffectInstance(MobEffects.LEVITATION, 1200)));
+    }
+
 
 
     public static Item register(String id, Item.Properties settings) {

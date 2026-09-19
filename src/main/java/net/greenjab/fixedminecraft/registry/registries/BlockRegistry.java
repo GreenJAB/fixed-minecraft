@@ -4,6 +4,7 @@ package net.greenjab.fixedminecraft.registry.registries;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.block.CopperFireBlock;
 import net.greenjab.fixedminecraft.registry.block.CopperRailBlock;
+import net.greenjab.fixedminecraft.registry.block.EndFireBlock;
 import net.greenjab.fixedminecraft.registry.block.NetheriteAnvilBlock;
 import net.greenjab.fixedminecraft.registry.block.OxidizableRailBlock;
 import net.greenjab.fixedminecraft.registry.block.RedstoneLanternBlock;
@@ -209,6 +210,19 @@ public class BlockRegistry {
             CopperFireBlock::new,
             BlockBehaviour.Properties.of()
                     .mapColor(MapColor.COLOR_LIGHT_GREEN)
+                    .replaceable()
+                    .noCollision()
+                    .instabreak()
+                    .lightLevel(_ -> 10)
+                    .sound(SoundType.WOOL)
+                    .pushReaction(PushReaction.POPPED)
+    );
+
+    public static final Block END_FIRE = register(
+            "end_fire",
+            EndFireBlock::new,
+            BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_PINK)
                     .replaceable()
                     .noCollision()
                     .instabreak()

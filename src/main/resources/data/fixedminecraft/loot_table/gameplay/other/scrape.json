@@ -7,6 +7,10 @@
         {
           "type": "minecraft:item",
           "name": "fixedminecraft:patina"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 2
         }
       ],
       "rolls": 1.0

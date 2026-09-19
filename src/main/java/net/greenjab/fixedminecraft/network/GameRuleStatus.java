@@ -10,7 +10,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 public class GameRuleStatus {
     public boolean combine_items;
     public boolean mending_on_op;
-    public boolean grinstone_damage;
+    public boolean grindstone_damage;
     public boolean global_locator_bar;
     public boolean elytra_drag;
     public int elytra_fly_in_rain;
@@ -30,7 +30,7 @@ public class GameRuleStatus {
     public void updateRules(GameRules rules) {
         this.combine_items = rules.get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS);
         this.mending_on_op = rules.get(GameRuleRegistry.MENDING_ON_OP_ITEMS);
-        this.grinstone_damage = rules.get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM);
+        this.grindstone_damage = rules.get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM);
         this.global_locator_bar = rules.get(GameRuleRegistry.GLOBAL_PLAYER_LOCATOR_BAR);
         this.elytra_drag = rules.get(GameRuleRegistry.ELYTRA_DRAG);
         this.elytra_fly_in_rain = rules.get(GameRuleRegistry.ELYTRA_FLY_IN_RAIN);
@@ -48,7 +48,7 @@ public class GameRuleStatus {
     void toPacket(FriendlyByteBuf buf) {
         buf.writeBoolean(combine_items);
         buf.writeBoolean(mending_on_op);
-        buf.writeBoolean(grinstone_damage);
+        buf.writeBoolean(grindstone_damage);
         buf.writeBoolean(global_locator_bar);
         buf.writeBoolean(elytra_drag);
         buf.writeInt(elytra_fly_in_rain);
@@ -67,7 +67,7 @@ public class GameRuleStatus {
         GameRuleStatus p = new GameRuleStatus();
         p.combine_items = buf.readBoolean();
         p.mending_on_op = buf.readBoolean();
-        p.grinstone_damage = buf.readBoolean();
+        p.grindstone_damage = buf.readBoolean();
         p.global_locator_bar = buf.readBoolean();
         p.elytra_drag = buf.readBoolean();
         p.elytra_fly_in_rain = buf.readInt();

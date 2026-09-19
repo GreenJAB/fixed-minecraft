@@ -7,6 +7,7 @@ import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -63,6 +64,19 @@ public abstract class InventoryMixin {
             }
         }
         return false;
+    }
+
+    @WrapOperation(method = "dropAll", at = @At(value = "INVOKE",
+                                                target = "Lnet/minecraft/world/entity/player/Player;createItemStackToDrop(Lnet/minecraft/world/item/ItemStack;ZZ)Lnet/minecraft/world/entity/item/ItemEntity;"
+    ))
+    private ItemEntity onGroundForLonger(Player instance, ItemStack stack, boolean randomly, boolean thrownFromHand, Operation<ItemEntity> original) {
+        ItemEntity entity = original.call(instance, stack, randomly, thrownFromHand);
+        if (entity!=null) {
+            int ticks = ((ServerLevel) instance.level()).getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
+            if (ticks == 0) entity.setUnlimitedLifetime();
+            else entity.age = 6000 - ticks;
+        }
+        return entity;
     }
 
     @WrapOperation(method = "dropAll", at = @At(value = "INVOKE",

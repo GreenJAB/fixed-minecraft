@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:empty_map_book"
+        "recipes": "fixedminecraft:empty_map_book"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

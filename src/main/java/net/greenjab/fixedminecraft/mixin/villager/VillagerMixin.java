@@ -40,7 +40,6 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -337,7 +336,7 @@ public abstract class VillagerMixin extends AbstractVillager {
     }
 
     @WrapOperation(method = "rewardTradeXp", at =
-    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V", opcode = Opcodes.GETFIELD))
+    @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V"))
     private void noAutoLevelUp(Villager instance, ServerLevel level, Operation<Void> original) {
     }
 
@@ -347,5 +346,4 @@ public abstract class VillagerMixin extends AbstractVillager {
             this.increaseMerchantCareer(level);
         }
     }
-    //TODO test villager increase level
 }

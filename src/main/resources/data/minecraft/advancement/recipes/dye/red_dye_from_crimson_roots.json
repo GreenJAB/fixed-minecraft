@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:red_dye_from_crimson_roots"
+                "recipes": "fixedminecraft:red_dye_from_crimson_roots"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

@@ -16,6 +16,7 @@ import net.greenjab.fixedminecraft.registry.registries.BiomeAdditions;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
+import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.LootTableAdditions;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.greenjab.fixedminecraft.registry.registries.LootTableRegistry;
@@ -63,6 +64,7 @@ public class FixedMinecraft implements ModInitializer {
         ItemGroupRegistry.register();
         GameRuleRegistry.registerGameRules();
         BlockRegistry.registerFireBlocks();
+        ItemRegistry.registerItemAdds();
         LootTableRegistry.registerLootTable();
         MobEffectRegistry.registerMobEffects();
         ParticleRegistry.registerParticles();
@@ -153,5 +155,4 @@ public class FixedMinecraft implements ModInitializer {
                LootTable.EMPTY;
     }
 }
-//TODO test floating island (ores specifically)
 //TODO test amplified (if can find)

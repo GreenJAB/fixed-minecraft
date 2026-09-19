@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:chainmail_leggings"
+                "recipes": "fixedminecraft:chainmail_leggings"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

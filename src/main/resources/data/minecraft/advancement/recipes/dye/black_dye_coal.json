@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:black_dye_coal"
+                "recipes": "fixedminecraft:black_dye_coal"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

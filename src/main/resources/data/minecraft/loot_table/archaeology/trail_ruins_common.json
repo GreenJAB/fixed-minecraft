@@ -55,18 +55,16 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:bundle",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_contents",
-                            "component": "minecraft:bundle_contents",
-                            "entries": [
-                                {
-                                    "type": "minecraft:loot_table",
-                                    "value": "fixedminecraft:gameplay/archaeology/bundle"
-                                }
-                            ]
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_contents",
+                        "component": "minecraft:bundle_contents",
+                        "entries": [
+                            {
+                                "type": "minecraft:loot_table",
+                                "value": "fixedminecraft:gameplay/archaeology/bundle"
+                            }
+                        ]
+                    }
                 }
             ],
             "rolls": 1

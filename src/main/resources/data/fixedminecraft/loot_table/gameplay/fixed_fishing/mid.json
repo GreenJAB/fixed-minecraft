@@ -39,17 +39,14 @@
                     "type": "minecraft:item",
                     "name": "minecraft:brush",
                     "weight": 3,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_damage",
-                            "damage": {
-                                "type": "minecraft:uniform",
-                                "min": 0,
-                                "max": 0.9
-                            },
-                            "add": false
+                    "modifier": {
+                        "type": "minecraft:set_damage",
+                        "damage": {
+                            "type": "minecraft:uniform",
+                            "max": 0.9,
+                            "min": 0.0
                         }
-                    ]
+                    }
                 },
                 {
                     "type": "minecraft:item",
@@ -60,34 +57,28 @@
                     "type": "minecraft:item",
                     "name": "minecraft:prismarine_shard",
                     "weight": 10,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 4
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 4
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:prismarine_crystals",
                     "weight": 10,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 3
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 3
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:potion",
                     "weight": 5,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:water_breathing"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:water_breathing"
+                    }
                 },
                 {
                     "type": "minecraft:item",
@@ -98,29 +89,23 @@
                     "type": "minecraft:item",
                     "name": "minecraft:shears",
                     "weight": 3,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_damage",
-                            "damage": {
-                                "type": "minecraft:uniform",
-                                "min": 0,
-                                "max": 0.9
-                            },
-                            "add": false
+                    "modifier": {
+                        "type": "minecraft:set_damage",
+                        "damage": {
+                            "type": "minecraft:uniform",
+                            "max": 0.9,
+                            "min": 0.0
                         }
-                    ]
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:arrow",
                     "weight": 8,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 10,
-                            "add": false
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 10
+                    }
                 }
             ]
         }

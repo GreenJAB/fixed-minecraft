@@ -17,7 +17,6 @@ import static net.minecraft.world.level.levelgen.feature.AbstractOreFeature.isAd
 @Mixin(AbstractOreFeature.class)
 public abstract class OreFeatureMixin {
 
-//TODO test genInTerracotta
     @ModifyExpressionValue(method = "canPlaceOre", at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/RuleTest;test(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)Z"

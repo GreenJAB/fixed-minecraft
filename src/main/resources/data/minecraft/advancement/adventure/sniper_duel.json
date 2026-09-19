@@ -3,9 +3,9 @@
     "criteria": {
         "killed_skeleton": {
             "conditions": {
-                "entity": [
+                "entity":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "minecraft:entity_type": "minecraft:skeleton",
@@ -16,13 +16,9 @@
                             }
                         }
                     }
-                ],
+                ,
                 "killing_blow": {
                     "tags": [
-                        {
-                            "expected": true,
-                            "id": "minecraft:is_projectile"
-                        }
                     ]
                 }
             },

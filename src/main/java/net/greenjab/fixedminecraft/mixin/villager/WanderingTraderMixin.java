@@ -25,11 +25,14 @@ public abstract class WanderingTraderMixin extends AbstractVillager {
         super(type, level);
     }
 
+
+
     @Inject(method = "updateTrades", at = @At("TAIL"))
     private void addSpecial(ServerLevel level, CallbackInfo ci, @Local MerchantOffers offers){
         WanderingTrader WTE = (WanderingTrader)(Object)this;
-        WTE.addOffersFromTradeSet(level, offers, ModTags.WANDERING_TRADER_SPECIAL);
+         WTE.addOffersFromTradeSet(level, offers, ModTags.WANDERING_TRADER_SPECIAL);
     }
+
 
     @Inject(method = "mobInteract", at = @At(
             value = "INVOKE",

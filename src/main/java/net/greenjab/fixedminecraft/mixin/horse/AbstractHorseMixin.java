@@ -176,7 +176,7 @@ public abstract class AbstractHorseMixin extends Animal {
     private static CommandSourceStack createCommandSource(ServerLevel level, BlockPos pos) {
         return new CommandSourceStack(
                 CommandSource.NULL, Vec3.atCenterOf(pos), Vec2.ZERO, level, LevelBasedPermissionSet.GAMEMASTER, Component.literal("Sign"), level.getServer());
-    }//TODO horse locator bar
+    }
 
     @Override
     public void hurtArmor(final @NonNull DamageSource damageSource, final float damage) {

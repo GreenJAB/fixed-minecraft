@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_slab"
+        "recipes": "fixedminecraft:azalea_slab"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

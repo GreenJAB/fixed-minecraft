@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:experience_bottle"
+        "recipes": "fixedminecraft:experience_bottle"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

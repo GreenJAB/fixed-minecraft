@@ -1,25 +1,26 @@
 #version 330
+#extension GL_ARB_separate_shader_objects : require
 
 #if !defined(IS_GUI) && !defined(IS_SEE_THROUGH)
-#moj_import <minecraft:fog.glsl>
+#include <minecraft:fog.glsl>
 #endif
 
-#moj_import <minecraft:dynamictransforms.glsl>
+#include <minecraft:dynamictransforms.glsl>
 
 uniform sampler2D Sampler0;
 
 #if !defined(IS_GUI) && !defined(IS_SEE_THROUGH)
-in float sphericalVertexDistance;
-in float cylindricalVertexDistance;
+layout(location = 0) in float sphericalVertexDistance;
+layout(location = 1) in float cylindricalVertexDistance;
 #endif
 
-in vec4 vertexColor;
-in vec2 texCoord0;
+layout(location = 2) in vec4 vertexColor;
+layout(location = 3) in vec2 texCoord0;
 
-in float interpFactor;
-in vec2 texCoordNext;
+layout(location = 4) in float interpFactor;
+layout(location = 5) in vec2 texCoordNext;
 
-out vec4 fragColor;
+layout(location = 0) out vec4 fragColor;
 
 void main() {
 #ifdef IS_GRAYSCALE

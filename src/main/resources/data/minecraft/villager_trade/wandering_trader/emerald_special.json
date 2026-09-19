@@ -1,7 +1,7 @@
 {
-  "given_item_modifiers": [
+  "given_item_modifier": [
     {
-      "function": "fixedminecraft:wandering_trader_special"
+      "type": "fixedminecraft:wandering_trader_special"
     }
   ],
   "gives": {

@@ -9,7 +9,7 @@
   "output": {
     "components": {
       "minecraft:potion_contents": {
-        "potion": "minecraft:levitation"
+        "potion": "fixedminecraft:levitation"
       }
     },
     "id": "minecraft:splash_potion"

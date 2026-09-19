@@ -46,3 +46,4 @@ accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityRight
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityLeft (Lnet/minecraft/nbt/CompoundTag;)V
 accessible class net/minecraft/client/StringSplitter$LineBreakFinder
 accessible field net/minecraft/world/entity/monster/zombie/Zombie drowningTracker Lnet/minecraft/world/entity/ConversionTracker;
+accessible field net/minecraft/advancements/Advancement rewards Lnet/minecraft/advancements/AdvancementRewards;

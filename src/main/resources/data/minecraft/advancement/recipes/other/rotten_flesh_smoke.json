@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:rotten_flesh_smoke"
+                "recipes": "fixedminecraft:rotten_flesh_smoke"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

@@ -201,7 +201,6 @@ public abstract class EnderDragonFightMixin {
             itemEntity.snapTo(0.5f, dragon.getY(), 0.5f, 0.0F, 0);
             itemEntity.setDeltaMovement(new Vec3(0, 0, 0));
             dragon.level().addFreshEntity(itemEntity);
-            //TODO test omen elytra
             this.level.setBlockAndUpdate(this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, this.origin), Blocks.DRAGON_EGG.defaultBlockState());
         }
 

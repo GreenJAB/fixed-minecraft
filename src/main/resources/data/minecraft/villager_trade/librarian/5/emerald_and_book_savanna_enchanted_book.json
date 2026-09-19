@@ -3,15 +3,15 @@
     "id": "minecraft:book"
   },
   "double_trade_price_enchantments": "#minecraft:double_trade_price",
-  "given_item_modifiers": [
+  "given_item_modifier": [
     {
-      "function": "fixedminecraft:librarian_book",
+      "type": "fixedminecraft:librarian_book",
       "master": true,
       "options": "#minecraft:trades/savanna_common",
       "all_options": "#minecraft:tradeable"
     },
     {
-      "function": "minecraft:filtered",
+      "type": "minecraft:filtered",
       "item_filter": {
         "items": "minecraft:enchanted_book",
         "predicates": {
@@ -21,7 +21,7 @@
         }
       },
       "on_fail": {
-        "function": "minecraft:discard"
+        "type": "minecraft:discard"
       }
     }
   ],

@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:bell"
+                "recipes": "fixedminecraft:bell"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

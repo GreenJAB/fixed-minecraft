@@ -16,7 +16,6 @@ import org.jspecify.annotations.NonNull;
 
 import static net.minecraft.world.level.block.WeatheringCopper.WeatherState.*;
 
-//TODO test copper rails oxidisation
 public class CopperRailBlock extends BaseRailBlock {
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
 

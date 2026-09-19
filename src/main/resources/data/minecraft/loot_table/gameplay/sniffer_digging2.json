@@ -21,7 +21,7 @@
                 },
                 {
                     "type": "minecraft:tag",
-                    "name": "fixedminecraft:sniffer_extra",
+                    "items": "#fixedminecraft:sniffer_extra",
                     "expand": true,
                     "weight": 1
                 }

@@ -16,9 +16,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 20,
@@ -37,9 +37,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 20,
@@ -53,9 +53,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": {
                                 "type": "minecraft:uniform",
                                 "max": 20,
@@ -69,9 +69,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_with_levels",
+                            "type": "minecraft:enchant_with_levels",
                             "levels": 50,
                             "options": "#minecraft:on_random_loot"
                         }
@@ -81,9 +81,9 @@
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:enchant_randomly",
+                            "type": "minecraft:enchant_randomly",
                             "options": "#fixedminecraft:other/trial_chamber"
                         }
                     ],

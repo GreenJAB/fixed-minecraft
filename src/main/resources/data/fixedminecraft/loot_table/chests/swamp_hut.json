@@ -142,23 +142,19 @@
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:book",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_with_levels",
-                            "levels": 15,
-                            "options": "#minecraft:on_random_loot"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:enchant_with_levels",
+                        "levels": 15,
+                        "options": "#minecraft:on_random_loot"
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:book",
-                    "functions": [
-                        {
-                            "function": "minecraft:enchant_randomly",
-                            "options": "#fixedminecraft:chest/swamp_hut"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:enchant_randomly",
+                        "options": "#fixedminecraft:chest/swamp_hut"
+                    }
                 }
             ],
             "rolls": {

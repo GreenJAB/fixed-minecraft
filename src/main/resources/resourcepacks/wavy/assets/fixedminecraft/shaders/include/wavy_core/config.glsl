@@ -1,0 +1,26 @@
+#ifndef VT_WAVY_CORE__CONFIG
+#define VT_WAVY_CORE__CONFIG
+
+// -- Config starts here --
+
+#define WATER_WAVE__ALPHA_INTENSITY 13.0
+#define WATER_WAVE__HEIGHT_INTENSITY 0.08
+
+#define GENERIC__X_INTENSITY 1.0
+#define GENERIC__Y_INTENSITY 0.33
+#define GENERIC__Z_INTENSITY 1.0
+
+#define LEAVES__X_INTENSITY 1.0
+#define LEAVES__Y_INTENSITY 0.05
+#define LEAVES__Z_INTENSITY 1.0
+
+#define UNDERWATER__X_INTENSITY 1.0
+#define UNDERWATER__Z_INTENSITY 1.0
+
+#define COORDS_MOD_AMOUNT 128.0
+
+// #define VT_WAVY_CORE__DEBUG_TRANSLUCENT_LAYER
+
+// -- Config ends here --
+
+#endif

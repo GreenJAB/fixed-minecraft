@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:nautilus_armor_dyed"
+        "recipes": "fixedminecraft:nautilus_armor_dyed"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

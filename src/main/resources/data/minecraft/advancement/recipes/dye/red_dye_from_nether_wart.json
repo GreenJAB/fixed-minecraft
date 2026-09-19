@@ -13,7 +13,7 @@
         },
         "has_the_recipe": {
             "conditions": {
-                "recipe": "fixedminecraft:red_dye_from_nether_wart"
+                "recipes": "fixedminecraft:red_dye_from_nether_wart"
             },
             "trigger": "minecraft:recipe_unlocked"
         }

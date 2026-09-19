@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fixedminecraft:azalea_shelf"
+        "recipes": "fixedminecraft:azalea_shelf"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

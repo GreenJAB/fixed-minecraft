@@ -102,16 +102,16 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
     }
 
     protected int getBurnDuration(final ServerLevel level, final ItemStack fuelItem) {
-        return ResolvableInt.getFromItem(fuelItem, DataComponents.COOKING_FUEL, CookingFuel::burnTime, this.getLootContext(level), 0);
+        return fuelItem.getComponents().get(DataComponents.COOKING_FUEL).burnTime().get(this.getLootContext(level), 0);
     }
     protected LootContext getLootContext(final ServerLevel level) {
         return new LootContext.Builder(
                 new LootParams.Builder(level)
+                        .withParameter(LootContextParams.ORIGIN, this.position())
                         .withParameter(LootContextParams.CONTAINER, this)
-                        .create(LootContextParamSets.CONTAINER_PROCESS)
+                        .create(LootContextParamSets.COMMAND_SLOT_SOURCE)
         ).create(Optional.empty());
     }
-    //TODO test furnace minecart fuel
 
     private void updateFuel() {
         if (train.size()>1 && fuel<100) {

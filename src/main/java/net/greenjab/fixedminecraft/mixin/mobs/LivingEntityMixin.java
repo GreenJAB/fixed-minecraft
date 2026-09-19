@@ -163,7 +163,6 @@ public abstract class LivingEntityMixin {
                         itemStack.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.outpost"));
                         ItemEntity drop = PE.createItemStackToDrop(itemStack, false, true);
                         if (drop != null) PE.level().addFreshEntity(drop);
-                        //TODO test pillager drop map
                     }
                 }
             }

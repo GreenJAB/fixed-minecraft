@@ -32,7 +32,7 @@ public abstract class SleepInBedMixin {
 
     @Inject(method = "start", at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/LivingEntity;startSleeping(Lnet/minecraft/core/BlockPos;)V"
+            target = "Lnet/minecraft/world/entity/LivingEntity;startSleeping(Lnet/minecraft/core/BlockPos;)Z"
     ))
     private void resetSleepTimer(ServerLevel level, LivingEntity body, long timestamp, CallbackInfo ci){
         body.getBrain().setMemory(MemoryRegistry.TIME_SINCE_SLEEP, 0);

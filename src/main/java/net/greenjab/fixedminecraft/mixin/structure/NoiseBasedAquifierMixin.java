@@ -6,6 +6,8 @@ import net.minecraft.world.level.levelgen.Aquifer;
 import net.minecraft.world.level.levelgen.NoiseChunk;
 import net.minecraft.world.level.levelgen.NoiseRouter;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;
+import net.minecraft.world.level.levelgen.densityfunction.DensitySamplerSet;
+import net.minecraft.world.level.levelgen.densityfunction.DensityVolume;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -48,10 +50,31 @@ public abstract class NoiseBasedAquifierMixin {
         }
     }
 
+    /*
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void disableSkipSamplingAboveY(NoiseChunk noiseChunk, ChunkPos pos, NoiseRouter router,
-                                           PositionalRandomFactory positionalRandomFactory, int minBlockY, int yBlockSize,
-                                           Aquifer.FluidPicker globalFluidPicker, CallbackInfo ci) {
+    private void disableSkipSamplingAboveY(
+            NoiseChunk noiseChunk,
+            ChunkPos pos,
+            NoiseRouter router,
+            PositionalRandomFactory positionalRandomFactory,
+            int minBlockY,
+            int yBlockSize,
+            Aquifer.FluidPicker globalFluidPicker,
+            CallbackInfo ci
+    ) {
+        if (FixedMinecraft.isChangesEnabled("terrain")) this.skipSamplingAboveY = Integer.MAX_VALUE;
+    }
+     */
+
+    @Inject(method = "<init>", at = @At("RETURN"))
+    private void disableSkipSamplingAboveY(
+            DensitySamplerSet cachingSamplers,
+            Aquifer.Config config,
+            PositionalRandomFactory positionalRandomFactory,
+            DensityVolume volume,
+            Aquifer.FluidPicker globalFluidPicker,
+            CallbackInfo ci
+    ) {
         if (FixedMinecraft.isChangesEnabled("terrain")) this.skipSamplingAboveY = Integer.MAX_VALUE;
     }
 }

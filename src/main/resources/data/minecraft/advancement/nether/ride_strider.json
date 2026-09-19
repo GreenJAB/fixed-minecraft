@@ -8,9 +8,9 @@
                         "minecraft:warped_fungus_on_a_stick"
                     ]
                 },
-                "player": [
+                "player":
                     {
-                        "condition": "minecraft:entity_properties",
+                        "type": "minecraft:entity_properties",
                         "entity": "this",
                         "predicate": {
                             "vehicle": {
@@ -18,7 +18,7 @@
                             }
                         }
                     }
-                ]
+
             },
             "trigger": "minecraft:item_durability_changed"
         }
