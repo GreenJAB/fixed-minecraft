@@ -213,6 +213,7 @@
         "structure.ServerLevelMixin",
         "structure.SnowAndFreezeFeatureMixin",
         "structure.StrongholdPieceLibraryMixin",
+        "structure.StructureProcessorTypesMixin",
         "structure.SwampHutPieceMixin",
         "structure.WoodlandMansionPieceMixin",
         "structure.WoodlandMansionPiecePlacerMixin",

@@ -95,7 +95,7 @@ public class ItemRegistry {
 
     public static final Item TRAIL_RUIN_MONUMENT_MAP = register("trail_ruins_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
     public static final Item RUINED_PORTAL__MAP = register("ruined_portal_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
-    public static final Item PILLAGER_OUTPOST_MAP = register("pillager_outpost", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
+    public static final Item PILLAGER_OUTPOST_MAP = register("pillager_outpost_map", MapItem::new, new Item.Properties().component(DataComponents.MAP_DECORATIONS, MapDecorations.EMPTY));
 
     public static final Item ALLAY_BUCKET = register("allay_bucket", settings ->
                     new MobBucketItem(EntityTypes.ALLAY, Fluids.EMPTY, SoundEvents.BUCKET_EMPTY_AXOLOTL, settings),

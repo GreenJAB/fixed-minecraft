@@ -1,7 +1,6 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
@@ -98,10 +97,13 @@ public class LootTableAdditions {
             HolderLookup.RegistryLookup<Structure> structures = holder.lookupOrThrow(Registries.STRUCTURE);
             HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
             if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
-                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(2))
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(3))
                         .add(LootItem.lootTableItem(Items.BURIED_TRIAL_CHAMBERS_MAP)
                                 .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ON_BURIED_TRIAL_CHAMBERS_MAPS))
-                                        .setMapDecoration(MapDecorationTypes.TRIAL_CHAMBERS).setSearchRadius(100).setSkipKnownStructures(true))).build());
+                                        .setMapDecoration(MapDecorationTypes.TRIAL_CHAMBERS).setSearchRadius(100).setSkipKnownStructures(true)))
+                        .add(LootItem.lootTableItem(Items.BURIED_MINESHAFT_MAP)
+                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ON_MINESHAFT_MAPS))
+                                        .setMapDecoration(MapDecorationTypes.MINESHAFT).setSearchRadius(100).setSkipKnownStructures(true))).build());
             } else if (key==BuiltInLootTables.PILLAGER_OUTPOST) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.WOODLAND_MANSION_MAP).setWeight(5)
@@ -129,22 +131,28 @@ public class LootTableAdditions {
             } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(Items.COMPASS).apply(new ExplorationCompassLootFunction.Builder())));
-            }
-            /*else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
+            } else if (key==BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_WARM_ARCHAEOLOGY) {
                 tableBuilder.modifyPools(builder ->
-                        builder.add(LootItem.lootTableItem(ItemRegistry.TRAIL_RUIN_MONUMENT_MAP).setWeight(5)
-                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(ModTags.ON_TRAIL_RUIN_MAPS))
-                                        .setMapDecoration(MapDecorationRegistry.TRAIL_RUINS).setSearchRadius(100).setSkipKnownStructures(true))).build());
-            }*/
-
-            else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
-                tableBuilder.modifyPools(builder ->
-                        builder.add(NestedLootTable.lootTableReference(lootTables.getOrThrow(LootTableRegistry.TRIAL_RUINS_MAP))).build());
+                        builder.add(NestedLootTable.lootTableReference(lootTables.getOrThrow(LootTableRegistry.TRAIL_RUINS_MAP))).build());
+            } else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(3))
+                        .add(LootItem.lootTableItem(Items.DESERT_PYRAMID_MAP)
+                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ON_DESERT_PYRAMID_MAPS))
+                                        .setMapDecoration(MapDecorationTypes.DESERT_PYRAMID).setSearchRadius(100).setSkipKnownStructures(true)))
+                        .add(LootItem.lootTableItem(Items.JUNGLE_PYRAMID_MAP)
+                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ON_JUNGLE_PYRAMID_MAPS))
+                                        .setMapDecoration(MapDecorationTypes.JUNGLE_TEMPLE).setSearchRadius(100).setSkipKnownStructures(true))).build());
+            } else if (key==BuiltInLootTables.SHIPWRECK_MAP) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(2))
+                        .add(LootItem.lootTableItem(Items.WARM_OCEAN_RUINS_MAP)
+                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ON_OCEAN_RUIN_WARM_MAPS))
+                                        .setMapDecoration(MapDecorationTypes.OCEAN_RUIN_WARM).setSearchRadius(100).setSkipKnownStructures(true))).build());
+            } else if (key==BuiltInLootTables.VILLAGE_CARTOGRAPHER) {
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(2))
+                        .add(LootItem.lootTableItem(Items.ABANDONED_CAMP_MAP)
+                                .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(StructureTags.ABANDONED_CAMP))
+                                        .setMapDecoration(MapDecorationTypes.ABANDONED_CAMP).setSearchRadius(100).setSkipKnownStructures(true))).build());
             }
-
-
-
-            //TODO ModTags.ON_TRAIL_RUIN_MAPS is broken?
         });
 
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
