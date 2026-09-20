@@ -255,10 +255,6 @@ public class BlockRegistry {
         fireBlock.setFlammable(AZALEA_WOOD, 5, 5);
         fireBlock.setFlammable(STRIPPED_AZALEA_LOG, 5, 5);
         fireBlock.setFlammable(STRIPPED_AZALEA_LOG, 5, 5);
-
-        //StrippableBlockRegistry.register(AZALEA_LOG, STRIPPED_AZALEA_LOG);
-        //StrippableBlockRegistry.register(AZALEA_WOOD, STRIPPED_AZALEA_WOOD);
-        //TODO stip azalea
     }
 
     private static Block register(String id, BlockBehaviour.Properties settings) {

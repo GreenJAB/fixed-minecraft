@@ -6,9 +6,6 @@
         "defaultRequire": 1
     },
     "mixins": [
-        "glint.TridentSpecialRendererMixin"
-    ],
-    "client": [
         "AbstractContainerScreenMixin",
         "AbstractMinecartRendererMixin",
         "AbstractMountInventoryScreenMixin",
@@ -46,11 +43,9 @@
         "font.GuiMixin",
         "font.MinecraftMixin",
         "font.StringSplitterMixin",
+        "glint.BakedQuadMixin",
         "glint.CuboidItemModelWrapperMixin",
         "glint.EquipmentLayerRendererMixin",
-        "glint.ItemFeatureRendererMixin",
-        "glint.ItemModelMixin",
-        "glint.ItemModelResolverMixin",
         "map.CartographyTableScreenMixin",
         "map.ClientPacketListenerMixin",
         "map.HudMixin",

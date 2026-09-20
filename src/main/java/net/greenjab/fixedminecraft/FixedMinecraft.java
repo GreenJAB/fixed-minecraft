@@ -155,4 +155,3 @@ public class FixedMinecraft implements ModInitializer {
                LootTable.EMPTY;
     }
 }
-//TODO test amplified (if can find)

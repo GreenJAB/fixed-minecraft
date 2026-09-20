@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.registry.registries;
 
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.other.ExplorationCompassLootFunction;
 import net.minecraft.advancements.predicates.LocationPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
@@ -95,6 +96,7 @@ public class LootTableAdditions {
 
         LootTableEvents.MODIFY.register((key, tableBuilder, _, holder) -> {
             HolderLookup.RegistryLookup<Structure> structures = holder.lookupOrThrow(Registries.STRUCTURE);
+            HolderLookup.RegistryLookup<LootTable> lootTables = holder.lookupOrThrow(Registries.LOOT_TABLE);
             if (key==BuiltInLootTables.SIMPLE_DUNGEON) {
                 tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(2))
                         .add(LootItem.lootTableItem(Items.BURIED_TRIAL_CHAMBERS_MAP)
@@ -127,14 +129,21 @@ public class LootTableAdditions {
             } else if (key==BuiltInLootTables.TRAIL_RUINS_ARCHAEOLOGY_RARE) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(Items.COMPASS).apply(new ExplorationCompassLootFunction.Builder())));
-            } /*
-            else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
+            }
+            /*else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
                 tableBuilder.modifyPools(builder ->
                         builder.add(LootItem.lootTableItem(ItemRegistry.TRAIL_RUIN_MONUMENT_MAP).setWeight(5)
                                 .apply(ExplorationMapFunction.makeExplorationMap(structures.getOrThrow(ModTags.ON_TRAIL_RUIN_MAPS))
                                         .setMapDecoration(MapDecorationRegistry.TRAIL_RUINS).setSearchRadius(100).setSkipKnownStructures(true))).build());
+            }*/
+
+            else if (key==BuiltInLootTables.DESERT_WELL_ARCHAEOLOGY||key==BuiltInLootTables.OCEAN_RUIN_COLD_ARCHAEOLOGY) {
+                tableBuilder.modifyPools(builder ->
+                        builder.add(NestedLootTable.lootTableReference(lootTables.getOrThrow(LootTableRegistry.TRIAL_RUINS_MAP))).build());
             }
-            */
+
+
+
             //TODO ModTags.ON_TRAIL_RUIN_MAPS is broken?
         });
 

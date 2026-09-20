@@ -4,22 +4,14 @@
   },
   "given_item_modifier": [
     {
+      "type": "minecraft:exploration_map",
       "decoration": "minecraft:ruined_portal",
       "destination": "#minecraft:ruined_portal",
-      "type": "minecraft:exploration_map",
       "search_radius": 100
-    },
-    {
-      "type": "minecraft:set_name",
-      "name": {
-        "translate": "filled_map.ruined_portal"
-      },
-      "target": "item_name"
     },
     {
       "type": "minecraft:filtered",
       "item_filter": {
-        "items": "minecraft:filled_map",
         "predicates": {
           "minecraft:map_id": {}
         }
@@ -30,13 +22,13 @@
     }
   ],
   "gives": {
-    "id": "minecraft:map"
+    "id": "fixedminecraft:ruined_portal_map"
   },
-  "max_uses": 12.0,
+  "max_uses": 12,
   "reputation_discount": 0.2,
   "wants": {
-    "count": 13.0,
+    "count": 12,
     "id": "minecraft:emerald"
   },
-  "xp": 10.0
+  "xp": 10
 }

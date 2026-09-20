@@ -1,0 +1,37 @@
+{
+    "type": "minecraft:chest",
+    "pools": [
+        {
+            "rolls": 1,
+            "bonus_rolls": 0,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 5,
+                    "modifier": [
+                        {
+                            "type": "minecraft:exploration_map",
+                            "decoration": "minecraft:trail_ruins",
+                            "destination": "#fixedminecraft:on_trail_ruins_maps",
+                            "skip_existing_chunks": false,
+                            "zoom": 1
+                        },
+                        {
+                            "type": "minecraft:filtered",
+                            "item_filter": {
+                                "predicates": {
+                                    "minecraft:map_id": {}
+                                }
+                            },
+                            "on_fail": {
+                                "type": "minecraft:discard"
+                            }
+                        }
+                    ],
+                    "name": "fixedminecraft:trail_ruins_map"
+                }
+            ]
+        }
+    ],
+    "random_sequence": "fixedminecraft:map/trial_ruins"
+}
