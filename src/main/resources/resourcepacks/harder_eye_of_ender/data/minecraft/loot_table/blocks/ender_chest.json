@@ -13,7 +13,7 @@
                             "name": "minecraft:ender_chest",
                             "conditions": [
                                 {
-                                    "condition": "minecraft:match_tool",
+                                    "type": "minecraft:match_tool",
                                     "predicate": {
                                         "predicates": {
                                             "minecraft:enchantments": [
@@ -54,9 +54,9 @@
                     "name": "minecraft:ender_pearl",
                     "conditions": [
                         {
-                            "condition": "minecraft:inverted",
+                            "type": "minecraft:inverted",
                             "term": {
-                                "condition": "minecraft:match_tool",
+                                "type": "minecraft:match_tool",
                                 "predicate": {
                                     "components": {
                                         "minecraft:enchantments": {
@@ -73,9 +73,9 @@
                     "name": "minecraft:ender_eye",
                     "conditions": [
                         {
-                            "condition": "minecraft:inverted",
+                            "type": "minecraft:inverted",
                             "term": {
-                                "condition": "minecraft:match_tool",
+                                "type": "minecraft:match_tool",
                                 "predicate": {
                                     "components": {
                                         "minecraft:enchantments": {

@@ -5,7 +5,7 @@
             "bonus_rolls": 0,
             "conditions": [
                 {
-                    "condition": "minecraft:random_chance_with_enchanted_bonus",
+                    "type": "minecraft:random_chance_with_enchanted_bonus",
                     "enchanted_chance": {
                         "type": "minecraft:linear",
                         "base": 0.5625,

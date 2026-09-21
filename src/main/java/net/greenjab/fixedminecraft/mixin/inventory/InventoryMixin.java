@@ -7,6 +7,9 @@ import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.EntityEquipment;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -86,4 +89,25 @@ public abstract class InventoryMixin {
         if (instance.is(ModTags.PARTIAL_KEEP_INVENTORY)) return true;
         return original.call(instance);
     }
+
+    @WrapOperation(method = "dropAll", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/EntityEquipment;dropAll(Lnet/minecraft/world/entity/LivingEntity;)V"))
+    private void noDropSpecialItemsArmour(EntityEquipment instance, LivingEntity dropper, Operation<Void> original) {
+        if (this.player.level() instanceof ServerLevel level && !level.getGameRules().get(GameRuleRegistry.PARTIAL_KEEP_INVENTORY)) original.call(instance, dropper);
+        else {
+            for (EquipmentSlot slot : instance.items.keySet()) {
+                if (!instance.get(slot).is(ModTags.PARTIAL_KEEP_INVENTORY)) {
+                    ItemEntity entity = dropper.createItemStackToDrop(instance.get(slot), true, false);
+                    if (entity!=null) {
+                        int ticks = ((ServerLevel) this.player.level()).getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
+                        if (ticks == 0) entity.setUnlimitedLifetime();
+                        else entity.age = 6000 - ticks;
+                    }
+                    if (entity != null) {
+                        dropper.level().addFreshEntity(entity);
+                    }
+                }
+            }
+        }
+    }
+
 }

@@ -32,6 +32,7 @@ public abstract class TradeWithVillagerMixin  {
         throwHalfStack(villager, itemStack -> FOOD_POINTS.containsKey(itemStack.getItem()), target);
     }
 
+    @Unique
     private static void throwHalfStack(final Villager villager, final Predicate<ItemStack> predicate, final LivingEntity target) {
         SimpleContainer inventory = villager.getInventory();
         ItemStack toThrow = ItemStack.EMPTY;

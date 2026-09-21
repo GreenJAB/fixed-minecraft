@@ -1,34 +1,31 @@
 {
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
+    "type": "minecraft:block",
+    "pools": [
         {
-          "type": "minecraft:item",
-          "modifier": [
-            {
-              "conditions": [
+            "entries": [
                 {
-                  "block": "fixedminecraft:azalea_slab",
-                  "condition": "minecraft:block_state_property",
-                  "properties": {
-                    "type": "double"
-                  }
+                    "type": "minecraft:item",
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_count",
+                            "condition": {
+                                "type": "minecraft:match_block",
+                                "blocks": "fixedminecraft:azalea_slab",
+                                "state": {
+                                    "type": "double"
+                                }
+                            },
+                            "count": 2
+                        },
+                        {
+                            "type": "minecraft:explosion_decay"
+                        }
+                    ],
+                    "name": "fixedminecraft:azalea_slab"
                 }
-              ],
-              "count": 2.0,
-              "type": "minecraft:set_count"
-            },
-            {
-              "type": "minecraft:explosion_decay"
-            }
-          ],
-          "name": "fixedminecraft:azalea_slab"
+            ],
+            "rolls": 1
         }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "fixedminecraft:blocks/azalea_slab"
+    ],
+    "random_sequence": "fixedminecraft:blocks/azalea_slab"
 }

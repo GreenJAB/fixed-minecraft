@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Sheets.class)
 @Environment(EnvType.CLIENT)
-public abstract class BakedQuadMixin {
+public abstract class SheetsMixin {
 
     @Inject(method = "translucentBlockItemGlintSpecialSheet", at = @At("HEAD"), cancellable = true)
     private static void getGlintTranslucent1(CallbackInfoReturnable<RenderType> cir) {

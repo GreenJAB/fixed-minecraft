@@ -1,7 +1,6 @@
 accessWidener v2 official
 
 accessible field net/minecraft/world/inventory/CartographyTableMenu lastSoundTime J
-#accessible method net/minecraft/world/level/block/Block dropFromBlockInteractLootTable (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/entity/BlockEntity;Lnet/minecraft/world/item/ItemInstance;Lnet/minecraft/world/entity/Entity;Ljava/util/function/BiConsumer;)Z
 accessible method net/minecraft/world/entity/monster/Shulker setVariant (Ljava/util/Optional;)V
 accessible class net/minecraft/world/inventory/ArmorSlot
 accessible field net/minecraft/world/entity/LivingEntity equipment Lnet/minecraft/world/entity/EntityEquipment;
@@ -47,3 +46,4 @@ accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityLeft 
 accessible class net/minecraft/client/StringSplitter$LineBreakFinder
 accessible field net/minecraft/world/entity/monster/zombie/Zombie drowningTracker Lnet/minecraft/world/entity/ConversionTracker;
 accessible field net/minecraft/advancements/Advancement rewards Lnet/minecraft/advancements/AdvancementRewards;
+accessible field net/minecraft/world/entity/EntityEquipment items Ljava/util/EnumMap;

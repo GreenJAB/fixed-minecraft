@@ -28,12 +28,6 @@ public class EnchantGlint {
     }
 
     @Environment(EnvType.CLIENT)
-    public static RenderType getEntityGlint(Identifier texture) {
-        if (isSuper()) return GlintRenderLayer.ENTITY_SOLID_GLINT.apply(texture);
-        else return RenderTypes.entitySolidGlint(texture);
-    }
-
-    @Environment(EnvType.CLIENT)
     public static RenderType getArmorEntityGlint(Identifier texture) {
         if (isSuper()) return GlintRenderLayer.ARMOR_CUTOUT_NO_CULL_GLINT.apply(texture);
         else return RenderTypes.armorCutoutNoCullGlint(texture);

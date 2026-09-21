@@ -43,7 +43,7 @@
         "font.GuiMixin",
         "font.MinecraftMixin",
         "font.StringSplitterMixin",
-        "glint.BakedQuadMixin",
+        "glint.SheetsMixin",
         "glint.CuboidItemModelWrapperMixin",
         "glint.EquipmentLayerRendererMixin",
         "map.CartographyTableScreenMixin",

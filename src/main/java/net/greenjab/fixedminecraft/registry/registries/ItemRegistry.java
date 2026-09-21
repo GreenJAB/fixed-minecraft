@@ -82,6 +82,7 @@ public class ItemRegistry {
     public static final Item NETHERITE_ANVIL = register(BlockRegistry.NETHERITE_ANVIL, new Item.Properties().fireResistant());
     public static final Item CHIPPED_NETHERITE_ANVIL = register(BlockRegistry.CHIPPED_NETHERITE_ANVIL, new Item.Properties().fireResistant());
     public static final Item DAMAGED_NETHERITE_ANVIL = register(BlockRegistry.DAMAGED_NETHERITE_ANVIL, new Item.Properties().fireResistant());
+//TODO blast resistant
 
     public static final Item COPPER_RAIL = register(BlockRegistry.COPPER_RAIL);
     public static final Item EXPOSED_COPPER_RAIL = register(BlockRegistry.EXPOSED_COPPER_RAIL);

@@ -11,16 +11,16 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:any_of",
+                  "type": "minecraft:any_of",
                   "terms": [
                     {
-                      "condition": "minecraft:match_tool",
+                      "type": "minecraft:match_tool",
                       "predicate": {
                         "items": "minecraft:shears"
                       }
                     },
                     {
-                      "condition": "minecraft:match_tool",
+                      "type": "minecraft:match_tool",
                       "predicate": {
                         "predicates": {
                           "minecraft:enchantments": [
@@ -43,7 +43,7 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:survives_explosion"
+                  "type": "minecraft:survives_explosion"
                 },
                 {
                   "chances": [
@@ -52,7 +52,7 @@
                     0.083333336,
                     0.1
                   ],
-                  "condition": "minecraft:table_bonus",
+                  "type": "minecraft:table_bonus",
                   "enchantment": "minecraft:fortune"
                 }
               ],
@@ -67,18 +67,18 @@
       "bonus_rolls": 0.0,
       "conditions": [
         {
-          "condition": "minecraft:inverted",
+          "type": "minecraft:inverted",
           "term": {
-            "condition": "minecraft:any_of",
+            "type": "minecraft:any_of",
             "terms": [
               {
-                "condition": "minecraft:match_tool",
+                "type": "minecraft:match_tool",
                 "predicate": {
                   "items": "minecraft:shears"
                 }
               },
               {
-                "condition": "minecraft:match_tool",
+                "type": "minecraft:match_tool",
                 "predicate": {
                   "predicates": {
                     "minecraft:enchantments": [
@@ -108,7 +108,7 @@
                 0.033333335,
                 0.1
               ],
-              "condition": "minecraft:table_bonus",
+              "type": "minecraft:table_bonus",
               "enchantment": "minecraft:fortune"
             }
           ],

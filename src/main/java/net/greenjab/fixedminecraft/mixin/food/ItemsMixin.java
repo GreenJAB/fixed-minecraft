@@ -196,7 +196,7 @@ public abstract class ItemsMixin {
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;fireResistant()Lnet/minecraft/world/item/Item$Properties;"))
     private static Item.Properties blastProofNetherite(Item.Properties instance, Operation<Item.Properties> original) {
         return original.call(instance);//.delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION)));
-    }
+    }//TODO test
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Lnet/minecraft/resources/ResourceKey;Lnet/minecraft/world/item/Item$Properties;)Lnet/minecraft/world/item/Item;", ordinal = 0), slice = @Slice(from =
     @At(value = "FIELD", target = "Lnet/minecraft/references/ItemIds;BLAZE_ROD:Lnet/minecraft/resources/ResourceKey;", opcode = Opcodes.GETSTATIC), to =

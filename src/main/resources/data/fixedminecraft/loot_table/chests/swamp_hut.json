@@ -6,33 +6,28 @@
             "entries": [
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "min": 5,
-                                "max": 8
-                            }
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "min": 5,
+                            "max": 8
                         }
-                    ],
+                    },
                     "name": "minecraft:glass_bottle",
                     "weight": 20
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [],
                     "name": "minecraft:fermented_spider_eye",
                     "weight": 15
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 4
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 4
+                    },
                     "name": "minecraft:redstone",
                     "weight": 10
                 },
@@ -40,10 +35,9 @@
                     "type": "minecraft:item",
                     "name": "minecraft:gunpowder",
                     "weight": 15,
-                    "conditions": [],
-                    "functions": [
+                    "modifier": [
                         {
-                            "function": "minecraft:set_count",
+                            "type": "minecraft:set_count",
                             "count": 3
                         }
                     ]
@@ -52,32 +46,26 @@
                     "type": "minecraft:item",
                     "name": "minecraft:sugar",
                     "weight": 10,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 2
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 2
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:glowstone_dust",
                     "weight": 10,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": 2
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": 2
+                    }
                 },
                 {
                     "type": "minecraft:item",
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:poison"
-                        }
-                    ],
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:poison"
+                    },
                     "name": "minecraft:potion",
                     "weight": 5
                 },
@@ -85,49 +73,41 @@
                     "type": "minecraft:item",
                     "name": "minecraft:potion",
                     "weight": 5,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:slowness"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:slowness"
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:potion",
                     "weight": 5,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:weakness"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:weakness"
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:potion",
                     "weight": 5,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_potion",
-                            "id": "minecraft:harming"
-                        }
-                    ]
+                    "modifier": {
+                        "type": "minecraft:set_potion",
+                        "id": "minecraft:harming"
+                    }
                 },
                 {
                     "type": "minecraft:item",
                     "name": "minecraft:stick",
                     "weight": 15,
-                    "functions": [
-                        {
-                            "function": "minecraft:set_count",
-                            "count": {
-                                "type": "minecraft:uniform",
-                                "min": 8,
-                                "max": 12
-                            }
+                    "modifier": {
+                        "type": "minecraft:set_count",
+                        "count": {
+                            "type": "minecraft:uniform",
+                            "min": 8,
+                            "max": 12
                         }
-                    ]
+                    }
                 }
             ],
             "rolls": {
