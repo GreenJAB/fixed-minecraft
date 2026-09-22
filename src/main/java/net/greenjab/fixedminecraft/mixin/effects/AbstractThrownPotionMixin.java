@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.effects;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.registries.MobEffectRegistry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
@@ -17,6 +18,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mixin(AbstractThrownPotion.class)
 public abstract class AbstractThrownPotionMixin {
@@ -35,15 +38,18 @@ public abstract class AbstractThrownPotionMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/item/alchemy/PotionContents;is(Lnet/minecraft/core/Holder;)Z"
     ))
-    private void piglinAwkwardEffect(HitResult hitResult, CallbackInfo ci) {
-        AbstractThrownPotion PE = (AbstractThrownPotion) (Object)this;
-        AABB box = PE.getBoundingBox().inflate(4.0, 2.0, 4.0);
-
-        for (Piglin piglinEntity : PE.level().getEntitiesOfClass(Piglin.class, box)) {
-            piglinEntity.setImmuneToZombification(true);
-        }
-        for (Hoglin hoglinEntity : PE.level().getEntitiesOfClass(Hoglin.class, box)) {
-            hoglinEntity.setImmuneToZombification(true);
+    private void piglinAwkwardEffect(HitResult hitResult, CallbackInfo ci, @Local PotionContents potion) {
+        AtomicBoolean awkward = new AtomicBoolean(false);
+        potion.getAllEffects().forEach(p->{if (p.getEffect() == MobEffectRegistry.AWKWARD) awkward.set(true);});
+        if (awkward.get()) {
+            AbstractThrownPotion PE = (AbstractThrownPotion) (Object)this;
+            AABB box = PE.getBoundingBox().inflate(4.0, 2.0, 4.0);
+            for (Piglin piglinEntity : PE.level().getEntitiesOfClass(Piglin.class, box)) {
+                piglinEntity.setImmuneToZombification(true);
+            }
+            for (Hoglin hoglinEntity : PE.level().getEntitiesOfClass(Hoglin.class, box)) {
+                hoglinEntity.setImmuneToZombification(true);
+            }
         }
     }
 

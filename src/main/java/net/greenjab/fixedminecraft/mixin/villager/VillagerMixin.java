@@ -341,13 +341,13 @@ public abstract class VillagerMixin extends AbstractVillager {
     @WrapOperation(method = "customServerAiStep", at =
     @At(value = "FIELD", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseProfessionLevelOnUpdate:Z", opcode = Opcodes.GETFIELD))
     private boolean noAutoLevelUp(Villager instance, Operation<Boolean> original) {
-        if (this.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT)) return original.call(instance);
+        if (this.level() instanceof ServerLevel serverLevel && !serverLevel.getGameRules().get(GameRules.ADVANCE_TIME)) return original.call(instance);
         return false;
     }
 
     @Inject(method = "shouldRestock", at = @At(value = "HEAD"))
     private void levelUpOnRestock(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
-        if (!level.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT) && this.shouldIncreaseLevel()) {
+        if (this.shouldIncreaseLevel()) {
             this.increaseMerchantCareer(level);
             this.increaseProfessionLevelOnUpdate = false;
         }

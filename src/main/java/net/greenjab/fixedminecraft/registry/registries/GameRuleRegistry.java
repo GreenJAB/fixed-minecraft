@@ -121,7 +121,7 @@ public class GameRuleRegistry {
         VILLAGERS_NEED_SUNLIGHT = registerBoolean("villagers_need_sunlight", JABSFIXEDMOBSANDBLOCKS, true);
         VILLAGERS_NEED_FRIENDS = registerBoolean("villagers_need_friends", JABSFIXEDMOBSANDBLOCKS, true);
         VILLAGERS_NEED_SPACE = registerBoolean("villagers_need_space", JABSFIXEDMOBSANDBLOCKS, true);
-        VILLAGERS_TRADE_AT_NIGHT = registerBoolean("villagers_trade_at_night", JABSFIXEDMOBSANDBLOCKS, true);
+        VILLAGERS_TRADE_AT_NIGHT = registerBoolean("villagers_trade_at_night", JABSFIXEDMOBSANDBLOCKS, false);
         VILLAGERS_STRONGER_DEMAND = registerBoolean("villagers_stronger_demand", JABSFIXEDMOBSANDBLOCKS, true);
         VILLAGERS_NITWITIFY_ON_ZOMBIFICATION = registerBoolean("villagers_nitwitify_on_zombification", JABSFIXEDMOBSANDBLOCKS, true);
         ONE_IRON_GOLEM_PER_MOB = registerBoolean("one_iron_golem_per_mob", JABSFIXEDMOBSANDBLOCKS, true);

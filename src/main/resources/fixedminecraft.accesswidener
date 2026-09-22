@@ -45,3 +45,4 @@ accessible method net/minecraft/world/level/NaturalSpawner$SpawnState canSpawnFo
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityRight (Lnet/minecraft/nbt/CompoundTag;)V
 accessible method net/minecraft/server/level/ServerPlayer setShoulderEntityLeft (Lnet/minecraft/nbt/CompoundTag;)V
 accessible class net/minecraft/client/StringSplitter$LineBreakFinder
+accessible field net/minecraft/world/entity/EntityEquipment items Ljava/util/EnumMap;
