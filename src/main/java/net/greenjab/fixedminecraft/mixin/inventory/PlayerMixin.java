@@ -1,6 +1,8 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponents;
@@ -61,7 +63,9 @@ public abstract class PlayerMixin {
         if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             Player PE = (Player) (Object) this;
             for (ItemStack itemStack : PE.inventoryMenu.getCraftSlots().getItems()) {
-                PE.drop(itemStack, false);
+                if (level.getGameRules().get(GameRuleRegistry.PARTIAL_KEEP_INVENTORY)){
+                    if (!itemStack.is(ModTags.PARTIAL_KEEP_INVENTORY)) PE.drop(itemStack, false);
+                } else PE.drop(itemStack, false);
             }
         }
     }
