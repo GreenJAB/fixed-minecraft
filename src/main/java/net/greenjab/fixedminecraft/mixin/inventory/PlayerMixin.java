@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.inventory;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentPatch;
@@ -63,13 +64,25 @@ public abstract class PlayerMixin {
         if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             Player PE = (Player) (Object) this;
             for (ItemStack itemStack : PE.inventoryMenu.getCraftSlots().getItems()) {
-                ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
-                if (drop != null) {
-                    int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
-                    if (ticks == 0) drop.setUnlimitedLifetime();
-                    else drop.age = 6000-ticks;
-                    PE.level().addFreshEntity(drop);
-                }
+                if (level.getGameRules().get(GameRuleRegistry.PARTIAL_KEEP_INVENTORY)){
+                    if (!itemStack.is(ModTags.PARTIAL_KEEP_INVENTORY)) {
+						ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
+						if (drop != null) {
+							int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
+							if (ticks == 0) drop.setUnlimitedLifetime();
+							else drop.age = 6000-ticks;
+							PE.level().addFreshEntity(drop);
+						}
+					}
+                } else {
+					ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
+					if (drop != null) {
+						int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
+						if (ticks == 0) drop.setUnlimitedLifetime();
+						else drop.age = 6000-ticks;
+						PE.level().addFreshEntity(drop);
+					}
+				}
             }
             PE.inventoryMenu.getCraftSlots().clearContent();
         }

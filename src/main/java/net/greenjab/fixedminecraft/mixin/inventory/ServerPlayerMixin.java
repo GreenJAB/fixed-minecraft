@@ -38,6 +38,10 @@ public abstract class ServerPlayerMixin extends Player{
                 if (oldPlayer.getInventory().getItem(i).is(ModTags.PARTIAL_KEEP_INVENTORY))
                     this.getInventory().setItem(i, oldPlayer.getInventory().getItem(i));
             }
+            for (int i = 0; i < 4; i++) {
+                if (oldPlayer.inventoryMenu.getCraftSlots().getItem(i).is(ModTags.PARTIAL_KEEP_INVENTORY))
+                    this.inventoryMenu.getCraftSlots().setItem(i, oldPlayer.inventoryMenu.getCraftSlots().getItem(i));
+            }
         }
         return original;
     }
