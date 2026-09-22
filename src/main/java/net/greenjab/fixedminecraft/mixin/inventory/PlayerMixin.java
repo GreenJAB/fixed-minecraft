@@ -63,28 +63,20 @@ public abstract class PlayerMixin {
     private void dropCraftingGridItems(ServerLevel level, CallbackInfo ci) {
         if (!level.getGameRules().get(GameRules.KEEP_INVENTORY)) {
             Player PE = (Player) (Object) this;
-            for (ItemStack itemStack : PE.inventoryMenu.getCraftSlots().getItems()) {
-                if (level.getGameRules().get(GameRuleRegistry.PARTIAL_KEEP_INVENTORY)){
-                    if (!itemStack.is(ModTags.PARTIAL_KEEP_INVENTORY)) {
-						ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
-						if (drop != null) {
-							int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
-							if (ticks == 0) drop.setUnlimitedLifetime();
-							else drop.age = 6000-ticks;
-							PE.level().addFreshEntity(drop);
-						}
-					}
-                } else {
-					ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
-					if (drop != null) {
-						int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
-						if (ticks == 0) drop.setUnlimitedLifetime();
-						else drop.age = 6000-ticks;
-						PE.level().addFreshEntity(drop);
-					}
-				}
+            CraftingContainer craft = PE.inventoryMenu.getCraftSlots();
+            for (int i = 0; i < 4; i++) {
+                ItemStack itemStack = craft.getItem(i);
+                if (!level.getGameRules().get(GameRuleRegistry.PARTIAL_KEEP_INVENTORY) || (!itemStack.is(ModTags.PARTIAL_KEEP_INVENTORY))) {
+                    ItemEntity drop = PE.createItemStackToDrop(itemStack, true, false);
+                    if (drop != null) {
+                        int ticks = level.getGameRules().get(GameRuleRegistry.ITEM_DEATH_DESPAWN_TIME) * 20 * 60;
+                        if (ticks == 0) drop.setUnlimitedLifetime();
+                        else drop.age = 6000 - ticks;
+                        PE.level().addFreshEntity(drop);
+                    }
+                    craft.setItem(i, ItemStack.EMPTY);
+                }
             }
-            PE.inventoryMenu.getCraftSlots().clearContent();
         }
     }
 
