@@ -96,7 +96,7 @@ public abstract class MapItemSavedDataMixin implements MapStateAccessor {
             String n = name.getString();
             if (n.charAt(0) == '¶') {
                 String[] s = n.split("¶");
-                type = getMapType(s[1]);
+                type = getMapType(s[1].split(":")[1]);
                 return original.call(type, x, z, rot, Optional.empty());
             }
             if (n.contains("[")) {
