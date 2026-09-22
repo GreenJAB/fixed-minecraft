@@ -1,7 +1,19 @@
 {
   "variants": {
-    "": {
-      "model": "fixedminecraft:block/azalea_sign"
+      "facing=east": {
+          "model": "fixedminecraft:block/azalea_wall_sign",
+          "y": 270
+      },
+      "facing=north": {
+          "model": "fixedminecraft:block/azalea_wall_sign",
+          "y": 180
+      },
+      "facing=south": {
+          "model": "fixedminecraft:block/azalea_wall_sign"
+      },
+      "facing=west": {
+          "model": "fixedminecraft:block/azalea_wall_sign",
+          "y": 90
     }
   }
 }
