@@ -343,11 +343,12 @@ public abstract class VillagerMixin extends AbstractVillager {
     @WrapOperation(method = "rewardTradeXp", at =
     @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/npc/villager/Villager;increaseMerchantCareer(Lnet/minecraft/server/level/ServerLevel;)V"))
     private void noAutoLevelUp(Villager instance, ServerLevel level, Operation<Void> original) {
+        if (!level.getGameRules().get(GameRules.ADVANCE_TIME)) original.call(instance, level);
     }
 
     @Inject(method = "shouldRestock", at = @At(value = "HEAD"))
     private void levelUpOnRestock(ServerLevel level, CallbackInfoReturnable<Boolean> cir) {
-        if (!level.getGameRules().get(GameRuleRegistry.VILLAGERS_TRADE_AT_NIGHT) && this.shouldIncreaseLevel()) {
+        if (this.shouldIncreaseLevel()) {
             this.increaseMerchantCareer(level);
         }
     }

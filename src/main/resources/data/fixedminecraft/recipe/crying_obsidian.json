@@ -1,14 +1,9 @@
 {
-    "type": "minecraft:crafting_shaped",
-    "pattern": [
-        "###",
-        "#G#",
-        "###"
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "minecraft:obsidian",
+        "minecraft:ghast_tear"
     ],
-    "key": {
-        "#": "minecraft:obsidian",
-        "G": "minecraft:ghast_tear"
-    },
     "result": {
         "count": 1,
         "id": "minecraft:crying_obsidian"
