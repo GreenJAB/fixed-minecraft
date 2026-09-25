@@ -34,10 +34,13 @@ public abstract class CauldronInteractionsMixin {
         WATER.put(Items.COMPASS, CauldronInteractionsMixin::cleanCompass);
 
         Items.DYED_BUNDLE.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanBundle));
-        Items.WOOL.forEach(dyed->{if(dyed==Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
-        Items.CARPET.forEach(dyed->{if(dyed==Items.CARPET.white())WATER.put(dyed, CauldronInteractionsMixin::cleanCarpet);});
-        Items.BED.forEach(dyed->{if(dyed==Items.BED.white())WATER.put(dyed, CauldronInteractionsMixin::cleanBed);});
-        Items.HARNESS.forEach(dyed->{if(dyed==Items.HARNESS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanHarness);});
+        Items.WOOL.forEach(dyed->{if(dyed!=Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
+        Items.WOOL_SLAB.forEach(dyed->{if(dyed!=Items.WOOL_SLAB.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWoolSlab);});
+        Items.WOOL_STAIRS.forEach(dyed->{if(dyed!=Items.WOOL_STAIRS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWoolStairs);});
+        Items.WOOL.forEach(dyed->{if(dyed!=Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
+        Items.CARPET.forEach(dyed->{if(dyed!=Items.CARPET.white())WATER.put(dyed, CauldronInteractionsMixin::cleanCarpet);});
+        Items.BED.forEach(dyed->{if(dyed!=Items.BED.white())WATER.put(dyed, CauldronInteractionsMixin::cleanBed);});
+        Items.HARNESS.forEach(dyed->{if(dyed!=Items.HARNESS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanHarness);});
         Items.STAINED_GLASS.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanGlass));
         Items.STAINED_GLASS_PANE.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanGlassPane));
         Items.DYED_TERRACOTTA.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanTerracotta));
@@ -78,6 +81,16 @@ public abstract class CauldronInteractionsMixin {
     @Unique
     private static InteractionResult cleanWool(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
         return cleanSimple(state, world, pos, player, hand, stack, ItemTags.WOOL, Items.WOOL.white());
+    }
+
+    @Unique
+    private static InteractionResult cleanWoolSlab(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
+        return cleanSimple(state, world, pos, player, hand, stack, ItemTags.WOOL_SLABS, Items.WOOL_SLAB.white());
+    }
+
+    @Unique
+    private static InteractionResult cleanWoolStairs(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, ItemStack stack) {
+        return cleanSimple(state, world, pos, player, hand, stack, ItemTags.WOOL_STAIRS, Items.WOOL_STAIRS.white());
     }
 
     @Unique

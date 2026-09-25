@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "concrete_slab",
+  "key": {
+    "#": "minecraft:magenta_concrete"
+  },
+  "pattern": [
+    "##"
+  ],
+  "result": {
+    "count": 4,
+    "id": "minecraft:magenta_concrete_slab"
+  }
+}

@@ -305,8 +305,8 @@ public class FixedFurnaceMinecartEntity extends MinecartFurnace {
     public @NonNull InteractionResult interact(Player player, @NonNull InteractionHand hand, @NonNull Vec3 location) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (fuel>0) this.setHasFuel(true);
-        if (itemStack.has(DataComponents.COOKING_FUEL)) {
-            int itemFuel = getBurnDuration((ServerLevel) level(), itemStack);
+        if (itemStack.has(DataComponents.COOKING_FUEL) && level() instanceof ServerLevel serverLevel) {
+            int itemFuel = getBurnDuration(serverLevel, itemStack);
             if (fuel + itemFuel <= 32000) {
                 fuel += itemFuel;
                 this.setHasFuel(true);

@@ -23,6 +23,7 @@ public class GameRuleStatus {
     public boolean modified_beacon;
     public boolean modified_dragon;
     public boolean modified_wither;
+    public boolean disable_f3;
 
     public GameRuleStatus(){
     }
@@ -43,6 +44,7 @@ public class GameRuleStatus {
         this.modified_beacon = rules.get(GameRuleRegistry.MODIFIED_BEACON);
         this.modified_dragon = rules.get(GameRuleRegistry.MODIFIED_DRAGON_FIGHT);
         this.modified_wither = rules.get(GameRuleRegistry.MODIFIED_WITHER_FIGHT);
+        this.disable_f3 = rules.get(GameRuleRegistry.DISABLE_F3);
     }
 
     void toPacket(FriendlyByteBuf buf) {
@@ -61,6 +63,7 @@ public class GameRuleStatus {
         buf.writeBoolean(modified_beacon);
         buf.writeBoolean(modified_dragon);
         buf.writeBoolean(modified_wither);
+        buf.writeBoolean(disable_f3);
     }
 
     static GameRuleStatus fromPacket(FriendlyByteBuf buf) {
@@ -80,6 +83,7 @@ public class GameRuleStatus {
         p.modified_beacon = buf.readBoolean();
         p.modified_dragon = buf.readBoolean();
         p.modified_wither = buf.readBoolean();
+        p.disable_f3 = buf.readBoolean();
         return p;
     }
 

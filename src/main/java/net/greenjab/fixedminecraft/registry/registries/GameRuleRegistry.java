@@ -21,6 +21,7 @@ public class GameRuleRegistry {
     public static final GameRuleCategory JABSFIXEDTRANSPORT = GameRuleCategory.register(FixedMinecraft.id("aab_jabsfixedtransport"));
     public static final GameRuleCategory JABSFIXEDCOMBAT = GameRuleCategory.register(FixedMinecraft.id("aac_jabsfixedcombat"));
     public static final GameRuleCategory JABSFIXEDMOBSANDBLOCKS = GameRuleCategory.register(FixedMinecraft.id("aad_jabsfixedmobsandblocks"));
+    public static final GameRuleCategory JABSFIXEDWORLDANDUI = GameRuleCategory.register(FixedMinecraft.id("aae_jabsfixedworldandui"));
 
     public static GameRule<Integer> ENCHANT_CAPACITY_PERCENTAGE;
     public static GameRule<Integer> SUPER_ENCHANT_CHANCE;
@@ -49,8 +50,6 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> EAT_DURATION_PROPORTIONAL_TO_FOOD;
     public static GameRule<Boolean> EAT_HIT_CANCELLING;
     public static GameRule<Boolean> RESPAWN_WITH_LESS_HEALTH;
-    public static GameRule<Boolean> PARTIAL_KEEP_INVENTORY;
-    public static GameRule<Integer> ITEM_DEATH_DESPAWN_TIME;
     public static GameRule<Boolean> STRONGER_MOBS;
     public static GameRule<Boolean> MOBS_LEAVE_VEHICLES_WHEN_ATTACKED;
     public static GameRule<Integer> NIGHTS_UNTIL_INSOMNIA;
@@ -72,6 +71,10 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> VILLAGERS_NITWITIFY_ON_ZOMBIFICATION;
     public static GameRule<Boolean> ONE_IRON_GOLEM_PER_MOB;
     public static GameRule<Boolean> HOSTILE_SNIFFER_PLANTS;
+
+    public static GameRule<Boolean> DISABLE_F3;
+    public static GameRule<Boolean> PARTIAL_KEEP_INVENTORY;
+    public static GameRule<Integer> ITEM_DEATH_DESPAWN_TIME;
 
 
     public static void registerGameRules() {
@@ -103,8 +106,6 @@ public class GameRuleRegistry {
         EAT_DURATION_PROPORTIONAL_TO_FOOD = registerBoolean("eat_duration_proportional_to_food", JABSFIXEDCOMBAT, true);
         EAT_HIT_CANCELLING = registerBoolean("eat_hit_cancelling", JABSFIXEDCOMBAT, true);
         RESPAWN_WITH_LESS_HEALTH = registerBoolean("respawn_with_less_health", JABSFIXEDCOMBAT, true);
-        PARTIAL_KEEP_INVENTORY = registerBoolean("partial_keep_inventory", JABSFIXEDCOMBAT, false);
-        ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", JABSFIXEDCOMBAT, 30, 0, 30);
         STRONGER_MOBS = registerBoolean("stronger_mobs", JABSFIXEDCOMBAT, true);
         MOBS_LEAVE_VEHICLES_WHEN_ATTACKED = registerBoolean("mobs_leave_vehicles_when_attacked", JABSFIXEDCOMBAT, true);
         NIGHTS_UNTIL_INSOMNIA = registerInteger("nights_until_insomnia", JABSFIXEDCOMBAT, 7, 0, Integer.MAX_VALUE);
@@ -126,6 +127,10 @@ public class GameRuleRegistry {
         VILLAGERS_NITWITIFY_ON_ZOMBIFICATION = registerBoolean("villagers_nitwitify_on_zombification", JABSFIXEDMOBSANDBLOCKS, true);
         ONE_IRON_GOLEM_PER_MOB = registerBoolean("one_iron_golem_per_mob", JABSFIXEDMOBSANDBLOCKS, true);
         HOSTILE_SNIFFER_PLANTS = registerBoolean("hostile_sniffer_plants", JABSFIXEDMOBSANDBLOCKS, true);
+
+        DISABLE_F3 = registerBoolean("disable_f3", JABSFIXEDWORLDANDUI, false);
+        PARTIAL_KEEP_INVENTORY = registerBoolean("partial_keep_inventory", JABSFIXEDWORLDANDUI, false);
+        ITEM_DEATH_DESPAWN_TIME = registerInteger("item_death_despawn_time", JABSFIXEDWORLDANDUI, 30, 0, 30);
     }
 
     private static GameRule<Boolean> registerBoolean(String name, GameRuleCategory category, boolean defaultValue) {

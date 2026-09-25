@@ -133,7 +133,7 @@ public abstract class VillagerMixin extends AbstractVillager {
     @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getItemInHand(Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/item/ItemStack;", ordinal = 0), cancellable = true)
     private void dismountCamel(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         if (this.getVehicle()!=null && this.getVehicle() instanceof VehicleEntity) {
-            if (player.isCrouching() && player.getItemInHand(hand).isEmpty()) {
+            if (player.isShiftKeyDown() && player.getItemInHand(hand).isEmpty()) {
                 this.stopRiding();
                 cir.setReturnValue(InteractionResult.SUCCESS);
             }

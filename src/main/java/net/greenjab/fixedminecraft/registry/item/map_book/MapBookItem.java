@@ -77,7 +77,7 @@ public class MapBookItem extends Item {
                     player.level().playSound(null, player, SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, player.getSoundSource(), 1.0f, 1.0f);
                     openMap = false;
                 }
-            } else if (user.isCrouching()) {
+            } else if (user.isShiftKeyDown()) {
                 if (otherHand.getItem() != ItemRegistry.MAP_BOOK && otherHand.has(DataComponents.MAP_ID)) {
                     if (addNewMapID(item, otherHand, (ServerLevel)world)) {
                         if (!player.hasInfiniteMaterials()) otherHand.shrink(1);

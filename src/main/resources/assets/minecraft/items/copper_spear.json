@@ -1,0 +1,85 @@
+{
+    "model": {
+        "type": "minecraft:select",
+        "cases": [
+            {
+                "model": {
+                    "type": "minecraft:range_dispatch",
+                    "property": "minecraft:damage",
+                    "entries": [
+                        {
+                            "threshold": 0,
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_spear"
+                            }
+                        },
+                        {
+                            "threshold": 0.25,
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_spear_exposed"
+                            }
+                        },
+                        {
+                            "threshold": 0.5,
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_spear_weathered"
+                            }
+                        },
+                        {
+                            "threshold": 0.75,
+                            "model": {
+                                "type": "minecraft:model",
+                                "model": "minecraft:item/copper_spear_oxidized"
+                            }
+                        }
+                    ]
+                },
+                "when": [
+                    "gui",
+                    "ground",
+                    "fixed",
+                    "on_shelf"
+                ]
+            }
+        ],
+        "fallback": {
+            "type": "minecraft:range_dispatch",
+            "property": "minecraft:damage",
+            "entries": [
+                {
+                    "threshold": 0,
+                    "model": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_spear_in_hand"
+                    }
+                },
+                {
+                    "threshold": 0.25,
+                    "model": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_spear_in_hand_exposed"
+                    }
+                },
+                {
+                    "threshold": 0.5,
+                    "model": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_spear_in_hand_weathered"
+                    }
+                },
+                {
+                    "threshold": 0.75,
+                    "model": {
+                        "type": "minecraft:model",
+                        "model": "minecraft:item/copper_spear_in_hand_oxidized"
+                    }
+                }
+            ]
+        },
+        "property": "minecraft:display_context"
+    },
+    "swap_animation_scale": 1.95
+}
