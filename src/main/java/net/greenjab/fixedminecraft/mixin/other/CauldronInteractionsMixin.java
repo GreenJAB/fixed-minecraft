@@ -34,10 +34,10 @@ public abstract class CauldronInteractionsMixin {
         WATER.put(Items.COMPASS, CauldronInteractionsMixin::cleanCompass);
 
         Items.DYED_BUNDLE.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanBundle));
-        Items.WOOL.forEach(dyed->{if(dyed==Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
-        Items.CARPET.forEach(dyed->{if(dyed==Items.CARPET.white())WATER.put(dyed, CauldronInteractionsMixin::cleanCarpet);});
-        Items.BED.forEach(dyed->{if(dyed==Items.BED.white())WATER.put(dyed, CauldronInteractionsMixin::cleanBed);});
-        Items.HARNESS.forEach(dyed->{if(dyed==Items.HARNESS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanHarness);});
+        Items.WOOL.forEach(dyed->{if(dyed!=Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
+        Items.CARPET.forEach(dyed->{if(dyed!=Items.CARPET.white())WATER.put(dyed, CauldronInteractionsMixin::cleanCarpet);});
+        Items.BED.forEach(dyed->{if(dyed!=Items.BED.white())WATER.put(dyed, CauldronInteractionsMixin::cleanBed);});
+        Items.HARNESS.forEach(dyed->{if(dyed!=Items.HARNESS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanHarness);});
         Items.STAINED_GLASS.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanGlass));
         Items.STAINED_GLASS_PANE.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanGlassPane));
         Items.DYED_TERRACOTTA.forEach(dyed->WATER.put(dyed, CauldronInteractionsMixin::cleanTerracotta));

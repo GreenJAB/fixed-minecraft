@@ -42,7 +42,7 @@ public abstract class AllayMixin extends PathfinderMob implements Bucketable {
 
     @Inject(method = "mobInteract", at = @At(value = "HEAD"), cancellable = true)
     public void bucket(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!player.isCrouching()) Bucketable.bucketMobPickup(player, hand, this).ifPresent(cir::setReturnValue);
+        if (!player.isShiftKeyDown()) Bucketable.bucketMobPickup(player, hand, this).ifPresent(cir::setReturnValue);
     }
 
     @Override public void setFromBucket(final boolean fromBucket) {}

@@ -57,7 +57,7 @@ public abstract class EntityMixin {
     private void exitBoat(Player player, InteractionHand hand, Vec3 location, CallbackInfoReturnable<InteractionResult> cir) {
         Entity E = (Entity)(Object)this;
         if (E.getVehicle()!=null && E.getVehicle() instanceof VehicleEntity) {
-            if (player.isCrouching()) {
+            if (player.isShiftKeyDown()) {
                 E.stopRiding();
                 cir.setReturnValue(InteractionResult.SUCCESS);
             }
