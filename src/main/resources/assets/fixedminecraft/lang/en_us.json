@@ -202,10 +202,6 @@
     "gamerule.fixedminecraft.eat_duration_proportional_to_fooddescription": "Small foods are quick to eat, Large foods take longer, Golden foods take 3 seconds",
     "gamerule.fixedminecraft.respawn_with_less_health": "Respawn with Less Health",
     "gamerule.fixedminecraft.respawn_with_less_health.description": "Based on the difficulty Respawn with less Health/Food (Easy 10 / Normal 5 / Hard 3)",
-    "gamerule.fixedminecraft.partial_keep_inventory": "Partial Keep Inventory",
-    "gamerule.fixedminecraft.partial_keep_inventory.description": "I.e. Netherite gear, elytra, dragon egg",
-    "gamerule.fixedminecraft.item_death_despawn_time": "Item Death Despawn Time",
-    "gamerule.fixedminecraft.item_death_despawn_time.description": "Time (in minutes, max 30) that items dropped on death will last before despawning. Setting to 0 means they wont despawn",
     "gamerule.fixedminecraft.stronger_mobs": "Stronger Mobs",
     "gamerule.fixedminecraft.stronger_mobs.description": "Based on difficulty, Mobs can spawn with more health, speed, better armour and additional Potion Effects",
     "gamerule.fixedminecraft.mobs_leave_vehicles_when_attacked": "Mobs leave Vehicles when attacked",
@@ -239,6 +235,13 @@
     "gamerule.fixedminecraft.villagers_nitwitify_on_zombification": "Villagers turn into Nitwits when Zombified",
     "gamerule.fixedminecraft.one_iron_golem_per_mob": "One Iron Golem Per Hostile Mob",
     "gamerule.fixedminecraft.hostile_sniffer_plants": "Hostile Sniffer Plants",
-    "gamerule.fixedminecraft.hostile_sniffer_plants.description": "Flaming Torch Flower and Carnivorous Pitcher Pod"
+    "gamerule.fixedminecraft.hostile_sniffer_plants.description": "Flaming Torch Flower and Carnivorous Pitcher Pod",
 
-    }
+    "gamerule.category.fixedminecraft.aae_jabsfixedworldandui": "Jabs Fixed World and UI",
+    "gamerule.fixedminecraft.disable_f3": "Disable F3",
+    "gamerule.fixedminecraft.partial_keep_inventory": "Partial Keep Inventory",
+    "gamerule.fixedminecraft.partial_keep_inventory.description": "I.e. Netherite gear, elytra, dragon egg",
+    "gamerule.fixedminecraft.item_death_despawn_time": "Item Death Despawn Time",
+    "gamerule.fixedminecraft.item_death_despawn_time.description": "Time (in minutes, max 30) that items dropped on death will last before despawning. Setting to 0 means they wont despawn"
+
+}

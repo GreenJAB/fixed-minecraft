@@ -24,6 +24,7 @@
         "CreateWorldScreenMixin",
         "CreativeModeInventoryScreenMixin",
         "CustomContainerTextureMixin",
+        "DebugScreenOverlayMixin",
         "DonkeyRendererMixin",
         "DonkeyRenderStateMixin",
         "EnderDragonModelMixin",

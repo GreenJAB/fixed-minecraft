@@ -210,7 +210,7 @@ public class LootTableAdditions {
                                 .add(NestedLootTable.lootTableReference(LootTableRegistry.SNIFFER_EXTRA)));
             } else if (key==EntityType.WARDEN.getDefaultLootTable().get()) {
                 tableBuilder.pool(LootPool.lootPool()
-                        .add(LootItem.lootTableItem(Items.MUSIC_DISC_5)).build());
+                        .add(LootItem.lootTableItem(Items.DISC_FRAGMENT_5)).build());
             } else if (key==BuiltInLootTables.SPAWNER_TRIAL_CHAMBER_CONSUMABLES) {
                 tableBuilder.pool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(Items.MUSIC_DISC_CREATOR))

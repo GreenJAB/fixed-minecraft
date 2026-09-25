@@ -66,7 +66,7 @@ public abstract class BlockBehaviourMixin {
     @Inject(method = "useWithoutItem", at = @At("HEAD"), cancellable = true)
     private void tryPlaceParrot(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult,
                                 CallbackInfoReturnable<InteractionResult> cir) {
-        if (player instanceof ServerPlayer serverPlayer && serverPlayer.isCrouching()) {
+        if (player instanceof ServerPlayer serverPlayer && serverPlayer.isShiftKeyDown()) {
             if (hitResult.getDirection() == Direction.UP && state.isFaceSturdy(level, pos, Direction.UP)) {
                 if (level.getBlockState(pos.above()).getCollisionShape(level, pos.above()).isEmpty()) {
                     if (player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()&&
