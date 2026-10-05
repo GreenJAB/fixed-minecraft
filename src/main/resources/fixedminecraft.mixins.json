@@ -76,6 +76,7 @@
         "horse.ItemPropertiesMixin",
         "horse.LeavesBlockMixin",
         "horse.LivingEntityMixin",
+        "horse.PowderSnowBlockMixin",
         "horse.ServerGamePacketListenerImplMixin",
         "horse.SkeletonHorseMixin",
         "horse.ThrownEnderPearlMixin",

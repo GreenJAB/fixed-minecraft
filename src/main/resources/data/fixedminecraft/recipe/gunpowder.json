@@ -1,0 +1,13 @@
+{
+    "type": "minecraft:crafting_shapeless",
+    "ingredients": [
+        "minecraft:bone_meal",
+        "minecraft:charcoal",
+        "minecraft:sulfur_spike"
+    ],
+    "result": {
+        "count": 1,
+        "id": "minecraft:gunpowder"
+    },
+    "category": "misc"
+}
