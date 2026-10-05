@@ -37,7 +37,6 @@ public abstract class CauldronInteractionsMixin {
         Items.WOOL.forEach(dyed->{if(dyed!=Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
         Items.WOOL_SLAB.forEach(dyed->{if(dyed!=Items.WOOL_SLAB.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWoolSlab);});
         Items.WOOL_STAIRS.forEach(dyed->{if(dyed!=Items.WOOL_STAIRS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWoolStairs);});
-        Items.WOOL.forEach(dyed->{if(dyed!=Items.WOOL.white())WATER.put(dyed, CauldronInteractionsMixin::cleanWool);});
         Items.CARPET.forEach(dyed->{if(dyed!=Items.CARPET.white())WATER.put(dyed, CauldronInteractionsMixin::cleanCarpet);});
         Items.BED.forEach(dyed->{if(dyed!=Items.BED.white())WATER.put(dyed, CauldronInteractionsMixin::cleanBed);});
         Items.HARNESS.forEach(dyed->{if(dyed!=Items.HARNESS.white())WATER.put(dyed, CauldronInteractionsMixin::cleanHarness);});

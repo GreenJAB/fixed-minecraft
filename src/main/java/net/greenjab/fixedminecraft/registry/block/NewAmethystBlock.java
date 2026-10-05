@@ -11,9 +11,9 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AmethystBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.RedstoneTorchBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
@@ -22,11 +22,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NonNull;
 
 public class NewAmethystBlock extends AmethystBlock {
-    public static final BooleanProperty LIT  = RedstoneTorchBlock.LIT;
+    public static final BooleanProperty LIT  = BlockStateProperties.LIT;
     public static final int[] RESONATION_NOTE_PITCHES = {0, 0, 2, 4, 6, 7, 9, 10, 12, 14, 16, 18, 19, 21, 22, 24};
 
     public NewAmethystBlock(Properties settings) {
         super(settings);
+        this.registerDefaultState(this.defaultBlockState().setValue(LIT, false));
     }
 
     @Override
