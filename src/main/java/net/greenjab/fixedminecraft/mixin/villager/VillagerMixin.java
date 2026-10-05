@@ -260,15 +260,16 @@ public abstract class VillagerMixin extends AbstractVillager {
     private void msgPlayer(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(Items.VILLAGER_SPAWN_EGG) || !this.isAlive() || this.isTrading() || this.isSleeping()) return;
-
         if (player instanceof ServerPlayer serverPlayer && level() instanceof ServerLevel serverLevel) {
+            eatUntilFull();
+            if (foodLevel>0)this.getBrain().setMemory(MemoryRegistry.TIME_SINCE_EAT, 0);
             if (this.isBaby()) {
                 cancel(serverPlayer, "baby", cir); return; }
             if (this.getVillagerData().profession().is(VillagerProfession.NITWIT)) {
                 cancel(serverPlayer, "nitwit", cir); return; }
             if (serverLevel.getGameRules().get(GameRuleRegistry.VILLAGERS_NEED_FOOD) &&
                 this.getBrain().getMemory(MemoryRegistry.TIME_SINCE_EAT).orElse(0) > 168000) {
-                if (!tryEat())
+                if (foodLevel<=0)
                     cancel(serverPlayer, "very_hungry", cir); return; }
             if (serverLevel.getGameRules().get(GameRuleRegistry.VILLAGERS_NEED_SLEEP) &&
                 this.getBrain().getMemory(MemoryRegistry.TIME_SINCE_SLEEP).orElse(0) > 168000) {
