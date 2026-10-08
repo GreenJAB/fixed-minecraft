@@ -10,11 +10,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.Hud;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.waypoints.WaypointStyleAssets;
@@ -63,8 +59,8 @@ public abstract class GuiMixin {
         return original.call(instance);
     }
     @WrapOperation(method = "extractSelectedItemName", at =
-    @At(value = "FIELD", target = "Lnet/minecraft/client/gui/Hud;toolHighlightTimer:I", opcode = Opcodes.GETFIELD))
-    private int renderLocatorBarIconNameTimer1(Hud instance, Operation<Integer> original) {
+    @At(value = "FIELD", target = "Lnet/minecraft/client/gui/Gui;toolHighlightTimer:I", opcode = Opcodes.GETFIELD))
+    private int renderLocatorBarIconNameTimer1(Gui instance, Operation<Integer> original) {
         if (FixedMinecraftClient.locatorBarName == null ) FixedMinecraftClient.locatorBarName = Component.empty();
         if (!Objects.equals(FixedMinecraftClient.locatorBarName, Component.empty()) && this.toolHighlightTimer<10) return 40;
         return original.call(instance);
