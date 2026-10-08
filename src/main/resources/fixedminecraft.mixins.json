@@ -98,7 +98,6 @@
         "map_book.MapIdMixin",
         "map_book.MapItemMixin",
         "map_book.MapItemSavedDataMixin",
-        "map_book.ServerWaypointManagerMixin",
         "minecart.AbstractMinecartMixin",
         "minecart.AxeItemMixin",
         "minecart.EntityTypesMixin",
