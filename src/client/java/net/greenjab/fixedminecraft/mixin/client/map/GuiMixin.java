@@ -1,11 +1,10 @@
 package net.greenjab.fixedminecraft.mixin.client.map;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.world.item.MapItem;
+import net.minecraft.core.component.DataComponents;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.FixedMinecraft;
@@ -32,23 +31,21 @@ public abstract class GuiMixin {
              target = "Lnet/minecraft/client/waypoints/ClientWaypointManager;hasWaypoints()Z"
      ))
      private boolean renderMapWayPoints(boolean original) {
-         if (FixedMinecraft.gameRules.global_locator_bar) return original;
-         LocalPlayer player = Minecraft.getInstance().player;
          Minecraft client = Minecraft.getInstance();
-         AtomicBoolean hasWaypoint = new AtomicBoolean(false);
          assert client.player != null;
+         LocalPlayer player = client.player;
+         if (player.getMainHandItem().getComponents().has(DataComponents.MAP_ID) ||
+             player.getOffhandItem().getComponents().has(DataComponents.MAP_ID)) return true;
+         if (FixedMinecraft.gameRules.global_locator_bar) return original;
+
+         AtomicBoolean hasWaypoint = new AtomicBoolean(false);
          assert client.getCameraEntity() != null;
          client.player.connection.getWaypointManager().forEachWaypoint(client.getCameraEntity(), (waypoint) -> {
              if (!(Boolean)waypoint.id().left().map((uuid) -> uuid.equals(client.getCameraEntity().getUUID())).orElse(false)) {
-                 hasWaypoint.set(hasWaypoint.get() || (waypoint.icon().style != WaypointStyleAssets.DEFAULT));
+                 if ((waypoint.icon().style != WaypointStyleAssets.DEFAULT)) hasWaypoint.set(true);
              }
          });
-
-         return hasWaypoint.get() ||
-                player.getMainHandItem().getItem() instanceof MapBookItem ||
-                player.getOffhandItem().getItem() instanceof MapBookItem ||
-                player.getMainHandItem().getItem() instanceof MapItem ||
-                player.getOffhandItem().getItem() instanceof MapItem;
+         return hasWaypoint.get();
      }
 
 
