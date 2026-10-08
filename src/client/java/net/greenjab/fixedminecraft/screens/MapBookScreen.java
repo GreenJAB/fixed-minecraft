@@ -212,7 +212,7 @@ public class MapBookScreen extends Screen {
                             "hud/locator_bar_dot/map_decorations/player"),
                     0, 0, 1, 1, -1);
         } else {
-            int color = getColor(player, minecraft);
+            int color = getColor(player.name, minecraft);
             context.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.parse(
                             "hud/locator_bar_dot/map_decorations/player"),
                     0, 0, 1, 1, color);
@@ -236,11 +236,11 @@ public class MapBookScreen extends Screen {
 
     }
 
-    public static int getColor(MapBookPlayer player, Minecraft minecraft) {
+    public static int getColor(String player, Minecraft minecraft) {
         assert minecraft.player != null;
-        int color = ARGB.setBrightness(ARGB.color(255, player.name.hashCode()), 0.9F);
+        int color = ARGB.setBrightness(ARGB.color(255, player.hashCode()), 0.9F);
         for (PlayerInfo playerListEntry : minecraft.player.connection.getOnlinePlayers()) {
-            if (Objects.equals(playerListEntry.getProfile().name(), player.name)) {
+            if (Objects.equals(playerListEntry.getProfile().name(), player)) {
                 Team team = playerListEntry.getTeam();
                 if (team != null) {
                     Optional<TeamColor> formatting = team.getColor();
