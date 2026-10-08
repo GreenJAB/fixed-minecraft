@@ -30,6 +30,8 @@ public class FixedMinecraftClient implements ClientModInitializer {
     public static OptionInstance<Boolean> jabsFixedFog = OptionInstance.createBoolean("options.jabsFixedFog", true);
     public static OptionInstance<Boolean> villagersSpeak = OptionInstance.createBoolean("options.chat.villagersSpeak", true);
 
+    public static Component locatorBarName = Component.empty();
+
     @Override
     public void onInitializeClient() {
 

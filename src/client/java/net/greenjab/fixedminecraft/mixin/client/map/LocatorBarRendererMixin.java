@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.mixin.client.map;
 
 import com.mojang.blaze3d.platform.Window;
 import net.greenjab.fixedminecraft.FixedMinecraft;
+import net.greenjab.fixedminecraft.FixedMinecraftClient;
 import net.greenjab.fixedminecraft.screens.MapBookScreen;
 import net.greenjab.fixedminecraft.network.MapBookPlayer;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookItem;
@@ -12,6 +13,8 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.contextualbar.LocatorBarRenderer;
+import net.minecraft.client.gui.contextualbar.LocatorBar;
+import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.WaypointStyle;
 import net.minecraft.core.component.DataComponents;
@@ -39,10 +42,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.network.chat.Component;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.UUID;
 
 import static net.minecraft.world.item.MapItem.getSavedData;
 
@@ -78,6 +83,10 @@ public abstract class LocatorBarRendererMixin {
         PartialTickSupplier partialTickSupplier = entity -> deltaTracker.getGameTimeDeltaPartialTick(
                 !tickRateManager.isEntityFrozen(entity)
         );
+
+        final double[] cAngle = {1000};
+        final Component[] cName = {Component.empty()};
+
         minecraft.player.connection
                 .getWaypointManager()
                 .forEachWaypoint(cameraEntity, waypoint -> {
@@ -89,29 +98,54 @@ public abstract class LocatorBarRendererMixin {
                     WaypointStyle style = this.minecraft.getWaypointStyles().get(icon.style);
                     float distance = Mth.sqrt((float)waypoint.distanceSquared(cameraEntity));
                     Identifier sprite = style.sprite(distance);
-                    int color = icon.color
-                            .orElseGet(
-                                    /* lambda$extractRenderState$3 */ () -> waypoint.id()
-                                            .map(
-                                                    /* lambda$extractRenderState$4 */ uuid -> ARGB.setBrightness(ARGB.color(255, uuid.hashCode()), 0.9F),
-                                                    /* lambda$extractRenderState$5 */ name -> ARGB.setBrightness(ARGB.color(255, name.hashCode()), 0.9F)
-                                            )
-                            );
-                    int dotPosition = Mth.floor(angle * 173.0 / 2.0 / 60.0);
-                    graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, screenMiddle + dotPosition, top - 2, 9, 9, color);
-                    TrackedWaypoint.PitchDirection pitchDirection = waypoint.pitchDirectionToCamera(level, this.minecraft.gameRenderer, partialTickSupplier);
-                    if (pitchDirection != TrackedWaypoint.PitchDirection.NONE) {
-                        int arrowTop;
-                        Identifier arrowSprite;
-                        if (pitchDirection == TrackedWaypoint.PitchDirection.DOWN) {
-                            arrowTop = 6;
-                            arrowSprite = LOCATOR_BAR_ARROW_DOWN;
-                        } else {
-                            arrowTop = -6;
-                            arrowSprite = LOCATOR_BAR_ARROW_UP;
+                    int color = icon.color.orElseGet(() -> waypoint.id().map(
+                            uuid -> ARGB.setBrightness(ARGB.color(255, uuid.hashCode()), 0.9F),
+                                    name -> ARGB.setBrightness(ARGB.color(255, name.hashCode()), 0.9F)));
+                    if (waypoint.id().left().isPresent()) {
+                        UUID id = waypoint.id().left().get();
+                        boolean b = false;
+                        for (PlayerInfo p : this.minecraft.player.connection.getOnlinePlayers()) {
+                            UUID b2 = p.getProfile().id();
+                            if (id.equals(b2)) {
+                                b = true;
+                                if (FixedMinecraft.gameRules.global_locator_bar) {
+                                    color = MapBookScreen.getColor(p.getProfile().name(), minecraft);
+                                    if (Math.abs(angle) < Math.abs(cAngle[0])) {
+                                        cAngle[0] = angle;
+                                        cName[0] = Component.literal(p.getProfile().name());
+                                    }
+                                }
+                                else color = -2;
+                                break;
+                            }
                         }
+                        if (!b) {
+                            Entity e = this.minecraft.level.getEntity(id);
+                            if (e != null) {
+                                if (Math.abs(angle) < Math.abs(cAngle[0])) {
+                                    cAngle[0] = angle;
+                                    cName[0] = e.getCustomName();
+                                }
+                            }
+                        }
+                    }
+                    if (color != -2) {
+                        int dotPosition = Mth.floor(angle * 173.0 / 2.0 / 60.0);
+                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, sprite, screenMiddle + dotPosition, top - 2, 9, 9, color);
+                        TrackedWaypoint.PitchDirection pitchDirection = waypoint.pitchDirectionToCamera(level, this.minecraft.gameRenderer, partialTickSupplier);
+                        if (pitchDirection != TrackedWaypoint.PitchDirection.NONE) {
+                            int arrowTop;
+                            Identifier arrowSprite;
+                            if (pitchDirection == TrackedWaypoint.PitchDirection.DOWN) {
+                                arrowTop = 6;
+                                arrowSprite = LOCATOR_BAR_ARROW_DOWN;
+                            } else {
+                                arrowTop = -6;
+                                arrowSprite = LOCATOR_BAR_ARROW_UP;
+                            }
 
-                        graphics.blitSprite(RenderPipelines.GUI_TEXTURED, arrowSprite, screenMiddle + dotPosition + 1, top + arrowTop, 7, 5);
+                            graphics.blitSprite(RenderPipelines.GUI_TEXTURED, arrowSprite, screenMiddle + dotPosition + 1, top + arrowTop, 7, 5);
+                        }
                     }
                 }
             }
@@ -123,7 +157,10 @@ public abstract class LocatorBarRendererMixin {
         if (!(stack.getItem() instanceof MapBookItem)) {
             stack = minecraft.player.getMainHandItem();
             if (!(stack.getItem() instanceof MapItem)) stack = minecraft.player.getOffhandItem();
-            if (!(stack.getItem() instanceof MapItem)) {ci.cancel();return;}
+            if (!(stack.getItem() instanceof MapItem)) {
+                if (Math.abs(cAngle[0])<15) FixedMinecraftClient.locatorBarName = cName[0];
+                ci.cancel();return;
+            }
 
             MapItemSavedData mapState = getSavedData(stack, minecraft.level);
             if (mapState!=null) {
@@ -150,6 +187,7 @@ public abstract class LocatorBarRendererMixin {
                     }
                 }
             }
+            if (Math.abs(cAngle[0])<15) FixedMinecraftClient.locatorBarName = cName[0];
             ci.cancel();
             return;
         }
@@ -177,6 +215,10 @@ public abstract class LocatorBarRendererMixin {
                             int m = (int) (a * 173.0 / 2.0 / 60.0);
                             double d = Math.sqrt((x-c.x)*(x-c.x)+(z-c.z)*(z-c.z));
                             if (d > 0.5 && d < 10000) {
+                                if (Math.abs(a)<Math.abs(cAngle[0])) {
+                                    cAngle[0] = a;
+                                    cName[0] = mapIcon.name().orElse(Component.empty());
+                                }
                                 int dd = (int) (255 * (1 - (d / 10000)));
                                 graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.parse(
                                                 "hud/locator_bar_dot/map_decorations/" + mapIcon.getSpriteLocation().getPath()),
@@ -206,6 +248,10 @@ public abstract class LocatorBarRendererMixin {
                     int m = (int) (a * 173.0 / 2.0 / 60.0);
                     double d = Math.sqrt((x - c.x) * (x - c.x) + (z - c.z) * (z - c.z));
                     if (d > 0.5 && d < 10000) {
+                        if (Math.abs(a)<Math.abs(cAngle[0])) {
+                            cAngle[0] = a;
+                            cName[0] = Component.empty();
+                        }
                         int dd = (int) (255 * (1 - (d / 10000)));
                         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.parse(
                                         "hud/locator_bar_dot/map_decorations/target_x"),
@@ -232,10 +278,14 @@ public abstract class LocatorBarRendererMixin {
                                     double dd = Math.sqrt((x - c.x) * (x - c.x) + (y - c.y) * (y - c.y) + (z - c.z) * (z - c.z));
                                     double a = getAngle(c, x, z, minecraft);
                                     if (!(a <= -61.0) && !(a > 60.0)) {
+                                        if (Math.abs(a)<Math.abs(cAngle[0])) {
+                                            cAngle[0] = a;
+                                            cName[0] = Component.literal(player.name);
+                                        }
                                         int k = Mth.ceil((graphics.guiWidth() - 9) / 2.0F);
                                         int m = (int) (a * 173.0 / 2.0 / 60.0);
 
-                                        int color = MapBookScreen.getColor(player, minecraft);
+                                        int color = MapBookScreen.getColor(player.name, minecraft);
                                         WaypointStyle waypointStyle = minecraft.getWaypointStyles().get(WaypointStyleAssets.DEFAULT);
                                         Identifier identifier = waypointStyle.sprite((float) dd);
                                         graphics.blitSprite(RenderPipelines.GUI_TEXTURED, identifier,
@@ -265,7 +315,7 @@ public abstract class LocatorBarRendererMixin {
                 }
             }
         }
-
+        if (Math.abs(cAngle[0])<15)FixedMinecraftClient.locatorBarName = cName[0];
         ci.cancel();
     }
 
