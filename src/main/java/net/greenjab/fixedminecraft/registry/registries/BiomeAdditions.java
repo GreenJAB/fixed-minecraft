@@ -3,7 +3,7 @@ package net.greenjab.fixedminecraft.registry.registries;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.greenjab.fixedminecraft.FixedMinecraft;
-import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.FixedMinecraftTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.OrePlacements;
 import net.minecraft.resources.ResourceKey;
@@ -25,8 +25,8 @@ public class BiomeAdditions {
         BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), GenerationStep.Decoration.UNDERGROUND_ORES, of("ore_ancient_debris_lava"));
         BiomeModifications.addFeature(BiomeSelectors.includeByKey(Biomes.BASALT_DELTAS), GenerationStep.Decoration.UNDERGROUND_ORES, of("ore_ancient_debris_extra"));
 
-        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.IS_FROZEN), GenerationStep.Decoration.UNDERGROUND_ORES, of("ore_packed_ice"));
-        BiomeModifications.addFeature(BiomeSelectors.tag(ModTags.IS_FROZEN), GenerationStep.Decoration.VEGETAL_DECORATION, of("cave_snow"));
+        BiomeModifications.addFeature(BiomeSelectors.tag(FixedMinecraftTags.IS_FROZEN), GenerationStep.Decoration.UNDERGROUND_ORES, of("ore_packed_ice"));
+        BiomeModifications.addFeature(BiomeSelectors.tag(FixedMinecraftTags.IS_FROZEN), GenerationStep.Decoration.VEGETAL_DECORATION, of("cave_snow"));
 
         BiomeModifications.addFeature(BiomeSelectors.tag(BiomeTags.IS_OCEAN), GenerationStep.Decoration.UNDERGROUND_ORES, of("ore_copper_extra"));
 

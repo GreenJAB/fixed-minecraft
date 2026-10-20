@@ -87,7 +87,7 @@ public abstract class ItemEnchantmentsMixin {
 
 
     @ModifyExpressionValue(method = "addToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getFullname(Lnet/minecraft/core/Holder;I)Lnet/minecraft/network/chat/Component;"))
-    private Component addEnchantLocationTooltip(Component original, @Local(argsOnly = true) TooltipFlag flag, @Local Holder<Enchantment> enchantment) {
+    private Component addEnchantLocationTooltip(Component original, @Local(argsOnly = true, name = "flag") TooltipFlag flag, @Local Holder<Enchantment> enchantment) {
 
         if (flag == TooltipFlag.ADVANCED) {
             MutableComponent mt = (MutableComponent) original;
