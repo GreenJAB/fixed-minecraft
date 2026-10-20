@@ -39,7 +39,7 @@ public abstract class EnchantmentMixin {
     }
 
 
-    @ModifyVariable(method = "matchingSlot", at = @At(value = "HEAD"), argsOnly = true, ordinal = 0)
+    @ModifyVariable(method = "matchingSlot", at = @At(value = "HEAD"), argsOnly = true, name = "slot")
     private EquipmentSlot feetEnchantsOnHorse(EquipmentSlot slot){
         if (slot==EquipmentSlot.BODY) {
             return EquipmentSlot.FEET;

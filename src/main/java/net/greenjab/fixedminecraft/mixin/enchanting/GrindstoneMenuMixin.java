@@ -71,7 +71,7 @@ public abstract class GrindstoneMenuMixin extends AbstractContainerMenu {
     }
 
     @Inject(method = "quickMoveStack", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/inventory/Slot;onQuickCraft(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/ItemStack;)V"), cancellable = true)
-    private void destroy0DurabilityItem2(Player player, int slotIndex, CallbackInfoReturnable<ItemStack> cir, @Local(ordinal = 1) ItemStack item) {
+    private void destroy0DurabilityItem2(Player player, int slotIndex, CallbackInfoReturnable<ItemStack> cir, @Local(name = "item") ItemStack item) {
         if (item.getComponents().getOrDefault(DataComponents.REPAIR_COST, 0) == 5){
             this.clicked(2, 1, ContainerInput.PICKUP, player);
             cir.setReturnValue(ItemStack.EMPTY);

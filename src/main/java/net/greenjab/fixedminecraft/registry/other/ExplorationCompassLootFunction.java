@@ -6,7 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.Optional;
 import java.util.Set;
-import net.greenjab.fixedminecraft.registry.ModTags;
+import net.greenjab.fixedminecraft.registry.FixedMinecraftTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
@@ -29,7 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.NonNull;
 
 public class ExplorationCompassLootFunction extends LootItemConditionalFunction {
-    public static final TagKey<Structure> DEFAULT_DESTINATION = ModTags.LODESTONE_COMPASS;
+    public static final TagKey<Structure> DEFAULT_DESTINATION = FixedMinecraftTags.LODESTONE_COMPASS;
     public static final int DEFAULT_COLOR = 32767;
     public static final int DEFAULT_SEARCH_RADIUS = 50;
     public static final boolean DEFAULT_SKIP_EXISTING_CHUNKS = true;

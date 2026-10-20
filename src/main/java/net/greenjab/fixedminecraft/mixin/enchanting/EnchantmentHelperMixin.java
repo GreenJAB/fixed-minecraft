@@ -1,10 +1,12 @@
 package net.greenjab.fixedminecraft.mixin.enchanting;
 
 import com.google.common.collect.Lists;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
+import net.greenjab.fixedminecraft.registry.FixedMinecraftTags;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.DamageTypeTags;
@@ -45,7 +47,6 @@ public abstract class EnchantmentHelperMixin {
                     }
                 });
         cir.setReturnValue(list);
-        cir.cancel();
     }
 
     @Inject(method = "selectEnchantment", at = @At("HEAD"))
@@ -61,19 +62,14 @@ public abstract class EnchantmentHelperMixin {
         return levelReference.get();
     }
 
-    @Inject(method = "getDamageProtection", at = @At("RETURN"), cancellable = true)
-    private static void chainmailProtection(ServerLevel serverLevel, LivingEntity victim, DamageSource source,
-                                            CallbackInfoReturnable<Float> cir) {
-        float i = cir.getReturnValueF();
-        if (victim instanceof AbstractHorse) i*=2;
-        if (source.is(DamageTypeTags.IS_FIRE)) return;
-        if (source.is(DamageTypeTags.IS_FALL)) return;
-        if (source.is(DamageTypeTags.IS_EXPLOSION)) return;
-        if (source.is(DamageTypeTags.IS_PROJECTILE)) return;
-        if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
+    @ModifyReturnValue(method = "getDamageProtection", at = @At("RETURN"))
+    private static float chainmailProtection(float original, ServerLevel serverLevel, LivingEntity victim, DamageSource source) {
+        if (victim instanceof AbstractHorse) original*=2;
+        if (source.is(FixedMinecraftTags.IGNORE_CHAINMAIL_PROTECTION_INCREASE)) return original;
         for (ItemStack equipment : FixedMinecraft.getArmor(victim)) {
-            if (equipment.getItem().toString().toLowerCase().contains("chainmail")) i++;
+            if (equipment.getItem().toString().toLowerCase().contains("chainmail"))
+                original++;
         }
-        cir.setReturnValue(i);
+        return original;
     }
 }

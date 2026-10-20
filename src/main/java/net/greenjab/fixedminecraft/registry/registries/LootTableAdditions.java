@@ -30,7 +30,7 @@ import net.minecraft.world.level.storage.loot.functions.ExplorationMapFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemEntityPropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
-import static net.greenjab.fixedminecraft.registry.ModTags.*;
+import static net.greenjab.fixedminecraft.registry.FixedMinecraftTags.*;
 
 public class LootTableAdditions {
 
