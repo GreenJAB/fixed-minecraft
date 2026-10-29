@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_template_seagrass",
+  "textures": {
+    "texture": "minecraft:block/tall_seagrass_top_wavy",
+    "particle": "minecraft:block/tall_seagrass_top"
+  }
+}

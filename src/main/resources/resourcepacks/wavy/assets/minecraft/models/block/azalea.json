@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_wavy_azalea",
+  "textures": {
+    "side": "minecraft:block/azalea_side_wavy",
+    "top": "minecraft:block/azalea_top"
+  }
+}

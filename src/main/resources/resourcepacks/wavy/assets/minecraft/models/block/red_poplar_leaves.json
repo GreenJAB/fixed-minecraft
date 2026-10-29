@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cube_all",
+  "textures": {
+    "all": "minecraft:block/red_poplar_leaves_wavy",
+    "particle": "minecraft:block/red_poplar_leaves"
+  }
+}

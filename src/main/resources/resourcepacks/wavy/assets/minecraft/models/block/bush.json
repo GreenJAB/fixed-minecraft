@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_tinted_cross",
+  "textures": {
+    "cross": "minecraft:block/bush_wavy",
+    "particle": "minecraft:block/bush"
+  }
+}

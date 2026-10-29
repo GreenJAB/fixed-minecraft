@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_cross",
+  "textures": {
+    "cross": "minecraft:block/sweet_berry_bush_stage0_wavy",
+    "particle": "minecraft:block/sweet_berry_bush_stage0"
+  }
+}

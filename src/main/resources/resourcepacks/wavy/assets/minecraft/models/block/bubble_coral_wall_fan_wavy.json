@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/wavy_coral_wall_fan",
+  "textures": {
+    "fan": "minecraft:block/bubble_coral_fan_wavy",
+    "particle": "minecraft:block/bubble_coral_fan"
+  }
+}

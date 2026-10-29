@@ -1,7 +1,7 @@
 {
-    "parent": "block/tinted_cross",
+    "parent": "minecraft:block/wavy_tinted_cross",
     "textures": {
-        "particle": "block/kelp_age_25",
-        "cross": "block/kelp_age_25"
+        "cross": "minecraft:block/kelp_age_25_wavy",
+        "particle": "minecraft:block/kelp_age_25"
     }
 }

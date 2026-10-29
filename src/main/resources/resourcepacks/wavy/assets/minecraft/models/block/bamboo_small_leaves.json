@@ -1,25 +1,54 @@
 {
-    "ambientocclusion": false,
-    "textures": {
-        "texture": "minecraft:block/bamboo_small_leaves_wavy",
-        "particle": "minecraft:block/bamboo_small_leaves"
-    },
-    "elements": [
-        {   "from": [ 0.8, 0, 8 ],
-            "to": [ 15.2, 16, 8 ],
-            "shade": false,
-            "faces": {
-                "north": { "uv": [ 0, 0, 8, 16 ], "texture": "#texture", "tintindex": 0 },
-                "south": { "uv": [ 0, 0, 8, 16 ], "texture": "#texture", "tintindex": 0 }
-            }
-        },
-        {   "from": [ 8, 0, 0.8 ],
-            "to": [ 8, 16, 15.2 ],
-            "shade": false,
-            "faces": {
-                "west": { "uv": [ 0, 0, 8, 16 ], "texture": "#texture", "tintindex": 0 },
-                "east": { "uv": [ 0, 0, 8, 16 ], "texture": "#texture", "tintindex": 0 }
-            }
-        }
-    ]
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench, by Enchanted_Games (https://enchanted.games)",
+	"ambientocclusion": false,
+	"textures": {
+		"texture": "block/bamboo_small_leaves_wavy",
+		"particle": "block/bamboo_small_leaves"
+	},
+	"elements": [
+		{
+			"from": [8, 0, 8],
+			"to": [15.2, 16, 8],
+			"shade": false,
+            "shade_direction_override": "up",
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.2, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 16], "texture": "#texture", "tintindex": 0},
+				"south": {"uv": [4, 0, 8, 16], "texture": "#texture", "tintindex": 0}
+			}
+		},
+		{
+			"from": [0.8, 0, 8],
+			"to": [8, 16, 8],
+			"shade": false,
+            "shade_direction_override": "up",
+			"faces": {
+				"north": {"uv": [4, 0, 8, 16], "texture": "#texture", "tintindex": 0},
+				"south": {"uv": [0, 0, 4, 16], "texture": "#texture", "tintindex": 0}
+			}
+		},
+		{
+			"from": [8, 0, 8],
+			"to": [15.2, 16, 8],
+			"shade": false,
+            "shade_direction_override": "up",
+			"rotation": {"x": 0, "y": -90, "z": 0, "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 16], "texture": "#texture", "tintindex": 0},
+				"south": {"uv": [4, 0, 8, 16], "texture": "#texture", "tintindex": 0}
+			}
+		},
+		{
+			"from": [0.8, 0, 8],
+			"to": [8, 16, 8],
+			"shade": false,
+            "shade_direction_override": "up",
+			"rotation": {"x": 0, "y": -90, "z": 0, "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 8, 16], "texture": "#texture", "tintindex": 0},
+				"south": {"uv": [0, 0, 4, 16], "texture": "#texture", "tintindex": 0}
+			}
+		}
+	]
 }

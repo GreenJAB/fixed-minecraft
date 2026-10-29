@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "waterlogged=true": {
+      "model": "minecraft:block/brain_coral_wavy"
+    }
+  }
+}

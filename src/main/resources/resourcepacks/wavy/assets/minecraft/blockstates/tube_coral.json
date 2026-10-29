@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "minecraft:block/tube_coral"
+    },
+    "waterlogged=true": {
+      "model": "minecraft:block/tube_coral_wavy"
+    }
+  }
+}

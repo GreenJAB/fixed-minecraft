@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/wavy_cross_emissive",
+  "textures": {
+    "cross": "minecraft:block/firefly_bush_wavy",
+    "cross_emissive": "minecraft:block/firefly_bush_emissive_wavy",
+    "particle": "minecraft:block/firefly_bush"
+  }
+}

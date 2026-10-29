@@ -1,0 +1,10 @@
+{
+  "animation": {
+    "frametime": 2,
+    "width": 32,
+    "height": 16
+  },
+  "texture": {
+    "alpha_cutoff_bias": 0.1
+  }
+}

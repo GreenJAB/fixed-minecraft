@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "minecraft:block/bubble_coral_fan"
+    },
+    "waterlogged=true": {
+      "model": "minecraft:block/bubble_coral_fan_wavy"
+    }
+  }
+}

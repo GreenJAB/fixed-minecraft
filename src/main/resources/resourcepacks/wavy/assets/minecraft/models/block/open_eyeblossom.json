@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/wavy_cross_emissive",
+  "textures": {
+    "cross": "minecraft:block/open_eyeblossom_wavy",
+    "cross_emissive": "minecraft:block/open_eyeblossom_emissive_wavy",
+    "particle": "minecraft:block/open_eyeblossom"
+  }
+}

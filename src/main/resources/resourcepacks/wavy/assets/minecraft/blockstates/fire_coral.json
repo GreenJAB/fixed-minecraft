@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "waterlogged=false": {
+      "model": "minecraft:block/fire_coral"
+    },
+    "waterlogged=true": {
+      "model": "minecraft:block/fire_coral_wavy"
+    }
+  }
+}
