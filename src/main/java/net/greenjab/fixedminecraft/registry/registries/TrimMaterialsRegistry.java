@@ -242,6 +242,21 @@ public class TrimMaterialsRegistry {
                         newCase.addProperty("sound", "minecraft:item.axe.strip");
                         root.add(newCase);
                     }
+                    if (!root.toString().contains("rail")) {
+                        JsonObject newCase = new JsonObject();
+                        JsonObject provider = new JsonObject();
+                        provider.addProperty("type", "minecraft:rule_based");
+                        JsonArray rules = new JsonArray();
+                        rules.add(makeRule("fixedminecraft:waxed_copper_rail", "fixedminecraft:copper_rail"));
+                        rules.add(makeRule("fixedminecraft:waxed_exposed_copper_rail", "fixedminecraft:exposed_copper_rail"));
+                        rules.add(makeRule("fixedminecraft:waxed_weathered_copper_rail", "fixedminecraft:weathered_copper_rail"));
+                        rules.add(makeRule("fixedminecraft:waxed_oxidized_copper_rail", "fixedminecraft:oxidized_copper_rail"));
+                        provider.add("rules", rules);
+                        newCase.add("block_state_provider", provider);
+                        newCase.addProperty("item_damage_per_use", 1);
+                        newCase.addProperty("sound", "minecraft:item.axe.strip");
+                        root.add(newCase);
+                    }
                 }
         );
     }

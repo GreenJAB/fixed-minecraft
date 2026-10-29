@@ -11,6 +11,8 @@ public class GameRuleStatus {
     public boolean combine_items;
     public boolean mending_on_op;
     public boolean grindstone_damage;
+    public boolean tomes_increase_level;
+    public boolean one_to_one_lapis_cost;
     public boolean global_locator_bar;
     public boolean elytra_drag;
     public int elytra_fly_in_rain;
@@ -32,6 +34,8 @@ public class GameRuleStatus {
         this.combine_items = rules.get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS);
         this.mending_on_op = rules.get(GameRuleRegistry.MENDING_ON_OP_ITEMS);
         this.grindstone_damage = rules.get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM);
+        this.tomes_increase_level = rules.get(GameRuleRegistry.TOMES_INCREASE_LEVEL);
+        this.one_to_one_lapis_cost = rules.get(GameRuleRegistry.ONE_TO_ONE_LAPIS_COST);
         this.global_locator_bar = rules.get(GameRuleRegistry.GLOBAL_PLAYER_LOCATOR_BAR);
         this.elytra_drag = rules.get(GameRuleRegistry.ELYTRA_DRAG);
         this.elytra_fly_in_rain = rules.get(GameRuleRegistry.ELYTRA_FLY_IN_RAIN);
@@ -51,6 +55,8 @@ public class GameRuleStatus {
         buf.writeBoolean(combine_items);
         buf.writeBoolean(mending_on_op);
         buf.writeBoolean(grindstone_damage);
+        buf.writeBoolean(tomes_increase_level);
+        buf.writeBoolean(one_to_one_lapis_cost);
         buf.writeBoolean(global_locator_bar);
         buf.writeBoolean(elytra_drag);
         buf.writeInt(elytra_fly_in_rain);
@@ -71,6 +77,8 @@ public class GameRuleStatus {
         p.combine_items = buf.readBoolean();
         p.mending_on_op = buf.readBoolean();
         p.grindstone_damage = buf.readBoolean();
+        p.tomes_increase_level = buf.readBoolean();
+        p.one_to_one_lapis_cost = buf.readBoolean();
         p.global_locator_bar = buf.readBoolean();
         p.elytra_drag = buf.readBoolean();
         p.elytra_fly_in_rain = buf.readInt();

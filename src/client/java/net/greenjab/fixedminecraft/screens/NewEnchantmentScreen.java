@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft.screens;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.registry.other.NewEnchantmentMenu;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -99,7 +100,6 @@ public class NewEnchantmentScreen extends AbstractContainerScreen< NewEnchantmen
         graphics.blit(RenderPipelines.GUI_TEXTURED, ENCHANTING_TABLE_LOCATION, xo, yo, 0.0F, 0.0F, this.imageWidth, this.imageHeight, 256, 256);
         this.extractBook(graphics, xo, yo);
         EnchantmentNames.getInstance().initSeed(this.menu.getEnchantmentSeed());
-        int lapisCount = this.menu.getLapisCount();
 
         for (int i = 0; i < 3; i++) {
             int leftPos = xo + 60;
@@ -112,7 +112,7 @@ public class NewEnchantmentScreen extends AbstractContainerScreen< NewEnchantmen
                 int textWidth = 70 - this.font.width(costText);
                 FormattedText message = EnchantmentNames.getInstance().getRandomName(this.font, textWidth);
                 int col = -9937334;
-                if ((lapisCount < Mth.ceil(cost / 10.0) || this.minecraft.player.experienceLevel < cost) && !this.minecraft.player.hasInfiniteMaterials()) {
+                if ((this.menu.getLapisCount() < (FixedMinecraft.gameRules.one_to_one_lapis_cost?Math.min(cost, 64):Mth.ceil(cost / 10.0)) || this.minecraft.player.experienceLevel < cost) && !this.minecraft.player.hasInfiniteMaterials()) {
                     graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ENCHANTMENT_SLOT_DISABLED_SPRITE, leftPos, yo + 16 + 18 * i, 108, 18);
                     graphics.blitSprite(RenderPipelines.GUI_TEXTURED, DISABLED_LEVEL_SPRITES[Math.clamp(this.menu.icon[i], 0, 2)], leftPos + 1, yo + 17 + 18 * i, 16, 16);
                     graphics.textWithWordWrap(this.font, message, leftPosText, yo + 18 + 18 * i, textWidth, ARGB.opaque((col & 16711422) >> 1), false);
@@ -162,6 +162,7 @@ public class NewEnchantmentScreen extends AbstractContainerScreen< NewEnchantmen
             if (minLevel>0) {
                 int enchantLevel = this.menu.icon[i];
                 int cost = Mth.ceil(minLevel / 10.0);
+                int lapis_cost = (FixedMinecraft.gameRules.one_to_one_lapis_cost?Math.min(minLevel, 64):cost);
                 if (this.isHovering(60, 16 + 18 * i, 108, 17, mouseX, mouseY) && enchantLevel >= 0) {
                     List<Component> texts = Lists.newArrayList();
 
@@ -170,9 +171,9 @@ public class NewEnchantmentScreen extends AbstractContainerScreen< NewEnchantmen
                             texts.add(Component.translatable("container.enchant.level.requirement", this.menu.costs[i]).withStyle(ChatFormatting.RED));
                         } else {
                             MutableComponent lapisCost;
-                            if (cost == 1) lapisCost = Component.translatable("container.enchant.lapis.one");
-                            else lapisCost = Component.translatable("container.enchant.lapis.many", cost);
-                            texts.add(lapisCost.withStyle(lapis >= cost ? ChatFormatting.GRAY : ChatFormatting.RED));
+                            if (lapis_cost == 1) lapisCost = Component.translatable("container.enchant.lapis.one");
+                            else lapisCost = Component.translatable("container.enchant.lapis.many", lapis_cost);
+                            texts.add(lapisCost.withStyle(lapis >= lapis_cost ? ChatFormatting.GRAY : ChatFormatting.RED));
 
                             MutableComponent levelCost;
                             if (cost == 1) levelCost = Component.translatable("container.enchant.level.one");

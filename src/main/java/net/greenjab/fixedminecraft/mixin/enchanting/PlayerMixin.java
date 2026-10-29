@@ -32,7 +32,7 @@ public abstract class PlayerMixin {
             }
             if (player.experienceLevel%2==1) i +=getNextLevelExperience(player.experienceLevel/2)/2;
             i+= (int) (player.experienceProgress/2);
-            cir.setReturnValue(i);
+            cir.setReturnValue(i+1);
         } else {
             cir.setReturnValue(0);
         }

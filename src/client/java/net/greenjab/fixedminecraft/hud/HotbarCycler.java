@@ -25,7 +25,7 @@ public class HotbarCycler
                 InputConstants.Type.KEYBOARD, InputConstants.KEY_C, KeyMapping.Category.INVENTORY));
 
         fontLegendKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.fixedminecraft.font_legend",
-                InputConstants.Type.KEYBOARD, InputConstants.KEY_LALT, KeyMapping.Category.MISC));
+                InputConstants.Type.KEYBOARD, InputConstants.KEY_RALT, KeyMapping.Category.MISC));
     }
 
     public static void shiftRows(Minecraft minecraft, final Direction direction) {

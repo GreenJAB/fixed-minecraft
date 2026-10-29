@@ -27,6 +27,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.timeline.Timelines;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +42,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -92,6 +94,14 @@ public abstract class HudMixin {
             target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;hasExperience()Z"))
     private boolean renderCreativeExperience2(boolean original){
         return original || (this.minecraft.options.keyPlayerList.isDown()&&!getCameraPlayer().isSpectator());
+    }
+
+    @ModifyExpressionValue(method = "extractHotbarAndDecorations", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;getPlayerMode()Lnet/minecraft/world/level/GameType;", ordinal = 1))
+    private GameType renderLocatorBarNameSpectator(GameType original){
+        if (original == GameType.SPECTATOR) {
+            if (!Objects.equals(FixedMinecraftClient.locatorBarName, Component.empty()))  return GameType.SURVIVAL;
+        }
+        return original;
     }
 
     @WrapOperation(method = "extractPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Hud;extractArmor(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/world/entity/player/Player;IIII)V"))

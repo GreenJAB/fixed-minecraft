@@ -235,6 +235,7 @@
         "villager.MerchantOfferMixin",
         "villager.SleepInBedMixin",
         "villager.TradeWithVillagerMixin",
+        "villager.VillagerMakeLoveMixin",
         "villager.VillagerMixin",
         "villager.WanderingTraderMixin",
         "villager.WanderingTraderSpawnerMixin",

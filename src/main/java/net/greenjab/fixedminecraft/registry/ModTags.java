@@ -4,6 +4,7 @@ import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -15,7 +16,9 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class ModTags {
     public static final TagKey<EntityType<?>> VEHICLES = TagKey.create(Registries.ENTITY_TYPE, FixedMinecraft.id("vehicles"));
+
     public static final TagKey<Block> ORES = TagKey.create(Registries.BLOCK, FixedMinecraft.id("ores"));
+    public static final TagKey<Block> GLASS_PANES = TagKey.create(Registries.BLOCK, FixedMinecraft.id("glass_panes"));
 
     public static final TagKey<Biome> IS_FROZEN = TagKey.create(Registries.BIOME, FixedMinecraft.id("is_frozen"));
 
@@ -32,6 +35,8 @@ public class ModTags {
     public static final TagKey<Item> VANILLA_NAUTILUS_ARMOR = TagKey.create(Registries.ITEM, FixedMinecraft.id("vanilla_nautilus_armor"));
 
     public static final ResourceKey<TradeSet> WANDERING_TRADER_SPECIAL = TradeSets.resourceKey("wandering_trader/special");
+
+    public static final TagKey<DamageType> NETHERITE_WITHSTANDS = TagKey.create(Registries.DAMAGE_TYPE, FixedMinecraft.id("netherite_withstands"));
 
     public static final TagKey<Enchantment> ABANDONED_MINESHAFT_EBOOKS = enchant_of("chest/abandoned_mineshaft");
     public static final TagKey<Enchantment> ANCIENT_CITY_EBOOKS = enchant_of("chest/ancient_city");
@@ -54,6 +59,9 @@ public class ModTags {
     public static final TagKey<Enchantment> TRIAL_CHAMBER_EBOOKS = enchant_of("other/trial_chamber");
     public static final TagKey<Enchantment> TRAIL_RUINS_EBOOKS = enchant_of("other/trail_ruins");
     public static final TagKey<Enchantment> FISHING_TREASURE_EBOOKS = enchant_of("other/fishing_treasure");
+
+    public static final TagKey<DamageType> IGNORE_CHAINMAIL_PROTECTION_INCREASE = TagKey.create(Registries.DAMAGE_TYPE, FixedMinecraft.id("ignore_chainmail_protection_increase"));
+
 
     private static TagKey<Enchantment> enchant_of(String id)  {
         return TagKey.create(Registries.ENCHANTMENT, FixedMinecraft.id(id));

@@ -1,6 +1,7 @@
 package net.greenjab.fixedminecraft.mixin.mobs;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.monster.illager.Pillager;
 import net.minecraft.world.entity.monster.skeleton.WitherSkeleton;
+import net.minecraft.world.entity.projectile.arrow.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
@@ -227,5 +229,14 @@ public abstract class LivingEntityMixin {
                 }
             }
         }
+    }
+
+    @ModifyExpressionValue(method = "hurtServer", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 3
+    ))
+    private boolean piercingArrowsPierce(boolean original, @Local DamageSource source){
+        if (source.getDirectEntity() instanceof Arrow arrow && arrow.getPierceLevel()!=0)return true;
+        return original;
     }
 }

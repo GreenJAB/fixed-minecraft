@@ -1,135 +1,92 @@
 {
-  "type": "minecraft:block",
-  "pools": [
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
+    "type": "minecraft:block",
+    "pools": [
         {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "conditions": [
+            "entries": [
                 {
-                  "type": "minecraft:any_of",
-                  "terms": [
-                    {
-                      "type": "minecraft:match_tool",
-                      "predicate": {
-                        "items": "minecraft:shears"
-                      }
-                    },
-                    {
-                      "type": "minecraft:match_tool",
-                      "predicate": {
-                        "predicates": {
-                          "minecraft:enchantments": [
-                            {
-                              "enchantments": "minecraft:silk_touch",
-                              "levels": {
-                                "min": 1
-                              }
-                            }
-                          ]
+                    "type": "minecraft:alternatives",
+                    "children": [
+                        {
+                            "type": "minecraft:item",
+                            "condition": {
+                                "type": "minecraft:any_of",
+                                "terms": [
+                                    "minecraft:tool/can_shear",
+                                    "minecraft:tool/can_silk_touch"
+                                ]
+                            },
+                            "name": "minecraft:jungle_leaves"
+                        },
+                        {
+                            "type": "minecraft:item",
+                            "condition": {
+                                "type": "minecraft:all_of",
+                                "terms": [
+                                    {
+                                        "type": "minecraft:survives_explosion"
+                                    },
+                                    {
+                                        "type": "minecraft:table_bonus",
+                                        "chances": [
+                                            0.05,
+                                            0.0625,
+                                            0.083333336,
+                                            0.1
+                                        ],
+                                        "enchantment": "minecraft:fortune"
+                                    }
+                                ]
+                            },
+                            "name": "minecraft:jungle_sapling"
                         }
-                      }
-                    }
-                  ]
-                }
-              ],
-              "name": "minecraft:jungle_leaves"
-            },
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "type": "minecraft:survives_explosion"
-                },
-                {
-                  "chances": [
-                    0.05,
-                    0.0625,
-                    0.083333336,
-                    0.1
-                  ],
-                  "type": "minecraft:table_bonus",
-                  "enchantment": "minecraft:fortune"
-                }
-              ],
-              "name": "minecraft:jungle_sapling"
-            }
-          ]
-        }
-      ],
-      "rolls": 1.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "conditions": [
-        {
-          "type": "minecraft:inverted",
-          "term": {
-            "type": "minecraft:any_of",
-            "terms": [
-              {
-                "type": "minecraft:match_tool",
-                "predicate": {
-                  "items": "minecraft:shears"
-                }
-              },
-              {
-                "type": "minecraft:match_tool",
-                "predicate": {
-                  "predicates": {
-                    "minecraft:enchantments": [
-                      {
-                        "enchantments": "minecraft:silk_touch",
-                        "levels": {
-                          "min": 1
-                        }
-                      }
                     ]
-                  }
                 }
-              }
-            ]
-          }
-        }
-      ],
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "chances": [
-                0.02,
-                0.022222223,
-                0.025,
-                0.033333335,
-                0.1
-              ],
-              "type": "minecraft:table_bonus",
-              "enchantment": "minecraft:fortune"
-            }
-          ],
-            "modifier": [
-              {
-                "type": "minecraft:set_count",
-                "count": {
-                  "type": "minecraft:uniform",
-                  "max": 2.0,
-                  "min": 1.0
-                }
-              },
-              {
-                "type": "minecraft:explosion_decay"
-              }
             ],
-          "name": "minecraft:stick"
+            "rolls": 1
+        },
+        {
+            "condition": {
+                "type": "minecraft:inverted",
+                "term": {
+                    "type": "minecraft:any_of",
+                    "terms": [
+                        "minecraft:tool/can_shear",
+                        "minecraft:tool/can_silk_touch"
+                    ]
+                }
+            },
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "condition": {
+                        "type": "minecraft:table_bonus",
+                        "chances": [
+                            0.02,
+                            0.022222223,
+                            0.025,
+                            0.033333335,
+                            0.1
+                        ],
+                        "enchantment": "minecraft:fortune"
+                    },
+                    "modifier": [
+                        {
+                            "type": "minecraft:set_count",
+                            "count": {
+                                "type": "minecraft:uniform",
+                                "max": 2,
+                                "min": 1
+                            }
+                        },
+                        {
+                            "type": "minecraft:explosion_decay"
+                        }
+                    ],
+                    "name": "minecraft:stick"
+                }
+            ],
+            "rolls": 1
         }
-      ],
-      "rolls": 1.0
-    }
-  ],
-  "random_sequence": "minecraft:blocks/jungle_leaves"
+    ],
+    "random_sequence": "minecraft:blocks/jungle_leaves"
 }

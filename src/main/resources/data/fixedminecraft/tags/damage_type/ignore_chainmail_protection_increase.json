@@ -1,0 +1,9 @@
+{
+    "values": [
+        "#minecraft:is_fire",
+        "#minecraft:is_fall",
+        "#minecraft:is_explosion",
+        "#minecraft:is_projectile",
+        "#minecraft:bypasses_invulnerability"
+    ]
+}
