@@ -6,18 +6,28 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.players.ProfileResolver;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.Util;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MapItem;
 import net.minecraft.world.item.component.MapItemColor;
 import net.minecraft.world.item.component.ResolvableProfile;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
@@ -30,7 +40,9 @@ import org.spongepowered.asm.mixin.Unique;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunction {
     public static final MapCodec<WanderingTraderSpecialLootFunction> CODEC = RecordCodecBuilder.mapCodec(
@@ -49,12 +61,13 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
 
     @Override
     public @NonNull ItemStack run(final @NonNull ItemStack itemStack, final @NonNull LootContext context) {
-        int i = (int)(Math.random()*5);
+        int i = (int)(Math.random()*6);
         return switch (i) {
             case 0 -> createMusicDiscStack();
             case 1 -> createSherdStack();
             case 2 -> createTrimStack();
             case 3 -> createMobHeadStack(context);
+            case 4 -> createEnchantedBookStack(context);
             default -> createBiomeMapStack(context);
         };
     }
@@ -158,6 +171,30 @@ public class WanderingTraderSpecialLootFunction extends LootItemConditionalFunct
             return itemStack;
         }
         return Items.MAP.getDefaultInstance();
+    }
+
+    @Unique
+    private ItemStack createEnchantedBookStack(LootContext context) {
+        RandomSource rn = context.getRandom();
+        HolderGetter<Enchantment> enchantments = context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+        HolderSet<Enchantment> enchantmentsForBooks = enchantments.getOrThrow(EnchantmentTags.TREASURE);
+
+        Optional<HolderSet<Enchantment>> i = Optional.of(enchantmentsForBooks);
+
+        Stream<Holder<Enchantment>> compatibleEnchantmentsStream = (i.map(HolderSet::stream).orElseGet(
+                () -> context.getLevel().registryAccess().lookupOrThrow(Registries.ENCHANTMENT).listElements().map(Function.identity())));
+        List<Holder<Enchantment>> compatibleEnchantments = compatibleEnchantmentsStream.toList();
+        Optional<Holder<Enchantment>> optional = Util.getRandomSafe(compatibleEnchantments, rn);
+
+        ItemStack itemStack = new ItemStack(Items.BOOK);
+        if (optional.isPresent()) {
+            Holder<Enchantment> registryEntry = optional.get();
+            Enchantment enchantment = registryEntry.value();
+            int maxLevel = enchantment.getMaxLevel();
+            int level = maxLevel==1?1: UniformInt.of(1,maxLevel).sample(rn);
+            itemStack = EnchantmentHelper.createBook(new EnchantmentInstance(registryEntry, level));
+        }
+        return itemStack;
     }
 
 }

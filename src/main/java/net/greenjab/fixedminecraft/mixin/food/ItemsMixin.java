@@ -8,6 +8,7 @@ import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.greenjab.fixedminecraft.registry.registries.TrimMaterialsRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
@@ -190,7 +191,7 @@ public abstract class ItemsMixin {
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Item$Properties;fireResistant()Lnet/minecraft/world/item/Item$Properties;"))
     private static Item.Properties blastProofNetherite(Item.Properties instance, Operation<Item.Properties> original) {
-        return original.call(instance).delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION)));}
+        return instance.delayedComponent(DataComponents.DAMAGE_RESISTANT, (context) -> new DamageResistant(context.getOrThrow(ModTags.NETHERITE_WITHSTANDS)));}
 
     @WrapOperation(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/item/Items;registerItem(Ljava/lang/String;)Lnet/minecraft/world/item/Item;", ordinal = 0 ), slice = @Slice(from =
     @At(value = "CONSTANT", args = "stringValue=blaze_rod"), to =

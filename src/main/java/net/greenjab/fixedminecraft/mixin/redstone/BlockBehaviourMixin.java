@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.redstone;
 
+import com.mojang.logging.LogUtils;
 import net.greenjab.fixedminecraft.registry.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,8 +34,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.function.BiConsumer;
-
-import static com.mojang.text2speech.Narrator.LOGGER;
 
 @Mixin(BlockBehaviour.class)
 public abstract class BlockBehaviourMixin {
@@ -90,7 +89,7 @@ public abstract class BlockBehaviourMixin {
         ServerLevel serverLevel = serverPlayer.level();
         if (serverLevel instanceof ServerLevel) {
             if (!tag.isEmpty()) {
-                try (ProblemReporter.ScopedCollector reporterx = new ProblemReporter.ScopedCollector(serverPlayer.problemPath(), LOGGER)) {
+                try (ProblemReporter.ScopedCollector reporterx = new ProblemReporter.ScopedCollector(serverPlayer.problemPath(), LogUtils.getLogger())) {
                     EntityType.create(
                                     TagValueInput.create(reporterx.forChild( () -> ".shoulder"), serverLevel.registryAccess(), tag),
                                     serverLevel,

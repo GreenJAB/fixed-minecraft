@@ -11,6 +11,7 @@
         "AbstractMountInventoryScreenMixin",
         "AbstractRecipeBookScreenMixin",
         "AbstractWidgetMixin",
+        "AccessibilityOptionsScreenMixin",
         "AdvancementsScreenMixin",
         "AdvancementTabMixin",
         "AdvancementWidgetMixin",

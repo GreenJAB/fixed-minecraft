@@ -166,6 +166,10 @@
     "gamerule.fixedminecraft.mending_on_op_items.description": "When an item is over capacity or has super enchants",
     "gamerule.fixedminecraft.enchant_capacity_percentage": "Enchant Capacity Percentage",
     "gamerule.fixedminecraft.enchant_capacity_percentage.description": "Rather than the anvil cap of 40, capacity is a percentage of how many enchants an item could have, capped at 50 Levels",
+    "gamerule.fixedminecraft.tomes_increase_level": "Tomes Increase Level",
+    "gamerule.fixedminecraft.books_increase_level.description": "Combining 2 Sharpness 4 Tomes make Sharpness 5",
+    "gamerule.fixedminecraft.one_to_one_lapis_cost": "One to One Lapis Cost",
+    "gamerule.fixedminecraft.one_to_one_lapis_cost.description": "Let Enchanting table require the required level amount of lapis rather than cost level (1 tenth)",
 
     "gamerule.category.fixedminecraft.aab_jabsfixedtransport": "Jabs Fixed Transport",
     "gamerule.fixedminecraft.train_max_length": "Train Max Length",

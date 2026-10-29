@@ -145,6 +145,7 @@ public class NewEnchantmentMenu extends AbstractContainerMenu {
             ItemStack itemStack = this.enchantSlots.getItem(0);
             ItemStack currency = this.enchantSlots.getItem(1);
             int enchantmentCost = Mth.ceil(this.costs[buttonId] / 10.0);
+            int lapisCost = (FixedMinecraft.gameRules.one_to_one_lapis_cost?Math.min(this.costs[buttonId], 64):enchantmentCost);
             if ((currency.isEmpty() || currency.getCount() < enchantmentCost) && !player.hasInfiniteMaterials()) {
                 return false;
             } else if (this.costs[buttonId] <= 0
@@ -157,7 +158,7 @@ public class NewEnchantmentMenu extends AbstractContainerMenu {
 
                     this.enchantSlots.setItem(0, this.outcomeSlots.getItem(buttonId).copy());
 
-                    currency.consume(enchantmentCost, player);
+                    currency.consume(lapisCost, player);
                     if (currency.isEmpty()) {
                         this.enchantSlots.setItem(1, ItemStack.EMPTY);
                     }
@@ -229,9 +230,10 @@ public class NewEnchantmentMenu extends AbstractContainerMenu {
                     if (!((registryEntry.value()).canEnchant(itemStack) || itemStack.is(Items.BOOK))) continue;
                     if ((enchPower.get() + FixedMinecraftEnchantmentHelper.getEnchantmentPower(registryEntry, level)) <= 0) continue;
                     if (enchantments.containsKey(registryEntry)) {
-                        if (enchantments.get(registryEntry) == level) {
-                            enchantments2.put(registryEntry, Math.min(level+1, enchantment.getMaxLevel()));
-                        } else enchantments2.put(registryEntry, Math.min(level, enchantment.getMaxLevel()));
+                        if (enchantments.get(registryEntry)==enchantment.getMaxLevel()) continue;
+                        if (enchantments.get(registryEntry) == level && FixedMinecraft.gameRules.tomes_increase_level) {
+                            enchantments2.put(registryEntry, level+1);
+                        } else enchantments2.put(registryEntry, level);
                         continue;
                     }
                     if (enchantments.keySet().stream().anyMatch(enchantment3 -> !Enchantment.areCompatible(registryEntry, enchantment3))) continue;
@@ -247,8 +249,8 @@ public class NewEnchantmentMenu extends AbstractContainerMenu {
                         if (i[0] == rand) {
                             enchPower.addAndGet(FixedMinecraftEnchantmentHelper.getEnchantmentPower(enchantment, level));
                             enchantments.put(enchantment, level);
-                            i[0]++;
                         }
+                        i[0]++;
                     });
 
                 }

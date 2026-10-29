@@ -240,10 +240,11 @@ public class NewAnvilMenu extends ItemCombinerMenu {
                     int q = builder.getLevel(registryEntry);
                     int r = entry.getIntValue();
                     Enchantment enchantment = registryEntry.value();
-                    r = q == r ? r + (book&&r<enchantment.getMaxLevel()?1:0) : Math.max(r, q);
+                    r = q == r ? r + (addition.is(Items.ENCHANTED_BOOK) && r<enchantment.getMaxLevel()
+                                      && FixedMinecraft.gameRules.tomes_increase_level ?1:0) : Math.max(r, q);
 
                     boolean canAdd = enchantment.canEnchant(input);
-                    if (this.player.hasInfiniteMaterials() || input.is(Items.ENCHANTED_BOOK)) {
+                    if (this.player.hasInfiniteMaterials() || (input.is(Items.ENCHANTED_BOOK) && !addition.is(Items.BOOK))) {
                         canAdd = true;
                     }
 

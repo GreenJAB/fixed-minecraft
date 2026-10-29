@@ -12,6 +12,7 @@ import net.greenjab.fixedminecraft.network.GameRuleStatus;
 import net.greenjab.fixedminecraft.network.SyncHandler;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookState;
 import net.greenjab.fixedminecraft.registry.item.map_book.MapBookStateManager;
+import net.greenjab.fixedminecraft.registry.other.RepairAnvilDispenserBehaviour;
 import net.greenjab.fixedminecraft.registry.registries.BiomeAdditions;
 import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemGroupRegistry;
@@ -80,6 +81,8 @@ public class FixedMinecraft implements ModInitializer {
         DispenserBlock.registerProjectileBehavior(Items.NETHER_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.RESIN_BRICK);
         DispenserBlock.registerProjectileBehavior(Items.TRIDENT);
+        DispenserBlock.registerBehavior(Items.IRON_BLOCK, new RepairAnvilDispenserBehaviour());
+        DispenserBlock.registerBehavior(Items.NETHERITE_INGOT, new RepairAnvilDispenserBehaviour());
 
         FabricLoader.getInstance().getModContainer(NAMESPACE).ifPresent(modContainer -> {
             ResourceManagerHelper.registerBuiltinResourcePack(

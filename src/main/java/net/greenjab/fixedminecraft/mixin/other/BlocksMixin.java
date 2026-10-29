@@ -1,5 +1,6 @@
 package net.greenjab.fixedminecraft.mixin.other;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.block.NewPitcherPlantBlock;
@@ -13,6 +14,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeafLitterBlock;
 import net.minecraft.world.level.block.RedstoneLampBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -204,6 +206,11 @@ public abstract class BlocksMixin {
     @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;PINK_PETALS:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)))
     private static MapColor pinkPetalsMapColor(MapColor color) {return MapColor.TERRACOTTA_WHITE;}
 
+    @ModifyExpressionValue(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;mapColor(Lnet/minecraft/world/level/material/MapColor;)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;", ordinal = 0), slice = @Slice(from =
+    @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;LEAF_LITTER:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
+    @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;LEAF_LITTER:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)))
+    private static BlockBehaviour.Properties brighterLeafLitterMapColor(BlockBehaviour.Properties original) {return original.mapColor(state -> state.getValue(LeafLitterBlock.AMOUNT)>2?MapColor.PODZOL:MapColor.NONE);}
+
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;mapColor(Lnet/minecraft/world/level/material/MapColor;)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;", ordinal = 0), slice = @Slice( from =
     @At(value = "CONSTANT", args = "stringValue=short_grass"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;SHORT_GRASS:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)))
@@ -222,7 +229,7 @@ public abstract class BlocksMixin {
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "CONSTANT", args = "stringValue=redstone_lamp"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;REDSTONE_LAMP:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)), index = 2)
-    private static BlockBehaviour.Properties LampColor(BlockBehaviour.Properties properties) {return properties.mapColor(state -> state.getValue(RedstoneLampBlock.LIT)?MapColor.COLOR_YELLOW:MapColor.TERRACOTTA_ORANGE);}
+    private static BlockBehaviour.Properties LampColor(BlockBehaviour.Properties properties) {return properties.mapColor(state -> state.getValue(RedstoneLampBlock.LIT)?MapColor.SAND:MapColor.TERRACOTTA_ORANGE);}
 
     @ModifyArg(method="<clinit>", at = @At( value = "INVOKE", target = "Lnet/minecraft/world/level/block/Blocks;register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;)Lnet/minecraft/world/level/block/Block;", ordinal = 0), slice = @Slice( from =
     @At(value = "CONSTANT", args = "stringValue=rail"), to =

@@ -3,6 +3,9 @@ package net.greenjab.fixedminecraft.mixin.redstone;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,11 +20,19 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 @Mixin(NoteBlock.class)
-public abstract class NoteBlockMixin {
+public abstract class NoteBlockMixin extends Block {
+    public NoteBlockMixin(Properties properties) {
+        super(properties);
+    }
+
     @WrapOperation(method = "useWithoutItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;cycle(Lnet/minecraft/world/level/block/state/properties/Property;)Ljava/lang/Object;"))
     private Object goDownNote(BlockState instance, Property<Integer> property, Operation<Object> original,
                               @Local(argsOnly = true) BlockHitResult hitResult,
-                              @Local(argsOnly = true) Player player) {
+                              @Local(argsOnly = true) Player player,
+                              @Local(argsOnly = true) BlockState state,
+                              @Local(argsOnly = true)  Level level,
+                              @Local(argsOnly = true)  BlockPos pos) {
+        level.updateNeighbourForOutputSignal(pos, state.getBlock());
         if (player.hasInfiniteMaterials() && player.isShiftKeyDown()) return instance;
         if (isTopHalf(hitResult)) return original.call(instance, property);
         else return instance.setValue(property, getPrev(property.getPossibleValues(), instance.getValue(property)));
@@ -38,5 +49,15 @@ public abstract class NoteBlockMixin {
     @Unique private static <T> T getPrev(List<T> values, T value) {
         int i = values.indexOf(value) - 1;
         return (T)(i == -1 ? values.size()-1 : values.get(i));
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(@NonNull BlockState state)  {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(@NonNull BlockState state, Level world, @NonNull BlockPos pos, @NonNull Direction direction) {
+        return state.getValue(NoteBlock.NOTE);
     }
 }
