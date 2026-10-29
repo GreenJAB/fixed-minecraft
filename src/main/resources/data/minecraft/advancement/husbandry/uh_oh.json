@@ -1,62 +1,66 @@
 {
-  "parent": "minecraft:adventure/very_very_frightening",
-  "criteria": {
-    "give_tnt_directly": {
-      "conditions": {
-        "entity": {
-          "type": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "minecraft:entity_type": "minecraft:sulfur_cube",
-            "minecraft:flags": {
-              "is_baby": false
-            }
-          }
+    "parent": "minecraft:husbandry/root",
+    "criteria": {
+        "give_tnt_directly": {
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "minecraft:entity_type": "minecraft:sulfur_cube",
+                            "minecraft:flags": {
+                                "is_baby": false
+                            }
+                        }
+                    }
+                ],
+                "item": {
+                    "items": "#minecraft:sulfur_cube_archetype/explosive"
+                }
+            },
+            "trigger": "minecraft:player_interacted_with_entity"
         },
-        "item": {
-          "items": "#minecraft:sulfur_cube_archetype/explosive"
+        "pick_up_dropped_tnt": {
+            "conditions": {
+                "entity": [
+                    {
+                        "condition": "minecraft:entity_properties",
+                        "entity": "this",
+                        "predicate": {
+                            "minecraft:entity_type": "minecraft:sulfur_cube",
+                            "minecraft:flags": {
+                                "is_baby": false
+                            }
+                        }
+                    }
+                ],
+                "item": {
+                    "items": "#minecraft:sulfur_cube_archetype/explosive"
+                }
+            },
+            "trigger": "minecraft:thrown_item_picked_up_by_entity"
         }
-      },
-      "trigger": "minecraft:player_interacted_with_entity"
     },
-    "pick_up_dropped_tnt": {
-      "conditions": {
-        "entity": {
-          "type": "minecraft:entity_properties",
-          "entity": "this",
-          "predicate": {
-            "minecraft:entity_type": "minecraft:sulfur_cube",
-            "minecraft:flags": {
-              "is_baby": false
-            }
-          }
+    "display": {
+        "description": {
+            "translate": "advancements.husbandry.uh_oh.description"
         },
-        "item": {
-          "items": "#minecraft:sulfur_cube_archetype/explosive"
+        "icon": {
+            "id": "minecraft:tnt"
+        },
+        "title": {
+            "translate": "advancements.husbandry.uh_oh.title"
         }
-      },
-      "trigger": "minecraft:thrown_item_picked_up_by_entity"
-    }
-  },
-  "display": {
-    "description": {
-      "translate": "advancements.husbandry.uh_oh.description"
     },
-    "icon": {
-      "id": "minecraft:tnt"
+    "requirements": [
+        [
+            "pick_up_dropped_tnt",
+            "give_tnt_directly"
+        ]
+    ],
+    "rewards": {
+        "experience": 300
     },
-    "title": {
-      "translate": "advancements.husbandry.uh_oh.title"
-    }
-  },
-  "requirements": [
-    [
-      "pick_up_dropped_tnt",
-      "give_tnt_directly"
-    ]
-  ],
-  "rewards": {
-    "experience": 300
-  },
-  "sends_telemetry_event": true
+    "sends_telemetry_event": true
 }

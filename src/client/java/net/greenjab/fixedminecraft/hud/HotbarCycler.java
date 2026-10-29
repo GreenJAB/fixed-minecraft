@@ -29,7 +29,7 @@ public class HotbarCycler
 
         fontLegendKeyBinding = KeyMappingHelper.registerKeyMapping(new KeyMapping(
                 "key.fixedminecraft.font_legend",
-                GLFW.GLFW_KEY_LEFT_ALT,
+                GLFW.GLFW_KEY_RIGHT_ALT,
                 KeyMapping.Category.MISC));
     }
 
