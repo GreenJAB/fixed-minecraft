@@ -9,7 +9,7 @@
         },
         "projection": "rigid"
       },
-      "weight": 7
+      "weight": 2
     },
     {
       "element": {
@@ -20,7 +20,7 @@
         },
         "projection": "rigid"
       },
-      "weight": 7
+      "weight": 2
     },
     {
       "element": {
@@ -31,7 +31,7 @@
         },
         "projection": "rigid"
       },
-      "weight": 5
+      "weight": 10
     },
     {
       "element": {
