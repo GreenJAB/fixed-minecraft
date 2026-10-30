@@ -32,14 +32,14 @@ public abstract class AtmosphericFogEnvironmentMixin {
 
         Entity entity = camera.entity();
         float palefog = FixedMinecraftClient.paleGardenFog;
-        boolean inPale = level.getBiome(entity.blockPosition()).is(Biomes.PALE_GARDEN);
+        boolean inPale = level.getBiome(camera.blockPosition()).is(Biomes.PALE_GARDEN);
         float delta = deltaTracker.getGameTimeDeltaTicks();
         if (inPale) FixedMinecraftClient.paleGardenFog = Math.min(palefog + (float) (delta * Math.sqrt(1-palefog*palefog)*0.01f), 1);
         else FixedMinecraftClient.paleGardenFog = Math.max(palefog - delta*0.01f, 0);
 
         float voidFog = FixedMinecraftClient.voidFog;
-        float inverseSkyLight = 1 - (entity.level().getBrightness(LightLayer.SKY, entity.blockPosition()) / 15f);
-        float height = (float) (1 - ((entity.level().dimensionType().minY() - (entity.position().y - 4)) / -10f));
+        float inverseSkyLight = 1 - (entity.level().getBrightness(LightLayer.SKY, camera.blockPosition()) / 15f);
+        float height = (float) (1 - ((entity.level().dimensionType().minY() - (camera.position().y - 4)) / -10f));
         float toVoid = entity.level().dimension().identifier().toString().toLowerCase().contains("overworld")?
                Mth.clamp(inverseSkyLight * height, 0, 1) : 0;
         if (Math.abs(toVoid-voidFog)>0.0)
