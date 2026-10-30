@@ -95,7 +95,7 @@ public abstract class GuiMixin {
     private boolean renderCreativeExperience2(boolean original){
         return original || (this.minecraft.options.keyPlayerList.isDown()&&!getCameraPlayer().isSpectator());
     }
-	
+
 	@ModifyExpressionValue(method = "extractHotbarAndDecorations", at = @At(value = "INVOKE",target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;getPlayerMode()Lnet/minecraft/world/level/GameType;", ordinal = 1))
     private GameType renderLocatorBarNameSpectator(GameType original){
         if (original == GameType.SPECTATOR) {
@@ -104,7 +104,7 @@ public abstract class GuiMixin {
         return original;
     }
 
-    @WrapOperation(method = "extractPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Hud;extractArmor(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/world/entity/player/Player;IIII)V"))
+    @WrapOperation(method = "extractPlayerHealth", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Gui;extractArmor(Lnet/minecraft/client/gui/GuiGraphicsExtractor;Lnet/minecraft/world/entity/player/Player;IIII)V"))
     private void renderArmorItems(GuiGraphicsExtractor graphics, Player player, int yLineBase, int numHealthRows, int healthRowHeight, int xLeft, Operation<Void> original){
         if (FixedMinecraftClient.itemArmorHud.get() || this.minecraft.options.keyPlayerList.isDown()) {
             Minecraft client = Minecraft.getInstance();

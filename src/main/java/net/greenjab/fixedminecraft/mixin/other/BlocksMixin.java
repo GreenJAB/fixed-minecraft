@@ -207,7 +207,7 @@ public abstract class BlocksMixin {
     private static MapColor pinkPetalsMapColor(MapColor color) {return MapColor.TERRACOTTA_WHITE;}
 
     @ModifyExpressionValue(method="<clinit>", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;mapColor(Lnet/minecraft/world/level/material/MapColor;)Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;", ordinal = 0), slice = @Slice(from =
-    @At(value = "FIELD", target = "Lnet/minecraft/references/BlockItemIds;LEAF_LITTER:Lnet/minecraft/references/BlockItemId;", opcode = Opcodes.GETSTATIC), to =
+    @At(value = "CONSTANT", args = "stringValue=leaf_litter"), to =
     @At(value = "FIELD",target = "Lnet/minecraft/world/level/block/Blocks;LEAF_LITTER:Lnet/minecraft/world/level/block/Block;", opcode = Opcodes.PUTSTATIC)))
     private static BlockBehaviour.Properties brighterLeafLitterMapColor(BlockBehaviour.Properties original) {return original.mapColor(state -> state.getValue(LeafLitterBlock.AMOUNT)>2?MapColor.PODZOL:MapColor.NONE);}
 

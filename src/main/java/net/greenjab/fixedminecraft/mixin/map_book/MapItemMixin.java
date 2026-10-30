@@ -40,14 +40,14 @@ public abstract class MapItemMixin {
     }
 
     @Unique Map<Block, Integer> bulbMap =Map.of(
-            Blocks.COPPER_BULB.waxed().unaffected(), 3,
-            Blocks.COPPER_BULB.waxed().exposed(), 2,
-            Blocks.COPPER_BULB.waxed().weathered(), 1,
-            Blocks.COPPER_BULB.waxed().oxidized(), 0,
-            Blocks.COPPER_BULB.weathering().unaffected(), 3,
-            Blocks.COPPER_BULB.weathering().exposed(), 2,
-            Blocks.COPPER_BULB.weathering().weathered(), 1,
-            Blocks.COPPER_BULB.weathering().oxidized(), 0
+            Blocks.WAXED_COPPER_BULB, 3,
+            Blocks.WAXED_EXPOSED_COPPER_BULB, 2,
+            Blocks.WAXED_WEATHERED_COPPER_BULB, 1,
+            Blocks.WAXED_OXIDIZED_COPPER_BULB, 0,
+            Blocks.COPPER_BULB, 3,
+            Blocks.EXPOSED_COPPER_BULB, 2,
+            Blocks.WEATHERED_COPPER_BULB, 1,
+            Blocks.OXIDIZED_COPPER_BULB, 0
     );
 
     @Unique Map<Integer, Integer> darkerMap =Map.of(
