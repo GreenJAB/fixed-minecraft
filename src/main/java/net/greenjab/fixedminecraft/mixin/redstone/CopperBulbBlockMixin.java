@@ -29,7 +29,7 @@ public abstract class CopperBulbBlockMixin extends Block {
         boolean signal = level.hasNeighborSignal(pos);
         BlockState newState = state;
         newState = newState.cycle(LIT);
-        level.setBlockAndUpdate(pos, newState.setValue(POWERED, signal));
+        level.setBlock(pos, newState.setValue(POWERED, signal), 3);
         level.playSound(null, pos, newState.getValue(LIT) ? SoundEvents.COPPER_BULB_TURN_ON : SoundEvents.COPPER_BULB_TURN_OFF, SoundSource.BLOCKS);
     }
 
@@ -40,20 +40,20 @@ public abstract class CopperBulbBlockMixin extends Block {
         boolean signal = level.hasNeighborSignal(pos);
         if (signal != state.getValue(POWERED)) {
             BlockState newState = state;
-            if (!state.getValue(POWERED)) {
-                int delay = 0;
-                if (state.toString().toLowerCase().contains("exposed")) delay = 1;
-                if (state.toString().toLowerCase().contains("weathered")) delay = 2;
-                if (state.toString().toLowerCase().contains("oxidized")) delay = 3;
-                if (delay > 0) {
-                    level.scheduleTick(pos, instance, delay, TickPriority.EXTREMELY_HIGH);
-                } else {
+            int delay = 0;
+            if (state.toString().toLowerCase().contains("exposed")) delay = 1;
+            if (state.toString().toLowerCase().contains("weathered")) delay = 2;
+            if (state.toString().toLowerCase().contains("oxidized")) delay = 3;
+
+            if (delay == 0) {
+                if (signal) {
                     newState = newState.cycle(LIT);
-                    level.setBlock(pos, newState.setValue(POWERED, signal), 3);
+                    level.setBlock(pos, newState.setValue(POWERED, true), 3);
                     level.playSound(null, pos, newState.getValue(LIT) ? SoundEvents.COPPER_BULB_TURN_ON : SoundEvents.COPPER_BULB_TURN_OFF, SoundSource.BLOCKS);
-                }
+                } else level.setBlock(pos, newState.setValue(POWERED, false), 818);
             } else {
-                level.setBlock(pos, newState.setValue(POWERED, signal), 3);
+                level.setBlock(pos, newState.setValue(POWERED, signal), 818);
+                if (signal) level.scheduleTick(pos, instance, delay, TickPriority.EXTREMELY_HIGH);
             }
         }
     }

@@ -141,7 +141,7 @@ public abstract class EnderDragonFightMixin {
 
     @WrapOperation(method = "onCrystalDestroyed", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;anyMatch(Ljava/util/function/Predicate;)Z"))
     private <T> boolean crystalFixer(Stream<EntityReference<EndCrystal>> instance, Predicate<? super T> predicate, Operation<Boolean> original){
-        if (instance == null || instance.findAny().isEmpty()) return false;
+        if (this.respawnCrystals == null || this.respawnCrystals.isEmpty()) return false;
         return original.call(instance, predicate);
     }
 

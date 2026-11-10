@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.At;
 public abstract class MerchantOfferMixin {
     @ModifyExpressionValue(method = "updateDemand", at = @At(value = "FIELD", target = "Lnet/minecraft/world/item/trading/MerchantOffer;uses:I", opcode = Opcodes.GETFIELD, ordinal = 0))
     private int strongerDemand(int original) {
-        if (!FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.VILLAGERS_STRONGER_DEMAND)) return original;
+        if (FixedMinecraft.SERVER==null || !FixedMinecraft.SERVER.getGameRules().get(GameRuleRegistry.VILLAGERS_STRONGER_DEMAND)) return original;
         MerchantOffer MO = (MerchantOffer)(Object)this;
         int uses = MO.getUses();
         int max = MO.getMaxUses();

@@ -45,7 +45,7 @@ public class LootTableAdditions {
                 tableBuilder.pool(bookPool(enchantments, ABANDONED_MINESHAFT_EBOOKS).build());
             } else if (key==BuiltInLootTables.ANCIENT_CITY) {
                 tableBuilder.pool(bookPool(enchantments, ANCIENT_CITY_EBOOKS).build());
-                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(5))
+                tableBuilder.pool(LootPool.lootPool().add(LootItem.lootTableItem(Items.AIR).setWeight(15))
                         .add(enchantedArmor(enchantments, Items.DIAMOND_HELMET))
                         .add(enchantedArmor(enchantments, Items.DIAMOND_CHESTPLATE))
                         .add(enchantedArmor(enchantments, Items.DIAMOND_BOOTS))
@@ -228,6 +228,8 @@ public class LootTableAdditions {
                         .add(LootItem.lootTableItem(Items.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE))
                         .add(LootItem.lootTableItem(Items.AIR))
                         .build());
+            } else if (key==EntityTypes.GLOW_SQUID.getDefaultLootTable().get()) {
+                tableBuilder.pool(LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.GLOW_SQUID_FROGLIGHT)).build());
             } else if (key== EntityTypes.GOAT.getDefaultLootTable().get()) {
                 LootPool.Builder poolBuilder = LootPool.lootPool().add(NestedLootTable.lootTableReference(LootTableRegistry.GOAT_MUTTON));
                 tableBuilder.pool(poolBuilder.build());

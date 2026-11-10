@@ -23,10 +23,13 @@ import net.minecraft.world.item.FireworkRocketItem;
 import net.minecraft.world.item.FishingRodItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.ThrowablePotionItem;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.item.WindChargeItem;
+import net.minecraft.world.item.component.UseRemainder;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,15 +42,18 @@ public abstract class ItemMixin {
 
     @Inject(method = "getUseDuration", at = @At("HEAD"), cancellable = true)
     private void modifyFoodEatTimes(ItemStack itemStack, LivingEntity user, CallbackInfoReturnable<Integer> cir) {
-        if (!FixedMinecraft.gameRules.eat_duration) return;
+        if (FixedMinecraft.gameRules.eat_duration == 0) return;
         if (itemStack.getItem().components().has(DataComponents.FOOD)) {
-            cir.setReturnValue(10 + 6 * itemStack.getItem().components().get(DataComponents.FOOD).nutrition());
+            boolean bowl = itemStack.getItem().components().getOrDefault(DataComponents.USE_REMAINDER, new UseRemainder(new ItemStackTemplate(Items.DIRT))).convertInto().item().value().getDefaultInstance().is(Items.BOWL);
+            int food = itemStack.getItem().components().get(DataComponents.FOOD).nutrition();
+            int dura = 32 - 4*FixedMinecraft.gameRules.eat_duration + (FixedMinecraft.gameRules.eat_duration * food)/(bowl?2:1);
+            cir.setReturnValue(Math.min(dura, 60));
             if (itemStack.is(ItemTags.PIGLIN_LOVED)) cir.setReturnValue(60);
         }
     }
 
     @Inject(method = "finishUsingItem", at = @At("HEAD"))
-    private void rawFoodDebuf(ItemStack itemStack, Level level, LivingEntity entity, CallbackInfoReturnable<ItemStack> cir) {
+    private void rawFoodDebuff(ItemStack itemStack, Level level, LivingEntity entity, CallbackInfoReturnable<ItemStack> cir) {
         FoodProperties foodComponent = itemStack.get(DataComponents.FOOD);
         if (entity instanceof ServerPlayer) {
             if (foodComponent != null) {

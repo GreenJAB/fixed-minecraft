@@ -20,6 +20,7 @@ public class LootTableRegistry {
     public static final ResourceKey<LootTable> CHARGED_CREEPER_ZOMBIE_TABLE = registerLoot_Table("gameplay/charged_creeper/zombie");
     public static final ResourceKey<LootTable> CHARGED_CREEPER_SKELETON_TABLE = registerLoot_Table("gameplay/charged_creeper/skeleton");
     public static final ResourceKey<LootTable> SNIFFER_EXTRA = registerLoot_Table("gameplay/other/sniffer_extra");
+    public static final ResourceKey<LootTable> GLOW_SQUID_FROGLIGHT = registerLoot_Table("gameplay/other/glow_squid_froglight");
     public static final ResourceKey<LootTable> GOAT_MUTTON = registerLoot_Table("entity/goat_mutton");
 
     private static ResourceKey<LootTable> registerLoot_Table(String id) {

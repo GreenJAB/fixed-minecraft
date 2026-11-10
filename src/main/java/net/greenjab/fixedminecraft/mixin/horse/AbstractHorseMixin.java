@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.horse;
 import com.llamalad7.mixinextras.sugar.Local;
 import it.unimi.dsi.fastutil.objects.Object2FloatArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.ItemRegistry;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -155,13 +156,16 @@ public abstract class AbstractHorseMixin extends Animal {
     @Inject(method = "getDismountLocationForPassenger", at = @At("HEAD"))
     private void addLocaterBarIcon(LivingEntity passenger, CallbackInfoReturnable<Vec3> cir) {
         if (passenger instanceof ServerPlayer) {
-            AbstractHorse AHE = (AbstractHorse) (Object) this;
-            if (!AHE.isTamed())return;
-            AHE.tickCount = 0;
-            AHE.addTag("locate");
-            AHE.getAttributes().getInstance(Attributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);
-            String s = "/waypoint modify " + AHE.getStringUUID() + " style set horse";
-            AHE.level().getServer().getCommands().performPrefixedCommand(createCommandSource((ServerLevel) AHE.level(), AHE.blockPosition()), s);
+            this.setHomeTo(this.blockPosition(), 8);
+            if (passenger.level().getServer().getGameRules().get(GameRuleRegistry.STRICT_HORSE_LOCATOR)) {
+                AbstractHorse AHE = (AbstractHorse) (Object) this;
+                if (!AHE.isTamed())return;
+                AHE.tickCount = 0;
+                AHE.addTag("locate");
+                AHE.getAttributes().getInstance(Attributes.WAYPOINT_TRANSMIT_RANGE).setBaseValue(100);
+                String s = "/waypoint modify " + AHE.getStringUUID() + " style set horse";
+                AHE.level().getServer().getCommands().performPrefixedCommand(createCommandSource((ServerLevel) AHE.level(), AHE.blockPosition()), s);
+            }
         }
     }
 
