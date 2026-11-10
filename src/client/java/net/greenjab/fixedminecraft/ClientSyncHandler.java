@@ -2,6 +2,7 @@ package net.greenjab.fixedminecraft;
 
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.greenjab.fixedminecraft.network.GameRulePayload;
+import net.greenjab.fixedminecraft.render.VillagerParticle;
 import net.greenjab.fixedminecraft.screens.MapBookScreen;
 import net.greenjab.fixedminecraft.network.MapBookOpenPayload;
 import net.greenjab.fixedminecraft.network.MapBookSyncPayload;
@@ -93,7 +94,6 @@ public class ClientSyncHandler {
                 Entity entity = level.getEntity((payload.villager()));
                 if (entity instanceof Villager villager) {
                     if (FixedMinecraftClient.villagersSpeak.get()) Minecraft.getInstance().player.sendSystemMessage(Component.translatable("entity.fixedminecraft.villager."+payload.need(), villager.getName()));
-
                     SimpleParticleType particle = switch (payload.need()) {
                         case "hungry","very_hungry" -> ParticleRegistry.VILLAGER_HUNGRY;
                         case "tired","very_tired" -> ParticleRegistry.VILLAGER_TIRED;
@@ -101,6 +101,14 @@ public class ClientSyncHandler {
                         case "lazy","very_lazy" -> ParticleRegistry.VILLAGER_LAZY;
                         case "dark","very_dark" -> ParticleRegistry.VILLAGER_DARK;
                         case "night" -> ParticleRegistry.VILLAGER_NIGHT;
+                        default -> null;
+                    };
+                    VillagerParticle.lastNeed = switch (payload.need()) {
+                        case "hungry","very_hungry" -> "villager_hungry";
+                        case "tired","very_tired" -> "villager_tired";
+                        case "lonely","very_lonely" -> "villager_lonely";
+                        case "lazy","very_lazy" -> "villager_lazy";
+                        case "dark","very_dark" -> "villager_dark";
                         default -> null;
                     };
                     if (particle != null) {

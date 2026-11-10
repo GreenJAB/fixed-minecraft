@@ -15,7 +15,9 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.equine.AbstractHorse;
+import net.minecraft.world.entity.animal.happyghast.HappyGhast;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Items;
@@ -122,16 +124,12 @@ public abstract class BeaconBlockEntityMixin {
                         CriteriaTriggers.CONSUME_ITEM.trigger(SPE, Items.BEACON.getDefaultInstance());
                 }});
 
-            level.getEntitiesOfClass(AbstractHorse.class, box).forEach(horse -> {
-                if (horse.isTamed()) {
-                    if (!finalPrimaryPower.is(MobEffects.INVISIBILITY) || horse.hasEffect(MobEffects.GLOWING))
-                        horse.addEffect(new MobEffectInstance(finalPrimaryPower, j, finalStatusLevel, true, false));
-                }});
-
-            level.getEntitiesOfClass(TamableAnimal.class, box).forEach(pet -> {
-                if (pet.isTame()) {
-                    if (!finalPrimaryPower.is(MobEffects.INVISIBILITY) || pet.hasEffect(MobEffects.GLOWING))
-                        pet.addEffect(new MobEffectInstance(finalPrimaryPower, j, finalStatusLevel, true, false));
+            level.getEntitiesOfClass(Animal.class, box).forEach(animal -> {
+                if ((animal instanceof AbstractHorse horse && horse.isTamed())
+                || (animal instanceof TamableAnimal tame && tame.isTame())
+                || (animal instanceof HappyGhast)) {
+                    if (!finalPrimaryPower.is(MobEffects.INVISIBILITY) || animal.hasEffect(MobEffects.GLOWING))
+                        animal.addEffect(new MobEffectInstance(finalPrimaryPower, j, finalStatusLevel, true, false));
                 }});
         }
         ci.cancel();

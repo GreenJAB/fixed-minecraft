@@ -3,6 +3,7 @@ package net.greenjab.fixedminecraft.mixin.other;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.greenjab.fixedminecraft.registry.block.NewSnowBlock;
+import net.greenjab.fixedminecraft.registry.registries.BlockRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(FallingBlockEntity.class)
@@ -95,4 +97,16 @@ public abstract class FallingBlockEntityMixin {
         return false;
     }
 
+    @ModifyVariable(method = "causeFallDamage", at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/item/FallingBlockEntity;level()Lnet/minecraft/world/level/Level;"
+    ), ordinal = 1)
+    private float a (float damage) {
+        if (this.blockState.is(BlockRegistry.NETHERITE_ANVIL)||
+            this.blockState.is(BlockRegistry.CHIPPED_NETHERITE_ANVIL)||
+            this.blockState.is(BlockRegistry.DAMAGED_NETHERITE_ANVIL)) {
+            return damage*2;
+        }
+        return damage;
+    }
 }

@@ -156,6 +156,7 @@ public abstract class EnderDragonFightMixin {
         return null;
     }
 
+
     @WrapOperation(method = "onCrystalDestroyed", at = @At(value = "INVOKE", target = "Ljava/util/List;contains(Ljava/lang/Object;)Z"))
     private boolean crystalFixer(List<EndCrystal> instance, Object o, Operation<Boolean> original){
         if (instance == null || instance.isEmpty()) return false;

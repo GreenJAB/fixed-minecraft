@@ -23,12 +23,14 @@ public class GameRuleRegistry {
     public static final GameRuleCategory JABSFIXEDMOBSANDBLOCKS = GameRuleCategory.register(FixedMinecraft.id("aad_jabsfixedmobsandblocks"));
     public static final GameRuleCategory JABSFIXEDWORLDANDUI = GameRuleCategory.register(FixedMinecraft.id("aae_jabsfixedworldandui"));
 
+    public static GameRule<Boolean> ANVIL_BREAKS;
     public static GameRule<Integer> ENCHANT_CAPACITY_PERCENTAGE;
     public static GameRule<Integer> SUPER_ENCHANT_CHANCE;
     public static GameRule<Boolean> COMBINE_ENCHANTED_ITEMS;
     public static GameRule<Boolean> MENDING_ON_OP_ITEMS;
     public static GameRule<Boolean> VILLAGERS_BIOME_ENCHANTED_BOOKS;
     public static GameRule<Boolean> GRINDSTONE_DAMAGES_ITEM;
+    public static GameRule<Boolean> GRINDSTONE_INTO_BOOKS;
     public static GameRule<Boolean> TOMES_INCREASE_LEVEL;
     public static GameRule<Boolean> ONE_TO_ONE_LAPIS_COST;
     public static GameRule<Boolean> GOLD_GEAR_AUTO_REPAIRS;
@@ -42,6 +44,7 @@ public class GameRuleRegistry {
     public static GameRule<Integer> ELYTRA_HIT_CANCEL_TICKS;
     public static GameRule<Boolean> ICE_MELT_IN_NETHER;
     public static GameRule<Boolean> GLOBAL_PLAYER_LOCATOR_BAR;
+    public static GameRule<Boolean> STRICT_HORSE_LOCATOR;
     public static GameRule<Boolean> REMOVE_VANILLA_NAUTILUS_ARMOUR;
 
     public static GameRule<Boolean> REQUIRE_TOTEM_USE;
@@ -49,7 +52,7 @@ public class GameRuleRegistry {
     public static GameRule<Boolean> NERF_VANILLA_SPEARS;
     public static GameRule<Boolean> SPEARS_ONLY_HORIZONTAL;
     public static GameRule<Integer> STAMINA_DRAIN_SPEED;
-    public static GameRule<Boolean> EAT_DURATION_PROPORTIONAL_TO_FOOD;
+    public static GameRule<Integer> EAT_DURATION_PROPORTIONAL_TO_FOOD;
     public static GameRule<Boolean> EAT_HIT_CANCELLING;
     public static GameRule<Boolean> RESPAWN_WITH_LESS_HEALTH;
     public static GameRule<Boolean> STRONGER_MOBS;
@@ -81,12 +84,14 @@ public class GameRuleRegistry {
 
     public static void registerGameRules() {
         System.out.println("register GameRules");
+        ANVIL_BREAKS = registerBoolean("anvil_breaks", JABSFIXEDENCHANTING, true);
         ENCHANT_CAPACITY_PERCENTAGE = registerInteger("enchant_capacity_percentage", JABSFIXEDENCHANTING, 54, 1, 100);
         SUPER_ENCHANT_CHANCE = registerInteger("super_enchant_chance", JABSFIXEDENCHANTING, 5, 0, 100);
         COMBINE_ENCHANTED_ITEMS = registerBoolean("combine_enchanted_items", JABSFIXEDENCHANTING, false);
         MENDING_ON_OP_ITEMS = registerBoolean("mending_on_op_items", JABSFIXEDENCHANTING, false);
         VILLAGERS_BIOME_ENCHANTED_BOOKS = registerBoolean("villagers_biome_enchanted_books", JABSFIXEDENCHANTING, true);
         GRINDSTONE_DAMAGES_ITEM = registerBoolean("grindstone_damages_item", JABSFIXEDENCHANTING, true);
+        GRINDSTONE_INTO_BOOKS = registerBoolean("grindstone_into_books", JABSFIXEDENCHANTING, false);
         TOMES_INCREASE_LEVEL = registerBoolean("tomes_increase_level", JABSFIXEDENCHANTING, true);
         ONE_TO_ONE_LAPIS_COST = registerBoolean("one_to_one_lapis_cost", JABSFIXEDENCHANTING, false);
         GOLD_GEAR_AUTO_REPAIRS = registerBoolean("gold_gear_auto_repairs", JABSFIXEDENCHANTING, true);
@@ -100,6 +105,7 @@ public class GameRuleRegistry {
         ELYTRA_HIT_CANCEL_TICKS = registerInteger("elytra_hit_cancel_ticks", JABSFIXEDTRANSPORT, 40, 0, Integer.MAX_VALUE);
         ICE_MELT_IN_NETHER = registerBoolean("ice_melt_in_nether", JABSFIXEDTRANSPORT, true);
         GLOBAL_PLAYER_LOCATOR_BAR = registerBoolean("global_player_locator_bar", JABSFIXEDTRANSPORT, false);
+        STRICT_HORSE_LOCATOR = registerBoolean("strict_horse_locator", JABSFIXEDTRANSPORT, false);
         REMOVE_VANILLA_NAUTILUS_ARMOUR = registerBoolean("remove_vanilla_nautilus_armour", JABSFIXEDTRANSPORT, true);
 
         REQUIRE_TOTEM_USE = registerBoolean("require_totem_use", JABSFIXEDCOMBAT, false);
@@ -107,7 +113,7 @@ public class GameRuleRegistry {
         NERF_VANILLA_SPEARS = registerBoolean("nerf_vanilla_spears", JABSFIXEDCOMBAT, true);
         SPEARS_ONLY_HORIZONTAL = registerBoolean("spears_only_horizontal", JABSFIXEDCOMBAT, true);
         STAMINA_DRAIN_SPEED = registerInteger("stamina_drain_speed", JABSFIXEDCOMBAT, 100, 0, 1000);
-        EAT_DURATION_PROPORTIONAL_TO_FOOD = registerBoolean("eat_duration_proportional_to_food", JABSFIXEDCOMBAT, true);
+        EAT_DURATION_PROPORTIONAL_TO_FOOD = registerInteger("eat_duration_proportional_to_food", JABSFIXEDCOMBAT, 4, 0, 7);
         EAT_HIT_CANCELLING = registerBoolean("eat_hit_cancelling", JABSFIXEDCOMBAT, true);
         RESPAWN_WITH_LESS_HEALTH = registerBoolean("respawn_with_less_health", JABSFIXEDCOMBAT, true);
         STRONGER_MOBS = registerBoolean("stronger_mobs", JABSFIXEDCOMBAT, true);

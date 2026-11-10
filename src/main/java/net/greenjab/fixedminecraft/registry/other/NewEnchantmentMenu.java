@@ -6,6 +6,7 @@ import net.greenjab.fixedminecraft.FixedMinecraftEnchantmentHelper;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.greenjab.fixedminecraft.registry.registries.MenuRegistry;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
@@ -172,6 +173,14 @@ public class NewEnchantmentMenu extends AbstractContainerMenu {
                     this.enchantmentSeed.set(player.getEnchantmentSeed());
                     this.slotsChanged(this.enchantSlots);
                     level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
+
+                    for(BlockPos p : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+                        if (level.getBlockEntity(pos.offset(p)) instanceof ChiseledBookShelfBlockEntity blockEntity) {
+                            for(ItemStack book : blockEntity.getItems()) {
+                                book.set(DataComponents.REPAIR_COST, 0);
+                            }
+                        }
+                    }
                 });
                 return true;
             }
