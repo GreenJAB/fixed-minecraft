@@ -26,6 +26,7 @@ import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.animal.equine.Llama;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -63,6 +64,9 @@ public abstract class LivingEntityMixin {
         if (LE instanceof WitherSkeleton) {
             if (source.getEntity() instanceof WitherBoss) cir.setReturnValue(false);
         }
+        if (LE instanceof Llama) {
+            if (source.getEntity() instanceof Llama) cir.setReturnValue(false);
+        }
     }
 
     @Inject(method = "hurtServer",at = @At( value = "TAIL" ))
@@ -78,13 +82,17 @@ public abstract class LivingEntityMixin {
         if (vehicle.is(ModTags.VEHICLES)) entity.stopRiding();
     }
 
-    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;actuallyHurt(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/damagesource/DamageSource;F)V"),
-            cancellable = true
-    )
-    private void cancel0Damage(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
-        if (modifyAppliedDamage(level, source, damage) < 0.05) {
-            cir.setReturnValue(false);
-        }
+    @Inject(method = "actuallyHurt", at = @At(value = "HEAD"), cancellable = true)
+    private void cancel0DamageHit(ServerLevel level, DamageSource source, float dmg, CallbackInfo ci) {
+        if (modifyAppliedDamage(level, source, dmg) < 0.05) ci.cancel();
+    }
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;broadcastDamageEvent(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V"), cancellable = true)
+    private void cancel0DamageAfterBeforeHurt(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (modifyAppliedDamage(level, source, damage) < 0.05) cir.setReturnValue(false);
+    }
+    @Inject(method = "hurtServer", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;markHurt()V"), cancellable = true)
+    private void cancel0DamageAfterBeforeHurt2(ServerLevel level, DamageSource source, float damage, CallbackInfoReturnable<Boolean> cir) {
+        if (modifyAppliedDamage(level, source, damage) < 0.05) cir.setReturnValue(false);
     }
 
     @Unique
@@ -235,7 +243,7 @@ public abstract class LivingEntityMixin {
             value = "INVOKE",
             target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z", ordinal = 3
     ))
-    private boolean piercingArrowsPierce(boolean original, @Local DamageSource source){
+    private boolean piercingArrowsPierce(boolean original, @Local(argsOnly = true) DamageSource source){
         if (source.getDirectEntity() instanceof Arrow arrow && arrow.getPierceLevel()!=0)return true;
         return original;
     }

@@ -94,14 +94,16 @@ public class NewAnvilMenu extends ItemCombinerMenu {
         }
 
         int finalbreakChance;
-        if (this.inputSlots.getItem(1).isEmpty()) {
-            finalbreakChance = 0;
-        } else if (isNetherite()) {
-            int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(carried);
-            int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(carried, false);
-            if (current > cap) finalbreakChance = 12;
-            else finalbreakChance = 0;
-        } else finalbreakChance = 12;
+        if (FixedMinecraft.gameRules.anvil_breaks) {
+            if (this.inputSlots.getItem(1).isEmpty()) {
+                finalbreakChance = 0;
+            } else if (isNetherite()) {
+                int cap = FixedMinecraftEnchantmentHelper.getEnchantmentCapacity(carried);
+                int current = FixedMinecraftEnchantmentHelper.getOccupiedEnchantmentCapacity(carried, false);
+                if (current > cap) finalbreakChance = 12;
+                else finalbreakChance = 0;
+            } else finalbreakChance = 12;
+        } else finalbreakChance = 0;
 
         ItemStack itemStack = this.inputSlots.getItem(1);
         if (this.repairItem) {

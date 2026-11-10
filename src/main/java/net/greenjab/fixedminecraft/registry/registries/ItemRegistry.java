@@ -17,7 +17,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -52,6 +51,7 @@ import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -81,10 +81,9 @@ public class ItemRegistry {
     public static final Item ECHO_FRUIT = register(
             "echo_fruit", EchoFruitItem::new, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).food(Foods.CHORUS_FRUIT));
 
-    public static final Item NETHERITE_ANVIL = register(BlockRegistry.NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
-    public static final Item CHIPPED_NETHERITE_ANVIL = register(BlockRegistry.CHIPPED_NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
-    public static final Item DAMAGED_NETHERITE_ANVIL = register(BlockRegistry.DAMAGED_NETHERITE_ANVIL, new Item.Properties().fireResistant().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION))));
-//TODO blast resistant
+    public static final Item NETHERITE_ANVIL = register(BlockRegistry.NETHERITE_ANVIL, new Item.Properties().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(ModTags.NETHERITE_WITHSTANDS))));
+    public static final Item CHIPPED_NETHERITE_ANVIL = register(BlockRegistry.CHIPPED_NETHERITE_ANVIL, new Item.Properties().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(ModTags.NETHERITE_WITHSTANDS))));
+    public static final Item DAMAGED_NETHERITE_ANVIL = register(BlockRegistry.DAMAGED_NETHERITE_ANVIL, new Item.Properties().delayedComponent(DataComponents.DAMAGE_RESISTANT,context -> new DamageResistant(context.getOrThrow(ModTags.NETHERITE_WITHSTANDS))));
 
     public static final Item COPPER_RAIL = register(BlockRegistry.COPPER_RAIL);
     public static final Item EXPOSED_COPPER_RAIL = register(BlockRegistry.EXPOSED_COPPER_RAIL);
@@ -121,7 +120,7 @@ public class ItemRegistry {
             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0), 1F))
             .build();
     public static final Consumable SWEET_BERRIES_EFFECT = food().onConsume(new ApplyStatusEffectsConsumeEffect(
-            new MobEffectInstance(MobEffects.SPEED, 200, 0), 1F)).build();
+            new MobEffectInstance(MobEffects.SPEED, 60, 0), 1F)).build();
 
     public static Consumable.Builder food() {
         return Consumable.builder().consumeSeconds(1.6F).animation(ItemUseAnimation.EAT).sound(SoundEvents.GENERIC_EAT).hasConsumeParticles(true);
@@ -192,28 +191,28 @@ public class ItemRegistry {
         return register(ResourceKey.create(Registries.ITEM, EntityType.getKey(type).withSuffix("_spawn_egg")), SpawnEggItem::new, new Item.Properties().spawnEgg(type));
     }
 
-    public static final Item AZALEA_PLANKS = register(BlockRegistry.AZALEA_PLANKS);
-    public static final Item AZALEA_LOG = register(BlockRegistry.AZALEA_LOG);
-    public static final Item STRIPPED_AZALEA_LOG = register(BlockRegistry.STRIPPED_AZALEA_LOG);
-    public static final Item STRIPPED_AZALEA_WOOD = register(BlockRegistry.STRIPPED_AZALEA_WOOD);
-    public static final Item AZALEA_WOOD = register(BlockRegistry.AZALEA_WOOD);
-    public static final Item AZALEA_SLAB = register(BlockRegistry.AZALEA_SLAB);
-    public static final Item AZALEA_FENCE = register(BlockRegistry.AZALEA_FENCE);
-    public static final Item AZALEA_STAIRS = register(BlockRegistry.AZALEA_STAIRS);
-    public static final Item AZALEA_BUTTON = register(BlockRegistry.AZALEA_BUTTON);
-    public static final Item AZALEA_PRESSURE_PLATE = register(BlockRegistry.AZALEA_PRESSURE_PLATE);
-    public static final Item AZALEA_DOOR = register(BlockRegistry.AZALEA_DOOR, DoubleHighBlockItem::new);
-    public static final Item AZALEA_TRAPDOOR = register(BlockRegistry.AZALEA_TRAPDOOR);
-    public static final Item AZALEA_FENCE_GATE = register(BlockRegistry.AZALEA_FENCE_GATE);
-    public static final Item AZALEA_SHELF = register(BlockRegistry.AZALEA_SHELF);
+    public static final Item AZALEA_PLANKS = register(BlockRegistry.AZALEA_PLANKS, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_LOG = register(BlockRegistry.AZALEA_LOG, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item STRIPPED_AZALEA_LOG = register(BlockRegistry.STRIPPED_AZALEA_LOG, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item STRIPPED_AZALEA_WOOD = register(BlockRegistry.STRIPPED_AZALEA_WOOD, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_WOOD = register(BlockRegistry.AZALEA_WOOD, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_SLAB = register(BlockRegistry.AZALEA_SLAB, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS));
+    public static final Item AZALEA_FENCE = register(BlockRegistry.AZALEA_FENCE, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_STAIRS = register(BlockRegistry.AZALEA_STAIRS, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_BUTTON = register(BlockRegistry.AZALEA_BUTTON, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL));
+    public static final Item AZALEA_PRESSURE_PLATE = register(BlockRegistry.AZALEA_PRESSURE_PLATE, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_DOOR = register(BlockRegistry.AZALEA_DOOR, DoubleHighBlockItem::new, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE));
+    public static final Item AZALEA_TRAPDOOR = register(BlockRegistry.AZALEA_TRAPDOOR, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_FENCE_GATE = register(BlockRegistry.AZALEA_FENCE_GATE, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
+    public static final Item AZALEA_SHELF = register(BlockRegistry.AZALEA_SHELF, new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS));
 
     public static final Item AZALEA_SIGN = register(
-            BlockRegistry.AZALEA_SIGN, (block, settings) -> new StandingAndWallBlockItem(block, BlockRegistry.AZALEA_WALL_SIGN, Direction.DOWN, settings), new Item.Properties().stacksTo(16)
+            BlockRegistry.AZALEA_SIGN, (block, settings) -> new StandingAndWallBlockItem(block, BlockRegistry.AZALEA_WALL_SIGN, Direction.DOWN, settings), new Item.Properties().stacksTo(16).cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
     );
     public static final Item AZALEA_HANGING_SIGN = register(
             BlockRegistry.AZALEA_HANGING_SIGN,
             (block, settings) -> new HangingSignItem(block, BlockRegistry.AZALEA_WALL_HANGING_SIGN, settings),
-            new Item.Properties().stacksTo(16)
+            new Item.Properties().stacksTo(16).cookingFuel(ContextIntProviders.COOKING_TIME_HANGING_SIGNS)
     );
 
     public static final EntityType<Boat> AZALEA_BOAT_ENTITY = register2(
@@ -234,10 +233,10 @@ public class ItemRegistry {
     );
 
     public static final Item AZALEA_BOAT = register(
-            "azalea_boat", settings -> new BoatItem(AZALEA_BOAT_ENTITY, settings), new Item.Properties().stacksTo(1)
+            "azalea_boat", settings -> new BoatItem(AZALEA_BOAT_ENTITY, settings), new Item.Properties().stacksTo(1).cookingFuel(ContextIntProviders.COOKING_TIME_BOATS)
     );
     public static final Item AZALEA_CHEST_BOAT = register(
-            "azalea_chest_boat", settings -> new BoatItem(AZALEA_CHEST_BOAT_ENTITY, settings), new Item.Properties().stacksTo(1)
+            "azalea_chest_boat", settings -> new BoatItem(AZALEA_CHEST_BOAT_ENTITY, settings), new Item.Properties().stacksTo(1).cookingFuel(ContextIntProviders.COOKING_TIME_BOATS)
     );
 
     private static EntityType.EntityFactory<Boat> getBoatFactory(Supplier<Item> itemSupplier) {

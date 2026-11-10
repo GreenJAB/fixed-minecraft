@@ -55,18 +55,18 @@ public abstract class FoodsMixin {
         CHORUS_FRUIT = (new FoodProperties.Builder()).nutrition(4).saturationModifier(0.3F).alwaysEdible().build();
         APPLE = (new FoodProperties.Builder()).nutrition(4).saturationModifier(0.4F).build();
         MELON_SLICE = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.4F).build();
-        SWEET_BERRIES = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.4F).build();
+        SWEET_BERRIES = (new FoodProperties.Builder()).nutrition(1).saturationModifier(0.4F).build();
 
         //soups
-        BEETROOT_SOUP = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5F).build();
-        MUSHROOM_STEW = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5F).build();
-        SUSPICIOUS_STEW = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.5F).alwaysEdible().build();
-        RABBIT_STEW = (new FoodProperties.Builder()).nutrition(10).saturationModifier(0.6F).build();
+        BEETROOT_SOUP = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.3F).build();
+        MUSHROOM_STEW = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.3F).build();
+        SUSPICIOUS_STEW = (new FoodProperties.Builder()).nutrition(6).saturationModifier(0.3F).alwaysEdible().build();
+        RABBIT_STEW = (new FoodProperties.Builder()).nutrition(10).saturationModifier(0.3F).build();
 
         //complex
         HONEY_BOTTLE = (new FoodProperties.Builder()).nutrition(3).saturationModifier(0.5F).alwaysEdible().build();
         PUMPKIN_PIE = (new FoodProperties.Builder()).nutrition(8).saturationModifier(0.6F).build();
-        COOKIE = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.6F).alwaysEdible().build();
+        COOKIE = (new FoodProperties.Builder()).nutrition(2).saturationModifier(0.8F).alwaysEdible().build();
 
         //gold
         GOLDEN_APPLE = (new FoodProperties.Builder()).nutrition(4).saturationModifier(0.8F).alwaysEdible().build();

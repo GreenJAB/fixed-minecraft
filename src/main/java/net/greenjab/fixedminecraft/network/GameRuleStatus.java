@@ -8,9 +8,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.gamerules.GameRules;
 
 public class GameRuleStatus {
+    public boolean anvil_breaks;
     public boolean combine_items;
     public boolean mending_on_op;
     public boolean grindstone_damage;
+    public boolean grindstone_into_books;
     public boolean tomes_increase_level;
     public boolean one_to_one_lapis_cost;
     public boolean global_locator_bar;
@@ -21,7 +23,7 @@ public class GameRuleStatus {
     public int elytra_hit_cancel_ticks;
     public boolean use_stamina;
     public boolean use_totem;
-    public boolean eat_duration;
+    public int eat_duration;
     public boolean modified_beacon;
     public boolean modified_dragon;
     public boolean modified_wither;
@@ -31,9 +33,11 @@ public class GameRuleStatus {
     }
 
     public void updateRules(GameRules rules) {
+        this.anvil_breaks = rules.get(GameRuleRegistry.ANVIL_BREAKS);
         this.combine_items = rules.get(GameRuleRegistry.COMBINE_ENCHANTED_ITEMS);
         this.mending_on_op = rules.get(GameRuleRegistry.MENDING_ON_OP_ITEMS);
         this.grindstone_damage = rules.get(GameRuleRegistry.GRINDSTONE_DAMAGES_ITEM);
+        this.grindstone_into_books = rules.get(GameRuleRegistry.GRINDSTONE_INTO_BOOKS);
         this.tomes_increase_level = rules.get(GameRuleRegistry.TOMES_INCREASE_LEVEL);
         this.one_to_one_lapis_cost = rules.get(GameRuleRegistry.ONE_TO_ONE_LAPIS_COST);
         this.global_locator_bar = rules.get(GameRuleRegistry.GLOBAL_PLAYER_LOCATOR_BAR);
@@ -52,9 +56,11 @@ public class GameRuleStatus {
     }
 
     void toPacket(FriendlyByteBuf buf) {
+        buf.writeBoolean(anvil_breaks);
         buf.writeBoolean(combine_items);
         buf.writeBoolean(mending_on_op);
         buf.writeBoolean(grindstone_damage);
+        buf.writeBoolean(grindstone_into_books);
         buf.writeBoolean(tomes_increase_level);
         buf.writeBoolean(one_to_one_lapis_cost);
         buf.writeBoolean(global_locator_bar);
@@ -65,7 +71,7 @@ public class GameRuleStatus {
         buf.writeInt(elytra_hit_cancel_ticks);
         buf.writeBoolean(use_stamina);
         buf.writeBoolean(use_totem);
-        buf.writeBoolean(eat_duration);
+        buf.writeInt(eat_duration);
         buf.writeBoolean(modified_beacon);
         buf.writeBoolean(modified_dragon);
         buf.writeBoolean(modified_wither);
@@ -74,9 +80,11 @@ public class GameRuleStatus {
 
     static GameRuleStatus fromPacket(FriendlyByteBuf buf) {
         GameRuleStatus p = new GameRuleStatus();
+        p.anvil_breaks = buf.readBoolean();
         p.combine_items = buf.readBoolean();
         p.mending_on_op = buf.readBoolean();
         p.grindstone_damage = buf.readBoolean();
+        p.grindstone_into_books = buf.readBoolean();
         p.tomes_increase_level = buf.readBoolean();
         p.one_to_one_lapis_cost = buf.readBoolean();
         p.global_locator_bar = buf.readBoolean();
@@ -87,7 +95,7 @@ public class GameRuleStatus {
         p.elytra_hit_cancel_ticks = buf.readInt();
         p.use_stamina = buf.readBoolean();
         p.use_totem = buf.readBoolean();
-        p.eat_duration = buf.readBoolean();
+        p.eat_duration = buf.readInt();
         p.modified_beacon = buf.readBoolean();
         p.modified_dragon = buf.readBoolean();
         p.modified_wither = buf.readBoolean();

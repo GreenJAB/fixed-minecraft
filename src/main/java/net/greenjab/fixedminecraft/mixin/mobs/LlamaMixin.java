@@ -20,8 +20,8 @@ public abstract class LlamaMixin extends AbstractChestedHorse {
         Llama llamaEntity = (Llama)(Object)this;
         int i = (llamaEntity.getStrength() + otherLlama.getStrength()) / 2;
         float f = this.random.nextFloat();
-        if (f < 0.5F) i--;
-        if (f > 0.8F) i++;
+        if (f < 0.33F) i--;
+        if (f > 0.33F) i++;
         return i;
     }
 }

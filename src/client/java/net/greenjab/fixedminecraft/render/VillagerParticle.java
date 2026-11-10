@@ -11,6 +11,9 @@ import net.minecraft.util.RandomSource;
 import org.jspecify.annotations.NonNull;
 
 public class VillagerParticle extends SingleQuadParticle {
+
+    public static String lastNeed = null;
+
     private VillagerParticle(
             final ClientLevel level,
             final double x,

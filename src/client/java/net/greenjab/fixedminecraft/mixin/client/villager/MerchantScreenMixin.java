@@ -3,7 +3,9 @@ package net.greenjab.fixedminecraft.mixin.client.villager;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.greenjab.fixedminecraft.FixedMinecraft;
 import net.greenjab.fixedminecraft.FixedMinecraftClient;
+import net.greenjab.fixedminecraft.render.VillagerParticle;
 import net.greenjab.fixedminecraft.util.CustomContainerTextureHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -13,6 +15,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
@@ -104,6 +107,24 @@ public abstract class MerchantScreenMixin {
                 type = s[s.length-1];
             }
             graphics.blitSprite(RenderPipelines.GUI_TEXTURED, Identifier.parse("container/villager/animated/"+type), xo + 116, yo + 49, 12, 5);
+        }
+    }
+
+    @Inject(method = "extractBackground", at = @At(value = "TAIL"))
+    private void villagerWant(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, CallbackInfo ci,
+                              @Local(ordinal = 2) int xo,
+                              @Local(ordinal = 3) int yo) {
+        if (VillagerParticle.lastNeed != null) {
+            int x = 278;
+            int y = 1;
+            if (FixedMinecraftClient.usingCustomContainers()) {
+                x = 102;
+                y = 14;
+            }
+            graphics.blit(RenderPipelines.GUI_TEXTURED, FixedMinecraft.id("textures/gui/sprites/villager_want.png"),
+                    xo + x, yo + y, 0, 0, 24, 24, 24, 24, ARGB.white(1F));
+            graphics.blit(RenderPipelines.GUI_TEXTURED, Identifier.parse("textures/particle/" + VillagerParticle.lastNeed +".png"),
+                    xo + x + 2, yo + y + 2, 0, 0, 16, 16, 16, 16, ARGB.white(1F));
         }
     }
 }

@@ -6,11 +6,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
 public class EntityTypeRegistry {
+
+    public static final ResourceKey<DamageType> TRAIN = ResourceKey.create(Registries.DAMAGE_TYPE, FixedMinecraft.id("train"));
 
     public static final EntityType<DispencerMinecartEntity> DISPENCER_MINECART_ENTITY_TYPE = register(
             keyOf("dispenser_minecart"), EntityType.Builder.of(DispencerMinecartEntity::new, MobCategory.MISC).noLootTable().sized(0.98F, 0.7F).passengerAttachments(0.1875F).clientTrackingRange(8));

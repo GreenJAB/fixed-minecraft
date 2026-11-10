@@ -3,7 +3,11 @@ package net.greenjab.fixedminecraft.mixin.other;
 import net.greenjab.fixedminecraft.registry.registries.GameRuleRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.attribute.EnvironmentAttributes;
 import net.minecraft.world.level.Level;
@@ -28,8 +32,13 @@ public abstract class IceBlockMixin extends HalfTransparentBlock {
     @Override
     protected void randomTick(@NonNull BlockState state, ServerLevel level, @NonNull BlockPos pos, @NonNull RandomSource random) {
         if (level.getGameRules().get(GameRuleRegistry.ICE_MELT_IN_NETHER)) {
-            if (level.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightDampening() || level.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos))
-                if (notNextToCryingObsidian(level, pos)) this.melt(state, level, pos);
+            if (level.getBrightness(LightLayer.BLOCK, pos) > 11 - state.getLightDampening() || level.environmentAttributes().getValue(EnvironmentAttributes.WATER_EVAPORATES, pos)) {
+                if (notNextToCryingObsidian(level, pos)) {
+                    this.melt(state, level, pos);
+                    level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.5F, 2.6F + (random.nextFloat() - random.nextFloat()) * 0.8F);
+                    level.sendParticles(ParticleTypes.LARGE_SMOKE, pos.getX(), pos.getY(), pos.getZ(), 8, 1.0, 1.0, 1.0, 0.0, ClientboundLevelParticlesPacket.RandomizationType.ALTERNATIVE);
+                }
+            }
         }
     }
 
