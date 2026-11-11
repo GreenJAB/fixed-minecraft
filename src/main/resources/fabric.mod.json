@@ -21,6 +21,9 @@
         ],
         "fabric-datagen": [
             "net.greenjab.fixedminecraft.FixedMinecraftDataGenerator"
+        ],
+        "sodium:config_api_user": [
+            "net.greenjab.fixedminecraft.config.SodiumCompat"
         ]
     },
     "mixins": [
